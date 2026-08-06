@@ -25,8 +25,9 @@ current outage and is removed rather than retained as dead code.
    default-branch-registered `compatibility.yml` `workflow_dispatch` inputs.
 2. Add one isolated job conditional on both `workflow_dispatch` and that input.
    It runs only on `[self-hosted, macOS, X64, ai-cockpit-recovery]`, checks out
-   and verifies `github.sha`, runs `make quality`, and writes an explicit
-   diagnostic-only red/green summary.
+   and verifies only PR #723 candidate
+   `365f5e30c9531d8d8948079fe58b8424ecc9efa7`, runs its `make quality`, and
+   writes an explicit temporary-runner-substitution red/green summary.
 3. Do not change any existing compatibility job, `push`, `pull_request`,
    required-check, smoke, or release behavior. Manual compatibility dispatch
    still starts its normal jobs; the diagnostic job is independent and has no
@@ -42,7 +43,8 @@ current outage and is removed rather than retained as dead code.
      -f recovery_diagnostic=true
    ```
 
-6. Record the run URL, exact SHA, and outcome as diagnostic evidence only.
+6. Record the run URL, workflow-definition SHA, exact PR #723 SHA, and outcome
+   as temporary runner-substitution evidence only.
    After official Actions recovery, rerun normal hosted smoke and compatibility
    before any merge or release decision. Remove this job through a separate
    governed Work Item once recovery is stable.

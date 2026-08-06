@@ -33,8 +33,9 @@ The selected approach is deliberately narrower than rerouting compatibility:
 
 `compatibility.yml` will expose a default-off boolean `recovery_diagnostic`
 input under `workflow_dispatch`. The isolated job will run only when that input
-is true, check out and verify the immutable dispatched `github.sha`, and use
-`contents: read` permissions. Its condition excludes `push` and
+is true, check out and verify only immutable PR #723 candidate
+`365f5e30c9531d8d8948079fe58b8424ecc9efa7`, and use `contents: read`
+permissions. Its condition excludes `push` and
 `pull_request`, so untrusted public PR code cannot cause execution on the
 personal machine.
 
@@ -59,9 +60,11 @@ runner service.
 ## Evidence and recovery sequence
 
 1. A maintainer dispatches `compatibility.yml` at the maintenance branch with
-   `recovery_diagnostic=true`.
-2. The run URL, dispatched SHA, checked-out SHA, command result, and diagnostic
-   classification are recorded in the relevant active Work Item Summary.
+   `recovery_diagnostic=true`; the isolated job substitutes the affected runner
+   only for PR #723 candidate `365f5e30c9531d8d8948079fe58b8424ecc9efa7`.
+2. The run URL, workflow-definition SHA, fixed PR #723 SHA, checked-out SHA,
+   command result, and diagnostic classification are recorded in the relevant
+   active Work Item Summary.
 3. A green diagnostic run permits continued development feedback only. It does
    not permit merge, archive mutation, release, or Work Item closure.
 4. After GitHub-hosted Actions recovers, the exact candidate SHA must again pass

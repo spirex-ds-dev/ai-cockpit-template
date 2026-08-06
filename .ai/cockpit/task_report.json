@@ -1,39 +1,64 @@
 {
   "reportVersion": 1,
-  "workItemId": "retire-obsolete-shell-chain-666-bandit-recovery",
+  "workItemId": "trusted-self-hosted-recovery-validation-724",
   "phase": "review",
-  "result": "completed",
+  "result": "blocked",
   "sourceOutcome": {
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1,
-    "digest": "338f76844e49e8922f68785e66eefc583cf6a999cffacb639abc1ee4596ab8e9"
+    "digest": "77c6813446b71c93af6e1bc28dde9a630acf6b934ffb9b3e259a35dd5ea316a2"
   },
   "task": {
-    "summary": "Task retire-obsolete-shell-chain-666-bandit-recovery generated an evidence-derived outcome with status completed.",
+    "summary": "Task trusted-self-hosted-recovery-validation-724 generated an evidence-derived outcome with status blocked.",
     "deliveredChanges": [
-      ".ai/work-items/archive/2026/retire-obsolete-shell-chain-666-bandit-recovery.contract.json",
-      ".ai/work-items/archive/2026/retire-obsolete-shell-chain-666-bandit-recovery.summary.json",
-      "docs/reference/deprecated-assets-registry.json",
-      "docs/reference/deprecated-assets.md",
-      "scripts/check_deprecated_assets.py",
-      "tests/test_deprecated_assets.py",
-      ".ai/work-items/archive/2026/retire-obsolete-shell-chain-666-bandit-recovery.outcome.json",
-      ".ai/work-items/archive/2026/retire-obsolete-shell-chain-666-bandit-recovery.outcome.md"
+      ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.contract.json",
+      ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.summary.json"
     ]
   },
   "issues": {
-    "detected": 0,
+    "detected": 2,
     "hardStops": 0,
-    "warnings": 0,
+    "warnings": 2,
     "resolved": 0,
-    "unresolved": 0
+    "unresolved": 2
   },
   "preventedRisks": [],
   "interventions": [],
   "forcedStops": [],
   "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
+  "limitations": [
+    {
+      "sourceWarning": "Replace this before finishing the Work Item.",
+      "title": "Unresolved evidence is explicitly limited",
+      "affectedClaims": [
+        "completion_claim"
+      ],
+      "requiredEvidence": [
+        "fresh verification evidence"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this warning was verified or resolved."
+      ]
+    },
+    {
+      "sourceWarning": "Finish blocked at aiCheckpoint: Contract/checkpoint binding is stale",
+      "title": "Finish verification is blocked",
+      "affectedClaims": [
+        "completion_claim",
+        "archive_readiness"
+      ],
+      "requiredEvidence": [
+        "a passing aiCheckpoint retry"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this Work Item is complete or archive-ready."
+      ]
+    }
+  ],
+  "forbiddenClaims": [
+    "Do not claim a blocked Work Item has completed verification or may be archived.",
+    "Do not claim an unresolved warning was verified or resolved."
+  ],
   "remainingRisks": [],
   "nextSafeAction": "Review the pull request and provider checks before merge."
 }

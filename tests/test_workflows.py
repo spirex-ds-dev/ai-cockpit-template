@@ -13,11 +13,17 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
 def test_self_hosted_recovery_is_dispatch_gated_and_diagnostic():
     """Catch a CI change that exposes a personal runner or upgrades its evidence."""
     workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    candidate = "365f5e30c9531d8d8948079fe58b8424ecc9efa7"
 
     assert "  workflow_dispatch:\n    inputs:\n      recovery_diagnostic:" in workflow
     assert "default: false" in workflow
     assert "if: github.event_name == 'workflow_dispatch' && inputs.recovery_diagnostic" in workflow
     assert "runs-on: [self-hosted, macOS, X64, ai-cockpit-recovery]" in workflow
+    assert f"ref: {candidate}" in workflow
+    assert f'test "$actual_commit" = "{candidate}"' in workflow
+    assert f'git cat-file -e "{candidate}^{{commit}}"' in workflow
+    assert f"SOURCE_COMMIT: {candidate}" in workflow
+    assert "Dispatched source commit: \\`$SOURCE_COMMIT\\`" in workflow
     assert "RECOVERY_RESULT=green" in workflow
     assert "RECOVERY_RESULT=red" in workflow
     assert "diagnostic only" in workflow

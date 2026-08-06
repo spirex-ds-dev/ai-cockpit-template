@@ -29,10 +29,10 @@ jobs:
     runs-on: [self-hosted, macOS, X64, ai-cockpit-recovery]
     timeout-minutes: 45
     steps:
-      - name: Checkout exact dispatched source
+      - name: Checkout exact PR 723 candidate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: ${{ github.sha }}
+          ref: 365f5e30c9531d8d8948079fe58b8424ecc9efa7
           fetch-depth: 0
 
       - name: Verify checked-out source identity
@@ -40,8 +40,8 @@ jobs:
         run: |
           set -euo pipefail
           actual_commit="$(git rev-parse HEAD)"
-          test "$actual_commit" = "$GITHUB_SHA"
-          git cat-file -e "$GITHUB_SHA^{commit}"
+          test "$actual_commit" = "365f5e30c9531d8d8948079fe58b8424ecc9efa7"
+          git cat-file -e "365f5e30c9531d8d8948079fe58b8424ecc9efa7^{commit}"
 
       - name: Run bounded diagnostic quality
         id: quality
@@ -53,7 +53,7 @@ jobs:
         shell: bash
         env:
           QUALITY_OUTCOME: ${{ steps.quality.outcome }}
-          SOURCE_COMMIT: ${{ github.sha }}
+          SOURCE_COMMIT: 365f5e30c9531d8d8948079fe58b8424ecc9efa7
         run: |
           set -euo pipefail
           if [[ "$QUALITY_OUTCOME" = success ]]; then

@@ -1,20 +1,20 @@
 # AI Cockpit Task Report
 
 Phase: `review`
-Result: `completed`
+Result: `blocked`
 
 ## 任务结论 / Task conclusion
-Task Outcome status: `completed`.
+Task Outcome status: `blocked`.
 
 ## 实际完成内容 / Completed work
-Task retire-obsolete-shell-chain-666-bandit-recovery generated an evidence-derived outcome with status completed.
+Task trusted-self-hosted-recovery-validation-724 generated an evidence-derived outcome with status blocked.
 
 ## 发现的问题 / Findings
-- Detected issues: 0
+- Detected issues: 2
 - Hard stops: 0
-- Warnings: 0
+- Warnings: 2
 - Resolved: 0
-- Unresolved: 0
+- Unresolved: 2
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,10 +32,12 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-None recorded.
+- Unresolved evidence is explicitly limited: Replace this before finishing the Work Item.
+- Finish verification is blocked: Finish blocked at aiCheckpoint: Contract/checkpoint binding is stale
 
 ## 当前禁止声明 / Forbidden claims
-None recorded.
+- Do not claim a blocked Work Item has completed verification or may be archived.
+- Do not claim an unresolved warning was verified or resolved.
 
 ## 需要人的决定 / Human decisions
 None recorded.

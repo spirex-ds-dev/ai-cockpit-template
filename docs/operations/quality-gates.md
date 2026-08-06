@@ -85,8 +85,10 @@ standard `self-hosted`, `macOS`, and `X64` labels plus the dedicated custom
 `ai-cockpit-recovery` label. Do not add hosted labels such as `ubuntu-latest`
 to a macOS runner.
 
-Dispatch the workflow from the branch containing its definition and supply the
-exact lower-case 40-character commit SHA to diagnose:
+Dispatch the workflow from the branch containing its definition. During the
+current outage it checks out only PR #723 candidate
+`365f5e30c9531d8d8948079fe58b8424ecc9efa7`; it does not execute the
+maintenance-branch SHA or arbitrary user-supplied code:
 
 ```bash
 gh workflow run compatibility.yml \
@@ -95,15 +97,16 @@ gh workflow run compatibility.yml \
 ```
 
 The normal compatibility workflow also starts for this manual dispatch, while
-the self-hosted job checks out the immutable dispatched `github.sha`, runs
-`make quality`, and emits a green or red diagnostic summary. The self-hosted
-job has an explicit `workflow_dispatch && recovery_diagnostic` condition, so
+the self-hosted job checks out and verifies the immutable PR #723 candidate,
+runs `make quality`, and emits a green or red diagnostic summary. The
+self-hosted job has an explicit `workflow_dispatch && recovery_diagnostic` condition, so
 it never runs for `push` or `pull_request`: public pull-request code must never
 execute on a personal runner. Only a maintainer with permission to dispatch
 repository workflows may use it.
 
-Record the run URL, dispatched SHA, checked-out SHA, and result in the active
-Work Item Summary. A green result is diagnostic only: it cannot satisfy
+Record the run URL, workflow-definition SHA, fixed PR #723 SHA, checked-out
+SHA, and result in the active Work Item Summary. A green result is temporary
+runner-substitution evidence only: it cannot satisfy
 compatibility, merge, archive, or release gates. A red result is a failed
 diagnostic and must record its failed gate and recovery condition. Neither
 result authorizes a bypass.

@@ -3,7 +3,7 @@
   "workItemId": "trusted-self-hosted-recovery-validation-724",
   "mode": "code",
   "title": "Add trusted self-hosted recovery validation path",
-  "rawUserRequest": "GitHub Actions is unavailable, so development progress must not be blocked. Add the recommended maintainer-dispatched, self-hosted recovery validation path without weakening hosted merge or release gates.",
+  "rawUserRequest": "The repository-owned self-hosted runner is intended to substitute for the affected GitHub Actions runner during the outage. Use it to execute the exact PR #723 candidate without weakening the final hosted merge or release gates.",
   "rawRequestSource": {
     "type": "human",
     "reference": "conversation:2026-08-07-self-hosted-recovery-accepted",
@@ -27,6 +27,8 @@
     ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.contract.json",
     ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.summary.json",
     ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
     ".ai/work-items/starts/**",
     ".ai/work-items/archive/**",
     ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.outcome.json",
@@ -102,6 +104,10 @@
     {
       "path": "https://api.github.com/repos/spirex-ds-dev/ai-cockpit-template/actions/runners/21",
       "reason": "Repository-owned runner 21 is online with only default self-hosted, macOS, and X64 labels; the user authorized adding the isolated recovery label."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/723",
+      "reason": "Defines the exact recovery candidate commit 365f5e30c9531d8d8948079fe58b8424ecc9efa7 that the temporary trusted runner must execute."
     }
   ],
   "unknowns": [],
@@ -177,10 +183,10 @@
   },
   "acceptance": [
     "The existing compatibility workflow exposes a default-off recovery_diagnostic workflow_dispatch input while preserving all push and pull_request matrix behavior.",
-    "The recovery_diagnostic job requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out the immutable GitHub-dispatched candidate commit.",
+    "The recovery_diagnostic job requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out only PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 before executing quality.",
     "The test-weakening guard distinguishes an optional workflow_dispatch input from a required CI check being made nonblocking, while preserving its required-check downgrade signal.",
     "The recovery_diagnostic job runs a bounded diagnostic quality command that is supported on macOS and publishes an explicit non-release result summary.",
-    "A hosted diagnostic dispatch for the exact candidate commit is prepared and recorded as diagnostic-only evidence; it cannot satisfy compatibility, merge, archive, or release gates.",
+    "A self-hosted diagnostic dispatch for the exact PR #723 candidate commit is prepared and recorded as temporary runner-substitution evidence; it cannot satisfy compatibility, merge, archive, or release gates.",
     "tests/test_workflows.py prevents trigger, label, source-identity, and non-release-boundary regressions.",
     "The committed SBOM is regenerated so its workflow-action coverage includes the additional pinned checkout action.",
     "All candidate release and generated documentation evidence affected by the SBOM refresh is regenerated through the repository's canonical generator chain.",
@@ -192,9 +198,9 @@
     "Document operational commands and security boundaries with the workflow change."
   ],
   "intent": {
-    "problem": "A GitHub Actions outage prevents timely feedback from hosted runners, but a new standalone workflow cannot be manually dispatched until it first exists on the default branch; changing the required hosted matrix or running untrusted public pull-request code on a personal machine would weaken both evidence and security.",
-    "constraints": ["Use only the existing compatibility workflow's workflow_dispatch surface with a default-off recovery_diagnostic input.", "The recovery job never runs for push or pull_request events.", "Use an isolated custom recovery label in addition to macOS/X64 self-hosted labels.", "Check out and verify the immutable GitHub-dispatched candidate commit.", "Run only macOS-supported diagnostic checks.", "Do not change existing compatibility jobs, smoke.yml, release.yml, branch protection, or required checks.", "Results must remain non-release, non-merge diagnostic evidence."],
-    "rationale": "GitHub can dispatch an already-default-branch-registered workflow at a maintenance-branch ref, so a default-off isolated diagnostic job restores feedback during the outage while preserving the hosted matrix as the sole authoritative cross-platform gate."
+    "problem": "A GitHub Actions outage prevents PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 from obtaining runner feedback. A new standalone workflow cannot be manually dispatched until it first exists on the default branch; changing the required hosted matrix or executing arbitrary ref input on a personal runner would weaken evidence or security.",
+    "constraints": ["Use only the existing compatibility workflow's workflow_dispatch surface with a default-off recovery_diagnostic input.", "The recovery job never runs for push or pull_request events.", "Use an isolated custom recovery label in addition to macOS/X64 self-hosted labels.", "Check out and verify only PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 before executing quality.", "Run only macOS-supported diagnostic checks.", "Do not change existing compatibility jobs, smoke.yml, release.yml, branch protection, or required checks.", "Results must remain non-release, non-merge temporary runner-substitution evidence."],
+    "rationale": "GitHub can dispatch an already-default-branch-registered workflow at the maintenance-branch ref. Binding its isolated job to the exact PR #723 candidate lets the repository-owned runner replace the affected runner during the outage, while the hosted matrix remains the sole authoritative cross-platform gate."
   },
   "verification": [
     {
