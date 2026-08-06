@@ -1,0 +1,288 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-session-isolation-654-current-main",
+  "mode": "code",
+  "title": "Recover quality-session isolation on current main",
+  "rawUserRequest": "Execute the plan automatically. RayIori authorized external Issue/PR handling and required every Contract to record the authorization. Complete #654 on current main without weakening governance, installer, CI, Outcome, merge, convergence, release, quality, or coverage gates.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "RayIori conversation: standing automatic authorization and #654 successor recovery",
+    "capturedAt": "2026-08-07",
+    "digest": "sha256:rayiori-quality-session-isolation-654-current-main"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Recover #654's strict quality-session and synchronization-Outcome correction on the current remote base.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "baseCommit": "a49343f90fe4a4bed19438024965e5a3d26501fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "Makefile",
+    "scripts/quality_session_lock.py",
+    "scripts/quality_evidence.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_resume_work_item.py",
+    "scripts/ai_finish.py",
+    "tests/test_quality_session.py",
+    "tests/test_quality_evidence.py",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_makefile.py",
+    "tests/test_ci_quality_orchestration.py",
+    "tests/test_workflows.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    ".github/workflows/compatibility.yml",
+    ".github/workflows/release.yml",
+    "docs/reference/governance-profiles.md",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/governance-profiles.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+    ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/quality-session-isolation-654-current-main.outcome.json",
+    ".ai/work-items/active/quality-session-isolation-654-current-main.outcome.md",
+    ".ai/work-items/conflict-successor-receipts/**"
+  ],
+  "outOfScope": [
+    "templates/**",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "requirements*.lock",
+    "provider configuration or branch-protection settings",
+    "changes that weaken quality, coverage, security, governance, installer, CI, Outcome, merge, convergence, or release gates",
+    "unrelated Work Items"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/quality-session-isolation-654.contract.json",
+      "reason": "Blocked predecessor Contract and its recorded acceptance criteria."
+    },
+    {
+      "path": ".ai/work-items/active/quality-session-isolation-654.outcome.json",
+      "reason": "Authenticated blocked Outcome from the governed synchronization conflict."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/654",
+      "reason": "Canonical GitHub Issue; this successor completes the same correction on current main."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "coverage_evidence_integrity",
+      "concurrent_execution",
+      "governance_quality_routing",
+      "lifecycle_evidence"
+    ],
+    "reason": "Concurrent quality runs can corrupt coverage and falsely attribute evidence; reuse must be bounded so it never turns stale local proof into merge, convergence, or release proof.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The task changes quality evidence, hosted workflows, and Work Item lifecycle behavior."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user gave RayIori standing authorization and the predecessor provides reviewed, evidence-backed scope."
+  },
+  "preReviewWarnings": [
+    "Review lock ownership, exact-state receipt binding, hosted pip/pip-tools compatibility, and whether synchronization conflict produces a red Outcome without source mutation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The #654 quality-session isolation correction is present on the current origin/main base, with a kernel-backed same-worktree lock and independent-worktree parallelism.",
+    "Reusable Full evidence is exact-state bound and rejected for merge, convergence, and release contexts.",
+    "Hosted lockfile reproducibility bootstraps a compatible pinned pip/pip-tools toolchain.",
+    "A synchronization conflict writes a valid red blocked Outcome with failedGate synchronization_conflict before a successor route is recorded.",
+    "Focused regressions, Strict Full quality, lifecycle checks, and generated documentation alignment pass."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A second same-worktree quality session is rejected without producing evidence",
+      "required": true,
+      "riskDomain": "coverage_evidence_integrity",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The first owner retains the kernel lock and the second caller receives the documented busy/retry result.",
+      "verificationPlan": "Regression tests hold the lock and assert the second subprocess fails without receipt output."
+    },
+    {
+      "scenario": "Independent worktrees run isolated quality sessions in parallel",
+      "required": true,
+      "riskDomain": "concurrent_execution",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Lock identity is local to the worktree and cannot serialize a distinct worktree.",
+      "verificationPlan": "Focused session tests compare two worktree identities."
+    },
+    {
+      "scenario": "A reusable Full receipt rejects state or environment mismatch",
+      "required": true,
+      "riskDomain": "governance_quality_routing",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Reuse fails closed for a mismatched base, tree, changed paths, environment, profile, active lock, or failed session.",
+      "verificationPlan": "Evidence tests mutate each binding and assert a rejection."
+    },
+    {
+      "scenario": "Final merge, convergence, and release routes reject local reusable evidence",
+      "required": true,
+      "riskDomain": "governance_quality_routing",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Final contexts require fresh Full or Release proof.",
+      "verificationPlan": "Quality routing architecture tests assert the final-stage fresh-evidence rules."
+    },
+    {
+      "scenario": "A governed synchronization conflict persists a red blocked Outcome before successor routing",
+      "required": true,
+      "riskDomain": "lifecycle_evidence",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The rebase abort leaves the Contract and Summary unchanged and writes a valid Outcome with failedGate synchronization_conflict.",
+      "verificationPlan": "Synchronization lifecycle regression creates an actual conflict and validates the emitted Outcome."
+    }
+  ],
+  "guidelines": [
+    "Fail closed with a canonical recovery command; never weaken or silently bypass coverage, quality, governance, security, installer, CI, Outcome, merge, convergence, or release gates.",
+    "Keep strict evidence provenance: do not fabricate a passed result, receipt, Outcome, or hosted execution.",
+    "User authorization: RayIori authorized automatic execution, external Issue/PR handling, supersession/quarantine, and recording this authority in each Work Item Contract."
+  ],
+  "intent": {
+    "problem": "The completed predecessor branch cannot be rebased onto current main because generated status artifacts conflict. The normal synchronization command must fail closed and bind a current-main successor rather than use a manual rebase.",
+    "constraints": [
+      "Remain bound to GitHub Issue #654; do not create a duplicate external Issue.",
+      "Use only governed synchronization/successor commands; do not manually rebase the predecessor.",
+      "Preserve the predecessor's blocked Outcome and do not weaken quality or coverage gates."
+    ],
+    "rationale": "A clean successor based on current origin/main permits the proven #654 changes to be delivered while retaining immutable evidence of the predecessor's conflict."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "Standing authorization: execute the plan automatically, record authorization in each Contract, handle external Issues/PRs, and use governed supersession/quarantine when required."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 819
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-session-isolation-654-current-main.json",
+    "baseCommit": "a49343f90fe4a4bed19438024965e5a3d26501fa",
+    "initialScopeDigest": "a27b9f690968f3d55363b528e53de4383a4ced693ea4506bdb9a075ad0fa3a91",
+    "contractSkeletonDigest": "d79e4d9b814d9053bc92892db285e415646a99c6c48685d26c01c15b54add53c"
+  }
+}
