@@ -37,6 +37,8 @@
     "release-state.json",
     ".github/workflows/self-hosted-recovery.yml",
     ".github/workflows/compatibility.yml",
+    "scripts/ai_check_test_weakening.py",
+    "tests/test_test_weakening.py",
     "tests/test_workflows.py",
     "docs/reference/capability-truth-matrix.json",
     "docs/reference/japanese-capability-assessment.json",
@@ -60,6 +62,14 @@
     {
       "path": ".github/workflows/compatibility.yml",
       "reason": "Defines the hosted compatibility matrix that remains the required merge and release evidence."
+    },
+    {
+      "path": "scripts/ai_check_test_weakening.py",
+      "reason": "The current quality gate must distinguish a newly optional manual-dispatch input from a required CI check being made nonblocking."
+    },
+    {
+      "path": "tests/test_test_weakening.py",
+      "reason": "Provides the regression proof that a genuine required-check downgrade remains review-blocking while an optional workflow_dispatch input does not trigger a false positive."
     },
     {
       "path": "docs/operations/quality-gates.md",
@@ -168,6 +178,7 @@
   "acceptance": [
     "The existing compatibility workflow exposes a default-off recovery_diagnostic workflow_dispatch input while preserving all push and pull_request matrix behavior.",
     "The recovery_diagnostic job requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out the immutable GitHub-dispatched candidate commit.",
+    "The test-weakening guard distinguishes an optional workflow_dispatch input from a required CI check being made nonblocking, while preserving its required-check downgrade signal.",
     "The recovery_diagnostic job runs a bounded diagnostic quality command that is supported on macOS and publishes an explicit non-release result summary.",
     "A hosted diagnostic dispatch for the exact candidate commit is prepared and recorded as diagnostic-only evidence; it cannot satisfy compatibility, merge, archive, or release gates.",
     "tests/test_workflows.py prevents trigger, label, source-identity, and non-release-boundary regressions.",
