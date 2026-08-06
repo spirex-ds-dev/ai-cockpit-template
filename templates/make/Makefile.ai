@@ -186,8 +186,8 @@ ai-synchronize-work-item:
 	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --project-root "$(or $(TARGET_ROOT),.)" --contract "$(CONTRACT)" $(if $(SUMMARY),--summary "$(SUMMARY)",) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
 
 ai-transition-conflict-successor:
-	@test -n "$(SOURCE_ROOT)" -a -n "$(SOURCE_CONTRACT)" -a -n "$(SUCCESSOR_CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(REASON)" || (echo 'SOURCE_ROOT, SOURCE_CONTRACT, SUCCESSOR_CONTRACT, BASE_REMOTE, BASE_BRANCH, ISSUE, AUTHORITY, and REASON are required' >&2; exit 2)
-	$(AI_PYTHON) scripts/ai_resume_work_item.py --transition-conflict-successor --project-root "$(or $(TARGET_ROOT),.)" --source-root "$(SOURCE_ROOT)" --source-contract "$(SOURCE_CONTRACT)" --successor-contract "$(SUCCESSOR_CONTRACT)" --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" --reason "$(REASON)"
+	@test -n "$(CONTRACT)" -a -n "$(SOURCE_ROOT)" -a -n "$(SOURCE_CONTRACT)" -a -n "$(SUCCESSOR_CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(REASON)" || (echo 'CONTRACT, SOURCE_ROOT, SOURCE_CONTRACT, SUCCESSOR_CONTRACT, BASE_REMOTE, BASE_BRANCH, ISSUE, AUTHORITY, and REASON are required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_resume_work_item.py --contract "$(CONTRACT)" --transition-conflict-successor --project-root "$(or $(TARGET_ROOT),.)" --source-root "$(SOURCE_ROOT)" --source-contract "$(SOURCE_CONTRACT)" --successor-contract "$(SUCCESSOR_CONTRACT)" --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" --reason "$(REASON)"
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)

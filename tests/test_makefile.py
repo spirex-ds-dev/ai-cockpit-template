@@ -61,6 +61,7 @@ def test_source_and_installed_makefiles_expose_the_same_conflict_successor_targe
 
     for text in (source, installed):
         assert "ai-transition-conflict-successor:" in text
+        assert '--contract "$(CONTRACT)" --transition-conflict-successor' in text
         assert "--transition-conflict-successor" in text
 
 
