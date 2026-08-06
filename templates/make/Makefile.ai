@@ -182,7 +182,7 @@ ai-start:
 
 ai-synchronize-work-item:
 	@test -n "$(CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" || (echo "CONTRACT, BASE_REMOTE, and BASE_BRANCH are required" >&2; exit 2)
-	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --contract "$(CONTRACT)" $(if $(SUMMARY),--summary "$(SUMMARY)",) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
+	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --project-root "$(or $(TARGET_ROOT),.)" --contract "$(CONTRACT)" $(if $(SUMMARY),--summary "$(SUMMARY)",) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)

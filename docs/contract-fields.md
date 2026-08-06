@@ -50,6 +50,10 @@ checkpoint commit、old/new base、path list、verification invalidation を
 temporary commit の代替ではありません。provider mutation、archive rewrite、PR 作成も
 許可しません。
 
+別 worktree を統制する場合は、`make ai-synchronize-work-item` に
+`TARGET_ROOT=<target-worktree-root>` を明示します。runtime は Contract、Summary、Git state、
+evidence write を target root 内だけで解決し、caller の active evidence を使用しません。
+
 ### 1.2 変更追跡と範囲
 
 - **`baselineDirtyPaths`**: `array[object]`

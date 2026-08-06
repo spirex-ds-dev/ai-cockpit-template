@@ -499,12 +499,18 @@ def main() -> int:
     parser.add_argument("--base-remote", required=True)
     parser.add_argument("--base-branch", required=True)
     parser.add_argument("--synchronize", action="store_true")
+    parser.add_argument(
+        "--project-root",
+        type=Path,
+        help="Explicit target repository root for a governed synchronization.",
+    )
     args = parser.parse_args()
     try:
-        contract_path = PROJECT_ROOT / args.contract
+        project_root = (args.project_root or PROJECT_ROOT).resolve()
+        contract_path = project_root / args.contract
         if args.synchronize:
             summary_path = (
-                PROJECT_ROOT / args.summary
+                project_root / args.summary
                 if args.summary
                 else contract_path.with_name(
                     contract_path.name.replace(".contract.json", ".summary.json")
@@ -515,14 +521,14 @@ def main() -> int:
                 summary_path=summary_path,
                 base_remote=args.base_remote,
                 base_branch=args.base_branch,
-                project_root=PROJECT_ROOT,
+                project_root=project_root,
             )
         else:
             transition = resume_contract(
                 contract_path,
                 base_remote=args.base_remote,
                 base_branch=args.base_branch,
-                project_root=PROJECT_ROOT,
+                project_root=project_root,
             )
     except (OSError, ResumeError) as exc:
         print(f"[ERROR] Work Item resume failed: {exc}")

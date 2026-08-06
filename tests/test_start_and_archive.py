@@ -1218,6 +1218,41 @@ def test_resume_cli_reports_success_and_failure(tmp_path, monkeypatch, capsys):
     assert "Work Item resume failed: rejected" in capsys.readouterr().out
 
 
+def test_synchronize_cli_uses_explicit_target_root_not_caller_root(tmp_path, monkeypatch, capsys):
+    target_root, contract_path, summary_path, _start, target = _synchronization_fixture(tmp_path)
+    caller_root = tmp_path / "caller"
+    caller_root.mkdir()
+    caller_contract = caller_root / ".ai" / "work-items" / "active" / "paused-task.contract.json"
+    caller_contract.parent.mkdir(parents=True)
+    caller_contract.write_text('{"workItemId": "caller-task"}\n', encoding="utf-8")
+    caller_before = caller_contract.read_bytes()
+    monkeypatch.setattr(ai_resume_work_item, "PROJECT_ROOT", caller_root)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_resume_work_item.py",
+            "--synchronize",
+            "--project-root",
+            str(target_root),
+            "--contract",
+            str(contract_path.relative_to(target_root)),
+            "--summary",
+            str(summary_path.relative_to(target_root)),
+            "--base-remote",
+            "origin",
+            "--base-branch",
+            "main",
+        ],
+    )
+
+    assert ai_resume_work_item.main() == 0
+    synchronized = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert synchronized["baseCommit"] == target
+    assert caller_contract.read_bytes() == caller_before
+    assert "Work Item synchronization recorded:" in capsys.readouterr().out
+
+
 def test_resume_helpers_reject_malformed_inputs_with_specific_diagnostics(tmp_path):
     malformed = tmp_path / "malformed.json"
     malformed.write_text("{", encoding="utf-8")

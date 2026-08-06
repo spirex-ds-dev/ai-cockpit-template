@@ -104,7 +104,8 @@ fetch してから次を実行します。
 ```text
 make ai-synchronize-work-item \
   CONTRACT=.ai/work-items/active/<task>.contract.json \
-  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch> \
+  TARGET_ROOT=<target-worktree-root>
 ```
 
 tracking ref が stale なら fail closed です。この command は専用 branch、active
@@ -116,6 +117,11 @@ identity、path、old/new base は digest-bound `synchronizationHistory` に記�
 既存 verification は無効化されます。push、force-push、PR、provider、archive、Start
 Receipt の変更権限はありません。conflict は自動 abort し、recoverable checkpoint は
 synchronization 成功を主張しません。Finish 前に Preflight と必要な全 check を再実行します。
+
+対象 checkout 内から実行する場合の `TARGET_ROOT` は optional です。別の caller が
+worktree を統制する場合は必須であり、command は Contract、Summary、Git facts と許可された
+すべての evidence write をその target root 内だけで解決します。caller 側の active Work Item
+evidence へ fallback しません。
 
 1. `make ai-start TASK=<task> TITLE="..." MODE=code` で Work Item を作成する。
 2. Contract の `scope`、`sources`、`acceptance`、`verification`、リスク評価、エージェント能力、実行判断を明確にする。

@@ -523,7 +523,7 @@ ai-resume-work-item:
 
 ai-synchronize-work-item:
 	@test -n "$(CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" || (echo "CONTRACT, BASE_REMOTE, and BASE_BRANCH are required" >&2; exit 2)
-	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --contract "$(CONTRACT)" $(if $(SUMMARY),--summary "$(SUMMARY)",) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
+	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --project-root "$(or $(TARGET_ROOT),.)" --contract "$(CONTRACT)" $(if $(SUMMARY),--summary "$(SUMMARY)",) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
 
 ai-onboard:
 	$(AI_PYTHON) scripts/ai_onboard.py --root . $(if $(PHASE),--phase $(PHASE),) $(if $(SKIP_CALIBRATE),--skip-calibrate,) $(if $(SKIP_READINESS_CHECKS),--skip-readiness-checks,)
