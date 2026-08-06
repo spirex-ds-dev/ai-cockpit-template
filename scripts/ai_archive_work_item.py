@@ -262,7 +262,16 @@ def _summary_worktree_digest(summary: dict[str, object]) -> str:
 
 def _current_worktree_digest(contract: dict[str, object]) -> str:
     summary_path = str(contract.get("summaryPath", ""))
-    paths = [path for path in changed_paths(contract) if path != summary_path]
+    post_finish_paths = {
+        summary_path,
+        summary_path.replace(".summary.json", ".outcome.json"),
+        summary_path.replace(".summary.json", ".outcome.md"),
+        summary_path.replace(".summary.json", ".events.jsonl"),
+        ".ai/cockpit/current_status.md",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    }
+    paths = [path for path in changed_paths(contract) if path not in post_finish_paths]
     return _worktree_digest(paths)
 
 

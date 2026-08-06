@@ -101,6 +101,27 @@ def test_outcome_artifact_paths_are_stable_and_ordered(tmp_path):
     ]
 
 
+def test_archive_digest_excludes_post_finish_generated_artifacts(monkeypatch):
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "changed_paths",
+        lambda _contract: [
+            "src/implementation.py",
+            ".ai/work-items/active/task.summary.json",
+            ".ai/work-items/active/task.outcome.json",
+            ".ai/work-items/active/task.outcome.md",
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+        ],
+    )
+    monkeypatch.setattr(ai_archive_work_item, "path_fingerprint", lambda path: f"digest:{path}")
+
+    assert ai_archive_work_item._current_worktree_digest(
+        {"summaryPath": ".ai/work-items/active/task.summary.json"}
+    ) == ai_archive_work_item._worktree_digest(["src/implementation.py"])
+
+
 def test_next_archive_sequence_prefers_existing_index(tmp_path, monkeypatch):
     archive = tmp_path / "archive"
     archive.mkdir()

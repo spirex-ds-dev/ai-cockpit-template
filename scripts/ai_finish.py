@@ -342,8 +342,17 @@ def worktree_digest(paths: list[str]) -> str:
 
 
 def worktree_digest_for_finish(paths: list[str], summary_path: str) -> str:
-    """Hash the Work Item state without the self-referential Summary file."""
-    return worktree_digest([path for path in paths if path != summary_path])
+    """Hash implementation state without finish-generated evidence artifacts."""
+    post_finish_paths = {
+        summary_path,
+        summary_path.replace(".summary.json", ".outcome.json"),
+        summary_path.replace(".summary.json", ".outcome.md"),
+        summary_path.replace(".summary.json", ".events.jsonl"),
+        ".ai/cockpit/current_status.md",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    }
+    return worktree_digest([path for path in paths if path not in post_finish_paths])
 
 
 def reusable_archive_verification(

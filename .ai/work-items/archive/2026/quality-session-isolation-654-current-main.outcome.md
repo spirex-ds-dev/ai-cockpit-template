@@ -38,7 +38,10 @@ Governed Work Item: quality-session-isolation-654-current-main
 - .ai/work-items/conflict-successor-receipts/quality-session-isolation-654.json
 - .ai/work-items/starts/quality-session-isolation-654-current-main.json
 - scripts/ai_check_work_item.py
+- scripts/ai_archive_work_item.py
 - tests/test_ai_check_work_item.py
+- tests/test_ai_archive_work_item.py
+- tests/test_finish_readiness.py
 - templates/make/Makefile.ai
 - .ai/work-items/active/quality-session-isolation-654-current-main.outcome.json
 - .ai/work-items/active/quality-session-isolation-654-current-main.outcome.md

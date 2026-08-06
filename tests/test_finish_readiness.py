@@ -118,6 +118,25 @@ def test_finish_archive_message_is_not_lifecycle_closure():
     assert "make ai-close-work-item TASK=example" in output
 
 
+def test_finish_digest_excludes_post_finish_generated_artifacts(monkeypatch):
+    summary_path = ".ai/work-items/active/example.summary.json"
+    paths = [
+        "scripts/implementation.py",
+        summary_path,
+        ".ai/work-items/active/example.outcome.json",
+        ".ai/work-items/active/example.outcome.md",
+        ".ai/work-items/active/example.events.jsonl",
+        ".ai/cockpit/current_status.md",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    ]
+    monkeypatch.setattr(ai_finish, "path_fingerprint", lambda path: f"digest:{path}")
+
+    assert ai_finish.worktree_digest_for_finish(paths, summary_path) == ai_finish.worktree_digest(
+        ["scripts/implementation.py"]
+    )
+
+
 def test_archive_reuse_requires_a_same_state_final_summary_attestation(monkeypatch):
     contract = {"scope": ["scripts/ai_finish.py"]}
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: contract["scope"])
