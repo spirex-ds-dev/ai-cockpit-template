@@ -82,6 +82,26 @@ Issue, authority, mode, and receipt location. Status/doctor show a yellow route
 while the predecessor Outcome remains red. It never authorizes archive, merge,
 release, branch deletion, provider mutation, or predecessor evidence rewrite.
 
+## Retry-versus-successor boundary
+
+A blocked active Work Item retries in place when it retains the same active
+Contract and scope and needs only an active schema/evidence correction. Preserve
+the blocked Outcome, append the correction, and rerun the affected gates. Do
+not create another Issue or successor for a missing Summary field or missing
+`before_finish` checkpoint.
+
+A governed successor/quarantine is required only if the delivery must start
+from a changed base, the Contract/scope is invalidated, or immutable
+failed-delivery evidence requires an independently re-delivered change. The
+successor route retains, rather than rewrites, predecessor evidence.
+
+Checkpoint recovery is stage-specific. A missing `before_finish` record is
+recovered with `make ai-checkpoint CONTRACT=<contract> SUMMARY=<summary>
+STAGE=before_finish`. A stale immutable `before_edit` Contract binding is
+recovered only through append-only
+`make ai-revalidate-contract-amendment`; it must never be replaced by a second
+`before_edit` record.
+
 When a process defect pauses a Work Item, complete and close the corrective
 Work Item first. Rebase the paused dedicated branch onto the latest discovered
 remote default branch, replace its `predecessorWorkItem` with that corrective's

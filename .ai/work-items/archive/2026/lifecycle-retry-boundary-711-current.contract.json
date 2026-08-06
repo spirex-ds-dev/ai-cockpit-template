@@ -1,0 +1,66 @@
+{
+  "contractVersion": 2,
+  "workItemId": "lifecycle-retry-boundary-711-current",
+  "mode": "code",
+  "title": "Re-deliver #711 lifecycle retry-boundary guidance from current main",
+  "baseCommit": "99124f01cfb544022852c31483c3dd8c21a501d5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/lifecycle-retry-boundary-711-current.contract.json",
+    ".ai/work-items/active/lifecycle-retry-boundary-711-current.summary.json",
+    ".ai/work-items/active/lifecycle-retry-boundary-711-current.outcome.json",
+    ".ai/work-items/active/lifecycle-retry-boundary-711-current.outcome.md",
+    ".ai/work-items/starts/**", ".ai/work-items/archive/**", ".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md",
+    "scripts/ai_finish.py", "scripts/ai_lifecycle_truth.py", "tests/test_finish_readiness.py", "tests/test_lifecycle_truth_core_677.py",
+    ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md", "templates/agents/AI_COCKPIT_RULES.md", "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not alter the archived, unmerged #711 predecessor or its branch; it is read-only forensic evidence.",
+    "Do not mutate #708 or #713 history, manually rebase, stash, amend, rewrite archives, force-push, release, merge, delete branches, or create a duplicate Issue for #711.",
+    "Do not weaken checkpoint validation, blocked Outcome generation, or successor/quarantine authority requirements."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/711", "reason": "Authoritative requirement and acceptance boundary."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/blob/ea191a1269b291849215fe2f524fdaa8b20f9d88/.ai/work-items/archive/2026/lifecycle-retry-boundary-711.contract.json", "reason": "Read-only predecessor Contract describing the previously verified but unmerged implementation."},
+    {"path": "scripts/ai_finish.py", "reason": "Current generic checkpoint recovery output."},
+    {"path": "scripts/ai_lifecycle_truth.py", "reason": "Canonical lifecycle Outcome and successor/quarantine truth."},
+    {"path": "tests/test_finish_readiness.py", "reason": "Focused ai-finish recovery guidance regression location."},
+    {"path": "tests/test_lifecycle_truth_core_677.py", "reason": "Focused lifecycle retry/successor boundary regression location."},
+    {"path": ".ai/cockpit/README.md", "reason": "Canonical English lifecycle guidance."},
+    {"path": ".ai/cockpit/README.ja.md", "reason": "Canonical Japanese lifecycle guidance."}
+  ],
+  "rawUserRequest": "Execute the plan to completion. I authorize automatic execution, captured in every Work Item Contract. A problem found within a Work Item must be resolved by the current Work Item; do not create a duplicate Issue.",
+  "rawRequestSource": {"type": "human", "reference": "RayIori standing authorization in this task; #711 current-main successor", "capturedAt": "2026-08-06", "digest": "sha256:rayiori-automatic-execution-711-current-20260806"},
+  "declaredIntent": {"summary": "Make ai-finish prescribe the checkpoint-stage-specific recovery and distinguish in-place active retry from a governed successor/quarantine transition.", "requestedCapabilities": ["ai_governance", "software_design", "documentation", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [], "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["lifecycle_ordering", "evidence_integrity", "template_parity"], "reason": "Wrong retry instructions can bypass immutable evidence or create needless successor Work Items.", "unknownsReviewComplete": true, "unknownsReviewReason": "#711, the old verified implementation, current runtime, instructions, and focused tests provide sufficient evidence."},
+  "governanceProfile": {"selected": "strict", "source": "human_override", "reasons": ["Lifecycle and immutable-evidence semantics require full regression coverage."], "operationClasses": ["repository_governance"], "verificationEscalations": [], "override": {"approvalEvidence": "RayIori standing authorization in this task.", "reason": "Strict corrective lifecycle behavior.", "risks": ["lifecycle_ordering", "evidence_integrity", "template_parity"], "notRunChecks": ["Release checks are inapplicable."], "workItemOnly": true, "workItemId": "lifecycle-retry-boundary-711-current"}},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "RayIori authorized automatic execution. This successor re-delivers existing #711 scope from current main without mutating predecessor evidence."},
+  "preReviewWarnings": ["Verify that missing before_finish directs ai-checkpoint, while changed base, invalidated Contract/scope, or immutable delivery selects governed successor/quarantine."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record implementation and finish boundaries for the lifecycle correction."},
+  "acceptance": [
+    "ai-finish directs a missing before_finish checkpoint to canonical ai-checkpoint recovery, while a stale immutable before_edit binding directs append-only Contract amendment revalidation.",
+    "Lifecycle truth tests that same-active, same-scope evidence/schema corrections retry in place and retain blocked Outcomes; changed base, invalidated Contract/scope, or immutable failed delivery requires the governed successor/quarantine route.",
+    "Focused regressions cover missing before_finish, stale amended Contract evidence, same-scope retry, and every successor condition without weakening validation or Outcome generation.",
+    "English/Japanese instructions, template agent rules, lifecycle reference, and generated capability/documentation projections express the same boundary and do not prescribe an unnecessary new Issue or Work Item.",
+    "Strict Finish, archive, PR, merge, and closure use normal lifecycle only after all declared checks pass."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Only the before_finish checkpoint is missing for an unchanged active Contract.", "required": true, "riskDomain": "lifecycle_ordering", "status": "unverified", "evidence": [], "expected": "Blocked Outcome stays red and recovery is ai-checkpoint STAGE=before_finish.", "verificationPlan": "Run focused ai-finish regression."},
+    {"scenario": "Immutable before_edit Contract binding is stale after an amendment.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "Recovery requires append-only amendment revalidation.", "verificationPlan": "Run focused stale-binding regression."},
+    {"scenario": "Same active Contract and scope only need evidence/schema correction.", "required": true, "riskDomain": "lifecycle_ordering", "status": "unverified", "evidence": [], "expected": "Retry stays in place and preserves the blocked Outcome.", "verificationPlan": "Run lifecycle truth regression."},
+    {"scenario": "Base, Contract/scope, or immutable delivery is invalidated.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "Governed successor/quarantine is required.", "verificationPlan": "Run focused lifecycle truth regressions."},
+    {"scenario": "Source and installed-template instructions expose the same boundary.", "required": true, "riskDomain": "template_parity", "status": "unverified", "evidence": [], "expected": "English/Japanese/template guidance and projections align.", "verificationPlan": "Run strict quality documentation and projection checks."}
+  ],
+  "guidelines": ["Preserve blocked Outcomes and immutable before_edit evidence.", "Use in-place retry only for same-active, same-scope corrections.", "Do not weaken checkpoint validation, Outcome generation, or successor/quarantine authority.", "Keep source, template, Japanese guidance, and generated projections aligned."],
+  "intent": {"problem": "#711 found that ai-finish emitted Contract-amendment advice even for a missing before_finish stage, and ordinary active evidence omissions could create needless Work Item expansion. Only a changed base, invalidated Contract/scope, or immutable failed delivery needs a successor/quarantine transition.", "constraints": ["Preserve predecessor and #708/#713 evidence.", "No duplicate Issue.", "Retain red blocked Outcome emission.", "No manual Git repair, provider mutation, release, merge, or deletion."], "rationale": "Stage-specific recovery removes a false dead end while a formal boundary prevents unnecessary expansion and retains audit truth."},
+  "verification": [{"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "RayIori", "reason": "Standing authorization for automatic execution. It does not authorize history rewrite, provider mutation, release, merge, or deletion."},
+  "rollbackNote": "Revert only this successor's source, docs, template, and tests; preserve predecessor evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 2400}},
+  "startReceipt": {"path": ".ai/work-items/starts/lifecycle-retry-boundary-711-current.json", "baseCommit": "99124f01cfb544022852c31483c3dd8c21a501d5", "initialScopeDigest": "aea03b77138c835f928a1622ea4c51913b41ebe56bb01a5360a85ed76e9a2647", "contractSkeletonDigest": "325b3cdc8af8a2dd00483ae2f50abade5342ce7aa1efaa7cd1481c0750a6351f"}
+}

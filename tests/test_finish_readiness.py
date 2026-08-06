@@ -1,6 +1,42 @@
 import ai_finish
 
 
+def test_checkpoint_recovery_guidance_uses_before_finish_for_a_missing_finish_stage():
+    guidance = ai_finish.checkpoint_recovery_guidance(
+        ["missing checkpointEvidence for required stage(s): before_finish"],
+        contract=".ai/work-items/active/example.contract.json",
+        summary=".ai/work-items/active/example.summary.json",
+    )
+
+    assert "make ai-checkpoint" in guidance
+    assert "STAGE=before_finish" in guidance
+    assert "ai-revalidate-contract-amendment" not in guidance
+
+
+def test_checkpoint_recovery_guidance_uses_append_only_amendment_for_stale_before_edit():
+    guidance = ai_finish.checkpoint_recovery_guidance(
+        ["missing contract_amendment_revalidation for stale before_edit Contract"],
+        contract=".ai/work-items/active/example.contract.json",
+        summary=".ai/work-items/active/example.summary.json",
+    )
+
+    assert "make ai-revalidate-contract-amendment" in guidance
+    assert "PREVIOUS_CONTRACT_HASH=<immutable-before-edit-hash>" in guidance
+
+
+def test_checkpoint_recovery_guidance_keeps_unknown_validation_failures_non_bypassing():
+    guidance = ai_finish.checkpoint_recovery_guidance(
+        ["checkpointEvidence[manual].contractHash is malformed"],
+        contract=".ai/work-items/active/example.contract.json",
+        summary=".ai/work-items/active/example.summary.json",
+    )
+
+    assert "inspect every reported checkpoint issue" in guidance
+    assert "preserve active evidence" in guidance
+    assert "ai-revalidate-contract-amendment" not in guidance
+    assert "STAGE=before_finish" not in guidance
+
+
 def summary(*, verification="passed", unknowns=None, residual_risks=None):
     return {
         "verification": [

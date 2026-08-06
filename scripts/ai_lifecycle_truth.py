@@ -128,6 +128,15 @@ class QualityAttemptDecision:
 
 
 @dataclass(frozen=True)
+class RetryOrSuccessorDecision:
+    """The lifecycle continuation boundary for a blocked active Work Item."""
+
+    action: str
+    successorRequired: bool
+    reason: str
+
+
+@dataclass(frozen=True)
 class SuccessorTransition:
     accepted: bool
     reason: str
@@ -276,6 +285,45 @@ def quality_attempt_state(
 
 def can_amend_contract(decision: QualityAttemptDecision) -> bool:
     return not decision.verificationStarted
+
+
+def retry_or_successor_decision(
+    *,
+    sameActiveContract: bool,
+    sameScope: bool,
+    baseChanged: bool,
+    immutableDelivery: bool,
+) -> RetryOrSuccessorDecision:
+    """Choose in-place evidence retry or the existing governed successor route."""
+    if baseChanged:
+        return RetryOrSuccessorDecision(
+            "governed_successor_or_quarantine",
+            True,
+            "the delivery must restart from a changed base",
+        )
+    if not sameActiveContract:
+        return RetryOrSuccessorDecision(
+            "governed_successor_or_quarantine",
+            True,
+            "the active Contract is no longer the same delivery boundary",
+        )
+    if not sameScope:
+        return RetryOrSuccessorDecision(
+            "governed_successor_or_quarantine",
+            True,
+            "the Contract scope is invalidated for this delivery",
+        )
+    if immutableDelivery:
+        return RetryOrSuccessorDecision(
+            "governed_successor_or_quarantine",
+            True,
+            "immutable failed-delivery evidence requires a new governed delivery",
+        )
+    return RetryOrSuccessorDecision(
+        "retry_in_place",
+        False,
+        "same active Contract and scope permit an append-only evidence correction and retry",
+    )
 
 
 def transition_to_successor(
