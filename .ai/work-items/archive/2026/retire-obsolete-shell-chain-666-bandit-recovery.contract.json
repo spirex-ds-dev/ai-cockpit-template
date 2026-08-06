@@ -1,0 +1,245 @@
+{
+  "contractVersion": 2,
+  "workItemId": "retire-obsolete-shell-chain-666-bandit-recovery",
+  "mode": "code",
+  "title": "retire-obsolete-shell-chain-666-bandit-recovery",
+  "baseCommit": "8a85716d95da3e57c06f1b78e3a86cceffb34b32",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/retire-obsolete-shell-chain-666-bandit-recovery.contract.json",
+    ".ai/work-items/active/retire-obsolete-shell-chain-666-bandit-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/retire-obsolete-shell-chain-666-bandit-recovery.outcome.json",
+    ".ai/work-items/active/retire-obsolete-shell-chain-666-bandit-recovery.outcome.md",
+    "docs/reference/deprecated-assets-registry.json",
+    "docs/reference/deprecated-assets.md",
+    "scripts/check_deprecated_assets.py",
+    "tests/test_deprecated_assets.py"
+  ],
+  "outOfScope": [
+    "Rewriting the immutable archived predecessor evidence for retire-obsolete-shell-chain-666-successor.",
+    "Updating the Bandit baseline to accept the new B101 finding.",
+    "Changing unrelated quality policy, release behavior, or GitHub Issue scope.",
+    "Merging, closing, deleting, rebasing, or force-pushing PR #721 before its successor passes hosted verification."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/666",
+      "reason": "The parent Issue: retire obsolete lifecycle shell-chain artifacts while preserving the governed lifecycle."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/721",
+      "reason": "Immutable failed hosted delivery evidence for the archived #666 predecessor."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31097401617/job/92602587815",
+      "reason": "Authoritative hosted failure: Bandit reported B101 in the new deprecated-assets checker, changing the baseline from 115 to 116 findings."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/retire-obsolete-shell-chain-666-successor.contract.json",
+      "reason": "Read-only predecessor Contract and immutable scope/history."
+    },
+    {
+      "path": "scripts/check_deprecated_assets.py",
+      "reason": "The precise implementation boundary containing the B101 assert finding."
+    },
+    {
+      "path": "b99b27764cff04c86eb1a0a43d8704b6e84a0bcd",
+      "reason": "Read-only failed #721 candidate diff used as the implementation reference; it is reconstructed, not revived or rewritten."
+    }
+  ],
+  "rawUserRequest": "Continue the authorized overall plan without bypassing failed gates. If process problems appear, create the governed corrective Work Item first; do not use temporary repairs. Preserve convergence and complete the original Issue plan.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:RayIori-continuous-authorization-process-first-remediation",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:rayiori-authorized-666-bandit-root-cause-recovery"
+  },
+  "declaredIntent": {
+    "summary": "Repair the archived #666 successor's Bandit B101 root cause without expanding the Bandit baseline, while preserving failed hosted evidence and completing the original Issue through a clean successor delivery.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["security_baseline", "hosted_parity", "governance_lifecycle"],
+    "reason": "A low-severity static-analysis finding blocked the hosted delivery after archive. The repair must preserve immutable predecessor evidence, remove rather than accept the finding, and prove local/hosted-quality parity.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "A bounded security-baseline correction with a focused implementation and full hosted verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "RayIori authorized autonomous corrective execution under the existing #666 Issue; no provider mutation is authorized until hosted checks pass."
+  },
+  "preReviewWarnings": ["Review the explicit fail-closed replacement for assert and verify no Bandit baseline expansion is introduced."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: scripts/check_deprecated_assets.py contains no assert-based control flow; invalid root or configuration still yields deterministic fail-closed diagnostics.",
+    "A2: Focused tests cover the explicit replacement behavior and a regression check prevents reintroducing assert into the checker.",
+    "A3: make check-bandit-baseline passes with the unchanged 115-finding baseline and its existing digest.",
+    "A4: The predecessor archive and failed PR #721 remain unmodified; this successor is the only new delivery route for GitHub Issue #666.",
+    "A5: The full local finish and successor hosted workflow pass before any PR merge or Issue closure."
+  ],
+  "guidelines": [
+    "Preserve fail-closed behavior and use explicit exceptions rather than assert for runtime validation.",
+    "Do not weaken Bandit policy or update the baseline to accept this newly introduced finding.",
+    "Keep predecessor failure and archive evidence immutable; report current Outcome state truthfully."
+  ],
+  "intent": {
+    "problem": "The archived #666 successor was locally green but PR #721 hosted template-smoke failed after all 2109 tests passed because a new assert in scripts/check_deprecated_assets.py generated Bandit B101. The expected baseline is 115 findings; hosted observed 116. The direct candidate must remain immutable, but the underlying Issue requires a successful governed delivery.",
+    "constraints": [
+      "Use current origin/main commit 8a85716d95da3e57c06f1b78e3a86cceffb34b32 as the successor base.",
+      "Eliminate the B101 root cause rather than accepting or suppressing it in the baseline.",
+      "Do not alter archived predecessor records, PR #721, or unrelated policy/release behavior.",
+      "Keep all provider mutations gated on a passing hosted successor workflow."
+    ],
+    "rationale": "A source-level explicit validation path retains the checker's fail-closed semantics and restores the existing security-baseline contract without hiding a new finding. A same-Issue successor preserves convergence while archive immutability keeps the failed hosted evidence truthful."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Declared scan roots are valid and the checker completes without assert control flow.",
+      "riskDomain": "security_baseline",
+      "expected": "The checker returns success when no deprecated shell chain is present and Bandit reports no B101 finding in the checker.",
+      "required": true,
+      "verificationPlan": "Run focused checker tests and make check-bandit-baseline.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A configured scan root is missing or malformed.",
+      "riskDomain": "fail_closed",
+      "expected": "The checker returns a deterministic error instead of relying on an assert that optimized Python can remove.",
+      "required": true,
+      "verificationPlan": "Add focused negative regression coverage in tests/test_deprecated_assets.py.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The successor is assessed against the exact pre-existing Bandit baseline.",
+      "riskDomain": "hosted_parity",
+      "expected": "The unchanged count and digest validate locally, then the hosted template-smoke job passes.",
+      "required": true,
+      "verificationPlan": "Run make check-bandit-baseline locally and require the successor PR hosted checks.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "RayIori authorized autonomous execution of the complete plan, including required governed corrective Work Items, while preserving no-bypass and hosted-gate rules."
+  },
+  "rollbackNote": "Revert only this successor commit and its focused regression test; preserve the archived predecessor and failed PR #721 as immutable hosted evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 818
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/retire-obsolete-shell-chain-666-bandit-recovery.json",
+    "baseCommit": "8a85716d95da3e57c06f1b78e3a86cceffb34b32",
+    "initialScopeDigest": "9adfca6dcd6d37aaa1a429cc1f40d3241549ba1a2ef358720df5701205b284c0",
+    "contractSkeletonDigest": "8f0b9f83d2518fa8dc728441944548c334ea3785586383fdb4029c933ea2c46e"
+  }
+}
