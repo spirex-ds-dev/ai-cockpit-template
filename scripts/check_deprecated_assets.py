@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -27,6 +28,23 @@ REQUIRED_FIELDS = {
     "migrationRequired",
 }
 PROTECTED_PREFIXES = (".ai/work-items/archive/", ".ai/decisions/", ".ai/events/", ".ai/release/")
+SCAN_REQUIRED_FIELDS = {"paths", "excludePrefixes", "prohibitedCommandChains"}
+TEXT_SUFFIXES = {
+    ".cfg",
+    ".ai",
+    ".ini",
+    ".json",
+    ".md",
+    ".mk",
+    ".py",
+    ".rst",
+    ".sh",
+    ".toml",
+    ".txt",
+    ".yaml",
+    ".yml",
+}
+TEXT_FILENAMES = {"AGENTS.md", "Makefile", "README.md"}
 
 
 def _date(value: Any) -> dt.date | None:
@@ -35,6 +53,97 @@ def _date(value: Any) -> dt.date | None:
     if not isinstance(value, str):
         raise InvalidDataShapeError("date must be ISO YYYY-MM-DD or 'never'")
     return dt.date.fromisoformat(value)
+
+
+def _relative_files(root: Path, relative: str) -> list[Path]:
+    """Return deterministic text-candidate files below one declared scan path."""
+    path = root / relative
+    if path.is_file():
+        return [path]
+    if path.is_dir():
+        return sorted(candidate for candidate in path.rglob("*") if candidate.is_file())
+    return []
+
+
+def _is_current_facing_text_asset(path: Path) -> bool:
+    """Keep the command scan on source and maintained prose, never binary/cache artifacts."""
+    return path.name in TEXT_FILENAMES or path.suffix.lower() in TEXT_SUFFIXES
+
+
+def _scan_configuration_issues(payload: Any) -> list[str]:
+    if not isinstance(payload, dict):
+        return ["registry must be an object"]
+    scan = payload.get("currentFacingScan")
+    if not isinstance(scan, dict):
+        return ["currentFacingScan must be an object"]
+    issues: list[str] = []
+    missing = SCAN_REQUIRED_FIELDS - set(scan)
+    issues.extend(f"currentFacingScan missing {field}" for field in sorted(missing))
+    paths = scan.get("paths")
+    if (
+        not isinstance(paths, list)
+        or not paths
+        or any(not isinstance(path, str) or not path or Path(path).is_absolute() for path in paths)
+    ):
+        issues.append("currentFacingScan paths must be a non-empty relative-path list")
+    excluded = scan.get("excludePrefixes")
+    if not isinstance(excluded, list) or any(
+        not isinstance(path, str) or not path or Path(path).is_absolute() for path in excluded
+    ):
+        issues.append("currentFacingScan excludePrefixes must be a relative-path list")
+    chains = scan.get("prohibitedCommandChains")
+    if not isinstance(chains, list) or not chains:
+        issues.append("currentFacingScan prohibitedCommandChains must be a non-empty list")
+        return issues
+    seen: set[str] = set()
+    for index, chain in enumerate(chains):
+        prefix = f"currentFacingScan prohibitedCommandChains[{index}]"
+        if not isinstance(chain, dict):
+            issues.append(f"{prefix} must be an object")
+            continue
+        identifier, expression = chain.get("id"), chain.get("pattern")
+        if not isinstance(identifier, str) or not identifier or identifier in seen:
+            issues.append(f"{prefix} id must be non-empty and unique")
+        else:
+            seen.add(identifier)
+        if not isinstance(expression, str) or not expression:
+            issues.append(f"{prefix} pattern must be a non-empty string")
+        else:
+            try:
+                re.compile(expression, flags=re.IGNORECASE | re.DOTALL)
+            except re.error as exc:
+                issues.append(f"{prefix} pattern is invalid: {exc}")
+    return issues
+
+
+def validate_current_facing_paths(root: Path, payload: Any) -> list[str]:
+    """Reject prohibited lifecycle chains in declared current-facing assets only."""
+    issues = _scan_configuration_issues(payload)
+    if issues:
+        return issues
+    assert isinstance(payload, dict)
+    scan = payload["currentFacingScan"]
+    files: list[Path] = []
+    for relative in scan["paths"]:
+        candidates = _relative_files(root, relative)
+        if not candidates:
+            issues.append(f"currentFacingScan path does not exist: {relative}")
+            continue
+        files.extend(candidates)
+    exclusions = tuple(scan["excludePrefixes"])
+    for candidate in sorted(set(files)):
+        relative = candidate.relative_to(root).as_posix()
+        if relative.startswith(exclusions) or not _is_current_facing_text_asset(candidate):
+            continue
+        try:
+            content = candidate.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as exc:
+            issues.append(f"currentFacingScan cannot read {relative}: {exc}")
+            continue
+        for chain in scan["prohibitedCommandChains"]:
+            if re.search(chain["pattern"], content, flags=re.IGNORECASE | re.DOTALL):
+                issues.append(f"{chain['id']}: {relative} matches prohibited command chain")
+    return issues
 
 
 def validate_registry(root: Path, payload: Any, *, today: dt.date | None = None) -> list[str]:
@@ -91,7 +200,7 @@ def validate_registry(root: Path, payload: Any, *, today: dt.date | None = None)
         for reference in entry.get("currentReferences", []):
             if not isinstance(reference, str) or not (root / reference).is_file():
                 issues.append(f"{prefix} current reference does not exist: {reference}")
-    return issues
+    return [*issues, *_scan_configuration_issues(payload)]
 
 
 def main() -> int:
@@ -105,6 +214,8 @@ def main() -> int:
         print(f"deprecated asset registry load failed: {exc}", file=sys.stderr)
         return 1
     issues = validate_registry(args.root.resolve(), payload)
+    if not issues:
+        issues = validate_current_facing_paths(args.root.resolve(), payload)
     if issues:
         print("\n".join(f"[ERROR] {item}" for item in issues), file=sys.stderr)
         return 1

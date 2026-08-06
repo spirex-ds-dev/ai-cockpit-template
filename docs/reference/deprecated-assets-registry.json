@@ -1,20 +1,67 @@
 {
-  "schemaVersion": 1,
-  "boundary": "Registry validation records candidates; it never authorizes deletion by itself.",
-  "entries": [
-    {
-      "id": "historical-release-v0538",
-      "path": "docs/releases/v0.5.38.md",
-      "type": "historical_release_note",
-      "replacement": "docs/releases/v0.5.40.md",
-      "deprecatedSince": "2026-07-26",
-      "plannedRemoval": "never",
-      "reason": "Retained historical release note; newer corrective release is the current reference for future release work.",
-      "currentReferences": ["docs/releases/v0.5.40.md"],
-      "runtimeUsed": false,
-      "migrationRequired": false,
-      "protected": true,
-      "deletionAllowed": false
-    }
-  ]
+    "schemaVersion": 1,
+    "boundary": "Registry validation records candidates; it never authorizes deletion by itself.",
+    "currentFacingScan": {
+        "paths": [
+            "AGENTS.md",
+            "README.md",
+            ".ai/cockpit",
+            "docs",
+            "Makefile",
+            "scripts",
+            "install.sh",
+            "templates",
+            ".github/workflows"
+        ],
+        "excludePrefixes": [
+            ".ai/work-items/archive/",
+            ".ai/decisions/",
+            ".ai/events/",
+            ".ai/release/",
+            "docs/releases/",
+            "docs/superpowers/"
+        ],
+        "prohibitedCommandChains": [
+            {
+                "id": "obsolete-quality-staging-finish-chain",
+                "pattern": "make\\s+quality(?:\\s+[^&;\\n]*)?\\s*(?:&&|;)\\s*make\\s+staging(?:\\s+[^&;\\n]*)?\\s*(?:&&|;)\\s*make\\s+ai-finish\\b"
+            }
+        ]
+    },
+    "entries": [
+        {
+            "id": "historical-release-v0538",
+            "path": "docs/releases/v0.5.38.md",
+            "type": "historical_release_note",
+            "replacement": "docs/releases/v0.5.40.md",
+            "deprecatedSince": "2026-07-26",
+            "plannedRemoval": "never",
+            "reason": "Retained historical release note; newer corrective release is the current reference for future release work.",
+            "currentReferences": ["docs/releases/v0.5.40.md"],
+            "runtimeUsed": false,
+            "migrationRequired": false,
+            "protected": true,
+            "deletionAllowed": false
+        },
+        {
+            "id": "obsolete-quality-staging-finish-chain",
+            "path": "docs/reference/deprecated-assets.md",
+            "type": "superseded_lifecycle_command_chain",
+            "replacement": "docs/operations/work-item-lifecycle.md",
+            "deprecatedSince": "2026-08-06",
+            "plannedRemoval": "never",
+            "reason": "The historical quality-to-staging-to-ai-finish shell chain is superseded: ai-finish owns required local governance and quality verification, while staging is not a lifecycle prerequisite. The old command itself has no current reachable source; its absence is protected by the declared current-facing scan.",
+            "currentReferences": [
+                "docs/reference/deprecated-assets.md",
+                "docs/operations/work-item-lifecycle.md"
+            ],
+            "runtimeUsed": false,
+            "migrationRequired": false,
+            "sourceLocation": "GitHub Issue #666 user-directed release prerequisite; repository-wide current-facing scan reports no current match.",
+            "reachability": "unreachable",
+            "regressionImpact": "A match in a declared maintained path blocks check-deprecated-assets and the owning quality gate.",
+            "protected": false,
+            "deletionAllowed": false
+        }
+    ]
 }
