@@ -367,6 +367,182 @@ def synchronize_contract(
     return transition
 
 
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _require_conflicting_merge(source_root: Path, source_head: str, target: str) -> None:
+    """Prove the retained source still conflicts without touching its worktree."""
+    result = subprocess.run(
+        # nosec B603: executable is resolved and validated; SHAs were validated from receipts.
+        [governed_git_executable(), "merge-tree", "--write-tree", source_head, target],
+        cwd=source_root,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode == 0:
+        raise ResumeError("source Work Item no longer has a synchronization conflict")
+
+
+def transition_conflicted_synchronization_to_successor(
+    *,
+    source_root: Path,
+    source_contract_path: Path,
+    successor_root: Path,
+    successor_contract_path: Path,
+    base_remote: str,
+    base_branch: str,
+    issue: str,
+    authority: str,
+    reason: str,
+) -> dict[str, Any]:
+    """Bind one clean current-main successor to an untouched sync-conflict source."""
+    source_root, successor_root = source_root.resolve(), successor_root.resolve()
+    if source_root == successor_root:
+        raise ResumeError("conflict successor must use a distinct source and successor worktree")
+    if not issue.startswith("https://github.com/spirex-ds-dev/ai-cockpit-template/issues/"):
+        raise ResumeError("conflict successor requires a repository Issue URL")
+    if not authority.strip() or not reason.strip():
+        raise ResumeError("conflict successor requires authority and reason")
+    if not _clean_worktree(source_root) or not _clean_worktree(successor_root):
+        raise ResumeError(
+            "conflict successor requires clean committed source and successor worktrees"
+        )
+    source_contract_path = source_contract_path.resolve()
+    successor_contract_path = successor_contract_path.resolve()
+    for path, root, description in (
+        (source_contract_path, source_root, "source Contract"),
+        (successor_contract_path, successor_root, "successor Contract"),
+    ):
+        try:
+            path.relative_to(root)
+        except ValueError as exc:
+            raise ResumeError(f"{description} must be inside its declared worktree") from exc
+    source_contract = _load_json(source_contract_path, "source Contract")
+    successor_contract = _load_json(successor_contract_path, "successor Contract")
+    source_task = source_contract.get("workItemId")
+    successor_task = successor_contract.get("workItemId")
+    if not isinstance(source_task, str) or not source_task:
+        raise ResumeError("source Work Item ID is missing")
+    if not isinstance(successor_task, str) or not successor_task or successor_task == source_task:
+        raise ResumeError("successor Work Item ID must be distinct")
+    source_summary_path = source_contract_path.with_name(
+        source_contract_path.name.replace(".contract.json", ".summary.json")
+    )
+    source_outcome_path = source_contract_path.with_name(
+        source_contract_path.name.replace(".contract.json", ".outcome.json")
+    )
+    source_summary = _load_json(source_summary_path, "source Summary")
+    source_outcome = _load_json(source_outcome_path, "source Outcome")
+    if source_summary.get("workItemId") != source_task:
+        raise ResumeError("source Summary Work Item ID does not match")
+    if source_outcome.get("workItemId") != source_task or source_outcome.get("status") != "blocked":
+        raise ResumeError("source Work Item must retain a blocked Outcome")
+    if source_outcome.get("failedGate") != "synchronization_conflict":
+        raise ResumeError("source blocked Outcome is not a synchronization conflict")
+    if source_contract.get("synchronizationHistory") is not None:
+        raise ResumeError("source Work Item already has a synchronization transition")
+    source_receipt_path = receipt_path(source_task, project_root=source_root)
+    source_receipt = _load_json(source_receipt_path, "source Start Receipt")
+    source_issues = validate_receipt(source_contract, source_receipt, project_root=source_root)
+    if source_issues:
+        raise ResumeError("source Work Item evidence is invalid: " + "; ".join(source_issues))
+    successor_receipt_path = receipt_path(successor_task, project_root=successor_root)
+    successor_receipt = _load_json(successor_receipt_path, "successor Start Receipt")
+    successor_issues = validate_receipt(
+        successor_contract, successor_receipt, project_root=successor_root
+    )
+    if successor_issues:
+        raise ResumeError("successor Work Item evidence is invalid: " + "; ".join(successor_issues))
+    source_branch = _governed_git(source_root, "branch", "--show-current")
+    successor_branch = _governed_git(successor_root, "branch", "--show-current")
+    if not work_branch_identifies_work_item(source_branch, source_task):
+        raise ResumeError("source branch does not identify its Work Item")
+    if successor_branch != f"codex/{successor_task}":
+        raise ResumeError("successor must be on its dedicated codex Work Item branch")
+    _validate_remote_and_branch(source_root, base_remote, base_branch)
+    target = _governed_git(
+        source_root, "rev-parse", "--verify", f"refs/remotes/{base_remote}/{base_branch}"
+    )
+    if _live_remote_head(source_root, base_remote, base_branch) != target:
+        raise ResumeError(
+            "remote tracking ref is stale; fetch before conflict successor transition"
+        )
+    source_base = source_contract.get("baseCommit")
+    if not isinstance(source_base, str) or len(source_base) != 40:
+        raise ResumeError("source Contract baseCommit is invalid")
+    source_head = _governed_git(source_root, "rev-parse", "HEAD")
+    _governed_git(source_root, "merge-base", "--is-ancestor", source_base, source_head)
+    _governed_git(source_root, "merge-base", "--is-ancestor", source_base, target)
+    _require_conflicting_merge(source_root, source_head, target)
+    if successor_contract.get("baseCommit") != target:
+        raise ResumeError("successor Contract is not bound to the current remote default branch")
+    _governed_git(successor_root, "merge-base", "--is-ancestor", target, "HEAD")
+    receipt_directory = successor_root / ".ai/work-items/conflict-successor-receipts"
+    receipt_path_value = receipt_directory / f"{source_task}.json"
+    if receipt_path_value.exists():
+        raise ResumeError("conflict successor receipt already exists")
+    receipt = {
+        "receiptVersion": 1,
+        "kind": "synchronization_conflict_successor",
+        "issue": issue,
+        "authority": authority,
+        "reason": reason,
+        "targetBaseCommit": target,
+        "source": {
+            "workItemId": source_task,
+            "branch": source_branch,
+            "baseCommit": source_base,
+            "checkpointHead": source_head,
+            "startReceipt": {
+                "path": source_receipt_path.relative_to(source_root).as_posix(),
+                "sha256": _sha256(source_receipt_path),
+            },
+            "contract": {
+                "path": source_contract_path.relative_to(source_root).as_posix(),
+                "sha256": _sha256(source_contract_path),
+            },
+            "summary": {
+                "path": source_summary_path.relative_to(source_root).as_posix(),
+                "sha256": _sha256(source_summary_path),
+            },
+            "outcome": {
+                "path": source_outcome_path.relative_to(source_root).as_posix(),
+                "sha256": _sha256(source_outcome_path),
+            },
+        },
+        "successor": {
+            "workItemId": successor_task,
+            "branch": successor_branch,
+            "baseCommit": target,
+            "startReceipt": {
+                "path": successor_receipt_path.relative_to(successor_root).as_posix(),
+                "sha256": _sha256(successor_receipt_path),
+            },
+            "contract": {
+                "path": successor_contract_path.relative_to(successor_root).as_posix(),
+                "sha256": _sha256(successor_contract_path),
+            },
+        },
+        "recordedAt": datetime.now(UTC).isoformat(),
+    }
+    original_successor_contract = successor_contract_path.read_bytes()
+    receipt_directory.mkdir(parents=True, exist_ok=True)
+    try:
+        _atomic_write_json(receipt_path_value, receipt)
+        successor_contract["conflictSuccessorReceipt"] = {
+            "path": receipt_path_value.relative_to(successor_root).as_posix(),
+            "sha256": _sha256(receipt_path_value),
+        }
+        _atomic_write_json(successor_contract_path, successor_contract)
+    except BaseException:
+        successor_contract_path.write_bytes(original_successor_contract)
+        receipt_path_value.unlink(missing_ok=True)
+        raise
+    return receipt
+
+
 def _predecessor_transition_fields(contract: dict[str, Any], target: str) -> dict[str, Any]:
     predecessor = contract.get("predecessorWorkItem")
     if not isinstance(predecessor, dict):
@@ -499,6 +675,13 @@ def main() -> int:
     parser.add_argument("--base-remote", required=True)
     parser.add_argument("--base-branch", required=True)
     parser.add_argument("--synchronize", action="store_true")
+    parser.add_argument("--transition-conflict-successor", action="store_true")
+    parser.add_argument("--source-root", type=Path)
+    parser.add_argument("--source-contract")
+    parser.add_argument("--successor-contract")
+    parser.add_argument("--issue")
+    parser.add_argument("--authority")
+    parser.add_argument("--reason")
     parser.add_argument(
         "--project-root",
         type=Path,
@@ -508,7 +691,32 @@ def main() -> int:
     try:
         project_root = (args.project_root or PROJECT_ROOT).resolve()
         contract_path = project_root / args.contract
-        if args.synchronize:
+        if args.transition_conflict_successor:
+            required = (
+                args.source_root,
+                args.source_contract,
+                args.successor_contract,
+                args.issue,
+                args.authority,
+                args.reason,
+            )
+            if not all(required):
+                raise ResumeError(
+                    "conflict successor requires source root/Contract, successor Contract, Issue, authority, and reason"
+                )
+            transition_conflicted_synchronization_to_successor(
+                source_root=args.source_root,
+                source_contract_path=args.source_root / args.source_contract,
+                successor_root=project_root,
+                successor_contract_path=project_root / args.successor_contract,
+                base_remote=args.base_remote,
+                base_branch=args.base_branch,
+                issue=args.issue,
+                authority=args.authority,
+                reason=args.reason,
+            )
+            operation = "conflict successor transition"
+        elif args.synchronize:
             summary_path = (
                 project_root / args.summary
                 if args.summary
@@ -533,10 +741,13 @@ def main() -> int:
     except (OSError, ResumeError) as exc:
         print(f"[ERROR] Work Item resume failed: {exc}")
         return 1
-    operation = "synchronization" if args.synchronize else "resume"
-    print(
-        f"Work Item {operation} recorded: {transition['fromBaseCommit']} -> {transition['toBaseCommit']}"
-    )
+    operation = locals().get("operation", "synchronization" if args.synchronize else "resume")
+    if args.transition_conflict_successor:
+        print("Work Item conflict successor transition recorded")
+    else:
+        print(
+            f"Work Item {operation} recorded: {transition['fromBaseCommit']} -> {transition['toBaseCommit']}"
+        )
     return 0
 
 

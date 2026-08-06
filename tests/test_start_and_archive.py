@@ -822,6 +822,144 @@ def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(
     assert _git(root, "status", "--porcelain") == ""
 
 
+def test_conflicted_synchronization_binds_a_current_main_successor_without_source_mutation(
+    tmp_path,
+):
+    source, contract_path, summary_path, start, target = _synchronization_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Preserve owned evidence before governed conflict transition.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    (source / "src").mkdir()
+    (source / "src" / "implementation.py").write_text("SOURCE\n", encoding="utf-8")
+    outcome = source / ".ai/work-items/active/paused-task.outcome.json"
+    outcome.write_text(
+        json.dumps(
+            {
+                "workItemId": "paused-task",
+                "status": "blocked",
+                "humanStatusColor": "red",
+                "failedGate": "synchronization_conflict",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    _git(source, "add", ".ai")
+    _git(source, "commit", "-m", "record blocked source evidence")
+    _git(source, "add", "src/implementation.py")
+    _git(source, "commit", "-m", "source change")
+    _git(source, "switch", "main")
+    target = _write_commit(source, "src/implementation.py", "TARGET\n")
+    _git(source, "push", "origin", "main")
+    _git(source, "switch", "codex/paused-task")
+
+    with pytest.raises(ResumeError, match="rebase conflicted and was aborted"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=source,
+        )
+    source_head = _git(source, "rev-parse", "HEAD")
+    source_contract = contract_path.read_bytes()
+    source_summary = summary_path.read_bytes()
+    source_outcome = outcome.read_bytes()
+
+    successor = tmp_path / "successor"
+    _git(
+        tmp_path,
+        "clone",
+        "--branch",
+        "main",
+        _git(source, "remote", "get-url", "origin"),
+        str(successor),
+    )
+    _git(successor, "config", "user.name", "Test")
+    _git(successor, "config", "user.email", "test@example.com")
+    _git(successor, "switch", "-c", "codex/recovered-task")
+    active = successor / ".ai/work-items/active"
+    starts = successor / ".ai/work-items/starts"
+    active.mkdir(parents=True)
+    starts.mkdir(parents=True)
+    successor_contract = {
+        "contractVersion": 2,
+        "workItemId": "recovered-task",
+        "mode": "code",
+        "title": "Recovered task",
+        "baseCommit": target,
+        "scope": ["src/**"],
+    }
+    successor_receipt = build_receipt(successor_contract, project_root=successor)
+    successor_contract["startReceipt"] = receipt_binding(successor_receipt)
+    successor_contract_path = active / "recovered-task.contract.json"
+    successor_contract_path.write_text(
+        json.dumps(successor_contract, indent=2) + "\n", encoding="utf-8"
+    )
+    (active / "recovered-task.summary.json").write_text(
+        json.dumps({"workItemId": "recovered-task", "verification": []}) + "\n",
+        encoding="utf-8",
+    )
+    (starts / "recovered-task.json").write_text(
+        json.dumps(successor_receipt, indent=2) + "\n", encoding="utf-8"
+    )
+    _git(successor, "add", ".ai")
+    _git(successor, "commit", "-m", "start successor")
+
+    receipt = ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+        source_root=source,
+        source_contract_path=contract_path,
+        successor_root=successor,
+        successor_contract_path=successor_contract_path,
+        base_remote="origin",
+        base_branch="main",
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        authority="user standing authorization recorded in Contract",
+        reason="The governed synchronization conflict requires a current-main successor.",
+    )
+
+    assert receipt["source"]["checkpointHead"] == source_head
+    assert receipt["source"]["baseCommit"] == start
+    assert receipt["targetBaseCommit"] == target
+    assert receipt["successor"]["workItemId"] == "recovered-task"
+    assert contract_path.read_bytes() == source_contract
+    assert summary_path.read_bytes() == source_summary
+    assert outcome.read_bytes() == source_outcome
+    assert _git(source, "rev-parse", "HEAD") == source_head
+    assert (successor / ".ai/work-items/conflict-successor-receipts/paused-task.json").is_file()
+
+
+def test_conflict_successor_rejects_shared_root_and_foreign_issue_before_evidence_reads(tmp_path):
+    common = tmp_path / "common"
+    common.mkdir()
+    kwargs = {
+        "source_contract_path": common / "source.contract.json",
+        "successor_contract_path": common / "successor.contract.json",
+        "base_remote": "origin",
+        "base_branch": "main",
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        "authority": "user",
+        "reason": "governed recovery",
+    }
+    with pytest.raises(ResumeError, match="distinct source and successor"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+            source_root=common, successor_root=common, **kwargs
+        )
+
+    successor = tmp_path / "successor"
+    successor.mkdir()
+    with pytest.raises(ResumeError, match="repository Issue URL"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+            source_root=common,
+            successor_root=successor,
+            issue="https://example.invalid/issues/709",
+            **{key: value for key, value in kwargs.items() if key != "issue"},
+        )
+
+
 def test_synchronize_contract_rejects_dirty_worktree_before_rebase_or_write(tmp_path):
     root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
     (root / "unrelated.txt").write_text("dirty\n", encoding="utf-8")

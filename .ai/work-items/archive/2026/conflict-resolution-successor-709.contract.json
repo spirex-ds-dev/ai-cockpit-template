@@ -1,0 +1,270 @@
+{
+  "contractVersion": 2,
+  "workItemId": "conflict-resolution-successor-709",
+  "mode": "code",
+  "title": "P1: provide governed conflict-resolution successor route",
+  "baseCommit": "4a1f184a1afc48bf3d46c099d3f6a60db020295a",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Execute the existing #709 corrective from current origin/main. Add the only governed route for an active Work Item whose ai-synchronize-work-item attempt conflicts: preserve source active evidence and any authorized checkpoint, bind the exact conflict context and user authority, and create a clean current-main successor without manual rebase, stash, archive rewrite, or a duplicate GitHub Issue. The user authorizes automatic execution and requires that authority to be recorded in every Work Item Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-06-closure-first-existing-issue-709",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:user-authorized-issue-709-conflict-successor"
+  },
+  "declaredIntent": {
+    "summary": "Make an active synchronization conflict an auditable transition to a current-main successor rather than a manual Git operation or a lifecycle dead end.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/conflict-resolution-successor-709.contract.json",
+    ".ai/work-items/active/conflict-resolution-successor-709.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/conflict-resolution-successor-709.outcome.json",
+    ".ai/work-items/active/conflict-resolution-successor-709.outcome.md",
+    ".ai/work-items/conflict-successor-receipts/**",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_resume_work_item.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_lifecycle_truth.py",
+    "scripts/ai_start.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/installer/legacy.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "tests/test_start_and_archive.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_lifecycle_truth_core_677.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_installer.py",
+    "tests/test_makefile.py"
+  ],
+  "outOfScope": [
+    "Manual rebase, merge, stash, force-push, archive rewrite, or cross-worktree modification of the conflicted source Work Item.",
+    "Publishing a release, merging a PR, changing provider state, or deleting branches outside this Work Item lifecycle.",
+    "Weakening Start Receipt, ownership, synchronization, or PR-audit checks."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+      "reason": "User-authorized existing corrective Issue and acceptance boundary."
+    },
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Current fail-closed synchronization and automatic rebase-abort behavior."
+    },
+    {
+      "path": "scripts/ai_lifecycle_truth.py",
+      "reason": "Existing receipt-bound successor/quarantine primitives."
+    },
+    {
+      "path": "scripts/ai_start_receipt.py",
+      "reason": "Immutable Start Receipt and synchronization-history validation boundary."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Canonical current synchronization instruction to extend."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and evidence-governance boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["work_item_integrity", "ownership_bypass", "source_evidence_preservation", "installer_parity"],
+    "reason": "A malformed conflict transition could lose active evidence, authorize a manual conflict resolution, or bind a successor to the wrong source/checkpoint.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Synchronization and successor identity alter lifecycle/ownership evidence."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The existing Issue, preserved #663 conflict evidence, current-main successor requirement, user authority, and executable verification plan are explicit."
+  },
+  "preReviewWarnings": [
+    "The source Work Item must remain untouched after its failed synchronization except for the narrowly defined receipt; the successor must start from current main and retain no source code by hidden Git replay."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A failed active synchronization conflict produces a fail-closed, append-only receipt binding the source Work Item, source branch/head/checkpoint, target base, conflict context, repository Issue, and recorded human authority without changing source Contract, Summary, Start Receipt, or archive evidence.",
+    "A dedicated successor can be initialized only from the verified current remote default branch and only when its Contract records the exact bound conflict receipt; stale, forged, mismatched, incomplete, foreign, or replayed receipt data fails closed.",
+    "The route never executes manual conflict resolution, stash, force-push, archive mutation, provider mutation, merge, release, or source branch deletion; the source remains auditable and blocked/quarantined until its successor lifecycle closes.",
+    "Source Make targets, installed template/runtime catalog, tests, and canonical documentation expose the same fail-closed behavior.",
+    "Focused red/green tests, full required quality, Finish/archive, clean committed PR audit, hosted CI, merge, and governed closure pass."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "An active Work Item synchronization creates an authorized checkpoint and then conflicts with the verified remote default branch.",
+      "expected": "The rebase is automatically aborted, source evidence remains unchanged except for the already-authorized checkpoint, and a bound conflict receipt can be opened without Git conflict resolution.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Extend a real Git fixture to force a conflict, compare source evidence bytes/head, and validate the receipt contents."
+    },
+    {
+      "scenario": "A successor is requested from a stale base, foreign Issue, forged receipt, mismatched source head, or a non-current branch.",
+      "expected": "The command fails before it writes successor lifecycle evidence or changes source state.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add focused negative tests that vary each bound field and assert no receipt/successor write occurs."
+    },
+    {
+      "scenario": "A valid receipt is consumed by a dedicated successor started from the live current main baseline.",
+      "expected": "The successor Contract binds the source conflict receipt and its current base; the source remains quarantined and cannot be silently treated as synchronized.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use an end-to-end repository fixture covering source conflict, receipt creation, successor start, and receipt validation."
+    },
+    {
+      "scenario": "An installed strict adopter needs the same conflict successor command.",
+      "expected": "Its Makefile and copied runtime expose the command and reject absent runtime dependencies.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Extend Makefile, installer, and installed-runtime parity tests."
+    }
+  ],
+  "guidelines": [
+    "Preserve the conflicted source Work Item evidence byte-for-byte and make every new transition receipt append-only and digest-bound.",
+    "Use executable negative and positive tests for conflict, stale, forged, and current-main successor cases; documentation alone is insufficient.",
+    "Keep source, installed template, and runtime command surfaces in parity.",
+    "Do not treat a conflict transition receipt as authority to merge, publish, delete branches, or close a Work Item."
+  ],
+  "intent": {
+    "problem": "#663 demonstrated that ai-synchronize-work-item correctly creates an authorized checkpoint and automatically aborts a conflicting rebase, but leaves no governed continuation to the now-current main baseline. #711 consequently cannot use the new post-archive recovery capability without a prohibited manual Git operation.",
+    "constraints": ["Keep source Work Item evidence and checkpoint auditable.", "No manual rebase, merge, stash, force-push, or archive rewrite.", "Successor must originate at verified current origin/main.", "Bind repository Issue and the user's standing automation authority.", "Do not create a new GitHub Issue for this known lifecycle defect."],
+    "rationale": "A narrow, receipt-bound conflict-to-successor route turns a safe abort into a recoverable governance state while retaining the one-Work-Item-per-branch/PR rule for the actual delivery."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User gave standing authorization to execute the full plan automatically and record it in every Contract, including the necessary existing #709 conflict-successor repair."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 814
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/conflict-resolution-successor-709.json",
+    "baseCommit": "4a1f184a1afc48bf3d46c099d3f6a60db020295a",
+    "initialScopeDigest": "89369f2b4809ebece0f0b9eee36124234d9dd5afc7e60b12c4c006276075c22b",
+    "contractSkeletonDigest": "e0b0a20f39110cc2d6dc98bd7db5c0c571a78c1c67a20c2f2f4f42e93579c255"
+  }
+}

@@ -45,7 +45,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	check-deprecated-assets \
 	check-instruction-traceability \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
-	ai-start ai-resume-work-item ai-synchronize-work-item ai-finish ai-open-post-archive-recovery ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
+	ai-start ai-resume-work-item ai-synchronize-work-item ai-transition-conflict-successor ai-finish ai-open-post-archive-recovery ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-guidelines check-ai-review-policy template-adoption-ready \
@@ -524,6 +524,10 @@ ai-resume-work-item:
 ai-synchronize-work-item:
 	@test -n "$(CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" || (echo "CONTRACT, BASE_REMOTE, and BASE_BRANCH are required" >&2; exit 2)
 	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --project-root "$(or $(TARGET_ROOT),.)" --contract "$(CONTRACT)" $(if $(SUMMARY),--summary "$(SUMMARY)",) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
+
+ai-transition-conflict-successor:
+	@test -n "$(SOURCE_ROOT)" -a -n "$(SOURCE_CONTRACT)" -a -n "$(SUCCESSOR_CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(REASON)" || (echo 'SOURCE_ROOT, SOURCE_CONTRACT, SUCCESSOR_CONTRACT, BASE_REMOTE, BASE_BRANCH, ISSUE, AUTHORITY, and REASON are required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_resume_work_item.py --transition-conflict-successor --project-root "$(or $(TARGET_ROOT),.)" --source-root "$(SOURCE_ROOT)" --source-contract "$(SOURCE_CONTRACT)" --successor-contract "$(SUCCESSOR_CONTRACT)" --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" --reason "$(REASON)"
 
 ai-onboard:
 	$(AI_PYTHON) scripts/ai_onboard.py --root . $(if $(PHASE),--phase $(PHASE),) $(if $(SKIP_CALIBRATE),--skip-calibrate,) $(if $(SKIP_READINESS_CHECKS),--skip-readiness-checks,)
