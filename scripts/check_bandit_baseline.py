@@ -48,11 +48,32 @@ def current_digest(input_path: Path) -> tuple[int, str]:
     return len(items), hashlib.sha256(payload).hexdigest()
 
 
+def refresh_baseline(input_path: Path, baseline_path: Path = BASELINE) -> dict[str, Any]:
+    """Write the exact low-risk baseline derived from canonical Bandit JSON evidence."""
+    count, digest = current_digest(input_path)
+    baseline = {"count": count, "digest": digest}
+    baseline_path.parent.mkdir(parents=True, exist_ok=True)
+    baseline_path.write_text(json.dumps(baseline, indent=2) + "\n", encoding="utf-8")
+    return baseline
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True)
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="replace the protected baseline with the exact count and digest from --input",
+    )
     args = parser.parse_args()
     try:
+        if args.refresh:
+            refreshed = refresh_baseline(args.input)
+            print(
+                "bandit low-risk baseline refreshed "
+                f"count={refreshed['count']} digest={refreshed['digest']}"
+            )
+            return 0
         baseline = load_baseline(BASELINE)
         expected_count = baseline["count"]
         expected_digest = baseline["digest"]

@@ -54,8 +54,10 @@ def _load_json(path: Path, description: str) -> dict[str, Any]:
 
 
 def _git(project_root: Path, *args: str) -> str:
+    """Run a controlled Git query through the validated executable boundary."""
+    executable = governed_git_executable()
     result = subprocess.run(
-        ["git", *args],
+        [executable, *args],  # nosec B603 - validated executable and fixed callers
         cwd=project_root,
         check=False,
         capture_output=True,

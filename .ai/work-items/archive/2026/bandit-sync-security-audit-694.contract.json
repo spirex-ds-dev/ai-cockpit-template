@@ -1,0 +1,249 @@
+{
+  "contractVersion": 2,
+  "workItemId": "bandit-sync-security-audit-694",
+  "mode": "code",
+  "title": "Audit synchronization Bandit findings for Issue 694",
+  "baseCommit": "daf15273edfd36fe71e54dc58212c3e389838f4c",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "目标：执行计划，到全部完成。 我授权给你自动执行，写入到每个工单的Contract里。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:active-goal-automatic-execution-and-contract-authorization",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:automatic-execution-contract-authorization-694"
+  },
+  "declaredIntent": {
+    "summary": "Audit and remediate the synchronization process-execution boundary without accepting an obsolete Bandit baseline expansion.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    "scripts/ai_resume_work_item.py",
+    "scripts/check_bandit_baseline.py",
+    "Makefile",
+    "tests/test_start_and_archive.py",
+    "tests/test_bandit_baseline.py",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    "docs/reference/bandit-synchronization-security-audit.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/bandit-sync-security-audit-694.contract.json",
+    ".ai/work-items/active/bandit-sync-security-audit-694.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/bandit-sync-security-audit-694.outcome.json",
+    ".ai/work-items/active/bandit-sync-security-audit-694.outcome.md"
+  ],
+  "outOfScope": [
+    "Changing the public synchronization command contract or its lifecycle semantics.",
+    "Suppressing Medium or High Bandit findings, weakening Bandit execution, or changing the locked Bandit version.",
+    "Amending Issue #691 or #699 archived Work Item evidence, closing Issues, merging, publishing, or deleting branches."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Current controlled synchronization implementation to audit and remediate."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing synchronization regression coverage and the focused test home."
+    },
+    {
+      "path": ".ai/cockpit/bandit_low_risk_baseline.json",
+      "reason": "Canonical pinned Bandit count and digest, currently 117 / sha256:9e01c28f…215bf9b."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/694",
+      "reason": "Authoritative acceptance for the discovered baseline discrepancy."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/700",
+      "reason": "Merged successor delivery of the synchronization implementation that superseded unmerged PR #698."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "supply_chain",
+      "governance_integrity"
+    ],
+    "reason": "The change touches process-execution boundaries and a protected security baseline; a false allow would hide future scanner expansion.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic execution of the complete plan; this Contract records that authorization and limits it to the declared audit/remediation scope."
+  },
+  "preReviewWarnings": [
+    "Review every retained Bandit suppression for a fixed executable, fixed argv, and prior validation boundary."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The canonical scanner evidence is inventoried in docs/reference/bandit-synchronization-security-audit.md with file, rule, code path, exploitability, and lifecycle impact for each synchronization-related finding or an explicit zero-new-findings result.",
+    "A safe source-level remediation removes raw partial-executable Git invocation from the synchronization helper without changing its fail-closed result behavior.",
+    "The protected baseline is regenerated only from canonical check-bandit-evidence output, remains exact and rejects an expanded scanner result in focused regression coverage.",
+    "Focused synchronization and Bandit-baseline tests, check-bandit-baseline, and the required full quality gate pass."
+  ],
+  "guidelines": [
+    "Keep subprocess execution list-form, use an absolute validated executable for controlled Git operations, and do not introduce shell execution.",
+    "Preserve fail-closed lifecycle behavior: a Git execution error must remain a ResumeError and must not write transition evidence.",
+    "Do not expand a security baseline merely to pass a gate; update it only after reproducible evidence and an explicit reviewed rationale."
+  ],
+  "intent": {
+    "problem": "Issue #694 recorded a historical Bandit drift from the 117-finding pinned baseline to 123 findings after controlled Work Item synchronization was introduced. Current origin/main is the merged #700 successor and pins/scans at 117, so the exact historical expansion cannot be accepted or blindly copied into the baseline.",
+    "constraints": [
+      "Work from latest origin/main daf15273edfd36fe71e54dc58212c3e389838f4c on a dedicated branch.",
+      "Do not mutate #662 reconciliation evidence or any archived #691/#699 evidence.",
+      "Do not use temporary suppression, baseline expansion, manual lifecycle workaround, or external GitHub mutations.",
+      "Record the user's direct execution mandate verbatim enough to make automatic execution auditable."
+    ],
+    "rationale": "Auditing the actual current implementation and pinning its scanner evidence prevents an obsolete unmerged implementation from expanding the trusted baseline while retaining a reproducible explanation for future maintainers."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A synchronization helper needs to invoke Git for a fixed lifecycle operation.",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The helper resolves and invokes an absolute executable through list-form argv; failure remains fail-closed.",
+      "verificationPlan": "Add a focused failing test before changing the helper, then run the synchronization test subset.",
+      "required": true
+    },
+    {
+      "scenario": "Bandit evidence has the expected reviewed finding set.",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "check-bandit-baseline accepts only the exact canonical count/digest and rejects a simulated expanded result.",
+      "verificationPlan": "Run tests/test_bandit_baseline.py and make check-bandit-baseline after regenerating evidence.",
+      "required": true
+    },
+    {
+      "scenario": "The historical #694 discrepancy cannot be reproduced on current merged main.",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The audit records zero net new findings rather than expanding the baseline from the obsolete report.",
+      "verificationPlan": "Generate canonical scanner evidence and compare its exact count/digest with the baseline in the audit document.",
+      "required": true
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori (user)",
+    "reason": "User authorization: '目标：执行计划，到全部完成。 我授权给你自动执行，写入到每个工单的Contract里。' Approval is limited to this Contract's protected baseline, Work Item evidence, archive, and generated status paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 817
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/bandit-sync-security-audit-694.json",
+    "baseCommit": "daf15273edfd36fe71e54dc58212c3e389838f4c",
+    "initialScopeDigest": "97532de2e012cf414eacd47353ce83f3354224f67545fb38b2b31fbdc1b49a57",
+    "contractSkeletonDigest": "8fb7b23b3ca3f4d61394060263add974337ed8413a8e5933b31d5bf2cf2eb525"
+  }
+}

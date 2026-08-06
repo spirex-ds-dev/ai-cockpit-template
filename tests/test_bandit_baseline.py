@@ -54,14 +54,41 @@ def test_current_digest_is_order_independent(tmp_path):
     assert digest == expected_digest
 
 
+def test_refresh_baseline_writes_only_the_exact_canonical_evidence_digest(tmp_path):
+    evidence = tmp_path / "bandit.json"
+    evidence.write_text(
+        json.dumps(
+            {
+                "results": [
+                    {
+                        "test_id": "B603",
+                        "issue_severity": "LOW",
+                        "filename": "scripts/sync.py",
+                        "issue_text": "controlled process call",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    baseline = tmp_path / "bandit_low_risk_baseline.json"
+
+    check_bandit_baseline.refresh_baseline(evidence, baseline)
+
+    assert check_bandit_baseline.load_baseline(baseline) == {
+        "count": 1,
+        "digest": check_bandit_baseline.current_digest(evidence)[1],
+    }
+
+
 def test_repository_baseline_pins_current_reviewed_bandit_evidence():
     baseline = check_bandit_baseline.load_baseline(
         ROOT / ".ai" / "cockpit" / "bandit_low_risk_baseline.json"
     )
 
     assert baseline == {
-        "count": 117,
-        "digest": "9e01c28f20c0b390861cc7cdc95add156f9345f7f0abcd79a5e06e71a215bf9b",
+        "count": 115,
+        "digest": "80327d22bfd0d3d907c7e2611f7cae159915289ed090afbc227cc2f1d3ac067d",
     }
 
 
