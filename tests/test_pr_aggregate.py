@@ -84,6 +84,32 @@ def patch_changes(monkeypatch, paths, *, statuses=None):
     )
 
 
+def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
+    tmp_path, monkeypatch
+):
+    pair = write_pair(tmp_path, "recovered", [], [])
+    contract_path = pair.relative_to(tmp_path).as_posix()
+    summary_path = contract_path.replace(".contract", ".summary")
+    receipt_path = ".ai/work-items/recovery-receipts/recovered.json"
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "same_work_item_recovery_paths",
+        lambda _base, _entries: ({"recovered": {"scripts/ai_finish.py"}}, {receipt_path}),
+    )
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    patch_changes(
+        monkeypatch,
+        [contract_path, summary_path, receipt_path, "scripts/ai_finish.py"],
+    )
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
+
+    assert not any("scripts/ai_finish.py" in issue for issue in issues)
+
+
 def test_pr_boundary_rejects_dirty_worktree(monkeypatch):
     monkeypatch.setattr(ai_check_pr, "run_git", lambda _args: fake_git_result(" M release.json\n"))
 

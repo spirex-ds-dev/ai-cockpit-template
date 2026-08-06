@@ -43,6 +43,15 @@ def test_check_ai_pr_runs_fast_predictors_before_aggregate_validation():
     assert positions == sorted(positions)
 
 
+def test_source_and_installed_makefiles_expose_the_same_post_archive_recovery_target():
+    source = (ROOT / "Makefile").read_text(encoding="utf-8")
+    installed = (ROOT / "templates/make/Makefile.ai").read_text(encoding="utf-8")
+
+    for text in (source, installed):
+        assert "ai-open-post-archive-recovery:" in text
+        assert "scripts/ai_post_archive_recovery.py" in text
+
+
 def test_normal_pr_does_not_run_release_only_source_bound_reassessment():
     result = subprocess.run(
         ["make", "-n", "check-ai-pr", "AI_BASE_COMMIT=abc123"],

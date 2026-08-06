@@ -105,6 +105,139 @@ def test_outcome_pipeline_without_contract_fails_closed(tmp_path):
     )
 
 
+def test_pre_archive_critical_coverage_records_success_and_failure(monkeypatch):
+    class Observer:
+        def __init__(self):
+            self.events = []
+
+        def check_started(self, **kwargs):
+            self.events.append(("started", kwargs))
+
+        def check_passed(self, **kwargs):
+            self.events.append(("passed", kwargs))
+
+        def check_failed(self, **kwargs):
+            self.events.append(("failed", kwargs))
+
+    contract = {"workItemId": "example-task", "baseCommit": "a" * 40}
+    observer = Observer()
+    monkeypatch.setattr(ai_finish, "run", lambda _command: (0, 17, "coverage passed"))
+
+    assert ai_finish.run_pre_archive_critical_coverage(contract, obs=observer) == (
+        0,
+        "coverage passed",
+    )
+    assert observer.events[0][0] == "started"
+    assert observer.events[0][1]["command"] == (
+        "make check-changed-critical-coverage AI_BASE_COMMIT="
+        + "a" * 40
+        + " CONTRACT=.ai/work-items/active/example-task.contract.json"
+    )
+    assert observer.events[1][0] == "passed"
+
+    monkeypatch.setattr(ai_finish, "run", lambda _command: (1, 19, "coverage failed"))
+    assert ai_finish.run_pre_archive_critical_coverage(contract, obs=observer) == (
+        1,
+        "coverage failed",
+    )
+    assert observer.events[-1][0] == "failed"
+
+
+def test_pre_archive_critical_coverage_requires_contract_base():
+    assert ai_finish.pre_archive_critical_coverage_command({"workItemId": "example-task"}) == (
+        None,
+        "Contract baseCommit is required for pre-archive critical coverage",
+    )
+
+
+def test_pre_archive_critical_coverage_requires_work_item_and_preserves_plain_failure_text():
+    class Observer:
+        def check_started(self, **_kwargs):
+            raise AssertionError("missing Contract identity must not invoke the gate")
+
+    assert ai_finish.pre_archive_critical_coverage_command({"baseCommit": "a" * 40}) == (
+        None,
+        "pre-archive changed-critical coverage requires a Work Item id",
+    )
+    assert ai_finish.run_pre_archive_critical_coverage(
+        {"baseCommit": "a" * 40}, obs=Observer()
+    ) == (2, "pre-archive changed-critical coverage requires a Work Item id")
+    assert ai_finish.outcome_failure_message("quality", "lint command failed") == (
+        "Finish blocked at quality: lint command failed"
+    )
+    assert ai_finish.verification_priority({"check": "aiStatusCheck"}) == 30
+
+
+def test_failed_check_selection_uses_latest_failure_and_fails_closed_on_bad_summary(tmp_path):
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [
+                    {"check": "quality", "result": "failed"},
+                    {"check": "aiSummary", "result": "passed"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert ai_finish.failed_check_from_summary(summary_path, "verification") == "quality"
+    summary_path.write_text(json.dumps({"verification": {}}), encoding="utf-8")
+    assert ai_finish.failed_check_from_summary(summary_path, "verification") == "verification"
+    summary_path.write_text(
+        json.dumps({"verification": [{"check": "", "result": "failed"}]}), encoding="utf-8"
+    )
+    assert ai_finish.failed_check_from_summary(summary_path, "verification") == "verification"
+    assert (
+        ai_finish.failed_check_from_summary(tmp_path / "missing.json", "verification")
+        == "verification"
+    )
+
+
+def test_blocked_finish_failure_preserves_gate_exit_status(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        ai_finish, "write_blocked_outcome", lambda *_args, **_kwargs: (True, "persisted")
+    )
+
+    assert (
+        ai_finish.return_blocked_finish_failure(
+            task="example-task",
+            contract_path=tmp_path / "contract.json",
+            summary_path=tmp_path / "summary.json",
+            failed_check="preArchiveCriticalCoverage",
+            failure_message="gate failed",
+            code=2,
+        )
+        == 2
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "write_blocked_outcome",
+        lambda *_args, **_kwargs: (False, "report refresh failed"),
+    )
+    assert (
+        ai_finish.return_blocked_finish_failure(
+            task="example-task",
+            contract_path=tmp_path / "contract.json",
+            summary_path=tmp_path / "summary.json",
+            failed_check="preArchiveCriticalCoverage",
+            failure_message="gate failed",
+            code=1,
+        )
+        == 1
+    )
+
+
+def test_documentation_alignment_failure_is_reported_without_raising(tmp_path):
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text("not-json", encoding="utf-8")
+
+    errors = ai_finish.documentation_alignment_issues(summary_path, {})
+
+    assert len(errors) == 1
+    assert errors[0].startswith("documentationAlignment could not be validated:")
+
+
 def test_blocked_outcome_refreshes_the_exact_active_review_report(tmp_path, monkeypatch):
     task = "example-task"
     contract_path = tmp_path / "contract.json"
@@ -141,6 +274,41 @@ def test_blocked_outcome_refreshes_the_exact_active_review_report(tmp_path, monk
     assert human.validate_human_report(report, outcome) == []
     assert report_markdown.read_text(encoding="utf-8") == human.render_human_report(report)
     assert any("quality gate failed" in warning for warning in outcome["sections"]["warnings"])
+
+
+def test_blocked_outcome_normalizes_coverage_metrics_for_valid_report(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "verification": []}),
+        encoding="utf-8",
+    )
+    summary_path.write_text(json.dumps({"changedFiles": [], "verification": []}), encoding="utf-8")
+    outcome_path = tmp_path / "outcome.json"
+    markdown_path = tmp_path / "outcome.md"
+    report_json = tmp_path / "task_report.json"
+    report_markdown = tmp_path / "task_report.md"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
+    monkeypatch.setattr(ai_finish, "_human_report_paths", lambda: (report_json, report_markdown))
+
+    ok, message = ai_finish.write_blocked_outcome(
+        task,
+        contract_path,
+        summary_path,
+        failed_check="preArchiveCriticalCoverage",
+        failure_message="scripts/ai_finish.py: 83.50% is below 85%",
+    )
+
+    assert ok, message
+    outcome = json.loads(outcome_path.read_text(encoding="utf-8"))
+    assert validate_outcome(
+        outcome, markdown_path.read_text(encoding="utf-8"), expected_task_id=task
+    ).valid
+    assert "preArchiveCriticalCoverage" in outcome["sections"]["warnings"][0]
+    assert "%" not in outcome["sections"]["warnings"][0]
 
 
 def test_blocked_outcome_survives_report_refresh_failure(tmp_path, monkeypatch):
@@ -537,7 +705,13 @@ def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatc
     active.mkdir(parents=True)
     contract_path = active / f"{task}.contract.json"
     summary_path = active / f"{task}.summary.json"
-    contract = {"contractVersion": 2, "workItemId": task, "scope": [], "verification": []}
+    contract = {
+        "contractVersion": 2,
+        "workItemId": task,
+        "baseCommit": "d" * 40,
+        "scope": [],
+        "verification": [],
+    }
     contract_path.write_text(json.dumps(contract), encoding="utf-8")
     digest = ai_finish.worktree_digest_for_finish([], summary_path.relative_to(tmp_path).as_posix())
     summary_path.write_text(
@@ -606,6 +780,12 @@ def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatc
 
     assert ai_finish.main() == 0
     assert commands == [
+        [
+            "make",
+            "check-changed-critical-coverage",
+            "AI_BASE_COMMIT=" + "d" * 40,
+            "CONTRACT=.ai/work-items/active/example-task.contract.json",
+        ],
         ["make", "archive-work-item", f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}"],
     ]
 

@@ -9,6 +9,7 @@ import fcntl
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -444,6 +445,45 @@ def archive_next_steps(task: str) -> str:
     )
 
 
+def pre_archive_critical_coverage_command(
+    contract_data: dict[str, Any],
+) -> tuple[list[str] | None, str | None]:
+    """Return the base-bound coverage gate that must precede archive mutation."""
+    base_commit = contract_data.get("baseCommit")
+    if not isinstance(base_commit, str) or not base_commit.strip():
+        return None, "Contract baseCommit is required for pre-archive critical coverage"
+    work_item_id = contract_data.get("workItemId")
+    if not isinstance(work_item_id, str) or not work_item_id:
+        return None, "pre-archive changed-critical coverage requires a Work Item id"
+    return [
+        "make",
+        "check-changed-critical-coverage",
+        f"AI_BASE_COMMIT={base_commit}",
+        f"CONTRACT=.ai/work-items/active/{work_item_id}.contract.json",
+    ], None
+
+
+def run_pre_archive_critical_coverage(
+    contract_data: dict[str, Any], *, obs: Any
+) -> tuple[int, str]:
+    """Run and record the archive-blocking critical coverage gate."""
+    command, error = pre_archive_critical_coverage_command(contract_data)
+    if command is None:
+        return 2, error or "pre-archive critical coverage is unavailable"
+    command_text = " ".join(command)
+    obs.check_started(check_id="preArchiveCriticalCoverage", command=command_text)
+    code, duration, output = run(command)
+    if code:
+        obs.check_failed(
+            check_id="preArchiveCriticalCoverage", command=command_text, duration_ms=duration
+        )
+    else:
+        obs.check_passed(
+            check_id="preArchiveCriticalCoverage", command=command_text, duration_ms=duration
+        )
+    return code, output
+
+
 def verification_priority(item: dict[str, Any]) -> int:
     check_id = verification_key(item)
     if check_id == "sourceBoundEvidence":
@@ -760,7 +800,7 @@ def write_blocked_outcome(
     from ai_render_task_outcome import render_task_outcome
 
     json_path, markdown_path = _outcome_paths(task)
-    message = f"Finish blocked at {failed_check}: {failure_message}"
+    message = outcome_failure_message(failed_check, failure_message)
     try:
         payload = _pre_merge_outcome_input(task, contract_path, summary_path)
         evidence = dict(payload["evidence"])
@@ -818,6 +858,22 @@ def write_blocked_outcome(
             f"blocked Outcome persisted but Human Benefit Report refresh failed: {report_message}",
         )
     return True, "blocked Outcome and Human Benefit Report persisted"
+
+
+def outcome_failure_message(failed_check: str, failure_message: str) -> str:
+    """Keep persisted blocked-Outcome text actionable and validator-safe.
+
+    Detailed command output remains in the Summary verification record.  The
+    Outcome is a human decision surface and deliberately carries only the gate
+    identity and recovery direction when a tool error contains raw metrics.
+    """
+    normalized = " ".join(failure_message.split())
+    if re.search(r"\b\d+(?:\.\d+)?\s*%", normalized):
+        return (
+            f"Finish blocked at {failed_check}: verification threshold was not met; "
+            "inspect recorded verification output and rerun the gate."
+        )
+    return f"Finish blocked at {failed_check}: {normalized}"
 
 
 def failed_check_from_summary(summary_path: Path, fallback: str) -> str:
@@ -1353,6 +1409,17 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
                 code=1,
             )
         if args.archive:
+            code, output = run_pre_archive_critical_coverage(contract_data, obs=obs)
+            if code != 0:
+                obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+                return return_blocked_finish_failure(
+                    task=args.task,
+                    contract_path=contract_path,
+                    summary_path=summary_path,
+                    failed_check="preArchiveCriticalCoverage",
+                    failure_message=output or "pre-archive critical coverage failed",
+                    code=code,
+                )
             archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
             cmd_str = " ".join(archive_command)
             obs.check_started(check_id="archive-work-item", command=cmd_str)
@@ -1578,6 +1645,17 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
     if args.archive:
+        code, output = run_pre_archive_critical_coverage(contract_data, obs=obs)
+        if code != 0:
+            obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+            return return_blocked_finish_failure(
+                task=args.task,
+                contract_path=contract_path,
+                summary_path=summary_path,
+                failed_check="preArchiveCriticalCoverage",
+                failure_message=output or "pre-archive critical coverage failed",
+                code=code,
+            )
         archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
         cmd_str = " ".join(archive_command)
         obs.check_started(check_id="archive-work-item", command=cmd_str)

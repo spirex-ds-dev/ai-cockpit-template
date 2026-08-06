@@ -32,7 +32,7 @@ GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality quality-fast quality-standard quality-full quality-release \
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-synchronize-work-item ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
-	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
+	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy check-changed-critical-coverage \
 	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact generate-human-benefit-report check-human-benefit-report ai-lifecycle-facts ai-work-item-status ai-work-item-intelligence-rebuild ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 	check-ai-lifecycle-truth
 
@@ -62,6 +62,7 @@ ai-help:
 	@printf '%s\n' '  make check-ai-diff-ownership [AI_BASE_COMMIT=<merge-base-sha>]'
 	@printf '%s\n' '  make ai-pre-merge AI_BASE_COMMIT=<merge-base-sha>'
 	@printf '%s\n' '  make ai-finish TASK=<task>'
+	@printf '%s\n' '  make ai-open-post-archive-recovery TASK=<task> AI_BASE_COMMIT=<merge-base-sha> ISSUE=<issue-url> AUTHORITY=<human-authority> RECOVERY_PATHS="path ..."'
 	@printf '%s\n' '  make ai-close-work-item TASK=<task>'
 	@printf '%s\n' '  make ai-cockpit-quality'
 
@@ -387,6 +388,13 @@ check-ai-pr:
 		$(AI_NESTED_MAKE) check-ai-reference-impact; \
 		$(AI_NESTED_MAKE) check-ai-test-weakening AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 		$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
+
+check-changed-critical-coverage:
+	$(AI_PYTHON) scripts/check_changed_critical_coverage.py --base "$(AI_BASE_COMMIT)" $(if $(CONTRACT),--contract "$(CONTRACT)")
+
+ai-open-post-archive-recovery:
+	@test -n "$(TASK)" -a -n "$(AI_BASE_COMMIT)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(RECOVERY_PATHS)" || (echo 'TASK, AI_BASE_COMMIT, ISSUE, AUTHORITY, and RECOVERY_PATHS are required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_post_archive_recovery.py --task "$(TASK)" --base "$(AI_BASE_COMMIT)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" $(foreach path,$(RECOVERY_PATHS),--recovery-path "$(path)")
 
 ai-finish:
 	@# ARCHIVE is a one-shot lifecycle request. Do not let Make propagate it into
