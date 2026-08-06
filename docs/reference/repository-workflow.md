@@ -95,7 +95,8 @@ bindings, Git ancestry, and the original dedicated branch.
 If no completed corrective predecessor is required but an active dedicated Work
 Item must move to current main, do not perform a manual rebase. Fetch the
 remote default branch, then use `make ai-synchronize-work-item
-CONTRACT=<active-contract> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>`.
+CONTRACT=<active-contract> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+TARGET_ROOT=<target-worktree-root>`.
 It is a local-only, fail-closed transition: it verifies the immutable Start
 Receipt, live/tracking-ref equality, ancestry, and dedicated Work Item branch.
 It synchronizes a clean worktree directly. For an active dirty worktree, it
@@ -104,6 +105,10 @@ unowned or ambiguous path before creating an explicit recoverable local
 checkpoint. It writes digest-bound `synchronizationHistory` evidence and
 invalidates prior verification. It cannot push, force-push, open a PR, mutate
 provider state, or rewrite archive/Start Receipt evidence.
+
+`TARGET_ROOT` is optional from the target checkout and required for a distinct
+governed checkout. It is the only root used for Contract/Summary paths, Git
+facts, and permitted evidence writes; caller-root evidence is never substituted.
 
 `make ai-lifecycle-facts` is the machine-readable source for repository lifecycle state. Consumers should use its `state`, active Work Item counts, and explicit `notRun` fields instead of re-deriving lifecycle facts. It does not claim readiness or enterprise assurance.
 ## Adopter project

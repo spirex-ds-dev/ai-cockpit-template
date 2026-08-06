@@ -155,7 +155,8 @@ the controlled local boundary instead of a manual rebase:
 ```text
 make ai-synchronize-work-item \
   CONTRACT=.ai/work-items/active/<task>.contract.json \
-  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch> \
+  TARGET_ROOT=<target-worktree-root>
 ```
 
 Fetch first: the command rejects a stale tracking ref. It verifies the
@@ -169,6 +170,11 @@ verification. It has no push, force-push, PR, provider, archive, or Start
 Receipt rewrite authority. A conflict aborts automatically; the explicit local
 checkpoint remains recoverable and does not claim that synchronization passed.
 Rerun Preflight and all required checks before Finish.
+
+`TARGET_ROOT` is optional for an invocation from the target checkout and is
+required when a caller governs a distinct worktree. The command resolves the
+Contract, Summary, Git facts, and every allowed evidence write under that one
+target root; it never falls back to the caller's active Work Item evidence.
 
 For an existing version-1 Receipt that truthfully records the default branch,
 the resume command has a compatibility-only path: the current branch must be

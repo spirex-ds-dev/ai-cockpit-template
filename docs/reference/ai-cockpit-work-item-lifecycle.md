@@ -120,7 +120,8 @@ head, then run:
 
 ```text
 make ai-synchronize-work-item CONTRACT=<active-contract> \
-  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch> \
+  TARGET_ROOT=<target-worktree-root>
 ```
 
 The command has local-only authority: it verifies the immutable Start Receipt,
@@ -136,6 +137,12 @@ active evidence write. A successful synchronization marks prior verification
 `not_run`; rerun Preflight and all required current-generation checks before
 Finish. Replay, stale tracking state, detached/base/foreign branches, dirty
 worktrees, unrelated histories, and malformed evidence fail closed.
+
+`TARGET_ROOT` is optional when the target is the current checkout; it is
+required for a caller acting on a distinct target worktree. The runtime treats
+that root as the sole source for Contract/Summary resolution, Git operations,
+validation, and evidence writes, and never reads caller active evidence as a
+fallback.
 
 ## Contract readiness
 

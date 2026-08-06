@@ -185,6 +185,28 @@ def test_makefile_exposes_ordered_pre_edit_preparation_entrypoint():
     assert 'STAGE="before_edit"' in result.stdout
 
 
+def test_synchronization_make_target_forwards_target_root_to_runtime():
+    result = subprocess.run(
+        [
+            "make",
+            "-n",
+            "ai-synchronize-work-item",
+            "CONTRACT=.ai/work-items/active/example.contract.json",
+            "SUMMARY=.ai/work-items/active/example.summary.json",
+            "BASE_REMOTE=origin",
+            "BASE_BRANCH=main",
+            "TARGET_ROOT=/governed-target",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert '--project-root "/governed-target"' in result.stdout
+
+
 def test_makefile_forwards_amendment_revalidation_binding_to_checkpoint_writer():
     result = subprocess.run(
         [
