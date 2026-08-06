@@ -1,0 +1,249 @@
+{
+  "contractVersion": 2,
+  "workItemId": "trusted-self-hosted-recovery-validation-724",
+  "mode": "code",
+  "title": "Add trusted self-hosted recovery validation path",
+  "rawUserRequest": "GitHub Actions is unavailable, so development progress must not be blocked. Add the recommended maintainer-dispatched, self-hosted recovery validation path without weakening hosted merge or release gates.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-07-self-hosted-recovery-accepted",
+    "capturedAt": "2026-08-07",
+    "digest": "user-authorized-trusted-self-hosted-recovery"
+  },
+  "declaredIntent": {
+    "summary": "Provide bounded diagnostic feedback during a GitHub-hosted Actions outage while retaining the full hosted compatibility matrix as the only merge and release evidence.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "a49343f90fe4a4bed19438024965e5a3d26501fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.contract.json",
+    ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.outcome.json",
+    ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.outcome.md",
+    ".github/workflows/self-hosted-recovery.yml",
+    "tests/test_workflows.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/operations/quality-gates.md",
+    "docs/plans/trusted-self-hosted-recovery-validation.md"
+  ],
+  "outOfScope": [
+    ".github/workflows/compatibility.yml",
+    ".github/workflows/smoke.yml",
+    ".github/workflows/release.yml",
+    "GitHub required-check configuration, branch protection, runner registration, deletion, and service lifecycle; only adding ai-cockpit-recovery to repository runner 21 is in scope",
+    "Executing code from pull_request events on a self-hosted runner",
+    "Any claim that recovery workflow results are merge or release evidence"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Defines the hosted compatibility matrix that remains the required merge and release evidence."
+    },
+    {
+      "path": "docs/operations/quality-gates.md",
+      "reason": "Documents the distinction between local/diagnostic checks and governed quality or release gates."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Existing workflow topology tests establish the repository regression-test convention."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Records the existing independent CI evidence capability whose workflow topology test is extended by this Work Item."
+    },
+    {
+      "path": "https://www.githubstatus.com/api/v2/summary.json",
+      "reason": "Official incident evidence: GitHub Actions was in major_outage when the user authorized the recovery path."
+    },
+    {
+      "path": "https://api.github.com/repos/spirex-ds-dev/ai-cockpit-template/actions/runners/21",
+      "reason": "Repository-owned runner 21 is online with only default self-hosted, macOS, and X64 labels; the user authorized adding the isolated recovery label."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_security_boundary",
+      "evidence_integrity",
+      "platform_compatibility"
+    ],
+    "reason": "A personal macOS runner must never become an untrusted pull-request execution surface or be mistaken for the hosted cross-platform matrix.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "CI trust-boundary and evidence-classification changes require standard governance."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly accepted a diagnostic self-hosted path that does not relax hosted verification."
+  },
+  "preReviewWarnings": [
+    "Review dispatch-only trigger semantics, exact runner-label isolation, fixed SHA checkout, and explicit non-release evidence wording."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Untrusted pull-request code cannot trigger or execute on the personal runner.",
+      "required": true,
+      "riskDomain": "ci_security_boundary",
+      "expected": "The recovery workflow declares workflow_dispatch only and has no pull_request or push trigger.",
+      "verificationPlan": "Add topology assertions in tests/test_workflows.py.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A maintainer dispatch runs only on the dedicated macOS recovery runner.",
+      "required": true,
+      "riskDomain": "platform_compatibility",
+      "expected": "The workflow requires self-hosted, macOS, X64, and ai-cockpit-recovery labels.",
+      "verificationPlan": "Add exact-label workflow assertions and document runner provisioning.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A successful recovery run is not mistaken for compatibility, merge, or release evidence.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "expected": "Workflow and documentation label every result diagnostic/non-release and preserve the hosted matrix unchanged.",
+      "verificationPlan": "Assert wording and forbidden workflow changes; review docs against quality-gate policy.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A new recovery workflow is runnable only by workflow_dispatch and has no push or pull_request trigger.",
+    "The recovery workflow requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out a maintainer-provided immutable source commit.",
+    "The workflow runs a bounded diagnostic quality command that is supported on macOS and publishes an explicit non-release result summary.",
+    "tests/test_workflows.py prevents trigger, label, source-identity, and non-release-boundary regressions.",
+    "Operational documentation defines runner provisioning, dispatch procedure, security limits, evidence classification, and the required return to hosted verification after recovery."
+  ],
+  "guidelines": [
+    "Do not execute untrusted fork or pull-request code on a personal self-hosted runner.",
+    "Recovery evidence is diagnostic only and cannot satisfy compatibility, merge, or release gates.",
+    "Document operational commands and security boundaries with the workflow change."
+  ],
+  "intent": {
+    "problem": "A GitHub Actions outage prevents timely feedback from hosted runners, but changing the required hosted matrix or running untrusted public pull-request code on a personal machine would weaken both evidence and security.",
+    "constraints": ["Dispatch-only; no push or pull_request trigger.", "Use an isolated custom recovery label in addition to macOS/X64 self-hosted labels.", "Require an immutable source commit input and verify it after checkout.", "Run only macOS-supported diagnostic checks.", "Do not alter compatibility.yml, smoke.yml, release.yml, branch protection, or required checks.", "Results must remain non-release, non-merge diagnostic evidence."],
+    "rationale": "A deliberately narrow maintenance-only route restores feedback during external outages while preserving the hosted matrix as the sole authoritative cross-platform gate."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user authorized automatic execution and explicitly accepted a dedicated maintainer-dispatched self-hosted recovery path; approval is limited to adding ai-cockpit-recovery to repository runner 21."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 819
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/trusted-self-hosted-recovery-validation-724.json",
+    "baseCommit": "a49343f90fe4a4bed19438024965e5a3d26501fa",
+    "initialScopeDigest": "a9d7acca8f6b1892774e1f9551fe4b83eadc29bc6b5e60e935bb2c6d5554335d",
+    "contractSkeletonDigest": "9c043c8e47eca9afaf2ba475e29b07d533cbbc664231fae8741ef9e8b6700018"
+  }
+}
