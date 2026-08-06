@@ -68,6 +68,7 @@ RUNTIME_TARGETS = (
     "check-capability-truth",
     "check-source-bound-evidence",
     "ai-synchronize-work-item",
+    "ai-transition-conflict-successor",
     "ai-transition-to-successor",
 )
 

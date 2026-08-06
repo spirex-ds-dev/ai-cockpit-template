@@ -822,6 +822,311 @@ def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(
     assert _git(root, "status", "--porcelain") == ""
 
 
+def test_conflicted_synchronization_binds_a_current_main_successor_without_source_mutation(
+    tmp_path,
+):
+    source, contract_path, summary_path, start, target = _synchronization_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Preserve owned evidence before governed conflict transition.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    (source / "src").mkdir()
+    (source / "src" / "implementation.py").write_text("SOURCE\n", encoding="utf-8")
+    outcome = source / ".ai/work-items/active/paused-task.outcome.json"
+    outcome.write_text(
+        json.dumps(
+            {
+                "workItemId": "paused-task",
+                "status": "blocked",
+                "humanStatusColor": "red",
+                "failedGate": "synchronization_conflict",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    _git(source, "add", ".ai")
+    _git(source, "commit", "-m", "record blocked source evidence")
+    _git(source, "add", "src/implementation.py")
+    _git(source, "commit", "-m", "source change")
+    _git(source, "switch", "main")
+    target = _write_commit(source, "src/implementation.py", "TARGET\n")
+    _git(source, "push", "origin", "main")
+    _git(source, "switch", "codex/paused-task")
+
+    with pytest.raises(ResumeError, match="rebase conflicted and was aborted"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=source,
+        )
+    source_head = _git(source, "rev-parse", "HEAD")
+    source_contract = contract_path.read_bytes()
+    source_summary = summary_path.read_bytes()
+    source_outcome = outcome.read_bytes()
+
+    successor = tmp_path / "successor"
+    _git(
+        tmp_path,
+        "clone",
+        "--branch",
+        "main",
+        _git(source, "remote", "get-url", "origin"),
+        str(successor),
+    )
+    _git(successor, "config", "user.name", "Test")
+    _git(successor, "config", "user.email", "test@example.com")
+    _git(successor, "switch", "-c", "codex/recovered-task")
+    active = successor / ".ai/work-items/active"
+    starts = successor / ".ai/work-items/starts"
+    active.mkdir(parents=True)
+    starts.mkdir(parents=True)
+    successor_contract = {
+        "contractVersion": 2,
+        "workItemId": "recovered-task",
+        "mode": "code",
+        "title": "Recovered task",
+        "baseCommit": target,
+        "scope": ["src/**"],
+    }
+    successor_receipt = build_receipt(successor_contract, project_root=successor)
+    successor_contract["startReceipt"] = receipt_binding(successor_receipt)
+    successor_contract_path = active / "recovered-task.contract.json"
+    successor_contract_path.write_text(
+        json.dumps(successor_contract, indent=2) + "\n", encoding="utf-8"
+    )
+    (active / "recovered-task.summary.json").write_text(
+        json.dumps({"workItemId": "recovered-task", "verification": []}) + "\n",
+        encoding="utf-8",
+    )
+    (starts / "recovered-task.json").write_text(
+        json.dumps(successor_receipt, indent=2) + "\n", encoding="utf-8"
+    )
+    _git(successor, "add", ".ai")
+    _git(successor, "commit", "-m", "start successor")
+
+    receipt = ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+        source_root=source,
+        source_contract_path=contract_path,
+        successor_root=successor,
+        successor_contract_path=successor_contract_path,
+        base_remote="origin",
+        base_branch="main",
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        authority="user standing authorization recorded in Contract",
+        reason="The governed synchronization conflict requires a current-main successor.",
+    )
+
+    assert receipt["source"]["checkpointHead"] == source_head
+    assert receipt["source"]["baseCommit"] == start
+    assert receipt["targetBaseCommit"] == target
+    assert receipt["successor"]["workItemId"] == "recovered-task"
+    assert contract_path.read_bytes() == source_contract
+    assert summary_path.read_bytes() == source_summary
+    assert outcome.read_bytes() == source_outcome
+    assert _git(source, "rev-parse", "HEAD") == source_head
+    assert (successor / ".ai/work-items/conflict-successor-receipts/paused-task.json").is_file()
+
+
+def test_conflict_successor_rejects_shared_root_and_foreign_issue_before_evidence_reads(tmp_path):
+    common = tmp_path / "common"
+    common.mkdir()
+    kwargs = {
+        "source_contract_path": common / "source.contract.json",
+        "successor_contract_path": common / "successor.contract.json",
+        "base_remote": "origin",
+        "base_branch": "main",
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        "authority": "user",
+        "reason": "governed recovery",
+    }
+    with pytest.raises(ResumeError, match="distinct source and successor"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+            source_root=common, successor_root=common, **kwargs
+        )
+
+    successor = tmp_path / "successor"
+    successor.mkdir()
+    with pytest.raises(ResumeError, match="repository Issue URL"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+            source_root=common,
+            successor_root=successor,
+            issue="https://example.invalid/issues/709",
+            **{key: value for key, value in kwargs.items() if key != "issue"},
+        )
+
+
+def test_conflict_successor_rejects_blank_authority_and_dirty_worktrees(tmp_path):
+    source = tmp_path / "source"
+    successor = tmp_path / "successor"
+    source.mkdir()
+    successor.mkdir()
+    _git(source, "init", "-b", "main")
+    _git(successor, "init", "-b", "main")
+    (successor / "untracked.txt").write_text("dirty\n", encoding="utf-8")
+    kwargs = {
+        "source_contract_path": source / "source.contract.json",
+        "successor_contract_path": successor / "successor.contract.json",
+        "base_remote": "origin",
+        "base_branch": "main",
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        "reason": "governed recovery",
+    }
+
+    with pytest.raises(ResumeError, match="authority and reason"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+            source_root=source, successor_root=successor, authority=" ", **kwargs
+        )
+
+    with pytest.raises(ResumeError, match="clean committed"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+            source_root=source, successor_root=successor, authority="user", **kwargs
+        )
+
+
+def test_conflict_successor_rejects_missing_duplicate_and_mismatched_source_evidence(
+    tmp_path, monkeypatch
+):
+    source = tmp_path / "source"
+    successor = tmp_path / "successor"
+    source.mkdir()
+    successor.mkdir()
+    source_contract_path = source / "source.contract.json"
+    successor_contract_path = successor / "successor.contract.json"
+    monkeypatch.setattr(ai_resume_work_item, "_clean_worktree", lambda _root: True)
+    kwargs = {
+        "source_root": source,
+        "source_contract_path": source_contract_path,
+        "successor_root": successor,
+        "successor_contract_path": successor_contract_path,
+        "base_remote": "origin",
+        "base_branch": "main",
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        "authority": "user",
+        "reason": "governed recovery",
+    }
+
+    source_contract_path.write_text("{}", encoding="utf-8")
+    successor_contract_path.write_text("{}", encoding="utf-8")
+    with pytest.raises(ResumeError, match="source Work Item ID is missing"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    source_contract_path.write_text('{"workItemId": "source"}', encoding="utf-8")
+    successor_contract_path.write_text('{"workItemId": "source"}', encoding="utf-8")
+    with pytest.raises(ResumeError, match="successor Work Item ID must be distinct"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    successor_contract_path.write_text('{"workItemId": "successor"}', encoding="utf-8")
+    (source / "source.summary.json").write_text('{"workItemId": "other"}', encoding="utf-8")
+    (source / "source.outcome.json").write_text('{"workItemId": "source"}', encoding="utf-8")
+    with pytest.raises(ResumeError, match="source Summary Work Item ID does not match"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    (source / "source.summary.json").write_text('{"workItemId": "source"}', encoding="utf-8")
+    with pytest.raises(ResumeError, match="retain a blocked Outcome"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    (source / "source.outcome.json").write_text(
+        '{"workItemId": "source", "status": "blocked", "failedGate": "other"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(ResumeError, match="not a synchronization conflict"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    (source / "source.outcome.json").write_text(
+        '{"workItemId": "source", "status": "blocked", "failedGate": "synchronization_conflict"}',
+        encoding="utf-8",
+    )
+    source_contract_path.write_text(
+        '{"workItemId": "source", "synchronizationHistory": {}}', encoding="utf-8"
+    )
+    with pytest.raises(ResumeError, match="already has a synchronization transition"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    external_contract = tmp_path / "foreign.contract.json"
+    external_contract.write_text('{"workItemId": "source"}', encoding="utf-8")
+    with pytest.raises(ResumeError, match="source Contract must be inside"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(
+            **{**kwargs, "source_contract_path": external_contract}
+        )
+
+
+def test_conflict_successor_rejects_invalid_receipts_and_branch_identities(tmp_path, monkeypatch):
+    source = tmp_path / "source"
+    successor = tmp_path / "successor"
+    source.mkdir()
+    successor.mkdir()
+    source_contract_path = source / "source.contract.json"
+    successor_contract_path = successor / "successor.contract.json"
+    source_contract = {"workItemId": "source", "baseCommit": "a" * 40}
+    successor_contract = {"workItemId": "successor", "baseCommit": "a" * 40}
+    source_summary = {"workItemId": "source"}
+    source_outcome = {
+        "workItemId": "source",
+        "status": "blocked",
+        "failedGate": "synchronization_conflict",
+    }
+
+    def load_json(_path, description):
+        values = {
+            "source Contract": source_contract,
+            "successor Contract": successor_contract,
+            "source Summary": source_summary,
+            "source Outcome": source_outcome,
+            "source Start Receipt": {},
+            "successor Start Receipt": {},
+        }
+        return values[description]
+
+    monkeypatch.setattr(ai_resume_work_item, "_clean_worktree", lambda _root: True)
+    monkeypatch.setattr(ai_resume_work_item, "_load_json", load_json)
+    monkeypatch.setattr(
+        ai_resume_work_item,
+        "receipt_path",
+        lambda task, project_root: project_root / f"{task}.json",
+    )
+    kwargs = {
+        "source_root": source,
+        "source_contract_path": source_contract_path,
+        "successor_root": successor,
+        "successor_contract_path": successor_contract_path,
+        "base_remote": "origin",
+        "base_branch": "main",
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        "authority": "user",
+        "reason": "governed recovery",
+    }
+
+    monkeypatch.setattr(ai_resume_work_item, "validate_receipt", lambda *_args, **_kwargs: ["bad"])
+    with pytest.raises(ResumeError, match="source Work Item evidence is invalid"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    receipt_results = iter(([], ["bad"]))
+    monkeypatch.setattr(
+        ai_resume_work_item, "validate_receipt", lambda *_args, **_kwargs: next(receipt_results)
+    )
+    with pytest.raises(ResumeError, match="successor Work Item evidence is invalid"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    monkeypatch.setattr(ai_resume_work_item, "validate_receipt", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(
+        ai_resume_work_item, "_governed_git", lambda *_args, **_kwargs: "codex/other"
+    )
+    with pytest.raises(ResumeError, match="source branch does not identify"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+    def branches(root, *_args, **_kwargs):
+        return "codex/source" if root == source else "codex/other"
+
+    monkeypatch.setattr(ai_resume_work_item, "_governed_git", branches)
+    with pytest.raises(ResumeError, match="successor must be on its dedicated"):
+        ai_resume_work_item.transition_conflicted_synchronization_to_successor(**kwargs)
+
+
 def test_synchronize_contract_rejects_dirty_worktree_before_rebase_or_write(tmp_path):
     root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
     (root / "unrelated.txt").write_text("dirty\n", encoding="utf-8")
