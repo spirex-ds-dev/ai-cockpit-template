@@ -75,27 +75,34 @@ does not claim release intent.
 ## Temporary self-hosted recovery diagnostics
 
 When GitHub reports a hosted Actions outage, a repository maintainer may use
-`.github/workflows/self-hosted-recovery.yml` for development feedback. This is
-a temporary, dispatch-only route; it does not replace hosted CI. The runner
-must be online and carry exactly the standard `self-hosted`, `macOS`, and
-`X64` labels plus the dedicated custom `ai-cockpit-recovery` label. Do not add
-hosted labels such as `ubuntu-latest` to a macOS runner.
+the default-off `recovery_diagnostic` input of
+`.github/workflows/compatibility.yml` for development feedback. GitHub only
+discovers manually dispatched workflows that already exist on the default
+branch, so this controlled job is intentionally attached to the existing
+compatibility workflow rather than a standalone temporary workflow. It does
+not replace hosted CI. The runner must be online and carry exactly the
+standard `self-hosted`, `macOS`, and `X64` labels plus the dedicated custom
+`ai-cockpit-recovery` label. Do not add hosted labels such as `ubuntu-latest`
+to a macOS runner.
 
 Dispatch the workflow from the branch containing its definition and supply the
 exact lower-case 40-character commit SHA to diagnose:
 
 ```bash
-gh workflow run self-hosted-recovery.yml \
+gh workflow run compatibility.yml \
   --ref <maintenance-branch> \
-  -f source_commit=<40-character-commit-sha>
+  -f recovery_diagnostic=true
 ```
 
-The workflow validates and checks out that SHA, runs `make quality`, and emits
-a green or red diagnostic summary. It has no `push` or `pull_request` trigger:
-public pull-request code must never execute on a personal runner. Only a
-maintainer with permission to dispatch repository workflows may use it.
+The normal compatibility workflow also starts for this manual dispatch, while
+the self-hosted job checks out the immutable dispatched `github.sha`, runs
+`make quality`, and emits a green or red diagnostic summary. The self-hosted
+job has an explicit `workflow_dispatch && recovery_diagnostic` condition, so
+it never runs for `push` or `pull_request`: public pull-request code must never
+execute on a personal runner. Only a maintainer with permission to dispatch
+repository workflows may use it.
 
-Record the run URL, requested SHA, checked-out SHA, and result in the active
+Record the run URL, dispatched SHA, checked-out SHA, and result in the active
 Work Item Summary. A green result is diagnostic only: it cannot satisfy
 compatibility, merge, archive, or release gates. A red result is a failed
 diagnostic and must record its failed gate and recovery condition. Neither
@@ -103,8 +110,8 @@ result authorizes a bypass.
 
 After GitHub-hosted Actions recovers, return to the normal path and rerun the
 hosted smoke and compatibility workflows for the exact candidate SHA before a
-merge or release decision. Retain the recovery workflow only while it is
-needed; any retirement is a separately governed change.
+merge or release decision. Retain the recovery job only while it is needed;
+remove it through a separately governed change after recovery is stable.
 
 Hosted before/after timing is an evidence claim, not an assumption. If a WI-20
 baseline or a hosted run cannot be retrieved, record a structured `not-run`

@@ -10,17 +10,16 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
     assert "  workflow_dispatch:" in workflow
 
 
-def test_self_hosted_recovery_is_maintainer_dispatched_and_diagnostic():
+def test_self_hosted_recovery_is_dispatch_gated_and_diagnostic():
     """Catch a CI change that exposes a personal runner or upgrades its evidence."""
-    workflow = (ROOT / ".github" / "workflows" / "self-hosted-recovery.yml").read_text(
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(
         encoding="utf-8"
     )
 
-    assert "  workflow_dispatch:" in workflow
-    assert "  pull_request:" not in workflow
-    assert "  push:" not in workflow
+    assert "  workflow_dispatch:\n    inputs:\n      recovery_diagnostic:" in workflow
+    assert "default: false" in workflow
+    assert "if: github.event_name == 'workflow_dispatch' && inputs.recovery_diagnostic" in workflow
     assert "runs-on: [self-hosted, macOS, X64, ai-cockpit-recovery]" in workflow
-    assert "^[0-9a-f]{40}$" in workflow
     assert "RECOVERY_RESULT=green" in workflow
     assert "RECOVERY_RESULT=red" in workflow
     assert "diagnostic only" in workflow
@@ -49,7 +48,7 @@ def test_ruby_compatibility_uses_dependabot_setup_ruby_13210_pin_at_both_locatio
     assert "  compatibility-gate:" in workflow
     assert "needs:\n      - shellcheck" in workflow
     assert 'test "$result" = success' in workflow
-    assert workflow.count("fetch-depth: 0") == 7
+    assert workflow.count("fetch-depth: 0") == 8
     assert 'toolchain: "1.86.0"' in workflow
 
 

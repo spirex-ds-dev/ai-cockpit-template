@@ -36,6 +36,7 @@
     ".ai/cockpit/release-digests.json",
     "release-state.json",
     ".github/workflows/self-hosted-recovery.yml",
+    ".github/workflows/compatibility.yml",
     "tests/test_workflows.py",
     "docs/reference/capability-truth-matrix.json",
     "docs/reference/japanese-capability-assessment.json",
@@ -48,9 +49,9 @@
     "release.json"
   ],
   "outOfScope": [
-    ".github/workflows/compatibility.yml",
     ".github/workflows/smoke.yml",
     ".github/workflows/release.yml",
+    "Existing compatibility jobs, push triggers, pull_request triggers, required checks, and compatibility-gate semantics; only a default-off workflow_dispatch recovery_diagnostic input and isolated diagnostic job are in scope",
     "GitHub required-check configuration, branch protection, runner registration, deletion, and service lifecycle; only adding ai-cockpit-recovery to repository runner 21 is in scope",
     "Executing code from pull_request events on a self-hosted runner",
     "Any claim that recovery workflow results are merge or release evidence"
@@ -129,10 +130,10 @@
   ],
   "scenarioCoverage": [
     {
-      "scenario": "Untrusted pull-request code cannot trigger or execute on the personal runner.",
+      "scenario": "Untrusted push or pull-request code cannot trigger or execute on the personal runner.",
       "required": true,
       "riskDomain": "ci_security_boundary",
-      "expected": "The recovery workflow declares workflow_dispatch only and has no pull_request or push trigger.",
+      "expected": "The compatibility workflow retains its existing push/pull_request jobs while the personal-runner job is conditional on the explicit workflow_dispatch recovery_diagnostic input.",
       "verificationPlan": "Add topology assertions in tests/test_workflows.py.",
       "status": "unverified",
       "evidence": []
@@ -165,9 +166,9 @@
     "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
   },
   "acceptance": [
-    "A new recovery workflow is runnable only by workflow_dispatch and has no push or pull_request trigger.",
-    "The recovery workflow requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out a maintainer-provided immutable source commit.",
-    "The workflow runs a bounded diagnostic quality command that is supported on macOS and publishes an explicit non-release result summary.",
+    "The existing compatibility workflow exposes a default-off recovery_diagnostic workflow_dispatch input while preserving all push and pull_request matrix behavior.",
+    "The recovery_diagnostic job requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out the immutable GitHub-dispatched candidate commit.",
+    "The recovery_diagnostic job runs a bounded diagnostic quality command that is supported on macOS and publishes an explicit non-release result summary.",
     "A hosted diagnostic dispatch for the exact candidate commit is prepared and recorded as diagnostic-only evidence; it cannot satisfy compatibility, merge, archive, or release gates.",
     "tests/test_workflows.py prevents trigger, label, source-identity, and non-release-boundary regressions.",
     "The committed SBOM is regenerated so its workflow-action coverage includes the additional pinned checkout action.",
@@ -180,9 +181,9 @@
     "Document operational commands and security boundaries with the workflow change."
   ],
   "intent": {
-    "problem": "A GitHub Actions outage prevents timely feedback from hosted runners, but changing the required hosted matrix or running untrusted public pull-request code on a personal machine would weaken both evidence and security.",
-    "constraints": ["Dispatch-only; no push or pull_request trigger.", "Use an isolated custom recovery label in addition to macOS/X64 self-hosted labels.", "Require an immutable source commit input and verify it after checkout.", "Run only macOS-supported diagnostic checks.", "Do not alter compatibility.yml, smoke.yml, release.yml, branch protection, or required checks.", "Results must remain non-release, non-merge diagnostic evidence."],
-    "rationale": "A deliberately narrow maintenance-only route restores feedback during external outages while preserving the hosted matrix as the sole authoritative cross-platform gate."
+    "problem": "A GitHub Actions outage prevents timely feedback from hosted runners, but a new standalone workflow cannot be manually dispatched until it first exists on the default branch; changing the required hosted matrix or running untrusted public pull-request code on a personal machine would weaken both evidence and security.",
+    "constraints": ["Use only the existing compatibility workflow's workflow_dispatch surface with a default-off recovery_diagnostic input.", "The recovery job never runs for push or pull_request events.", "Use an isolated custom recovery label in addition to macOS/X64 self-hosted labels.", "Check out and verify the immutable GitHub-dispatched candidate commit.", "Run only macOS-supported diagnostic checks.", "Do not change existing compatibility jobs, smoke.yml, release.yml, branch protection, or required checks.", "Results must remain non-release, non-merge diagnostic evidence."],
+    "rationale": "GitHub can dispatch an already-default-branch-registered workflow at a maintenance-branch ref, so a default-off isolated diagnostic job restores feedback during the outage while preserving the hosted matrix as the sole authoritative cross-platform gate."
   },
   "verification": [
     {

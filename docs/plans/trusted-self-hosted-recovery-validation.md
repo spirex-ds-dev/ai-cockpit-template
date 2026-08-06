@@ -13,10 +13,13 @@ keywords:
 
 ## Decision
 
-Add a separate `self-hosted-recovery.yml` workflow for maintainer-initiated,
-diagnostic validation while GitHub-hosted Actions capacity is unavailable. It
-does not change `compatibility.yml`, `smoke.yml`, `release.yml`, required
-checks, branch protection, or release evidence rules.
+Add a default-off `recovery_diagnostic` job to the existing
+`compatibility.yml` manual-dispatch surface for maintainer-initiated diagnostic
+validation while GitHub-hosted Actions capacity is unavailable. GitHub does
+not discover a new manually dispatched workflow until it exists on the default
+branch, so a separate recovery workflow cannot unblock the current outage. The
+existing push/pull-request compatibility matrix, `smoke.yml`, `release.yml`,
+required checks, branch protection, and release evidence rules remain unchanged.
 
 The selected approach is deliberately narrower than rerouting compatibility:
 
@@ -24,15 +27,16 @@ The selected approach is deliberately narrower than rerouting compatibility:
 | --- | --- | --- |
 | Wait for GitHub-hosted runners | Rejected | It leaves development feedback unavailable during a provider outage. |
 | Add hosted-runner labels to the Mac runner | Rejected | A macOS host must not impersonate an Ubuntu matrix lane; that would invalidate cross-platform evidence. |
-| Dispatch-only self-hosted diagnostic workflow | Selected | Restores bounded maintainer feedback without changing the authoritative hosted gate. |
+| Default-off compatibility dispatch diagnostic job | Selected | Uses an already registered manual-dispatch workflow while preserving the authoritative hosted gate. |
 
 ## Workflow contract
 
-`self-hosted-recovery.yml` will have only `workflow_dispatch`. It will require
-an immutable 40-hex-character `source_commit` input, validate that format,
-and use `contents: read` permissions. A maintainer must dispatch it explicitly;
-it has no `push` or `pull_request` trigger, so untrusted public PR code cannot
-cause execution on the personal machine.
+`compatibility.yml` will expose a default-off boolean `recovery_diagnostic`
+input under `workflow_dispatch`. The isolated job will run only when that input
+is true, check out and verify the immutable dispatched `github.sha`, and use
+`contents: read` permissions. Its condition excludes `push` and
+`pull_request`, so untrusted public PR code cannot cause execution on the
+personal machine.
 
 Its sole job will require all of these labels:
 
@@ -40,7 +44,7 @@ Its sole job will require all of these labels:
 runs-on: [self-hosted, macOS, X64, ai-cockpit-recovery]
 ```
 
-The job will check out the requested commit, confirm that `HEAD` equals that
+The job will check out the dispatched commit, confirm that `HEAD` equals that
 commit, run the repository's macOS-supported `make quality` command under the
 job timeout, and publish a red/green diagnostic summary. The summary must say
 that the result is **diagnostic, non-release, and cannot satisfy compatibility,
@@ -54,9 +58,9 @@ runner service.
 
 ## Evidence and recovery sequence
 
-1. A maintainer dispatches the recovery workflow at the branch containing its
-   definition and supplies the exact source SHA to diagnose.
-2. The run URL, requested SHA, checked-out SHA, command result, and diagnostic
+1. A maintainer dispatches `compatibility.yml` at the maintenance branch with
+   `recovery_diagnostic=true`.
+2. The run URL, dispatched SHA, checked-out SHA, command result, and diagnostic
    classification are recorded in the relevant active Work Item Summary.
 3. A green diagnostic run permits continued development feedback only. It does
    not permit merge, archive mutation, release, or Work Item closure.
@@ -66,10 +70,10 @@ runner service.
 
 ## Regression protection
 
-`tests/test_workflows.py` will assert the trigger restriction, exact label
-array, fixed-source checkout verification, diagnostic wording, and absence of
-an authoritative hosted-workflow change. The operational quality-gate document
-will repeat the security boundary and dispatch procedure.
+`tests/test_workflows.py` will assert the default-off dispatch condition, exact
+label array, fixed-source checkout verification, diagnostic wording, and
+preservation of existing compatibility triggers. The operational quality-gate
+document will repeat the security boundary and dispatch procedure.
 
 ## Failure handling
 

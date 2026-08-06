@@ -7,6 +7,12 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
+    inputs:
+      recovery_diagnostic:
+        description: Run the temporary self-hosted diagnostic job in addition to the normal compatibility workflow.
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -16,6 +22,56 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  recovery-diagnostic:
+    # This exact label set isolates the personal runner from generic self-hosted
+    # jobs. It is diagnostic only and never hosted release evidence.
+    if: github.event_name == 'workflow_dispatch' && inputs.recovery_diagnostic
+    runs-on: [self-hosted, macOS, X64, ai-cockpit-recovery]
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact dispatched source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Verify checked-out source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual_commit="$(git rev-parse HEAD)"
+          test "$actual_commit" = "$GITHUB_SHA"
+          git cat-file -e "$GITHUB_SHA^{commit}"
+
+      - name: Run bounded diagnostic quality
+        id: quality
+        shell: bash
+        run: make quality
+
+      - name: Publish diagnostic result
+        if: always()
+        shell: bash
+        env:
+          QUALITY_OUTCOME: ${{ steps.quality.outcome }}
+          SOURCE_COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [[ "$QUALITY_OUTCOME" = success ]]; then
+            echo 'RECOVERY_RESULT=green' >> "$GITHUB_ENV"
+            result='green'
+          else
+            echo 'RECOVERY_RESULT=red' >> "$GITHUB_ENV"
+            result='red'
+          fi
+          {
+            echo '## Self-hosted recovery diagnostic'
+            echo
+            echo "- Dispatched source commit: \`$SOURCE_COMMIT\`"
+            echo "- Result: **$result**"
+            echo '- This result is diagnostic only and cannot satisfy compatibility, merge, or release gates.'
+            echo '- After GitHub-hosted Actions recovers, rerun the normal hosted smoke and compatibility workflows before merge or release.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
   shellcheck:
     runs-on: ubuntu-latest
     timeout-minutes: 20
