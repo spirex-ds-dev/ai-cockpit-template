@@ -1,3 +1,14 @@
+---
+author: Codex
+title: "Trusted Self-hosted Recovery Validation"
+description: Design boundary for temporary maintainer-dispatched self-hosted diagnostics.
+keywords:
+  - ai-cockpit
+  - self-hosted-runner
+  - ci
+  - recovery
+---
+
 # Trusted self-hosted recovery validation
 
 ## Decision

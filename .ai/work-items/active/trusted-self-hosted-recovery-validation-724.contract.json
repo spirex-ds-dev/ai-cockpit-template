@@ -31,11 +31,21 @@
     ".ai/work-items/archive/**",
     ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.outcome.json",
     ".ai/work-items/active/trusted-self-hosted-recovery-validation-724.outcome.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release-state.json",
     ".github/workflows/self-hosted-recovery.yml",
     "tests/test_workflows.py",
     "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
     "docs/operations/quality-gates.md",
-    "docs/plans/trusted-self-hosted-recovery-validation.md"
+    "docs/plans/trusted-self-hosted-recovery-validation.md",
+    "docs/plans/trusted-self-hosted-recovery-validation-implementation.md",
+    "release.json"
   ],
   "outOfScope": [
     ".github/workflows/compatibility.yml",
@@ -63,6 +73,18 @@
       "reason": "Records the existing independent CI evidence capability whose workflow topology test is extended by this Work Item."
     },
     {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Committed supply-chain baseline records the additional pinned workflow action introduced by the recovery workflow."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Defines the canonical ordered candidate-evidence refresh that keeps SBOM, provenance, release metadata, and release digests consistent."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "Defines the canonical generated documentation-alignment reports that bind current release and capability evidence."
+    },
+    {
       "path": "https://www.githubstatus.com/api/v2/summary.json",
       "reason": "Official incident evidence: GitHub Actions was in major_outage when the user authorized the recovery path."
     },
@@ -78,7 +100,8 @@
     "riskTypes": [
       "ci_security_boundary",
       "evidence_integrity",
-      "platform_compatibility"
+      "platform_compatibility",
+      "hosted_verification"
     ],
     "reason": "A personal macOS runner must never become an untrusted pull-request execution surface or be mistaken for the hosted cross-platform matrix.",
     "unknownsReviewComplete": true
@@ -145,7 +168,10 @@
     "A new recovery workflow is runnable only by workflow_dispatch and has no push or pull_request trigger.",
     "The recovery workflow requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out a maintainer-provided immutable source commit.",
     "The workflow runs a bounded diagnostic quality command that is supported on macOS and publishes an explicit non-release result summary.",
+    "A hosted diagnostic dispatch for the exact candidate commit is prepared and recorded as diagnostic-only evidence; it cannot satisfy compatibility, merge, archive, or release gates.",
     "tests/test_workflows.py prevents trigger, label, source-identity, and non-release-boundary regressions.",
+    "The committed SBOM is regenerated so its workflow-action coverage includes the additional pinned checkout action.",
+    "All candidate release and generated documentation evidence affected by the SBOM refresh is regenerated through the repository's canonical generator chain.",
     "Operational documentation defines runner provisioning, dispatch procedure, security limits, evidence classification, and the required return to hosted verification after recovery."
   ],
   "guidelines": [

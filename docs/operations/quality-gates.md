@@ -72,6 +72,40 @@ for source-bound performance measurement. `release_preparation` remains the
 strict default and runs release-state evidence checks; measurement dispatch
 does not claim release intent.
 
+## Temporary self-hosted recovery diagnostics
+
+When GitHub reports a hosted Actions outage, a repository maintainer may use
+`.github/workflows/self-hosted-recovery.yml` for development feedback. This is
+a temporary, dispatch-only route; it does not replace hosted CI. The runner
+must be online and carry exactly the standard `self-hosted`, `macOS`, and
+`X64` labels plus the dedicated custom `ai-cockpit-recovery` label. Do not add
+hosted labels such as `ubuntu-latest` to a macOS runner.
+
+Dispatch the workflow from the branch containing its definition and supply the
+exact lower-case 40-character commit SHA to diagnose:
+
+```bash
+gh workflow run self-hosted-recovery.yml \
+  --ref <maintenance-branch> \
+  -f source_commit=<40-character-commit-sha>
+```
+
+The workflow validates and checks out that SHA, runs `make quality`, and emits
+a green or red diagnostic summary. It has no `push` or `pull_request` trigger:
+public pull-request code must never execute on a personal runner. Only a
+maintainer with permission to dispatch repository workflows may use it.
+
+Record the run URL, requested SHA, checked-out SHA, and result in the active
+Work Item Summary. A green result is diagnostic only: it cannot satisfy
+compatibility, merge, archive, or release gates. A red result is a failed
+diagnostic and must record its failed gate and recovery condition. Neither
+result authorizes a bypass.
+
+After GitHub-hosted Actions recovers, return to the normal path and rerun the
+hosted smoke and compatibility workflows for the exact candidate SHA before a
+merge or release decision. Retain the recovery workflow only while it is
+needed; any retirement is a separately governed change.
+
 Hosted before/after timing is an evidence claim, not an assumption. If a WI-20
 baseline or a hosted run cannot be retrieved, record a structured `not-run`
 reason, run ID and limitation; do not report an improvement.
