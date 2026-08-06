@@ -824,6 +824,10 @@ def _validate_required_verification(
     summary: dict[str, Any], contract: dict[str, Any] | None
 ) -> list[str]:
     issues: list[str] = []
+    # An active Summary is validated before ai-finish runs the remaining gates.
+    # It may therefore truthfully defer those records as not_run; ai-finish is
+    # still the sole writer of passed provenance and archive validation remains strict.
+    active_bootstrap = str(summary.get("contractPath", "")).startswith(".ai/work-items/active/")
     if contract is not None:
         required = [
             verification_key(item)
@@ -845,7 +849,9 @@ def _validate_required_verification(
         non_passed = [
             command
             for command in required
-            if command != self_check and status.get(command) != "passed"
+            if command != self_check
+            and status.get(command) != "passed"
+            and not (active_bootstrap and status.get(command) == "not_run")
         ]
         if missing:
             issues.append(f"Summary is missing required verification: {', '.join(missing)}")

@@ -36,6 +36,29 @@ scope, resource claim, or capability claim is release-related also runs
 `quality-release` for release-preflight and distribution verification. `make quality` remains a compatibility alias for Full;
 `make ai-cockpit-quality` is the evidence-routed Work Item entrypoint.
 
+## Session ownership and bounded reuse
+
+Every public quality profile and direct `project-test` acquire one non-blocking,
+worktree-local kernel lock before a coverage or report writer runs. A second
+same-worktree invocation fails closed immediately, writes no quality evidence,
+and prints `Retry: make quality`. The lock is released by the operating system
+when its owner exits, so users must not delete a lock file. Different worktrees
+have different lock paths and can run in parallel.
+
+A passing Strict Full run writes `target/quality/reusable-full-evidence.json`.
+`make quality-evidence-reuse-check` can validate it only for a task-stage local
+decision. Its key binds the Contract base, exact repository tree/worktree state,
+changed-path content digest, Python/platform/locked-tool environment digest,
+Strict profile, Full-session identity, and passing session-summary digest. A
+missing, malformed, failed, incomplete, active-lock, base/tree/path/environment/
+profile/session mismatch invalidates the receipt; validation never reruns a gate,
+creates a receipt, waits for a lock, or silently reuses a result.
+
+Reusable local Full evidence is deliberately forbidden for merge, convergence,
+and release. Those boundaries require a fresh Full execution (and Release's
+additional graph where applicable). This rule never downgrades governance,
+installer, CI, security, Outcome, coverage, or lifecycle gates.
+
 ## Contract evidence
 
 ```json

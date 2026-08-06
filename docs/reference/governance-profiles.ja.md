@@ -37,6 +37,26 @@ capability claim を持つ Strict Work Item だけが `quality-release` の rele
 distribution verification を追加で実行します。`make quality` は Full の
 互換 Alias のまま、`make ai-cockpit-quality` が Evidence-based Entry Point です。
 
+## Session ownership と限定的な再利用
+
+公開 Quality Profile と直接の `project-test` は、Coverage または Report writer の前に
+worktree-local の non-blocking kernel lock を 1 つ取得します。同じ worktree の 2 番目の
+呼び出しは直ちに fail closed となり、Quality Evidence を書かず `Retry: make quality` を表示します。
+lock は owner の終了時に OS が解放するため、lock file を削除してはいけません。異なる worktree は
+別の lock path を使うため並列実行できます。
+
+成功した Strict Full は `target/quality/reusable-full-evidence.json` を書きます。
+`make quality-evidence-reuse-check` は task-stage の local decision だけでこれを検証できます。
+key は Contract base、正確な repository tree/worktree state、changed-path content digest、
+Python/platform/locked-tool environment digest、Strict profile、Full session identity、成功した
+session-summary digest に bind されます。欠落、malformed、failed、incomplete、active lock、
+base/tree/path/environment/profile/session mismatch は receipt を無効化します。検証は gate の再実行、
+receipt の作成、lock の待機、silent reuse を行いません。
+
+reusable local Full evidence は merge、convergence、release では禁止です。これらは fresh Full
+（必要時は Release の追加 graph を含む）を必要とします。この規則は governance、installer、CI、
+security、Outcome、coverage、lifecycle gate を弱めません。
+
 ## Contract Evidence
 
 Contract の `governanceProfile` は `selected`、`source`、`reasons`、`override` を記録します。

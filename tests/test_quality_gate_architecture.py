@@ -30,7 +30,7 @@ def test_quality_entry_points_have_explicit_compatibility_semantics():
 
 def test_default_quality_entrypoint_routes_without_duplicating_gate_commands():
     routed = _target_block("ai-cockpit-quality")
-    standard = _target_block("quality-standard")
+    standard = _target_block("quality-standard-owned")
 
     assert "scripts/determine_governance_profile.py" in routed
     assert "dispatchTarget" in routed
@@ -45,7 +45,7 @@ def test_default_quality_entrypoint_routes_without_duplicating_gate_commands():
 
 def test_standard_quality_dry_run_uses_only_its_required_owners():
     result = subprocess.run(
-        ["make", "-n", "quality-standard"],
+        ["make", "-n", "quality-standard-owned"],
         cwd=ROOT,
         text=True,
         capture_output=True,
@@ -89,7 +89,7 @@ def test_registry_declares_no_parallel_write_conflicts():
 
 def test_release_preserves_security_and_installation_ownership():
     text = MAKEFILE.read_text(encoding="utf-8")
-    release = _target_block("quality-release")
+    release = _target_block("quality-release-owned")
     for required in ("quality-full", "quality-installation", "quality-release-evidence"):
         assert required in release
     for required in (
@@ -157,10 +157,34 @@ def test_quality_full_uses_commit_and_run_bound_session_directories():
 
 
 def test_quality_full_uses_owned_phase_cleanup_helper():
-    full = _target_block("quality-full")
+    full = _target_block("quality-full-owned")
     assert "scripts/run_quality_session.py" in full
     assert "quality-fast" in full
     assert "quality-heavy" in full
+
+
+def test_all_public_quality_profiles_enter_the_worktree_session_lock_before_writers():
+    text = MAKEFILE.read_text(encoding="utf-8")
+    for target in (
+        "quality-fast",
+        "quality-standard",
+        "quality-full",
+        "quality-release",
+        "project-test",
+    ):
+        block = _target_block(target)
+        assert "RUN_QUALITY_SESSION" in block
+    assert "scripts/quality_session_lock.py" in text
+    assert "QUALITY_SESSION_LOCK_HELD=true" in text
+    assert "quality-full-owned" in text
+
+
+def test_reusable_full_evidence_is_explicitly_task_only_and_rejects_final_stages():
+    text = MAKEFILE.read_text(encoding="utf-8")
+    assert "quality-evidence-reuse-check:" in text
+    assert "scripts/quality_evidence.py validate" in text
+    assert "QUALITY_EVIDENCE_STAGE" in text
+    assert "scripts/quality_evidence.py capture" in text
 
 
 def test_full_quality_dry_run_delegates_without_forced_gate_execution():

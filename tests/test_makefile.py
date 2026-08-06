@@ -253,7 +253,7 @@ def test_makefile_forwards_amendment_revalidation_binding_to_checkpoint_writer()
 
 def test_project_test_uses_stricter_coverage_floor():
     result = subprocess.run(
-        ["make", "-n", "project-test"],
+        ["make", "-n", "project-test-owned"],
         text=True,
         capture_output=True,
         check=False,
@@ -331,6 +331,23 @@ def test_quality_summary_receives_governance_receipt_metadata_when_available():
     assert 'QUALITY_ESCALATIONS="$$escalations"' in makefile
     assert '--profile "$(QUALITY_PROFILE)"' in makefile
     assert "$(QUALITY_ESCALATIONS)" in makefile
+
+
+def test_quality_lock_and_reuse_check_are_visible_in_dry_run_output():
+    quality = subprocess.run(
+        ["make", "-n", "quality-full"], cwd=ROOT, text=True, capture_output=True, check=False
+    )
+    assert quality.returncode == 0, quality.stdout + quality.stderr
+    assert "scripts/quality_session_lock.py" in quality.stdout
+    reuse = subprocess.run(
+        ["make", "-n", "quality-evidence-reuse-check"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert reuse.returncode == 0, reuse.stdout + reuse.stderr
+    assert "scripts/quality_evidence.py validate" in reuse.stdout
 
 
 def test_project_governance_make_targets_are_public():

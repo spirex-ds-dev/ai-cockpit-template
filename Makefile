@@ -31,6 +31,10 @@ QUALITY_ESCALATIONS ?=
 QUALITY_ESCALATION_REASONS ?=
 GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
+QUALITY_SESSION_LOCK ?= target/quality/session.lock
+QUALITY_SESSION_LOCK_HELD ?= false
+QUALITY_EVIDENCE_RECEIPT ?= target/quality/reusable-full-evidence.json
+QUALITY_EVIDENCE_STAGE ?= task
 
 .PHONY: help \
 	test check-quality-toolchain project-format-check project-test project-lint diff-check quality quality-gates \
@@ -55,6 +59,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	ai-assess-provider-merge-state-recovery \
 	quality-fast quality-standard quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
+	quality-fast-owned quality-standard-owned quality-full-owned quality-release-owned project-test-owned quality-evidence-reuse-check \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
@@ -149,6 +154,9 @@ check-instruction-traceability:
 	$(AI_PYTHON) scripts/check_instruction_traceability.py
 
 project-test:
+	$(call RUN_QUALITY_SESSION,project-test)
+
+project-test-owned:
 	mkdir -p "$(QUALITY_JUNIT_DIR)"
 	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85.10 --junitxml="$(QUALITY_JUNIT_DIR)/project-test.xml" --durations=25 --durations-min=1
 	bash tests/test_installer_boundaries.sh
@@ -347,8 +355,22 @@ define RUN_QUALITY_GATE
 	$(AI_PYTHON) scripts/run_quality_gate.py --gate $(1) --category $(2) --session-id "$(QUALITY_SESSION_ID)" --run-id "$(QUALITY_RUN_ID)" --output "$(QUALITY_TIMING_DIR)/$(1).json" --log "$(QUALITY_LOG_DIR)/$(1).log" -- $(QUALITY_MAKE) --no-print-directory $(1)
 endef
 
+# A live kernel lock is worktree-local and released automatically on process
+# death.  Recursive quality targets inherit QUALITY_SESSION_LOCK_HELD and
+# therefore join the existing owner rather than deadlocking themselves.
+define RUN_QUALITY_SESSION
+	@if test "$(QUALITY_SESSION_LOCK_HELD)" = true; then \
+		$(QUALITY_MAKE) --no-print-directory $(1)-owned; \
+	else \
+		$(AI_PYTHON) scripts/quality_session_lock.py --lock "$(QUALITY_SESSION_LOCK)" --worktree "$(CURDIR)" -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_LOCK_HELD=true $(1)-owned; \
+	fi
+endef
+
 # Fast is intentionally narrower than Full.  It never implies release readiness.
 quality-fast:
+	$(call RUN_QUALITY_SESSION,quality-fast)
+
+quality-fast-owned:
 	$(QUALITY_MAKE) --no-print-directory quality-fast-static
 	$(QUALITY_MAKE) --no-print-directory quality-fast-policy
 
@@ -387,6 +409,9 @@ qg-check-ai-test-weakening-fast:
 # Standard reuses existing gate owners and replaces the Fast weakening sample
 # with the full diff analysis. It intentionally excludes Full/Release groups.
 quality-standard:
+	$(call RUN_QUALITY_SESSION,quality-standard)
+
+quality-standard-owned:
 	$(QUALITY_MAKE) --no-print-directory quality-fast TEST_WEAKENING_FULL_OWNERSHIP=true
 	$(QUALITY_MAKE) --no-print-directory project-test
 	$(QUALITY_MAKE) --no-print-directory check-ai-reference-impact
@@ -442,6 +467,9 @@ qg-check-ai-test-weakening:
 	$(call RUN_QUALITY_GATE,check-ai-test-weakening,project-consistency)
 
 quality-full:
+	$(call RUN_QUALITY_SESSION,quality-full)
+
+quality-full-owned:
 	@set -eu; \
 		commit=$$(git rev-parse --short=12 HEAD 2>/dev/null || printf unknown); \
 		run_id="$${GITHUB_RUN_ID:-local}"; \
@@ -455,8 +483,10 @@ quality-full:
 		printf '%s\n' "$$session_id" > target/quality/current-session.txt; \
 		$(AI_PYTHON) scripts/run_quality_session.py --phase quality-fast --phase quality-heavy -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit" TEST_WEAKENING_FULL_OWNERSHIP=true; \
 		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md" --profile "$(QUALITY_PROFILE)" $(QUALITY_ESCALATIONS) $(QUALITY_ESCALATION_REASONS); \
+		$(AI_PYTHON) scripts/quality_evidence.py capture --session-root "$$session_root" --profile strict --output "$$session_root/reusable-full-evidence.json"; \
 		cp "$$session_root/summary.json" target/quality/summary.json; \
-		cp "$$session_root/summary.md" target/quality/summary.md
+		cp "$$session_root/summary.md" target/quality/summary.md; \
+		cp "$$session_root/reusable-full-evidence.json" "$(QUALITY_EVIDENCE_RECEIPT)"
 
 # Backward-compatible aliases.  These names are compatibility/debug views of
 # the new ownership graph; none invokes the removed duplicate gate graph.
@@ -476,9 +506,15 @@ quality-release-evidence:
 	$(QUALITY_MAKE) --no-print-directory check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence
 
 quality-release:
+	$(call RUN_QUALITY_SESSION,quality-release)
+
+quality-release-owned:
 	$(QUALITY_MAKE) --no-print-directory quality-full
 	$(QUALITY_MAKE) --no-print-directory quality-installation
 	$(QUALITY_MAKE) --no-print-directory quality-release-evidence
+
+quality-evidence-reuse-check:
+	$(AI_PYTHON) scripts/quality_evidence.py validate --receipt "$(QUALITY_EVIDENCE_RECEIPT)" --stage "$(QUALITY_EVIDENCE_STAGE)"
 
 ai-cockpit-project-format-check: project-format-check
 

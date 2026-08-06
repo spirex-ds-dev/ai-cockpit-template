@@ -57,6 +57,18 @@ def test_contract_schema_accepts_synchronization_history_field():
     )
 
 
+def test_contract_schema_accepts_conflict_successor_receipt_field():
+    contract = valid_contract()
+    contract["conflictSuccessorReceipt"] = {
+        "path": ".ai/work-items/conflict-successor-receipts/predecessor.json",
+        "sha256": "a" * 64,
+    }
+
+    assert "unknown field: conflictSuccessorReceipt" not in ai_check_work_item.validate_contract(
+        contract
+    )
+
+
 def test_contract_schema_requires_explicit_synchronization_checkpoint_authorization():
     contract = valid_contract()
     contract["synchronizationCheckpoint"] = {"authorized": True}

@@ -34,6 +34,24 @@ Standard 复用现有 Fast、项目测试、引用影响和完整测试削弱检
 release-preflight 和分发验证。`make quality` 继续作为 Full 的兼容别名，`make ai-cockpit-quality`
 是按证据路由的工单入口。
 
+## 会话归属与受限复用
+
+每个公开质量级别和直接 `project-test` 都会在 coverage 或报告写入者运行前取得一个非阻塞、
+工作树本地的内核锁。同一工作树的第二次调用会立即失败关闭，不写入质量证据，并输出
+`Retry: make quality`。锁会在 owner 退出时由操作系统释放，因此不得删除锁文件。不同工作树
+使用不同锁路径，可以并行运行。
+
+成功的 Strict Full 运行会写入 `target/quality/reusable-full-evidence.json`。
+`make quality-evidence-reuse-check` 只能在 task-stage 的本地决策中验证它。其 key 绑定 Contract
+base、精确 repository tree/worktree state、changed-path 内容摘要、Python/platform/locked-tool
+环境摘要、Strict profile、Full session identity 和通过的 session-summary 摘要。缺失、格式错误、
+失败、不完整、活动锁、base/tree/path/environment/profile/session 不匹配都会使 receipt 失效；验证
+不会重跑 gate、创建 receipt、等待锁或静默复用结果。
+
+可复用的本地 Full 证据在 merge、convergence 和 release 时明确禁止。这些边界必须重新执行 Full
+（适用时还包括 Release 的额外图）。本规则绝不降低治理、安装器、CI、安全、Outcome、coverage 或
+生命周期 gate。
+
 ## Contract 证据
 
 Contract 的 `governanceProfile` 记录 `selected`、`source`、`reasons` 和 `override`。

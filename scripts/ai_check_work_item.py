@@ -65,6 +65,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "resumeHistory",
     "synchronizationHistory",
     "synchronizationCheckpoint",
+    "conflictSuccessorReceipt",
     "budgetImpact",
     "governanceProfile",
     "operationClasses",

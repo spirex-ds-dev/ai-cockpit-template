@@ -810,13 +810,14 @@ def _write_and_validate_pre_merge_outcome(
     return True, "Outcome pipeline passed"
 
 
-def write_blocked_outcome(
+def _write_blocked_outcome(
     task: str,
     contract_path: Path,
     summary_path: Path,
     *,
     failed_check: str,
     failure_message: str,
+    record_summary: bool = True,
 ) -> tuple[bool, str]:
     """Persist a valid blocked Outcome, then derive its exact review report.
 
@@ -861,26 +862,30 @@ def write_blocked_outcome(
             "Do not claim a blocked Work Item has completed verification or may be archived.",
         ]
         outcome = generate_outcome(task, payload["bindings"], evidence=evidence)
+        outcome["failedGate"] = failed_check
         markdown = render_task_outcome(outcome)
         report = validate_outcome(outcome, markdown, expected_task_id=task)
         if not report.valid:
             return False, "; ".join(f"{item.code}: {item.message}" for item in report.errors)
         save_json(json_path, outcome)
         markdown_path.write_text(markdown, encoding="utf-8")
-        _record_outcome_state(
-            summary_path,
-            {
-                "status": "blocked",
-                "jsonPath": json_path.relative_to(PROJECT_ROOT).as_posix(),
-                "markdownPath": markdown_path.relative_to(PROJECT_ROOT).as_posix(),
-                "rawEvidencePath": "derived:blocked_finish",
-                "failedCheck": failed_check,
-                "error": failure_message,
-            },
-        )
+        if record_summary:
+            _record_outcome_state(
+                summary_path,
+                {
+                    "status": "blocked",
+                    "jsonPath": json_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "markdownPath": markdown_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "rawEvidencePath": "derived:blocked_finish",
+                    "failedCheck": failed_check,
+                    "error": failure_message,
+                },
+            )
     except (OSError, KeyError, TypeError, ValueError) as exc:
         return False, str(exc)
 
+    if not record_summary:
+        return True, "blocked Outcome persisted"
     report_ok, report_message = run_human_report_pipeline(task, summary_path)
     if not report_ok:
         return (
@@ -888,6 +893,43 @@ def write_blocked_outcome(
             f"blocked Outcome persisted but Human Benefit Report refresh failed: {report_message}",
         )
     return True, "blocked Outcome and Human Benefit Report persisted"
+
+
+def write_blocked_outcome(
+    task: str,
+    contract_path: Path,
+    summary_path: Path,
+    *,
+    failed_check: str,
+    failure_message: str,
+    project_root: Path | None = None,
+    record_summary: bool = True,
+) -> tuple[bool, str]:
+    """Persist a blocked Outcome in the supplied governed repository root."""
+    global PROJECT_ROOT, ACTIVE_DIR
+    if project_root is None or project_root.resolve() == PROJECT_ROOT:
+        return _write_blocked_outcome(
+            task,
+            contract_path,
+            summary_path,
+            failed_check=failed_check,
+            failure_message=failure_message,
+            record_summary=record_summary,
+        )
+    previous_root, previous_active = PROJECT_ROOT, ACTIVE_DIR
+    try:
+        PROJECT_ROOT = project_root.resolve()
+        ACTIVE_DIR = PROJECT_ROOT / ".ai/work-items/active"
+        return _write_blocked_outcome(
+            task,
+            contract_path,
+            summary_path,
+            failed_check=failed_check,
+            failure_message=failure_message,
+            record_summary=record_summary,
+        )
+    finally:
+        PROJECT_ROOT, ACTIVE_DIR = previous_root, previous_active
 
 
 def outcome_failure_message(failed_check: str, failure_message: str) -> str:

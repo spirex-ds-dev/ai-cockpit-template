@@ -332,7 +332,21 @@ def synchronize_contract(
         _governed_git(project_root, "merge-base", "--is-ancestor", from_base, head_before)
     except ResumeError as exc:
         raise ResumeError("Work Item branch is unrelated to Contract baseCommit") from exc
-    _rebase_onto(project_root, target)
+    try:
+        _rebase_onto(project_root, target)
+    except ResumeError as exc:
+        from ai_finish import write_blocked_outcome
+
+        write_blocked_outcome(
+            work_item_id,
+            contract_path,
+            summary_path,
+            failed_check="synchronization_conflict",
+            failure_message=str(exc),
+            project_root=project_root,
+            record_summary=False,
+        )
+        raise
     head_after = _governed_git(project_root, "rev-parse", "HEAD")
     transition = {
         "synchronizationVersion": SYNCHRONIZATION_SCHEMA_VERSION,

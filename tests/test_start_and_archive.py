@@ -764,7 +764,7 @@ def test_synchronization_history_rejects_malformed_checkpoint_evidence(tmp_path)
     assert "synchronizationHistory[0].checkpointPaths must be a non-empty list" in issues
 
 
-def test_synchronize_contract_aborts_conflict_without_evidence_write(tmp_path):
+def test_synchronize_contract_aborts_conflict_and_persists_blocked_outcome(tmp_path):
     root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
     _write_commit(root, "seed.txt", "work item edit\n")
     _git(root, "switch", "main")
@@ -786,8 +786,15 @@ def test_synchronize_contract_aborts_conflict_without_evidence_write(tmp_path):
 
     assert contract_path.read_bytes() == before_contract
     assert summary_path.read_bytes() == before_summary
+    outcome = contract_path.with_name("paused-task.outcome.json")
+    assert (
+        json.loads(outcome.read_text(encoding="utf-8"))["failedGate"] == "synchronization_conflict"
+    )
     assert _git(root, "rev-parse", "HEAD") == before_head
-    assert _git(root, "status", "--porcelain") == ""
+    assert _git(root, "status", "--porcelain").splitlines() == [
+        "?? .ai/work-items/active/paused-task.outcome.json",
+        "?? .ai/work-items/active/paused-task.outcome.md",
+    ]
 
 
 def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(tmp_path):
@@ -833,7 +840,10 @@ def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(
     assert retained["synchronizationCheckpoint"]["authorized"] is True
     assert "synchronizationHistory" not in retained
     assert summary_path.read_bytes() == before_summary
-    assert _git(root, "status", "--porcelain") == ""
+    assert _git(root, "status", "--porcelain").splitlines() == [
+        "?? .ai/work-items/active/paused-task.outcome.json",
+        "?? .ai/work-items/active/paused-task.outcome.md",
+    ]
 
 
 def test_conflicted_synchronization_binds_a_current_main_successor_without_source_mutation(
@@ -848,21 +858,8 @@ def test_conflicted_synchronization_binds_a_current_main_successor_without_sourc
     contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
     (source / "src").mkdir()
     (source / "src" / "implementation.py").write_text("SOURCE\n", encoding="utf-8")
-    outcome = source / ".ai/work-items/active/paused-task.outcome.json"
-    outcome.write_text(
-        json.dumps(
-            {
-                "workItemId": "paused-task",
-                "status": "blocked",
-                "humanStatusColor": "red",
-                "failedGate": "synchronization_conflict",
-            }
-        )
-        + "\n",
-        encoding="utf-8",
-    )
     _git(source, "add", ".ai")
-    _git(source, "commit", "-m", "record blocked source evidence")
+    _git(source, "commit", "-m", "record source evidence")
     _git(source, "add", "src/implementation.py")
     _git(source, "commit", "-m", "source change")
     _git(source, "switch", "main")
@@ -878,6 +875,14 @@ def test_conflicted_synchronization_binds_a_current_main_successor_without_sourc
             base_branch="main",
             project_root=source,
         )
+    outcome = source / ".ai/work-items/active/paused-task.outcome.json"
+    _git(
+        source,
+        "add",
+        outcome.relative_to(source).as_posix(),
+        outcome.with_suffix(".md").relative_to(source).as_posix(),
+    )
+    _git(source, "commit", "-m", "record authenticated synchronization conflict outcome")
     source_head = _git(source, "rev-parse", "HEAD")
     source_contract = contract_path.read_bytes()
     source_summary = summary_path.read_bytes()

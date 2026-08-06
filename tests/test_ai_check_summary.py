@@ -667,6 +667,32 @@ def test_scenario_coverage_validator_accepts_valid_payload():
     )
 
 
+def test_active_summary_defers_ai_finish_provenance_without_accepting_passed_placeholders():
+    summary = aligned_documentation_summary(
+        evidence="scripts/ai_check_summary.py",
+        changed_files=[{"path": "scripts/ai_check_summary.py", "reason": "fixture"}],
+    )
+    summary.update(
+        {
+            "workItemId": "task",
+            "contractPath": ".ai/work-items/active/task.contract.json",
+            "verification": [
+                {"check": "quality", "result": "not_run"},
+                {"check": "aiStatus", "result": "not_run"},
+            ],
+        }
+    )
+    contract = {
+        "workItemId": "task",
+        "contractVersion": 2,
+        "verification": [
+            {"check": "quality", "required": True},
+            {"check": "aiStatus", "required": True},
+        ],
+    }
+    assert ai_check_summary._validate_required_verification(summary, contract) == []
+
+
 def test_scenario_coverage_validator_rejects_invalid_required_entries():
     summary = {
         "summaryVersion": 2,

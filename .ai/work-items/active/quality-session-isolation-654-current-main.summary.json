@@ -4,118 +4,550 @@
   "contractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
   "changedFiles": [
     {
-      "path": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
-      "reason": "Created the Work Item Contract skeleton."
+      "path": "Makefile",
+      "reason": "Adds worktree-local quality-session ownership and bounded evidence targets."
+    },
+    {
+      "path": "scripts/quality_session_lock.py",
+      "reason": "Implements the kernel-backed same-worktree quality lock."
+    },
+    {
+      "path": "scripts/quality_evidence.py",
+      "reason": "Captures and validates exact-state reusable Full evidence."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Defers only active ai-finish provenance while rejecting fabricated passed records."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Supports root-aware blocked Outcome generation."
+    },
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Persists an authenticated synchronization-conflict Outcome after clean abort."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Pins the compatible pip/pip-tools bootstrap for lockfile verification."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Uses the same compatible lockfile compiler bootstrap."
+    },
+    {
+      "path": "tests/test_quality_session.py",
+      "reason": "Covers ownership, busy recovery, and independent worktree locks."
+    },
+    {
+      "path": "tests/test_quality_evidence.py",
+      "reason": "Covers evidence state binding and fail-closed validation."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Covers active Summary provenance deferral."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Covers clean synchronization-conflict Outcome and successor evidence flow."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Covers quality target routing."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Covers quality gate topology."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Covers hosted bootstrap pinning."
+    },
+    {
+      "path": "docs/reference/governance-profiles.md",
+      "reason": "Documents quality-session ownership and reuse."
+    },
+    {
+      "path": "docs/reference/governance-profiles.ja.md",
+      "reason": "Japanese canonical documentation alignment."
+    },
+    {
+      "path": "docs/reference/governance-profiles.zh-CN.md",
+      "reason": "Chinese canonical documentation alignment."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Generated capability binding."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Generated Japanese capability binding."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Generated Japanese capability view."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Generated documentation-alignment evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Generated documentation-alignment view."
     },
     {
       "path": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
-      "reason": "Created the AI Change Summary skeleton."
+      "reason": "Current Work Item handoff and verification state."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated current Work Item status."
+    },
+    {
+      "path": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "reason": "Current-main successor scope, authorization, and conflict-successor binding."
+    },
+    {
+      "path": ".ai/work-items/conflict-successor-receipts/quality-session-isolation-654.json",
+      "reason": "Governed receipt binding the blocked predecessor to this current-main successor."
+    },
+    {
+      "path": ".ai/work-items/starts/quality-session-isolation-654-current-main.json",
+      "reason": "Start receipt bound to the current origin/main base."
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Recognizes the canonical conflictSuccessorReceipt field emitted by the governed successor command."
+    },
+    {
+      "path": "tests/test_ai_check_work_item.py",
+      "reason": "Regression coverage for the canonical conflictSuccessorReceipt Contract field."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Installed runtime exposes the executable conflict-successor target with its required Contract argument."
+    },
+    {
+      "path": ".ai/work-items/active/quality-session-isolation-654-current-main.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/active/quality-session-isolation-654-current-main.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
     }
   ],
   "sourcesUsed": [
-    ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json"
+    ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+    "GitHub issue #654",
+    "current worktree implementation state"
   ],
   "verification": [
     {
       "check": "aiWorkItem",
-      "result": "not_run"
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:37.025330+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "119cfe13e87844af7fe995b7b7f0644b4e439f172250192deb9408e3b2909625",
+      "commandHash": "f8b5669353cb0632943dba8aef438e26ab6e5301a64caf7cdd659b23d87a6c40",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "1bc85017825d194326491f9aa2d68481b699d2f5266ed5a3b22010905e83183c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/quality-session-isolation-654-current-main.contract.json work item contract check passed: .ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/quality-session-isolation-654-current-main.contract.json work item contract check passed: .ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "outputBytes": 264
     },
     {
       "check": "aiScope",
-      "result": "not_run"
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:37.264026+00:00",
+      "exitCode": 0,
+      "durationMs": 145,
+      "outputDigest": "da23205bbf9190ab1eb8a75cc4d1a35f16cc49e762630f3053b729b3177632e5",
+      "commandHash": "b1d102676dd00a1b08078789303b416df3a68918b72577366b286a07acc000ff",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "52f8cb456dd406712069d1e6c4826fb5606beaffaf3981a5e332ce840e7bbafa",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/quality-session-isolation-654-current-main.contract.json scope guard passed: 33 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/quality-session-isolation-654-current-main.contract.json scope guard passed: 33 changed path(s) covered",
+      "outputBytes": 195
     },
     {
       "check": "aiGuards",
-      "result": "not_run"
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:37.813675+00:00",
+      "exitCode": 0,
+      "durationMs": 430,
+      "outputDigest": "f6cec25ad286fd010aaaec301b850ae4f4a92a5ef88bd506d09322677825519e",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "730e864fb141dd8b31ddf257c80b18ffff82ed87bb5f0a9cb2d16b5a46cdf13e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: .github/workflows/release.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 3",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: .github/workflows/release.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 3 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 548
     },
     {
       "check": "aiCheckpoint",
-      "result": "not_run"
-    },
-    {
-      "check": "aiAgentRisk",
-      "result": "not_run"
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:38.243070+00:00",
+      "exitCode": 0,
+      "durationMs": 337,
+      "outputDigest": "df7e3e342855eae80d4dbd8439409d18b4e059d7fa0adbd34333757fa6fc9443",
+      "commandHash": "a8309a9822127a054a31e4ee857047caec54b1e1151978eada9d7ef72e3a78c5",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "74291ba228e27929cc778dffaad5693d13ab0f761da795fe86ab8b96e7fef2cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `quality-session-isolation-654-current-main` - Contract Hash: `367982175943f28b` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Co",
+      "outputTail": "ile` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.ja.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_summary.py` — covered by Contract scope - [active_owned] `scripts/ai_check_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_resume_work_item.py` — covered by Contract scope - [active_owned] `scripts/quality_evidence.py` — covered by Contract scope - [active_owned] `scripts/quality_session_lock.py` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_ai_check_summary.py` — covered by Contract scope - [active_owned] `tests/test_ai_check_work_item.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_quality_evidence.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope - [active_owned] `tests/test_quality_session.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope ## Next Action - Ready for final status generation and human review.",
+      "outputBytes": 7557
     },
     {
       "check": "aiReviewPolicy",
-      "result": "not_run"
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:38.474601+00:00",
+      "exitCode": 0,
+      "durationMs": 133,
+      "outputDigest": "8ac0d529694bbc81be98e0906f1fd884e4e97c2d9b5ce1fd6a6dfdb628104496",
+      "commandHash": "4f11e1a41b1829323b636c69c30c293d668c06a53ff40fa354821129db140414",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "961732bd59a925898fbd32907be829f3b487dc8902de38c1b3319f51113ebe40",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json review policy matched 14 path(s) [review] .ai/work-items/conflict-successor-receipts/quality-session-isolation-654.json [review] .ai/work-items/starts/quality-session-isolation-654-current-main.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json review policy matched 14 path(s) [review] .ai/work-items/conflict-successor-receipts/quality-session-isolation-654.json [review] .ai/work-items/starts/quality-session-isolation-654-current-main.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items/active/quality-session-isolation-654-current-main.contract.json [review] .github/workflows/compatibility.yml [review] .github/workflows/release.yml [review] Makefile [review] scripts/ai_check_summary.py [review] scripts/ai_check_work_item.py [review] scripts/ai_finish.py [review] scripts/ai_resume_work_item.py [review] templates/make/Makefile.ai review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 926
     },
     {
       "check": "aiBacktrack",
-      "result": "not_run"
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:38.953982+00:00",
+      "exitCode": 0,
+      "durationMs": 197,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "b8961292e0fcfcdbdc59ca8cb93208af80a0b3413737dc6e9586146e03a9238c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
     },
     {
       "check": "aiCoverage",
-      "result": "not_run"
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:39.178681+00:00",
+      "exitCode": 0,
+      "durationMs": 133,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "de6b7d9d81fa39c77afcffa6a9c51331f53de22178492415a0077e4a3f26860c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
     },
     {
       "check": "aiScenarioCoverage",
-      "result": "not_run"
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:39.322926+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "215232138344d8b9af213c711a950ab7a74a4c7a924ebf5caacf11ba0e2be625",
+      "commandHash": "d137381cb46803943de33665d00a9b9453b589ddccb0d1133e7e8b12f9157269",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "037eaaeed50a5c285101217b85ebeff5493dd3e75d8cff819db469a2d13c3301",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 307
     },
     {
       "check": "aiGuidelines",
-      "result": "not_run"
-    },
-    {
-      "check": "aiSummary",
-      "result": "not_run"
-    },
-    {
-      "check": "aiStatus",
-      "result": "not_run"
-    },
-    {
-      "check": "aiStatusCheck",
-      "result": "not_run"
-    },
-    {
-      "check": "aiStatusConsistency",
-      "result": "not_run"
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:39.460393+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "542b52de17c47ea7185bc6fd90f9655909e2fe1d7e151bd4f43def2b62c89569",
+      "commandHash": "3f4111160b77efe559a1ee92ad9a719f7455284db7c30fb88a3fef5b8b290603",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "9305900844c6a0dd3438c3dff8cd4e838321ebe860d7d9e21378575d756717dd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputBytes": 312
     },
     {
       "check": "aiDiffOwnership",
-      "result": "not_run"
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:34:39.909226+00:00",
+      "exitCode": 0,
+      "durationMs": 338,
+      "outputDigest": "8327c257f93dc99547d14149d895a3ed9bead150d3cb3f0872bae662da9c5d31",
+      "commandHash": "60c39634159290353753b763eda998f6a954f09dcc8d337aeb85656b29296245",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "baff61e1d5f96094def28ee4f645cc9d1eddd965f578e633e7c67e2198bd850f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json ## Diff Ownership Preview - active_owned: `33`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against acti",
+      "outputTail": "lows/release.yml` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.ja.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_summary.py` — covered by Contract scope - [active_owned] `scripts/ai_check_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_resume_work_item.py` — covered by Contract scope - [active_owned] `scripts/quality_evidence.py` — covered by Contract scope - [active_owned] `scripts/quality_session_lock.py` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_ai_check_summary.py` — covered by Contract scope - [active_owned] `tests/test_ai_check_work_item.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_quality_evidence.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope - [active_owned] `tests/test_quality_session.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope",
+      "outputBytes": 3319
     },
     {
       "check": "quality",
-      "result": "not_run"
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:44:19.245351+00:00",
+      "exitCode": 0,
+      "durationMs": 579232,
+      "outputDigest": "4d161cd6f205a48de145c0dfe3174060af5985ebe052c5932f9a76aa7dbf4831",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "218dea65e42f565d9b00b69092dc8ddf5bf068822bf86370c69bc5071f4cf80c",
+      "outputSummary": "{ \"automaticProfile\": \"strict\", \"base\": \"a49343f90fe4a4bed19438024965e5a3d26501fa\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/quality-session-isolation-654-current-main.contract.json\", \".ai/work-items/active/quality-session-isolation-654-current-main.summary.json\", \".ai/work-items/conflict-successor-receipts/quality-session-isolation-654.json\", \".ai/work-items/starts/quality-session-isolation-654-curren",
+      "outputTail": "cannot_invalidate_japanese_assessment 3.39s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 3.34s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 3.22s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 3.09s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 2139 passed, 3 warnings in 563.98s (0:09:23) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.QkpilvcKF6/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.QkpilvcKF6/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.QkpilvcKF6/multi-workflow.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.QkpilvcKF6/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.QkpilvcKF6/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/c402cdac9c47-local-20260806T153440Z-45840-0/summary.json reusable Full quality evidence written: target/quality/sessions/c402cdac9c47-local-20260806T153440Z-45840-0/reusable-full-evidence.json",
+      "outputBytes": 89598
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:44:19.975208+00:00",
+      "exitCode": 0,
+      "durationMs": 350,
+      "outputDigest": "401c57acfed1ede94648cd7dac02be1b13758ccc09cfd873b66e41bbf9e35f53",
+      "commandHash": "fe87141e93c549c9533420b764b064b19642304953dc8b3afd2ffc487aca0284",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "c4b2a6cc0fcc68a17d9ed39b6cbb5315feacfee5909fb325ad2c94c18c7a8794",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 388
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:44:20.753921+00:00",
+      "exitCode": 0,
+      "durationMs": 344,
+      "outputDigest": "ed34bd7aa98a6b2b0c3055afcc502dc8d19f33c4535b9af1fba53fb2f2b6dc55",
+      "commandHash": "3afdeeb877740d7117134c7abb86229a1cba8f9cbfad8d340b8730ad9fe8d7d8",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "3697223aa8876cebf68bdcfba283cb1dcb6d579b399eed8fcf5d6b7377405751",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 337
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:44:21.231215+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "d287fccd18c6dcf4e74f87bf1c8137960c4fd85345578ccbe3720086dff53fa9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:44:21.650312+00:00",
+      "exitCode": 0,
+      "durationMs": 295,
+      "outputDigest": "f6fb2811aaa174fea5ec586c367adc0791ea8e5b8d0a4e950865a118c20daf3c",
+      "commandHash": "4207f890d1c89ae19628376a8c9c96975d1e7bdabe6ae67644bd4b9a121993e8",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "d1a99399d5e856739a2fe53dd8ba8ada76b82b84f79e716088c349dbec48ba66",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json --summary .ai/work-items/active/quality-session-isolation-654-current-main.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 317
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/quality-session-isolation-654-current-main.summary.json CONTRACT=.ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-06T15:44:23.074045+00:00",
+      "exitCode": 0,
+      "durationMs": 253,
+      "outputDigest": "28d8f0d12e18be84a5e39d90b2d2120060106718a7aee5d5ec7ffec0ebdde342",
+      "commandHash": "558be706a40d5be04a1db7297896d7eee7ce0fc3b54e06399074a5aed6f4db62",
+      "contractHash": "367982175943f28b9dd544a5c948902408f55e45e62834c91590fe6acc153101",
+      "commitSha": "c402cdac9c47d0b88b4b44be7b638c9dbe50632b",
+      "executionContractPath": ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "worktreeDigest": "a7f33625b967077c5f507a8c6a8db170116cc8c3dcb02f781290e3831e359f05",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/quality-session-isolation-654-current-main.summary.json --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json ai summary check passed: .ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/quality-session-isolation-654-current-main.summary.json --contract .ai/work-items/active/quality-session-isolation-654-current-main.contract.json ai summary check passed: .ai/work-items/active/quality-session-isolation-654-current-main.summary.json",
+      "outputBytes": 343
     }
   ],
   "guidelinesCompliance": [
     {
-      "guideline": "New public APIs must be documented.",
-      "compliant": false,
-      "evidence": "Not verified."
+      "guideline": "Fail closed with a canonical recovery command; never weaken or silently bypass coverage, quality, governance, security, installer, CI, Outcome, merge, convergence, or release gates.",
+      "compliant": true,
+      "evidence": "quality_session_lock.py rejects a concurrent owner; quality_evidence.py rejects stale or final-stage reuse; the Make target now refuses to invoke successor routing without CONTRACT."
     },
     {
-      "guideline": "Do not import internal modules from other features.",
-      "compliant": false,
-      "evidence": "Not verified."
+      "guideline": "Keep strict evidence provenance: do not fabricate a passed result, receipt, Outcome, or hosted execution.",
+      "compliant": true,
+      "evidence": "ai_resume_work_item writes a blocked synchronization_conflict Outcome only after rebase abort, and the successor receipt binds source and successor digests."
+    },
+    {
+      "guideline": "User authorization: RayIori authorized automatic execution, external Issue/PR handling, supersession/quarantine, and recording this authority in each Work Item Contract.",
+      "compliant": true,
+      "evidence": "The current Contract records RayIori's authority in rawUserRequest, rawRequestSource, restrictedWriteApproval, and guidelines; the conflict successor receipt repeats that authority."
     }
   ],
-  "unknownsRemaining": [
-    "Replace this before finishing the Work Item."
+  "scenarioCoverage": [
+    {
+      "scenario": "A second same-worktree quality session is rejected without producing evidence",
+      "required": true,
+      "riskDomain": "coverage_evidence_integrity",
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_session.py::test_second_same_worktree_session_fails_fast_with_canonical_retry"
+      ],
+      "reason": "Focused pytest passed on 2026-08-07."
+    },
+    {
+      "scenario": "Independent worktrees run isolated quality sessions in parallel",
+      "required": true,
+      "riskDomain": "concurrent_execution",
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_session.py::test_distinct_worktrees_hold_independent_quality_locks"
+      ],
+      "reason": "Focused pytest passed on 2026-08-07."
+    },
+    {
+      "scenario": "A reusable Full receipt rejects state or environment mismatch",
+      "required": true,
+      "riskDomain": "governance_quality_routing",
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_evidence.py::test_reusable_full_receipt_rejects_every_binding_mismatch"
+      ],
+      "reason": "Focused pytest passed every binding-mismatch parameterization on 2026-08-07."
+    },
+    {
+      "scenario": "Final merge, convergence, and release routes reject local reusable evidence",
+      "required": true,
+      "riskDomain": "governance_quality_routing",
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_evidence.py::test_reusable_full_receipt_is_forbidden_at_final_stages"
+      ],
+      "reason": "Focused pytest passed every final-stage parameterization on 2026-08-07."
+    },
+    {
+      "scenario": "A governed synchronization conflict persists a red blocked Outcome before successor routing",
+      "required": true,
+      "riskDomain": "lifecycle_evidence",
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_synchronize_contract_aborts_conflict_and_persists_blocked_outcome",
+        "tests/test_start_and_archive.py::test_conflicted_synchronization_binds_a_current_main_successor_without_source_mutation"
+      ],
+      "reason": "Focused pytest passed authenticated conflict Outcome and successor binding coverage on 2026-08-07."
+    }
   ],
+  "unknownsRemaining": [],
   "risk": {
-    "level": "medium",
-    "detail": "Initial skeleton; scope and acceptance still need task-specific review."
+    "level": "high",
+    "detail": "Quality evidence integrity, synchronization-conflict Outcome integrity, and hosted dependency reproducibility require fresh governed verification."
   },
-  "generatedFiles": [],
+  "generatedFiles": [
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
   "destructiveChanges": [],
   "observedIssues": [],
   "residualRisks": [
     {
       "level": "medium",
       "area": "scope",
-      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "detail": "Fresh Strict Full quality, lifecycle checks, and hosted verification remain required; no local pass is asserted by this Summary.",
       "reviewRecommended": true,
       "followUpCandidate": false
     }
   ],
   "reviewReadiness": {
-    "status": "not_ready",
-    "reason": "Initial skeleton; required checks have not run.",
-    "expectedReviewFocus": []
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "kernel-backed quality lock and receipt invalidation",
+      "synchronization-conflict blocked Outcome",
+      "hosted pip/pip-tools bootstrap"
+    ]
   },
   "boundaryChecks": {
     "runtimeEntrypoints": "not_applicable",
@@ -125,7 +557,9 @@
     "generatedArtifacts": "not_applicable",
     "makeEntrypoints": "not_applicable"
   },
-  "userCorrectionsCaptured": [],
+  "userCorrectionsCaptured": [
+    "Treat recurring coverage and Outcome failures as current Work Item defects; do not lower gates or fabricate evidence."
+  ],
   "userCorrectionSolidification": [],
   "checkpointEvidence": [
     {
@@ -152,47 +586,94 @@
       "invalidatedRequiredChecks": [],
       "requiredChecksPassedAtAmendment": 0,
       "recordedAt": "2026-08-06T15:13:15.511355+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "655632610c82a098",
+      "previousContractHash": "538b1c7fb7b5b20a",
+      "contractHash": "367982175943f28b",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "The successor receipt exposed two canonical-contract defects: allow the generated conflictSuccessorReceipt field and remove the contradictory templates exclusion before validating the installed Make target.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-06T15:16:36.187110+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "367982175943f28b",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 16
     }
   ],
-  "knownGaps": [
-    "Replace this before finishing the Work Item."
-  ],
+  "knownGaps": [],
   "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
   "documentationAlignment": {
     "schemaVersion": 1,
-    "status": "not_checked",
-    "checkedAt": null,
+    "status": "aligned",
+    "checkedAt": "2026-08-07T00:17:39+09:00",
     "checks": [
       {
         "area": "plan",
-        "status": "not_checked",
+        "status": "not_applicable",
         "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "reason": "No plan document is in scope."
       },
       {
         "area": "contractSummaryEvidence",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/active/quality-session-isolation-654-current-main.contract.json",
+          ".ai/work-items/conflict-successor-receipts/quality-session-isolation-654.json"
+        ],
+        "reason": "The Contract records the user authorization and current-main successor receipt."
       },
       {
         "area": "documentationCommandsCapability",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "templates/make/Makefile.ai",
+          "docs/reference/governance-profiles.md",
+          ".ai/work-items/active/quality-session-isolation-654-current-main.outcome.md"
+        ],
+        "reason": "Source and installed Make targets require CONTRACT, while canonical governance documentation describes the bounded quality evidence behavior."
       },
       {
         "area": "multilingualSemantics",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/governance-profiles.ja.md",
+          "docs/reference/governance-profiles.zh-CN.md",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "Multilingual canonical governance documentation is regenerated with the same quality-session semantics."
       },
       {
         "area": "limitationsUnknownsHistory",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/pre-release-documentation-alignment.md"
+        ],
+        "reason": "The generated pre-release alignment report records the current documentation surface."
       }
     ]
+  },
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/quality-session-isolation-654-current-main.outcome.json",
+    "markdownPath": ".ai/work-items/active/quality-session-isolation-654-current-main.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2,
+    "humanStatusColor": "green",
+    "completionFact": "All declared finish checks passed.",
+    "recoveryCondition": ""
   }
 }

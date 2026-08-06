@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import signal
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
+import quality_session_lock
 import run_quality_session
 
 
@@ -88,3 +92,139 @@ def test_owned_process_groups_include_independent_descendant_sessions(monkeypatc
     monkeypatch.setattr(run_quality_session.subprocess, "run", lambda *_args, **_kwargs: Snapshot())
 
     assert run_quality_session._owned_process_groups(100) == {100, 101, 102}
+
+
+def test_second_same_worktree_session_fails_fast_with_canonical_retry(tmp_path):
+    lock_path = tmp_path / "target" / "quality" / "session.lock"
+    with quality_session_lock.acquire(lock_path, worktree=tmp_path):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(Path(quality_session_lock.__file__)),
+                "--lock",
+                str(lock_path),
+                "--worktree",
+                str(tmp_path),
+                "--",
+                "make",
+                "-f",
+                "/dev/null",
+                "-n",
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+    assert result.returncode == quality_session_lock.BUSY_EXIT_CODE
+    assert "Quality session already active in this worktree" in result.stderr
+    assert "Retry: make quality" in result.stderr
+
+
+def test_distinct_worktrees_hold_independent_quality_locks(tmp_path):
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    with (
+        quality_session_lock.acquire(first / "target/quality/session.lock", worktree=first),
+        quality_session_lock.acquire(second / "target/quality/session.lock", worktree=second),
+    ):
+        assert True
+
+
+def test_lock_runner_marks_child_as_already_owned(tmp_path):
+    lock_path = tmp_path / "target" / "quality" / "session.lock"
+    makefile = tmp_path / "QualitySession.mk"
+    makefile.write_text(
+        'check-env:\n\t@test "$$QUALITY_SESSION_LOCK_HELD" = true\n', encoding="utf-8"
+    )
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(Path(quality_session_lock.__file__)),
+            "--lock",
+            str(lock_path),
+            "--worktree",
+            str(tmp_path),
+            "--",
+            "make",
+            "-f",
+            str(makefile),
+            "check-env",
+        ],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+
+
+def test_lock_runner_rejects_non_make_commands(tmp_path):
+    with pytest.raises(ValueError, match="only Make commands"):
+        quality_session_lock.run(
+            [sys.executable, "-c", "raise SystemExit(0)"],
+            lock_path=tmp_path / "target/quality/session.lock",
+            worktree=tmp_path,
+        )
+
+
+def test_run_returns_child_status_and_busy_path_without_spawning(tmp_path, monkeypatch, capsys):
+    calls = []
+
+    def fake_run(command, **kwargs):
+        calls.append((command, kwargs))
+        return type("Result", (), {"returncode": 7})()
+
+    monkeypatch.setattr(quality_session_lock.subprocess, "run", fake_run)
+    assert (
+        quality_session_lock.run(
+            ["make", "quality-fast"],
+            lock_path=tmp_path / "target/quality/session.lock",
+            worktree=tmp_path,
+        )
+        == 7
+    )
+    assert calls[0][1]["env"]["QUALITY_SESSION_LOCK_HELD"] == "true"
+
+    monkeypatch.setattr(
+        quality_session_lock,
+        "acquire",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(quality_session_lock.QualitySessionBusy()),
+    )
+    assert (
+        quality_session_lock.run(
+            ["make", "quality"],
+            lock_path=tmp_path / "target/quality/session.lock",
+            worktree=tmp_path,
+        )
+        == quality_session_lock.BUSY_EXIT_CODE
+    )
+    assert "Retry: make quality" in capsys.readouterr().err
+
+
+def test_cli_parsing_and_main_delegate_to_resolved_paths(tmp_path, monkeypatch):
+    lock = tmp_path / "lock"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "quality_session_lock.py",
+            "--lock",
+            str(lock),
+            "--worktree",
+            str(tmp_path),
+            "--",
+            "make",
+            "quality",
+        ],
+    )
+    parsed = quality_session_lock.parse_args()
+    assert parsed.command == ["make", "quality"]
+    observed = {}
+    monkeypatch.setattr(
+        quality_session_lock,
+        "run",
+        lambda command, **kwargs: observed.update(command=command, **kwargs) or 0,
+    )
+    assert quality_session_lock.main() == 0
+    assert observed["lock_path"] == lock.resolve()
+    assert observed["worktree"] == tmp_path.resolve()
