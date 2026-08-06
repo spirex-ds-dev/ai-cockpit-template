@@ -237,6 +237,28 @@ authorizes archive rewrite, merge, release, branch deletion, closure, or new
 scope. Use a successor only when the Contract/base/scope itself is invalid or
 a new delivery is required.
 
+When the failure occurred only in hosted GitHub Actions aggregate coverage and
+the local audit passes, use the same target with all hosted arguments together:
+
+```sh
+make ai-open-post-archive-recovery \
+  TASK=<task> AI_BASE_COMMIT=<merge-base-sha> \
+  ISSUE=https://github.com/<owner>/<repo>/issues/<number> \
+  AUTHORITY='<recorded human authority>' RECOVERY_PATHS='tests/test_example.py' \
+  HOSTED_REPOSITORY=<owner>/<repo> HOSTED_PULL_REQUEST=<number> \
+  HOSTED_CANDIDATE_HEAD=<40-character-sha> HOSTED_RUN_ID=<run-id> \
+  HOSTED_JOB_ID=<template-smoke-job-id>
+```
+
+The runtime and `check-ai-pr` each query GitHub again. They require the exact
+repository, pull request, candidate Head, pull-request workflow event,
+completed failed `template-smoke` job, and the canonical `pytest-cov`
+below-floor line in that job's log. Missing authentication, unavailable logs,
+reruns, changed provider facts, a successful or non-coverage failure, a
+different base, or a changed archive fails closed. Do not supply a copied log,
+write a receipt by hand, reduce the coverage floor, or add a patch directly to
+the archived candidate.
+
 Before the `before_finish` checkpoint, complete the current v2 Summary's
 `documentationAlignment` record. It must cover the plan,
 Contract/Summary evidence relationship, documentation/commands/capability

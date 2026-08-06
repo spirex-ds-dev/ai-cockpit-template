@@ -50,6 +50,9 @@ def test_source_and_installed_makefiles_expose_the_same_post_archive_recovery_ta
     for text in (source, installed):
         assert "ai-open-post-archive-recovery:" in text
         assert "scripts/ai_post_archive_recovery.py" in text
+        assert "HOSTED_REPOSITORY" in text
+        assert "HOSTED_RUN_ID" in text
+        assert "HOSTED_JOB_ID" in text
 
 
 def test_normal_pr_does_not_run_release_only_source_bound_reassessment():

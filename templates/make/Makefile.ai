@@ -62,7 +62,7 @@ ai-help:
 	@printf '%s\n' '  make check-ai-diff-ownership [AI_BASE_COMMIT=<merge-base-sha>]'
 	@printf '%s\n' '  make ai-pre-merge AI_BASE_COMMIT=<merge-base-sha>'
 	@printf '%s\n' '  make ai-finish TASK=<task>'
-	@printf '%s\n' '  make ai-open-post-archive-recovery TASK=<task> AI_BASE_COMMIT=<merge-base-sha> ISSUE=<issue-url> AUTHORITY=<human-authority> RECOVERY_PATHS="path ..."'
+	@printf '%s\n' '  make ai-open-post-archive-recovery TASK=<task> AI_BASE_COMMIT=<merge-base-sha> ISSUE=<issue-url> AUTHORITY=<human-authority> RECOVERY_PATHS="path ..." [HOSTED_REPOSITORY=owner/repo HOSTED_PULL_REQUEST=<n> HOSTED_CANDIDATE_HEAD=<sha> HOSTED_RUN_ID=<n> HOSTED_JOB_ID=<n>]'
 	@printf '%s\n' '  make ai-close-work-item TASK=<task>'
 	@printf '%s\n' '  make ai-cockpit-quality'
 
@@ -394,7 +394,12 @@ check-changed-critical-coverage:
 
 ai-open-post-archive-recovery:
 	@test -n "$(TASK)" -a -n "$(AI_BASE_COMMIT)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(RECOVERY_PATHS)" || (echo 'TASK, AI_BASE_COMMIT, ISSUE, AUTHORITY, and RECOVERY_PATHS are required' >&2; exit 2)
-	$(AI_PYTHON) scripts/ai_post_archive_recovery.py --task "$(TASK)" --base "$(AI_BASE_COMMIT)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" $(foreach path,$(RECOVERY_PATHS),--recovery-path "$(path)")
+	@if test -n "$(HOSTED_RUN_ID)$(HOSTED_JOB_ID)$(HOSTED_REPOSITORY)$(HOSTED_PULL_REQUEST)$(HOSTED_CANDIDATE_HEAD)"; then \
+		test -n "$(HOSTED_REPOSITORY)" -a -n "$(HOSTED_PULL_REQUEST)" -a -n "$(HOSTED_CANDIDATE_HEAD)" -a -n "$(HOSTED_RUN_ID)" -a -n "$(HOSTED_JOB_ID)" || { echo 'HOSTED_REPOSITORY, HOSTED_PULL_REQUEST, HOSTED_CANDIDATE_HEAD, HOSTED_RUN_ID, and HOSTED_JOB_ID are all required together' >&2; exit 2; }; \
+		$(AI_PYTHON) scripts/ai_post_archive_recovery.py --task "$(TASK)" --base "$(AI_BASE_COMMIT)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" $(foreach path,$(RECOVERY_PATHS),--recovery-path "$(path)") --hosted-repository "$(HOSTED_REPOSITORY)" --hosted-pull-request "$(HOSTED_PULL_REQUEST)" --hosted-candidate-head "$(HOSTED_CANDIDATE_HEAD)" --hosted-run-id "$(HOSTED_RUN_ID)" --hosted-job-id "$(HOSTED_JOB_ID)"; \
+	else \
+		$(AI_PYTHON) scripts/ai_post_archive_recovery.py --task "$(TASK)" --base "$(AI_BASE_COMMIT)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" $(foreach path,$(RECOVERY_PATHS),--recovery-path "$(path)"); \
+	fi
 
 ai-finish:
 	@# ARCHIVE is a one-shot lifecycle request. Do not let Make propagate it into

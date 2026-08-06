@@ -28,6 +28,16 @@ Only `ready_on_base` means the invoking worktree can start the next Work Item. `
 8. If you need a pre-implementation readiness view, run `make ai-preflight`. Use `make generate-ai-preflight-review` when you want generation only, and `make check-ai-preflight-review` as the report validator. `make ai-start` in `MODE=code` should surface the same review before implementation begins.
    The rule is **Evidence over Self-Declaration**: readiness is derived from Contract evidence, not from agent confidence. When that review reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before any coding continues. Advisory mode means the command can exit successfully; it does not mean the agent may silently continue.
 
+For a completed archive whose local `check-ai-pr` passes but whose exact GitHub
+Actions `template-smoke` job failed aggregate coverage, use only the documented
+same-Work-Item recovery command with all `HOSTED_REPOSITORY`,
+`HOSTED_PULL_REQUEST`, `HOSTED_CANDIDATE_HEAD`, `HOSTED_RUN_ID`, and
+`HOSTED_JOB_ID` arguments. The runtime and PR audit must independently verify
+the provider facts and canonical coverage failure log. Never paste a log,
+hand-write a receipt, lower the coverage floor, rewrite the archive, or commit
+an ad-hoc repair to the archived candidate. The receipt does not authorize
+provider mutation, merge, release, closure, or deletion.
+
 Before editing, use Empathy, Design, Architecture, Implementation, Judgment, and Shipping as review lenses.
 Do not invent missing product context. Prefer explicit "not provided" over inferred explanations.
 If the user did not provide motivation or user impact, record that plainly in `problemStatement` or `unknowns` when relevant.

@@ -124,6 +124,16 @@ incomplete, different-base, archive-mutating, or out-of-scope receipt remains
 unowned and fails the PR audit. It is never a merge, release, branch deletion,
 or closure authorization.
 
+For a hosted-only GitHub Actions aggregate coverage failure, the local
+`check-ai-pr` need not fail. Supply all five `HOSTED_*` arguments to the same
+command. It obtains the exact provider run, `template-smoke` job, and log using
+authenticated GitHub API access, binds their repository/PR/Head/run/job/log
+facts and parsed actual/required coverage to the receipt, and rechecks them in
+`check-ai-pr`. A pasted log, missing credentials, stale or rerun provider
+state, mismatched Head or PR, a non-coverage failure, archive mutation, or a
+path outside `RECOVERY_PATHS` remains fail-closed. This route is neither a
+provider mutation nor authorization to merge, release, close, or delete.
+
 The repository's remote name and default branch are discovered from Git's remote HEAD. Adopter projects therefore do not need to use `origin/main`.
 
 ## Exceptional provider merge-state recovery

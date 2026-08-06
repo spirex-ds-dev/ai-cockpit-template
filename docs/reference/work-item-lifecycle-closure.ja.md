@@ -115,6 +115,22 @@ receipt の欠落、並び替え、不整合、未 merge、無関係な entry �
   実行元 worktree は detached であり、次の Work Item を開始できません。
   コマンドが表示する同期済み base worktree へ移動して続行します。
 
+## hosted-only の post-archive coverage recovery
+
+GitHub Actions だけで aggregate coverage が失敗し、local の `check-ai-pr` が
+pass する場合は、同じ `ai-open-post-archive-recovery` に
+`HOSTED_REPOSITORY`、`HOSTED_PULL_REQUEST`、`HOSTED_CANDIDATE_HEAD`、
+`HOSTED_RUN_ID`、`HOSTED_JOB_ID` をすべて指定します。runtime と
+`check-ai-pr` は GitHub API から repository、PR、candidate Head、
+pull_request event、failed `template-smoke` job、canonical pytest-cov
+below-floor log をそれぞれ再検証し、receipt に束縛します。
+
+認証不足、log 不可、rerun/stale な provider facts、Head/PR 不一致、成功または
+coverage 以外の failure、archive 変更、`RECOVERY_PATHS` 外の path は fail closed
+です。log の貼り付け、receipt の手書き、coverage floor の低下、archived candidate
+への直接 patch は禁止です。この route は merge、release、close、branch deletion、
+provider mutation を許可しません。
+
 ## Provider merge 状態が不整合な場合の例外評価
 
 `ai-close-work-item` には、`OPEN`、`CLOSED`、`skipped` などの PR を通常の
