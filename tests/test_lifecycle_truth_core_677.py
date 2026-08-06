@@ -94,6 +94,66 @@ def test_source_bound_quality_attempt_locks_amendment_even_when_summary_claims_n
         assert runtime.can_amend_contract(decision) is False
 
 
+def test_same_active_scope_evidence_correction_retries_in_place_and_keeps_blocked_outcome(
+    tmp_path: Path,
+) -> None:
+    runtime = _runtime()
+    blocked = runtime.finish_failure(
+        root=tmp_path,
+        identity=_identity(),
+        failedGate="aiCheckpoint",
+        message="missing before_finish checkpoint",
+        archiveRequested=False,
+    )
+
+    decision = runtime.retry_or_successor_decision(
+        sameActiveContract=True,
+        sameScope=True,
+        baseChanged=False,
+        immutableDelivery=False,
+    )
+
+    assert decision.action == "retry_in_place"
+    assert decision.successorRequired is False
+    assert json.loads(blocked.outcomePath.read_text(encoding="utf-8"))["status"] == "blocked"
+
+
+def test_changed_base_invalidated_scope_or_immutable_delivery_requires_successor():
+    runtime = _runtime()
+
+    for facts in (
+        {
+            "sameActiveContract": True,
+            "sameScope": True,
+            "baseChanged": True,
+            "immutableDelivery": False,
+        },
+        {
+            "sameActiveContract": True,
+            "sameScope": False,
+            "baseChanged": False,
+            "immutableDelivery": False,
+        },
+        {
+            "sameActiveContract": False,
+            "sameScope": True,
+            "baseChanged": False,
+            "immutableDelivery": False,
+        },
+        {
+            "sameActiveContract": True,
+            "sameScope": True,
+            "baseChanged": False,
+            "immutableDelivery": True,
+        },
+    ):
+        decision = runtime.retry_or_successor_decision(**facts)
+
+        assert decision.action == "governed_successor_or_quarantine"
+        assert decision.successorRequired is True
+        assert decision.reason
+
+
 def test_only_a_bound_blocked_predecessor_can_be_quarantined_or_superseded_for_its_successor(
     tmp_path: Path,
 ) -> None:

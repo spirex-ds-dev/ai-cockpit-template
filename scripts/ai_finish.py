@@ -57,6 +57,36 @@ REPORT_BOUNDARY_TEXT = {
 }
 
 
+def checkpoint_recovery_guidance(issues: list[str], *, contract: str, summary: str) -> str:
+    """Return the canonical non-bypass recovery command for checkpoint failures."""
+    missing_before_finish = any(
+        "missing checkpointEvidence for required stage(s):" in issue and "before_finish" in issue
+        for issue in issues
+    )
+    if missing_before_finish:
+        return (
+            "ERROR: Required before_finish checkpoint evidence is missing; run "
+            f"make ai-checkpoint CONTRACT={contract} SUMMARY={summary} "
+            "STAGE=before_finish before retrying ai-finish."
+        )
+    stale_before_edit = any(
+        "contract_amendment_revalidation" in issue or "before_edit" in issue and "stale" in issue
+        for issue in issues
+    )
+    if stale_before_edit:
+        return (
+            "ERROR: Immutable before_edit Contract binding is stale; run "
+            f"make ai-revalidate-contract-amendment CONTRACT={contract} SUMMARY={summary} "
+            "PREVIOUS_CONTRACT_HASH=<immutable-before-edit-hash> "
+            "AMENDMENT_REASON='<why the Contract changed>' before retrying ai-finish."
+        )
+    return (
+        "ERROR: Checkpoint validation failed; inspect every reported checkpoint issue, "
+        "preserve active evidence, and use only the stage-specific canonical recovery "
+        "command before retrying ai-finish."
+    )
+
+
 class FinishMutexError(RuntimeError):
     """Raised when another Finish owns this Work Item worktree."""
 
@@ -1236,11 +1266,7 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
         for issue in checkpoint_issues:
             print(f"ERROR: {issue}", file=sys.stderr)
         print(
-            "ERROR: Contract/checkpoint binding is stale; run "
-            f"make ai-revalidate-contract-amendment CONTRACT={contract} SUMMARY={summary} "
-            "PREVIOUS_CONTRACT_HASH=<immutable-before-edit-hash> "
-            "AMENDMENT_REASON='<why the Contract changed>' "
-            "before retrying ai-finish.",
+            checkpoint_recovery_guidance(checkpoint_issues, contract=contract, summary=summary),
             file=sys.stderr,
         )
         return return_blocked_finish_failure(

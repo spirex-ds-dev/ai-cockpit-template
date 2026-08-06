@@ -25,6 +25,15 @@ Only `ready_on_base` means the invoking worktree can start the next Work Item. `
    `unknowns` and `notCodable` are valid outputs when coding should not continue. Summary is a collaboration handoff, not only an audit artifact.
 7. Run `make ai-finish TASK=<task>` and treat failures as blockers for completion or archive.
    Use checkpoints to keep long-running tasks from drifting.
+   A same-active-Contract, same-scope correction of active schema or evidence
+   retries in that Work Item and preserves each blocked Outcome; do not create a
+   successor or duplicate Issue merely for that correction. Use a governed
+   successor/quarantine route only when the base changed, the Contract/scope is
+   invalidated, or immutable failed-delivery evidence must be re-delivered.
+   For a missing `before_finish` checkpoint, run the canonical
+   `make ai-checkpoint CONTRACT=<contract> SUMMARY=<summary> STAGE=before_finish`;
+   use `make ai-revalidate-contract-amendment` only for a stale immutable
+   `before_edit` Contract binding.
 8. If you need a pre-implementation readiness view, run `make ai-preflight`. Use `make generate-ai-preflight-review` when you want generation only, and `make check-ai-preflight-review` as the report validator. `make ai-start` in `MODE=code` should surface the same review before implementation begins.
    The rule is **Evidence over Self-Declaration**: readiness is derived from Contract evidence, not from agent confidence. When that review reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before any coding continues. Advisory mode means the command can exit successfully; it does not mean the agent may silently continue.
 

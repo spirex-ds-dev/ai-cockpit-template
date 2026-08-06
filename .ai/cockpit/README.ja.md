@@ -189,6 +189,24 @@ make ai-transition-to-successor \
 
 このコマンドは、blocked Outcome とその digest、相互に異なる identity、リポジトリ Issue、authority、reason、mode、receipt path を検証してから、唯一の束縛済み successor receipt を書き込みます。Status と doctor は有効な route を yellow と表示しますが、predecessor は独立に解消されるまで red / blocked のままです。receipt は archive、merge、release、branch 削除、provider mutation、または predecessor evidence の書き換えを許可しません。
 
+### active Work Item の retry と successor の境界
+
+Contract と scope が同じ delivery を表したままで、修正が active な schema/evidence
+（例: `before_finish` checkpoint や Summary evidence field の不足）に限られる場合は、
+同じ Work Item 内で retry します。すべての blocked Outcome を保持し、修正した evidence を
+append して必要な check を再実行します。この場合に別 Issue や successor を作成してはいけません。
+
+changed base から delivery を再開する場合、active Contract/scope が無効化された場合、または
+immutable な failed-delivery evidence を独立に再 delivery する場合にだけ、上記の
+governed successor/quarantine route を使用します。いずれの場合も predecessor Outcome の
+書き換えは許可されません。
+
+`ai-finish` は失敗した checkpoint に対応する正規の recovery を表示します。`before_finish`
+record がない場合は `make ai-checkpoint CONTRACT=<contract> SUMMARY=<summary> STAGE=before_finish`、
+immutable な `before_edit` Contract binding が stale の場合は append-only の
+`make ai-revalidate-contract-amendment` を使います。どちらも validation や Outcome emission を
+bypass しません。
+
 アクティブ Work Item が 0 件、または 1 組の Contract/Summary ペアだけの場合、`make repair-ai-status` で `current_status.md` を再生成できます。不整合ファイルや複数アクティブ Work Item の修復は含みません。
 
 archive 後の状態は `no_active_work_item` です。これは worktree が clean である意味ではなく、no-active status はファイル一覧を保存しません。最初の archive bundle commit 前に限り、現在変更中の同一 Work Item の Contract、Summary、manifest、index 更新、Start Receipt が揃い、manifest が正確な archive pair を束縛し、すべての live path が archived Summary の `changedFiles` に記録されている場合だけ、同じ transaction として扱います。Summary にない path、無関係な変更、孤立した receipt、履歴にしか存在しない pair、不完全な pair、不正な Summary、manifest の不一致は引き続き fail closed です。完全な archive bundle を先に commit し、アーカイブ証跡と完全 PR diff の所有権を `make check-ai-pr AI_BASE_COMMIT=<merge-base>` で検証します。`repair-ai-status` は有効な 0 件または 1 組の active 状態で stale な Status 表示を再生成できますが、live change の所有権は作れません。archive transaction 外の path が報告された場合は repair を繰り返さず、変更を戻すか Work Item を作成・再開します。

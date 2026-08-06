@@ -271,6 +271,27 @@ yellow; the predecessor remains red and blocked until independently resolved.
 The receipt is never authorization to archive, merge, release, delete a branch,
 mutate a provider, or rewrite predecessor evidence.
 
+### Retry an active Work Item or create a successor
+
+Keep an ordinary active Work Item in place when its Contract and scope still
+describe the same delivery and the correction is limited to active
+schema/evidence facts (for example, a missing `before_finish` checkpoint or a
+Summary evidence field). Preserve every blocked Outcome and append the corrected
+evidence, then rerun the required checks. Do not create another Issue or
+successor for that case.
+
+Use the governed successor/quarantine route above only when the delivery must
+restart from a changed base, its active Contract/scope is invalidated, or its
+failed-delivery evidence is immutable and must be independently re-delivered.
+Those conditions do not authorize rewriting the predecessor Outcome.
+
+`ai-finish` reports the canonical checkpoint recovery for the failure it sees:
+a missing `before_finish` record requires
+`make ai-checkpoint CONTRACT=<contract> SUMMARY=<summary> STAGE=before_finish`;
+a stale immutable `before_edit` Contract binding requires the append-only
+`make ai-revalidate-contract-amendment` command. Neither recovery bypasses
+validation or Outcome emission.
+
 Run `make repair-ai-status` to regenerate `current_status.md` when there is no active Work Item or exactly one active Contract/Summary pair. It does not repair unpaired files or multiple active Work Items; those require manual cleanup.
 
 After archive, the generated state is `no_active_work_item`. It means no active Contract/Summary pair. No-active status deliberately omits the file list and persists a deterministic clean marker; transient archive-time worktree changes are not serialized. Before the first archive-bundle commit, a current same-task Contract, Summary, manifest, index update, and Start Receipt form one transaction only when the manifest binds the exact archive pair and every live path is named by that archived Summary's `changedFiles`. An omitted or unrelated path, orphan receipt, historical-only or incomplete pair, malformed Summary, or mismatched manifest remains fail closed. Commit the complete archived bundle first, then use `make check-ai-pr AI_BASE_COMMIT=<merge-base>` to validate the clean committed PR diff and archive ownership. `make repair-ai-status` can regenerate stale serialized Status for a valid zero- or one-active-pair lifecycle state; it cannot establish ownership for live changes. If the diagnostic says a path is outside the archive transaction, restore it or create/resume a Work Item instead of retrying repair.
