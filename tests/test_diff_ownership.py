@@ -4,6 +4,44 @@ import ai_check_diff_ownership as ownership
 import ai_generate_human_report as human
 
 
+def completed_outcome(task):
+    sections = {"outcomeSummary": "Completed.", "taskOverview": "Task."}
+    for key in (
+        "deliveredChanges",
+        "findings",
+        "risks",
+        "warnings",
+        "interventions",
+        "forcedStops",
+        "resolutions",
+        "recurrencePrevention",
+        "avoidedImpact",
+        "residualRisks",
+        "humanDecisions",
+    ):
+        sections[key] = []
+    sections["evidence"] = [{"subject": "evidence"}]
+    return {
+        "format": "ai-cockpit-task-outcome",
+        "schemaVersion": 1,
+        "workItemId": task,
+        "status": "completed",
+        "sections": sections,
+        "bindings": {
+            "taskId": task,
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "d" * 40,
+            "headCommit": "e" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.0",
+        },
+    }
+
+
 def contract(scope, *, excluded=(), approved=False):
     return {
         "scope": list(scope),
@@ -32,6 +70,106 @@ def test_start_receipt_binding_implicitly_owns_receipt_path():
         None,
     )
     assert ownership.covers(owner, ".ai/work-items/starts/receipt.json") == (True, False)
+
+
+def test_archived_owner_implicitly_owns_its_bound_start_receipt():
+    receipt = ".ai/work-items/starts/receipt.json"
+    owner = ownership.Owner(
+        "archived",
+        "receipt",
+        contract(["scripts/ai_start.py"]) | {"startReceipt": {"path": receipt}},
+        {"changedFiles": [{"path": "scripts/ai_start.py"}]},
+    )
+
+    assert ownership.covers(owner, receipt) == (True, False)
+
+
+def test_archived_owner_owns_only_a_validated_matching_report_pair(tmp_path, monkeypatch):
+    task = "archived-task"
+    outcome = completed_outcome(task)
+    report_json = tmp_path / "task_report.json"
+    report_markdown = tmp_path / "task_report.md"
+    report = human.generate_human_report(outcome, phase="review")
+    report_json.write_text(json.dumps(report), encoding="utf-8")
+    report_markdown.write_text(human.render_human_report(report), encoding="utf-8")
+    archive = tmp_path / "archive"
+    archive.mkdir()
+    (archive / f"{task}.outcome.json").write_text(json.dumps(outcome), encoding="utf-8")
+    monkeypatch.setattr(ownership, "ARCHIVE_DIR", archive)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_JSON", report_json)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_MARKDOWN", report_markdown)
+    owner = ownership.Owner("archived", task, contract([]), {"changedFiles": []})
+
+    claim = ownership.generated_archived_human_report_owner(".ai/cockpit/task_report.json", [owner])
+
+    assert claim is not None
+    assert claim.state == "archived_owned"
+    assert claim.owners == [f"archived:{task}"]
+
+
+def test_archived_owner_rejects_a_report_for_a_different_task(tmp_path, monkeypatch):
+    outcome = completed_outcome("other-task")
+    report = human.generate_human_report(outcome, phase="review")
+    report_json = tmp_path / "task_report.json"
+    report_markdown = tmp_path / "task_report.md"
+    report_json.write_text(json.dumps(report), encoding="utf-8")
+    report_markdown.write_text(human.render_human_report(report), encoding="utf-8")
+    archive = tmp_path / "archive"
+    archive.mkdir()
+    archived = completed_outcome("archived-task")
+    (archive / "archived-task.outcome.json").write_text(json.dumps(archived), encoding="utf-8")
+    monkeypatch.setattr(ownership, "ARCHIVE_DIR", archive)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_JSON", report_json)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_MARKDOWN", report_markdown)
+
+    assert (
+        ownership.generated_archived_human_report_owner(
+            ".ai/cockpit/task_report.json",
+            [ownership.Owner("archived", "archived-task", contract([]), {"changedFiles": []})],
+        )
+        is None
+    )
+
+
+def test_preview_owns_current_archive_transaction_start_and_report_pair(tmp_path, monkeypatch):
+    """No-active pre-merge retains only exact evidence for the archive transaction."""
+    task = "archived-task"
+    receipt = ".ai/work-items/starts/archived-task.json"
+    archive = tmp_path / "archive"
+    archive.mkdir()
+    outcome = completed_outcome(task)
+    (archive / f"{task}.outcome.json").write_text(json.dumps(outcome), encoding="utf-8")
+    report = human.generate_human_report(outcome, phase="review")
+    report_json = tmp_path / "task_report.json"
+    report_markdown = tmp_path / "task_report.md"
+    report_json.write_text(json.dumps(report), encoding="utf-8")
+    report_markdown.write_text(human.render_human_report(report), encoding="utf-8")
+    owner = ownership.Owner(
+        "archived",
+        task,
+        {"workItemId": task, "scope": [], "outOfScope": [], "startReceipt": {"path": receipt}},
+        {"changedFiles": []},
+    )
+    monkeypatch.setattr(ownership, "ARCHIVE_DIR", archive)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_JSON", report_json)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_MARKDOWN", report_markdown)
+    monkeypatch.setattr(
+        ownership,
+        "changed_name_status",
+        lambda *_args, **_kwargs: [
+            ("A", receipt),
+            ("M", ".ai/cockpit/task_report.json"),
+            ("M", ".ai/cockpit/task_report.md"),
+        ],
+    )
+    monkeypatch.setattr(ownership, "owners", lambda **_kwargs: [owner])
+    monkeypatch.setattr(ownership, "parse_simple_manifest", lambda _path: {})
+
+    values = ownership.preview(contract={"baselineDirtyPaths": []})
+
+    assert [item.state for item in values] == ["archived_owned"] * 3
+    assert values[0].path == ".ai/cockpit/task_report.json"
+    assert values[-1].path == receipt
 
 
 def test_active_owner_implicitly_owns_its_outcome_paths():

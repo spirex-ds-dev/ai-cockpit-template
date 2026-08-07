@@ -240,6 +240,12 @@ release evidence. Independent review must finish while evidence is active. The o
 independent review → ai-finish/archive → commit bundle → check-ai-pr → push → PR
 ```
 
+During the no-active pre-merge check, the current archive transaction owns only
+its exact Contract-bound Start Receipt and a Human Benefit Report pair that
+validates against that same archived Task Outcome. This narrow binding does not
+extend to historical, malformed, cross-task, or otherwise unlisted evidence;
+those paths remain unowned and fail closed.
+
 Before either Finish archive path mutates active evidence, it runs
 `make check-changed-critical-coverage AI_BASE_COMMIT=<Contract baseCommit>`.
 The resulting report binds the immutable Contract base plus the candidate HEAD

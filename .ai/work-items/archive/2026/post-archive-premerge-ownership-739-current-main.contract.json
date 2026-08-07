@@ -1,0 +1,226 @@
+{
+  "contractVersion": 2,
+  "workItemId": "post-archive-premerge-ownership-739-current-main",
+  "mode": "code",
+  "title": "Fix post-archive pre-merge ownership convergence",
+  "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.contract.json",
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.outcome.json",
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.outcome.md",
+    "scripts/ai_check_diff_ownership.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_diff_ownership.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting or deleting #709's immutable archive, Outcome, manifest, or existing PR evidence.",
+    "Lowering the declared coverage floor, bypassing ai-pre-merge, merging #738, or changing provider required checks.",
+    "Unrelated Issue reconciliation, release publication, and broad worktree cleanup."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/739",
+      "reason": "Authoritative corrective Issue with the reproduced #709 post-archive pre-merge failure."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/conflict-successor-outcome-709-current-main.summary.json",
+      "reason": "Immutable source Summary whose generated start/report evidence must be recognized precisely."
+    },
+    {
+      "path": "scripts/ai_check_diff_ownership.py",
+      "reason": "No-active ownership classifier used by ai-pre-merge."
+    },
+    {
+      "path": "scripts/ai_post_archive_recovery.py",
+      "reason": "Existing recovery admission boundary that correctly rejects check-ai-pr-passing candidates."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Canonical lifecycle boundary documentation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_integrity",
+      "coverage_determinism",
+      "archived_evidence_ownership"
+    ],
+    "reason": "A false ownership allowance could permit unrelated archive evidence; a false rejection blocks a completed Work Item. Coverage comparison must remain strict without floating-point ambiguity.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Archived evidence and merge-gate behavior require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic governed execution; #739 provides the bounded corrective authority."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A completed archive transaction grants no-active pre-merge ownership only to its exact manifest/Summary-bound generated start receipt and Human Benefit Report paths.",
+    "Unrelated, historical, malformed, or mismatched generated evidence remains unowned and fails closed.",
+    "The declared 85.10 percent coverage floor is compared deterministically without lowering the policy or accepting a below-floor rounded display.",
+    "Executable regressions reproduce #709's post-archive candidate and prove both check-ai-pr and ai-pre-merge converge without an archive rewrite or bypass.",
+    "Lifecycle documentation and generated capability projections describe the corrected post-archive boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "#709's archived candidate passes check-ai-pr and all hosted checks but ai-pre-merge rejects its generated start receipt and Human Benefit Report as unowned; the existing same-Work-Item recovery route cannot open because its admission audit passes.",
+    "constraints": [
+      "Use Issue #739 and the user's standing direction recorded in this Contract; do not bypass or merge #738 while the gate is red.",
+      "Treat #709 archive evidence as immutable and repair the generic lifecycle behavior from current main.",
+      "Keep ownership fail-closed outside the exact current archive transaction and do not reduce the coverage floor."
+    ],
+    "rationale": "A precise archive-transaction binding restores legitimate lifecycle progress while preserving evidence integrity and makes the current #709 delivery mergeable through normal gates."
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:goal-continuation-automatic-execution", "capturedAt": "2026-08-07", "digest": "sha256:post-archive-premerge-739-authorized"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Repair #739 through its own bounded Work Item, then resume #709 normal merge and closure.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {
+      "scenario": "Exact current archive transaction owns its generated start receipt and report pair during no-active pre-merge validation.",
+      "required": true,
+      "expected": "ai-pre-merge accepts the candidate when all archive digests and Summary bindings match.",
+      "verificationPlan": "Create an archived fixture transaction and invoke the production no-active ownership/pre-merge path.",
+      "status": "unverified", "evidence": []
+    },
+    {
+      "scenario": "A similarly named but unrelated generated artifact appears beside a completed archive transaction.",
+      "required": true,
+      "expected": "The artifact remains unowned and validation fails closed.",
+      "verificationPlan": "Add a foreign fixture path and assert the ownership classifier rejects it.",
+      "status": "unverified", "evidence": []
+    },
+    {
+      "scenario": "Coverage lands infinitesimally below the declared 85.10 percent floor while formatted display rounds to 85.10.",
+      "required": true,
+      "expected": "The check fails deterministically without lowering the floor.",
+      "verificationPlan": "Exercise the production comparison helper with boundary decimal values.",
+      "status": "unverified", "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user-continuation-authorization", "reason": "The user authorized automatic execution and requires process defects to be corrected through the owning governed Work Item."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 822
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/post-archive-premerge-ownership-739-current-main.json",
+    "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+    "initialScopeDigest": "e45387e93da847e78c9c08e56c1117c77639e65adb7fed951fcdfa7892a45057",
+    "contractSkeletonDigest": "d4c4a6688bbe4fe07c952a1828dc9a2224808f1e1516745c50268a9d3611ec35"
+  }
+}

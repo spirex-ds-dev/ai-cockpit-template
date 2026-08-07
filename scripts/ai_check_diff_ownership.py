@@ -129,8 +129,10 @@ def covers(owner: Owner, path: str) -> tuple[bool, bool]:
     scoped = included(path, string_list(owner.contract.get("scope")))
     excluded = included(path, string_list(owner.contract.get("outOfScope")))
     binding = owner.contract.get("startReceipt")
+    bound_start_receipt = False
     if isinstance(binding, dict) and binding.get("path") == path:
         scoped = True
+        bound_start_receipt = True
     if owner.kind == "active" and path in {
         f".ai/work-items/active/{owner.work_item_id}.outcome.json",
         f".ai/work-items/active/{owner.work_item_id}.outcome.md",
@@ -139,7 +141,8 @@ def covers(owner: Owner, path: str) -> tuple[bool, bool]:
     if not scoped or excluded:
         return False, excluded
     if owner.kind == "archived" and (
-        owner.summary is None or path not in changed_file_paths(owner.summary)
+        owner.summary is None
+        or (path not in changed_file_paths(owner.summary) and not bound_start_receipt)
     ):
         return False, False
     return True, False
@@ -259,6 +262,43 @@ def generated_human_report_owner(path: str, contract: dict[str, Any] | None) -> 
     )
 
 
+def generated_archived_human_report_owner(path: str, candidates: list[Owner]) -> Ownership | None:
+    """Own a report pair only when it validates against one archived Outcome."""
+    if path not in {".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"}:
+        return None
+    if not HUMAN_REPORT_JSON.is_file() or not HUMAN_REPORT_MARKDOWN.is_file():
+        return None
+    try:
+        report = load_json(HUMAN_REPORT_JSON)
+        markdown = HUMAN_REPORT_MARKDOWN.read_text(encoding="utf-8")
+        from ai_generate_human_report import validate_human_report
+    except (OSError, ValueError, json.JSONDecodeError):
+        return None
+    matching: list[Owner] = []
+    for owner in candidates:
+        if owner.kind != "archived":
+            continue
+        outcomes = list(ARCHIVE_DIR.rglob(f"{owner.work_item_id}.outcome.json"))
+        if len(outcomes) != 1:
+            continue
+        try:
+            outcome = load_json(outcomes[0])
+            issues = validate_human_report(report, outcome, phase="review", markdown=markdown)
+        except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+            continue
+        if not issues and outcome.get("workItemId") == owner.work_item_id:
+            matching.append(owner)
+    if len(matching) != 1:
+        return None
+    owner = matching[0]
+    return Ownership(
+        path,
+        "archived_owned",
+        [f"archived:{owner.work_item_id}"],
+        "exact generated Human Benefit Report pair validates against archived Task Outcome",
+    )
+
+
 def classify(
     path: str,
     candidates: list[Owner],
@@ -366,6 +406,10 @@ def preview(*, base: str = "", contract: dict[str, Any] | None = None) -> list[O
         generated_report = generated_human_report_owner(path, contract)
         if generated_report is not None:
             values.append(generated_report)
+            continue
+        archived_report = generated_archived_human_report_owner(path, candidates)
+        if archived_report is not None:
+            values.append(archived_report)
             continue
         if path == GENERATED_ARCHIVE_INDEX and archive_index_repair_approved(contract):
             continue

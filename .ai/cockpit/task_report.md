@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task dependabot-intake-coverage-successor-734-current-main generated an evidence-derived outcome with status completed.
+Task post-archive-premerge-ownership-739-current-main generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0
