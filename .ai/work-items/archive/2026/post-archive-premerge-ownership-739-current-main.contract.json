@@ -1,0 +1,196 @@
+{
+  "contractVersion": 2,
+  "workItemId": "post-archive-premerge-ownership-739-current-main",
+  "mode": "code",
+  "title": "P1 post-archive pre-merge ownership convergence",
+  "baseCommit": "84672957f07bd4a0f63de3a859279649821395d7",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.contract.json",
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.outcome.json",
+    ".ai/work-items/active/post-archive-premerge-ownership-739-current-main.outcome.md",
+    "scripts/ai_check_diff_ownership.py",
+    "scripts/ai_check_status_consistency.py",
+    "tests/test_diff_ownership.py",
+    "tests/test_core_gates.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "historical archive evidence not created by this Work Item",
+    "provider branch-protection settings",
+    "workflow bypasses or weakened ownership checks"
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/739",
+      "reason": "Authoritative P1 problem statement, observed failure, and acceptance criteria."
+    },
+    {
+      "path": "scripts/ai_check_diff_ownership.py",
+      "reason": "Current no-active and PR diff ownership authority."
+    },
+    {
+      "path": "scripts/ai_check_status_consistency.py",
+      "reason": "Existing immutable manifest-bound transaction ownership model to align with."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/conflict-successor-outcome-709-current-main.contract.json",
+      "reason": "Archived real failure evidence that must become mergeable without rewriting it."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_integrity", "merge_lifecycle"],
+    "reason": "The change governs post-archive PR admission; incorrect ownership could either reject valid immutable evidence or admit unrelated evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "P1 lifecycle correction with executable fail-closed regression coverage."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized autonomous completion and the issue supplies bounded, testable acceptance criteria."
+  },
+  "preReviewWarnings": ["Review manifest, outcome, report-pair, and receipt bindings for fail-closed behavior."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A completed archived Work Item whose immutable manifest binds its exact start receipt, outcome, and generated report pair passes both check-ai-pr and ai-pre-merge on its clean candidate.",
+    "Unrelated, historical, malformed, incomplete, mismatched, or cross-task evidence remains unowned and fails closed.",
+    "The prior #709 archived candidate reaches ai-pre-merge without archive rewriting, a bypass, or a lower coverage threshold.",
+    "Executable regression tests cover admission and rejection cases, and lifecycle documentation explains the narrow rule."
+  ],
+  "guidelines": [
+    "Keep ownership admission exact, immutable, and fail-closed.",
+    "Do not weaken quality, coverage, or provider checks.",
+    "Document behavior changes to agent-facing lifecycle guidance."
+  ],
+  "intent": {
+    "problem": "Post-archive lifecycle evidence can be valid to check-ai-pr yet be rejected by the no-active pre-merge ownership stage, leaving completed Work Items unable to merge.",
+    "constraints": ["Do not rewrite archived evidence.", "Do not add a bypass or broadly trust generated files.", "Keep unrelated and malformed evidence rejected.", "Do not lower coverage thresholds."],
+    "rationale": "The immutable archive manifest and paired Summary already bind the exact transaction and should be the sole authority for a narrowly admitted post-archive ownership projection."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized autonomous execution, external Work Item takeover, and supersession/quarantine as needed; this bounded P1 correction must close the planned Work Items."
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。接下来英文省token模式。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-08-autonomous-plan", "capturedAt": "2026-08-08", "digest": "sha256:28ce3356df74ba0ebe754caf647c417bc7a0afd460c6cdcc2533181d622b643e"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Converge immutable post-archive ownership so valid Work Items merge normally and invalid evidence remains rejected.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {"scenario": "Exact current archive transaction includes receipt, manifest, outcome, and valid report pair.", "required": true, "status": "unverified", "evidence": [], "expected": "The archive transaction is owned in pre-merge mode and passes with its clean candidate.", "verificationPlan": "Focused ownership and PR aggregate tests plus ai-pre-merge against the archived candidate."},
+    {"scenario": "A report pair is incomplete, malformed, cross-task, or not bound to the archived outcome.", "required": true, "status": "unverified", "evidence": [], "expected": "The evidence remains unowned and the gate fails closed.", "verificationPlan": "Focused negative ownership tests."},
+    {"scenario": "Historical or unrelated archive evidence appears in the diff.", "required": true, "status": "unverified", "evidence": [], "expected": "No broad archive exemption is granted.", "verificationPlan": "Focused archive selection and ownership tests."}
+  ],
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 825
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/post-archive-premerge-ownership-739-current-main.json",
+    "baseCommit": "84672957f07bd4a0f63de3a859279649821395d7",
+    "initialScopeDigest": "e45387e93da847e78c9c08e56c1117c77639e65adb7fed951fcdfa7892a45057",
+    "contractSkeletonDigest": "476da83ef9a5bdefc572adbeec5bb787e21905223041849b7b24f35b24b8c8ad"
+  }
+}

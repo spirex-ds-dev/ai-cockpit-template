@@ -1,45 +1,59 @@
 {
   "reportVersion": 1,
-  "workItemId": "post-archive-status-consistency-740-current-main",
+  "workItemId": "post-archive-premerge-ownership-739-current-main",
   "phase": "review",
-  "result": "completed",
+  "result": "completed_with_warnings",
   "sourceOutcome": {
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1,
-    "digest": "d63c987a96cdd3916645a3b105a7b30e60a81db25100c67e1927f8e628cfe354"
+    "digest": "463a0d7f6d652aa97d73774ffa152b6fa5441eeb1603c4ae39b19e17c0deab01"
   },
   "task": {
-    "summary": "Task post-archive-status-consistency-740-current-main generated an evidence-derived outcome with status completed.",
+    "summary": "Task post-archive-premerge-ownership-739-current-main generated an evidence-derived outcome with status completed_with_warnings.",
     "deliveredChanges": [
-      ".ai/work-items/archive/2026/post-archive-status-consistency-740-current-main.contract.json",
-      ".ai/work-items/archive/2026/post-archive-status-consistency-740-current-main.summary.json",
-      ".ai/work-items/starts/post-archive-status-consistency-740-current-main.json",
+      ".ai/work-items/archive/2026/post-archive-premerge-ownership-739-current-main.contract.json",
+      ".ai/work-items/archive/2026/post-archive-premerge-ownership-739-current-main.summary.json",
       ".ai/cockpit/current_status.md",
-      "scripts/ai_check_status_consistency.py",
-      "tests/test_core_gates.py",
+      ".ai/work-items/starts/post-archive-premerge-ownership-739-current-main.json",
+      "scripts/ai_check_diff_ownership.py",
+      "tests/test_diff_ownership.py",
       "docs/reference/ai-cockpit-work-item-lifecycle.md",
       "docs/reference/capability-truth-matrix.json",
-      "docs/reference/japanese-capability-assessment.json",
-      "docs/reference/japanese-capability-assessment.md",
       "docs/reference/pre-release-documentation-alignment.json",
-      "docs/reference/pre-release-documentation-alignment.md"
+      "docs/reference/pre-release-documentation-alignment.md",
+      ".ai/work-items/archive/2026/post-archive-premerge-ownership-739-current-main.outcome.json",
+      ".ai/work-items/archive/2026/post-archive-premerge-ownership-739-current-main.outcome.md"
     ]
   },
   "issues": {
-    "detected": 0,
+    "detected": 1,
     "hardStops": 0,
-    "warnings": 0,
+    "warnings": 1,
     "resolved": 0,
-    "unresolved": 0
+    "unresolved": 1
   },
   "preventedRisks": [],
   "interventions": [],
   "forcedStops": [],
-  "humanDecisions": [
-    "如果遇到流程问题，要先开工单修正。不要采用临时修补方案。"
+  "humanDecisions": [],
+  "limitations": [
+    {
+      "sourceWarning": "Hosted provider checks must validate the final PR head.",
+      "title": "Unresolved evidence is explicitly limited",
+      "affectedClaims": [
+        "completion_claim"
+      ],
+      "requiredEvidence": [
+        "fresh verification evidence"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this warning was verified or resolved."
+      ]
+    }
   ],
-  "limitations": [],
-  "forbiddenClaims": [],
+  "forbiddenClaims": [
+    "Do not claim an unresolved warning was verified or resolved."
+  ],
   "remainingRisks": [],
   "nextSafeAction": "Review the pull request and provider checks before merge."
 }
