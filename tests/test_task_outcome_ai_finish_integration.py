@@ -714,27 +714,26 @@ def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatc
     }
     contract_path.write_text(json.dumps(contract), encoding="utf-8")
     digest = ai_finish.worktree_digest_for_finish([], summary_path.relative_to(tmp_path).as_posix())
-    summary_path.write_text(
-        json.dumps(
+    summary_data = {
+        "verification": [
             {
-                "verification": [
-                    {
-                        "check": "aiSummary",
-                        "result": "passed",
-                        "runner": "ai_finish",
-                        "contractHash": __import__("hashlib")
-                        .sha256(contract_path.read_bytes())
-                        .hexdigest(),
-                        "commitSha": "a" * 40,
-                        "executionContractPath": contract_path.relative_to(tmp_path).as_posix(),
-                        "executionSummaryPath": summary_path.relative_to(tmp_path).as_posix(),
-                        "worktreeDigest": digest,
-                    }
-                ]
+                "check": "aiSummary",
+                "result": "passed",
+                "runner": "ai_finish",
+                "contractHash": __import__("hashlib")
+                .sha256(contract_path.read_bytes())
+                .hexdigest(),
+                "commitSha": "a" * 40,
+                "executionContractPath": contract_path.relative_to(tmp_path).as_posix(),
+                "executionSummaryPath": summary_path.relative_to(tmp_path).as_posix(),
+                "worktreeDigest": digest,
             }
-        ),
-        encoding="utf-8",
+        ]
+    }
+    summary_data["verification"][0]["outcomeInputDigest"] = ai_finish.outcome_input_digest(
+        summary_data
     )
+    summary_path.write_text(json.dumps(summary_data), encoding="utf-8")
     outcome_path = active / f"{task}.outcome.json"
     outcome_path.write_text(json.dumps(_outcome(task)), encoding="utf-8")
 

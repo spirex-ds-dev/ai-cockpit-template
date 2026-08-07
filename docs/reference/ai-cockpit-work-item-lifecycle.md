@@ -247,6 +247,15 @@ and worktree state observed by the coverage run. A missing or failing result
 produces a blocked active Outcome and denies archive. This guard complements,
 rather than replaces, the clean committed `check-ai-pr` gate.
 
+An archive retry may reuse a prior `ai-finish` verification only when its final
+`aiSummary` attestation binds both the unchanged Work Item state and the
+Summary inputs consumed to derive the Task Outcome and Human Benefit Report.
+If any such input changes—for example `knownGaps`, changed-file evidence,
+verification evidence, non-risk explanations, or recorded human decisions—the
+retry reruns the normal Finish verification and regenerates the derived Outcome
+and report. Do not delete or hand-edit derived artifacts to turn a yellow or
+red Outcome green.
+
 The installer-created `adopt_ai_cockpit` Contract is the only bounded
 not-applicable case: its explicit `adoptionBootstrapPaths` identify template
 runtime files whose mapped template tests are intentionally not copied into an
