@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task post-archive-premerge-ownership-739-current-main generated an evidence-derived outcome with status completed_with_warnings.
+Task permit-quarantined-successor-start-737-current-main-v2 generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1

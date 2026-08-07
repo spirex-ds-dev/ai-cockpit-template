@@ -1,0 +1,235 @@
+{
+  "contractVersion": 2,
+  "workItemId": "permit-quarantined-successor-start-737-current-main-v2",
+  "mode": "code",
+  "title": "Permit receipt-bound quarantined successor startup",
+  "baseCommit": "02623837cab86f2cb4937e187d5d86d344f47fec",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v2.contract.json",
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v2.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v2.outcome.json",
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v2.outcome.md",
+    "scripts/ai_start.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Manual mutation, rebase, archive, deletion, or repair of #708 predecessor evidence.",
+    "Allowing unrelated concurrent Work Items, relaxing malformed or foreign receipt rejection, or bypassing ai-start generally.",
+    "PR merge, release publication, provider configuration, and branch deletion outside this Work Item lifecycle."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/737",
+      "reason": "Authoritative bootstrap-deadlock requirement and acceptance."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/708",
+      "reason": "The quarantined predecessor route whose receipt-bound successor must start."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "The linked-worktree active-slot guard currently rejects the exact authorized successor."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Lifecycle startup and successor-route regression coverage."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Canonical successor/quarantine lifecycle documentation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_bootstrap", "authorization_bypass"],
+    "reason": "A narrow exception must preserve fail-closed Work Item isolation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the governed current-main successor; all acceptance and verification evidence is explicit."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Only the exact receipt-bound successor identity of a quarantined blocked predecessor can pass linked-worktree startup validation.",
+    "Foreign, malformed, stale, digest-mismatched, issue-mismatched, authority-missing, branch-mismatched, base-mismatched, or unrelated concurrent requests remain rejected.",
+    "The #708 predecessor remains unchanged and its quarantine route remains visible and auditable.",
+    "The exact #708 current-main successor can be created through the normal ai-start command after this correction; an unrelated task still fails.",
+    "Lifecycle documentation and generated capability projections describe the narrow bootstrap boundary."
+  ],
+  "guidelines": [
+    "Make the receipt-bound exception exact and fail closed.",
+    "Preserve quarantined predecessor evidence without mutating it.",
+    "Provide executable positive and negative startup regressions."
+  ],
+  "intent": {
+    "problem": "#708 has a valid quarantined successor receipt, but ai-start treats the quarantined predecessor as an ordinary active Work Item and rejects that exact successor, creating a self-bootstrap deadlock.",
+    "constraints": [
+      "Use the explicit user bootstrap authority only for #737 initial evidence creation.",
+      "Do not make a general concurrent-start allowance or modify #708 evidence.",
+      "Return immediately to the normal Work Item, preflight, finish, archive, PR, merge, and closure lifecycle."
+    ],
+    "rationale": "An independently verified, exact receipt predicate restores the documented quarantine successor route while retaining global Work Item isolation."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "Explicit user bootstrap authority for Issue #737 only; it does not waive subsequent lifecycle gates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "rawUserRequest": "Execute the approved plan to completion, automatically record authorization in every Work Item Contract, and use the governed corrective route rather than temporary patches.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-08-autonomous-plan",
+    "capturedAt": "2026-08-08",
+    "digest": "sha256:28ce3356df74ba0ebe754caf647c417bc7a0afd460c6cdcc2533181d622b643e"
+  },
+  "declaredIntent": {
+    "summary": "Restore the exact receipt-bound quarantine successor startup route without weakening Work Item isolation.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The exact #708 successor named by a valid quarantined receipt starts from current main.",
+      "required": true,
+      "expected": "ai-start permits only the receipt-bound task/branch/base after validating all predecessor evidence.",
+      "verificationPlan": "Add a linked-worktree fixture and execute the production startup path.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "An unrelated or malformed successor request is attempted while a quarantined predecessor exists.",
+      "required": true,
+      "expected": "ai-start fails before creating Contract, Summary, receipt, status, or Git mutation.",
+      "verificationPlan": "Add focused negative regressions for every identity mismatch class.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 826
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/permit-quarantined-successor-start-737-current-main-v2.json",
+    "baseCommit": "02623837cab86f2cb4937e187d5d86d344f47fec",
+    "initialScopeDigest": "15ba90c076ecaf3ccf99745636e6ff8159e12a984d28f3abde9453500059e7e2",
+    "contractSkeletonDigest": "831e6530bdb7614b9cdb5920766c5465b7b3b527added3c7b7be25d678fe80d7"
+  }
+}
