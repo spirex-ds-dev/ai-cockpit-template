@@ -81,6 +81,11 @@ The command validates the blocked Outcome, exact identities, same-repository
 Issue, authority, mode, and receipt location. Status/doctor show a yellow route
 while the predecessor Outcome remains red. It never authorizes archive, merge,
 release, branch deletion, provider mutation, or predecessor evidence rewrite.
+During `ai-start`, a valid quarantined receipt admits only its named successor
+when the requested task, dedicated branch, and current base commit all match
+the receipt. Any unrelated task, malformed or stale receipt, or branch/base
+mismatch fails before lifecycle writes; this narrow bootstrap exception does
+not enable general concurrent startup.
 
 ## Retry-versus-successor boundary
 

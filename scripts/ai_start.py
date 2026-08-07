@@ -32,6 +32,7 @@ from ai_common import (
     save_json,
 )
 from ai_generate_status import write_active_status, write_no_active_status
+from ai_lifecycle_truth import validate_successor_receipt
 from ai_observability import create_observability
 from ai_readiness_policy import readiness_state
 from ai_start_receipt import build_receipt, current_branch, receipt_binding, receipt_path
@@ -279,6 +280,48 @@ def recoverable_foreign_duplicate_identities(
     return recoverable
 
 
+def quarantined_successor_issue(
+    requested_task: str | None,
+    identities: list[LinkedWorktreeIdentity],
+    *,
+    root: Path,
+) -> str | None:
+    """Allow only the exact current-base successor named by a valid quarantine receipt."""
+    for identity in identities:
+        active_dir = identity.worktree / ".ai" / "work-items" / "active"
+        outcome = active_dir / f"{identity.task}.outcome.json"
+        receipt_path = active_dir / f"{identity.task}.successor-receipt.json"
+        if not receipt_path.exists():
+            continue
+        try:
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return f"ERROR: linked worktree has unreadable quarantined successor receipt: {receipt_path}"
+        reason = validate_successor_receipt(
+            predecessor_outcome=outcome,
+            predecessor_work_item_id=identity.task,
+            receipt=receipt,
+        )
+        if reason:
+            return (
+                "ERROR: linked worktree has invalid quarantined successor receipt "
+                f"({reason}): {receipt_path}"
+            )
+        successor = receipt["successor"]
+        if (
+            requested_task == successor["workItemId"]
+            and current_branch() == successor["branch"]
+            and current_head() == successor["baseCommit"]
+        ):
+            continue
+        return (
+            "ERROR: linked worktree quarantined successor receipt permits only "
+            f"{successor['workItemId']} on {successor['branch']} at {successor['baseCommit']}: "
+            f"{receipt_path}"
+        )
+    return None
+
+
 def linked_worktree_active_issue(
     requested_task: str | None = None, *, root: Path = PROJECT_ROOT
 ) -> str | None:
@@ -286,6 +329,9 @@ def linked_worktree_active_issue(
     identities, errors = linked_worktree_identity_report(root=root)
     if errors:
         return errors[0]
+    quarantine_issue = quarantined_successor_issue(requested_task, identities, root=root)
+    if quarantine_issue:
+        return quarantine_issue
     recoverable = recoverable_foreign_duplicate_identities(identities)
     for identity in identities:
         if identity in recoverable:

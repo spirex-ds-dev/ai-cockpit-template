@@ -12,6 +12,7 @@ import ai_check_pr
 import ai_check_scope
 import ai_common
 import ai_generate_human_report
+import ai_lifecycle_truth
 import ai_linked_worktree_recovery
 import ai_resume_work_item
 import ai_start
@@ -264,6 +265,66 @@ def test_linked_worktree_valid_isolated_active_pair_allows_agent_parallelism(tmp
 
     assert issue is None
     assert not list((current / ".ai" / "work-items" / "active").glob("*.json"))
+
+
+def test_linked_worktree_quarantined_receipt_allows_only_its_bound_successor(tmp_path, monkeypatch):
+    """Removing the successor-identity check must let an unrelated task through."""
+    current, predecessor = (tmp_path / name for name in ("current", "predecessor"))
+    active = predecessor / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    outcome = active / "blocked-task.outcome.json"
+    outcome.write_text(
+        json.dumps({"workItemId": "blocked-task", "status": "blocked"}), encoding="utf-8"
+    )
+    transition = ai_lifecycle_truth.transition_to_successor(
+        predecessorOutcome=outcome,
+        predecessor={"workItemId": "blocked-task"},
+        successor={
+            "workItemId": "bound-successor",
+            "branch": "codex/bound-successor",
+            "baseCommit": "a" * 40,
+        },
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/737",
+        authority="explicit human authorization",
+        mode="quarantined",
+        reason="start only the exact successor",
+    )
+    assert transition.accepted
+    for suffix in ("contract", "summary"):
+        (active / f"blocked-task.{suffix}.json").write_text(
+            json.dumps({"workItemId": "blocked-task"}), encoding="utf-8"
+        )
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(
+        ai_start,
+        "linked_worktree_records",
+        lambda **_kwargs: [(predecessor, "codex/blocked-task")],
+    )
+    monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_start, "current_branch", lambda: "codex/bound-successor")
+
+    assert ai_start.linked_worktree_active_issue("bound-successor", root=current) is None
+    assert "quarantined successor" in ai_start.linked_worktree_active_issue(
+        "unrelated-task", root=current
+    )
+    monkeypatch.setattr(ai_start, "current_branch", lambda: "codex/unrelated-task")
+    assert "quarantined successor" in ai_start.linked_worktree_active_issue(
+        "bound-successor", root=current
+    )
+    monkeypatch.setattr(ai_start, "current_branch", lambda: "codex/bound-successor")
+    monkeypatch.setattr(ai_start, "current_head", lambda: "b" * 40)
+    assert "quarantined successor" in ai_start.linked_worktree_active_issue(
+        "bound-successor", root=current
+    )
+    monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
+    receipt_path = active / "blocked-task.successor-receipt.json"
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["authority"] = ""
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+    assert "invalid quarantined successor receipt (missing_authority)" in (
+        ai_start.linked_worktree_active_issue("bound-successor", root=current) or ""
+    )
 
 
 def test_linked_worktree_malformed_active_pair_fails_closed(tmp_path, monkeypatch):
