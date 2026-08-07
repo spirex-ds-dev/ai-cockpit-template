@@ -34,6 +34,13 @@ Standard 复用现有 Fast、项目测试、引用影响和完整测试削弱检
 release-preflight 和分发验证。`make quality` 继续作为 Full 的兼容别名，`make ai-cockpit-quality`
 是按证据路由的工单入口。
 
+## 会话归属
+
+每个公开质量级别和直接 `project-test` 都会在 coverage 或报告写入者运行前取得一个非阻塞、
+工作树本地的内核锁。同一工作树的第二次调用会立即失败关闭，不写入质量证据，并输出
+`Retry: make quality`。锁会在 owner 退出时由操作系统释放，因此不得删除锁文件。不同工作树
+使用不同锁路径，可以并行运行。
+
 ## Contract 证据
 
 Contract 的 `governanceProfile` 记录 `selected`、`source`、`reasons` 和 `override`。

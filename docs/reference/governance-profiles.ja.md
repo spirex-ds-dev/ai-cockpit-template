@@ -37,6 +37,14 @@ capability claim を持つ Strict Work Item だけが `quality-release` の rele
 distribution verification を追加で実行します。`make quality` は Full の
 互換 Alias のまま、`make ai-cockpit-quality` が Evidence-based Entry Point です。
 
+## Session ownership
+
+公開 Quality Profile と直接の `project-test` は、Coverage または Report writer の前に
+worktree-local の non-blocking kernel lock を 1 つ取得します。同じ worktree の 2 番目の
+呼び出しは直ちに fail closed となり、Quality Evidence を書かず `Retry: make quality` を表示します。
+lock は owner の終了時に OS が解放するため、lock file を削除してはいけません。異なる worktree は
+別の lock path を使うため並列実行できます。
+
 ## Contract Evidence
 
 Contract の `governanceProfile` は `selected`、`source`、`reasons`、`override` を記録します。

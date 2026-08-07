@@ -1,0 +1,219 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-session-isolation-654-after-lockfile-725",
+  "mode": "code",
+  "title": "Continue #654 quality session isolation after lockfile recovery",
+  "rawUserRequest": "Complete GitHub Issue #654 on the latest main branch. The previous archived delivery PR #723 could not be merged after main advanced and is superseded. Return to the main plan; do not continue runner work. RayIori authorized automatic execution and external Issue/PR handling, including governed supersession/quarantine.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "RayIori conversation and GitHub Issue #654",
+    "capturedAt": "2026-08-07",
+    "digest": "sha256:rayiori-654-successor-after-lockfile-725"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Deliver #654's worktree-local quality-session serialization from the current remote base without reviving the archived predecessor.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "baseCommit": "4cb27a8801928498524c646ae212db893d8e8b51",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "Makefile",
+    "scripts/quality_session_lock.py",
+    "tests/test_quality_session.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_gate_architecture.py",
+    "docs/reference/governance-profiles.md",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/governance-profiles.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/quality-session-isolation-654-after-lockfile-725.contract.json",
+    ".ai/work-items/active/quality-session-isolation-654-after-lockfile-725.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/quality-session-isolation-654-after-lockfile-725.outcome.json",
+    ".ai/work-items/active/quality-session-isolation-654-after-lockfile-725.outcome.md"
+  ],
+  "outOfScope": [
+    "scripts/quality_evidence.py",
+    "requirements*.lock",
+    ".github/workflows/**",
+    "provider configuration, CodeQL configuration, runner configuration, and branch-protection settings",
+    "release.json, next-release.json, and release-state.json",
+    "changes that weaken quality, coverage, security, governance, installer, CI, Outcome, merge, convergence, or release gates",
+    "unrelated Work Items"
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/654",
+      "reason": "Canonical problem statement and acceptance criteria."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/723",
+      "reason": "Archived, unmerged predecessor delivery; source reference only, never revived or rebased."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-session-isolation-654-current-main.contract.json@365f5e30c9531d8d8948079fe58b8424ecc9efa7",
+      "reason": "Immutable predecessor Contract used to recover tested lock design and authorization traceability."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current root cause: concurrent quality runs write shared coverage and current-session paths."
+    },
+    {
+      "path": "scripts/run_quality_session.py",
+      "reason": "Existing phase runner whose child targets must inherit a single lock owner."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "coverage_evidence_integrity",
+      "concurrent_execution",
+      "governance_quality_routing"
+    ],
+    "reason": "Overlapping quality commands write shared coverage and report paths; false attribution would compromise review evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The change controls coverage-producing quality commands and their review evidence."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Standing RayIori authorization covers this source-bound successor; its scope is limited to Issue #654 and excludes runner configuration."
+  },
+  "preReviewWarnings": [
+    "Confirm that all public quality entrypoints acquire the same non-blocking worktree-local lock exactly once.",
+    "Confirm the busy path writes no coverage or quality evidence and provides the canonical retry command.",
+    "Do not port predecessor changes already closed by #725 or unrelated lifecycle changes."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record implementation and finish checkpoints for the high-risk evidence boundary."
+  },
+  "acceptance": [
+    "A second make quality invocation in the same worktree deterministically fails fast with a clear Retry: make quality recovery command and produces no quality evidence.",
+    "Independent worktrees retain independent lock identities and can execute quality sessions in parallel.",
+    "Every public quality profile and direct project-test path acquires the worktree-local lock without recursive self-deadlock.",
+    "Regression tests exercise actual concurrent lock ownership, the busy path, child ownership propagation, and independent worktree locks.",
+    "Documentation accurately states the lock boundary, no-manual-deletion rule, recovery command, and cross-worktree parallelism."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A second same-worktree quality session is rejected without producing evidence",
+      "required": true,
+      "riskDomain": "coverage_evidence_integrity",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The first owner retains the kernel lock; the second caller exits 75 and prints Retry: make quality.",
+      "verificationPlan": "Hold the actual lock in a subprocess regression and assert the second invocation's exit code and stderr."
+    },
+    {
+      "scenario": "Independent worktrees hold independent quality locks",
+      "required": true,
+      "riskDomain": "concurrent_execution",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Lock identity is rooted under each worktree, so one worktree does not serialize another.",
+      "verificationPlan": "Acquire both distinct lock paths concurrently in a focused regression."
+    },
+    {
+      "scenario": "Nested quality targets join the existing owner rather than self-deadlock",
+      "required": true,
+      "riskDomain": "governance_quality_routing",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The lock wrapper marks its child environment and the owned target runs once.",
+      "verificationPlan": "Run a temporary Make target under the wrapper and assert the inherited owner marker."
+    }
+  ],
+  "guidelines": [
+    "Fail closed with a canonical recovery command; never weaken or silently bypass coverage, quality, governance, security, installer, CI, Outcome, merge, convergence, or release gates.",
+    "Use an OS-owned non-blocking lock released on process exit; do not rely on stale lock-file deletion.",
+    "Keep source-bound successor scope narrow: no runner or CodeQL configuration and no revival of archived #723.",
+    "User authorization: RayIori authorized automatic execution, external Issue/PR handling, supersession/quarantine, and recording this authority in each Contract."
+  ],
+  "intent": {
+    "problem": "Two overlapping make quality invocations in one worktree can concurrently write target/coverage.json, current-session state, and report paths. The old #654 delivery was archived but its PR conflicted after main advanced, so the same correction must be delivered by a fresh source-bound successor.",
+    "constraints": [
+      "Remain bound to GitHub Issue #654 and current origin/main; do not revive, rebase, or mutate archived predecessor evidence.",
+      "Use a non-blocking worktree-local lock and preserve parallelism in distinct worktrees.",
+      "Do not change GitHub Actions runners, CodeQL, provider settings, lockfiles, or release policy in this Work Item.",
+      "Do not weaken any quality or governance gate."
+    ],
+    "rationale": "Kernel-managed locking prevents corrupted evidence at its source while a clean successor preserves the immutable audit trail of the unmerged predecessor."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "Standing authorization: execute the plan automatically, record authorization in each Contract, handle external Issues/PRs, and use governed supersession/quarantine when required."
+  },
+  "rollbackNote": "Revert this Work Item diff; it removes only the lock wrapper, lock script, related tests, and documentation.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 470
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-session-isolation-654-after-lockfile-725.json",
+    "baseCommit": "4cb27a8801928498524c646ae212db893d8e8b51",
+    "initialScopeDigest": "4a8ae88ec8d1985c249908a14e2d18ce79c1b0830f5e0718103624d1a6ac4ef7",
+    "contractSkeletonDigest": "d2b67e15fb6a31b9455b631f89d0b8b0d06035234b4acba5af05f64933eb8811"
+  }
+}
