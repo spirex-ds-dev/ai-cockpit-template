@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_common import matches
+from ai_finish import write_blocked_outcome
 from ai_start_receipt import (
     PROJECT_ROOT,
     RESUME_SCHEMA_VERSION,
@@ -332,7 +333,39 @@ def synchronize_contract(
         _governed_git(project_root, "merge-base", "--is-ancestor", from_base, head_before)
     except ResumeError as exc:
         raise ResumeError("Work Item branch is unrelated to Contract baseCommit") from exc
-    _rebase_onto(project_root, target)
+    try:
+        _rebase_onto(project_root, target)
+    except ResumeError as exc:
+        if str(exc) != "rebase conflicted and was aborted":
+            raise
+        checkpoint = contract.get("synchronizationCheckpoint")
+        if not isinstance(checkpoint, dict) or checkpoint.get("authorized") is not True:
+            raise
+        outcome_ok, outcome_message = write_blocked_outcome(
+            work_item_id,
+            contract_path,
+            summary_path,
+            failed_check="synchronization_conflict",
+            failure_message=str(exc),
+            project_root=project_root,
+        )
+        if not outcome_ok:
+            raise ResumeError(
+                f"{exc}; blocked synchronization Outcome persistence failed: {outcome_message}"
+            ) from exc
+        try:
+            _, outcome_checkpoint_head, _ = _commit_synchronization_checkpoint(
+                project_root, contract, work_item_id
+            )
+        except ResumeError as checkpoint_exc:
+            raise ResumeError(
+                f"{exc}; blocked synchronization Outcome checkpoint failed: {checkpoint_exc}"
+            ) from checkpoint_exc
+        if outcome_checkpoint_head is None:
+            raise ResumeError(
+                f"{exc}; blocked synchronization Outcome checkpoint produced no commit"
+            )
+        raise
     head_after = _governed_git(project_root, "rev-parse", "HEAD")
     transition = {
         "synchronizationVersion": SYNCHRONIZATION_SCHEMA_VERSION,

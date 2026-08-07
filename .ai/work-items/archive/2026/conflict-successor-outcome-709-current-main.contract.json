@@ -1,0 +1,254 @@
+{
+  "contractVersion": 2,
+  "workItemId": "conflict-successor-outcome-709-current-main",
+  "mode": "code",
+  "title": "Emit blocked Outcome for governed synchronization conflicts",
+  "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/conflict-successor-outcome-709-current-main.contract.json",
+    ".ai/work-items/active/conflict-successor-outcome-709-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/conflict-successor-outcome-709-current-main.outcome.json",
+    ".ai/work-items/active/conflict-successor-outcome-709-current-main.outcome.md",
+    "scripts/ai_finish.py",
+    "scripts/ai_resume_work_item.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "docs/superpowers/specs/2026-08-07-synchronization-conflict-outcome-709-design.md",
+    "docs/superpowers/plans/2026-08-07-synchronization-conflict-outcome-709.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Manual creation, editing, or deletion of any blocked Outcome, start receipt, archive evidence, or rebase state.",
+    "Manual conflict resolution, force-push, merge, release, tag, provider branch deletion, or GitHub required-check changes.",
+    "Changing the success path of ai-synchronize-work-item or weakening ai-transition-conflict-successor validation."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+      "reason": "Reopened authoritative corrective Issue: the synchronization-conflict successor requires an Outcome that the real synchronization path does not emit."
+    },
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Owns checkpoint, automatic rebase abort, and conflict-successor receipt validation."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Owns validated blocked Outcome and derived Human Benefit Report generation."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Contains the current synchronization-conflict fixture, which currently handwrites the required Outcome."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Owns the required context classification for new governed design and plan documents."
+    },
+    {
+      "path": ".ai/work-items/active/reconcile-open-items-662-branch-cleanup.contract.json",
+      "reason": "Real governed #662 source Work Item that reproduced the production-path gap; it is read-only forensic evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "lifecycle_state", "regression"],
+    "reason": "A missing or malformed conflict Outcome can strand a legitimate Work Item; an over-broad writer could falsely authorize a successor or corrupt the normal synchronization path.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "RayIori approved design A and standing automatic execution; implementation remains limited to #709's real synchronization-conflict Outcome gap."
+  },
+  "preReviewWarnings": ["Review the conflict-only guard, exact target-root ownership, and preservation of the source checkpoint/abort behavior."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "When an authorized ai-synchronize-work-item checkpoint encounters a rebase conflict, it automatically aborts the rebase and persists a validated red blocked Outcome with failedGate synchronization_conflict before returning failure.",
+    "The derived Human Benefit Report and generated cockpit status expose the same blocked Outcome; the writer resolves every path inside the explicit target worktree, preserves the original checkpoint commit and source Contract/Start Receipt, and records the blocked state through a distinct authorized recovery-evidence commit after the abort.",
+    "The normal clean synchronization path and all conflict-successor validation remain fail-closed; a successor is accepted only after the real source conflict Outcome exists.",
+    "A regression invokes the production synchronization path rather than handwriting Outcome JSON, proves the red Outcome/report, then proves the conflict-successor receipt can bind it.",
+    "Lifecycle documentation and generated capability projections describe the automatic conflict Outcome and its recovery boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features.",
+    "Outcome evidence is generated by canonical code, never handwritten to satisfy a transition guard."
+  ],
+  "intent": {
+    "problem": "A real governed synchronization conflict currently checkpoints and aborts safely but emits no blocked Outcome, while the merged conflict-successor route requires exactly that Outcome. This leaves an active Work Item unable to enter its documented current-main successor route.",
+    "constraints": [
+      "Use the existing #709 corrective Issue and do not create another Issue for this production-path omission.",
+      "Persist the Outcome only after the synchronization command proves a conflict and has automatically aborted the rebase.",
+      "Use the existing validated Outcome/Human Report pipeline, made explicit-target-root safe where necessary; do not handwrite lifecycle evidence.",
+      "Preserve the original checkpoint commit, source Contract, start receipt, normal synchronization behavior, and conflict-successor validation; the Summary may be updated only with canonical blocked Outcome state and committed as recovery evidence.",
+      "The user approved automatic execution and evidence-bound supersession/quarantine; this Work Item does not authorize any release or provider cleanup."
+    ],
+    "rationale": "A single canonical blocked-Outcome pipeline makes the failure visible through the required red traffic-light surface and supplies the immutable evidence that the existing successor command already validates."
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。确认方案 A：同步冲突后使用共享、target-root-safe 的 blocked Outcome/Human Report 管线，再由冲突 successor 读取该证据。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "RayIori conversation: confirmed proposal A on 2026-08-07",
+    "capturedAt": "2026-08-07",
+    "digest": "sha256:rayiori-709-conflict-outcome-design-a"
+  },
+  "declaredIntent": {
+    "summary": "Repair #709 so a real governed synchronization conflict produces canonical blocked Outcome evidence before the existing successor transition evaluates it.",
+    "requestedCapabilities": ["ai_governance", "software_design", "documentation", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Contract-owned dirty synchronization conflicts with current main.",
+      "required": true,
+      "riskDomain": "lifecycle_state",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The rebase is aborted; a validated red synchronization_conflict Outcome, Markdown report, and status projection are written in the source target root.",
+      "verificationPlan": "Exercise the real synchronization command in the existing local Git fixture and validate the generated evidence."
+    },
+    {
+      "scenario": "A successor binds the real conflict source after Outcome emission.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The conflict-successor receipt binds the exact generated Outcome digest and still rejects malformed or unrelated evidence.",
+      "verificationPlan": "Extend the existing conflict-successor fixture without manually writing an Outcome."
+    },
+    {
+      "scenario": "Synchronization completes without a conflict.",
+      "required": true,
+      "riskDomain": "regression",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The existing successful synchronization transition remains unchanged and does not create a blocked Outcome.",
+      "verificationPlan": "Run the focused successful synchronization regression."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "Standing automatic-execution authorization, reaffirmed by approval of design A; restricted governance evidence changes remain bounded to this #709 Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 822
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/conflict-successor-outcome-709-current-main.json",
+    "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+    "initialScopeDigest": "944802dd9d27ba286c84e95f945e50f1aa6c666674140e6adb729f39b412b984",
+    "contractSkeletonDigest": "d487243d057f3224f995d5d259cd8ac6bee39b6ad3249c5e1a7e5b39ae6d7622"
+  }
+}

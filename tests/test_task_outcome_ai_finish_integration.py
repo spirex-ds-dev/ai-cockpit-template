@@ -1,5 +1,7 @@
 import json
+import subprocess
 import sys
+from pathlib import Path
 
 import ai_check_agent_risk
 import ai_finish
@@ -274,6 +276,53 @@ def test_blocked_outcome_refreshes_the_exact_active_review_report(tmp_path, monk
     assert human.validate_human_report(report, outcome) == []
     assert report_markdown.read_text(encoding="utf-8") == human.render_human_report(report)
     assert any("quality gate failed" in warning for warning in outcome["sections"]["warnings"])
+
+
+def test_write_blocked_outcome_uses_explicit_target_root(tmp_path: Path):
+    """A recovery Outcome must never be written into the caller's repository."""
+    task = "source-task"
+    target = tmp_path / "target"
+    target.mkdir()
+    for command in (
+        ["git", "init", "--initial-branch=main"],
+        ["git", "config", "user.name", "Test"],
+        ["git", "config", "user.email", "test@example.com"],
+    ):
+        subprocess.run(command, cwd=target, check=True, capture_output=True, text=True)
+    (target / "seed.txt").write_text("seed\n", encoding="utf-8")
+    subprocess.run(
+        ["git", "add", "seed.txt"], cwd=target, check=True, capture_output=True, text=True
+    )
+    subprocess.run(
+        ["git", "commit", "-m", "seed"], cwd=target, check=True, capture_output=True, text=True
+    )
+    active = target / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    contract_path = active / f"{task}.contract.json"
+    summary_path = active / f"{task}.summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "scope": []}),
+        encoding="utf-8",
+    )
+    summary_path.write_text(json.dumps({"changedFiles": [], "verification": []}), encoding="utf-8")
+
+    ok, message = ai_finish.write_blocked_outcome(
+        task,
+        contract_path,
+        summary_path,
+        failed_check="synchronization_conflict",
+        failure_message="rebase conflicted and was aborted",
+        project_root=target,
+    )
+
+    assert ok, message
+    assert (active / f"{task}.outcome.json").is_file()
+    assert (active / f"{task}.outcome.md").is_file()
+    assert (target / ".ai/cockpit/task_report.json").is_file()
+    assert (target / ".ai/cockpit/task_report.md").is_file()
+    outcome = json.loads((active / f"{task}.outcome.json").read_text(encoding="utf-8"))
+    assert outcome["failedGate"] == "synchronization_conflict"
+    assert outcome["humanStatusColor"] == "red"
 
 
 def test_blocked_outcome_normalizes_coverage_metrics_for_valid_report(tmp_path, monkeypatch):

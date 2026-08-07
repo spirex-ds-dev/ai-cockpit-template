@@ -583,23 +583,31 @@ def inject_mandatory_verification_checks(
     return list(normalized.values())
 
 
-def _outcome_paths(task: str) -> tuple[Path, Path]:
-    root = ACTIVE_DIR / task
+def _outcome_paths(task: str, *, project_root: Path | None = None) -> tuple[Path, Path]:
+    active_dir = (project_root or PROJECT_ROOT) / ".ai" / "work-items" / "active"
+    root = active_dir / task
     return root.with_suffix(".outcome.json"), root.with_suffix(".outcome.md")
 
 
-def _human_report_paths() -> tuple[Path, Path]:
-    root = PROJECT_ROOT / ".ai" / "cockpit" / "task_report"
+def _human_report_paths(*, project_root: Path | None = None) -> tuple[Path, Path]:
+    root = (project_root or PROJECT_ROOT) / ".ai" / "cockpit" / "task_report"
     return root.with_suffix(".json"), root.with_suffix(".md")
 
 
-def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]:
+def run_human_report_pipeline(
+    task: str, summary_path: Path, *, project_root: Path | None = None
+) -> tuple[bool, str]:
     """Generate the compact review view from the validated Task Outcome."""
 
     from ai_generate_human_report import generate_human_report, render_human_report
 
-    outcome_path, _ = _outcome_paths(task)
-    json_path, markdown_path = _human_report_paths()
+    root = (project_root or PROJECT_ROOT).resolve()
+    if root == PROJECT_ROOT:
+        outcome_path, outcome_markdown_path = _outcome_paths(task)
+        json_path, markdown_path = _human_report_paths()
+    else:
+        outcome_path, outcome_markdown_path = _outcome_paths(task, project_root=root)
+        json_path, markdown_path = _human_report_paths(project_root=root)
     try:
         outcome = load_json(outcome_path)
         report = generate_human_report(outcome, phase="review")
@@ -607,7 +615,7 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
         markdown_path.write_text(render_human_report(report), encoding="utf-8")
         summary = load_json(summary_path)
         changed = summary.setdefault("changedFiles", [])
-        contract_path = PROJECT_ROOT / ".ai" / "work-items" / "active" / f"{task}.contract.json"
+        contract_path = root / ".ai" / "work-items" / "active" / f"{task}.contract.json"
         contract = load_json(contract_path) if contract_path.is_file() else {}
         scope = contract.get("scope", []) if isinstance(contract, dict) else []
         existing = {item.get("path") for item in changed if isinstance(item, dict)}
@@ -615,12 +623,12 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
             (json_path, "Generated machine-readable Human Benefit Review Report."),
             (markdown_path, "Generated human-readable Human Benefit Review Report."),
         ):
-            relative = path.relative_to(PROJECT_ROOT).as_posix()
+            relative = path.relative_to(root).as_posix()
             if included(relative, scope) and relative not in existing:
                 changed.append({"path": relative, "reason": reason})
         alignment = summary.get("documentationAlignment")
-        report_markdown = markdown_path.relative_to(PROJECT_ROOT).as_posix()
-        outcome_markdown = _outcome_paths(task)[1].relative_to(PROJECT_ROOT).as_posix()
+        report_markdown = markdown_path.relative_to(root).as_posix()
+        outcome_markdown = outcome_markdown_path.relative_to(root).as_posix()
         documented_generated_paths = {
             report_markdown,
             outcome_markdown,
@@ -708,11 +716,33 @@ def _sha256_json(value: Any) -> str:
     ).hexdigest()
 
 
-def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path) -> dict[str, Any]:
+def _current_head_for_root(project_root: Path) -> str:
+    """Read HEAD from the repository that owns the evidence being generated."""
+    if project_root.resolve() == PROJECT_ROOT:
+        return current_head()
+    result = subprocess.run(  # nosec B603 B607 - fixed Git metadata query
+        ["git", "rev-parse", "--verify", "HEAD"],
+        cwd=project_root,
+        env=clean_git_environment(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.stdout.strip() if result.returncode == 0 else ""
+
+
+def _pre_merge_outcome_input(
+    task: str,
+    contract_path: Path,
+    summary_path: Path,
+    *,
+    project_root: Path | None = None,
+) -> dict[str, Any]:
     """Derive truthful Outcome evidence before a provider PR can exist."""
+    root = (project_root or PROJECT_ROOT).resolve()
     contract = load_json(contract_path)
     summary = load_json(summary_path)
-    head_commit = current_head()
+    head_commit = _current_head_for_root(root)
     base_commit = contract.get("baseCommit")
     if not isinstance(base_commit, str) or len(base_commit) != 40:
         raise ValueError("Contract baseCommit is required for mandatory Task Outcome")
@@ -780,10 +810,10 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
             "humanDecisions": human_decisions,
             "sources": [
                 {
-                    "source": contract_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "source": contract_path.relative_to(root).as_posix(),
                     "subject": "Contract",
                 },
-                {"source": summary_path.relative_to(PROJECT_ROOT).as_posix(), "subject": "Summary"},
+                {"source": summary_path.relative_to(root).as_posix(), "subject": "Summary"},
             ],
         },
     }
@@ -817,6 +847,7 @@ def write_blocked_outcome(
     *,
     failed_check: str,
     failure_message: str,
+    project_root: Path | None = None,
 ) -> tuple[bool, str]:
     """Persist a valid blocked Outcome, then derive its exact review report.
 
@@ -829,10 +860,14 @@ def write_blocked_outcome(
     from ai_generate_task_outcome import generate_outcome
     from ai_render_task_outcome import render_task_outcome
 
-    json_path, markdown_path = _outcome_paths(task)
+    root = (project_root or PROJECT_ROOT).resolve()
+    if root == PROJECT_ROOT:
+        json_path, markdown_path = _outcome_paths(task)
+    else:
+        json_path, markdown_path = _outcome_paths(task, project_root=root)
     message = outcome_failure_message(failed_check, failure_message)
     try:
-        payload = _pre_merge_outcome_input(task, contract_path, summary_path)
+        payload = _pre_merge_outcome_input(task, contract_path, summary_path, project_root=root)
         evidence = dict(payload["evidence"])
         warnings = list(evidence.get("warnings", []))
         warnings.append(message)
@@ -861,6 +896,8 @@ def write_blocked_outcome(
             "Do not claim a blocked Work Item has completed verification or may be archived.",
         ]
         outcome = generate_outcome(task, payload["bindings"], evidence=evidence)
+        outcome["failedGate"] = failed_check
+        outcome["humanStatusColor"] = "red"
         markdown = render_task_outcome(outcome)
         report = validate_outcome(outcome, markdown, expected_task_id=task)
         if not report.valid:
@@ -871,8 +908,8 @@ def write_blocked_outcome(
             summary_path,
             {
                 "status": "blocked",
-                "jsonPath": json_path.relative_to(PROJECT_ROOT).as_posix(),
-                "markdownPath": markdown_path.relative_to(PROJECT_ROOT).as_posix(),
+                "jsonPath": json_path.relative_to(root).as_posix(),
+                "markdownPath": markdown_path.relative_to(root).as_posix(),
                 "rawEvidencePath": "derived:blocked_finish",
                 "failedCheck": failed_check,
                 "error": failure_message,
@@ -881,7 +918,10 @@ def write_blocked_outcome(
     except (OSError, KeyError, TypeError, ValueError) as exc:
         return False, str(exc)
 
-    report_ok, report_message = run_human_report_pipeline(task, summary_path)
+    if root == PROJECT_ROOT:
+        report_ok, report_message = run_human_report_pipeline(task, summary_path)
+    else:
+        report_ok, report_message = run_human_report_pipeline(task, summary_path, project_root=root)
     if not report_ok:
         return (
             False,

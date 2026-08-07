@@ -676,6 +676,7 @@ def test_synchronize_contract_rebases_clean_active_branch_and_records_one_transi
     assert _git(root, "merge-base", "--is-ancestor", target, "HEAD") == ""
     assert summary["verification"][0]["result"] == "not_run"
     assert (root / ".ai/work-items/starts/paused-task.json").read_bytes() == original_receipt
+    assert not (root / ".ai/work-items/active/paused-task.outcome.json").exists()
 
 
 def test_synchronize_contract_checkpoints_contract_authorized_owned_dirty_worktree(tmp_path):
@@ -788,6 +789,7 @@ def test_synchronize_contract_aborts_conflict_without_evidence_write(tmp_path):
     assert summary_path.read_bytes() == before_summary
     assert _git(root, "rev-parse", "HEAD") == before_head
     assert _git(root, "status", "--porcelain") == ""
+    assert not (root / ".ai/work-items/active/paused-task.outcome.json").exists()
 
 
 def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(tmp_path):
@@ -815,7 +817,6 @@ def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(
     _write_commit(writer, "src/implementation.py", "VALUE = 'corrective change'\n")
     _git(writer, "push", "origin", "main")
     _git(root, "fetch", "origin", "main")
-    before_summary = summary_path.read_bytes()
     before_head = _git(root, "rev-parse", "HEAD")
 
     with pytest.raises(ResumeError, match="rebase conflicted and was aborted"):
@@ -832,7 +833,10 @@ def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(
     assert checkpoint_head != before_head
     assert retained["synchronizationCheckpoint"]["authorized"] is True
     assert "synchronizationHistory" not in retained
-    assert summary_path.read_bytes() == before_summary
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert summary["taskOutcome"]["status"] == "blocked"
+    assert summary["taskOutcome"]["failedCheck"] == "synchronization_conflict"
+    assert (root / ".ai/work-items/active/paused-task.outcome.json").is_file()
     assert _git(root, "status", "--porcelain") == ""
 
 
@@ -849,26 +853,20 @@ def test_conflicted_synchronization_binds_a_current_main_successor_without_sourc
     (source / "src").mkdir()
     (source / "src" / "implementation.py").write_text("SOURCE\n", encoding="utf-8")
     outcome = source / ".ai/work-items/active/paused-task.outcome.json"
-    outcome.write_text(
-        json.dumps(
-            {
-                "workItemId": "paused-task",
-                "status": "blocked",
-                "humanStatusColor": "red",
-                "failedGate": "synchronization_conflict",
-            }
-        )
-        + "\n",
-        encoding="utf-8",
+    writer = tmp_path / "provider-writer"
+    _git(
+        tmp_path,
+        "clone",
+        "--branch",
+        "main",
+        _git(source, "remote", "get-url", "origin"),
+        str(writer),
     )
-    _git(source, "add", ".ai")
-    _git(source, "commit", "-m", "record blocked source evidence")
-    _git(source, "add", "src/implementation.py")
-    _git(source, "commit", "-m", "source change")
-    _git(source, "switch", "main")
-    target = _write_commit(source, "src/implementation.py", "TARGET\n")
-    _git(source, "push", "origin", "main")
-    _git(source, "switch", "codex/paused-task")
+    _git(writer, "config", "user.name", "Provider")
+    _git(writer, "config", "user.email", "provider@example.com")
+    target = _write_commit(writer, "src/implementation.py", "TARGET\n")
+    _git(writer, "push", "origin", "main")
+    _git(source, "fetch", "origin", "main")
 
     with pytest.raises(ResumeError, match="rebase conflicted and was aborted"):
         synchronize_contract(
@@ -882,6 +880,10 @@ def test_conflicted_synchronization_binds_a_current_main_successor_without_sourc
     source_contract = contract_path.read_bytes()
     source_summary = summary_path.read_bytes()
     source_outcome = outcome.read_bytes()
+    assert json.loads(source_outcome)["status"] == "blocked"
+    assert json.loads(source_outcome)["failedGate"] == "synchronization_conflict"
+    assert outcome.with_suffix(".md").is_file()
+    assert _git(source, "status", "--porcelain") == ""
 
     successor = tmp_path / "successor"
     _git(

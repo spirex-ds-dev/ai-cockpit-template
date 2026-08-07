@@ -152,11 +152,19 @@ only when every dirty path is Contract-owned or a governed generated artifact;
 it first creates a recoverable local checkpoint and records its identity and
 paths in the digest-bound `synchronizationHistory` transition. It never pushes,
 force-pushes, opens a PR, changes provider state, rewrites the Start Receipt,
-or changes archive evidence. A conflict is automatically aborted before any
-active evidence write. A successful synchronization marks prior verification
-`not_run`; rerun Preflight and all required current-generation checks before
-Finish. Replay, stale tracking state, detached/base/foreign branches, dirty
-worktrees, unrelated histories, and malformed evidence fail closed.
+or changes archive evidence. A proven conflict is automatically aborted. Only
+when the Contract explicitly authorizes `synchronizationCheckpoint` may the
+command then write and validate a red blocked Outcome with
+`failedGate: synchronization_conflict` and its Human Benefit Report in the
+explicit target root. Those generated recovery artifacts are committed in a
+distinct local recovery checkpoint so the source worktree remains clean for the
+conflict-successor validator. An unapproved conflict makes no evidence write.
+This never authorizes archive, merge, release, provider mutation, or manual
+conflict resolution. A successful synchronization writes no blocked Outcome,
+marks prior verification `not_run`, and requires Preflight plus all required
+current-generation checks before Finish. Replay, stale tracking state,
+detached/base/foreign branches, dirty worktrees, unrelated histories, and
+malformed evidence fail closed.
 
 ## Conflict successor after an automatic synchronization abort
 
