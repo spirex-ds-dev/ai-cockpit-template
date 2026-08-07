@@ -1,0 +1,206 @@
+{
+  "contractVersion": 2,
+  "workItemId": "dependabot-intake-coverage-successor-734-current-main",
+  "mode": "code",
+  "title": "Correct Dependabot intake hosted coverage regression",
+  "baseCommit": "769f7e6f495098bea460c2f13f9a26cccaae26db",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/dependabot-intake-coverage-successor-734-current-main.contract.json",
+    ".ai/work-items/active/dependabot-intake-coverage-successor-734-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/dependabot-intake-coverage-successor-734-current-main.outcome.json",
+    ".ai/work-items/active/dependabot-intake-coverage-successor-734-current-main.outcome.md",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "scripts/ai_check_dependabot_intake.py",
+    "scripts/ai_dependabot_intake.py",
+    "tests/test_dependabot_intake.py",
+    "docs/reference/dependabot-intake.md",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Modification of immutable archives for the failed predecessor Work Item.",
+    "Lowering the 85.10% coverage threshold or bypassing hosted checks.",
+    "Automatic merging of raw Dependabot pull requests.",
+    "Release publication and unrelated Issue remediation."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/734",
+      "reason": "Corrective Issue records the hosted coverage failure, exact measured coverage, and authorized corrective scope."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/733",
+      "reason": "Archived predecessor delivery and hosted failure evidence; it is reference-only and must not be revived."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/dependabot-governance-successor-663-current-main.contract.json",
+      "reason": "Immutable predecessor Contract defining the Dependabot intake behavior to reproduce on this fresh successor."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/dependabot-governance-successor-663-current-main.summary.json",
+      "reason": "Immutable predecessor Summary and local verification evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_behavior", "hosted_coverage", "workflow_change"],
+    "reason": "The correction re-delivers a fail-closed governance path and must restore hosted coverage without weakening project gates.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Corrective successor is a bounded code Work Item with explicit hosted verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "RayIori authorized automatic execution; this Contract constrains the corrective successor."
+  },
+  "preReviewWarnings": [
+    "Review direct coverage of every raw Dependabot intake decision branch.",
+    "Review successor lineage and ensure no predecessor archive or coverage threshold is modified."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Fresh current-main successor implements the Dependabot intake behavior specified by the immutable #663 predecessor without modifying that predecessor's archive.",
+    "A2: Direct tests execute both raw Dependabot rejection and non-Dependabot/not-applicable check-script branches, and the aggregate coverage gate is at least 85.10% locally and hosted.",
+    "A3: The intake assessment remains fail-closed for raw locked-dependency and pinned-action candidates and never grants automatic merge authority.",
+    "A4: Intake and repository-workflow documentation describe successor evidence and the hosted verification requirement.",
+    "A5: Fresh hosted PR checks, including template-smoke and ci-evidence, pass before merge."
+  ],
+  "guidelines": [
+    "Document any public Make target and operational intake behavior.",
+    "Keep intake helpers standalone; do not add cross-feature internal imports.",
+    "Preserve predecessor evidence immutably and record successor lineage."
+  ],
+  "intent": {
+    "problem": "Hosted template-smoke for #733 passed all 2,124 tests but failed total coverage at 85.08%, below 85.10%, because the new Dependabot check script was only 47.37% covered. The archived predecessor cannot be altered.",
+    "constraints": ["Use a fresh successor based on origin/main.", "Do not weaken the coverage gate.", "Do not mutate the archived predecessor or merge its failed PR.", "Preserve fail-closed Dependabot behavior and require hosted verification."],
+    "rationale": "A narrow successor prevents post-archive evidence rewrite while fixing the exact hosted regression and retaining the original delivery intent."
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。遇到流程问题先开工单修正，不采用临时修补方案。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:active-goal-and-coverage-regression-734", "capturedAt": "2026-08-07", "digest": "user-authorized-plan-execution"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Correct the hosted coverage regression in the Dependabot intake delivery through a fresh, governed successor.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {"id": "SC-734-1", "scenario": "Raw Dependabot pull request is rejected by the workflow-facing check.", "required": true, "status": "unverified", "evidence": [], "expected": "blocked decision with no merge authority.", "verificationPlan": "Direct unit test for the workflow-facing check."},
+    {"id": "SC-734-2", "scenario": "Non-Dependabot pull request reaches the same check.", "required": true, "status": "unverified", "evidence": [], "expected": "not_applicable decision.", "verificationPlan": "Direct unit test for a human PR actor."},
+    {"id": "SC-734-3", "scenario": "Raw locked dependency and pinned action candidate lack successor evidence.", "required": true, "status": "unverified", "evidence": [], "expected": "assessment is blocked and fail-closed.", "verificationPlan": "Assessment unit tests covering each candidate category."},
+    {"id": "SC-734-4", "scenario": "Complete local and hosted verification runs.", "required": true, "status": "unverified", "evidence": [], "expected": "coverage is at least 85.10% and all required hosted checks succeed.", "verificationPlan": "Run ai-finish locally then require green hosted PR checks."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User authorized automatic execution and requested authorization be recorded in every Work Item Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 821
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/dependabot-intake-coverage-successor-734-current-main.json",
+    "baseCommit": "769f7e6f495098bea460c2f13f9a26cccaae26db",
+    "initialScopeDigest": "9affb19c064ebdea44c4b067179e02b2551e8a8fd9918bee6d00be6b7868bd0c",
+    "contractSkeletonDigest": "d2d5240abee740cdcc75da449cc9a0b06f928707a338503fef49a7609d04a999"
+  }
+}
