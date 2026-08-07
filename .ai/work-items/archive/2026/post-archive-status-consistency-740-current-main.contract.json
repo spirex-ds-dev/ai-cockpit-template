@@ -1,0 +1,256 @@
+{
+  "contractVersion": 2,
+  "workItemId": "post-archive-status-consistency-740-current-main",
+  "mode": "code",
+  "title": "Fix post-archive no-active status consistency",
+  "baseCommit": "7f711575a1130c020c52d9c545928b05ebdcbd2c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/post-archive-status-consistency-740-current-main.contract.json",
+    ".ai/work-items/active/post-archive-status-consistency-740-current-main.summary.json",
+    ".ai/work-items/active/post-archive-status-consistency-740-current-main.outcome.json",
+    ".ai/work-items/active/post-archive-status-consistency-740-current-main.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_check_status_consistency.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_core_gates.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not rewrite #739 archived evidence or merge/rebase PR #741.",
+    "Do not relax unrelated no-active status consistency checks, coverage thresholds, or ai-pre-merge gates.",
+    "Do not close #709, #739, #740, PR #738, or PR #741 until provider evidence proves the applicable terminal disposition."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/740",
+      "reason": "Authoritative bounded correction and acceptance criteria."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/741",
+      "reason": "Immutable archived audit evidence for the preceding #739 route."
+    },
+    {
+      "path": "scripts/ai_check_status_consistency.py",
+      "reason": "Current no-active report-pair classifier."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive transaction and generated Human Benefit Report lifecycle."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Focused consistency regression surface."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "governance_integrity",
+      "generated_evidence",
+      "lifecycle_correctness"
+    ],
+    "reason": "The change admits only a narrowly verified post-archive report pair; an overbroad classifier could hide stale or cross-task evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P1 lifecycle and generated-evidence correction with immutable predecessor evidence."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "RayIori authorized automatic execution, external Work Item takeover, and supersession/quarantine for the complete plan."
+  },
+  "preReviewWarnings": [
+    "Review the no-active classifier against malformed, stale, cross-task, ambiguous, historical, and manually altered Human Benefit Report pairs."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "With no active Work Item, status consistency admits only the exact current task_report.json/task_report.md pair that validates against exactly one archived completed Outcome from the same complete archive transaction.",
+    "Focused tests reject missing, malformed, stale, cross-task, ambiguous, historical, and manually altered report pairs.",
+    "A production-path post-archive ai-pre-merge regression passes without bypassing Diff Ownership, status consistency, coverage, or unrelated no-active rules.",
+    "Lifecycle documentation and generated capability/Japanese/pre-release projections describe the bounded behavior and limitations.",
+    "Finish, archive, clean PR audit, hosted CI, merge, and lifecycle closure complete before #740 is reported resolved."
+  ],
+  "guidelines": [
+    "Keep archive evidence immutable and derive all status/report decisions from validated machine facts.",
+    "Reject ambiguous or cross-task evidence fail-closed.",
+    "Document user-visible lifecycle behavior and preserve installed/template source parity."
+  ],
+  "intent": {
+    "problem": "After #739 archive, ai-pre-merge rejects the current validator-backed Human Benefit Report pair before Diff Ownership runs because the no-active status-consistency classifier does not recognize the complete archive transaction. The archived #739 route is immutable and cannot be recovered in place.",
+    "constraints": [
+      "Implement only the no-active complete-archive transaction exception described by #740.",
+      "Preserve rejection of malformed, stale, cross-task, ambiguous, historical, or manually altered report pairs.",
+      "Do not merge or rewrite the archived/conflicting #741 evidence; retain it as audit input.",
+      "Record the standing execution direction in raw request provenance; this Work Item changes only repository-local governance code and tests."
+    ],
+    "rationale": "A current-main replacement is the only governed recovery path. A narrowly evidence-bound classifier restores a valid post-archive ai-pre-merge path without turning historical reports into general no-active allowances."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert the current-main #740 diff; archived #739/#741 evidence remains immutable.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 824
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/post-archive-status-consistency-740-current-main.json",
+    "baseCommit": "7f711575a1130c020c52d9c545928b05ebdcbd2c",
+    "initialScopeDigest": "87233dd20f1bcdfeed54b44efab155c2d8fea0d1edba7b1ffa840b3d1c0038b4",
+    "contractSkeletonDigest": "0611edc7d12042eb20277ec5d440865238bb6e2cc4f67a2cf1ec847170e2e6b7"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。授权接管外部工单。授权 supersession/quarantine。处理 Pull 和 Issue 全部解决，然后再发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "RayIori standing authorization in this task: automatic execution, external Issue takeover, supersession/quarantine, resolve all Pulls and Issues before publishing.",
+    "capturedAt": "2026-08-07",
+    "digest": "sha256:rayiori-plan-execution-supersession-quarantine-20260807"
+  },
+  "declaredIntent": {
+    "summary": "Deliver the bounded #740 no-active report-pair consistency correction as part of the authorized complete remediation plan.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "No active Work Item has exactly one archived completed Outcome and the current generated Human Benefit Report JSON/Markdown pair belongs to that archive transaction.",
+      "required": true,
+      "expected": "Status consistency and post-archive ai-pre-merge accept the pair.",
+      "verificationPlan": "Focused positive classifier test and production-path ai-pre-merge regression.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "No active Work Item has a missing, malformed, stale, cross-task, ambiguous, historical, or manually altered report pair.",
+      "required": true,
+      "expected": "Status consistency rejects it fail-closed before archive/merge can proceed.",
+      "verificationPlan": "Focused negative matrix in test_status_consistency.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "No-active status contains an unrelated changed path.",
+      "required": true,
+      "expected": "Existing no-active ownership and status guards remain unchanged.",
+      "verificationPlan": "Existing no-active regression suite and ai-pre-merge path.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}

@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_common import PROJECT_ROOT, clean_git_environment
+from ai_generate_human_report import validate_human_report
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 DEFAULT_STATUS = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
@@ -118,6 +119,11 @@ def transaction_owned_paths(changed: set[str]) -> set[str]:
             archive_dir = Path(manifest_path).parent.as_posix()
             contract_path = f"{archive_dir}/{task}.contract.json"
             summary_path = f"{archive_dir}/{task}.summary.json"
+            outcome_path = f"{archive_dir}/{task}.outcome.json"
+            report_paths = {
+                ".ai/cockpit/task_report.json",
+                ".ai/cockpit/task_report.md",
+            }
             if contract_path not in changed or summary_path not in changed:
                 continue
             try:
@@ -155,6 +161,29 @@ def transaction_owned_paths(changed: set[str]) -> set[str]:
                     contract_path,
                     summary_path,
                 }
+                report_changed = report_paths & changed
+                if report_changed:
+                    if report_changed != report_paths or outcome_path not in changed:
+                        continue
+                    try:
+                        outcome = json.loads(
+                            (PROJECT_ROOT / outcome_path).read_text(encoding="utf-8")
+                        )
+                        report = json.loads(
+                            (PROJECT_ROOT / ".ai/cockpit/task_report.json").read_text(
+                                encoding="utf-8"
+                            )
+                        )
+                        markdown = (PROJECT_ROOT / ".ai/cockpit/task_report.md").read_text(
+                            encoding="utf-8"
+                        )
+                    except (OSError, json.JSONDecodeError):
+                        continue
+                    if outcome.get("workItemId") != task or outcome.get("status") != "completed":
+                        continue
+                    if validate_human_report(report, outcome, markdown=markdown):
+                        continue
+                    required.update({outcome_path, *report_paths})
                 if summary_owned is None or not required.issubset(summary_owned):
                     continue
                 owned.update(summary_owned)

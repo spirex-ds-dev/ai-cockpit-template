@@ -10,6 +10,7 @@ import ai_check_status_consistency
 import ai_checkpoint
 import ai_common
 import ai_finish
+import ai_generate_human_report
 import ai_generate_status
 import ai_governance_compression
 import pytest
@@ -519,6 +520,46 @@ def _write_archive_summary(root, paths: dict[str, str], changed_files: list[str]
     target.write_text(json.dumps(summary), encoding="utf-8")
 
 
+def _completed_outcome(task: str) -> dict[str, object]:
+    return {
+        "format": "ai-cockpit-task-outcome",
+        "schemaVersion": 1,
+        "workItemId": task,
+        "status": "completed",
+        "bindings": {
+            "taskId": task,
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "d" * 40,
+            "headCommit": "e" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.0",
+        },
+        "sections": {
+            "outcomeSummary": "Implemented the governed change.",
+            "taskOverview": f"Governed Work Item: {task}",
+            "deliveredChanges": ["scripts/example.py"],
+            "findings": [],
+            "risks": [],
+            "warnings": [],
+            "limitations": [],
+            "nonRiskExplanations": [],
+            "forbiddenClaims": [],
+            "interventions": [],
+            "forcedStops": [],
+            "resolutions": [],
+            "recurrencePrevention": [],
+            "avoidedImpact": [],
+            "residualRisks": [],
+            "humanDecisions": [],
+            "evidence": [{"source": "contract.json", "subject": "Contract"}],
+        },
+    }
+
+
 def test_status_consistency_accepts_transaction_owned_archive_start_receipt(tmp_path, monkeypatch):
     paths = _archive_bundle_paths()
     status = tmp_path / ".ai/cockpit/current_status.md"
@@ -540,6 +581,107 @@ def test_status_consistency_accepts_transaction_owned_archive_start_receipt(tmp_
     assert ai_check_status_consistency.live_no_active_changed_files(status) == []
     assert ai_check_status_consistency.validate_status_consistency(status) == []
     assert ai_check_status_consistency.repair_status(status) == 0
+
+
+def test_status_consistency_accepts_current_report_pair_bound_to_archived_completed_outcome(
+    tmp_path, monkeypatch
+):
+    paths = _archive_bundle_paths()
+    outcome_path = ".ai/work-items/archive/2026/task.outcome.json"
+    report_paths = [".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"]
+    changed = [*paths.values(), outcome_path, *report_paths]
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    outcome = _completed_outcome("task")
+    outcome_target = tmp_path / outcome_path
+    outcome_target.parent.mkdir(parents=True, exist_ok=True)
+    outcome_target.write_text(json.dumps(outcome), encoding="utf-8")
+    report = ai_generate_human_report.generate_human_report(outcome)
+    (tmp_path / report_paths[0]).write_text(json.dumps(report), encoding="utf-8")
+    (tmp_path / report_paths[1]).write_text(
+        ai_generate_human_report.render_human_report(report), encoding="utf-8"
+    )
+    _write_archive_summary(tmp_path, paths, changed)
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, changed)
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == []
+
+
+def test_status_consistency_rejects_stale_current_report_pair_in_archive_transaction(
+    tmp_path, monkeypatch
+):
+    paths = _archive_bundle_paths()
+    outcome_path = ".ai/work-items/archive/2026/task.outcome.json"
+    report_paths = [".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"]
+    changed = [*paths.values(), outcome_path, *report_paths]
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    outcome = _completed_outcome("task")
+    outcome_target = tmp_path / outcome_path
+    outcome_target.parent.mkdir(parents=True, exist_ok=True)
+    outcome_target.write_text(json.dumps(outcome), encoding="utf-8")
+    report = ai_generate_human_report.generate_human_report(outcome)
+    (tmp_path / report_paths[0]).write_text(json.dumps(report), encoding="utf-8")
+    (tmp_path / report_paths[1]).write_text("stale report\n", encoding="utf-8")
+    _write_archive_summary(tmp_path, paths, changed)
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, changed)
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == sorted(changed)
+
+
+def test_status_consistency_rejects_single_current_report_file_in_archive_transaction(
+    tmp_path, monkeypatch
+):
+    paths = _archive_bundle_paths()
+    outcome_path = ".ai/work-items/archive/2026/task.outcome.json"
+    report_path = ".ai/cockpit/task_report.json"
+    changed = [*paths.values(), outcome_path, report_path]
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    outcome = _completed_outcome("task")
+    outcome_target = tmp_path / outcome_path
+    outcome_target.parent.mkdir(parents=True, exist_ok=True)
+    outcome_target.write_text(json.dumps(outcome), encoding="utf-8")
+    (tmp_path / report_path).write_text(
+        json.dumps(ai_generate_human_report.generate_human_report(outcome)), encoding="utf-8"
+    )
+    _write_archive_summary(tmp_path, paths, changed)
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, changed)
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == sorted(changed)
 
 
 def test_status_consistency_accepts_summary_owned_post_archive_implementation_changes(
