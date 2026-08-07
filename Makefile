@@ -557,7 +557,7 @@ ai-resume-work-item:
 
 ai-synchronize-work-item:
 	@test -n "$(CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" || (echo "CONTRACT, BASE_REMOTE, and BASE_BRANCH are required" >&2; exit 2)
-	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --project-root "$(or $(TARGET_ROOT),.)" --contract "$(CONTRACT)" $(if $(SUMMARY),--summary "$(SUMMARY)",) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
+	$(AI_PYTHON) scripts/ai_resume_work_item.py --synchronize --project-root "$(or $(TARGET_ROOT),.)" --contract "$(CONTRACT)" $(if $(TARGET_ROOT),$(if $(TARGET_SUMMARY),--summary "$(TARGET_SUMMARY)",),$(if $(SUMMARY),--summary "$(SUMMARY)",)) --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
 
 ai-transition-conflict-successor:
 	@test -n "$(SOURCE_ROOT)" -a -n "$(SOURCE_CONTRACT)" -a -n "$(SUCCESSOR_CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(REASON)" || (echo 'SOURCE_ROOT, SOURCE_CONTRACT, SUCCESSOR_CONTRACT, BASE_REMOTE, BASE_BRANCH, ISSUE, AUTHORITY, and REASON are required' >&2; exit 2)

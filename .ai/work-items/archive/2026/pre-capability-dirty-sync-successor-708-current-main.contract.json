@@ -1,0 +1,295 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pre-capability-dirty-sync-successor-708-current-main",
+  "mode": "code",
+  "title": "Re-deliver governed cross-worktree synchronization from current main",
+  "rawUserRequest": "Execute the plan to completion. I authorize automatic execution and require the authority to be recorded in every Work Item Contract. If a process problem occurs, create a corrective Work Item first; do not use temporary repairs. I authorize supersession/quarantine and require red/yellow/green Outcome visibility.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "Governed execution thread, user authorization",
+    "capturedAt": "2026-08-07T00:00:00Z",
+    "digest": "81f098a4f478c469755750f37ed9ec8dd119d7e09b94e0428ad8371045af5b47"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Re-deliver the explicit TARGET_ROOT synchronization capability from current main, with fail-closed target validation and source/template/documentation parity.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pre-capability-dirty-sync-successor-708-current-main.contract.json",
+    ".ai/work-items/active/pre-capability-dirty-sync-successor-708-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/pre-capability-dirty-sync-successor-708-current-main.outcome.json",
+    ".ai/work-items/active/pre-capability-dirty-sync-successor-708-current-main.outcome.md",
+    "scripts/ai_resume_work_item.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_start_and_archive.py",
+    "tests/test_makefile.py",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "docs/contract-fields.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "The blocked predecessor #704 and its evidence, archive state, and branch history.",
+    "The preserved #663 implementation files and provider state, except a governed synchronization command may create its own checkpoint or transition when #663 permits it.",
+    "Manual rebase, stash, amend, archive rewrite, force-push, PR merge, release, or branch deletion."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/708",
+      "reason": "Authoritative corrective requirement and acceptance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/successor-transition-command-682.contract.json",
+      "reason": "Merged public successor/quarantine command contract and authority boundary."
+    },
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Synchronization CLI and validation boundary to extend."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing synchronization fixtures and CLI regression location."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/663",
+      "reason": "Preserved eligible dirty target Work Item used only for governed integration evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "lifecycle_ordering",
+      "evidence_integrity",
+      "cross_worktree_mutation",
+      "template_parity"
+    ],
+    "reason": "The correction operates a current capability checkout against another active dirty Work Item. It must validate target-root evidence before mutation, prevent caller-root confusion, and keep source, template, and documentation parity.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The governing Issue, successor route, source boundary, target authorization, and regression fixtures are available; no product decision is missing."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "High-risk cross-worktree lifecycle and evidence-integrity operation."
+    ],
+    "override": {
+      "approvalEvidence": "User authorization in this governed execution thread.",
+      "reason": "Strict verification is required for cross-worktree lifecycle and evidence-integrity behavior.",
+      "risks": [
+        "lifecycle_ordering",
+        "evidence_integrity",
+        "cross_worktree_mutation",
+        "template_parity"
+      ],
+      "notRunChecks": [
+        "Provider mutation is out of scope and must not be performed."
+      ],
+      "workItemOnly": true,
+      "workItemId": "pre-capability-dirty-sync-successor-708-current-main"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized automatic execution; the corrective scope and verification boundary are concrete."
+  },
+  "preReviewWarnings": [
+    "Review target-root validation, source/template/documentation parity, and the prohibition on manual recovery."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The #704 blocked Outcome remains preserved and is bound to this current-main successor through the public successor/quarantine route; its evidence is not manually rewritten, rebased, stashed, archived, or discarded.",
+    "The synchronization CLI accepts an explicit target worktree root, resolves Contract and Summary only inside that root, and passes that same root to every validation and mutation path.",
+    "Focused regressions prove a dirty authorized target can be synchronized from a distinct caller root without using or changing caller-root evidence; invalid target roots or evidence fail closed before mutation.",
+    "The source Makefile, installed Makefile template, English/Japanese workflow guidance, contract guidance, and generated projections expose the same TARGET_ROOT behavior.",
+    "The historical #663 route is reconciled against its current-main successor evidence before any target mutation. Because successor #735 is merged and #663 is closed, this Work Item must not invoke or mutate the obsolete #663 checkout."
+  ],
+  "guidelines": [
+    "Require an explicit, validated target worktree before cross-worktree lifecycle operations.",
+    "Never use manual rebase, stash, hidden temporary state, provider mutation, or archive rewrite as a synchronization substitute.",
+    "Use the current guarded schema and Git boundary for the target Work Item; reject every ambiguous or stale state before mutation.",
+    "Keep source and installed-template commands, documentation, and generated evidence aligned."
+  ],
+  "intent": {
+    "problem": "#704 correctly emitted a blocked Outcome after strict-quality failure, so its Contract cannot be amended. At current main, #663 has already been delivered by merged successor #735, but the public source and installed Makefile command still forward a caller Summary when TARGET_ROOT is supplied. That can mix caller and target evidence during any future authorized synchronization.",
+    "constraints": [
+      "Preserve #704 and #663 evidence; do not manually rebase, stash, amend, archive, discard, force-push, or mutate provider state.",
+      "Use the merged public successor receipt before implementation.",
+      "Reconcile #663 against its merged successor before any target operation; do not invoke or mutate an obsolete checkout."
+    ],
+    "rationale": "A dedicated current-main successor makes the correction auditable, independently verifies the command boundary, and preserves the lifecycle truth that blocked or superseded predecessors cannot be silently repaired or mutated."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A current-capability caller synchronizes a dirty authorized Work Item in a distinct target checkout.",
+      "required": true,
+      "riskDomain": "cross_worktree_mutation",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Only target Contract, Summary, and Git state are read or changed; target base advances through the governed checkpoint and caller state remains unrelated.",
+      "verificationPlan": "Run a focused CLI regression with distinct caller and target temporary repositories, then inspect target base and caller isolation."
+    },
+    {
+      "scenario": "The target root is missing, foreign, or its active evidence is malformed or unauthorized.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The command fails closed before a Git or evidence mutation.",
+      "verificationPlan": "Exercise focused negative CLI tests for invalid root and target evidence."
+    },
+    {
+      "scenario": "Source and installed template users discover the same explicit TARGET_ROOT invocation and limitations.",
+      "required": true,
+      "riskDomain": "template_parity",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Make targets and docs expose the option while retaining the target-only, no-provider/no-archive boundary.",
+      "verificationPlan": "Run Makefile/template and documentation/projection checks plus strict quality."
+    },
+    {
+      "scenario": "The historical #663 target is reconciled against its current-main successor lifecycle before any synchronization attempt.",
+      "required": true,
+      "riskDomain": "lifecycle_ordering",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "A merged and closed successor prevents obsolete-target mutation; if no successor existed, the public command would remain the only eligible route and would fail closed on conflict.",
+      "verificationPlan": "Inspect #663 and successor #735 lifecycle evidence and record the no-mutation decision; retain focused public-command regressions for the live behavior."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "User authorized governed Contract and Work Item writes for this execution plan."
+  },
+  "requiredEvidence": [
+    "Focused target-root synchronization and fail-closed negative regressions.",
+    "Source/template/documentation projection verification.",
+    "Hosted PR verification before merge."
+  ],
+  "humanDecisionPoints": [
+    "Provider configuration and provider mutations remain out of scope."
+  ],
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 822
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/pre-capability-dirty-sync-successor-708-current-main.json",
+    "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+    "initialScopeDigest": "1856ee017753d3e847f5bff02cd229715cca33f4b70b4e8aa9cecb415d6e7e28",
+    "contractSkeletonDigest": "5ccb291c794dec7854147b5ab8868870820f624b4a4f615ad7540a7c7588c5c0"
+  }
+}

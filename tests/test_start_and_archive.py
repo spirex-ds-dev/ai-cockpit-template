@@ -708,6 +708,42 @@ def test_synchronize_contract_checkpoints_contract_authorized_owned_dirty_worktr
     assert synchronized["synchronizationHistory"] == [transition]
 
 
+def test_synchronize_cli_uses_explicit_target_root_for_dirty_worktree(tmp_path, monkeypatch):
+    target_root, contract_path, _summary_path, _start, target = _synchronization_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Record the governed active Work Item synchronization checkpoint.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    source = target_root / "src" / "implementation.py"
+    source.parent.mkdir()
+    source.write_text("VALUE = 'active work item change'\n", encoding="utf-8")
+    caller_root = tmp_path / "current-capability-caller"
+    caller_root.mkdir()
+    monkeypatch.setattr(ai_resume_work_item, "PROJECT_ROOT", caller_root)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_resume_work_item.py",
+            "--synchronize",
+            "--project-root",
+            str(target_root),
+            "--contract",
+            ".ai/work-items/active/paused-task.contract.json",
+            "--base-remote",
+            "origin",
+            "--base-branch",
+            "main",
+        ],
+    )
+
+    assert ai_resume_work_item.main() == 0
+    assert json.loads(contract_path.read_text(encoding="utf-8"))["baseCommit"] == target
+    assert not (caller_root / ".ai").exists()
+
+
 def test_synchronize_contract_checkpoints_modified_owned_path(tmp_path):
     root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
     _write_commit(root, "src/implementation.py", "VALUE = 'initial'\n")

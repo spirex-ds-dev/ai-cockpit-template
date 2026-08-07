@@ -206,6 +206,28 @@ def test_makefile_exposes_ordered_pre_edit_preparation_entrypoint():
     assert 'STAGE="before_edit"' in result.stdout
 
 
+def test_target_root_synchronization_does_not_forward_caller_default_summary():
+    result = subprocess.run(
+        [
+            "make",
+            "-n",
+            "ai-synchronize-work-item",
+            "TARGET_ROOT=/tmp/pre-capability-work-item",
+            "CONTRACT=.ai/work-items/active/target.contract.json",
+            "BASE_REMOTE=origin",
+            "BASE_BRANCH=main",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert '--project-root "/tmp/pre-capability-work-item"' in result.stdout
+    assert "--summary" not in result.stdout
+
+
 def test_synchronization_make_target_forwards_target_root_to_runtime():
     result = subprocess.run(
         [
