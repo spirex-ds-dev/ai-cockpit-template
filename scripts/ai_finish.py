@@ -346,6 +346,31 @@ def worktree_digest_for_finish(paths: list[str], summary_path: str) -> str:
     return worktree_digest([path for path in paths if path != summary_path])
 
 
+def outcome_input_digest(summary: dict[str, Any]) -> str:
+    """Bind archive reuse to every Summary field consumed by Outcome generation.
+
+    The final ``aiSummary`` record is deliberately excluded: it is written
+    after Outcome generation to attest the stabilized state and therefore
+    cannot be an Outcome input without creating a self-reference cycle.
+    """
+    verification = summary.get("verification", [])
+    return _sha256_json(
+        {
+            "changedFiles": summary.get("changedFiles", []),
+            "knownGaps": summary.get("knownGaps", []),
+            "nonRiskExplanations": summary.get("nonRiskExplanations", []),
+            "userCorrectionsCaptured": summary.get("userCorrectionsCaptured", []),
+            "verification": [
+                item
+                for item in verification
+                if isinstance(item, dict) and item.get("check") != "aiSummary"
+            ]
+            if isinstance(verification, list)
+            else verification,
+        }
+    )
+
+
 def reusable_archive_verification(
     summary: dict[str, Any],
     contract_data: dict[str, Any],
@@ -376,6 +401,7 @@ def reusable_archive_verification(
         and item.get("executionContractPath") == contract
         and item.get("executionSummaryPath") == summary_path
         and item.get("worktreeDigest") == expected_digest
+        and item.get("outcomeInputDigest") == outcome_input_digest(summary)
         for item in values
     )
 
@@ -1642,21 +1668,20 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             failure_message="final Summary validation failed",
             code=code,
         )
-    record_result(
-        summary_path,
-        evidence(
-            "aiSummary",
-            " ".join(summary_command),
-            code,
-            duration,
-            output,
-            contract_hash=contract_hash,
-            commit_sha=commit_sha,
-            execution_contract_path=contract,
-            execution_summary_path=summary,
-            worktree_digest=worktree_digest_for_finish(changed_paths(contract_data), summary),
-        ),
+    final_summary_evidence = evidence(
+        "aiSummary",
+        " ".join(summary_command),
+        code,
+        duration,
+        output,
+        contract_hash=contract_hash,
+        commit_sha=commit_sha,
+        execution_contract_path=contract,
+        execution_summary_path=summary,
+        worktree_digest=worktree_digest_for_finish(changed_paths(contract_data), summary),
     )
+    final_summary_evidence["outcomeInputDigest"] = outcome_input_digest(load_json(summary_path))
+    record_result(summary_path, final_summary_evidence)
 
     print("Work Item finish checks passed")
     record_fact_once(

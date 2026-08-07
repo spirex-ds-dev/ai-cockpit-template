@@ -137,6 +137,7 @@ def test_archive_reuse_requires_a_same_state_final_summary_attestation(monkeypat
         "worktreeDigest": digest,
     }
     summary_data = {"verification": [evidence]}
+    evidence["outcomeInputDigest"] = ai_finish.outcome_input_digest(summary_data)
 
     assert ai_finish.reusable_archive_verification(
         summary_data,
@@ -148,6 +149,49 @@ def test_archive_reuse_requires_a_same_state_final_summary_attestation(monkeypat
     )
 
     evidence["commitSha"] = "stale-commit"
+    assert not ai_finish.reusable_archive_verification(
+        summary_data,
+        contract,
+        contract_hash=contract_hash,
+        commit_sha=commit_sha,
+        contract=contract_path,
+        summary_path=summary_path,
+    )
+
+
+def test_archive_reuse_rejects_changed_outcome_inputs_after_summary_attestation(monkeypatch):
+    contract = {"scope": ["scripts/ai_finish.py"]}
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: contract["scope"])
+    contract_hash = "contract-hash"
+    commit_sha = "commit-sha"
+    contract_path = ".ai/work-items/active/example.contract.json"
+    summary_path = ".ai/work-items/active/example.summary.json"
+    summary_data = {
+        "changedFiles": [],
+        "knownGaps": [],
+        "nonRiskExplanations": [],
+        "userCorrectionsCaptured": [],
+        "verification": [
+            {
+                "check": "aiSummary",
+                "result": "passed",
+                "runner": "ai_finish",
+                "contractHash": contract_hash,
+                "commitSha": commit_sha,
+                "executionContractPath": contract_path,
+                "executionSummaryPath": summary_path,
+                "worktreeDigest": ai_finish.worktree_digest_for_finish(
+                    contract["scope"], summary_path
+                ),
+            }
+        ],
+    }
+    summary_data["verification"][0]["outcomeInputDigest"] = ai_finish.outcome_input_digest(
+        summary_data
+    )
+
+    summary_data["knownGaps"] = ["A previously generated warning is now stale."]
+
     assert not ai_finish.reusable_archive_verification(
         summary_data,
         contract,

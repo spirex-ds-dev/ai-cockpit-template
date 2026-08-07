@@ -1,0 +1,260 @@
+{
+  "contractVersion": 2,
+  "workItemId": "finish-ordering-outcome-archive-truth-634-current-main",
+  "mode": "code",
+  "title": "finish-ordering-outcome-archive-truth-634-current-main",
+  "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/finish-ordering-outcome-archive-truth-634-current-main.contract.json",
+    ".ai/work-items/active/finish-ordering-outcome-archive-truth-634-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/finish-ordering-outcome-archive-truth-634-current-main.outcome.json",
+    ".ai/work-items/active/finish-ordering-outcome-archive-truth-634-current-main.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_finish.py",
+    "tests/test_finish_readiness.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Manual editing of Task Outcome, human report, status, archive, or verification evidence to force a green lifecycle state.",
+    "Changing quality checks, archive policy, provider settings, releases, or branch deletion behavior.",
+    "Unrelated Work Item startup, successor, or parallelism behavior."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/634",
+      "reason": "Authoritative P1 Finish/Outcome/archive truth requirement."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Same-state archive verification reuse and Outcome generation implementation."
+    },
+    {
+      "path": "tests/test_finish_readiness.py",
+      "reason": "Existing same-state archive attestation regression coverage."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Outcome/finish/archive integration regression coverage."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Canonical lifecycle documentation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "lifecycle_ordering",
+      "evidence_integrity",
+      "archive_truth"
+    ],
+    "reason": "A stale success Outcome could authorize an incorrect archive or leave a truthful completion permanently yellow; reuse must be bound to every Outcome input.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "P1 lifecycle and evidence-integrity correction."
+    ],
+    "override": {
+      "approvalEvidence": "User message: 授权给你.",
+      "reason": "The user authorized autonomous governed execution for the remaining Work Item plan.",
+      "risks": ["lifecycle_ordering", "evidence_integrity", "archive_truth"],
+      "notRunChecks": ["No checks are waived; normal strict verification remains required after bootstrap."],
+      "workItemOnly": true,
+      "workItemId": "finish-ordering-outcome-archive-truth-634-current-main"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized autonomous governed execution; all strict lifecycle gates remain required."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Archive reuse is rejected when the active Summary has changed any Outcome-derived input after its recorded aiSummary attestation, including knownGaps, changedFiles, verification evidence, or human-decision input.",
+    "A valid unchanged same-state archive retry still reuses verification without rerunning the full quality gate.",
+    "A stale warning Outcome is regenerated from the current Summary before any archive decision and becomes green when no warnings remain.",
+    "Blocked and warning Outcomes remain preserved when current evidence still requires them; no manual Outcome or report rewriting is used.",
+    "Focused lifecycle tests, full strict quality, generated capability evidence, and the normal archive/PR lifecycle pass."
+  ],
+  "guidelines": [
+    "Bind archive reuse to all inputs that can alter the generated Outcome or human report.",
+    "Preserve fail-closed archive behavior and blocked Outcome recovery.",
+    "Use executable regressions for both stale and unchanged same-state paths.",
+    "Update lifecycle documentation and generated capability evidence for user-visible behavior."
+  ],
+  "intent": {
+    "problem": "A successful Work Item can retain an obsolete yellow Outcome after knownGaps are cleared because ai-finish reuses the prior same-state attestation without binding the Outcome input Summary. This blocks truthful green completion and archive, or risks archive using stale Outcome evidence.",
+    "constraints": [
+      "Do not bypass quality, archive, Outcome, or status checks.",
+      "Do not hand-edit derived Outcome, report, status, or archive files to change lifecycle state.",
+      "Retain fast same-state archive retry only when both verification and all Outcome inputs are unchanged."
+    ],
+    "rationale": "A canonical input digest lets the lifecycle distinguish an unchanged retry from a stale Outcome, preserving both performance and evidence truth."
+  },
+  "rawUserRequest": "授权给你",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:explicit-autonomous-execution-2026-08-07",
+    "capturedAt": "2026-08-07",
+    "digest": "sha256:autonomous-execution-authority-issue-634"
+  },
+  "declaredIntent": {
+    "summary": "Complete the existing P1 #634 lifecycle truth correction, then resume the blocked governed Work Item plan without temporary workarounds.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A prior finish has a yellow Outcome, then the active Summary is legitimately amended to remove its resolved known gap before archive retry.",
+      "required": true,
+      "expected": "Reuse is rejected, Outcome/report are regenerated from current Summary, and archive can proceed only with the regenerated truthful green Outcome.",
+      "verificationPlan": "Add focused regression coverage for changed Outcome inputs and exercise the production archive-reuse predicate.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A completed active Summary and Outcome remain byte-equivalent across an archive retry.",
+      "required": true,
+      "expected": "The retry reuses the final same-state verification attestation without re-running quality.",
+      "verificationPlan": "Retain and extend the existing same-state attestation regression.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Current evidence still requires warnings or a blocked state.",
+      "required": true,
+      "expected": "The lifecycle preserves the non-green Outcome and fails closed rather than converting it manually.",
+      "verificationPlan": "Run existing Outcome integration regressions covering warning and blocked evidence.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User explicitly authorized autonomous governed execution for the remaining Work Item plan; strict checks and review remain mandatory."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 1000
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/finish-ordering-outcome-archive-truth-634-current-main.json",
+    "baseCommit": "2308627944e1867a1abb63f8bdc68befbe9d4b99",
+    "initialScopeDigest": "3d250f5aad6335e8dea537dd03b5377e9d80de4665d131f19a0374e00e4271b5",
+    "contractSkeletonDigest": "75429362ebb71efb46c2f96d1ac9c6c1eced351fd53bdcd52d7119eeca204430"
+  }
+}
