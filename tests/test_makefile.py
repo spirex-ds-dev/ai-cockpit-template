@@ -252,7 +252,7 @@ def test_makefile_forwards_amendment_revalidation_binding_to_checkpoint_writer()
 
 def test_project_test_uses_stricter_coverage_floor():
     result = subprocess.run(
-        ["make", "-n", "project-test"],
+        ["make", "-n", "project-test-owned"],
         text=True,
         capture_output=True,
         check=False,
@@ -322,6 +322,14 @@ def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
     assert "\n\t+$(AI_PYTHON) scripts/run_quality_gate.py" not in makefile
     quality_section = makefile.split("quality-full:", 1)[1].split("# Backward-compatible", 1)[0]
     assert "\n\t+@set -eu;" not in quality_section
+
+
+def test_quality_busy_recovery_uses_a_canonical_make_command():
+    lock_script = ROOT / "scripts" / "quality_session_lock.py"
+    assert lock_script.is_file()
+    text = lock_script.read_text(encoding="utf-8")
+    assert "Retry: make quality" in text
+    assert "BUSY_EXIT_CODE = 75" in text
 
 
 def test_quality_summary_receives_governance_receipt_metadata_when_available():

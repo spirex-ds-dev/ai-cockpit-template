@@ -28,9 +28,26 @@ def test_quality_entry_points_have_explicit_compatibility_semantics():
     assert "scripts/summarize_quality_gates.py" in text
 
 
+def test_public_quality_paths_use_one_worktree_local_nonblocking_lock():
+    text = MAKEFILE.read_text(encoding="utf-8")
+    assert "QUALITY_SESSION_LOCK ?= target/quality/session.lock" in text
+    assert "QUALITY_SESSION_LOCK_HELD ?= false" in text
+    assert "define RUN_QUALITY_SESSION" in text
+    assert "scripts/quality_session_lock.py" in text
+    for target in (
+        "quality-fast",
+        "quality-standard",
+        "quality-full",
+        "quality-release",
+        "project-test",
+    ):
+        assert f"$(call RUN_QUALITY_SESSION,{target})" in text
+        assert f"{target}-owned:" in text
+
+
 def test_default_quality_entrypoint_routes_without_duplicating_gate_commands():
     routed = _target_block("ai-cockpit-quality")
-    standard = _target_block("quality-standard")
+    standard = _target_block("quality-standard-owned")
 
     assert "scripts/determine_governance_profile.py" in routed
     assert "dispatchTarget" in routed
@@ -45,7 +62,7 @@ def test_default_quality_entrypoint_routes_without_duplicating_gate_commands():
 
 def test_standard_quality_dry_run_uses_only_its_required_owners():
     result = subprocess.run(
-        ["make", "-n", "quality-standard"],
+        ["make", "-n", "quality-standard-owned"],
         cwd=ROOT,
         text=True,
         capture_output=True,
@@ -89,7 +106,7 @@ def test_registry_declares_no_parallel_write_conflicts():
 
 def test_release_preserves_security_and_installation_ownership():
     text = MAKEFILE.read_text(encoding="utf-8")
-    release = _target_block("quality-release")
+    release = _target_block("quality-release-owned")
     for required in ("quality-full", "quality-installation", "quality-release-evidence"):
         assert required in release
     for required in (
@@ -157,7 +174,7 @@ def test_quality_full_uses_commit_and_run_bound_session_directories():
 
 
 def test_quality_full_uses_owned_phase_cleanup_helper():
-    full = _target_block("quality-full")
+    full = _target_block("quality-full-owned")
     assert "scripts/run_quality_session.py" in full
     assert "quality-fast" in full
     assert "quality-heavy" in full

@@ -36,6 +36,15 @@ scope, resource claim, or capability claim is release-related also runs
 `quality-release` for release-preflight and distribution verification. `make quality` remains a compatibility alias for Full;
 `make ai-cockpit-quality` is the evidence-routed Work Item entrypoint.
 
+## Session ownership
+
+Every public quality profile and direct `project-test` acquire one non-blocking,
+worktree-local kernel lock before coverage or report writers run. A second
+same-worktree invocation fails closed immediately, writes no quality evidence,
+and prints `Retry: make quality`. The operating system releases the lock when
+its owner exits, so users must not delete a lock file. Different worktrees use
+different lock paths and remain parallelizable.
+
 ## Contract evidence
 
 ```json
