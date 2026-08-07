@@ -1,0 +1,198 @@
+{
+  "contractVersion": 2,
+  "workItemId": "reconcile-open-prs-issues-662",
+  "mode": "review",
+  "title": "reconcile-open-prs-issues-662",
+  "baseCommit": "769f7e6f495098bea460c2f13f9a26cccaae26db",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/reconcile-open-prs-issues-662.contract.json",
+    ".ai/work-items/active/reconcile-open-prs-issues-662.summary.json",
+    "docs/reference/open-pr-issue-reconciliation-662.json",
+    "docs/reference/open-pr-issue-reconciliation-662.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/reconcile-open-prs-issues-662.outcome.json",
+    ".ai/work-items/active/reconcile-open-prs-issues-662.outcome.md"
+  ],
+  "outOfScope": [
+    "Implementation changes for any open remediation Issue; each remains a separate Work Item.",
+    "Merging, rebasing, or deleting a PR/branch without its lifecycle evidence.",
+    "Release publication; #625 begins only after this reconciliation is terminal."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/662",
+      "reason": "Authoritative acceptance and required dispositions."
+    },
+    {
+      "path": "GitHub open PR and Issue API state captured during this Work Item",
+      "reason": "Authoritative provider state for each disposition."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_governance", "external_state", "stale_evidence"],
+    "reason": "Incorrect disposition could allow an unresolved finding or stale PR to contaminate the release path.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "RayIori authorized automatic execution; review output is bounded to evidence-backed reconciliation records."
+  },
+  "preReviewWarnings": ["Do not use a partial implementation or linked branch as a terminal Issue disposition."] ,
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Machine-readable and human-readable records inventory every PR and Issue open at Work Item start.",
+    "Every inventory entry has exactly one evidence-backed disposition allowed by #662.",
+    "No entry is marked terminal without provider and lifecycle evidence; each unresolved finding has an explicit successor or next gate.",
+    "The record identifies whether release #625 may begin."
+  ],
+  "guidelines": [
+    "Record RayIori's authorization for external GitHub actions in the Contract.",
+    "Do not alter implementation or lifecycle state outside an explicit evidence-backed disposition."
+  ],
+  "intent": {
+    "problem": "Open PRs and Issues must be reconciled before release without confusing superseded, partial, or delivered work.",
+    "constraints": ["Use provider state and archived evidence", "Do not bypass gates", "Keep implementation fixes in their own Work Items"],
+    "rationale": "A release can be trusted only when every open finding has a traceable terminal or actively governed disposition."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Every Issue and PR open at Work Item start is inventoried.",
+      "expected": "The machine and human records include each provider identifier once with a disposition and evidence references.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Compare the captured GitHub API inventory with both generated reconciliation records."
+    },
+    {
+      "scenario": "An Issue is linked to partial, stale, superseded, or archived-incompatible work.",
+      "expected": "The record identifies the exact unmet acceptance or successor rather than claiming terminal delivery.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inspect PR state, merge base, archived Outcome, and closure receipt before assigning a terminal disposition."
+    },
+    {
+      "scenario": "The release gate is evaluated after reconciliation.",
+      "expected": "The record states whether #625 may begin and lists any remaining blocking Work Items without changing release state.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Validate all open entries have one allowed disposition and independently inspect release Issue prerequisites."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User explicitly authorized automatic execution and requested the approval be recorded in every Work Item Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 821
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/reconcile-open-prs-issues-662.json",
+    "baseCommit": "769f7e6f495098bea460c2f13f9a26cccaae26db",
+    "initialScopeDigest": "068f1a0e628ea4b5736fc15c5f6499914b51ed7dfc48ecf5d9358addabd4e084",
+    "contractSkeletonDigest": "f9babfedc99fafbbaa752d4d8d93a7ac854d83f0e79dd7b0cb99481481b2e8a4"
+  }
+}

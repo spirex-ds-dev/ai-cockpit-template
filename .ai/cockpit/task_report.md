@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task quality-session-isolation-654-after-lockfile-725 generated an evidence-derived outcome with status completed.
+Task reconcile-open-prs-issues-662 generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0
