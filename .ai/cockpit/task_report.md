@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task pre-capability-dirty-sync-successor-708-current-main generated an evidence-derived outcome with status completed.
+Task post-archive-status-consistency-740-current-main generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0
@@ -38,7 +38,7 @@ None recorded.
 None recorded.
 
 ## 需要人的决定 / Human decisions
-None recorded.
+- 如果遇到流程问题，要先开工单修正。不要采用临时修补方案。
 
 ## 下一步 / Next safe action
 Review the pull request and provider checks before merge.

@@ -327,6 +327,13 @@ Execution-time evidence such as recorded commands and `executionContractPath`
 remains unchanged because it describes the actual check context rather than a
 current resolvable documentation reference.
 
+When that transaction refreshes the current Human Benefit Report, the JSON and
+Markdown files are admitted only as an exact pair. Both files must be currently
+changed, named by the archived Summary, and validate against the one currently
+changed archived `completed` Task Outcome for the same Work Item. A missing,
+stale, malformed, cross-task, non-completed, or historical-only report remains
+outside transaction ownership and blocks pre-merge validation.
+
 The same archive transaction loads the registered instruction-traceability
 manifest before moving any active artifact. If that JSON is malformed, archive
 fails closed without moving the Contract or Summary. Every value exactly equal
