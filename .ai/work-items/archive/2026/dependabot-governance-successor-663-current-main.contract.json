@@ -1,0 +1,184 @@
+{
+  "contractVersion": 2,
+  "workItemId": "dependabot-governance-successor-663-current-main",
+  "mode": "code",
+  "title": "dependabot-governance-successor-663-current-main",
+  "baseCommit": "769f7e6f495098bea460c2f13f9a26cccaae26db",
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。",
+  "rawRequestSource": {"type":"human","reference":"conversation:continuous-authorization","capturedAt":"2026-08-07","digest":"sha256:continuous-authorized-remediation"},
+  "declaredIntent": {"summary":"Re-deliver #663 Dependabot governance on current main without reviving stale #726.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/dependabot-governance-successor-663-current-main.contract.json",
+    ".ai/work-items/active/dependabot-governance-successor-663-current-main.summary.json",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "scripts/ai_check_dependabot_intake.py",
+    "scripts/ai_dependabot_intake.py",
+    "tests/test_dependabot_intake.py",
+    "docs/reference/dependabot-intake.md",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/dependabot-governance-successor-663-current-main.outcome.json",
+    ".ai/work-items/active/dependabot-governance-successor-663-current-main.outcome.md"
+  ],
+  "outOfScope": ["Any mutation of Dependabot bot branches or #726 archived evidence.", "Merging dependency updates without a dedicated governed successor.", "Unrelated remediation Issues and release publication."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/663",
+      "reason": "Authoritative problem and acceptance criteria."
+    },
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/726", "reason": "Closed stale predecessor; implementation scope only, never mutable evidence."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["dependency_governance", "workflow_gating", "stale_evidence"],
+    "reason": "A weak intake gate could let raw dependency changes bypass lifecycle and derived-evidence requirements.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "RayIori authorized automatic execution; the successor is bounded to #663 acceptance."
+  },
+  "preReviewWarnings": ["Preserve raw Dependabot facts and prevent any branch mutation path."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Raw Dependabot candidates that require Work Item evidence are rejected with a governed successor path.",
+    "Representative pip/lockfile and action/SBOM candidates have executable acceptance and rejection coverage.",
+    "The source and installed workflow surfaces cannot present an unguided merge path for such candidates.",
+    "Documentation explains #662 classification and immutable predecessor handling."
+  ],
+  "guidelines": [
+    "Record RayIori's automatic external-execution authorization in this Contract.",
+    "Never mutate Dependabot bot branches or predecessor archives."
+  ],
+  "intent": {
+    "problem": "Raw Dependabot dependency diffs can lack governed Work Item ownership and stale derived-evidence checks.",
+    "constraints": ["Start from current main", "Preserve #726 as immutable audit evidence", "Use a dedicated governed successor", "Cover pip/lockfile and action/SBOM"],
+    "rationale": "Dependency updates need the same auditable lifecycle as all other changes."
+  },
+  "scenarioCoverage": [
+    {"scenario":"Raw pip/lockfile or action/SBOM candidate lacks governed evidence.","expected":"The intake check fails closed and reports the dedicated successor path.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Run representative unit and workflow fixtures."},
+    {"scenario":"A valid governed successor binds the raw candidate without mutating it.","expected":"The intake record preserves provider facts and permits only lifecycle-bound handling.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Exercise accepted fixtures and inspect no-mutation contracts."},
+    {"scenario":"Source documentation and workflow expose the same rule.","expected":"Tests and generated capability documentation agree on the fail-closed intake boundary.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Run documentation, parity, and full quality checks."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User explicitly authorized automatic execution and requested it be recorded in every Work Item Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 821
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/dependabot-governance-successor-663-current-main.json",
+    "baseCommit": "769f7e6f495098bea460c2f13f9a26cccaae26db",
+    "initialScopeDigest": "253cd12f550d1384a3f82ba1c498a0d96fc7633c1d56d451ec43786e4f1a65cb",
+    "contractSkeletonDigest": "f50e7b2690fd295a2414ddecc3b3bf8bd93ecab52a89b0c940616df4b05c9088"
+  }
+}

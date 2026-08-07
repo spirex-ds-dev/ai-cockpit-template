@@ -70,6 +70,14 @@ still fails the workflow.
 
 ## Work Item Start Receipt
 
+### Dependabot source candidates
+
+Raw Dependabot PRs are not Work Item delivery branches. Hosted CI rejects a
+`dependabot[bot]` candidate before quality and PR ownership checks. Preserve
+source facts, start a separate current-main Work Item, and bind its evidence to
+the exact raw URL/head/diff digest. The gate never mutates a provider PR or
+authorizes a successor merge. See [Dependabot Intake](dependabot-intake.md).
+
 `make ai-start` creates a Git-tracked
 `.ai/work-items/starts/<work-item-id>.json` before implementation begins. The
 Receipt records the Work Item ID, Contract base commit, start timestamp, initial
