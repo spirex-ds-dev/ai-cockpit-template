@@ -1,20 +1,20 @@
 # AI Cockpit Task Report
 
 Phase: `review`
-Result: `completed`
+Result: `completed_with_warnings`
 
 ## 任务结论 / Task conclusion
-Task Outcome status: `completed`.
+Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task post-archive-status-consistency-740-current-main generated an evidence-derived outcome with status completed.
+Task post-archive-premerge-ownership-739-current-main generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 0
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 0
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 0
+- Unresolved: 1
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,13 +32,13 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-None recorded.
+- Unresolved evidence is explicitly limited: Hosted provider checks must validate the final PR head.
 
 ## 当前禁止声明 / Forbidden claims
-None recorded.
+- Do not claim an unresolved warning was verified or resolved.
 
 ## 需要人的决定 / Human decisions
-- 如果遇到流程问题，要先开工单修正。不要采用临时修补方案。
+None recorded.
 
 ## 下一步 / Next safe action
 Review the pull request and provider checks before merge.

@@ -1,6 +1,8 @@
+import hashlib
 import json
 
 import ai_check_diff_ownership as ownership
+import ai_check_status_consistency as status_consistency
 import ai_generate_human_report as human
 
 
@@ -414,6 +416,80 @@ def test_pr_preview_uses_only_archive_pairs_from_the_pr(monkeypatch):
         == "archived_owned"
     )
     assert ownership.preview(contract={"baselineDirtyPaths": []})[0].state == "ambiguous"
+
+
+def test_pr_preview_owns_only_a_complete_current_archive_transaction(monkeypatch, tmp_path):
+    task = "exact"
+    archive = f".ai/work-items/archive/2026/{task}"
+    paths = {
+        ".ai/work-items/archive/index.json",
+        f".ai/work-items/starts/{task}.json",
+        f"{archive}.archive-manifest.json",
+        f"{archive}.contract.json",
+        f"{archive}.summary.json",
+        "docs/owned.md",
+    }
+    changed_paths = set(paths)
+    contract_path = tmp_path / f"{archive}.contract.json"
+    contract_path.parent.mkdir(parents=True, exist_ok=True)
+    contract_path.write_text(
+        json.dumps({"contractVersion": 2, "workItemId": task}), encoding="utf-8"
+    )
+    summary_path = tmp_path / f"{archive}.summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "summaryVersion": 2,
+                "workItemId": task,
+                "changedFiles": [{"path": path, "reason": "fixture"} for path in paths],
+            }
+        ),
+        encoding="utf-8",
+    )
+    manifest_path = tmp_path / f"{archive}.archive-manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "format": "ai-cockpit-archive-manifest",
+                "manifestVersion": 1,
+                "workItemId": task,
+                "contractPath": f"{archive}.contract.json",
+                "summaryPath": f"{archive}.summary.json",
+                "contractSha256": hashlib.sha256(contract_path.read_bytes()).hexdigest(),
+                "summarySha256": hashlib.sha256(summary_path.read_bytes()).hexdigest(),
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ownership, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ownership,
+        "changed_name_status",
+        lambda *_args, **_kwargs: [("A", path) for path in changed_paths],
+    )
+    monkeypatch.setattr(ownership, "archive_evidence_changes", lambda _base: {})
+    monkeypatch.setattr(ownership, "owners", lambda **_kwargs: [])
+    monkeypatch.setattr(ownership, "parse_simple_manifest", lambda _path: {})
+
+    values = ownership.preview(base="merge-base")
+
+    assert {item.path for item in values} == changed_paths
+    assert {item.state for item in values} == {"archived_owned"}
+
+    paths.remove("docs/owned.md")
+    summary_path.write_text(
+        json.dumps(
+            {
+                "summaryVersion": 2,
+                "workItemId": task,
+                "changedFiles": [{"path": path, "reason": "fixture"} for path in paths],
+            }
+        ),
+        encoding="utf-8",
+    )
+    values = ownership.preview(base="merge-base")
+    assert any(item.path == "docs/owned.md" and item.state == "unowned" for item in values)
 
 
 def test_pr_preview_coalesces_multiple_effective_archive_owners(monkeypatch):

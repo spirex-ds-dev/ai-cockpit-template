@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_check_pr import _is_no_op_restore, archive_evidence_changes, archive_pair_rank
+from ai_check_status_consistency import transaction_owned_paths
 from ai_check_summary import changed_file_paths
 from ai_common import (
     PROJECT_ROOT,
@@ -359,9 +360,20 @@ def preview(*, base: str = "", contract: dict[str, Any] | None = None) -> list[O
             audit_paths = set()
     policy = parse_simple_manifest(OWNERSHIP_POLICY)
     candidates = owners(base=base, active_contract=contract)
+    transaction_paths = transaction_owned_paths({path for _, path in changed}) if base else set()
     values: list[Ownership] = []
     for status, path in changed:
         if is_generated_no_active_status(path):
+            continue
+        if path in transaction_paths:
+            values.append(
+                Ownership(
+                    path,
+                    "archived_owned",
+                    ["generated:current-archive-transaction"],
+                    "bound by the exact current archive manifest, Summary, receipt, and outcome/report evidence",
+                )
+            )
             continue
         generated_report = generated_human_report_owner(path, contract)
         if generated_report is not None:

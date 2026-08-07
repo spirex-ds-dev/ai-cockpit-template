@@ -334,6 +334,13 @@ changed archived `completed` Task Outcome for the same Work Item. A missing,
 stale, malformed, cross-task, non-completed, or historical-only report remains
 outside transaction ownership and blocks pre-merge validation.
 
+The same complete transaction is the only no-active ownership projection used
+by `check-ai-diff-ownership` during `ai-pre-merge`. Its archive index, start
+receipt, manifest, Contract, Summary, and every Summary-declared changed path
+are accepted together only after all bindings validate. This does not exempt
+other historical evidence or incomplete transactions: those paths remain
+unowned and fail closed.
+
 The same archive transaction loads the registered instruction-traceability
 manifest before moving any active artifact. If that JSON is malformed, archive
 fails closed without moving the Contract or Summary. Every value exactly equal
