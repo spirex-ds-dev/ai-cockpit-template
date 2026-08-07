@@ -43,10 +43,10 @@ jobs:
           test "$actual_commit" = "365f5e30c9531d8d8948079fe58b8424ecc9efa7"
           git cat-file -e "365f5e30c9531d8d8948079fe58b8424ecc9efa7^{commit}"
 
-      - name: Run bounded diagnostic quality
+      - name: Run PR 723 compatibility replacement
         id: quality
         shell: bash
-        run: make quality
+        run: make compatibility-test
 
       - name: Publish diagnostic result
         if: always()

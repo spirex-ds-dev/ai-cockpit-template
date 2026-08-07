@@ -183,14 +183,14 @@
   },
   "acceptance": [
     "The existing compatibility workflow exposes a default-off recovery_diagnostic workflow_dispatch input while preserving all push and pull_request matrix behavior.",
-    "The recovery_diagnostic job requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out only PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 before executing quality.",
+    "The recovery_diagnostic job requires the exact labels self-hosted, macOS, X64, and ai-cockpit-recovery, and checks out only PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 before executing compatibility-test.",
     "The test-weakening guard distinguishes an optional workflow_dispatch input from a required CI check being made nonblocking, while preserving its required-check downgrade signal.",
-    "The recovery_diagnostic job runs a bounded diagnostic quality command that is supported on macOS and publishes an explicit non-release result summary.",
+    "The recovery_diagnostic job runs the repository's macOS-supported compatibility-test command for the immutable PR #723 candidate and publishes an explicit non-release result summary.",
     "A self-hosted diagnostic dispatch for the exact PR #723 candidate commit is prepared and recorded as temporary runner-substitution evidence; it cannot satisfy compatibility, merge, archive, or release gates.",
     "tests/test_workflows.py prevents trigger, label, source-identity, and non-release-boundary regressions.",
     "The committed SBOM is regenerated so its workflow-action coverage includes the additional pinned checkout action.",
     "All candidate release and generated documentation evidence affected by the SBOM refresh is regenerated through the repository's canonical generator chain.",
-    "Operational documentation defines runner provisioning, dispatch procedure, security limits, evidence classification, and the required return to hosted verification after recovery."
+    "The operations guide names the recovery dispatch command, immutable #723 SHA, four runner labels, compatibility-test command, non-release evidence classification, and the mandatory hosted smoke and compatibility rerun after recovery."
   ],
   "guidelines": [
     "Do not execute untrusted fork or pull-request code on a personal self-hosted runner.",
@@ -198,8 +198,8 @@
     "Document operational commands and security boundaries with the workflow change."
   ],
   "intent": {
-    "problem": "A GitHub Actions outage prevents PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 from obtaining runner feedback. A new standalone workflow cannot be manually dispatched until it first exists on the default branch; changing the required hosted matrix or executing arbitrary ref input on a personal runner would weaken evidence or security.",
-    "constraints": ["Use only the existing compatibility workflow's workflow_dispatch surface with a default-off recovery_diagnostic input.", "The recovery job never runs for push or pull_request events.", "Use an isolated custom recovery label in addition to macOS/X64 self-hosted labels.", "Check out and verify only PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 before executing quality.", "Run only macOS-supported diagnostic checks.", "Do not change existing compatibility jobs, smoke.yml, release.yml, branch protection, or required checks.", "Results must remain non-release, non-merge temporary runner-substitution evidence."],
+    "problem": "A GitHub Actions outage prevents PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 from obtaining runner feedback. A new standalone workflow cannot be manually dispatched until it first exists on the default branch; changing the required hosted matrix, violating the compatibility-versus-smoke quality ownership boundary, or executing arbitrary ref input on a personal runner would weaken evidence or security.",
+    "constraints": ["Use only the existing compatibility workflow's workflow_dispatch surface with a default-off recovery_diagnostic input.", "The recovery job never runs for push or pull_request events.", "Use an isolated custom recovery label in addition to macOS/X64 self-hosted labels.", "Check out and verify only PR #723 candidate 365f5e30c9531d8d8948079fe58b8424ecc9efa7 before executing make compatibility-test.", "Do not duplicate smoke.yml's make quality ownership in compatibility.yml.", "Do not change existing compatibility jobs, smoke.yml, release.yml, branch protection, or required checks.", "Results must remain non-release, non-merge temporary runner-substitution evidence."],
     "rationale": "GitHub can dispatch an already-default-branch-registered workflow at the maintenance-branch ref. Binding its isolated job to the exact PR #723 candidate lets the repository-owned runner replace the affected runner during the outage, while the hosted matrix remains the sole authoritative cross-platform gate."
   },
   "verification": [

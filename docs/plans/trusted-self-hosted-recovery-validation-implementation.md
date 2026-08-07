@@ -26,7 +26,8 @@ current outage and is removed rather than retained as dead code.
 2. Add one isolated job conditional on both `workflow_dispatch` and that input.
    It runs only on `[self-hosted, macOS, X64, ai-cockpit-recovery]`, checks out
    and verifies only PR #723 candidate
-   `365f5e30c9531d8d8948079fe58b8424ecc9efa7`, runs its `make quality`, and
+   `365f5e30c9531d8d8948079fe58b8424ecc9efa7`, runs its
+   `make compatibility-test`, and
    writes an explicit temporary-runner-substitution red/green summary.
 3. Do not change any existing compatibility job, `push`, `pull_request`,
    required-check, smoke, or release behavior. Manual compatibility dispatch

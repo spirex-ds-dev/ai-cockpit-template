@@ -63,7 +63,7 @@ runner service.
    `recovery_diagnostic=true`; the isolated job substitutes the affected runner
    only for PR #723 candidate `365f5e30c9531d8d8948079fe58b8424ecc9efa7`.
 2. The run URL, workflow-definition SHA, fixed PR #723 SHA, checked-out SHA,
-   command result, and diagnostic classification are recorded in the relevant
+   compatibility-test result and diagnostic classification are recorded in the relevant
    active Work Item Summary.
 3. A green diagnostic run permits continued development feedback only. It does
    not permit merge, archive mutation, release, or Work Item closure.

@@ -98,7 +98,8 @@ gh workflow run compatibility.yml \
 
 The normal compatibility workflow also starts for this manual dispatch, while
 the self-hosted job checks out and verifies the immutable PR #723 candidate,
-runs `make quality`, and emits a green or red diagnostic summary. The
+runs `make compatibility-test` (the same lightweight compatibility command),
+and emits a green or red diagnostic summary. The
 self-hosted job has an explicit `workflow_dispatch && recovery_diagnostic` condition, so
 it never runs for `push` or `pull_request`: public pull-request code must never
 execute on a personal runner. Only a maintainer with permission to dispatch

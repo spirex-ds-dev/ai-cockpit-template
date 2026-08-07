@@ -24,6 +24,8 @@ def test_self_hosted_recovery_is_dispatch_gated_and_diagnostic():
     assert f'git cat-file -e "{candidate}^{{commit}}"' in workflow
     assert f"SOURCE_COMMIT: {candidate}" in workflow
     assert "Dispatched source commit: \\`$SOURCE_COMMIT\\`" in workflow
+    assert "run: make compatibility-test" in workflow
+    assert "run: make quality" not in workflow
     assert "RECOVERY_RESULT=green" in workflow
     assert "RECOVERY_RESULT=red" in workflow
     assert "diagnostic only" in workflow
