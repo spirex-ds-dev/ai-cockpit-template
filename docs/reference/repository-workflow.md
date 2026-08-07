@@ -57,6 +57,17 @@ CODEOWNER, stale-review dismissal, and conversation resolution. The
 governance files; it must never be treated as proof that a platform review was
 approved. Platform API evidence remains the source of truth for that boundary.
 
+## Lockfile reproducibility toolchain
+
+`make check-lockfile-reproducibility` is a required, fail-closed proof: it
+regenerates the development lockfile and compares normalized content with the
+committed lock. The compatibility and release workflows install the same
+deterministic compiler boundary before invoking it: `pip==25.2`,
+`pip-tools==7.6.0`, and `typing-extensions==4.16.0`. This prevents mutable
+runner versions of pip from changing the compiler's private-API compatibility.
+The pin is toolchain setup, not a waiver: a compiler error or changed lockfile
+still fails the workflow.
+
 ## Work Item Start Receipt
 
 `make ai-start` creates a Git-tracked

@@ -1,0 +1,185 @@
+{
+  "contractVersion": 2,
+  "workItemId": "lockfile-reproducibility-725",
+  "mode": "code",
+  "title": "Make lockfile reproducibility independent of pip internal API drift",
+  "baseCommit": "a49343f90fe4a4bed19438024965e5a3d26501fa",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the authorized remediation plan to completion. Correct workflow failures through governed Work Items, not temporary bypasses; use the temporary self-hosted runner only as outage-time feedback and retain official hosted gates for merge and release.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:continuous-authorization-lockfile-correction", "capturedAt": "2026-08-07", "digest": "sha256:continuous-authorized-lockfile-remediation"},
+  "declaredIntent": {"summary": "Make the committed development lockfile reproducibility check independent of pip-tools use of removed pip private APIs while preserving exact lockfile comparison and hosted enforcement.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scope": [
+    ".ai/work-items/active/lockfile-reproducibility-725.contract.json",
+    ".ai/work-items/active/lockfile-reproducibility-725.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/lockfile-reproducibility-725.outcome.json",
+    ".ai/work-items/active/lockfile-reproducibility-725.outcome.md",
+    "Makefile",
+    ".github/workflows/compatibility.yml",
+    ".github/workflows/release.yml",
+    "requirements-dev.in",
+    "requirements-dev.lock",
+    "tests/test_makefile.py",
+    "tests/test_workflows.py",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Bypassing, disabling, or downgrading lockfile reproducibility checks.", "Merging, closing, rebasing, or otherwise mutating unrelated PRs, including #723 and #726.", "Publishing a release or treating the temporary self-hosted runner as an official hosted gate."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/725", "reason": "Authoritative report of the hosted ImportError caused by pip-tools importing pip private API stdlib_pkgs."},
+    {"path": "Makefile", "reason": "Owns the lockfile reproducibility command and exact comparison boundary."},
+    {"path": ".github/workflows/compatibility.yml", "reason": "Owns ordinary hosted lockfile verification setup."},
+    {"path": ".github/workflows/release.yml", "reason": "Owns release-time lockfile verification setup."},
+    {"path": "tests/test_makefile.py", "reason": "Existing command behavior regression coverage."},
+    {"path": "tests/test_workflows.py", "reason": "Existing hosted bootstrap regression coverage."},
+    {"path": ".ai/glossary.md", "reason": "Repository terminology and architecture boundary source reviewed before implementation."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["supply_chain", "hosted_ci", "reproducibility", "release_gate"],
+    "reason": "The check protects supply-chain reproducibility and is invoked by both ordinary hosted verification and release preflight; the correction must remain deterministic across supported pip versions.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "User authorized automated corrective Work Items and the change affects hosted and release verification."
+    ],
+    "override": {"approvalEvidence": "The user granted standing authorization for required Work Item corrections, lifecycle completion, and provider operations in this thread.", "reason": "Strict reproducibility and hosted/release gate verification are required.", "risks": ["supply_chain", "hosted_ci", "reproducibility", "release_gate"], "notRunChecks": ["Release distribution verification is inapplicable: this Work Item changes pre-release verification tooling and does not publish or distribute an artifact."], "workItemOnly": true, "workItemId": "lockfile-reproducibility-725"}
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "#725 is the governed corrective path for the observed pip/pip-tools compatibility failure; no gate will be bypassed."},
+  "preReviewWarnings": [
+    "Review exact lockfile equivalence, deterministic compiler dependency bounds, both hosted workflow paths, and the absence of any check bypass."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "`make check-lockfile-reproducibility` remains fail-closed and compares normalized regenerated content to the committed lockfile, but does not rely on pip-tools importing a removed private pip API.",
+    "Compatibility and release workflows install a deterministic compiler/runtime combination before invoking the same lockfile target; no workflow skips, masks, or downgrades the gate.",
+    "Regression tests cover the public Make command and both hosted bootstrap paths, including the pinned compatibility boundary that prevents the reported ImportError.",
+    "Canonical workflow documentation and generated capability/documentation-alignment evidence explain the enforced reproducibility boundary and are refreshed."
+  ],
+  "guidelines": [
+    "Use stable, declared tool dependencies; do not rely on private pip internals or ambient runner package versions.",
+    "Preserve exact lockfile reproduction and failure semantics; a compatibility fix must not weaken the security or release gate.",
+    "Keep ordinary hosted and release workflow setup aligned and covered by focused regression tests.",
+    "Document public command behavior and tool-version constraints in canonical workflow guidance."
+  ],
+  "intent": {
+    "problem": "Hosted lockfile verification failed before regeneration because the installed pip-tools imports `stdlib_pkgs` from pip private internals, which the runner pip version no longer provides.",
+    "constraints": ["Preserve the lockfile comparison and fail-closed behavior.", "Use one deterministic compatibility strategy in both compatibility and release workflows.", "Do not use the temporary self-hosted runner to satisfy official hosted evidence or bypass a failing check.", "Do not alter unrelated dependency proposals, releases, or PR state."],
+    "rationale": "Pinning or otherwise constraining the compiler's supported runtime dependency boundary makes the reproducibility proof deterministic instead of depending on mutable GitHub runner pip internals."
+  },
+  "scenarioCoverage": [
+    {"scenario": "The lockfile target executes with the supported compiler/runtime combination.", "expected": "It regenerates and compares the normalized lockfile successfully without a private-pip API ImportError.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run the target in a clean controlled environment and focused Makefile tests."},
+    {"scenario": "Generated lock content differs from the committed lockfile or the compiler fails.", "expected": "The target remains fail-closed with a non-zero result and clear diagnostic.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Preserve and run negative command coverage."},
+    {"scenario": "Compatibility and release hosted workflows install their toolchain before the lockfile gate.", "expected": "Both paths use the same declared compatibility boundary and invoke the unchanged gate.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add focused workflow assertions and inspect rendered workflow commands."},
+    {"scenario": "Canonical documentation and generated evidence reflect the final enforcement path.", "expected": "Maintainers can distinguish a deterministic toolchain from a bypass and generated artifacts converge.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Refresh generators and run documentation alignment checks."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori standing automatic authorization",
+    "reason": "The user authorized automatic execution and requires workflow failures to be corrected through governed Work Items; this approval is limited to the declared compatibility and release workflow paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 819
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/lockfile-reproducibility-725.json",
+    "baseCommit": "a49343f90fe4a4bed19438024965e5a3d26501fa",
+    "initialScopeDigest": "92a197e5881d56f02c8b6ed141bf9358f35c23c9723ddb4a98da6817f64ab152",
+    "contractSkeletonDigest": "274d36b7901c952bf5d8c77dfe0723ef1b3b82b7e0d63a2e5566ed230bfefac6"
+  }
+}

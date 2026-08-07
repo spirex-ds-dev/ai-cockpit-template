@@ -43,7 +43,7 @@ def test_compatibility_runs_lockfile_reproducibility_on_clean_runner():
     )[0]
     assert 'python-version: "3.11"' in lockfile
     assert (
-        "python -m pip install --disable-pip-version-check pip-tools==7.6.0 typing-extensions==4.16.0"
+        "python -m pip install --disable-pip-version-check pip==25.2 pip-tools==7.6.0 typing-extensions==4.16.0"
         in lockfile
     )
     assert "make check-lockfile-reproducibility" in lockfile
@@ -290,7 +290,7 @@ def test_release_workflow_runs_strict_smoke_before_tag_and_release_mutations():
 
 def test_release_workflow_bootstraps_pinned_tool_before_lockfile_reproducibility():
     workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
-    install = "python3 -m pip install --disable-pip-version-check pip-tools==7.6.0 typing-extensions==4.16.0"
+    install = "python3 -m pip install --disable-pip-version-check pip==25.2 pip-tools==7.6.0 typing-extensions==4.16.0"
     check = workflow.index("make check-lockfile-reproducibility")
     tag = workflow.index('git push origin "$SOURCE_COMMIT:refs/tags/$RELEASE_TAG"')
     assert workflow.index(install) < check < tag
