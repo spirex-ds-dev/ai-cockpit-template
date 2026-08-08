@@ -1,3 +1,4 @@
+import hashlib
 import json
 from argparse import Namespace
 
@@ -170,16 +171,92 @@ def test_archive_manifest_binds_outcome_artifact_digests(tmp_path, monkeypatch):
     assert len(manifest["outcomeArtifacts"][0]["sha256"]) == 64
 
 
-def test_current_worktree_digest_excludes_self_referential_summary(monkeypatch):
+def test_archive_manifest_binds_content_addressed_pre_archive_coverage(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    contract.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+    summary.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+
+    coverage = {
+        "reportSha256": "a" * 64,
+        "binding": {
+            "baseCommit": "b" * 40,
+            "candidateHead": "c" * 40,
+            "candidateTreeDigest": "d" * 64,
+            "candidateDiffDigest": "e" * 64,
+        },
+    }
+    manifest = ai_archive_work_item._archive_manifest(
+        contract_target=contract,
+        summary_target=summary,
+        archive_sequence=9,
+        pre_archive_candidate_coverage=coverage,
+    )
+
+    assert manifest["preArchiveCandidateCoverage"] == coverage
+
+
+def test_pre_archive_candidate_coverage_requires_matching_outcome_binding(tmp_path, monkeypatch):
+    active = tmp_path / ".ai/work-items/active"
+    target = tmp_path / "target"
+    active.mkdir(parents=True)
+    target.mkdir()
+    contract = active / "task.contract.json"
+    contract.write_text(
+        json.dumps({"workItemId": "task", "baseCommit": "a" * 40}), encoding="utf-8"
+    )
+    binding = {
+        "baseCommit": "a" * 40,
+        "candidateHead": "b" * 40,
+        "candidateTreeDigest": "c" * 64,
+        "candidateDiffDigest": "d" * 64,
+    }
+    report = {"binding": binding}
+    report_bytes = (json.dumps(report, sort_keys=True) + "\n").encode("utf-8")
+    (target / "changed-critical-coverage.json").write_bytes(report_bytes)
+    coverage = {"reportSha256": hashlib.sha256(report_bytes).hexdigest(), "binding": binding}
+    (active / "task.outcome.json").write_text(
+        json.dumps({"bindings": {"preArchiveCandidateCoverage": coverage}}), encoding="utf-8"
+    )
+
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    import check_changed_critical_coverage
+
+    monkeypatch.setattr(
+        check_changed_critical_coverage, "candidate_snapshot", lambda **_kwargs: binding
+    )
+
+    assert (
+        ai_archive_work_item.load_pre_archive_candidate_coverage(
+            contract_path=contract, contract=json.loads(contract.read_text(encoding="utf-8"))
+        )
+        == coverage
+    )
+
+
+def test_current_worktree_digest_excludes_self_referential_lifecycle_projections(monkeypatch):
     monkeypatch.setattr(
         ai_archive_work_item,
         "changed_paths",
-        lambda _contract: ["src/app.py", ".ai/work-items/active/task.summary.json"],
+        lambda _contract: [
+            "src/app.py",
+            ".ai/work-items/active/task.summary.json",
+            ".ai/work-items/active/task.outcome.json",
+            ".ai/work-items/active/task.outcome.md",
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+        ],
     )
     monkeypatch.setattr(ai_archive_work_item, "path_fingerprint", lambda path: f"digest:{path}")
 
     digest = ai_archive_work_item._current_worktree_digest(
-        {"summaryPath": ".ai/work-items/active/task.summary.json"}
+        {
+            "workItemId": "task",
+            "summaryPath": ".ai/work-items/active/task.summary.json",
+        }
     )
 
     assert digest == ai_archive_work_item._worktree_digest(["src/app.py"])
