@@ -140,10 +140,23 @@ def default_quality_runner(root: Path) -> dict[str, str]:
             **{key: value for key, value in os.environ.items() if key not in inherited_make_state},
             "PYTHONDONTWRITEBYTECODE": "1",
         },
+        text=True,
+        capture_output=True,
         check=False,
     )
     if result.returncode != 0:
-        return {"sessionId": "unknown", "decision": "FAIL", "summaryDigest": ""}
+        output = (result.stderr or result.stdout).strip()
+        recovery = (
+            output.splitlines()[-1]
+            if output
+            else "configure PROJECT_FORMAT_CHECK, PROJECT_LINT, and PROJECT_TEST in Makefile.ai.stack"
+        )
+        return {
+            "sessionId": "unknown",
+            "decision": "FAIL",
+            "summaryDigest": "",
+            "recovery": recovery,
+        }
     pointer = root / "target" / "quality" / "current-session.txt"
     if not pointer.is_file():
         raise HostedVerificationError("local quality session pointer is missing")
@@ -219,7 +232,9 @@ def prepare_snapshot(
     refs_before = governed_refs(root)
     quality = quality_runner(root)
     if quality.get("decision") != "PASS":
-        raise HostedVerificationError("local quality did not pass")
+        recovery = quality.get("recovery")
+        suffix = f": {recovery}" if isinstance(recovery, str) and recovery else ""
+        raise HostedVerificationError(f"local quality did not pass{suffix}")
     if not quality.get("sessionId") or not str(quality.get("summaryDigest", "")).startswith(
         "sha256:"
     ):

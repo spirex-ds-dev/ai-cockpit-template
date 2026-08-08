@@ -235,12 +235,17 @@ def test_default_quality_runner_rejects_failed_or_unbound_quality(tmp_path, monk
     monkeypatch.setattr(
         hosted.subprocess,
         "run",
-        lambda *_args, **_kwargs: SimpleNamespace(returncode=1),
+        lambda *_args, **_kwargs: SimpleNamespace(
+            returncode=1,
+            stderr="ERROR: no project formatter configured. Set PROJECT_FORMAT_CHECK in Makefile.ai.stack.\n",
+            stdout="",
+        ),
     )
     assert hosted.default_quality_runner(tmp_path) == {
         "sessionId": "unknown",
         "decision": "FAIL",
         "summaryDigest": "",
+        "recovery": "ERROR: no project formatter configured. Set PROJECT_FORMAT_CHECK in Makefile.ai.stack.",
     }
 
     monkeypatch.setattr(

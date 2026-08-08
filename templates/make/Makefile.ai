@@ -29,7 +29,8 @@ GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 
 .PHONY: ai-help ai-doctor ai-onboard cockpit-doctor cockpit-calibrate cockpit-calibrate-session cockpit-calibration-inventory cockpit-validate-calibration check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration check-ai-adoption-ready \
-	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality quality-fast quality-standard quality-full quality-release \
+	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality quality quality-fast quality-standard quality-full quality-release \
+	ai-cockpit-validate-project-quality-configuration \
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-synchronize-work-item ai-transition-conflict-successor ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy check-changed-critical-coverage \
@@ -74,6 +75,11 @@ ai-cockpit-project-test:
 
 ai-cockpit-project-lint:
 	@$(PROJECT_LINT)
+
+ai-cockpit-validate-project-quality-configuration:
+	$(if $(strip $(PROJECT_FORMAT_CHECK)),,@printf '%s\n' 'ERROR: no project formatter configured. Set PROJECT_FORMAT_CHECK in Makefile.ai.stack.' >&2; exit 2)
+	$(if $(strip $(PROJECT_TEST)),,@printf '%s\n' 'ERROR: no project test command configured. Set PROJECT_TEST in Makefile.ai.stack.' >&2; exit 2)
+	$(if $(strip $(PROJECT_LINT)),,@printf '%s\n' 'ERROR: no project linter configured. Set PROJECT_LINT in Makefile.ai.stack.' >&2; exit 2)
 
 ai-lifecycle-facts:
 	$(AI_PYTHON) scripts/ai_lifecycle_facts.py --root .
@@ -127,7 +133,7 @@ ai-cockpit-uninstall-execute:
 ai-cockpit-diff-check:
 	git diff --check
 
-quality-fast:
+quality-fast: ai-cockpit-validate-project-quality-configuration
 	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-format-check
 	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-lint
 	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-diff-check
@@ -156,6 +162,11 @@ ai-cockpit-quality:
 		target=$$($(PYTHON) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
 		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
 		$(AI_NESTED_MAKE) --no-print-directory "$$target"
+
+# The portable adopter entrypoint. Makefile.ai.stack keeps the actual formatter,
+# linter, and test commands project-owned; their defaults fail closed above.
+# Snapshot verification must not require an active Work Item merely to run adopter quality.
+quality: quality-full
 
 check-capability-truth:
 	@if test -f docs/reference/capability-truth-matrix.json && test -f scripts/ai_capability_truth.py; then \
