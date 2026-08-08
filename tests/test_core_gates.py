@@ -86,6 +86,28 @@ def test_finish_run_merges_stabilization_environment(monkeypatch):
     assert captured["env"]["AI_FINISH_STABILIZING"] == "1"
 
 
+def test_finish_discards_verification_evidence_bound_to_a_prior_contract(tmp_path):
+    summary_path = tmp_path / "task.summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [
+                    {"check": "quality", "contractHash": "old-contract"},
+                    {"check": "aiScope", "contractHash": "current-contract"},
+                    {"check": "legacy", "result": "passed"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    removed = ai_finish.discard_stale_contract_verification(summary_path, "current-contract")
+
+    assert removed == 2
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert summary["verification"] == [{"check": "aiScope", "contractHash": "current-contract"}]
+
+
 def test_finish_console_output_is_bounded_but_marks_truncation():
     output = "x" * (ai_finish.CONSOLE_OUTPUT_LIMIT + 10)
 
@@ -1218,7 +1240,22 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 3
-    assert executed == [["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"]]
+    assert executed == [
+        ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"],
+        [
+            "make",
+            "generate-cockpit-status",
+            "CONTRACT=.ai/work-items/active/task.contract.json",
+            "SUMMARY=.ai/work-items/active/task.summary.json",
+        ],
+        [
+            "make",
+            "check-ai-status",
+            "CONTRACT=.ai/work-items/active/task.contract.json",
+            "SUMMARY=.ai/work-items/active/task.summary.json",
+        ],
+        ["make", "check-ai-status-consistency"],
+    ]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
     assert [item["check"] for item in recorded] == ["quality"]
     assert recorded[0]["result"] == "failed"
@@ -1401,7 +1438,22 @@ def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, mo
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 4
-    assert executed == [["make", "sourceBoundEvidence"]]
+    assert executed == [
+        ["make", "sourceBoundEvidence"],
+        [
+            "make",
+            "generate-cockpit-status",
+            "CONTRACT=.ai/work-items/active/task.contract.json",
+            "SUMMARY=.ai/work-items/active/task.summary.json",
+        ],
+        [
+            "make",
+            "check-ai-status",
+            "CONTRACT=.ai/work-items/active/task.contract.json",
+            "SUMMARY=.ai/work-items/active/task.summary.json",
+        ],
+        ["make", "check-ai-status-consistency"],
+    ]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
     assert [(item["check"], item["result"]) for item in recorded] == [
         ("sourceBoundEvidence", "failed")
@@ -1511,6 +1563,19 @@ def test_finish_main_deduplicates_explicit_source_bound_check(tmp_path, monkeypa
     assert executed == [
         ["make", "sourceBoundEvidence"],
         ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"],
+        [
+            "make",
+            "generate-cockpit-status",
+            "CONTRACT=.ai/work-items/active/task.contract.json",
+            "SUMMARY=.ai/work-items/active/task.summary.json",
+        ],
+        [
+            "make",
+            "check-ai-status",
+            "CONTRACT=.ai/work-items/active/task.contract.json",
+            "SUMMARY=.ai/work-items/active/task.summary.json",
+        ],
+        ["make", "check-ai-status-consistency"],
     ]
 
 

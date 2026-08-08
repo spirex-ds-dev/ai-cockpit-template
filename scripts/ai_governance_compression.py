@@ -750,6 +750,7 @@ def render_active_status(
         "",
         "## Key Conclusion",
         "",
+        "- Signal Domain: `governance_review`",
         f"- Color: `{signal['color']}`",
         f"- Conclusion: {signal['conclusion']}",
         f"- Evidence Basis: `{'; '.join(signal['evidenceBasis']) or 'none'}`",
@@ -843,6 +844,8 @@ def render_active_status(
 
     if isinstance(task_outcome, dict):
         lines.extend(["", "## Task Outcome", ""])
+        lines.append("- Signal Domain: `work_item_lifecycle`")
+        lines.append("- Presence: `present`")
         outcome_path = task_outcome.get("markdownPath", "")
         outcome_count = task_outcome.get("evidenceCount", 0)
         outcome_status = task_outcome.get("status", "unknown")
@@ -857,6 +860,13 @@ def render_active_status(
             lines.append(f"- Recovery Condition: `{recovery}`")
         lines.append(f"- Report: `{outcome_path}`")
         lines.append(f"- Evidence Count: `{outcome_count}`")
+    else:
+        lines.extend(["", "## Task Outcome", ""])
+        lines.append("- Signal Domain: `work_item_lifecycle`")
+        lines.append("- Presence: `absent`")
+        lines.append("- Status: `in_progress`")
+        lines.append("- Traffic Light: `yellow`")
+        lines.append("- Next Action: `continue verification or run make ai-finish`")
 
     if isinstance(calibration_inventory, dict):
         lines.extend(["", "## Calibration Inventory", ""])

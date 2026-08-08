@@ -23,6 +23,7 @@ from ai_generate_status import (
     load_preflight_review,
     localize_status_markdown,
     normalize_status_language,
+    project_active_task_outcome,
     project_relative,
     status_for,
 )
@@ -142,7 +143,7 @@ def main() -> int:
         preflight_review=preflight_review,
         ownership_counts=ownership_counts,
         calibration_inventory=inventory,
-        task_outcome=summary.get("taskOutcome") if isinstance(summary, dict) else None,
+        task_outcome=project_active_task_outcome(contract, summary, Path(args.contract)),
     )
     expected = localize_status_markdown(expected, language)
 

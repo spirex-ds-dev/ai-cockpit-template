@@ -14,6 +14,7 @@ from typing import Any
 from ai_calibration_inventory import build_inventory
 from ai_check_diff_ownership import counts as ownership_counts_for
 from ai_check_diff_ownership import preview as ownership_preview
+from ai_check_task_outcome import validate_outcome
 from ai_common import PROJECT_ROOT, changed_paths, load_json
 from ai_governance_compression import derive_governance_status, render_active_status
 from ai_lifecycle_truth import validate_successor_receipt
@@ -279,6 +280,63 @@ def no_active_worktree_state(output: Path) -> tuple[str, int, str]:
     return "absent", 0, "clean"
 
 
+def project_active_task_outcome(
+    contract: dict[str, Any], summary: dict[str, Any] | None, contract_path: Path
+) -> dict[str, Any] | None:
+    """Return an active Outcome projection only when its evidence binds this Work Item.
+
+    The generated status is an operator surface, not an independent source of
+    lifecycle facts.  An absent Outcome is a normal in-progress condition; a
+    present but mismatched or invalid Outcome is a contradiction and must stop
+    status generation rather than display another Work Item's result.
+    """
+    if not isinstance(summary, dict) or "taskOutcome" not in summary:
+        return None
+    state = summary.get("taskOutcome")
+    if not isinstance(state, dict):
+        raise TypeError("active Task Outcome state must be an object")
+    task = contract.get("workItemId")
+    if not isinstance(task, str) or not task:
+        raise RuntimeError("active Contract is missing workItemId for Task Outcome binding")
+    json_path_text = state.get("jsonPath")
+    markdown_path_text = state.get("markdownPath")
+    if not isinstance(json_path_text, str) or not isinstance(markdown_path_text, str):
+        raise TypeError("present Task Outcome is missing its JSON or Markdown evidence path")
+    json_path = (PROJECT_ROOT / json_path_text).resolve()
+    expected_json_path = contract_path.with_name(f"{task}.outcome.json").resolve()
+    expected_markdown_path = contract_path.with_name(f"{task}.outcome.md").resolve()
+    markdown_path = (PROJECT_ROOT / markdown_path_text).resolve()
+    if json_path != expected_json_path or markdown_path != expected_markdown_path:
+        raise RuntimeError("Task Outcome evidence paths do not bind to the active Work Item")
+    try:
+        outcome = load_json(json_path)
+    except (OSError, ValueError) as exc:
+        raise RuntimeError(f"failed to read active Task Outcome: {exc}") from exc
+    if outcome.get("workItemId") != task:
+        raise RuntimeError("Task Outcome workItemId does not match active Work Item")
+    try:
+        markdown = markdown_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(f"failed to read active Task Outcome report: {exc}") from exc
+    report = validate_outcome(outcome, markdown, expected_task_id=task)
+    if not report.valid:
+        detail = "; ".join(f"{item.code}: {item.message}" for item in report.errors)
+        raise RuntimeError(f"active Task Outcome is invalid: {detail}")
+    status = outcome.get("status")
+    if state.get("status") != status:
+        raise RuntimeError("Task Outcome status contradicts its active Summary projection")
+    sections = outcome.get("sections")
+    evidence_count = len(sections.get("evidence", [])) if isinstance(sections, dict) else 0
+    return {
+        "status": status,
+        "humanStatusColor": outcome.get("humanStatusColor", "unknown"),
+        "failedCheck": outcome.get("failedGate", ""),
+        "recoveryCondition": outcome.get("recoveryCondition", ""),
+        "markdownPath": markdown_path_text,
+        "evidenceCount": evidence_count,
+    }
+
+
 def load_preflight_review(
     contract: dict[str, Any],
     contract_path: Path,
@@ -429,7 +487,7 @@ def write_active_status(
         preflight_review=preflight_review,
         ownership_counts=ownership_counts,
         calibration_inventory=calibration_inventory,
-        task_outcome=(summary.get("taskOutcome") if isinstance(summary, dict) else None),
+        task_outcome=project_active_task_outcome(contract, summary, contract_path),
     )
     receipt_path = contract_path.with_name(
         f"{contract.get('workItemId', '')}.successor-receipt.json"
@@ -497,7 +555,7 @@ def main() -> int:
             retry_threshold=args.retry_threshold,
             language=language,
         )
-    except (RuntimeError, ValueError) as exc:
+    except (RuntimeError, TypeError, ValueError) as exc:
         print(exc, file=sys.stderr)
         return 1
     return 0
