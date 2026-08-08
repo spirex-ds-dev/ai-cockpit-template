@@ -95,7 +95,7 @@ def _drift_check(root: Path, proposal: dict[str, Any]) -> list[str]:
 def _snapshot(root: Path, proposal: dict[str, Any], snapshot: Path) -> None:
     facts = validate_fact_bundle(root)
     snapshot.mkdir(parents=True, exist_ok=True)
-    for name in ("manifest.json", "version.json", "managed-regions.json"):
+    for name in ("manifest.json", "version.json", "release-identity.json", "managed-regions.json"):
         shutil.copy2(root / ".ai" / "install" / name, snapshot / f"{name[:-5]}.before.json")
     (snapshot / "project-config-hash.txt").write_text(
         facts["rollbackBaseline"].get("fileDigests", {}).get(".ai/project_profile.yaml", "missing")
@@ -124,8 +124,12 @@ def _update_facts(root: Path) -> None:
             entries[path]["projectModified"] = False
     manifest["files"] = [entries[path] for path in sorted(entries)]
     manifest_hash = write_json(root / ".ai" / "install" / "manifest.json", manifest)
+    identity = read_json(root / ".ai" / "install" / "release-identity.json")
+    identity["manifestHash"] = manifest_hash
+    identity_hash = write_json(root / ".ai" / "install" / "release-identity.json", identity)
     version = read_json(root / ".ai" / "install" / "version.json")
     version["manifestHash"] = manifest_hash
+    version["releaseIdentityHash"] = identity_hash
     write_json(root / ".ai" / "install" / "version.json", version)
     baseline = read_json(root / ".ai" / "install" / "rollback-baseline.json")
     baseline["manifestHash"] = manifest_hash

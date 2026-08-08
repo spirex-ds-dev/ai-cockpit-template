@@ -37,7 +37,14 @@ def test_write_fact_bundle_contains_bound_manifest_and_all_ownerships(tmp_path):
         },
     )
 
-    assert set(facts) == {"manifest", "version", "managedRegions", "rollbackBaseline"}
+    assert set(facts) == {
+        "manifest",
+        "version",
+        "managedRegions",
+        "rollbackBaseline",
+        "releaseIdentity",
+    }
+    assert facts["releaseIdentity"]["sourceCommit"] is None
     manifest = facts["manifest"]
     assert manifest["installationId"]
     assert facts["version"]["manifestHash"]
@@ -50,6 +57,71 @@ def test_write_fact_bundle_contains_bound_manifest_and_all_ownerships(tmp_path):
     assert all(item["projectModified"] is False for item in manifest["files"])
     assert all(item["ownershipClass"] for item in manifest["files"])
     assert validate_fact_bundle(target)["version"] == facts["version"]
+
+
+def test_tagged_release_identity_binds_tag_commit_version_and_assets(tmp_path):
+    source, target = make_install_tree(tmp_path)
+    identity = {
+        "releaseTag": "v1.2.3",
+        "releaseVersion": "1.2.3",
+        "sourceCommit": "a" * 40,
+        "tagTarget": "a" * 40,
+        "metadataCommit": "a" * 40,
+        "artifactDigests": {"install.sh": "b" * 64},
+    }
+
+    facts = write_fact_bundle(
+        source=source,
+        target=target,
+        distribution_version={
+            "distributionVersion": 2,
+            "releaseVersion": "1.2.3",
+            "contractSchema": 2,
+        },
+        release_identity=identity,
+    )
+
+    assert facts["releaseIdentity"]["releaseTag"] == "v1.2.3"
+    assert facts["releaseIdentity"]["sourceCommit"] == "a" * 40
+    assert facts["version"]["releaseIdentityHash"]
+    assert validate_fact_bundle(target)["releaseIdentity"] == facts["releaseIdentity"]
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("releaseTag", "not-a-release", "semantic"),
+        ("tagTarget", "c" * 40, "one matching SHA-1"),
+        ("artifactDigests", {"install.sh": "not-a-digest"}, "SHA-256"),
+    ],
+)
+def test_tagged_release_identity_rejects_inconsistent_metadata_before_fact_writes(
+    tmp_path, field, value, message
+):
+    source, target = make_install_tree(tmp_path)
+    identity = {
+        "releaseTag": "v1.2.3",
+        "releaseVersion": "1.2.3",
+        "sourceCommit": "a" * 40,
+        "tagTarget": "a" * 40,
+        "metadataCommit": "a" * 40,
+        "artifactDigests": {"install.sh": "b" * 64},
+    }
+    identity[field] = value
+
+    with pytest.raises(InstallFactsError, match=message):
+        write_fact_bundle(
+            source=source,
+            target=target,
+            distribution_version={
+                "distributionVersion": 2,
+                "releaseVersion": "1.2.3",
+                "contractSchema": 2,
+            },
+            release_identity=identity,
+        )
+
+    assert not (target / ".ai/install/manifest.json").exists()
 
 
 def test_validation_reports_current_digest_and_project_modification(tmp_path):
