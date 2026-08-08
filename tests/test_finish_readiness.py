@@ -118,6 +118,22 @@ def test_finish_archive_message_is_not_lifecycle_closure():
     assert "make ai-close-work-item TASK=example" in output
 
 
+def test_finish_quality_paths_excludes_only_current_generated_evidence(monkeypatch):
+    contract = {"workItemId": "example"}
+    monkeypatch.setattr(
+        ai_finish,
+        "changed_paths",
+        lambda _contract: [
+            "docs/guide.md",
+            ".ai/cockpit/current_status.md",
+            ".ai/work-items/active/example.summary.json",
+            ".ai/guards/policy.yaml",
+        ],
+    )
+
+    assert ai_finish.finish_quality_paths(contract) == ["docs/guide.md", ".ai/guards/policy.yaml"]
+
+
 def test_archive_reuse_requires_a_same_state_final_summary_attestation(monkeypatch):
     contract = {"scope": ["scripts/ai_finish.py"]}
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: contract["scope"])

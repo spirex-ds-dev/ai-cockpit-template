@@ -27,6 +27,15 @@ DOMAIN_LEVELS = {
 }
 
 
+def finish_quality_route(changed_paths: list[str]) -> dict[str, Any]:
+    """Return the auditable local Finish quality command for changed paths."""
+    policy = select_policy("task", changed_paths)
+    return {
+        "policy": policy,
+        "command": f"make ai-cockpit-quality GOVERNANCE_PROFILE={policy['level']}",
+    }
+
+
 def select_policy(
     stage: str, changed_paths: list[str], *, requested: str | None = None
 ) -> dict[str, Any]:

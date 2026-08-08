@@ -17,6 +17,23 @@ ALIGNMENT_AREAS = {
 }
 
 
+def test_registered_command_matches_only_supported_finish_quality_profiles():
+    expected = "make ai-cockpit-quality"
+
+    assert ai_check_summary.registered_command_matches(
+        "quality", "make ai-cockpit-quality GOVERNANCE_PROFILE=light", expected
+    )
+    assert ai_check_summary.registered_command_matches(
+        "quality", "make ai-cockpit-quality GOVERNANCE_PROFILE=strict", expected
+    )
+    assert not ai_check_summary.registered_command_matches(
+        "quality", "make ai-cockpit-quality GOVERNANCE_PROFILE=release", expected
+    )
+    assert not ai_check_summary.registered_command_matches(
+        "quality", "make arbitrary-quality GOVERNANCE_PROFILE=light", expected
+    )
+
+
 def aligned_documentation_summary(
     *,
     evidence: str = "docs/contract-fields.md",

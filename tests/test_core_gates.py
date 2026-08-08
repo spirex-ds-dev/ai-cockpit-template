@@ -953,7 +953,7 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     item = ai_finish.evidence(
         "quality",
-        "make quality",
+        "make ai-cockpit-quality GOVERNANCE_PROFILE=standard",
         0,
         12,
         "token=secret-value /Users/example/project passed",
@@ -974,7 +974,7 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
     truncated_private_key = "".join(["-" * 5, "BEGIN PRIVATE KEY", "-" * 5, "\n", "A" * 40])
     truncated_item = ai_finish.evidence(
         "quality",
-        "make quality",
+        "make ai-cockpit-quality GOVERNANCE_PROFILE=standard",
         0,
         12,
         f"prefix {truncated_private_key}",
@@ -990,7 +990,7 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
         fragment = "".join(["-" * 5, "BEGIN ", key_kind, "-" * 5, "\n", key_kind, "-body-fragment"])
         fragment_item = ai_finish.evidence(
             "quality",
-            "make quality",
+            "make ai-cockpit-quality GOVERNANCE_PROFILE=standard",
             0,
             12,
             f"prefix {fragment}",
@@ -1017,7 +1017,7 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
     )
     long_item = ai_finish.evidence(
         "quality",
-        "make quality",
+        "make ai-cockpit-quality GOVERNANCE_PROFILE=standard",
         0,
         12,
         f"prefix {long_private_key} suffix",
@@ -1032,7 +1032,7 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
     assert (
         ai_finish.pending_evidence(
             "quality",
-            "make quality",
+            "make ai-cockpit-quality GOVERNANCE_PROFILE=standard",
             contract_hash="a" * 64,
             commit_sha="b" * 40,
             execution_contract_path="contract.json",
@@ -1067,7 +1067,7 @@ def test_finish_record_result_requires_active_summary(tmp_path, monkeypatch):
 
     item = ai_finish.evidence(
         "quality",
-        "make quality",
+        "make ai-cockpit-quality GOVERNANCE_PROFILE=standard",
         0,
         1,
         "passed",
@@ -1209,7 +1209,7 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
 
     def fail_quality(command, **_kwargs):
         executed.append(command)
-        if command == ["make", "quality"]:
+        if command == ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"]:
             return 3, 7, "quality failed"
         return 0, 1, "passed"
 
@@ -1218,7 +1218,7 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 3
-    assert executed == [["make", "quality"]]
+    assert executed == [["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"]]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
     assert [item["check"] for item in recorded] == ["quality"]
     assert recorded[0]["result"] == "failed"
@@ -1266,7 +1266,7 @@ def test_finish_main_does_not_inject_release_source_evidence_into_work_item_chec
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 0
-    assert executed[0] == ["make", "quality"]
+    assert executed[0] == ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"]
     assert ["make", "sourceBoundEvidence"] not in executed
 
 
@@ -1361,6 +1361,7 @@ def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, mo
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [
                     {"check": "sourceBoundEvidence", "required": True},
                     {"check": "quality", "required": True},
@@ -1373,6 +1374,7 @@ def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, mo
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(
         ai_finish,
         "render_check_command",
@@ -1443,7 +1445,7 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     # Status is regenerated before each status-derived assertion so persisted
     # verification evidence cannot invalidate the projection it is checking.
     assert len(executed) == 12
-    assert executed[0] == ["make", "quality"]
+    assert executed[0] == ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"]
     assert sum(command[:2] == ["make", "generate-cockpit-status"] for command in executed) == 4
     assert executed[-1][:2] == ["make", "check-ai-change-summary"]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
@@ -1465,6 +1467,7 @@ def test_finish_main_deduplicates_explicit_source_bound_check(tmp_path, monkeypa
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [
                     {"check": "sourceBoundEvidence", "required": False},
                     {"check": "quality", "required": True},
@@ -1478,6 +1481,7 @@ def test_finish_main_deduplicates_explicit_source_bound_check(tmp_path, monkeypa
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(
         ai_finish,
         "render_check_command",
@@ -1487,14 +1491,21 @@ def test_finish_main_deduplicates_explicit_source_bound_check(tmp_path, monkeypa
 
     def fail_quality(command, **_kwargs):
         executed.append(command)
-        return (3, 7, "quality failed") if command == ["make", "quality"] else (0, 1, "passed")
+        return (
+            (3, 7, "quality failed")
+            if command == ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"]
+            else (0, 1, "passed")
+        )
 
     monkeypatch.setattr(ai_finish, "run", fail_quality)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 3
-    assert executed == [["make", "sourceBoundEvidence"], ["make", "quality"]]
+    assert executed == [
+        ["make", "sourceBoundEvidence"],
+        ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"],
+    ]
 
 
 def test_finish_main_demotes_readiness_when_final_status_check_fails(tmp_path, monkeypatch):
