@@ -615,6 +615,7 @@ def _execute_archive_transaction(
         PROJECT_ROOT / ".ai" / "cockpit" / "task_report.md",
     )
     report_backups = {path: path.read_bytes() if path.exists() else None for path in report_paths}
+    refreshed_report_paths = False
     active_file_backups = {source: source.read_bytes() for source, _ in files_to_move}
     traceability_changed = False
     try:
@@ -664,6 +665,7 @@ def _execute_archive_transaction(
                         report = generate_human_report(outcome, phase="review")
                         save_json(report_paths[0], report)
                         report_paths[1].write_text(render_human_report(report), encoding="utf-8")
+                        refreshed_report_paths = True
             if traceability_payload is not None:
                 rewritten_traceability, replacement_count = _rewrite_traceability_paths(
                     traceability_payload, replacements
@@ -688,6 +690,45 @@ def _execute_archive_transaction(
                         }
                     )
                 existing = {item.get("path") for item in changed if isinstance(item, dict)}
+                if refreshed_report_paths:
+                    for report_path in report_paths:
+                        report_rel = report_path.relative_to(PROJECT_ROOT).as_posix()
+                        if report_rel not in existing:
+                            changed.append(
+                                {
+                                    "path": report_rel,
+                                    "reason": (
+                                        "Regenerated from the rewritten archived Task Outcome "
+                                        "during this archive transaction."
+                                    ),
+                                }
+                            )
+                            existing.add(report_rel)
+                    alignment = summary.get("documentationAlignment")
+                    if isinstance(alignment, dict):
+                        checks = alignment.get("checks")
+                        if isinstance(checks, list):
+                            for check in checks:
+                                if (
+                                    isinstance(check, dict)
+                                    and check.get("area") == "documentationCommandsCapability"
+                                ):
+                                    evidence = check.get("evidence")
+                                    report_markdown = (
+                                        report_paths[1].relative_to(PROJECT_ROOT).as_posix()
+                                    )
+                                    if (
+                                        isinstance(evidence, list)
+                                        and report_markdown not in evidence
+                                    ):
+                                        evidence.append(report_markdown)
+                                    if check.get("status") == "not_applicable":
+                                        check["status"] = "aligned"
+                                        check["reason"] = (
+                                            "Archive transaction regenerated the Human Benefit "
+                                            "Report from the rewritten archived Task Outcome."
+                                        )
+                                    break
                 for archived_path in replacements.values():
                     if archived_path not in existing:
                         changed.append(

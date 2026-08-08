@@ -2466,7 +2466,7 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     monkeypatch.setattr(
         ai_generate_human_report,
         "generate_human_report",
-        lambda value, *, phase: {
+        lambda value, *, phase, closure_facts=None: {
             "workItemId": value["workItemId"],
             "source": value["sections"]["evidence"][0]["source"],
             "phase": phase,
@@ -2560,6 +2560,7 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         )(),
     )
     monkeypatch.setattr(ai_check_pr, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(ai_check_pr, "human_benefit_report_issues", lambda _contract: [])
     monkeypatch.setattr(
         ai_check_pr,
         "validate_summary",
@@ -2596,7 +2597,13 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         for issue in aggregate_missing_issues
     )
     assert all(
-        "/archive/" in item["path"] or item["path"] == ".ai/cockpit/current_status.md"
+        "/archive/" in item["path"]
+        or item["path"]
+        in {
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+        }
         for item in data["changedFiles"]
     )
     assert any(item["path"].endswith("task.review.json") for item in data["changedFiles"])

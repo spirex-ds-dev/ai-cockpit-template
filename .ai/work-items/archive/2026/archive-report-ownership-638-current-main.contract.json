@@ -1,0 +1,259 @@
+{
+  "contractVersion": 2,
+  "workItemId": "archive-report-ownership-638-current-main",
+  "mode": "code",
+  "title": "Preserve ownership of live Human Benefit Reports after archive",
+  "baseCommit": "22aaec13f6405e2f80e01069d33402b3ba82009c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/archive-report-ownership-638-current-main.contract.json",
+    ".ai/work-items/active/archive-report-ownership-638-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/archive-report-ownership-638-current-main.outcome.json",
+    ".ai/work-items/active/archive-report-ownership-638-current-main.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_diff_ownership.py",
+    "scripts/ai_check_pr.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_diff_ownership.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/features/human-benefit-report.md",
+    "docs/features/human-benefit-report.ja.md",
+    "docs/features/human-benefit-report.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting any existing archived Work Item evidence.",
+    "Adding a generic exemption for generated Human Benefit Reports.",
+    "Changing unrelated Work Item lifecycle, release, or provider policy."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Owns the archive transaction that regenerates reports after moving active evidence."
+    },
+    {
+      "path": "scripts/ai_check_diff_ownership.py",
+      "reason": "Defines exact validator-bound ownership for active generated reports and no-active ownership behavior."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Validates final PR ownership against archived Work Item evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/638",
+      "reason": "Authoritative corrective requirements and observed archive supersession failure."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/637",
+      "reason": "Historical PR evidence demonstrating the report-path ownership omission."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "archive_integrity",
+      "generated_evidence_ownership",
+      "lifecycle_regression"
+    ],
+    "reason": "The correction must preserve immutable archives while making the post-archive report pair precisely attributable and rejecting stale or malformed reports.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Archive integrity and generated-evidence ownership require the standard governed verification profile."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized autonomous execution and the issue defines a bounded archive-ownership correction."
+  },
+  "preReviewWarnings": [
+    "Do not mutate historical archive evidence to repair ownership.",
+    "A valid report pair must remain exact-outcome-bound; malformed, stale, and cross-task reports must remain unowned."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An archive transaction that refreshes a valid Human Benefit Report records both report paths in the same archived Summary that owns the transaction.",
+    "No-active/PR diff ownership classifies that exact valid post-archive report pair as owned by its archived Work Item without a generic report-file exemption.",
+    "Malformed, stale, missing, or cross-task report pairs remain unowned after archive or supersession.",
+    "Archive, ownership, and PR-bundle regressions cover the positive and negative paths, and lifecycle documentation describes the precise ownership rule."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "rawUserRequest": "Execute the authorized remediation plan to completion. For issue #638, preserve precise ownership of live Human Benefit Reports after archive supersession without bypasses or generic exemptions.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation: continuous authorization to execute the remediation plan and record it in every Work Item Contract",
+    "capturedAt": "2026-08-08",
+    "digest": "sha256:issue-638-autonomous-remediation-authorization"
+  },
+  "declaredIntent": {
+    "summary": "Bind post-archive Human Benefit Report paths to the immutable archive transaction that regenerated them.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "intent": {
+    "problem": "Archive supersession can regenerate the live Human Benefit Report after the active Summary has moved, while the archived Summary omits the two report paths. A subsequent no-active ownership check then truthfully rejects a valid report pair as unowned.",
+    "constraints": [
+      "Keep archived evidence append-only and immutable after archival.",
+      "Preserve strict exact validator binding for a report pair and reject stale, malformed, missing, or cross-task artifacts.",
+      "Do not manually stage/delete reports or introduce a generic ownership exemption.",
+      "Run the governed archive, PR, hosted, merge, and closure lifecycle."
+    ],
+    "rationale": "The archive transaction is the only authoritative operation that knows it regenerated a report from the rewritten archived Outcome, so it must bind the report paths to the same immutable Summary before freezing the archive."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "archive refresh records an exact valid report pair in the archived Summary",
+      "expected": "The transaction appends both report paths before freezing the immutable Summary and archive manifest.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Archive-transaction regression asserts the report paths are present in the archived Summary and immutable manifest-consistent bundle."
+    },
+    {
+      "scenario": "no-active and PR ownership accept only the archived transaction's exact valid pair",
+      "expected": "Diff and PR ownership resolve the valid pair to the archive transaction rather than granting a generic exemption.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Ownership and PR-bundle regressions exercise no-active and archived transaction paths."
+    },
+    {
+      "scenario": "malformed, stale, missing, and cross-task report pairs remain unowned",
+      "expected": "Each invalid variation is rejected as unowned even after active evidence is archived.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Negative ownership regressions tamper, remove, stale-bind, and cross-bind report artifacts."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert only this Work Item diff; never rewrite existing archived evidence or manually remove generated report files.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 828
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/archive-report-ownership-638-current-main.json",
+    "baseCommit": "22aaec13f6405e2f80e01069d33402b3ba82009c",
+    "initialScopeDigest": "bc6957f25c126c67e88ccc5d2085ba62c2a23d4666af733ce4735dcdb2ab2a3e",
+    "contractSkeletonDigest": "50fdab84d0de20f75f93b8f835460d4435bc03f56d282d5b7ec19121bcacdccc"
+  }
+}

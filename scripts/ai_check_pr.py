@@ -823,9 +823,38 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     exempt = policy.get("allowAlways", [])
 
     generated_archive_index = f"{ARCHIVE_PREFIX}index.json"
+    report_paths = {HUMAN_REPORT_JSON, HUMAN_REPORT_MARKDOWN}
+
+    def current_archive_owns_report_pair() -> bool:
+        """Accept only a complete current archive transaction's exact report pair.
+
+        The archive transaction regenerates these reports after moving active
+        evidence, so their durable ownership is the archived Summary rather
+        than a broad Contract path.  Both reports and the corresponding
+        archived Outcome must be part of this PR and validate together.
+        """
+        if not report_paths.issubset(all_paths):
+            return False
+        for contract_path, _contract, summary, _rank in reversed(archive_entries):
+            if not report_paths.issubset(changed_file_paths(summary)):
+                continue
+            outcome_path = (
+                contract_path.with_name(
+                    contract_path.name.replace(".contract.json", ".outcome.json")
+                )
+                .relative_to(PROJECT_ROOT)
+                .as_posix()
+            )
+            if outcome_path not in all_paths:
+                continue
+            if not human_benefit_report_issues(contract_path):
+                return True
+        return False
 
     def is_archived_generated_evidence(path: str) -> bool:
         """Accept generated archive metadata only when archived evidence names it."""
+        if path in report_paths:
+            return current_archive_owns_report_pair()
         return path == generated_archive_index and any(
             path in changed_file_paths(summary)
             for _contract_path, _contract, summary, _rank in archive_entries

@@ -1496,6 +1496,53 @@ def test_pr_keeps_non_archive_modified_paths_valid(tmp_path, monkeypatch):
     assert ai_check_pr.validate_pr_bundle("a" * 40, [pair]) == []
 
 
+def test_pr_bundle_accepts_only_valid_current_archive_report_pair(tmp_path, monkeypatch):
+    task = "report-owner"
+    archive = f".ai/work-items/archive/2026/{task}"
+    contract = write_pair(
+        tmp_path,
+        task,
+        ["scripts/ai_archive_work_item.py", ".ai/work-items/archive/**"],
+        [
+            f"{archive}.outcome.json",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+        ],
+    )
+    contract_rel = contract.relative_to(tmp_path).as_posix()
+    summary_rel = contract_rel.replace(".contract", ".summary")
+    outcome_rel = f"{archive}.outcome.json"
+    changed = [
+        contract_rel,
+        summary_rel,
+        outcome_rel,
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    ]
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "archive_evidence_changes",
+        lambda _base: {contract_rel: "A", summary_rel: "A"},
+    )
+    monkeypatch.setattr(ai_check_pr, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(ai_check_pr, "validate_summary", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(ai_check_pr, "human_benefit_report_issues", lambda _contract: [])
+    patch_changes(monkeypatch, changed)
+
+    assert ai_check_pr.validate_pr_bundle("a" * 40, [contract]) == []
+
+    monkeypatch.setattr(
+        ai_check_pr, "human_benefit_report_issues", lambda _contract: ["report is stale"]
+    )
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [contract])
+    assert any("task_report.json" in issue for issue in issues)
+    assert any("task_report.md" in issue for issue in issues)
+
+
 def test_human_benefit_report_issues_rejects_stale_review_report(tmp_path, monkeypatch):
     from ai_generate_human_report import generate_human_report, render_human_report
 
