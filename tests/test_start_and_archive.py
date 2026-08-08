@@ -304,9 +304,7 @@ def test_linked_worktree_quarantined_receipt_allows_only_its_bound_successor(tmp
     monkeypatch.setattr(ai_start, "current_branch", lambda: "codex/bound-successor")
 
     assert ai_start.linked_worktree_active_issue("bound-successor", root=current) is None
-    assert "quarantined successor" in ai_start.linked_worktree_active_issue(
-        "unrelated-task", root=current
-    )
+    assert ai_start.linked_worktree_active_issue("unrelated-task", root=current) is None
     monkeypatch.setattr(ai_start, "current_branch", lambda: "codex/unrelated-task")
     assert "quarantined successor" in ai_start.linked_worktree_active_issue(
         "bound-successor", root=current
@@ -324,6 +322,7 @@ def test_linked_worktree_quarantined_receipt_allows_only_its_bound_successor(tmp
     assert "invalid quarantined successor receipt (missing_authority)" in (
         ai_start.linked_worktree_active_issue("bound-successor", root=current) or ""
     )
+    assert ai_start.linked_worktree_active_issue("unrelated-task", root=current) is None
 
 
 def test_linked_worktree_malformed_active_pair_fails_closed(tmp_path, monkeypatch):

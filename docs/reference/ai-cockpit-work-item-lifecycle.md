@@ -81,10 +81,12 @@ The command validates the blocked Outcome, exact identities, same-repository
 Issue, authority, mode, and receipt location. Status/doctor show a yellow route
 while the predecessor Outcome remains red. It never authorizes archive, merge,
 release, branch deletion, provider mutation, or predecessor evidence rewrite.
-During `ai-start`, a valid quarantined receipt admits only its named successor
+During `ai-start`, a valid quarantined receipt admits its named successor only
 when the requested task, dedicated branch, and current base commit all match
-the receipt. Any unrelated task, malformed or stale receipt, or branch/base
-mismatch fails before lifecycle writes; this narrow bootstrap exception does
+the receipt. A valid or invalid receipt remains fail-closed for its predecessor
+and named successor, but cannot block an unrelated Work Item from starting. A
+malformed or stale bound-task receipt, or a branch/base mismatch, fails before
+lifecycle writes; this narrow bootstrap exception does
 not enable general concurrent startup.
 
 ## Retry-versus-successor boundary

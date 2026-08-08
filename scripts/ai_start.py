@@ -303,6 +303,14 @@ def quarantined_successor_issue(
             receipt=receipt,
         )
         if reason:
+            successor = receipt.get("successor")
+            successor_task = (
+                successor.get("workItemId")
+                if isinstance(successor, dict) and isinstance(successor.get("workItemId"), str)
+                else None
+            )
+            if requested_task not in {identity.task, successor_task}:
+                continue
             return (
                 "ERROR: linked worktree has invalid quarantined successor receipt "
                 f"({reason}): {receipt_path}"
@@ -313,6 +321,8 @@ def quarantined_successor_issue(
             and current_branch() == successor["branch"]
             and current_head() == successor["baseCommit"]
         ):
+            continue
+        if requested_task not in {identity.task, successor["workItemId"]}:
             continue
         return (
             "ERROR: linked worktree quarantined successor receipt permits only "
