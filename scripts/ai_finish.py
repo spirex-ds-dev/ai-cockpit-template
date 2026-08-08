@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -39,6 +40,7 @@ from ai_common import (
 from ai_observability import create_observability, elapsed_ms
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
+from ai_verification_policy import finish_quality_route
 from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -1118,6 +1120,20 @@ def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
     return f"{heading}\n{render_localized_outcome(outcome, locale)}{next_action}\n"
 
 
+def finish_quality_paths(contract_data: dict[str, Any]) -> list[str]:
+    """Exclude only this Work Item's generated projections from risk routing."""
+    task = str(contract_data.get("workItemId", ""))
+    generated = {
+        ".ai/cockpit/current_status.md",
+        f".ai/work-items/starts/{task}.json",
+        f".ai/work-items/active/{task}.contract.json",
+        f".ai/work-items/active/{task}.summary.json",
+        f".ai/work-items/active/{task}.outcome.json",
+        f".ai/work-items/active/{task}.outcome.md",
+    }
+    return [path for path in changed_paths(contract_data) if path not in generated]
+
+
 def run_declared_checks(
     declared_items: list[dict[str, Any]],
     *,
@@ -1156,10 +1172,16 @@ def run_declared_checks(
                 )
                 return 2
             continue
+        route: dict[str, Any] | None = None
         try:
-            cmd_str, command = render_check_command(
-                check_id, contract_path=contract, summary_path=summary
-            )
+            if check_id == "quality":
+                route = finish_quality_route(finish_quality_paths(contract_data))
+                cmd_str = str(route["command"])
+                command = shlex.split(cmd_str)
+            else:
+                cmd_str, command = render_check_command(
+                    check_id, contract_path=contract, summary_path=summary
+                )
         except ValueError as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             return 2
@@ -1211,6 +1233,8 @@ def run_declared_checks(
                 ),
             )
         code, duration, output = run(command)
+        if route is not None:
+            output = json.dumps({"finishQualityRoute": route}, sort_keys=True) + "\n" + output
         current_digest = worktree_digest(changed_paths(contract_data))
         record_result(
             summary_path,

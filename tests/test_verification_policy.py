@@ -1,11 +1,23 @@
 import pytest
 from ai_verification_policy import (
     escalation_reasons,
+    finish_quality_route,
     order_checks,
     select_policy,
     verification_cache_key,
     verification_signal,
 )
+
+
+def test_finish_quality_route_keeps_docs_only_task_focused_but_escalates_governance_paths():
+    assert (
+        finish_quality_route(["docs/guide.md"])["command"]
+        == "make ai-cockpit-quality GOVERNANCE_PROFILE=light"
+    )
+    assert (
+        finish_quality_route([".ai/guards/policy.yaml"])["command"]
+        == "make ai-cockpit-quality GOVERNANCE_PROFILE=strict"
+    )
 
 
 def test_verification_policy_distinguishes_failure_incomplete_and_passed():

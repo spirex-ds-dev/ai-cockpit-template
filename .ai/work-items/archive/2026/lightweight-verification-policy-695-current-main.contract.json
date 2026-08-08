@@ -1,0 +1,105 @@
+{
+  "contractVersion": 2,
+  "workItemId": "lightweight-verification-policy-695-current-main",
+  "mode": "code",
+  "title": "Bind lightweight verification policy to Work Item execution",
+  "baseCommit": "322e56ffa00f997665ab6cc6ba5646f650ecc664",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/lightweight-verification-policy-695-current-main.contract.json",
+    ".ai/work-items/active/lightweight-verification-policy-695-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/lightweight-verification-policy-695-current-main.outcome.json",
+    ".ai/work-items/active/lightweight-verification-policy-695-current-main.outcome.md",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_verification_policy.py",
+    "tests/test_finish_readiness.py",
+    "tests/test_core_gates.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_verification_policy.py",
+    "docs/architecture/lightweight-verification-and-soft-gates.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json"
+    ,"docs/reference/japanese-capability-assessment.json"
+    ,"docs/reference/japanese-capability-assessment.md"
+    ,"docs/reference/pre-release-documentation-alignment.json"
+    ,"docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "PR and release verification policy, which remain full gates.",
+    "Hosted workflow definitions, branch protection, and provider runner configuration.",
+    "Skipping declared Contract verification or weakening failure/Outcome evidence."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/695", "reason": "Authoritative P1 problem statement and acceptance."},
+    {"path": "scripts/ai_verification_policy.py", "reason": "Existing deterministic classifier and monotonic escalation policy."},
+    {"path": "scripts/ai_verify.py", "reason": "Existing observational task/PR/release policy projection."},
+    {"path": "scripts/ai_finish.py", "reason": "Current Finish dispatcher that records verification and Outcome evidence."},
+    {"path": "Makefile", "reason": "Defines quality targets and verification entrypoints."},
+    {"path": "docs/architecture/lightweight-verification-and-soft-gates.md", "reason": "Current public statement that Finish remains a lifecycle entrypoint."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["verification_routing", "governance_integrity", "false_completion"],
+    "reason": "This changes which local quality command Finish executes and must preserve monotonic escalation and immutable verification evidence.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The existing classifier, ai-verify projection, Finish dispatcher, and #695 acceptance make the routing boundary testable without unresolved external dependencies."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["Finish routing and verification evidence are repository-governance behavior with a possible false-completion failure mode."],
+    "override": null
+  },
+  "declaredIntent": {
+    "summary": "Make the existing deterministic verification policy govern local Work Item Finish execution, while PR and release remain full gates.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。遇到流程问题，要先开工单修正，不要采用临时修补方案。全部原始指摘不得遗漏；最终执行自检、修正循环和发布。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:continuous-authorization", "capturedAt": "2026-08-08", "digest": "sha256:continuous-authorized-remediation"},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user granted standing authorization to execute the approved remediation plan through governed Work Items; #695 is the next verified unresolved P1 gate."},
+  "preReviewWarnings": [],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record the executable routing boundary before implementation and before archive."},
+  "acceptance": [
+    "For a documentation-only low-risk Work Item, ai-finish derives and records a focused task policy and runs only the registered focused quality path plus mandatory AI checks.",
+    "Workflow, installer, dependency, trust, unknown, failed, or explicitly strict Contract changes cannot downgrade and select the full local quality path.",
+    "The selected policy, quality command, changed-path inputs, and escalation reasons are recorded in Summary evidence and visible in the active/archived Outcome.",
+    "PR and release stages continue to select full verification regardless of a focused local Work Item policy.",
+    "Focused and escalation regressions fail before the routing implementation and pass after it; documentation explains the local-only boundary."
+  ],
+  "guidelines": [
+    "Treat the verification classifier as the single policy source; do not add a competing ad-hoc Finish classifier.",
+    "Never allow a Contract field, CLI flag, or documentation-only classification to lower a workflow, installer, dependency, trust, unknown, failure, PR, or release gate.",
+    "Persist evidence-derived routing facts before Outcome generation so a focused check is never represented as PR or release verification.",
+    "Keep installed-template behavior and user documentation aligned with the repository runtime."
+  ],
+  "intent": {
+    "problem": "The repository already classifies task risk and exposes focused/full verification commands, but ai-finish always invokes the same full quality graph. Repeating full project tests for genuinely documentation-only Work Items slows the remediation plan without improving the evidence, while any solution must not weaken PR or release gates.",
+    "constraints": ["Use the existing policy classifier and registered quality targets.", "Keep all mandatory AI lifecycle checks and blocked Outcome behavior.", "Preserve monotonic escalation for high-risk paths and any prior failure.", "Do not alter hosted workflows or branch protection."],
+    "rationale": "Binding one deterministic policy to local Finish makes proportional verification auditable and efficient, while stage floors continue to protect PR and release decisions."
+  },
+  "scenarioCoverage": [
+    {"id": "docs-focused-finish", "riskDomain": "verification", "scenario": "A docs-only active Work Item reaches Finish.", "expected": "Finish records a light/focused task policy and executes the focused local quality command while required AI checks remain enforced.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused ai-finish regression that captures the dispatched registered quality command and Summary/Outcome policy evidence."},
+    {"id": "risk-escalation", "riskDomain": "governance", "scenario": "A workflow, installer, dependency, trust, unknown, or failed Work Item reaches Finish.", "expected": "The policy is strict/full and cannot be overridden downward.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Policy and Finish negative regressions for high-risk paths and invalid downgrade requests."},
+    {"id": "pr-release-floor", "riskDomain": "release", "scenario": "The same docs-only path is evaluated for PR or release.", "expected": "The stage floor selects full verification, not focused local verification.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Verification-policy unit regressions for PR and release stages."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted governance path is required."},
+  "rollbackNote": "Revert the Finish routing and policy-evidence changes together; the previous full local quality path remains the safe fallback.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 832}},
+  "startReceipt": {"path": ".ai/work-items/starts/lightweight-verification-policy-695-current-main.json", "baseCommit": "322e56ffa00f997665ab6cc6ba5646f650ecc664", "initialScopeDigest": "ebd04bdd66e4850c2daf65d055abfb67dd01c805c1e046b154858a9153f9b4c0", "contractSkeletonDigest": "7aabbf8ec2e6fd13bfc30ae10df42235516a8881531b94b17fba973d55f466d7"}
+}

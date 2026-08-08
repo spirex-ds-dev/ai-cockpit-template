@@ -353,7 +353,9 @@ def _validate_verification_entries(
                             summary_path=item.get("executionSummaryPath", summary_path),
                         )
                         if (
-                            item.get("command") != expected_command
+                            not registered_command_matches(
+                                item["check"], item.get("command"), expected_command
+                            )
                             and item.get("result") == "passed"
                         ):
                             issues.append(
@@ -430,6 +432,19 @@ def _validate_verification_entries(
                         )
 
     return issues
+
+
+def registered_command_matches(check_id: str, command: object, expected_command: str) -> bool:
+    """Accept the registered command plus the bounded Finish quality route."""
+    if command == expected_command:
+        return True
+    if check_id != "quality" or not isinstance(command, str):
+        return False
+    return command in {
+        f"{expected_command} GOVERNANCE_PROFILE=light",
+        f"{expected_command} GOVERNANCE_PROFILE=standard",
+        f"{expected_command} GOVERNANCE_PROFILE=strict",
+    }
 
 
 def _validate_non_risk_explanations(summary: dict[str, Any]) -> list[str]:
