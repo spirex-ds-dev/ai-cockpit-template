@@ -1,0 +1,81 @@
+{
+  "contractVersion": 2,
+  "workItemId": "permit-quarantined-successor-start-737-current-main-v3",
+  "mode": "code",
+  "title": "Isolate invalid quarantined successor receipts from unrelated starts",
+  "baseCommit": "c7afee780f71c18ee14f4d848aa9e9b012943786",
+  "baseRemote": "origin",
+  "baseBranch": "main",
+  "baselineDirtyPaths": [],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/permit-quarantined-successor-start-737-current-main-v3.json",
+    "baseCommit": "c7afee780f71c18ee14f4d848aa9e9b012943786",
+    "initialScopeDigest": "8c058c95abf90944d06f028482c739df0a1ecf70efbf6e6ce452bc0bf182fb90",
+    "contractSkeletonDigest": "ed413cf4f3aa3ce3250d62aa5c3932449d9492ddb13afc910b29c5beb92b177d"
+  },
+  "scope": [
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v3.contract.json",
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v3.summary.json",
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v3.outcome.json",
+    ".ai/work-items/active/permit-quarantined-successor-start-737-current-main-v3.outcome.md",
+    ".ai/work-items/starts/permit-quarantined-successor-start-737-current-main-v3.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_start.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Editing, deleting, archiving, or otherwise mutating the foreign linked worktree or its receipt.",
+    "Permitting the receipt-bound task to start from an invalid receipt.",
+    "Implementing report ownership correction #638 or parallel projection correction #664.",
+    "Merging, releasing, or deleting branches outside this Work Item lifecycle."
+  ],
+  "sources": [
+    {"path": "scripts/ai_start.py", "reason": "The global receipt scan currently rejects an unrelated start before its Contract can be created."},
+    {"path": "tests/test_start_and_archive.py", "reason": "Regression coverage defines receipt-bound and unrelated-start behavior."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/737", "reason": "Reopened corrective issue records the missed invalid-receipt isolation path."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/638", "reason": "Its failed standard start supplies the observed governed deadlock."}
+  ],
+  "rawUserRequest": "Execute the complete approved remediation plan autonomously, record authority in every Work Item Contract, and resolve process defects through governed corrective Work Items rather than temporary bypasses. The attempted #638 start was blocked by an unrelated invalid quarantined receipt, so reopen #737 and correct that missing path without mutating foreign evidence.",
+  "rawRequestSource": {"type": "human", "reference": "Codex user conversation, 2026-08-08", "capturedAt": "2026-08-07T18:10:33+00:00", "digest": "c2fe1921870171d48e9b3a68ea0789092440402a6901c10968c1d2cb72d90410"},
+  "declaredIntent": {"requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["governance_deadlock", "foreign_evidence_integrity", "lifecycle_regression"], "reason": "The correction changes the fail-closed startup boundary and must preserve invalid receipt diagnostics for the bound task.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["A systemic lifecycle deadlock prevents unrelated Work Item creation."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user authorized autonomous corrective implementation; this self-only bootstrap exists because normal ai-start failed before it could write the corrective evidence."},
+  "preReviewWarnings": ["Bootstrap writes only this Work Item's evidence before normal lifecycle execution resumes; foreign evidence remains read-only."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record immutable implementation and finish checkpoints for this high-risk lifecycle correction."},
+  "acceptance": [
+    "An invalid quarantined successor receipt in a foreign linked worktree does not prevent a different dedicated Work Item from starting.",
+    "The task named by an invalid receipt remains fail-closed with a precise receipt diagnostic.",
+    "A valid receipt continues to admit only its exact task, branch, and base commit without globally blocking unrelated Work Items.",
+    "Regression coverage proves the unrelated invalid-receipt path and preserves all valid-receipt restrictions.",
+    "Lifecycle documentation and generated capability evidence describe the bounded behavior."
+  ],
+  "guidelines": [
+    "Preserve foreign Work Item evidence and worktrees without mutation.",
+    "Use executable regressions for every receipt-validity boundary.",
+    "Keep the exception task-specific; no generic bypass of invalid evidence is permitted."
+  ],
+  "intent": {"problem": "A stale invalid quarantined receipt in an unrelated linked worktree blocks normal ai-start for #638 before it can create its Contract, recreating a governance bootstrap deadlock.", "constraints": ["Do not change the foreign receipt or linked worktree.", "The invalid receipt must remain fail-closed for its bound task.", "Only unrelated Work Items may be isolated from that diagnostic."], "rationale": "Receipt integrity must remain strict without allowing obsolete foreign evidence to globally halt independent governed work."},
+  "scenarioCoverage": [
+    {"scenario": "An unrelated Work Item starts while a foreign linked worktree has an invalid quarantined receipt.", "required": true, "status": "unverified", "evidence": [], "expected": "The foreign receipt is preserved and the unrelated start is not rejected by that receipt.", "verificationPlan": "Build a linked-worktree fixture with a digest-mismatched receipt and assert no issue for a different requested task."},
+    {"scenario": "The task named by the invalid receipt attempts to start.", "required": true, "status": "unverified", "evidence": [], "expected": "The start remains fail-closed with its invalid receipt reason.", "verificationPlan": "Use the same fixture and assert the bound requested task receives the exact invalid-receipt diagnostic."},
+    {"scenario": "A valid quarantined receipt binds only its predecessor and named successor identities.", "required": true, "status": "unverified", "evidence": [], "expected": "The exact successor requires its recorded branch and base, while unrelated Work Items remain startable.", "verificationPlan": "Assert exact-successor admission, branch/base rejection, and unrelated-task admission in the linked-worktree regression."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": [], "approvalEvidence": null},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted paths are approved for this bootstrap."},
+  "rollbackNote": "Revert this Work Item diff; do not alter foreign receipt or linked-worktree evidence."
+}
