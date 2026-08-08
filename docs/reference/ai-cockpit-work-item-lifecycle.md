@@ -287,7 +287,8 @@ release evidence. Independent review must finish while evidence is active. The o
 independent review → ai-finish/archive → commit bundle → check-ai-pr → push → PR
 ```
 
-Before either Finish archive path mutates active evidence, it runs
+Before reporting a successful `ai-finish` result—whether archive is requested
+inline or as the later explicit `archive-work-item` step—Finish runs
 `make check-changed-critical-coverage AI_BASE_COMMIT=<Contract baseCommit>`.
 The resulting report binds the immutable Contract base, candidate HEAD, a
 content-addressed candidate tree digest, and a binary diff digest. The
@@ -300,7 +301,8 @@ Derived active lifecycle projections (the same Work Item's Summary, Outcome,
 status, and Human Benefit Report) are excluded from both the candidate tree and
 the Summary worktree digest to avoid a self-reference cycle: a successful gate
 must be recorded in those files after the snapshot. Their bytes remain
-independently bound by the Outcome and immutable archive manifest. Archive re-computes the candidate
+independently bound by the Outcome and immutable archive manifest. A later
+explicit archive re-computes the candidate
 immediately before mutation, requires the matching report and Outcome binding,
 and records the report digest plus candidate binding in the manifest. A
 missing, stale, mismatched, or failing result produces a blocked active Outcome

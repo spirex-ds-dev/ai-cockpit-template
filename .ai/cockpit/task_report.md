@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task pre-archive-candidate-coverage-680-current-main generated an evidence-derived outcome with status completed.
+Task pre-archive-candidate-coverage-680-hosted-retry generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0

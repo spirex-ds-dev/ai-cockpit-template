@@ -1262,6 +1262,9 @@ def test_finish_main_does_not_inject_release_source_evidence_into_work_item_chec
         return 0, 1, "passed"
 
     monkeypatch.setattr(ai_finish, "run", record_run)
+    monkeypatch.setattr(
+        ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
+    )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
@@ -1437,6 +1440,9 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
         ai_finish,
         "run",
         lambda command, **_kwargs: executed.append(command) or (0, 2, "passed"),
+    )
+    monkeypatch.setattr(
+        ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
     )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
@@ -1769,6 +1775,9 @@ def test_finish_main_allows_optional_check_failure(tmp_path, monkeypatch):
         return 0, 1, "passed"
 
     monkeypatch.setattr(ai_finish, "run", run)
+    monkeypatch.setattr(
+        ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
+    )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
@@ -1853,6 +1862,9 @@ def test_finish_main_archives_on_success(tmp_path, monkeypatch):
         lambda check, **_kwargs: (f"make {check}", ["make", check]),
     )
     monkeypatch.setattr(ai_finish, "run", lambda command, **_kwargs: (0, 1, "passed"))
+    monkeypatch.setattr(
+        ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
+    )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task"])
 

@@ -4,6 +4,7 @@ import sys
 import ai_check_agent_risk
 import ai_finish
 import ai_generate_human_report as human
+import pytest
 from ai_check_task_outcome import validate_outcome
 from ai_governance_compression import render_active_status
 
@@ -185,6 +186,35 @@ def test_pre_archive_critical_coverage_requires_work_item_and_preserves_plain_fa
         "Finish blocked at quality: lint command failed"
     )
     assert ai_finish.verification_priority({"check": "aiStatusCheck"}) == 30
+
+
+def test_prepare_pre_archive_candidate_coverage_fails_closed_for_gate_or_binding_failure(
+    monkeypatch,
+):
+    contract = {"workItemId": "example-task", "baseCommit": "a" * 40}
+    observer = object()
+    monkeypatch.setattr(
+        ai_finish,
+        "run_pre_archive_critical_coverage",
+        lambda *_args, **_kwargs: (7, "coverage failed"),
+    )
+
+    assert ai_finish.prepare_pre_archive_candidate_coverage(
+        "example-task", contract, obs=observer
+    ) == (7, "coverage failed")
+
+    monkeypatch.setattr(
+        ai_finish, "run_pre_archive_critical_coverage", lambda *_args, **_kwargs: (0, "")
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "bind_pre_archive_candidate_coverage_to_outcome",
+        lambda _task: (False, "binding failed"),
+    )
+
+    assert ai_finish.prepare_pre_archive_candidate_coverage(
+        "example-task", contract, obs=observer
+    ) == (1, "binding failed")
 
 
 def test_pre_archive_candidate_coverage_is_projected_into_outcome(tmp_path, monkeypatch):
@@ -467,6 +497,53 @@ def test_human_report_pipeline_generates_review_artifacts_and_summary_binding(
         "task_report.md",
     }
     assert summary["documentationAlignment"]["checks"][0]["evidence"] == ["task_report.md"]
+
+
+def test_prepare_documentation_alignment_binds_existing_human_report_before_finish(
+    tmp_path, monkeypatch
+):
+    task = "example-task"
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [{"path": ".ai/cockpit/task_report.md", "reason": "prior report"}],
+                "documentationAlignment": {
+                    "checks": [{"area": "documentationCommandsCapability", "evidence": []}]
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    contract_path = tmp_path / ".ai/work-items/active" / f"{task}.contract.json"
+    contract_path.parent.mkdir(parents=True)
+    contract_path.write_text(
+        json.dumps({"scope": [".ai/cockpit/task_report.md"]}), encoding="utf-8"
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "_human_report_paths",
+        lambda: (
+            tmp_path / ".ai/cockpit/task_report.json",
+            tmp_path / ".ai/cockpit/task_report.md",
+        ),
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "_outcome_paths",
+        lambda _: (
+            tmp_path / ".ai/work-items/active/outcome.json",
+            tmp_path / ".ai/work-items/active/outcome.md",
+        ),
+    )
+
+    ai_finish.prepare_documentation_alignment_evidence(task, summary_path)
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert summary["documentationAlignment"]["checks"][0]["evidence"] == [
+        ".ai/cockpit/task_report.md"
+    ]
 
 
 def test_human_report_pipeline_binds_generated_outcome_markdown_before_finish_recheck(
@@ -757,7 +834,10 @@ def test_direct_outcome_report_is_localized_and_explicit_about_archive_boundary(
     assert "归档必须显式执行" in report
 
 
-def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatch):
+@pytest.mark.parametrize("archive", [False, True])
+def test_finish_prepares_candidate_coverage_for_separate_or_inline_archive(
+    tmp_path, monkeypatch, archive
+):
     task = "example-task"
     active = tmp_path / ".ai/work-items/active"
     active.mkdir(parents=True)
@@ -836,18 +916,28 @@ def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatc
         "run",
         lambda command, **_kwargs: commands.append(command) or (0, 1, "ok"),
     )
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", task, "--archive"])
+    argv = ["ai_finish.py", "--task", task]
+    if archive:
+        argv.append("--archive")
+    monkeypatch.setattr(sys, "argv", argv)
 
     assert ai_finish.main() == 0
-    assert commands == [
-        [
-            "make",
-            "check-changed-critical-coverage",
-            "AI_BASE_COMMIT=" + "d" * 40,
-            "CONTRACT=.ai/work-items/active/example-task.contract.json",
-        ],
-        ["make", "archive-work-item", f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}"],
+    coverage_command = [
+        "make",
+        "check-changed-critical-coverage",
+        "AI_BASE_COMMIT=" + "d" * 40,
+        "CONTRACT=.ai/work-items/active/example-task.contract.json",
     ]
+    archive_command = [
+        "make",
+        "archive-work-item",
+        f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}",
+    ]
+    assert coverage_command in commands
+    if archive:
+        assert archive_command in commands
+    else:
+        assert archive_command not in commands
 
 
 def test_reused_finish_verification_blocks_archive_when_documentation_alignment_is_incomplete(

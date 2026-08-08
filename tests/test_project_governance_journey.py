@@ -277,9 +277,8 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
         run(
             project,
             "make",
-            "ai-finish",
-            "TASK=adopt_ai_cockpit",
-            "ARCHIVE=true",
+            "archive-work-item",
+            "CONTRACT=.ai/work-items/active/adopt_ai_cockpit.contract.json",
             f"PYTHON={sys.executable}",
         ).returncode
         == 0
@@ -343,9 +342,8 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
         run(
             project,
             "make",
-            "ai-finish",
-            "TASK=configure_ai_cockpit",
-            "ARCHIVE=true",
+            "archive-work-item",
+            "CONTRACT=.ai/work-items/active/configure_ai_cockpit.contract.json",
             f"PYTHON={sys.executable}",
         ).returncode
         == 0
@@ -374,9 +372,8 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
         run(
             project,
             "make",
-            "ai-finish",
-            "TASK=normal_change",
-            "ARCHIVE=true",
+            "archive-work-item",
+            "CONTRACT=.ai/work-items/active/normal_change.contract.json",
             f"PYTHON={sys.executable}",
         ).returncode
         == 0
