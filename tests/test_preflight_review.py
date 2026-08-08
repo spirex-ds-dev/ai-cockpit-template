@@ -76,6 +76,27 @@ def planned_scenario_contract() -> dict:
     return contract
 
 
+def test_preflight_blocks_an_invalid_declared_implementation_surface(tmp_path):
+    contract = ready_contract()
+    contract["implementationSurface"] = {
+        "production": ["scripts/ai_preflight_review.py"],
+        "tests": [],
+        "generated": [],
+        "documentation": [],
+    }
+    path = capability_contract_path(tmp_path)
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract, contract_path=path, policy_path=tmp_path / "preflight_review_policy.yaml"
+    )
+
+    assert report["status"] == "not_ready"
+    signal = next(item for item in report["signals"] if item["name"] == "Implementation Surface")
+    assert signal["value"] == "Inconsistent"
+    assert "implementationSurface.production requires at least one tests path" in signal["evidence"]
+
+
 def test_release_claim_requires_distribution_evidence_before_preflight_is_ready():
     contract = ready_contract()
     contract["scope"] = ["docs/guide.md"]
@@ -402,6 +423,7 @@ def test_preflight_signals_expose_shared_protocol_envelope(tmp_path):
         "Sources": "Ready",
         "Evidence Dependency": "Not Applicable",
         "Required Evidence": "Not Applicable",
+        "Implementation Surface": "Not Applicable",
         "Scenario Coverage": "Ready",
         "Verification": "Ready",
         "Critical Domain Guard": "Ready",

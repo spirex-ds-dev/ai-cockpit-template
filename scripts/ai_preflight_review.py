@@ -13,6 +13,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_check_work_item import validate_implementation_surface
 from ai_common import (
     PROJECT_ROOT,
     canonical_json_hash,
@@ -715,6 +716,31 @@ def verification_signal(contract: dict[str, Any]) -> Signal:
     )
 
 
+def implementation_surface_signal(contract: dict[str, Any]) -> Signal:
+    """Expose the pre-edit path declaration boundary in the generated review."""
+    if "implementationSurface" not in contract:
+        return Signal(
+            "Implementation Surface",
+            "Not Applicable",
+            ["no implementation surface is declared"],
+            ["contract.implementationSurface"],
+        )
+    issues = validate_implementation_surface(contract)
+    if issues:
+        return Signal(
+            "Implementation Surface",
+            "Inconsistent",
+            issues,
+            ["contract.implementationSurface", "contract.scope", "contract.outOfScope"],
+        )
+    return Signal(
+        "Implementation Surface",
+        "Ready",
+        ["all declared implementation-surface paths are owned and approval-valid"],
+        ["contract.implementationSurface", "contract.scope", "contract.outOfScope"],
+    )
+
+
 def scenario_coverage_signal(contract: dict[str, Any]) -> Signal:
     risk = _dict(contract.get("riskAssessment"))
     level = risk.get("level")
@@ -996,6 +1022,7 @@ def derive_report(
         sources_signal(contract),
         evidence_dependency_signal(contract, root=project_root_for(contract_path)),
         required_evidence_signal(contract),
+        implementation_surface_signal(contract),
         scenario_coverage_signal(contract),
         verification_signal(contract),
     ]
@@ -1229,6 +1256,7 @@ def validate_report_structure(report: dict[str, Any]) -> list[str]:
                 "Sources",
                 "Evidence Dependency",
                 "Required Evidence",
+                "Implementation Surface",
                 "Scenario Coverage",
                 "Verification",
                 "Capability",

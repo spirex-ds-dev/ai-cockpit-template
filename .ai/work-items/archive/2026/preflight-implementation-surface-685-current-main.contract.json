@@ -1,0 +1,196 @@
+{
+  "contractVersion": 2,
+  "workItemId": "preflight-implementation-surface-685-current-main",
+  "mode": "code",
+  "title": "Re-deliver preflight implementation-surface enforcement",
+  "baseCommit": "ae37b8b62874a671f9a98dab044dc1f5d747f3bb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/preflight-implementation-surface-685-current-main.contract.json",
+    ".ai/work-items/active/preflight-implementation-surface-685-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/preflight-implementation-surface-685-current-main.outcome.json",
+    ".ai/work-items/active/preflight-implementation-surface-685-current-main.outcome.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_preflight_review.py",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_preflight_review.py",
+    "tests/test_makefile.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/commands.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Retroactively modifying #683 or any archived Work Item evidence.",
+    "Changing unrelated runtime governance, hosted workflows, branch protection, or release policy.",
+    "Allowing post-before_edit Contract repair or bypassing restricted-write approval."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/685", "reason": "Authoritative successor scope and acceptance for the blocked #683 delivery."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/683", "reason": "Original P1 problem statement and preflight boundary requirements."},
+    {"path": "scripts/ai_check_work_item.py", "reason": "Canonical Contract schema validator that must own implementation-surface validation."},
+    {"path": "scripts/ai_preflight_review.py", "reason": "Preflight evidence projection that must expose a blocking implementation-surface signal."},
+    {"path": "Makefile", "reason": "Canonical ai-preflight and ai-prepare-implementation entrypoints."},
+    {"path": "docs/reference/ai-cockpit-work-item-lifecycle.md", "reason": "Current lifecycle documentation and no-post-freeze-repair boundary."},
+    {"path": ".ai/work-items/archive/2026/active-work-item-sync-successor-699.contract.json", "reason": "Current-main Contract evidence pattern after predecessor closure."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "governance_integrity",
+      "restricted_write_control",
+      "false_preflight_readiness"
+    ],
+    "reason": "The change controls whether Work Items are permitted to modify governance runtime, guard, test, and documentation paths before the immutable before_edit checkpoint.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The original #683 report, scope-complete successor #685, current schema validator, and preflight entrypoint provide sufficient concrete acceptance and test targets."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "This is a P1 governance and restricted-write enforcement change whose failure would allow a false implementation-ready state."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the complete remediation plan and instructed that recurring workflow defects be corrected through governed Work Items rather than temporary workarounds."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Freeze the complete runtime, test, guard, template, and documentation surface before implementation and before archive."
+  },
+  "acceptance": [
+    "A future MODE=code Contract can declare implementationSurface with concrete production, tests, generated, and documentation path lists; malformed or unknown surface fields fail closed.",
+    "Before implementation, every declared implementation-surface path is covered by Contract scope and not covered by outOfScope; a planned production surface requires at least one planned test path.",
+    "A restricted Makefile, guard, or other policy-matched surface is rejected unless restrictedWriteApproval is complete; no post-before_edit repair path is accepted.",
+    "ai-preflight and ai-prepare-implementation block on an invalid implementation surface, while ai-start continues to show the advisory Preflight review for a new skeleton.",
+    "Red-first regressions cover omitted runtime, test, Makefile, and guard paths and a valid fully declared surface; installed Makefile and lifecycle documentation expose the same boundary."
+  ],
+  "guidelines": [
+    "Keep the Contract schema validator as the single source of implementation-surface validation; do not add a parallel Finish-only check.",
+    "Treat a restricted surface as an approval requirement even when its broad scope pattern matches.",
+    "Do not weaken ai-start's skeleton behavior, ai-preflight's fail-closed implementation boundary, or ai-prepare-implementation's before_edit checkpoint.",
+    "Keep source Makefile, installed Makefile, tests, generated capability evidence, and lifecycle documentation aligned."
+  ],
+  "intent": {
+    "problem": "Work Items can pass the initial Preflight and freeze before_edit, then fail only at Finish because an implementation-required Makefile, guard, runtime, test, or documentation path was omitted from scope or lacked restricted-write approval. The immutable checkpoint correctly prevents late repair, but the defect creates avoidable successor churn.",
+    "constraints": ["Preserve readability of historic Contracts and immutable #683 evidence.", "Enforce new implementation-surface evidence before before_edit rather than repairing it after verification starts.", "Use one structured field with concrete paths and validate it against scope, outOfScope, test coverage, and restricted-write policy.", "Keep ai-start usable for skeleton creation while ai-preflight and ai-prepare-implementation remain blocking for implementation."],
+    "rationale": "Making the required implementation surface explicit and machine-checked before editing converts a late ownership failure into an actionable, fail-closed pre-edit decision and prevents unnecessary successor Work Items."
+  },
+  "declaredIntent": {"summary": "Enforce a scope-complete, approval-aware implementation surface before a Work Item can enter implementation.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。遇到流程问题，要先开工单修正，不要采用临时修补方案。全部原始指摘不得遗漏；最终执行自检、修正循环和发布。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:continuous-authorization", "capturedAt": "2026-08-08", "digest": "sha256:continuous-authorized-remediation"},
+  "scenarioCoverage": [
+    {"id": "runtime-and-test-surface", "riskDomain": "governance", "scenario": "A Contract plans a runtime implementation path and its regression test.", "expected": "Preflight accepts only when both concrete paths are declared in implementationSurface and covered by scope.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Unit and preflight regressions for valid and omitted runtime/test paths."},
+    {"id": "restricted-surface-approval", "riskDomain": "restricted_write", "scenario": "A Contract plans a Makefile or guard-policy change.", "expected": "Preflight blocks unless restrictedWriteApproval is complete and the path is declared in the surface and scope.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Red-first validator and preflight regressions for Makefile and guard omissions and approval states."},
+    {"id": "pre-edit-boundary", "riskDomain": "lifecycle", "scenario": "An invalid planned implementation surface reaches ai-preflight or ai-prepare-implementation.", "expected": "Both commands fail before before_edit evidence is written, while ai-start remains able to create an advisory skeleton.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Makefile command wiring regression and no-checkpoint assertion."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "RayIori", "reason": "The user explicitly authorized automatic execution of every planned remediation Work Item and required recurring process defects to be corrected in governed Work Items; this Contract declares its restricted Makefile and governance paths before before_edit."},
+  "rollbackNote": "Revert the schema, Preflight, Makefile, template, documentation, and regression changes together; the previous behavior remains intact without rewriting archived #683 evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 833
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/preflight-implementation-surface-685-current-main.json",
+    "baseCommit": "ae37b8b62874a671f9a98dab044dc1f5d747f3bb",
+    "initialScopeDigest": "45a634b424e2fb9dd396442d0b9f37a287054dc7663b081f0f775c25cd1b9885",
+    "contractSkeletonDigest": "b569276b6d04871f412cc7cdce742058580e571233114d55cd9a8240e8d6e7de"
+  }
+}

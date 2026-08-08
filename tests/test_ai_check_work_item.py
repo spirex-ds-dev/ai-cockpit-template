@@ -57,6 +57,61 @@ def test_contract_schema_accepts_synchronization_history_field():
     )
 
 
+def test_implementation_surface_accepts_complete_owned_runtime_and_test_paths():
+    contract = valid_contract()
+    contract["scope"] = ["scripts/ai_check_work_item.py", "tests/test_ai_check_work_item.py"]
+    contract["implementationSurface"] = {
+        "production": ["scripts/ai_check_work_item.py"],
+        "tests": ["tests/test_ai_check_work_item.py"],
+        "generated": [],
+        "documentation": [],
+    }
+
+    assert ai_check_work_item.validate_contract(contract) == []
+
+
+def test_implementation_surface_rejects_unowned_production_and_missing_tests():
+    contract = valid_contract()
+    contract["scope"] = ["scripts/ai_check_work_item.py"]
+    contract["implementationSurface"] = {
+        "production": ["scripts/ai_check_work_item.py", "scripts/ai_preflight_review.py"],
+        "tests": [],
+        "generated": [],
+        "documentation": [],
+    }
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert (
+        "implementationSurface.production path is not covered by scope: scripts/ai_preflight_review.py"
+        in issues
+    )
+    assert "implementationSurface.production requires at least one tests path" in issues
+
+
+def test_implementation_surface_rejects_out_of_scope_and_unapproved_restricted_paths():
+    contract = valid_contract()
+    contract["scope"] = ["Makefile", ".ai/guards/file_ownership.yaml", "tests/test_makefile.py"]
+    contract["outOfScope"] = [".ai/guards/**"]
+    contract["implementationSurface"] = {
+        "production": ["Makefile", ".ai/guards/file_ownership.yaml"],
+        "tests": ["tests/test_makefile.py"],
+        "generated": [],
+        "documentation": [],
+    }
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert (
+        "implementationSurface.production path is covered by outOfScope: .ai/guards/file_ownership.yaml"
+        in issues
+    )
+    assert (
+        "implementationSurface restricted paths require approved restrictedWriteApproval: Makefile, .ai/guards/file_ownership.yaml"
+        in issues
+    )
+
+
 def test_contract_schema_requires_explicit_synchronization_checkpoint_authorization():
     contract = valid_contract()
     contract["synchronizationCheckpoint"] = {"authorized": True}
