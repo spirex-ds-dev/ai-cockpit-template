@@ -17,6 +17,19 @@ AI Cockpit は `make quality` の後方互換性を維持します。`make quali
 `make quality-full` と同じです。短いローカルフィードバックには
 `make quality-fast`、リリース準備には `make quality-release` を使います。
 
+## Adopter の quality 設定
+
+インストール済み template は常に `make quality` を提供します。実際の
+format、lint、test は adopter が所有する `Makefile.ai.stack` の
+`PROJECT_FORMAT_CHECK`、`PROJECT_LINT`、`PROJECT_TEST` に委譲されます。
+三つすべてを project の command で設定してください。未設定または空の値は、
+該当する variable を示す recovery message で fail-closed になります。
+
+Hosted snapshot preparation は同じ entrypoint を必要とし、quality が失敗した
+場合は receipt を書きません。`Makefile.ai.stack` の不足 variable を設定して
+から、`make quality`、続けて
+`make ai-prepare-hosted-verification-snapshot CONTRACT=<active-contract>` を実行します。
+
 ## 責任範囲
 
 - `quality-fast` は format、lint、diff、schema、文書メタデータ、Project Profile、status policy を担当します。

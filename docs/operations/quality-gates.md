@@ -23,6 +23,19 @@ AI Cockpit keeps `make quality` backward-compatible: it is an alias for
 `make quality-full`. The shorter local feedback path is `make quality-fast`,
 and release preparation uses `make quality-release`.
 
+## Adopter quality configuration
+
+The installed template always provides `make quality`; it delegates the actual
+formatter, linter, and test work to the adopter-owned
+`Makefile.ai.stack` variables `PROJECT_FORMAT_CHECK`, `PROJECT_LINT`, and
+`PROJECT_TEST`. Configure all three with the project's commands. Missing or
+empty values fail closed with the variable-specific recovery message.
+
+Hosted snapshot preparation requires this same entrypoint. It writes no receipt
+when quality fails. Recover by setting the missing variable in
+`Makefile.ai.stack`, then run `make quality` followed by
+`make ai-prepare-hosted-verification-snapshot CONTRACT=<active-contract>`.
+
 ## Ownership
 
 - `quality-fast` owns formatting, lint, diff, schemas, documentation metadata,

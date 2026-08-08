@@ -712,6 +712,99 @@ def test_missing_stack_file_project_quality_targets_fail_closed(tmp_path):
         check=False,
     )
     assert quality.returncode != 0
+    assert "ERROR: no project formatter configured" in quality.stderr
+
+
+def test_installed_quality_target_delegates_to_project_owned_stack_commands(tmp_path):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+    assert installer.install() == 0
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.invalid",
+            "commit",
+            "-m",
+            "initial",
+        ],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
+    (tmp_path / "Makefile.ai.stack").write_text(
+        "PROJECT_FORMAT_CHECK := true\nPROJECT_LINT := true\nPROJECT_TEST := true\n",
+        encoding="utf-8",
+    )
+
+    quality = subprocess.run(
+        ["make", "quality"], cwd=tmp_path, text=True, capture_output=True, check=False
+    )
+
+    assert quality.returncode == 0
+
+
+@pytest.mark.parametrize(
+    ("variable", "message"),
+    [
+        ("PROJECT_FORMAT_CHECK", "ERROR: no project formatter configured"),
+        ("PROJECT_LINT", "ERROR: no project linter configured"),
+        ("PROJECT_TEST", "ERROR: no project test command configured"),
+    ],
+)
+def test_installed_quality_rejects_an_empty_project_owned_command(tmp_path, variable, message):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+    assert installer.install() == 0
+    (tmp_path / "Makefile.ai.stack").write_text(
+        "PROJECT_FORMAT_CHECK := true\n"
+        "PROJECT_LINT := true\n"
+        "PROJECT_TEST := true\n"
+        f"{variable} :=\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.invalid",
+            "commit",
+            "-m",
+            "initial",
+        ],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
+
+    quality = subprocess.run(
+        ["make", "quality"], cwd=tmp_path, text=True, capture_output=True, check=False
+    )
+
+    assert quality.returncode != 0
+    assert message in quality.stderr
 
 
 def test_upgrade_backs_up_policies_and_replaces_agent_marker_section(tmp_path):

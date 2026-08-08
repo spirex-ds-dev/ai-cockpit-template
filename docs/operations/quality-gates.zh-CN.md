@@ -16,6 +16,17 @@ keywords:
 AI Cockpit 保持 `make quality` 向后兼容：它等价于 `make quality-full`。
 本地快速反馈使用 `make quality-fast`，发布准备使用 `make quality-release`。
 
+## 采用方质量配置
+
+安装后的模板始终提供 `make quality`。实际的格式化、Lint 和测试由采用方在
+`Makefile.ai.stack` 中拥有的 `PROJECT_FORMAT_CHECK`、`PROJECT_LINT` 与
+`PROJECT_TEST` 配置。必须为三项都配置项目命令；缺失或空值会失败关闭，并指出
+需要修复的变量。
+
+Hosted snapshot 准备使用同一个入口。质量检查失败时不会写出 receipt。请先在
+`Makefile.ai.stack` 中配置缺失变量，再执行 `make quality`，随后执行
+`make ai-prepare-hosted-verification-snapshot CONTRACT=<active-contract>`。
+
 ## 责任归属
 
 - `quality-fast` 负责格式、Lint、差分、Schema、文档元数据、项目配置和状态策略检查。

@@ -1,0 +1,280 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-aggregation-adopter-snapshot-613-current-main",
+  "mode": "code",
+  "title": "P1: standard adopter quality aggregation for hosted snapshots",
+  "baseCommit": "fad91534bf4ae23fb813068c9e517c67198ab527",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/quality-aggregation-adopter-snapshot-613-current-main.contract.json",
+    ".ai/work-items/active/quality-aggregation-adopter-snapshot-613-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/quality-aggregation-adopter-snapshot-613-current-main.outcome.json",
+    ".ai/work-items/active/quality-aggregation-adopter-snapshot-613-current-main.outcome.md",
+    "templates/make/Makefile.ai",
+    "scripts/ai_prepare_hosted_verification.py",
+    "scripts/installer/legacy.py",
+    "tests/test_hosted_verification_snapshot.py",
+    "tests/test_installer*.py",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Publishing a release or creating a version tag.",
+    "Weakening the required local quality gate or accepting a missing adopter quality command.",
+    "Changing unrelated hosted workflow scheduling."
+  ],
+  "sources": [
+    {
+      "path": "GitHub issue #613",
+      "reason": "Defines the missing override-friendly quality aggregation contract and its required snapshot behavior."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Installed adopter Make target surface."
+    },
+    {
+      "path": "scripts/ai_prepare_hosted_verification.py",
+      "reason": "Hosted snapshot preflight and receipt implementation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "hosted_verification_contract",
+      "adopter_installation"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The installed target surface and snapshot entrypoint have been inspected; implementation will add only an explicit project-owned configuration boundary."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Adopter template, hosted verification, installer-adjacent quality routing, documentation, and regression behavior are governed implementation surfaces.",
+      "The automatic profile rejects standard because this Work Item changes strict-scope installer, documentation, and test surfaces."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic execution of the complete remediation plan; this Contract records that authority."
+  },
+  "preReviewWarnings": [
+    "Review that missing configuration fails before any hosted snapshot receipt is emitted and that a configured override remains project-owned."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The installed Makefile exposes `make quality`, delegating to an explicitly project-owned command or failing closed with a recovery message.",
+    "Hosted snapshot preparation rejects a missing or invalid adopter quality configuration before emitting a receipt.",
+    "A configured adopter quality command is exercised by the snapshot path and its result is bound to the receipt evidence.",
+    "A missing quality configuration regression proves snapshot preparation emits no receipt.",
+    "A configured quality command regression proves the installed target delegates successfully.",
+    "A malformed configuration regression proves validation fails before command execution.",
+    "The English, Japanese, and Simplified-Chinese quality guides name the configuration key and the exact recovery command."
+  ],
+  "guidelines": [
+    "Public Make targets and configuration keys must be documented for adopters.",
+    "Keep the quality command override project-owned and use list-form process invocation without shell interpolation.",
+    "Do not weaken required local or hosted verification to make a missing configuration pass."
+  ],
+  "intent": {
+    "problem": "#613 records that hosted snapshot guidance requires `make quality` although an installed adopter may not have a standard quality entrypoint; this makes snapshot preparation nondeterministic or impossible.",
+    "constraints": [
+      "Provide an override-friendly aggregate contract rather than hardcoding a repository-specific build tool.",
+      "Fail closed with an actionable recovery when the adopter did not configure quality.",
+      "Do not publish a release or alter unrelated workflow scheduling in this Work Item.",
+      "Record the user's automatic-execution authority in this Contract."
+    ],
+    "rationale": "A template-provided contract gives snapshot and hosted measurement one deterministic verification entrypoint while preserving adopter control of the actual quality command."
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。#613：Provide a standard quality aggregation target for adopters and hosted snapshots; missing configuration must fail with actionable recovery and configured quality must be usable by snapshot and hosted measurement paths.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request: full remediation execution and GitHub issue #613",
+    "capturedAt": "2026-08-09T03:58:00+09:00",
+    "digest": "sha256:quality-aggregation-adopter-snapshot-613-current-main-request"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Install an override-friendly quality aggregation entrypoint and make hosted snapshot verification fail closed until the adopter configures it.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "implementationSurface": {
+    "production": [
+      "templates/make/Makefile.ai",
+      "scripts/ai_prepare_hosted_verification.py",
+      "scripts/installer/legacy.py"
+    ],
+    "tests": [
+      "tests/test_hosted_verification_snapshot.py",
+      "tests/test_installer.py"
+    ],
+    "documentation": [
+      "docs/operations/quality-gates.md",
+      "docs/operations/quality-gates.ja.md",
+      "docs/operations/quality-gates.zh-CN.md"
+    ],
+    "generated": [
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "missing-adopter-quality",
+      "riskDomain": "hosted_verification_contract",
+      "scenario": "An adopter has not configured its delegated quality command.",
+      "expected": "Snapshot preparation fails before receipt emission and tells the adopter how to configure the command.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add installer and hosted-snapshot regressions for a missing quality configuration."
+    },
+    {
+      "id": "configured-adopter-quality",
+      "riskDomain": "adopter_installation",
+      "scenario": "An adopter configures a project-owned quality command.",
+      "expected": "The installed aggregate target delegates to it and the snapshot path binds successful quality evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add end-to-end installer and snapshot receipt regressions."
+    },
+    {
+      "id": "unsafe-command-rejected",
+      "riskDomain": "command_execution",
+      "scenario": "The configured quality command is malformed or unsafe.",
+      "expected": "Validation fails closed without shell execution or receipt emission.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add malformed configuration rejection regression coverage."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user authorized automatic execution of the complete remediation plan and requires that authority in every Work Item Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 838
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-aggregation-adopter-snapshot-613-current-main.json",
+    "baseCommit": "fad91534bf4ae23fb813068c9e517c67198ab527",
+    "initialScopeDigest": "48280b3a24c86f0e4d5fc515635ab737c6379f3da387e94a823bfac5e143f714",
+    "contractSkeletonDigest": "0e3eb41582a21c5ad05f090de07fafab170a4713e79c4db1d3e8c71cd953e077"
+  }
+}
