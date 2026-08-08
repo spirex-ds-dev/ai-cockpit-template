@@ -22,6 +22,7 @@ from pathlib import Path
 from ai_check_diff_ownership import format_preview, preview
 from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
 from ai_check_summary import documentation_alignment_skeleton
+from ai_check_work_item import validate_concurrency_boundary
 from ai_common import (
     PROJECT_ROOT,
     capture_dirty_baseline,
@@ -89,6 +90,10 @@ def parse_args() -> argparse.Namespace:
         "--journey", default="feature", choices=JOURNEYS, help="Work journey preset."
     )
     parser.add_argument("--force", action="store_true", help="Overwrite an existing skeleton.")
+    parser.add_argument(
+        "--concurrency-boundary",
+        help="JSON ownership declaration required when starting beside a linked Work Item.",
+    )
     return parser.parse_args()
 
 
@@ -190,6 +195,91 @@ class LinkedWorktreeIdentity:
     worktree: Path
     branch: str
     task: str
+
+
+BOUNDARY_PATH_KEYS = ("implementationPaths", "generatedEvidencePaths", "verificationOutputPaths")
+
+
+def parse_concurrency_boundary(
+    raw: str | None, task: str
+) -> tuple[dict[str, object] | None, str | None]:
+    """Parse and validate a candidate boundary before lifecycle writes."""
+    if raw is None:
+        return None, None
+    try:
+        boundary = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        return None, f"ERROR: --concurrency-boundary must be valid JSON: {exc.msg}"
+    if not isinstance(boundary, dict):
+        return None, "ERROR: --concurrency-boundary must be a JSON object"
+    issues = validate_concurrency_boundary({"workItemId": task, "concurrencyBoundary": boundary})
+    if issues:
+        return None, "ERROR: invalid --concurrency-boundary: " + "; ".join(issues)
+    return boundary, None
+
+
+def boundary_overlap(
+    candidate: dict[str, object], foreign: dict[str, object]
+) -> tuple[str, str] | None:
+    """Return any non-serialized path collision across declared ownership."""
+    for candidate_key in BOUNDARY_PATH_KEYS:
+        for foreign_key in BOUNDARY_PATH_KEYS:
+            candidate_paths = candidate.get(candidate_key)
+            foreign_paths = foreign.get(foreign_key)
+            if not isinstance(candidate_paths, list) or not isinstance(foreign_paths, list):
+                return candidate_key, "<invalid-boundary>"
+            for candidate_path in candidate_paths:
+                for foreign_path in foreign_paths:
+                    if not isinstance(candidate_path, str) or not isinstance(foreign_path, str):
+                        return candidate_key, "<invalid-boundary>"
+                    candidate_prefix = candidate_path.removesuffix("/**")
+                    foreign_prefix = foreign_path.removesuffix("/**")
+                    if (
+                        candidate_prefix == foreign_prefix
+                        or candidate_prefix.startswith(foreign_prefix + "/")
+                        or foreign_prefix.startswith(candidate_prefix + "/")
+                    ):
+                        return (
+                            f"{candidate_key}->{foreign_key}",
+                            f"{candidate_path} overlaps {foreign_path}",
+                        )
+    return None
+
+
+def linked_worktree_boundary_issue(
+    identities: list[LinkedWorktreeIdentity],
+    candidate: dict[str, object] | None,
+    *,
+    require_boundary: bool,
+) -> str | None:
+    """Require and compare boundaries whenever a linked Work Item is active."""
+    if not identities:
+        return None
+    if candidate is None and require_boundary:
+        return "ERROR: linked Work Items are active; supply a valid --concurrency-boundary before lifecycle writes."
+    if candidate is None:
+        return None
+    for identity in identities:
+        path = (
+            identity.worktree / ".ai" / "work-items" / "active" / f"{identity.task}.contract.json"
+        )
+        try:
+            contract = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return f"ERROR: linked Work Item boundary is unreadable: {identity.worktree}"
+        boundary = contract.get("concurrencyBoundary")
+        issues = validate_concurrency_boundary(contract)
+        if boundary is None or issues or not isinstance(boundary, dict):
+            detail = "; ".join(issues) if issues else "concurrencyBoundary is missing"
+            return f"ERROR: linked Work Item has no provable concurrency boundary: {identity.task}: {detail}"
+        overlap = boundary_overlap(candidate, boundary)
+        if overlap is not None:
+            category, detail = overlap
+            return (
+                f"ERROR: planned concurrency boundary overlaps linked Work Item "
+                f"{identity.task}: {category}: {detail}"
+            )
+    return None
 
 
 def linked_worktree_identity_report(
@@ -333,7 +423,11 @@ def quarantined_successor_issue(
 
 
 def linked_worktree_active_issue(
-    requested_task: str | None = None, *, root: Path = PROJECT_ROOT
+    requested_task: str | None = None,
+    *,
+    candidate_boundary: dict[str, object] | None = None,
+    require_boundary: bool = False,
+    root: Path = PROJECT_ROOT,
 ) -> str | None:
     """Reject unsafe foreign state while allowing unrelated recoverable duplicates."""
     identities, errors = linked_worktree_identity_report(root=root)
@@ -361,7 +455,9 @@ def linked_worktree_active_issue(
                 "ERROR: linked worktree active Work Item branch does not match its task: "
                 f"{identity.branch} != codex/{identity.task}: {identity.worktree}"
             )
-    return None
+    return linked_worktree_boundary_issue(
+        identities, candidate_boundary, require_boundary=require_boundary
+    )
 
 
 def existing_work_item_ids() -> set[str]:
@@ -638,7 +734,11 @@ def run_code_preflight(contract_path: Path, summary_path: Path, contract_rel: st
 
 
 def validate_start_state(
-    task: str, *, force: bool, mode: str = "code"
+    task: str,
+    *,
+    force: bool,
+    mode: str = "code",
+    candidate_boundary: dict[str, object] | None = None,
 ) -> tuple[Path, Path, str] | None:
     """Validate lifecycle state and return target paths plus trusted base commit."""
     branch_issue = default_branch_start_issue(root=PROJECT_ROOT)
@@ -646,7 +746,21 @@ def validate_start_state(
         print(branch_issue, file=sys.stderr)
         return None
 
-    linked_issue = linked_worktree_active_issue(task, root=PROJECT_ROOT)
+    if (
+        candidate_boundary is not None
+        and current_branch(project_root=PROJECT_ROOT) != f"codex/{task}"
+    ):
+        print(
+            "ERROR: --concurrency-boundary requires the requested task's dedicated branch before lifecycle writes.",
+            file=sys.stderr,
+        )
+        return None
+    linked_issue = linked_worktree_active_issue(
+        task,
+        candidate_boundary=candidate_boundary,
+        require_boundary=candidate_boundary is not None,
+        root=PROJECT_ROOT,
+    )
     if linked_issue:
         print(linked_issue, file=sys.stderr)
         return None
@@ -702,6 +816,11 @@ def main() -> int:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 
+    candidate_boundary, boundary_error = parse_concurrency_boundary(args.concurrency_boundary, task)
+    if boundary_error:
+        print(boundary_error, file=sys.stderr)
+        return 2
+
     try:
         lock_context: contextlib.AbstractContextManager[None] = acquire_start_lock()
         lock_context.__enter__()
@@ -719,7 +838,12 @@ def main() -> int:
                     file=sys.stderr,
                 )
                 task = resolved_task
-        start_state = validate_start_state(task, force=args.force, mode=args.mode)
+        start_state = validate_start_state(
+            task,
+            force=args.force,
+            mode=args.mode,
+            candidate_boundary=candidate_boundary,
+        )
         if start_state is None:
             return 1
         contract_path, summary_path, base_commit = start_state
@@ -806,6 +930,8 @@ def main() -> int:
             "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
             "budgetImpact": {"expectedMetrics": {"archiveGrowth": projected_archive_growth()}},
         }
+        if candidate_boundary is not None:
+            contract["concurrencyBoundary"] = candidate_boundary
         summary = {
             "summaryVersion": 2,
             "workItemId": task,

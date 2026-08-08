@@ -24,6 +24,8 @@ from ai_common import (
     load_json,
     run_git,
 )
+from ai_projection_lease import release as release_projection_lease
+from ai_projection_lease import requires_lease
 from ai_work_item_intelligence import record_fact_once
 
 ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
@@ -79,6 +81,16 @@ def _find_archived_contract(task: str) -> Path:
             f"expected exactly one archived Contract for {task}, found {len(matches)}"
         )
     return matches[0]
+
+
+def _release_projection_lease_if_required(task: str, branch: str, contract_path: Path) -> None:
+    """Release the exact owner only after the full closure succeeds."""
+    try:
+        contract = load_json(contract_path)
+    except (OSError, ValueError):
+        return
+    if requires_lease(contract):
+        release_projection_lease(task, branch, root=PROJECT_ROOT)
 
 
 def _recorded_start_branch(task: str) -> str | None:
@@ -598,6 +610,7 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     )
     if (CLOSURE_RECEIPTS_DIR / f"{task}.closure.json").is_file():
         finalize_closure_receipt(task)
+    _release_projection_lease_if_required(task, work_branch, contract_path)
 
     linked_base = base_path is not None
     repository_state = "closed_but_current_worktree_detached" if linked_base else "ready_on_base"

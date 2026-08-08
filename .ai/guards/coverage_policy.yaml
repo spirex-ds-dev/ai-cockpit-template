@@ -95,6 +95,7 @@ associations:
     tests:
       - "tests/test_work_item_intelligence.py"
       - "tests/test_work_item_intelligence_integration.py"
+      - "tests/test_projection_isolation.py"
   linkedWorktreeRecoveryDiagnostic:
     production:
       - "scripts/ai_linked_worktree_recovery.py"
@@ -225,6 +226,12 @@ associations:
       - "scripts/ai_close_work_item.py"
     tests:
       - "tests/test_work_item_lifecycle_closure.py"
+  projectionIsolationLifecycle:
+    production:
+      - "scripts/ai_projection_lease.py"
+      - "scripts/ai_close_work_item.py"
+    tests:
+      - "tests/test_projection_isolation.py"
   readinessPolicy:
     production:
       - "scripts/ai_scenario_policy.py"
@@ -318,6 +325,7 @@ associations:
       - "scripts/ai_start.py"
     tests:
       - "tests/test_start_and_archive.py"
+      - "tests/test_projection_isolation.py"
   lightweightVerification:
     production:
       - "scripts/ai_check_registry.py"
@@ -340,6 +348,7 @@ associations:
     tests:
       - "tests/test_start_and_archive.py"
       - "tests/test_pr_aggregate.py"
+      - "tests/test_projection_isolation.py"
       - "tests/test_installer.py"
   hostedVerificationSnapshot:
     production:
@@ -359,6 +368,7 @@ associations:
     tests:
       - "tests/test_start_and_archive.py"
       - "tests/test_ai_archive_work_item.py"
+      - "tests/test_projection_isolation.py"
   ruff016Compatibility:
     production:
       - "scripts/ai_baseline_evidence.py"

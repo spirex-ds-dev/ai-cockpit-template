@@ -37,6 +37,8 @@ from ai_common import (
     verification_key,
 )
 from ai_observability import create_observability, elapsed_ms
+from ai_projection_lease import ProjectionLeaseError, requires_lease
+from ai_projection_lease import acquire as acquire_projection_lease
 from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -1737,10 +1739,19 @@ def main() -> int:
     args = parse_args()
     try:
         # Acquire before Preflight, verification, Outcome/report/status, or
-        # archive paths can perform mutable lifecycle work.
+        # archive paths can perform mutable lifecycle work. Legacy serial
+        # Work Items retain their established route; an explicit concurrency
+        # boundary is the sole opt-in to the persistent projection lease.
         with finish_mutex(args.task, archive=args.archive):
+            contract_path = ACTIVE_DIR / f"{args.task}.contract.json"
+            try:
+                contract = load_json(contract_path)
+            except (OSError, ValueError):
+                contract = None
+            if requires_lease(contract):
+                acquire_projection_lease(args.task, root=PROJECT_ROOT)
             return _main_with_mutex(args)
-    except FinishMutexError as exc:
+    except (FinishMutexError, ProjectionLeaseError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 

@@ -32,6 +32,8 @@ from ai_common import (
     verification_key,
 )
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
+from ai_projection_lease import ProjectionLeaseError, requires_lease
+from ai_projection_lease import acquire as acquire_projection_lease
 from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -980,6 +982,16 @@ def main() -> int:
         for src, target in files_to_move:
             print(f"  {src.relative_to(PROJECT_ROOT)} -> {target.relative_to(PROJECT_ROOT)}")
         return 0
+
+    # Unit fixtures without a Git checkout cannot create branch projections.
+    # A real repository must hold the explicit lease before archive mutates the
+    # shared archive index, status, or task-report projections.
+    if (PROJECT_ROOT / ".git").exists() and requires_lease(contract):
+        try:
+            acquire_projection_lease(str(work_item_id), root=PROJECT_ROOT)
+        except ProjectionLeaseError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
 
     archive_sequence = _next_archive_sequence()
     target_dir.mkdir(parents=True, exist_ok=True)
