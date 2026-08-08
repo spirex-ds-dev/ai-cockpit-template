@@ -1,0 +1,180 @@
+{
+  "contractVersion": 2,
+  "workItemId": "source-bound-evidence-replacement-661-current-main",
+  "mode": "code",
+  "title": "source-bound-evidence-replacement-661-current-main",
+  "baseCommit": "f73bb5245fc4cbfb3cded79767ae82bbf3f40e48",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。遇到流程问题，要先开工单修正，不要采用临时修补方案。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:continuous-governed-execution", "capturedAt": "2026-08-08T07:20:00+00:00", "digest": "sha256:ea126860f3ea4ce847dce281aaec66bc81431080f9fab022c07ee67363c8f33d"},
+  "declaredIntent": {"summary": "Reapply the source-bound generated-evidence policy from current main without changing the conflicted historical archive.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "sourceBoundGeneratedEvidence": {"mode": "canonical_generators", "generatedPaths": ["docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"]},
+  "scope": [
+    ".ai/work-items/active/source-bound-evidence-replacement-661-current-main.contract.json",
+    ".ai/work-items/active/source-bound-evidence-replacement-661-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/source-bound-evidence-replacement-661-current-main.outcome.json",
+    ".ai/work-items/active/source-bound-evidence-replacement-661-current-main.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_evidence_dependencies.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_check_scope.py",
+    "scripts/ai_preflight_review.py",
+    "tests/test_evidence_dependencies.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_preflight_review.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Modifying #657/#660 historical archive evidence.", "Modifying the distinct stale-source remediation owned by #643.", "Hand-editing derived documentation or allowing unrelated documentation through a source-bound exception."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/661",
+      "reason": "Authoritative current-main replacement scope and acceptance."
+    },
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/657", "reason": "Original source-bound evidence deadlock report."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/660", "reason": "Conflicted historical delivery retained only as audit evidence."},
+    {"path": "scripts/ai_evidence_dependencies.py", "reason": "Capability Truth dependency graph."},
+    {"path": "scripts/ai_check_scope.py", "reason": "Changed-path scope enforcement."},
+    {"path": "scripts/ai_preflight_review.py", "reason": "Pre-edit ownership readiness signal."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["workflow_integrity", "evidence_integrity", "scope_ownership"],
+    "reason": "The policy must allow only declared canonical generated evidence for source-changing Work Items while rejecting unrelated documentation and stale evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P1 current-main replacement with source-bound evidence ownership."
+    ],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic governed execution; the replacement starts from current origin/main and leaves historical archive evidence immutable."
+  },
+  "preReviewWarnings": ["Generated documentation may only be produced by canonical generators after policy validation."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The Contract declares a bounded source-bound generated-evidence ownership policy before derived artifacts are written.",
+    "Preflight accepts a source-changing Contract with the bounded policy and rejects missing required generated ownership.",
+    "Scope Guard accepts only the capability-bound source plus exact authorized generator outputs, and rejects unrelated documentation or incomplete descendants.",
+    "Regression coverage reproduces the Finish-source shape while preserving #643-style unrelated documentation rejection."
+  ],
+  "guidelines": [
+    "Use Capability Truth dependency facts instead of duplicating row lists.",
+    "Keep source and derived-output ownership explicit and machine-validated.",
+    "Allow only canonical generator outputs and retain fail-closed unrelated-documentation behavior.",
+    "Do not modify predecessor scope as a workaround."
+  ],
+  "intent": {
+    "problem": "A source-changing Finish Work Item requires derived Capability Truth evidence but cannot safely own the output, creating a governed lifecycle deadlock.",
+    "constraints": ["Preserve #657/#660 archive evidence.", "Keep #643 remediation independent.", "Do not hand-edit derived artifacts.", "Reject unrelated documentation changes."],
+    "rationale": "A Contract-declared bounded source-to-derived ownership policy makes canonical generator writes auditable before they occur."
+  },
+  "scenarioCoverage": [{"scenario": "Finish source change declares required generated evidence.", "expected": "Preflight and Scope Guard accept canonical outputs.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused red-green tests with a temporary Contract and Capability Truth matrix."}, {"scenario": "Capability-bound source omits authorized generated evidence.", "expected": "Preflight or Scope Guard fails before Finish.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused negative tests for omission."}, {"scenario": "Unrelated documentation path is added.", "expected": "Policy does not authorize it and Scope Guard fails closed.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused stale-documentation negative control."}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user authorized automatic execution and requested recording that authorization in each Work Item Contract; scope is limited to this corrective lifecycle."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 829
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/source-bound-evidence-replacement-661-current-main.json",
+    "baseCommit": "f73bb5245fc4cbfb3cded79767ae82bbf3f40e48",
+    "initialScopeDigest": "e4c9dc5627e3c77e5b47ce272e779252eadfcbb1c5d71f0cc4f55140c6d0c493",
+    "contractSkeletonDigest": "46bf339a2b2cc6e3eb35f2b6fdadd4b0f6451f72035682cf23627c73811ed5fc"
+  }
+}

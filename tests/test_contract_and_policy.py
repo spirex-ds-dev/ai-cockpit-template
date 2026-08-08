@@ -246,6 +246,52 @@ def test_scope_guard_accepts_matrix_and_unrelated_changed_path_controls(
     assert ai_check_scope.main() == 0
 
 
+def test_scope_guard_declared_source_bound_policy_rejects_missing_output(
+    tmp_path, monkeypatch, capsys
+):
+    matrix = tmp_path / "docs/reference/capability-truth-matrix.json"
+    matrix.parent.mkdir(parents=True)
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "scripts/ai_finish.py").write_text("pass\n")
+    matrix.write_text(
+        '{"capabilities":[{"id":"finish","sourceEvidence":["scripts/ai_finish.py"],"testEvidence":["tests/test_finish.py"]}]}'
+    )
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests/test_finish.py").write_text("pass\n")
+    contract = tmp_path / "task.contract.json"
+    contract.write_text(
+        json.dumps(
+            {
+                "contractVersion": 2,
+                "workItemId": "task",
+                "scope": ["scripts/ai_finish.py", "docs/reference/**"],
+                "outOfScope": [],
+                "sourceBoundGeneratedEvidence": {
+                    "mode": "canonical_generators",
+                    "generatedPaths": [
+                        "docs/reference/capability-truth-matrix.json",
+                        "docs/reference/pre-release-documentation-alignment.json",
+                        "docs/reference/pre-release-documentation-alignment.md",
+                    ],
+                },
+            }
+        )
+    )
+    monkeypatch.setattr(ai_check_scope, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_scope,
+        "changed_paths",
+        lambda _contract: [
+            "scripts/ai_finish.py",
+            "tests/test_finish.py",
+            "docs/reference/capability-truth-matrix.json",
+        ],
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", str(contract)])
+    assert ai_check_scope.main() == 1
+    assert "required generated path is absent" in capsys.readouterr().err
+
+
 def test_scope_guard_fails_closed_when_configured_dependency_matrix_is_malformed(
     tmp_path, monkeypatch, capsys
 ):

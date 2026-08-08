@@ -15,6 +15,12 @@ from ai_common import matches
 
 MATRIX_PATH = "docs/reference/capability-truth-matrix.json"
 MARKDOWN_PATH = "docs/reference/capability-truth-matrix.md"
+SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS = (
+    MATRIX_PATH,
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+)
+SOURCE_BOUND_GENERATED_EVIDENCE_MODE = "canonical_generators"
 
 
 class EvidenceDependencyError(ValueError):
@@ -213,3 +219,71 @@ def changed_path_dependency_issues(
         for path, capability_ids in dependencies.capability_ids_by_path.items()
         if path in changed
     ]
+
+
+def source_bound_generated_evidence_policy_issues(
+    contract: Mapping[str, Any], dependencies: EvidenceDependencies
+) -> list[str]:
+    """Require an exact bounded policy when a v2 Contract scopes Capability Truth evidence."""
+    scope = contract.get("scope")
+    if (
+        contract.get("contractVersion") != 2
+        or not isinstance(scope, list)
+        or not any(
+            isinstance(pattern, str) and matches(pattern, path)
+            for pattern in scope
+            for path in dependencies.capability_ids_by_path
+        )
+    ):
+        return []
+    policy = contract.get("sourceBoundGeneratedEvidence")
+    if policy is None:
+        return []
+    if not isinstance(policy, Mapping):
+        return ["sourceBoundGeneratedEvidence must be an object"]
+    paths = policy.get("generatedPaths")
+    if (
+        policy.get("mode") != SOURCE_BOUND_GENERATED_EVIDENCE_MODE
+        or not isinstance(paths, list)
+        or set(paths) != set(SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS)
+        or len(paths) != len(SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS)
+    ):
+        return [
+            "sourceBoundGeneratedEvidence.generatedPaths must declare exactly the canonical generated paths"
+        ]
+    missing = [
+        path
+        for path in SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS
+        if not any(matches(pattern, path) for pattern in scope)
+    ]
+    return (
+        ["sourceBoundGeneratedEvidence requires Contract scope coverage for: " + ", ".join(missing)]
+        if missing
+        else []
+    )
+
+
+def source_bound_generated_evidence_change_issues(
+    contract: Mapping[str, Any], paths: list[str], dependencies: EvidenceDependencies
+) -> list[str]:
+    """Require canonical outputs for a changed bound source and reject extra docs."""
+    if "sourceBoundGeneratedEvidence" not in contract:
+        return []
+    changed = set(paths)
+    if not any(path in changed for path in dependencies.capability_ids_by_path):
+        return []
+    issues = source_bound_generated_evidence_policy_issues(contract, dependencies)
+    if issues:
+        return issues
+    issues.extend(
+        "source-bound generated evidence required generated path is absent from the diff: " + path
+        for path in SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS
+        if path not in changed
+    )
+    issues.extend(
+        "sourceBoundGeneratedEvidence does not authorize changed non-generated documentation: "
+        + path
+        for path in sorted(changed)
+        if path.startswith("docs/") and path not in SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS
+    )
+    return issues

@@ -215,6 +215,33 @@ def test_preflight_capability_dependency_negative_controls(tmp_path, scope, expe
     assert signal_map(report)["Evidence Dependency"] == expected
 
 
+def test_preflight_accepts_declared_source_bound_policy(tmp_path):
+    write_capability_truth_matrix(tmp_path)
+    contract = capability_contract()
+    contract.update(
+        {
+            "contractVersion": 2,
+            "scope": ["docs/getting-started/installation.md", "docs/reference/**"],
+            "sourceBoundGeneratedEvidence": {
+                "mode": "canonical_generators",
+                "generatedPaths": [
+                    "docs/reference/capability-truth-matrix.json",
+                    "docs/reference/pre-release-documentation-alignment.json",
+                    "docs/reference/pre-release-documentation-alignment.md",
+                ],
+            },
+        }
+    )
+    path = capability_contract_path(tmp_path)
+    write_contract(path, contract)
+    report = ai_preflight_review.derive_report(
+        contract,
+        contract_path=path,
+        policy_path=tmp_path / "preflight_review_policy.yaml",
+    )
+    assert report["status"] == "ready"
+
+
 def test_preflight_blocks_declared_deletion_when_required_evidence_is_missing(tmp_path):
     contract = ready_contract()
     contract["requestedOperation"] = {
