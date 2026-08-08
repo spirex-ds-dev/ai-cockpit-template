@@ -1,0 +1,315 @@
+{
+  "contractVersion": 2,
+  "workItemId": "blocked-outcome-projection-681-current-main",
+  "mode": "code",
+  "title": "Project blocked Outcome gate and recovery facts",
+  "baseCommit": "0bb2578f93b8f16c1a700d2dde9354a69864bfa5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/blocked-outcome-projection-681-current-main.contract.json",
+    ".ai/work-items/active/blocked-outcome-projection-681-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/blocked-outcome-projection-681-current-main.outcome.json",
+    ".ai/work-items/active/blocked-outcome-projection-681-current-main.outcome.md",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_verification_policy.py",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_task_outcome_markdown_renderer.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_verification_policy.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
+    ".ai/cockpit/README.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing Cockpit status-page projection, external-wait states, archive history, provider workflows, or release policy; those belong to their separately tracked Work Items.",
+    "Rewriting any existing archived Outcome merely to add the new fields.",
+    "Relaxing Outcome validation or archive eligibility for blocked, stale, or contradictory evidence."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/681",
+      "reason": "Authoritative P1 requirement for canonical Outcome traffic-light, failed-gate, and recovery facts."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Canonical deterministic Outcome JSON generator."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome.py",
+      "reason": "Canonical operator-facing Outcome Markdown renderer."
+    },
+    {
+      "path": "scripts/ai_check_task_outcome.py",
+      "reason": "Fail-closed Outcome schema and Markdown parity validator."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Supplies verified failed gate and retry recovery facts when Finish creates a blocked Outcome."
+    },
+    {
+      "path": "scripts/ai_verification_policy.py",
+      "reason": "Finish quality routing must honor the Contract governance profile, dynamically reclassify automatic profiles from final scope, and may not lower strict verification."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Existing failure/retry integration coverage and regression extension point."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "End-to-end fixture coverage for automatic governance-profile reclassification during Finish."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "Installed-project lifecycle coverage for automatic governance-profile reclassification during Finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-implementation-surface-685-current-main.outcome.json",
+      "reason": "Recent real blocked and completed Outcome evidence; historical bytes remain read-only."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "governance_integrity",
+      "operator_misdiagnosis",
+      "archive_authorization"
+    ],
+    "reason": "Outcome truth controls whether reviewers can distinguish a blocked recovery path from archive-eligible completion; false green or omitted recovery evidence can authorize unsafe lifecycle progression.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The issue, current generator/render/validator/Finish pipeline, and reproducible historical Outcomes establish the exact affected boundary."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P1 lifecycle truth and archive-authorization correction requires strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic governed remediation and explicitly requires Outcome red/yellow/green diagnostics to be visible rather than inferred."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Freeze the JSON, rendering, validation, Finish integration, test, documentation, and generated-evidence surfaces before lifecycle verification."
+  },
+  "acceptance": [
+    "Every newly generated blocked Outcome carries top-level humanStatusColor=red, a non-empty failedGate, and a non-empty actionable recoveryCondition derived from verified Finish failure facts.",
+    "Newly generated completed and warning/incomplete Outcomes carry the canonical green or yellow humanStatusColor without allowing a later failure or blocked state to appear green.",
+    "The canonical Outcome Markdown visibly renders the traffic-light value and, for blocked Outcomes, the failed gate and recovery condition; JSON and Markdown validation rejects malformed new-version projection fields.",
+    "Historical archived Outcomes without the new fields remain readable and are never rewritten; only newly generated Outcome schema versions require the stronger projection fields.",
+    "Red-first unit and integration regressions cover early/post-verification blocked Outcomes, missing or contradictory fields, completed color, Markdown visibility, and archive-failure truth preservation.",
+    "Finish quality routing honors the Contract governanceProfile: automatic profiles are reclassified from the final declared scope without lowering a recorded higher level, while human overrides cannot lower strict verification.",
+    "Cockpit lifecycle documentation and generated capability evidence describe the canonical Outcome diagnostic fields without claiming that the separate status-page or external-wait Work Items are delivered."
+  ],
+  "guidelines": [
+    "Keep one canonical Outcome fact model: generators produce facts, renderers display them, and validators reject contradictions; do not infer colors independently in consumers.",
+    "Derive blocked failedGate and recoveryCondition only from structured Finish failure facts, never from chat text or mutable archived evidence.",
+    "Preserve backward validation compatibility for historic archived Outcomes while requiring the new schema version for newly generated Outcomes.",
+    "Do not widen archive, status-page, provider, or release behavior beyond the declared Outcome projection boundary."
+  ],
+  "intent": {
+    "problem": "A blocked Finish currently records its failed gate and recovery direction in the Summary, but the canonical Outcome JSON and Markdown expose only a status string. Reviewers must cross-read artifacts and cannot verify the red diagnostic from the Outcome itself; completed colors are likewise not consistently visible in the rendered Outcome.",
+    "constraints": [
+      "Do not edit immutable archived Outcome bytes or permit stale evidence to authorize archive.",
+      "Keep blocked, incomplete, and completed states fail-closed and machine-validated.",
+      "Preserve legacy archive readability while versioning stronger requirements for new generated Outcomes.",
+      "Do not implement the separate Cockpit status-page projection or external-execution state model in this Work Item."
+    ],
+    "rationale": "Making the diagnostic fields canonical at the Outcome source lets every later report and projection display the same evidence-backed red/yellow/green state, reduces operator ambiguity, and supplies the data boundary required by the separate visibility Work Item."
+  },
+  "declaredIntent": {
+    "summary": "Make Outcome traffic-light, failed-gate, and recovery facts canonical and visibly rendered for newly generated lifecycle evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。Outcome报告必须输出，并以红绿灯明确显示；流程问题不采用临时修改，必须根除。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-authorization-and-outcome-correction",
+    "capturedAt": "2026-08-08",
+    "digest": "sha256:continuous-authorized-outcome-projection"
+  },
+  "implementationSurface": {
+    "production": [
+      "scripts/ai_generate_task_outcome.py",
+      "scripts/ai_render_task_outcome.py",
+      "scripts/ai_check_task_outcome.py",
+      "scripts/ai_finish.py",
+      "scripts/ai_verification_policy.py"
+    ],
+    "tests": [
+      "tests/test_task_outcome_generator.py",
+      "tests/test_task_outcome_markdown_renderer.py",
+      "tests/test_task_outcome_validator.py",
+      "tests/test_task_outcome_ai_finish_integration.py",
+      "tests/test_verification_policy.py",
+      "tests/test_finish_e2e.py",
+      "tests/test_project_governance_journey.py"
+    ],
+    "generated": [
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ],
+    "documentation": [
+      ".ai/cockpit/README.md",
+      "docs/reference/ai-cockpit-work-item-lifecycle.md"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "blocked-outcome-diagnostic",
+      "riskDomain": "lifecycle",
+      "scenario": "An early or post-verification Finish gate fails.",
+      "expected": "The new blocked Outcome is red and exposes the exact failed gate and an actionable retry recovery condition in JSON and Markdown.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Red-first generator, validator, renderer, and Finish integration tests for missing, malformed, early, and post-verification diagnostic facts."
+    },
+    {
+      "id": "successful-outcome-color",
+      "riskDomain": "operator_misdiagnosis",
+      "scenario": "A Work Item reaches a valid completed Outcome or a warning/incomplete Outcome.",
+      "expected": "The canonical Outcome contains and renders green only for completed and yellow for warning/incomplete states.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Generator and renderer regressions for complete and cautionary colors plus validator contradiction cases."
+    },
+    {
+      "id": "archive-truth-preservation",
+      "riskDomain": "archive_authorization",
+      "scenario": "A blocked or later-failed lifecycle attempts to generate or archive Outcome evidence.",
+      "expected": "No Outcome with a red/blocked fact can be represented as green; historic archive bytes remain unchanged and invalid new canonical fields fail validation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Integration regressions for blocked failures, archive/reuse truth, and legacy Outcome validation."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user authorized automatic execution of all remediation Work Items and specifically required canonical visible Outcome red/yellow/green diagnostics; the restricted .ai Cockpit documentation and governance runtime paths are declared before before_edit."
+  },
+  "rollbackNote": "Revert generator, renderer, validator, Finish integration, documentation, generated evidence, and tests together; do not edit historical archives as rollback.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 834
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/blocked-outcome-projection-681-current-main.json",
+    "baseCommit": "0bb2578f93b8f16c1a700d2dde9354a69864bfa5",
+    "initialScopeDigest": "71ce2cb9afce1ba5ee1e435d40c1bdb29751d3bca34692d5b45943ab9d741bcb",
+    "contractSkeletonDigest": "61f8a2bbef5426edb1e9305576024b4e79ff5d04f6671b13f89fa7cdfa46a9d4"
+  }
+}

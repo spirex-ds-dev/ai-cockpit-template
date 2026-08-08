@@ -267,6 +267,11 @@ def test_blocked_outcome_refreshes_the_exact_active_review_report(tmp_path, monk
     assert ok, message
     outcome = json.loads(outcome_path.read_text(encoding="utf-8"))
     assert outcome["status"] == "blocked"
+    assert outcome["humanStatusColor"] == "red"
+    assert outcome["failedGate"] == "quality"
+    assert outcome["recoveryCondition"] == "Run a passing quality retry."
+    assert "Human Status: `red`" in markdown_path.read_text(encoding="utf-8")
+    assert "Failed Gate: `quality`" in markdown_path.read_text(encoding="utf-8")
     assert validate_outcome(
         outcome, markdown_path.read_text(encoding="utf-8"), expected_task_id=task
     ).valid

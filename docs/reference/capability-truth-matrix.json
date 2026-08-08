@@ -66,10 +66,10 @@
         ],
         "digest": "sha256:ca22278d6d7ea49b4fc65b8fe43a93f1831fc7a3a12bbbae2a2d86d89d001a12"
       },
-      "digest": "sha256:8546456e52b78b71edd9627bf9a4d2dc7d899d3c35f1a98038832284359c899c",
+      "digest": "sha256:b9e818077eddc29601c40ef8cdcc28a91324f04762662392b8c538afa416997a",
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.464538+00:00",
-        "validUntil": "2026-09-07T12:08:59.464538+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.155531+00:00",
+        "validUntil": "2026-09-07T13:18:13.155531+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -149,8 +149,8 @@
         "digest": "sha256:abebb88c2d4166ef8000332720fea5ec3cd3fafe21d60e326ca5137029ef0481"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.466175+00:00",
-        "validUntil": "2026-09-07T12:08:59.466175+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.157315+00:00",
+        "validUntil": "2026-09-07T13:18:13.157315+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -168,7 +168,7 @@
         ],
         "evidenceFreshness": "fresh"
       },
-      "digest": "sha256:628a0136cc2126b644c7ae7fb7caaa8e9f626a64ac68bfc94ae8d36a005b79fd"
+      "digest": "sha256:535cc3dea1bafbb4cff860cccb04fd7303f5cc70c7cc0f6bde8c06ea23a72743"
     },
     {
       "id": "risk_based_quality_routing",
@@ -253,10 +253,10 @@
         ],
         "digest": "sha256:67dc5118c2865e526bab9254b34a7d5402ba794068018a13418e2994b6bc5075"
       },
-      "digest": "sha256:3b07479913ee89d8289abb040fa4b6239a8202dd1c572e6f20c713c9be79fa05",
+      "digest": "sha256:128a67347757dfba877609269a4ff61bc4f9325196d01dbd2e86c56d8af7f0e4",
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.467767+00:00",
-        "validUntil": "2026-09-07T12:08:59.467767+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.159043+00:00",
+        "validUntil": "2026-09-07T13:18:13.159043+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -282,9 +282,12 @@
     {
       "id": "human_benefit_report",
       "status": "implemented",
-      "claim": "The repository derives a concise Human Benefit Review Report from validated Task Outcome evidence, refreshes an exact active review pair when Finish records a blocked recovery Outcome, checks it at the PR boundary, and emits a provider-bound Final Report during closure.",
+      "claim": "The repository generates a canonical Task Outcome with machine-validated human-status diagnostics, including a red blocked state with failed-gate and recovery facts, derives a concise Human Benefit Review Report from that evidence, refreshes an exact active review pair when Finish records a blocked recovery Outcome, checks it at the PR boundary, and emits a provider-bound Final Report during closure.",
       "evidence": [
         "scripts/ai_generate_human_report.py",
+        "scripts/ai_generate_task_outcome.py",
+        "scripts/ai_render_task_outcome.py",
+        "scripts/ai_check_task_outcome.py",
         "scripts/ai_check_diff_ownership.py",
         "scripts/ai_finish.py",
         "scripts/ai_check_pr.py",
@@ -341,7 +344,7 @@
           },
           {
             "path": "scripts/ai_finish.py",
-            "sha256": "aec35201804b9ac8a64a26b365168eb1963d3adb571d3cf6248b748096e5d7e9"
+            "sha256": "48dd9d739a00ea8a361cc3fc60bcf7a2e70d50c1ef6c3dd62b77a730838ea3a4"
           },
           {
             "path": "scripts/ai_generate_human_report.py",
@@ -365,19 +368,19 @@
           },
           {
             "path": "tests/test_task_outcome_ai_finish_integration.py",
-            "sha256": "edca2a56e585a08d15a02ac03c0befd9544a084a60ee5417d40b51974a527498"
+            "sha256": "e5686274d03304c8a0c28b471bd1ee8ef5dfd48dfebb523549ceab6fa849cc6e"
           },
           {
             "path": "tests/test_work_item_lifecycle_closure.py",
             "sha256": "f4f2ad8fe3c4940b87c1245b73b2d955cf7720f0b7fe817d40d5d1da9f284442"
           }
         ],
-        "digest": "sha256:986931be147a0c343888fb014fc9c7a71eb7acd886542509175d507318666a09"
+        "digest": "sha256:596cb25ee00b47e3f53d537248350670e1e5379b3f480f0b9958ccd50bc7fc0c"
       },
-      "digest": "sha256:9a45d3dcc27fa07bb9eaee440c14a68aa139d5de15edeec8d0d5e9429c0f9fc5",
+      "digest": "sha256:2832b1df8ff0850bb5864d40f8c505eef3c96b415dcf15bcf2863fb3d7a6b70b",
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.470142+00:00",
-        "validUntil": "2026-09-07T12:08:59.470142+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.161307+00:00",
+        "validUntil": "2026-09-07T13:18:13.161307+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -446,14 +449,14 @@
         "make quality"
       ],
       "limitations": "Repository evidence describes this template; it does not prove an adopter executed the lifecycle.",
-      "digest": "sha256:0d6f9dbc7b18c441d5df6f1736a4ef8379dbc5e47505e55f5352ae3634ba5c95",
+      "digest": "sha256:91c8cdd153390ee1e0786bdafac461b961e5f8f6ab8189cf85cb7f3ed6803966",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 14,
         "files": [
           {
             "path": ".ai/cockpit/README.md",
-            "sha256": "6835631959db6f6fed800e5c3f375473802e025363c5ef443d1704a6c25d44ae"
+            "sha256": "070ee8c193add0e3ce95845e71f82c751e78287db95c08cd3f027ff60537a4c4"
           },
           {
             "path": "Makefile",
@@ -465,7 +468,7 @@
           },
           {
             "path": "scripts/ai_finish.py",
-            "sha256": "aec35201804b9ac8a64a26b365168eb1963d3adb571d3cf6248b748096e5d7e9"
+            "sha256": "48dd9d739a00ea8a361cc3fc60bcf7a2e70d50c1ef6c3dd62b77a730838ea3a4"
           },
           {
             "path": "scripts/ai_provider_merge_state_recovery.py",
@@ -501,18 +504,18 @@
           },
           {
             "path": "tests/test_task_outcome_ai_finish_integration.py",
-            "sha256": "edca2a56e585a08d15a02ac03c0befd9544a084a60ee5417d40b51974a527498"
+            "sha256": "e5686274d03304c8a0c28b471bd1ee8ef5dfd48dfebb523549ceab6fa849cc6e"
           },
           {
             "path": "tests/test_work_item_lifecycle_closure.py",
             "sha256": "f4f2ad8fe3c4940b87c1245b73b2d955cf7720f0b7fe817d40d5d1da9f284442"
           }
         ],
-        "digest": "sha256:4e117e9995179e5822e645ae9c198ef0028ddec5aa6d64c2343571ed067dcea9"
+        "digest": "sha256:7bc89f2a954a7eac051af82afff99924af87f00a6d5724c020d3280439bcbde9"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.472349+00:00",
-        "validUntil": "2026-09-07T12:08:59.472349+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.163324+00:00",
+        "validUntil": "2026-09-07T13:18:13.163324+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -571,7 +574,7 @@
         "make quality"
       ],
       "limitations": "Template evidence validates repository records but does not authenticate the named human or prove completed adopter calibration.",
-      "digest": "sha256:e8c0537cc0be8a5c88bd6a2072a8d3eaba507c80165a135578f4755504c3a9a0",
+      "digest": "sha256:beeea03ed06ea2af22eae15e41e95d9c96189b4e747334b917a9b91aa39ea559",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 8,
@@ -612,8 +615,8 @@
         "digest": "sha256:478e104e478423ccf978406c7e0fb470d8e8c91a34754226f989b01df3a8ee64"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.473542+00:00",
-        "validUntil": "2026-09-07T12:08:59.473542+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.165096+00:00",
+        "validUntil": "2026-09-07T13:18:13.165096+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -660,7 +663,7 @@
         "make quality"
       ],
       "limitations": "Installed capability must be verified in the adopter repository.",
-      "digest": "sha256:59e8dbb5d20ba13c5d971f22662c63615c6e99469cbef4832325537e2abc657d",
+      "digest": "sha256:99437c5984409f9e728df5438bbfa9169888841d311e2e74a78adf1df9fb91e9",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 5,
@@ -689,8 +692,8 @@
         "digest": "sha256:9e014acb222142ced358a3e824eb83c82f79c44299f5c42dd7045acc99b615b0"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.474337+00:00",
-        "validUntil": "2026-09-07T12:08:59.474337+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.165846+00:00",
+        "validUntil": "2026-09-07T13:18:13.165846+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -736,7 +739,7 @@
         "make quality"
       ],
       "limitations": "Template execution evidence does not prove an adopter completed calibration or approval.",
-      "digest": "sha256:cdcdbca75c734fc63bcbd0aa051c7d5645ef3712730fa82e9efe615a8cc8578e",
+      "digest": "sha256:63d97bf20c84c8f80fe355016befd33856d1938f6ffa51fc25508f70c5d598e3",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
@@ -769,8 +772,8 @@
         "digest": "sha256:adedeeda1661e8a024c01a148783ccc3c0b152f1bfe101228e26a3fdb96a55cc"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.475030+00:00",
-        "validUntil": "2026-09-07T12:08:59.475030+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.166561+00:00",
+        "validUntil": "2026-09-07T13:18:13.166561+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -827,7 +830,7 @@
         "make quality"
       ],
       "limitations": "Profile choice is installation-plan intent only; the wizard neither calibrates nor proves an adopter repository is production-ready, and it does not itself commit, push, create or merge a PR, delete the successful branch, or activate Strict policy.",
-      "digest": "sha256:08473cd7cdbbab0b510244fe0b3d665a3aa8f7114839452a4a185e78ea89fd2f",
+      "digest": "sha256:ac4cf75be285afa900c1ee76576da6b90f9efae3096eddc5c8e5eaea2de7af41",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 11,
@@ -880,8 +883,8 @@
         "digest": "sha256:8eda44e2f362439e64d1ebcbdefb08759f3b0751afe5687ecad6d23856208795"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.476436+00:00",
-        "validUntil": "2026-09-07T12:08:59.476436+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.168216+00:00",
+        "validUntil": "2026-09-07T13:18:13.168216+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -931,7 +934,7 @@
         "make quality"
       ],
       "limitations": "Adopter toolchain execution and project-owned approval remain separate evidence.",
-      "digest": "sha256:7771c3dcb5683184f52431f546298996251f1b0624be744bc00c34d85164ce4a",
+      "digest": "sha256:fdc55c81315d6eed9f84aa00284ca00d403363d898ec0c7d74b34f7999e06701",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 5,
@@ -960,8 +963,8 @@
         "digest": "sha256:48602b4ae0d777bdcf26d5896e5f6d07568c1e34498323ef5bdc9ad2aa030a1d"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.476934+00:00",
-        "validUntil": "2026-09-07T12:08:59.476934+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.168714+00:00",
+        "validUntil": "2026-09-07T13:18:13.168714+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1007,7 +1010,7 @@
         "make quality"
       ],
       "limitations": "Inventory status is evidence compression, not external project execution proof.",
-      "digest": "sha256:ec36e4210a206e51d13ec7df4110d96194e4fc23f35efc89c4b2116ae0c31ffa",
+      "digest": "sha256:43578f8095ec117bbef71def53107af35fd9446f8e9778749e86b7efed0073ff",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
@@ -1040,8 +1043,8 @@
         "digest": "sha256:191a9b84f27d4f78b344ef4fc4d7678a99ee75e8423d2f9f5671ef8623f88671"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.478148+00:00",
-        "validUntil": "2026-09-07T12:08:59.478148+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.169762+00:00",
+        "validUntil": "2026-09-07T13:18:13.169762+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1082,7 +1085,7 @@
         "make quality"
       ],
       "limitations": "Atomic activation evidence does not prove a particular adopter activated a Candidate.",
-      "digest": "sha256:6d1e322606d226f0075b73be25f93fef02fea146eb6dd4ada7e5a9d2418038a6",
+      "digest": "sha256:eb3bea9f50577d2ac68d7d10eaa67617a08e06212b90927b8fb822c4e5a024ae",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 3,
@@ -1103,8 +1106,8 @@
         "digest": "sha256:0b5a21e337f9ac8fc85ca47156804b9f7694a054c7249a50649037d83bbc491c"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.478289+00:00",
-        "validUntil": "2026-09-07T12:08:59.478289+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.169907+00:00",
+        "validUntil": "2026-09-07T13:18:13.169907+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1148,7 +1151,7 @@
         "make quality"
       ],
       "limitations": "Bootstrap evidence remains template-local until an adopter records installation facts.",
-      "digest": "sha256:c727ab81d86e4ef28d996291227d91f54457cf80fe41d1035b948a84a075b075",
+      "digest": "sha256:3edf93fba86f0483b8fd26cf08cdbc0b1322bc98eaad4244adef18bff16b130d",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
@@ -1181,8 +1184,8 @@
         "digest": "sha256:fae035fe330e2f520a276037bd2053d42d6368f588eafca54df9c70ad23eafbd"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.479458+00:00",
-        "validUntil": "2026-09-07T12:08:59.479458+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.170804+00:00",
+        "validUntil": "2026-09-07T13:18:13.170804+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1231,7 +1234,7 @@
         "make quality"
       ],
       "limitations": "Adopter-installed status requires evidence from the target repository.",
-      "digest": "sha256:0ef122d3589e343f7163b8eb492a0cf7278cf341f31020a15e16a041dc264f22",
+      "digest": "sha256:0b23c0ddbcdcb1ae0f96b2a91ebc367f642625cd36cfeecfbe627ade7be199d7",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 7,
@@ -1268,8 +1271,8 @@
         "digest": "sha256:3f400c833a6b3b02c76ea53af6061dd4697872c00acf39b37ef30a18c42bdbff"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.480374+00:00",
-        "validUntil": "2026-09-07T12:08:59.480374+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.171871+00:00",
+        "validUntil": "2026-09-07T13:18:13.171871+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1341,7 +1344,7 @@
         "make quality"
       ],
       "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
-      "digest": "sha256:ec81eff7ecedc7fea8bd4ae2be0ec25c3347b407a1002c998eddccc3f1c9ea99",
+      "digest": "sha256:1b0e5833b38b3954631613e713cd69f4fc3a4953121d95d266f896c5ab81f6a8",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 18,
@@ -1422,8 +1425,8 @@
         "digest": "sha256:0d000f36d7fe90d793518bad525269b41b653e5a5d8a4529583aa67bd517a227"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.562382+00:00",
-        "validUntil": "2026-09-07T12:08:59.562382+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.174972+00:00",
+        "validUntil": "2026-09-07T13:18:13.174972+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1477,7 +1480,7 @@
         "make check-release-preflight"
       ],
       "limitations": "Implemented repository verification does not prove that the projected release is the latest provider publication, that a provider Release is stable rather than draft, that its assets are publicly downloadable, or that a future candidate is available.",
-      "digest": "sha256:f2a84f6d29125507c8a4479400d9228abe613579f23a382045dc41148522c421",
+      "digest": "sha256:ea59cacc1842eb8cf55e242ac4b334ddc87f9b876a322ea66baf513c8b60d24e",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 3,
@@ -1498,8 +1501,8 @@
         "digest": "sha256:25fefb84f91d9e806482d3b68cb1098be0aabaf471599b2e9777ec1438bdbd16"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.562801+00:00",
-        "validUntil": "2026-09-07T12:08:59.562801+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.175412+00:00",
+        "validUntil": "2026-09-07T13:18:13.175412+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1547,7 +1550,7 @@
         "make check-release-preflight"
       ],
       "limitations": "Provider evidence is required for a specific run; repository workflow presence alone is not a published release.",
-      "digest": "sha256:5d017e82048b5c283eaffa037e4a3a118aad6e4e9bb424d8f90828249633c6dd",
+      "digest": "sha256:f526b009ed93041d8f68ed9dc2ef0bf3eae64e0996e370ac11c2d694d5000ed1",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 8,
@@ -1588,8 +1591,8 @@
         "digest": "sha256:bf2b73c9103d7faea044bdf55f677b6512de7fab9400651e3c22bd393353ba03"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.564235+00:00",
-        "validUntil": "2026-09-07T12:08:59.564235+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.176864+00:00",
+        "validUntil": "2026-09-07T13:18:13.176864+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1644,7 +1647,7 @@
         "python3 -m pytest -q tests/test_real_absurd_injection.py tests/test_input_trust.py tests/test_input_trust_corpus.py tests/test_real_absurd_injection_docs.py"
       ],
       "limitations": "RAI-01, RAI-03, RAI-07, RAI-08, RAI-09, RAI-11, and RAI-12 require repository, verification, archive, release, scope, or independent-review facts that this evaluator does not collect; they remain review/evidence_gap outcomes.",
-      "digest": "sha256:f18e981282c62b517fa9509fe877cbb3d8e468fda1da825d495894e994483bfc",
+      "digest": "sha256:350ee3d5f56f4e35563b01649f0b97317727853b69092aa452cd56d62a5d5bdb",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 9,
@@ -1689,8 +1692,8 @@
         "digest": "sha256:793d9960907d33a9f28d32d25ec23e241d59f7825276bd976d236fbe71f817b9"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.565664+00:00",
-        "validUntil": "2026-09-07T12:08:59.565664+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.178457+00:00",
+        "validUntil": "2026-09-07T13:18:13.178457+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1747,7 +1750,7 @@
         "make check-ai-reference-impact"
       ],
       "limitations": "Python uses AST name analysis, TypeScript uses basic text analysis, and other languages use generic text only. Reflection, aliases, generated code, runtime loading, external repositories, and monitoring remain dependent on supplied evidence; the gate does not claim complete semantic analysis.",
-      "digest": "sha256:c11cb778eccbd7946d5c64d97de94c6d9568f4c9491e701c3362866cf6f61c81",
+      "digest": "sha256:c2e5ec182cfbbe17bd6e7e36e7e31b65463716f66a7e9db50342a70f398e25cc",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 9,
@@ -1792,8 +1795,8 @@
         "digest": "sha256:9bbae15fe35ad3dea773c0aa3b3988ed901e9c4501f19c837d63419daf268c0d"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.566628+00:00",
-        "validUntil": "2026-09-07T12:08:59.566628+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.179930+00:00",
+        "validUntil": "2026-09-07T13:18:13.179930+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1899,10 +1902,10 @@
         ],
         "digest": "sha256:31082882defcfcfe9378f2718123a1682a6df2dcc98d738b952f6d414406f170"
       },
-      "digest": "sha256:18c34273b4ea0f80baff75866da1037c23c9c0a71b606817e772f8012e8f5897",
+      "digest": "sha256:796ed1f5072073395eb387e23ea82a76ce09f8db3d71c0f1ec3e6af73dbd4906",
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.567529+00:00",
-        "validUntil": "2026-09-07T12:08:59.567529+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.181465+00:00",
+        "validUntil": "2026-09-07T13:18:13.181465+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -1952,7 +1955,7 @@
         "make check-docs-metadata"
       ],
       "limitations": "Lexical trigger detection and equal binding sets make declared claim scope auditable, but do not prove semantic entailment, translation quality, production readiness, enterprise assurance, or claims outside the selected current public documentation boundary.",
-      "digest": "sha256:63275f4530f4714a8b59edc254292d0a418d7425e34d4f6c2e54bf91c5891fdf",
+      "digest": "sha256:cd63083aa034dc1e923bfed874b3118abaf03b7371e1cbd7fe733df6df9d9fa6",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 5,
@@ -1981,8 +1984,8 @@
         "digest": "sha256:2a38a9fc7fdf30b0e388b67ec038a9c579bb8d20da5a862a9c22def9319d4ba0"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.568160+00:00",
-        "validUntil": "2026-09-07T12:08:59.568160+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.182296+00:00",
+        "validUntil": "2026-09-07T13:18:13.182296+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -2031,7 +2034,7 @@
         "python3 -m pytest -q tests/test_external_identity.py tests/test_trust_schema.py tests/test_ai_check_work_item.py"
       ],
       "limitations": "The repository validates supplied evidence structure, level-specific references, direct-user instruction bindings, and declared scope. It does not contact providers, authenticate actors, implement SSO or IAM, prove branch protection, turn direct user consent into an independent review, or provide enterprise assurance.",
-      "digest": "sha256:e246ec527b271a5802e9488f0ca72de18a91b507ccf0652083e9aa5a5979ba11",
+      "digest": "sha256:9187df9a3cd6765f5f7fe4f33421d95e48cf74bca906c891bd892622288623d0",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 7,
@@ -2068,8 +2071,8 @@
         "digest": "sha256:fa27bcad0b5e7828b2367b482be411d8216bce55b9f855bf09ff57efb7517ab0"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.568928+00:00",
-        "validUntil": "2026-09-07T12:08:59.568928+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.183513+00:00",
+        "validUntil": "2026-09-07T13:18:13.183513+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [
@@ -2109,7 +2112,7 @@
         "make quality"
       ],
       "limitations": "Enterprise identity, isolation, immutable audit, and compliance assurance remain outside this repository evidence.",
-      "digest": "sha256:ba60b76549adee34a82e74f72a2b1ae8a0a3808911232c0ca85808fb2f74285d",
+      "digest": "sha256:0c602c78aa2f81fa3089b35409c27908403800636f0137243b9d023dab1727b3",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 2,
@@ -2126,8 +2129,8 @@
         "digest": "sha256:476c130e32ffff31db1ac31c6352f87e0e66b4665a7579c3ed5c7f880da2123b"
       },
       "freshness": {
-        "verifiedAt": "2026-08-08T12:08:59.569157+00:00",
-        "validUntil": "2026-09-07T12:08:59.569157+00:00",
+        "verifiedAt": "2026-08-08T13:18:13.183752+00:00",
+        "validUntil": "2026-09-07T13:18:13.183752+00:00",
         "environment": {
           "runtime": "python-3",
           "toolVersions": [

@@ -2,6 +2,7 @@ import pytest
 from ai_verification_policy import (
     escalation_reasons,
     finish_quality_route,
+    finish_quality_route_for_contract,
     order_checks,
     select_policy,
     verification_cache_key,
@@ -18,6 +19,35 @@ def test_finish_quality_route_keeps_docs_only_task_focused_but_escalates_governa
         finish_quality_route([".ai/guards/policy.yaml"])["command"]
         == "make ai-cockpit-quality GOVERNANCE_PROFILE=strict"
     )
+
+
+def test_finish_quality_route_cannot_lower_an_explicit_strict_contract_profile():
+    route = finish_quality_route(["scripts/ai_generate_task_outcome.py"], requested="strict")
+
+    assert route["policy"]["level"] == "strict"
+    assert route["command"] == "make ai-cockpit-quality GOVERNANCE_PROFILE=strict"
+
+
+def test_finish_route_reclassifies_automatic_profile_but_preserves_stricter_record():
+    elevated = finish_quality_route_for_contract(
+        [".ai/guards/policy.yaml"],
+        {"selected": "standard", "source": "automatic"},
+    )
+    preserved = finish_quality_route_for_contract(
+        ["docs/guide.md"],
+        {"selected": "strict", "source": "automatic"},
+    )
+    with pytest.raises(ValueError, match="cannot lower"):
+        finish_quality_route_for_contract(
+            [".ai/guards/policy.yaml"],
+            {
+                "selected": "standard",
+                "source": "human_override",
+            },
+        )
+
+    assert elevated["policy"]["level"] == "strict"
+    assert preserved["policy"]["level"] == "strict"
 
 
 def test_verification_policy_distinguishes_failure_incomplete_and_passed():

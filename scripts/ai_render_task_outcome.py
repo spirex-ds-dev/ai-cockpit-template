@@ -47,7 +47,20 @@ def render_task_outcome(outcome: Mapping[str, Any]) -> str:
     task_id = outcome.get("workItemId", "unknown-task")
     status = outcome.get("status", "unknown")
     sections = outcome.get("sections", {})
-    lines = [f"# Task Outcome: {task_id}", "", f"Status: `{status}`", ""]
+    human_status = outcome.get("humanStatusColor", "unknown")
+    lines = [
+        f"# Task Outcome: {task_id}",
+        "",
+        f"Status: `{status}`",
+        f"Human Status: `{human_status}`",
+    ]
+    failed_gate = outcome.get("failedGate")
+    recovery = outcome.get("recoveryCondition")
+    if isinstance(failed_gate, str) and failed_gate.strip():
+        lines.append(f"Failed Gate: `{failed_gate.strip()}`")
+    if isinstance(recovery, str) and recovery.strip():
+        lines.append(f"Recovery Condition: {recovery.strip()}")
+    lines.append("")
     for key, title in SECTION_TITLES:
         lines.append(f"## {title}")
         value = sections.get(key, []) if isinstance(sections, Mapping) else []

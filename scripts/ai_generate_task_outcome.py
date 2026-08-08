@@ -13,7 +13,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-GENERATOR_VERSION = "1.0"
+GENERATOR_VERSION = "1.1"
 FINAL_STATUSES = {
     "completed",
     "completed_with_warnings",
@@ -138,6 +138,16 @@ def _status(
     if "stop" in types:
         return "needs_human_confirmation"
     return "completed_with_warnings" if warnings else "completed"
+
+
+def _human_status_color(status: str) -> str:
+    """Return the canonical human diagnostic color for an Outcome status."""
+
+    if status == "completed":
+        return "green"
+    if status in {"completed_with_warnings", "needs_human_confirmation"}:
+        return "yellow"
+    return "red"
 
 
 def generate_outcome(
@@ -346,12 +356,17 @@ def generate_outcome(
         "humanDecisions": human_decisions,
         "evidence": unique_refs(all_evidence),
     }
+    canonical_bindings = dict(bindings)
+    canonical_bindings["generatorVersion"] = GENERATOR_VERSION
     return {
         "format": "ai-cockpit-task-outcome",
         "schemaVersion": 1,
         "workItemId": task_id,
         "status": status,
-        "bindings": dict(bindings),
+        "humanStatusColor": _human_status_color(status),
+        "failedGate": _safe_text(evidence.get("failedGate")),
+        "recoveryCondition": _safe_text(evidence.get("recoveryCondition")),
+        "bindings": canonical_bindings,
         "sections": sections,
     }
 
@@ -360,7 +375,19 @@ def render_markdown(outcome: Mapping[str, Any]) -> str:
     """Render Markdown as a derived view; empty sections are explicitly None."""
 
     sections = outcome["sections"]
-    lines = [f"# Task Outcome: {outcome['workItemId']}", "", f"Status: `{outcome['status']}`", ""]
+    lines = [
+        f"# Task Outcome: {outcome['workItemId']}",
+        "",
+        f"Status: `{outcome['status']}`",
+        f"Human Status: `{outcome.get('humanStatusColor', 'unknown')}`",
+    ]
+    failed_gate = _safe_text(outcome.get("failedGate"))
+    recovery = _safe_text(outcome.get("recoveryCondition"))
+    if failed_gate:
+        lines.append(f"Failed Gate: `{failed_gate}`")
+    if recovery:
+        lines.append(f"Recovery Condition: {recovery}")
+    lines.append("")
     for key, title in SECTION_TITLES.items():
         lines.extend([f"## {title}"])
         value = sections[key]
