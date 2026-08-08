@@ -27,13 +27,42 @@ DOMAIN_LEVELS = {
 }
 
 
-def finish_quality_route(changed_paths: list[str]) -> dict[str, Any]:
-    """Return the auditable local Finish quality command for changed paths."""
-    policy = select_policy("task", changed_paths)
+def finish_quality_route(
+    changed_paths: list[str], *, requested: str | None = None
+) -> dict[str, Any]:
+    """Return the auditable Finish route without lowering a Contract profile."""
+
+    policy = select_policy("task", changed_paths, requested=requested)
     return {
         "policy": policy,
         "command": f"make ai-cockpit-quality GOVERNANCE_PROFILE={policy['level']}",
     }
+
+
+def finish_quality_route_for_contract(
+    changed_paths: list[str], governance_profile: dict[str, Any] | None
+) -> dict[str, Any]:
+    """Route Finish from final scope without treating automatic defaults as overrides.
+
+    An automatic profile is a prior classification, not a human instruction.  Finish
+    must therefore reclassify it against the final Contract scope, while preserving
+    a recorded higher automatic level.  A human override remains an explicit request
+    and is validated fail-closed by ``select_policy``.
+    """
+    profile = governance_profile if isinstance(governance_profile, dict) else {}
+    selected = profile.get("selected")
+    source = profile.get("source")
+    automatic_route = finish_quality_route(changed_paths)
+
+    if source != "automatic":
+        return finish_quality_route(changed_paths, requested=selected)
+    if selected not in POLICY_LEVELS:
+        return automatic_route
+
+    automatic_level = str(automatic_route["policy"]["level"])
+    if POLICY_LEVELS.index(str(selected)) > POLICY_LEVELS.index(automatic_level):
+        return finish_quality_route(changed_paths, requested=str(selected))
+    return automatic_route
 
 
 def select_policy(

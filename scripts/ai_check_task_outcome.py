@@ -53,6 +53,46 @@ INCOMPATIBLE_VERIFIED_CLAIM = re.compile(
 TASK_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{2,127}$")
 SHA256 = re.compile(r"^[a-f0-9]{64}$")
 COMMIT = re.compile(r"^[0-9a-f]{40}$")
+HUMAN_STATUS_COLORS = {"green", "yellow", "red", "unknown"}
+STATUS_COLORS = {
+    "completed": "green",
+    "completed_with_warnings": "yellow",
+    "needs_human_confirmation": "yellow",
+    "blocked": "red",
+    "cancelled": "red",
+}
+
+
+def _requires_human_status_projection(outcome: Mapping[str, Any]) -> bool:
+    bindings = outcome.get("bindings")
+    if not isinstance(bindings, Mapping):
+        return False
+    version = bindings.get("generatorVersion")
+    if not isinstance(version, str):
+        return False
+    try:
+        major, minor = (int(part) for part in version.split(".", maxsplit=1))
+    except ValueError:
+        return False
+    return (major, minor) >= (1, 1)
+
+
+def _validate_human_status_projection(
+    outcome: Mapping[str, Any], errors: list[ValidationError]
+) -> None:
+    if not _requires_human_status_projection(outcome):
+        return
+    status = outcome.get("status")
+    color = outcome.get("humanStatusColor")
+    expected_color = STATUS_COLORS.get(status) if isinstance(status, str) else None
+    if color not in HUMAN_STATUS_COLORS or color != expected_color:
+        _error(errors, "human_status", "humanStatusColor contradicts Outcome status")
+    failed_gate = outcome.get("failedGate")
+    recovery = outcome.get("recoveryCondition")
+    if not isinstance(failed_gate, str) or not isinstance(recovery, str):
+        _error(errors, "human_status", "diagnostic fields must be text")
+    elif status == "blocked" and (not failed_gate.strip() or not recovery.strip()):
+        _error(errors, "human_status", "blocked Outcome requires failedGate and recoveryCondition")
 
 
 @dataclass(frozen=True)
@@ -280,7 +320,10 @@ def _validate_claims(sections: Mapping[str, Any], errors: list[ValidationError])
 
 
 def _validate_markdown(
-    markdown: str | None, sections: Mapping[str, Any], errors: list[ValidationError]
+    markdown: str | None,
+    outcome: Mapping[str, Any],
+    sections: Mapping[str, Any],
+    errors: list[ValidationError],
 ) -> None:
     if markdown is None:
         return
@@ -305,6 +348,20 @@ def _validate_markdown(
     for key, title in (("findings", "Findings"), ("residualRisks", "Residual Risks")):
         if not sections[key] and f"## {title}\nNone" not in markdown:
             _error(errors, "markdown_parity", f"empty {title} section must say None")
+    if _requires_human_status_projection(outcome):
+        color = outcome.get("humanStatusColor")
+        if f"Human Status: `{color}`" not in markdown:
+            _error(errors, "markdown_parity", "Markdown is missing the human status diagnostic")
+        if outcome.get("status") == "blocked":
+            if f"Failed Gate: `{outcome.get('failedGate')}`" not in markdown:
+                _error(errors, "markdown_parity", "Markdown is missing the failed gate diagnostic")
+            recovery = outcome.get("recoveryCondition")
+            if not isinstance(recovery, str) or f"Recovery Condition: {recovery}" not in markdown:
+                _error(
+                    errors,
+                    "markdown_parity",
+                    "Markdown is missing the recovery condition diagnostic",
+                )
 
 
 def validate_outcome(
@@ -326,11 +383,12 @@ def validate_outcome(
     if outcome.get("status") not in STATUSES:
         _error(errors, "schema", "status is invalid")
     _validate_bindings(outcome, expected_task_id, errors)
+    _validate_human_status_projection(outcome, errors)
     _validate_sections(outcome.get("sections"), errors)
     if isinstance(outcome.get("sections"), dict):
         _validate_claims(outcome["sections"], errors)
         _validate_severities(outcome["sections"], errors)
-        _validate_markdown(markdown, outcome["sections"], errors)
+        _validate_markdown(markdown, outcome, outcome["sections"], errors)
     _validate_events(events, errors)
     _walk(outcome, errors)
     return ValidationReport(not errors, tuple(errors))

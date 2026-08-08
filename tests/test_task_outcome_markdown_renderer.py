@@ -41,6 +41,24 @@ def test_structured_items_and_conditional_language_are_readable() -> None:
     assert "Owner approved" in rendered
 
 
+def test_blocked_diagnostics_are_visible_in_markdown() -> None:
+    candidate = outcome()
+    candidate.update(
+        {
+            "status": "blocked",
+            "humanStatusColor": "red",
+            "failedGate": "quality",
+            "recoveryCondition": "Run a passing quality retry.",
+        }
+    )
+
+    rendered = render_task_outcome(candidate)
+
+    assert "Human Status: `red`" in rendered
+    assert "Failed Gate: `quality`" in rendered
+    assert "Recovery Condition: Run a passing quality retry." in rendered
+
+
 def test_rendering_is_deterministic_and_does_not_mutate_input() -> None:
     candidate = outcome()
     before = deepcopy(candidate)

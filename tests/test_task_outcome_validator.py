@@ -34,12 +34,52 @@ def test_valid_empty_outcome_passes_and_all_statuses_are_allowed() -> None:
         "blocked",
         "cancelled",
     ):
-        candidate = outcome()
-        candidate["status"] = status
+        evidence = {"status": status}
+        if status == "blocked":
+            evidence.update(
+                {
+                    "failedGate": "quality",
+                    "recoveryCondition": "Run a passing quality retry.",
+                }
+            )
+        candidate = generate_outcome("task-outcome-validator", bindings(), evidence=evidence)
         report = validate_outcome(
             candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
         )
         assert report.valid, report.errors
+
+
+def test_new_outcome_diagnostics_reject_missing_or_contradictory_fields() -> None:
+    candidate = generate_outcome(
+        "task-outcome-validator",
+        bindings(),
+        evidence={
+            "status": "blocked",
+            "failedGate": "quality",
+            "recoveryCondition": "Run a passing quality retry.",
+        },
+    )
+    candidate.pop("failedGate")
+    candidate["humanStatusColor"] = "green"
+
+    report = validate_outcome(
+        candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
+    )
+
+    assert not report.valid
+    assert "human_status" in {error.code for error in report.errors}
+
+
+def test_historical_generator_version_remains_readable_without_diagnostics() -> None:
+    candidate = generate_outcome("task-outcome-validator", bindings())
+    candidate["bindings"]["generatorVersion"] = "1.0"
+    candidate.pop("humanStatusColor", None)
+    candidate.pop("failedGate", None)
+    candidate.pop("recoveryCondition", None)
+
+    report = validate_outcome(candidate, render_markdown(candidate))
+
+    assert report.valid, report.errors
 
 
 def test_contract_style_underscore_work_item_id_is_valid() -> None:
@@ -156,6 +196,7 @@ def test_warning_with_a_limitation_risk_and_forbidden_claim_is_valid() -> None:
     candidate = outcome()
     warning = "Hosted provider checks were not run."
     candidate["status"] = "completed_with_warnings"
+    candidate["humanStatusColor"] = "yellow"
     candidate["sections"]["warnings"] = [warning]
     candidate["sections"]["limitations"] = [
         {

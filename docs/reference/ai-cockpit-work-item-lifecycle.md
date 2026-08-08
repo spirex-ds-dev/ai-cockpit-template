@@ -15,6 +15,18 @@ remote base → dedicated branch → Contract/Preflight → implement → ai-fin
   → close and clean that Work Item
 ```
 
+## Outcome diagnostic boundary
+
+Task Outcome is the canonical lifecycle decision record, not merely a prose
+summary. Newly generated records carry `humanStatusColor`: `green` only for a
+completed Outcome, `yellow` for warning or human-confirmation states, and
+`red` for blocked or cancelled states. A blocked Outcome additionally requires
+the structured `failedGate` and an actionable `recoveryCondition`; the
+canonical Markdown renders all three fields. Validators reject missing or
+contradictory fields for new generator versions, so a blocked delivery cannot
+be displayed as green. Historical archived Outcomes remain read-compatible and
+are never rewritten solely to add these fields.
+
 An agent or subagent may orchestrate multiple independent Work Items in parallel
 when each has a separate linked worktree, `codex/<work-item-id>` branch,
 Contract/Summary pair, PR, archive, and closure receipt. AI Cockpit does not

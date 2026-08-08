@@ -228,6 +228,30 @@ def test_explicit_final_statuses_are_preserved() -> None:
         )
 
 
+def test_generated_outcome_projects_canonical_human_status_diagnostics() -> None:
+    blocked = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "status": "blocked",
+            "failedGate": "quality",
+            "recoveryCondition": "Run a passing quality retry.",
+        },
+    )
+    completed = generate_outcome("task-outcome-generator", bindings())
+    warning = generate_outcome(
+        "task-outcome-generator", bindings(), evidence={"status": "completed_with_warnings"}
+    )
+
+    assert blocked["humanStatusColor"] == "red"
+    assert blocked["failedGate"] == "quality"
+    assert blocked["recoveryCondition"] == "Run a passing quality retry."
+    assert completed["humanStatusColor"] == "green"
+    assert completed["failedGate"] == ""
+    assert completed["recoveryCondition"] == ""
+    assert warning["humanStatusColor"] == "yellow"
+
+
 def test_invalid_event_values_use_safe_defaults_and_interventions_are_visible() -> None:
     events = [
         event(

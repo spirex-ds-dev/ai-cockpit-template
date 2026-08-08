@@ -40,7 +40,7 @@ from ai_common import (
 from ai_observability import create_observability, elapsed_ms
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
-from ai_verification_policy import finish_quality_route
+from ai_verification_policy import finish_quality_route_for_contract
 from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -794,7 +794,7 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
             "lifecycleStage": "pre_merge",
             "pullRequest": {"state": "not_created"},
             "aiCockpitVersion": "repository-governance",
-            "generatorVersion": "1.0",
+            "generatorVersion": "1.1",
         },
         "evidence": {
             "deliveredChanges": delivered,
@@ -868,6 +868,8 @@ def write_blocked_outcome(
         warnings.append(message)
         evidence["warnings"] = warnings
         evidence["status"] = "blocked"
+        evidence["failedGate"] = failed_check
+        evidence["recoveryCondition"] = f"Run a passing {failed_check} retry."
         evidence["limitations"] = [
             *list(evidence.get("limitations", [])),
             {
@@ -1175,7 +1177,11 @@ def run_declared_checks(
         route: dict[str, Any] | None = None
         try:
             if check_id == "quality":
-                route = finish_quality_route(finish_quality_paths(contract_data))
+                governance_profile = contract_data.get("governanceProfile", {})
+                route = finish_quality_route_for_contract(
+                    finish_quality_paths(contract_data),
+                    governance_profile if isinstance(governance_profile, dict) else None,
+                )
                 cmd_str = str(route["command"])
                 command = shlex.split(cmd_str)
             else:
