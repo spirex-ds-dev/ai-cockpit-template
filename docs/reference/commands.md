@@ -22,3 +22,8 @@ lastVerifiedBy: capability-truth-matrix
 | Diagnose | `make generate-cockpit-status`, `make cockpit-doctor` | [Troubleshooting](troubleshooting.md) |
 
 Run `make help` in the exact installed revision for the executable command list.
+
+For a code Contract with `implementationSurface`, use
+`make ai-preflight CONTRACT=<contract>` before `make ai-prepare-implementation`.
+The Preflight rejects an unowned, out-of-scope, malformed, forbidden, or
+unapproved restricted implementation path before `before_edit` is recorded.

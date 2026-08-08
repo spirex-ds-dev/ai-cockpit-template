@@ -9,10 +9,12 @@ import time
 from pathlib import Path
 from typing import Any
 
+from ai_check_guards import detect as detect_guard_items
 from ai_common import (
     contains_machine_path,
     load_check_registry,
     load_json,
+    matches,
     non_empty_string,
     validate_scenario_coverage,
 )
@@ -86,6 +88,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "requiredEvidenceContext",
     "sourceBoundGeneratedEvidence",
     "concurrencyBoundary",
+    "implementationSurface",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -658,6 +661,75 @@ def validate_required_evidence_context(data: dict[str, Any]) -> list[str]:
     return issues
 
 
+IMPLEMENTATION_SURFACE_KEYS = ("production", "tests", "generated", "documentation")
+
+
+def validate_implementation_surface(data: dict[str, Any]) -> list[str]:
+    """Validate planned edit paths before the immutable implementation checkpoint."""
+    surface = data.get("implementationSurface")
+    if surface is None:
+        return []
+    if not isinstance(surface, dict):
+        return ["implementationSurface must be an object"]
+
+    issues: list[str] = []
+    for key in surface:
+        if key not in IMPLEMENTATION_SURFACE_KEYS:
+            issues.append(f"implementationSurface.{key} is not allowed")
+    paths_by_kind: dict[str, list[str]] = {}
+    for kind in IMPLEMENTATION_SURFACE_KEYS:
+        paths = surface.get(kind)
+        if not isinstance(paths, list) or any(not non_empty_string(path) for path in paths):
+            issues.append(f"implementationSurface.{kind} must be a list of non-empty paths")
+            continue
+        normalized = [path.strip() for path in paths]
+        if len(normalized) != len(set(normalized)):
+            issues.append(f"implementationSurface.{kind} must not contain duplicate paths")
+        for path in normalized:
+            if (
+                path.startswith("/")
+                or ".." in Path(path).parts
+                or any(token in path for token in "*?[")
+            ):
+                issues.append(
+                    f"implementationSurface.{kind} path must be a concrete repository-relative path: {path}"
+                )
+        paths_by_kind[kind] = normalized
+
+    production = paths_by_kind.get("production", [])
+    tests = paths_by_kind.get("tests", [])
+    if production and not tests:
+        issues.append("implementationSurface.production requires at least one tests path")
+
+    scope = [path for path in data.get("scope", []) if isinstance(path, str)]
+    out_of_scope = [path for path in data.get("outOfScope", []) if isinstance(path, str)]
+    declared_paths = [path for paths in paths_by_kind.values() for path in paths]
+    for kind, paths in paths_by_kind.items():
+        for path in paths:
+            if any(matches(pattern, path) for pattern in out_of_scope):
+                issues.append(f"implementationSurface.{kind} path is covered by outOfScope: {path}")
+            if not any(matches(pattern, path) for pattern in scope):
+                issues.append(f"implementationSurface.{kind} path is not covered by scope: {path}")
+
+    approval = data.get("restrictedWriteApproval")
+    approved = isinstance(approval, dict) and approval.get("approved") is True
+    guard_items = detect_guard_items(declared_paths, restricted_approved=approved)
+    restricted = [item.path for item in guard_items if item.kind == "restricted_write"]
+    if restricted and not approved:
+        issues.append(
+            "implementationSurface restricted paths require approved restrictedWriteApproval: "
+            + ", ".join(restricted)
+        )
+    forbidden = [
+        item.path for item in guard_items if item.kind in {"forbidden_write", "forbidden_boundary"}
+    ]
+    if forbidden:
+        issues.append(
+            "implementationSurface cannot declare forbidden paths: " + ", ".join(forbidden)
+        )
+    return issues
+
+
 def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str]:
     issues: list[str] = []
     for key in REQUIRED_FIELDS:
@@ -694,6 +766,7 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
     issues.extend(validate_raw_request_requirement(data))
     issues.extend(validate_requested_operation(data))
     issues.extend(validate_required_evidence_context(data))
+    issues.extend(validate_implementation_surface(data))
     policy = data.get("sourceBoundGeneratedEvidence")
     if policy is not None:
         if not isinstance(policy, dict) or set(policy) != {"mode", "generatedPaths"}:

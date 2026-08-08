@@ -209,6 +209,18 @@ fallback.
 
 Active v2 code Contracts must contain concrete problem, constraints, rationale, sources, acceptance, and verification content. Generic starter phrases are rejected by the Contract check before implementation. If Preflight reports `needs_human_confirmation` or `not_ready`, stop and report the reason; do not continue by treating advisory output as authorization.
 
+For a code Contract that declares an `implementationSurface`, list every
+planned repository-relative path under `production`, `tests`, `generated`, or
+`documentation`. Every path must be Contract-owned, must not match
+`outOfScope`, and a non-empty `production` list requires a non-empty `tests`
+list. A declared Makefile, guard, workflow, or other restricted path also
+requires a complete `restrictedWriteApproval`. `Implementation Surface` is a
+first-class Preflight signal: malformed, unowned, excluded, forbidden, or
+unapproved paths make `make ai-preflight` and therefore
+`make ai-prepare-implementation` fail before the immutable `before_edit`
+checkpoint. `ai-start` may still create and display an incomplete skeleton; it
+does not authorize editing until the Contract becomes ready.
+
 ### Contract amendment revalidation
 
 `before_edit` proves the phase boundary at which implementation was first
