@@ -10,9 +10,11 @@ from typing import Any
 
 import pytest
 from ai_evidence_dependencies import (
+    SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS,
     changed_path_dependency_issues,
     contract_scope_dependency_issues,
     load_capability_evidence_dependencies,
+    source_bound_generated_evidence_change_issues,
 )
 
 MATRIX_PATH = "docs/reference/capability-truth-matrix.json"
@@ -316,3 +318,48 @@ def test_changed_path_dependency_issues_require_actual_matrix_change(
     assert changed_path_dependency_issues(["src/source.py", MATRIX_PATH], dependencies) == []
     assert changed_path_dependency_issues(["docs/unrelated.md"], dependencies) == []
     assert changed_path_dependency_issues([MATRIX_PATH], dependencies) == []
+
+
+def test_declared_source_bound_policy_requires_the_exact_generated_bundle(tmp_path: Path) -> None:
+    write_file(tmp_path, "scripts/ai_finish.py")
+    write_file(tmp_path, "tests/test_finish.py")
+    write_matrix(
+        tmp_path,
+        {
+            "capabilities": [
+                capability(
+                    "finish", source=["scripts/ai_finish.py"], tests=["tests/test_finish.py"]
+                )
+            ]
+        },
+    )
+    dependencies = load_capability_evidence_dependencies(tmp_path)
+    assert dependencies is not None
+    contract = {
+        "contractVersion": 2,
+        "scope": ["scripts/ai_finish.py", *SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS],
+        "sourceBoundGeneratedEvidence": {
+            "mode": "canonical_generators",
+            "generatedPaths": list(SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS),
+        },
+    }
+    assert (
+        source_bound_generated_evidence_change_issues(
+            contract,
+            ["scripts/ai_finish.py", *SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS],
+            dependencies,
+        )
+        == []
+    )
+    assert (
+        "required generated path is absent"
+        in source_bound_generated_evidence_change_issues(
+            contract, ["scripts/ai_finish.py", MATRIX_PATH], dependencies
+        )[0]
+    )
+    assert (
+        source_bound_generated_evidence_change_issues(
+            {}, ["scripts/ai_finish.py", MATRIX_PATH], dependencies
+        )
+        == []
+    )

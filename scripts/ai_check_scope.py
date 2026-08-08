@@ -15,6 +15,7 @@ from ai_evidence_dependencies import (
     EvidenceDependencyError,
     changed_path_dependency_issues,
     load_capability_evidence_dependencies,
+    source_bound_generated_evidence_change_issues,
 )
 from ai_observability import create_observability, elapsed_ms
 
@@ -144,6 +145,9 @@ def main() -> int:
                     path="capabilityEvidenceDependencies",
                     detail=issue,
                 )
+            issues.extend(
+                source_bound_generated_evidence_change_issues(contract, paths, dependencies)
+            )
 
     for issue in dependency_scope_issues(contract, paths, policy_lists):
         issues.append(issue)

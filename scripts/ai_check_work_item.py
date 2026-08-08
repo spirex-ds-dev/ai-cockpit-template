@@ -16,6 +16,10 @@ from ai_common import (
     non_empty_string,
     validate_scenario_coverage,
 )
+from ai_evidence_dependencies import (
+    SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS,
+    SOURCE_BOUND_GENERATED_EVIDENCE_MODE,
+)
 from ai_external_identity import high_risk_approval_issues
 from ai_observability import create_observability, elapsed_ms
 from ai_start_receipt import receipt_path, validate_receipt
@@ -79,6 +83,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "predecessorClosureEvidence",
     "rollbackPlan",
     "requiredEvidenceContext",
+    "sourceBoundGeneratedEvidence",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -640,6 +645,16 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
     issues.extend(validate_raw_request_requirement(data))
     issues.extend(validate_requested_operation(data))
     issues.extend(validate_required_evidence_context(data))
+    policy = data.get("sourceBoundGeneratedEvidence")
+    if policy is not None:
+        if not isinstance(policy, dict) or set(policy) != {"mode", "generatedPaths"}:
+            issues.append("sourceBoundGeneratedEvidence must contain only mode and generatedPaths")
+        elif policy.get("mode") != SOURCE_BOUND_GENERATED_EVIDENCE_MODE or set(
+            policy.get("generatedPaths", [])
+        ) != set(SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS):
+            issues.append(
+                "sourceBoundGeneratedEvidence.generatedPaths must declare exactly the canonical generated paths"
+            )
     issues.extend(validate_governance_profile(data))
     issues.extend(validate_operation_escalations(data))
     if "problemStatement" in data and not non_empty_string(data.get("problemStatement")):

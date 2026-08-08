@@ -29,6 +29,7 @@ from ai_evidence_dependencies import (
     EvidenceDependencyError,
     contract_scope_dependency_issues,
     load_capability_evidence_dependencies,
+    source_bound_generated_evidence_policy_issues,
 )
 from ai_readiness_policy import has_explicit_blocker
 from ai_required_evidence import EvidenceContext, derive_required_evidence
@@ -304,6 +305,7 @@ def evidence_dependency_signal(contract: dict[str, Any], *, root: Path) -> Signa
         )
 
     issues = contract_scope_dependency_issues(scope, dependencies)
+    issues.extend(source_bound_generated_evidence_policy_issues(contract, dependencies))
     if issues:
         return Signal(
             "Evidence Dependency",
