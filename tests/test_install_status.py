@@ -46,6 +46,46 @@ def test_missing_or_invalid_release_evidence_fails_closed(tmp_path):
     assert status["readOnly"] is True
 
 
+def test_external_release_evidence_must_match_installed_tag_and_commit(tmp_path):
+    root = _install(tmp_path)
+    evidence = tmp_path / "evidence.json"
+    evidence.write_text(
+        json.dumps({"releaseTag": "v9.9.9", "assetDigest": "a" * 64, "sourceCommit": "b" * 40}),
+        encoding="utf-8",
+    )
+
+    status = installed_status(root, evidence_path=evidence)
+
+    assert status["state"] == "error"
+    assert "release tag" in status["conflicts"][0]
+
+
+def test_tagged_install_status_verifies_installed_identity_without_external_evidence(tmp_path):
+    root = _install(tmp_path)
+    write_fact_bundle(
+        source=tmp_path / "source",
+        target=root,
+        distribution_version={
+            "distributionVersion": 1,
+            "releaseVersion": "v1.0.0",
+            "contractSchema": 1,
+        },
+        release_identity={
+            "releaseTag": "v1.0.0",
+            "releaseVersion": "v1.0.0",
+            "sourceCommit": "a" * 40,
+            "tagTarget": "a" * 40,
+            "metadataCommit": "a" * 40,
+            "artifactDigests": {"install.sh": "b" * 64},
+        },
+    )
+
+    status = installed_status(root)
+
+    assert status["state"] == "active"
+    assert status["releaseEvidence"] == "verified"
+
+
 def test_missing_manifest_fails_closed(tmp_path):
     status = installed_status(tmp_path)
     assert status["state"] == "error"

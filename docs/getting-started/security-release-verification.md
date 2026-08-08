@@ -44,8 +44,10 @@ Release is public. Keep these records separate:
 
 Use only the authoritative public projection or a separately verified private
 mirror. Stop unless the stable provider Release, tag-pinned metadata, source,
-installer, archive asset, and digests agree. Do not select the highest tag as a
-substitute.
+installer, archive asset, and digests agree. The installer records the same
+canonical tag, version, source/tag/metadata commit, and artifact-digest tuple
+in its validated lifecycle facts; disagreement fails before any installer
+write. Do not select the highest tag as a substitute.
 
 ### Maintainer route
 

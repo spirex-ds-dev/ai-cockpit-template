@@ -7,6 +7,7 @@ from pathlib import Path
 
 import install_ai_cockpit as installer_mod
 import pytest
+from ai_install_facts import validate_fact_bundle
 from ai_installer_repository import clean_git_environment
 from install_ai_cockpit import Installer
 
@@ -62,6 +63,134 @@ def init_git_repo(path: Path, filename: str, content: str, message: str) -> str:
     run(path, "git", "add", filename)
     run(path, "git", "commit", "-qm", message)
     return run(path, "git", "rev-parse", "HEAD").stdout.strip()
+
+
+def test_tagged_source_identity_binds_requested_tag_version_commit_and_digests(
+    tmp_path, monkeypatch
+):
+    source = tmp_path / "source"
+    target = tmp_path / "target"
+    (source / ".ai/cockpit").mkdir(parents=True)
+    source_commit = init_git_repo(source, "README.md", "source\n", "initial source")
+    run(source, "git", "tag", "v1.2.3")
+    (source / ".ai/cockpit/version.json").write_text(
+        json.dumps({"distributionVersion": 2, "releaseVersion": "1.2.3", "contractSchema": 2}),
+        encoding="utf-8",
+    )
+    (source / ".ai/cockpit/release-digests.json").write_text(
+        json.dumps(
+            {
+                "releaseTag": "v1.2.3",
+                "sourceCommit": source_commit,
+                "tagTarget": source_commit,
+                "metadataCommit": source_commit,
+                "artifacts": {"install.sh": "b" * 64},
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("AI_COCKPIT_TEMPLATE_REF", "v1.2.3")
+    installer = Installer(
+        source=source,
+        target=target,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.validate_source_release_identity() == {
+        "releaseTag": "v1.2.3",
+        "releaseVersion": "1.2.3",
+        "sourceCommit": source_commit,
+        "tagTarget": source_commit,
+        "metadataCommit": source_commit,
+        "artifactDigests": {"install.sh": "b" * 64},
+    }
+
+
+def test_tagged_install_rejects_conflicting_source_identity_before_writes(
+    tmp_path, monkeypatch, capsys
+):
+    monkeypatch.setenv("AI_COCKPIT_TEMPLATE_REF", "v0.5.48")
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 2
+
+    assert "source release identity" in capsys.readouterr().err
+    assert not (tmp_path / "Makefile.ai").exists()
+
+
+def test_tagged_source_rejects_release_digest_commit_mismatch(tmp_path, monkeypatch):
+    source = tmp_path / "source"
+    target = tmp_path / "target"
+    (source / ".ai/cockpit").mkdir(parents=True)
+    target.mkdir()
+    (source / ".ai/cockpit/version.json").write_text(
+        json.dumps({"distributionVersion": 2, "contractSchema": 2, "releaseVersion": "1.2.3"}),
+        encoding="utf-8",
+    )
+    (source / ".ai/cockpit/release-digests.json").write_text(
+        json.dumps(
+            {
+                "releaseTag": "v1.2.3",
+                "sourceCommit": "b" * 40,
+                "tagTarget": "b" * 40,
+                "metadataCommit": "b" * 40,
+                "artifacts": {"install.sh": "c" * 64},
+            }
+        ),
+        encoding="utf-8",
+    )
+    installer = Installer(
+        source=source,
+        target=target,
+        stack="generic",
+        force=False,
+        dry_run=True,
+        with_examples=False,
+        update_makefile=False,
+    )
+    monkeypatch.setenv("AI_COCKPIT_TEMPLATE_REF", "v1.2.3")
+    monkeypatch.setattr(
+        installer_mod.subprocess,
+        "run",
+        lambda args, **_kwargs: subprocess.CompletedProcess(args, 0, "a" * 40 + "\n", ""),
+    )
+
+    with pytest.raises(ValueError, match="sourceCommit"):
+        installer.validate_source_release_identity()
+
+
+def test_install_replaces_stale_lifecycle_version_metadata(tmp_path):
+    stale = tmp_path / ".ai/install/version.json"
+    stale.parent.mkdir(parents=True)
+    stale.write_text('{"releaseVersion": "0.5.32"}\n', encoding="utf-8")
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+
+    facts = validate_fact_bundle(tmp_path)
+    assert facts["version"]["releaseVersion"] == "0.5.32"
+    assert facts["version"]["installationId"]
+    assert facts["releaseIdentity"]["manifestHash"] == facts["version"]["manifestHash"]
 
 
 def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
@@ -1216,3 +1345,27 @@ def test_failed_initial_install_restores_original_tree(tmp_path, monkeypatch):
     assert sorted(
         path.relative_to(tmp_path).as_posix() for path in tmp_path.rglob("*") if path.is_file()
     ) == ["README.md"]
+
+
+def test_failed_lifecycle_fact_write_removes_partial_identity_bundle(tmp_path, monkeypatch):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    def write_partial_fact_bundle(**_kwargs):
+        partial = tmp_path / ".ai/install/release-identity.json"
+        partial.parent.mkdir(parents=True, exist_ok=True)
+        partial.write_text('{"partial": true}\n', encoding="utf-8")
+        raise OSError("simulated final lifecycle fact write failure")
+
+    monkeypatch.setattr(installer_mod, "write_fact_bundle", write_partial_fact_bundle)
+
+    assert installer.install() == 2
+
+    assert not (tmp_path / ".ai/install/release-identity.json").exists()

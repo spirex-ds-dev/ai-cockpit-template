@@ -15,10 +15,11 @@ An installation may record durable lifecycle facts under `.ai/install/`; their p
 
 - `manifest.json` records the installation identity, source/version, timestamp, installed paths, source paths, ownership class, installed SHA-256 digest, current digest, and `projectModified` fact for every file.
 - `version.json` records the installed distribution and Contract schema versions, Runtime State, and the SHA-256 binding to the manifest.
+- `release-identity.json` records either a local-source boundary or the immutable tagged-release tuple: canonical tag, release version, source/tag/metadata commit, artifact digests, and its binding to the manifest. A tagged installation is rejected before writes unless all of those release facts agree.
 - `managed-regions.json` records Shared files, ownership class, installed/current digest, modification state, and their installation-time full-file boundaries.
 - `rollback-baseline.json` records the installation-time digest baseline used by later update and rollback proposals.
 
-Ownership is explicit: `template`, `project`, `shared`, `generated`, or `historical`. The installer does not infer permission to overwrite or delete project-owned or historical content from a path alone. `scripts/ai_install_facts.py` validates that all fact files exist, agree on one installation identity, and bind ownership and baseline digests; missing, malformed, or tampered facts fail closed while current project drift is reported as evidence.
+Ownership is explicit: `template`, `project`, `shared`, `generated`, or `historical`. The installer does not infer permission to overwrite or delete project-owned or historical content from a path alone. `scripts/ai_install_facts.py` validates that all fact files exist, agree on one installation identity, and bind ownership, release identity, and baseline digests; missing, malformed, stale, or tampered facts fail closed while current project drift is reported as evidence.
 
 These facts are a repository record, not an identity system, approval system, immutable audit ledger, sandbox, or enterprise assurance claim. Update, migration, rollback, disable/enable, uninstall, and purge behavior is governed by their own Work Items and must consume validated facts.
 
@@ -80,7 +81,7 @@ Project-owned configuration migrations use a versioned registry and produce a pl
 
 ## Rollback snapshot and execution
 
-Before an update mutates Runtime or Managed Regions, a snapshot is created under `.ai/upgrade/snapshots/<upgrade-id>/`. It contains `manifest.before.json`, `version.before.json`, `managed-regions.before.json`, Runtime restore sources, the Project Config hash, the Migration Plan, and rollback instructions. Rollback first validates the current installed manifest, then emits a confirmation-gated proposal. Confirmation restores only snapshot-owned Runtime and Managed Region content; Project-owned code and configuration are preserved even when they drifted after the update. Missing snapshots or current-installation drift are `blocked`. A non-invertible migration is `partial_rollback` and lists remaining manual operations; no write occurs in either state.
+Before an update mutates Runtime or Managed Regions, a snapshot is created under `.ai/upgrade/snapshots/<upgrade-id>/`. It contains `manifest.before.json`, `version.before.json`, `release-identity.before.json`, `managed-regions.before.json`, Runtime restore sources, the Project Config hash, the Migration Plan, and rollback instructions. Rollback first validates the current installed manifest, then emits a confirmation-gated proposal. Confirmation restores only snapshot-owned Runtime and Managed Region content; Project-owned code and configuration are preserved even when they drifted after the update. Missing snapshots or current-installation drift are `blocked`. A non-invertible migration is `partial_rollback` and lists remaining manual operations; no write occurs in either state.
 
 ## Disable and enable
 

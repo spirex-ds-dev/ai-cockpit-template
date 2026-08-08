@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -38,7 +39,9 @@ def _error(message: str) -> dict[str, Any]:
     }
 
 
-def _release_evidence(path: Path | None, expected_commit: str | None) -> tuple[str, str | None]:
+def _release_evidence(
+    path: Path | None, expected_commit: str | None, expected_release_version: str | None
+) -> tuple[str, str | None]:
     if path is None:
         return "not_run", None
     try:
@@ -53,6 +56,26 @@ def _release_evidence(path: Path | None, expected_commit: str | None) -> tuple[s
         return "invalid", "release evidence requires releaseTag and assetDigest"
     if expected_commit and evidence.get("sourceCommit") != expected_commit:
         return "invalid", "release evidence source commit does not match installed facts"
+    if expected_release_version and evidence.get("releaseTag") != expected_release_version:
+        return "invalid", "release evidence release tag does not match installed release version"
+    return "verified", None
+
+
+def _installed_release_identity(
+    identity: dict[str, Any], expected_commit: str | None, expected_release_version: str | None
+) -> tuple[str, str | None]:
+    kind = identity.get("identityKind")
+    if kind == "local_source":
+        return "not_release_source", None
+    if kind != "tagged_release":
+        return "invalid", "installed release identity kind is unsupported"
+    tag = identity.get("releaseTag")
+    if not isinstance(tag, str) or not re.fullmatch(r"v\d+\.\d+\.\d+", tag):
+        return "invalid", "installed release identity requires a semantic release tag"
+    if expected_release_version and tag.lstrip("v") != expected_release_version.lstrip("v"):
+        return "invalid", "installed release identity tag does not match installed release version"
+    if expected_commit and identity.get("sourceCommit") != expected_commit:
+        return "invalid", "installed release identity source commit does not match installed facts"
     return "verified", None
 
 
@@ -67,9 +90,16 @@ def installed_status(
     version = facts["version"]
     manifest = facts["manifest"]
     current = version.get("releaseVersion") or version.get("distributionVersion")
-    evidence_state, evidence_error = _release_evidence(
-        evidence_path, manifest["source"].get("sourceCommit")
-    )
+    if evidence_path is None:
+        evidence_state, evidence_error = _installed_release_identity(
+            facts["releaseIdentity"],
+            manifest["source"].get("sourceCommit"),
+            version.get("releaseVersion"),
+        )
+    else:
+        evidence_state, evidence_error = _release_evidence(
+            evidence_path, manifest["source"].get("sourceCommit"), version.get("releaseVersion")
+        )
     if evidence_error:
         return {
             **_error(evidence_error),

@@ -1,0 +1,225 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-install-identity-current-main",
+  "mode": "code",
+  "title": "Reconcile immutable tagged installation identity on current main",
+  "rawUserRequest": "执行完整修复计划；自动执行并在每个 Contract 记录授权。修复真实 adopter 安装中选择 v0.5.48 却出现 v0.5.42/v0.5.32 的版本事实冲突。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal: execute full remediation plan with automatic authority",
+    "capturedAt": "2026-08-08",
+    "digest": "sha256:release-install-identity-current-main-authority"
+  },
+  "declaredIntent": {
+    "summary": "Bind tagged installer releases to one immutable fact bundle and diagnose contradictions.",
+    "requestedCapabilities": ["ai_governance", "software_design", "documentation", "test_automation"]
+  },
+  "baseCommit": "b1bbbc1f3c6381b8b857f5afe7c194c8b8eb375b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-install-identity-current-main.contract.json",
+    ".ai/work-items/active/release-install-identity-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-install-identity-current-main.outcome.json",
+    ".ai/work-items/active/release-install-identity-current-main.outcome.md",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/install/**",
+    "install.sh",
+    "scripts/installer/**",
+    "scripts/ai_install_facts.py",
+    "scripts/ai_install_status.py",
+    "scripts/ai_upgrade_apply.py",
+    "scripts/ai_release_*.py",
+    "scripts/check_release_*.py",
+    "tests/test_installer*.py",
+    "tests/test_install_*.py",
+    "tests/test_upgrade_apply.py",
+    "docs/reference/distribution.md",
+    "docs/reference/installed-lifecycle.md",
+    "docs/getting-started/security-release-verification.md",
+    "docs/reference/capability-truth-matrix.json"
+    ,"docs/reference/japanese-capability-assessment.json"
+    ,"docs/reference/japanese-capability-assessment.md"
+    ,"docs/reference/pre-release-documentation-alignment.json"
+    ,"docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Publishing a release or creating a semantic version tag.",
+    "Deleting or rewriting the stale release-install-identity worktree.",
+    "Weakening installer, release, or source-bound evidence checks."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/611",
+      "reason": "Authoritative remediation request and acceptance criteria."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/tree/codex/release-install-identity",
+      "reason": "Quarantined stale predecessor; read-only implementation reference, never a merge base."
+    },
+    {
+      "path": "docs/reference/installed-lifecycle.md",
+      "reason": "Installed lifecycle fact contract."
+    },
+    {
+      "path": "scripts/ai_install_facts.py",
+      "reason": "Current atomic lifecycle fact writer."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["supply_chain", "installation", "source_binding"],
+    "reason": "Installer metadata must be atomically bound to immutable release identity without accepting stale facts.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized full plan execution and supersession/quarantine; authority is recorded here."
+  },
+  "preReviewWarnings": ["Treat the predecessor as read-only evidence; do not copy stale version facts without revalidation."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A conflicting selected tag, tag target, version metadata, manifest/release digest, or asset SHA-256 fails before installer lifecycle facts are written.",
+    "A successful tagged install atomically emits exactly one mutually consistent fact bundle that ai-cockpit-version can validate.",
+    "Stale metadata is not reused and rollback preserves the prior valid facts on a failed write.",
+    "Installer, upgrade, and status tests cover contradiction, success, stale-metadata, and rollback paths.",
+    "Distribution and installed-lifecycle documentation state the immutable identity contract."
+  ],
+  "guidelines": [
+    "Fail closed on unverifiable external release facts.",
+    "Write lifecycle fact bundles atomically; never reuse stale version metadata.",
+    "Keep installer behavior project-neutral and document public commands."
+  ],
+  "intent": {
+    "problem": "Real adopter installation selected v0.5.48 but exposed conflicting v0.5.42/v0.5.32 facts. The original #611 Work Item is stale and dirty, so it is quarantined as read-only evidence.",
+    "constraints": ["Use current origin/main as the only implementation base.", "Do not modify the quarantined predecessor.", "Do not publish or tag a release in this Work Item.", "Record the user's automatic-execution and supersession authority in this Contract."],
+    "rationale": "Immutable tag, commit, manifest, and asset-digest binding removes multiple installation truths and makes diagnostics reproducible."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {"scenario": "conflicting tag, commit, version, manifest, or asset digest", "required": true, "riskDomain": "source_binding", "status": "verified", "expected": "Reject before any lifecycle fact write.", "verificationPlan": "Add installer and fact-bundle contradiction tests.", "evidence": ["tests/test_installer.py::test_tagged_install_rejects_conflicting_source_identity_before_writes", "tests/test_installer.py::test_tagged_source_rejects_release_digest_commit_mismatch"]},
+    {"scenario": "consistent tagged install writes one fact bundle", "required": true, "riskDomain": "installation", "status": "verified", "expected": "One atomically bound identity and version fact bundle validates.", "verificationPlan": "Add tagged-install success and status tests.", "evidence": ["tests/test_install_facts.py::test_tagged_release_identity_binds_tag_commit_version_and_assets", "tests/test_install_status.py::test_tagged_install_status_verifies_installed_identity_without_external_evidence"]},
+    {"scenario": "failed lifecycle write retains valid prior facts", "required": true, "riskDomain": "rollback", "status": "verified", "expected": "No partial new identity facts survive a failed write.", "verificationPlan": "Add rollback and failed-write regression tests.", "evidence": ["tests/test_installer.py::test_failed_lifecycle_fact_write_removes_partial_identity_bundle", "tests/test_upgrade_apply.py::test_confirmed_apply_snapshots_and_preserves_project_content"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized automatic execution of the full plan and supersession/quarantine of stale Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 837
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-install-identity-current-main.json",
+    "baseCommit": "b1bbbc1f3c6381b8b857f5afe7c194c8b8eb375b",
+    "initialScopeDigest": "8344e8a8a722d742bc0f0ae73d1a1c387bb9e65e9f7d364b6ead7db7dd120514",
+    "contractSkeletonDigest": "7b2ceda09aa60d8b3803b76fddd031ffa5610ab548cfc6f9b3a1e0819744cc6e"
+  }
+}

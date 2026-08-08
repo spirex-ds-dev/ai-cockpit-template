@@ -4,7 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from ai_install_facts import write_fact_bundle
+from ai_install_facts import validate_fact_bundle, write_fact_bundle
 from ai_upgrade_apply import apply_proposal
 
 
@@ -94,6 +94,10 @@ def test_confirmed_apply_snapshots_and_preserves_project_content(tmp_path: Path)
     ]
     assert result["rollbackEvidence"]["state"] == "captured"
     assert result["prHandoff"]["state"] == "not_started"
+    snapshot = root / ".ai/upgrade/snapshots/upgrade-apply-test"
+    assert (snapshot / "release-identity.before.json").is_file()
+    facts = validate_fact_bundle(root)
+    assert facts["releaseIdentity"]["manifestHash"] == facts["version"]["manifestHash"]
 
 
 def test_drift_blocks_apply_without_writing(tmp_path: Path) -> None:

@@ -243,6 +243,7 @@ class Installer:
         self.upgrade_conflicts: list[dict[str, str]] = []
         self.upgrade_conflict_report: dict[str, object] | None = None
         self.source_classification = classify_source(self.source)
+        self.source_release_identity: dict[str, object] | None = None
         self.write_plan = WritePlan([])
         self.lock = InstallerLock(self.target / ".ai" / "cockpit" / ".install.lock")
         self._tree_copy_cache: dict[str, tuple[Path, ...]] = {}
@@ -256,6 +257,11 @@ class Installer:
                 "ERROR: refusing unknown installer source: " + self.source_classification.reason,
                 file=sys.stderr,
             )
+            return 2
+        try:
+            self.source_release_identity = self.validate_source_release_identity()
+        except (OSError, ValueError, subprocess.SubprocessError) as exc:
+            print(f"ERROR: source release identity is invalid: {exc}", file=sys.stderr)
             return 2
         if self.stack not in STACKS:
             print(
@@ -1415,6 +1421,85 @@ class Installer:
     def release_semver(value: str) -> tuple[int, int, int]:
         return installer_release_semver(value)
 
+    @classmethod
+    def canonical_release_tag(cls, value: str) -> str:
+        major, minor, patch = cls.release_semver(value)
+        return f"v{major}.{minor}.{patch}"
+
+    def validate_source_release_identity(self) -> dict[str, object] | None:
+        """Bind a requested immutable source tag before any target writes occur."""
+        requested_ref = os.environ.get("AI_COCKPIT_TEMPLATE_REF", "").strip()
+        if not requested_ref:
+            return None
+        requested_tag = self.canonical_release_tag(requested_ref)
+        version = self.load_version(self.source / ".ai" / "cockpit" / "version.json")
+        release_version = version.get("releaseVersion")
+        if (
+            not isinstance(release_version, str)
+            or self.canonical_release_tag(release_version) != requested_tag
+        ):
+            raise ValueError(
+                f"version.json releaseVersion {release_version!r} does not match requested tag {requested_tag}"
+            )
+        digest_path = self.source / ".ai" / "cockpit" / "release-digests.json"
+        digests = json.loads(digest_path.read_text(encoding="utf-8"))
+        if not isinstance(digests, dict):
+            raise TypeError("release-digests.json must be a JSON object")
+        release_tag = digests.get("releaseTag")
+        if (
+            not isinstance(release_tag, str)
+            or self.canonical_release_tag(release_tag) != requested_tag
+        ):
+            raise ValueError(
+                f"release-digests.json releaseTag {release_tag!r} does not match requested tag {requested_tag}"
+            )
+        # Fixed git executable; source path is a Path and the tag was canonicalized above.
+        source_head = subprocess.run(  # nosec B603 B607
+            ["git", "-C", str(self.source), "rev-parse", "HEAD"],
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout.strip()
+        # Fixed git executable; source path and canonical tag are non-shell argv values.
+        tag_target = subprocess.run(  # nosec B603 B607
+            ["git", "-C", str(self.source), "rev-parse", f"refs/tags/{requested_tag}^{{commit}}"],
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout.strip()
+        if source_head != tag_target:
+            raise ValueError(
+                f"requested tag {requested_tag} resolves to {tag_target}, not source HEAD {source_head}"
+            )
+        for field in ("sourceCommit", "tagTarget", "metadataCommit"):
+            if digests.get(field) != source_head:
+                raise ValueError(
+                    f"release-digests.json {field} does not match requested tag source commit"
+                )
+        artifacts = digests.get("artifacts")
+        if not isinstance(artifacts, dict) or not artifacts:
+            raise ValueError("release-digests.json artifacts must be a non-empty object")
+        invalid_artifacts = sorted(
+            name
+            for name, digest in artifacts.items()
+            if not isinstance(name, str)
+            or not isinstance(digest, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", digest)
+        )
+        if invalid_artifacts:
+            raise ValueError(
+                "release-digests.json artifacts contain invalid SHA-256 digest(s): "
+                + ", ".join(invalid_artifacts)
+            )
+        return {
+            "releaseTag": requested_tag,
+            "releaseVersion": release_version,
+            "sourceCommit": source_head,
+            "tagTarget": tag_target,
+            "metadataCommit": digests["metadataCommit"],
+            "artifactDigests": artifacts,
+        }
+
     @staticmethod
     def load_version(path: Path) -> dict[str, int | str]:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -1501,14 +1586,16 @@ class Installer:
             else:
                 self.record("write", path, "write installed lifecycle fact")
                 created.append(path)
+        # Track every new fact before writing: rollback must remove a partial bundle.
+        self.created_paths.update(created)
         write_fact_bundle(
             source=self.source,
             target=self.target,
             distribution_version=self.load_version(
                 self.source / ".ai" / "cockpit" / "version.json"
             ),
+            release_identity=self.source_release_identity,
         )
-        self.created_paths.update(created)
 
     def copy_scripts(self) -> None:
         self.copy_path(
