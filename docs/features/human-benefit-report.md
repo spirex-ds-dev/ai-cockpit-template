@@ -14,6 +14,8 @@ The report is a deterministic projection of the validated Task Outcome. It does 
 
 `ai-finish` writes the Review Report to `.ai/cockpit/task_report.json` and `.ai/cockpit/task_report.md`. `check-ai-pr` compares those files with the archived Task Outcome and fails closed when they are missing, malformed, stale, or inconsistent.
 
+When archive rewrites that Outcome's active paths, the archive transaction regenerates the exact report pair and records both paths in the same archived Summary. Only a complete current archive transaction can own that pair; a missing, stale, malformed, or cross-task report remains unowned.
+
 After provider verification, `ai-close-work-item` writes the Final Report beside the Closure Receipt under `target/task-closure-receipts/` before branch deletion. The Final Report adds the PR URL, merge commit, synchronized base, cleanup intent, and continuation worktree. Writing it outside source history keeps synchronized `main` clean.
 
 ## Count semantics

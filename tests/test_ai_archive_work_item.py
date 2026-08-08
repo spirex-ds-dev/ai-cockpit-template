@@ -2,6 +2,8 @@ import json
 from argparse import Namespace
 
 import ai_archive_work_item
+import ai_check_status_consistency
+import ai_generate_human_report
 import pytest
 
 
@@ -338,6 +340,7 @@ def test_main_dry_run_validates_summary_and_current_digest(tmp_path, monkeypatch
     contract_path.write_text(
         json.dumps(
             {
+                "summaryVersion": 2,
                 "workItemId": "task",
                 "mode": "code",
                 "scope": ["src/app.py"],
@@ -494,3 +497,145 @@ def test_archive_failure_rolls_back_rewritten_traceability_bytes(tmp_path, monke
 
     assert traceability.read_bytes() == original_traceability
     assert all(path.read_bytes() == original_source_bytes[path] for path in sources)
+
+
+def test_archive_transaction_records_refreshed_human_report_paths_in_archived_summary(
+    tmp_path, monkeypatch
+):
+    active = tmp_path / ".ai/work-items/active"
+    cockpit = tmp_path / ".ai/cockpit"
+    target = tmp_path / ".ai/work-items/archive/2026"
+    active.mkdir(parents=True)
+    cockpit.mkdir(parents=True)
+    target.mkdir(parents=True)
+    (target.parent / "index.json").write_text('{"indexVersion": 1, "entries": []}\n')
+
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    review = active / "task.review.json"
+    outcome = active / "task.outcome.json"
+    contract.write_text('{"workItemId":"task"}\n', encoding="utf-8")
+    summary.write_text(
+        json.dumps(
+            {
+                "summaryVersion": 2,
+                "workItemId": "task",
+                "changedFiles": [{"path": ".ai/work-items/starts/task.json", "reason": "fixture"}],
+                "documentationAlignment": {
+                    "schemaVersion": 1,
+                    "status": "aligned",
+                    "checkedAt": "2026-08-08T00:00:00+00:00",
+                    "checks": [
+                        {
+                            "area": "documentationCommandsCapability",
+                            "status": "aligned",
+                            "evidence": [".ai/work-items/starts/task.json"],
+                            "reason": "fixture",
+                        }
+                    ],
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    review.write_text("{}\n", encoding="utf-8")
+    outcome_payload = {
+        "format": "ai-cockpit-task-outcome",
+        "schemaVersion": 1,
+        "workItemId": "task",
+        "status": "completed",
+        "bindings": {
+            "taskId": "task",
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "d" * 40,
+            "headCommit": "e" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.0",
+        },
+        "sections": {
+            "outcomeSummary": "Completed.",
+            "taskOverview": "Task.",
+            "deliveredChanges": [],
+            "findings": [],
+            "risks": [],
+            "warnings": [],
+            "limitations": [],
+            "nonRiskExplanations": [],
+            "forbiddenClaims": [],
+            "interventions": [],
+            "forcedStops": [],
+            "resolutions": [],
+            "recurrencePrevention": [],
+            "avoidedImpact": [],
+            "residualRisks": [],
+            "humanDecisions": [],
+            "evidence": [{"source": "contract.json", "subject": "Contract"}],
+        },
+    }
+    outcome.write_text(json.dumps(outcome_payload), encoding="utf-8")
+    report = ai_generate_human_report.generate_human_report(outcome_payload)
+    (cockpit / "task_report.json").write_text(json.dumps(report), encoding="utf-8")
+    (cockpit / "task_report.md").write_text(
+        ai_generate_human_report.render_human_report(report), encoding="utf-8"
+    )
+
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_archive_work_item, "ARCHIVE_BASE_DIR", tmp_path / ".ai/work-items/archive"
+    )
+    monkeypatch.setattr(ai_archive_work_item, "_generate_status", lambda _command: None)
+
+    sources = (contract, summary, review, outcome)
+    ai_archive_work_item._execute_archive_transaction(
+        contract_path=contract,
+        summary_path=summary,
+        review_path=review,
+        success_path=active / "task.success.json",
+        outcome_paths=[outcome],
+        files_to_move=[(path, target / path.name) for path in sources],
+        target_dir=target,
+        summary_tmp=target / ".task.summary.tmp",
+        manifest_target=target / "task.archive-manifest.json",
+        has_summary=True,
+        has_review=True,
+        has_success=False,
+        archive_sequence=1,
+        traceability_path=tmp_path / "docs/reference/traceability.json",
+        traceability_backup=None,
+        traceability_payload=None,
+    )
+
+    archived_summary = json.loads((target / "task.summary.json").read_text(encoding="utf-8"))
+    changed_paths = {item["path"] for item in archived_summary["changedFiles"]}
+    assert ".ai/cockpit/task_report.json" in changed_paths
+    assert ".ai/cockpit/task_report.md" in changed_paths
+    command_evidence = next(
+        check["evidence"]
+        for check in archived_summary["documentationAlignment"]["checks"]
+        if check["area"] == "documentationCommandsCapability"
+    )
+    assert ".ai/cockpit/task_report.md" in command_evidence
+
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    transaction_paths = {
+        ".ai/work-items/archive/index.json",
+        ".ai/work-items/starts/task.json",
+        ".ai/work-items/archive/2026/task.archive-manifest.json",
+        ".ai/work-items/archive/2026/task.contract.json",
+        ".ai/work-items/archive/2026/task.summary.json",
+        ".ai/work-items/archive/2026/task.outcome.json",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    }
+    assert {
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    }.issubset(ai_check_status_consistency.transaction_owned_paths(transaction_paths))
+
+    (cockpit / "task_report.md").write_text("tampered\n", encoding="utf-8")
+    assert not ai_check_status_consistency.transaction_owned_paths(transaction_paths)
