@@ -115,6 +115,163 @@ def git_changed_files(base: str) -> list[str]:
     return changed
 
 
+def _git_text(command: list[str], *, project_root: Path) -> str:
+    """Run a fixed Git metadata command or fail closed with its diagnostic."""
+    result = subprocess.run(  # nosec B603: callers use fixed Git subcommands and revisions
+        command,
+        cwd=project_root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode:
+        raise ValueError(
+            f"cannot build pre-archive candidate: {(result.stderr or result.stdout).strip()}"
+        )
+    return result.stdout
+
+
+def _candidate_paths(base: str, *, project_root: Path) -> list[str]:
+    """Return every path whose bytes may be included by a future archive commit."""
+    commands = [
+        ["git", "diff", "--name-only", f"{base}...HEAD"],
+        ["git", "diff", "--name-only"],
+        ["git", "diff", "--cached", "--name-only"],
+        ["git", "ls-files", "--others", "--exclude-standard"],
+    ]
+    paths: list[str] = []
+    for command in commands:
+        for raw in _git_text(command, project_root=project_root).splitlines():
+            path = raw.strip()
+            if path and path not in paths:
+                paths.append(path)
+    return paths
+
+
+def candidate_snapshot(
+    *, base: str, project_root: Path, contract_path: Path | None = None
+) -> dict[str, object]:
+    """Build a content-addressed pre-archive candidate without creating a commit.
+
+    The snapshot records the bytes currently present in the worktree for every
+    committed, staged, unstaged, or untracked path that would be captured by
+    the canonical post-archive commit.  It deliberately does not use only
+    `git status`: two edits to the same path must produce different bindings.
+    """
+    head = _git_text(["git", "rev-parse", "HEAD"], project_root=project_root).strip()
+    if not head:
+        raise ValueError("cannot build pre-archive candidate without HEAD")
+    paths = _candidate_paths(base, project_root=project_root)
+    contract: dict[str, object] | None = None
+    if contract_path is not None:
+        try:
+            loaded = json.loads(contract_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(f"cannot load coverage Contract: {exc}") from exc
+        if not isinstance(loaded, dict):
+            raise ValueError("coverage Contract must be an object")
+        contract = loaded
+        scope = contract.get("scope")
+        baseline = contract.get("baselineDirtyPaths", [])
+        if not isinstance(scope, list) or not all(isinstance(item, str) for item in scope):
+            raise ValueError("coverage Contract scope must be a list of paths")
+        if not isinstance(baseline, list) or not all(isinstance(item, str) for item in baseline):
+            raise ValueError("coverage Contract baselineDirtyPaths must be a list of paths")
+        scope_paths = list(scope)
+        baseline_paths = list(baseline)
+    # Summary, Outcome, status, and report are generated after a successful
+    # gate records its binding. Including them would create a self-reference:
+    # persisting the evidence would necessarily invalidate the evidence. They
+    # remain scope-checked above and are separately digested by Outcome and
+    # archive-manifest contracts.
+    derived_paths: set[str] = {
+        ".ai/cockpit/current_status.md",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    }
+    if contract is not None and contract_path is not None:
+        work_item = contract.get("workItemId")
+        if isinstance(work_item, str) and work_item:
+            active = f".ai/work-items/active/{work_item}"
+            derived_paths.update(
+                {
+                    f"{active}.summary.json",
+                    f"{active}.outcome.json",
+                    f"{active}.outcome.md",
+                }
+            )
+            lifecycle_surface_paths = {
+                *derived_paths,
+                f".ai/work-items/starts/{work_item}.json",
+            }
+        else:
+            lifecycle_surface_paths = set(derived_paths)
+        foreign = [
+            path
+            for path in paths
+            if path not in baseline_paths
+            and path not in lifecycle_surface_paths
+            and not included(path, scope_paths)
+        ]
+        if foreign:
+            raise ValueError(
+                "pre-archive candidate contains Contract-unowned path(s): " + ", ".join(foreign)
+            )
+    candidate_paths = [path for path in paths if path not in derived_paths]
+
+    files: list[dict[str, str]] = []
+    for path in sorted(candidate_paths):
+        candidate = project_root / path
+        if candidate.is_symlink():
+            raise ValueError(f"pre-archive candidate path must not be a symbolic link: {path}")
+        if candidate.exists():
+            if not candidate.is_file():
+                raise ValueError(f"pre-archive candidate path must be a regular file: {path}")
+            digest = hashlib.sha256(candidate.read_bytes()).hexdigest()
+            state = "present"
+        else:
+            digest = hashlib.sha256(b"deleted\0" + path.encode("utf-8")).hexdigest()
+            state = "deleted"
+        files.append({"path": path, "state": state, "sha256": digest})
+
+    untracked_paths = set(
+        _git_text(
+            ["git", "ls-files", "--others", "--exclude-standard"], project_root=project_root
+        ).splitlines()
+    )
+    diff_payload = {
+        "baseDiff": _git_text(
+            ["git", "diff", "--binary", f"{base}...HEAD"], project_root=project_root
+        ),
+        "indexDiff": _git_text(["git", "diff", "--binary", "--cached"], project_root=project_root),
+        "worktreeDiff": _git_text(["git", "diff", "--binary"], project_root=project_root),
+        "untracked": [item for item in files if item["path"] in untracked_paths],
+    }
+    candidate_tree_payload: dict[str, object] = {
+        "baseCommit": base,
+        "candidateHead": head,
+        "files": files,
+    }
+    if contract is not None and contract_path is not None:
+        candidate_tree_payload["contractSha256"] = hashlib.sha256(
+            contract_path.read_bytes()
+        ).hexdigest()
+    canonical_tree = json.dumps(
+        candidate_tree_payload, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    canonical_diff = json.dumps(diff_payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return {
+        "baseCommit": base,
+        "candidateHead": head,
+        "candidateFiles": files,
+        "excludedDerivedPaths": sorted(path for path in paths if path in derived_paths),
+        "candidateTreeDigest": hashlib.sha256(canonical_tree).hexdigest(),
+        "candidateDiffDigest": hashlib.sha256(canonical_diff).hexdigest(),
+        # Retained for consumers of the former report schema; it is now content-addressed.
+        "candidateStateDigest": hashlib.sha256(canonical_tree).hexdigest(),
+    }
+
+
 def candidate_binding(*, base: str, project_root: Path) -> dict[str, str]:
     """Bind a report to the PR base and the exact candidate observed by pytest."""
     head = subprocess.run(  # nosec B603 B607 - fixed list-form Git metadata lookup
@@ -171,7 +328,15 @@ def run_predictor(
     contract_path: Path | None = None,
 ) -> int:
     policy = load_policy(policy_path)
-    changed_files = git_changed_files(base)
+    snapshot = candidate_snapshot(base=base, project_root=project_root, contract_path=contract_path)
+    candidate_files = snapshot.get("candidateFiles", [])
+    if not isinstance(candidate_files, list):
+        raise TypeError("pre-archive candidate snapshot is missing candidateFiles")
+    changed_files = [
+        item["path"]
+        for item in candidate_files
+        if isinstance(item, dict) and isinstance(item.get("path"), str)
+    ]
     bootstrap_paths = adoption_bootstrap_paths(changed_files, contract_path)
     selected, tests = select_changed_critical(
         [path for path in changed_files if path not in bootstrap_paths],
@@ -179,8 +344,8 @@ def run_predictor(
         critical_minimums,
     )
     if not selected:
+        report_path.parent.mkdir(parents=True, exist_ok=True)
         if bootstrap_paths:
-            report_path.parent.mkdir(parents=True, exist_ok=True)
             report_path.write_text(
                 json.dumps(
                     {
@@ -190,7 +355,7 @@ def run_predictor(
                             "contract": contract_path.as_posix() if contract_path else None,
                             "excludedPaths": bootstrap_paths,
                         },
-                        "binding": candidate_binding(base=base, project_root=project_root),
+                        "binding": snapshot,
                     },
                     indent=2,
                     sort_keys=True,
@@ -200,6 +365,23 @@ def run_predictor(
             )
             print("changed-critical coverage: not applicable; adoption bootstrap runtime")
             return 0
+        report_path.write_text(
+            json.dumps(
+                {
+                    "applicability": {
+                        "status": "not_applicable",
+                        "reason": "no_critical_script_changed",
+                        "contract": contract_path.as_posix() if contract_path else None,
+                        "excludedPaths": [],
+                    },
+                    "binding": snapshot,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
         print("changed-critical coverage: not applicable; no critical script changed")
         return 0
     missing_tests = [path for path in tests if not (project_root / path).is_file()]
@@ -230,7 +412,7 @@ def run_predictor(
         for failure in failures:
             print(f"[ERROR] {failure}", file=sys.stderr)
         return 1
-    report["binding"] = candidate_binding(base=base, project_root=project_root)
+    report["binding"] = snapshot
     report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     rendered = ", ".join(f"{path}>={critical_minimums[path]:g}%" for path in selected)
     print(f"changed-critical coverage passed: {rendered}")

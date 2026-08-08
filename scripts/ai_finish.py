@@ -346,8 +346,17 @@ def worktree_digest(paths: list[str]) -> str:
 
 
 def worktree_digest_for_finish(paths: list[str], summary_path: str) -> str:
-    """Hash the Work Item state without the self-referential Summary file."""
-    return worktree_digest([path for path in paths if path != summary_path])
+    """Hash source state without lifecycle projections written after verification."""
+    outcome_stem = summary_path.removesuffix(".summary.json")
+    derived_paths = {
+        summary_path,
+        f"{outcome_stem}.outcome.json",
+        f"{outcome_stem}.outcome.md",
+        ".ai/cockpit/current_status.md",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    }
+    return worktree_digest([path for path in paths if path not in derived_paths])
 
 
 def outcome_input_digest(summary: dict[str, Any]) -> str:
@@ -542,6 +551,41 @@ def run_pre_archive_critical_coverage(
             check_id="preArchiveCriticalCoverage", command=command_text, duration_ms=duration
         )
     return code, output
+
+
+def bind_pre_archive_candidate_coverage_to_outcome(task: str) -> tuple[bool, str]:
+    """Project the successful candidate report into the already-derived Outcome."""
+    from ai_check_task_outcome import validate_outcome
+    from ai_render_task_outcome import render_task_outcome
+
+    report_path = PROJECT_ROOT / "target" / "changed-critical-coverage.json"
+    json_path, markdown_path = _outcome_paths(task)
+    try:
+        report_bytes = report_path.read_bytes()
+        report = json.loads(report_bytes)
+        outcome = load_json(json_path)
+        binding = report.get("binding") if isinstance(report, dict) else None
+        if not isinstance(binding, dict):
+            return False, "pre-archive candidate coverage report is missing a binding"
+        required = ("baseCommit", "candidateHead", "candidateTreeDigest", "candidateDiffDigest")
+        if any(not isinstance(binding.get(key), str) or not binding[key] for key in required):
+            return False, "pre-archive candidate coverage binding is incomplete"
+        bindings = outcome.get("bindings")
+        if not isinstance(bindings, dict):
+            return False, "Task Outcome bindings are missing"
+        bindings["preArchiveCandidateCoverage"] = {
+            "reportSha256": hashlib.sha256(report_bytes).hexdigest(),
+            "binding": {key: binding[key] for key in required},
+        }
+        markdown = render_task_outcome(outcome)
+        validation = validate_outcome(outcome, markdown, expected_task_id=task)
+        if not validation.valid:
+            return False, "; ".join(f"{item.code}: {item.message}" for item in validation.errors)
+        save_json(json_path, outcome)
+        markdown_path.write_text(markdown, encoding="utf-8")
+    except (OSError, TypeError, ValueError) as exc:
+        return False, str(exc)
+    return True, "Task Outcome binds pre-archive candidate coverage"
 
 
 def verification_priority(item: dict[str, Any]) -> int:
@@ -1504,6 +1548,17 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
                     failure_message=output or "pre-archive critical coverage failed",
                     code=code,
                 )
+            outcome_ok, outcome_message = bind_pre_archive_candidate_coverage_to_outcome(args.task)
+            if not outcome_ok:
+                obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+                return return_blocked_finish_failure(
+                    task=args.task,
+                    contract_path=contract_path,
+                    summary_path=summary_path,
+                    failed_check="preArchiveCandidateCoverageOutcome",
+                    failure_message=outcome_message,
+                    code=1,
+                )
             archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
             cmd_str = " ".join(archive_command)
             obs.check_started(check_id="archive-work-item", command=cmd_str)
@@ -1738,6 +1793,17 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
                 failed_check="preArchiveCriticalCoverage",
                 failure_message=output or "pre-archive critical coverage failed",
                 code=code,
+            )
+        outcome_ok, outcome_message = bind_pre_archive_candidate_coverage_to_outcome(args.task)
+        if not outcome_ok:
+            obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+            return return_blocked_finish_failure(
+                task=args.task,
+                contract_path=contract_path,
+                summary_path=summary_path,
+                failed_check="preArchiveCandidateCoverageOutcome",
+                failure_message=outcome_message,
+                code=1,
             )
         archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
         cmd_str = " ".join(archive_command)

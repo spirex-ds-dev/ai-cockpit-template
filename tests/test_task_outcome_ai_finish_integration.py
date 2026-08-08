@@ -8,6 +8,25 @@ from ai_check_task_outcome import validate_outcome
 from ai_governance_compression import render_active_status
 
 
+def test_finish_digest_excludes_derived_lifecycle_projections(monkeypatch):
+    monkeypatch.setattr(ai_finish, "path_fingerprint", lambda path: f"digest:{path}")
+
+    digest = ai_finish.worktree_digest_for_finish(
+        [
+            "scripts/example.py",
+            ".ai/work-items/active/task.summary.json",
+            ".ai/work-items/active/task.outcome.json",
+            ".ai/work-items/active/task.outcome.md",
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+        ],
+        ".ai/work-items/active/task.summary.json",
+    )
+
+    assert digest == ai_finish.worktree_digest(["scripts/example.py"])
+
+
 def _outcome(task: str) -> dict:
     sections = {
         "outcomeSummary": "Completed from structured evidence.",
@@ -166,6 +185,40 @@ def test_pre_archive_critical_coverage_requires_work_item_and_preserves_plain_fa
         "Finish blocked at quality: lint command failed"
     )
     assert ai_finish.verification_priority({"check": "aiStatusCheck"}) == 30
+
+
+def test_pre_archive_candidate_coverage_is_projected_into_outcome(tmp_path, monkeypatch):
+    task = "example-task"
+    report_path = tmp_path / "target/changed-critical-coverage.json"
+    report_path.parent.mkdir(parents=True)
+    binding = {
+        "baseCommit": "a" * 40,
+        "candidateHead": "b" * 40,
+        "candidateTreeDigest": "c" * 64,
+        "candidateDiffDigest": "d" * 64,
+    }
+    report_path.write_text(json.dumps({"binding": binding}), encoding="utf-8")
+    outcome_path = tmp_path / "task.outcome.json"
+    markdown_path = tmp_path / "task.outcome.md"
+    outcome = _outcome(task)
+    outcome["bindings"] = {}
+    outcome_path.write_text(json.dumps(outcome), encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
+    import ai_check_task_outcome
+
+    monkeypatch.setattr(
+        ai_check_task_outcome,
+        "validate_outcome",
+        lambda *_args, **_kwargs: type("Report", (), {"valid": True, "errors": []})(),
+    )
+
+    assert ai_finish.bind_pre_archive_candidate_coverage_to_outcome(task) == (
+        True,
+        "Task Outcome binds pre-archive candidate coverage",
+    )
+    actual = json.loads(outcome_path.read_text(encoding="utf-8"))["bindings"]
+    assert actual["preArchiveCandidateCoverage"]["binding"] == binding
 
 
 def test_failed_check_selection_uses_latest_failure_and_fails_closed_on_bad_summary(tmp_path):
@@ -774,6 +827,9 @@ def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatc
     )
     monkeypatch.setattr(ai_finish, "render_direct_outcome_report", lambda *_args: "report\n")
     monkeypatch.setattr(ai_finish, "refresh_archived_human_report", lambda _task: (True, "ok"))
+    monkeypatch.setattr(
+        ai_finish, "bind_pre_archive_candidate_coverage_to_outcome", lambda _task: (True, "ok")
+    )
     commands = []
     monkeypatch.setattr(
         ai_finish,

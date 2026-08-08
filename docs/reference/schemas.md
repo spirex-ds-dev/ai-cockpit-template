@@ -20,7 +20,7 @@ lastVerifiedBy: capability-truth-matrix
 | Cockpit checks | `.ai/cockpit/checks.yaml` |
 | Capability status | [capability-truth-matrix.json](capability-truth-matrix.json) |
 | Documentation context | [documentation-context-registry.json](documentation-context-registry.json) |
-| Archive discovery | `.ai/work-items/archive/index.json` and immutable archive manifests |
+| Archive discovery | `.ai/work-items/archive/index.json` and immutable archive manifests; each new manifest also records the content-addressed pre-archive candidate-coverage report digest and binding |
 | Work Item Intelligence Snapshot | `.ai/schemas/work-item-intelligence-snapshot.schema.json` and `scripts/ai_work_item_intelligence.py` |
 
 Examples are explanatory. The executable validators and versioned

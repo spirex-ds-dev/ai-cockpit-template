@@ -1684,6 +1684,9 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
 
     monkeypatch.setattr(ai_finish, "run", run)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
+    monkeypatch.setattr(
+        ai_finish, "bind_pre_archive_candidate_coverage_to_outcome", lambda _task: (True, "ok")
+    )
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--archive"])
 
     assert ai_finish.main() == 5
