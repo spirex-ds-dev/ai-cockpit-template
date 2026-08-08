@@ -263,8 +263,29 @@ def _summary_worktree_digest(summary: dict[str, object]) -> str:
 
 
 def _current_worktree_digest(contract: dict[str, object]) -> str:
+    """Anchor owned source bytes while manifest roots derived lifecycle projections."""
     summary_path = str(contract.get("summaryPath", ""))
-    paths = [path for path in changed_paths(contract) if path != summary_path]
+    work_item = contract.get("workItemId")
+    derived_paths = (
+        {
+            f".ai/work-items/active/{work_item}.outcome.json",
+            f".ai/work-items/active/{work_item}.outcome.md",
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+        }
+        if isinstance(work_item, str) and work_item
+        else {
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+        }
+    )
+    paths = [
+        path
+        for path in changed_paths(contract)
+        if path != summary_path and path not in derived_paths
+    ]
     return _worktree_digest(paths)
 
 
@@ -418,6 +439,7 @@ def _archive_manifest(
     summary_target: Path,
     archive_sequence: int,
     outcome_targets: list[Path] | None = None,
+    pre_archive_candidate_coverage: dict[str, object] | None = None,
 ) -> dict[str, object]:
     """Build the immutable root after Contract and Summary are frozen."""
     manifest = {
@@ -439,7 +461,56 @@ def _archive_manifest(
             }
             for target in outcome_targets
         ]
+    if pre_archive_candidate_coverage is not None:
+        manifest["preArchiveCandidateCoverage"] = pre_archive_candidate_coverage
     return manifest
+
+
+def load_pre_archive_candidate_coverage(
+    *, contract_path: Path, contract: dict[str, object]
+) -> dict[str, object]:
+    """Load and revalidate the exact candidate report that authorizes archive.
+
+    The report remains local generated state, but its content-addressed binding
+    must still describe the current candidate immediately before immutable
+    archive mutation.  The returned report digest is the durable manifest root.
+    """
+    report_path = PROJECT_ROOT / "target" / "changed-critical-coverage.json"
+    try:
+        report_bytes = report_path.read_bytes()
+        report = json.loads(report_bytes)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"missing readable pre-archive candidate coverage report: {exc}") from exc
+    if not isinstance(report, dict) or not isinstance(report.get("binding"), dict):
+        raise TypeError("pre-archive candidate coverage report is missing a binding")
+    base = contract.get("baseCommit")
+    if not isinstance(base, str) or not base:
+        raise ValueError("pre-archive candidate coverage requires Contract baseCommit")
+    from check_changed_critical_coverage import candidate_snapshot
+
+    current = candidate_snapshot(base=base, project_root=PROJECT_ROOT, contract_path=contract_path)
+    binding = report["binding"]
+    required = ("baseCommit", "candidateHead", "candidateTreeDigest", "candidateDiffDigest")
+    if any(binding.get(key) != current.get(key) for key in required):
+        raise ValueError(
+            "pre-archive candidate coverage binding is stale or does not match the current candidate"
+        )
+    coverage: dict[str, object] = {
+        "reportSha256": hashlib.sha256(report_bytes).hexdigest(),
+        "binding": {key: binding[key] for key in required},
+    }
+    work_item = contract.get("workItemId")
+    if not isinstance(work_item, str) or not work_item:
+        raise ValueError("pre-archive candidate coverage requires Contract workItemId")
+    outcome_path = ACTIVE_DIR / f"{work_item}.outcome.json"
+    try:
+        outcome = load_json(outcome_path)
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"cannot read Outcome candidate coverage binding: {exc}") from exc
+    bindings = outcome.get("bindings") if isinstance(outcome, dict) else None
+    if not isinstance(bindings, dict) or bindings.get("preArchiveCandidateCoverage") != coverage:
+        raise ValueError("Task Outcome does not bind the current pre-archive candidate coverage")
+    return coverage
 
 
 def _archive_sequence_key(item: object) -> int:
@@ -606,6 +677,7 @@ def _execute_archive_transaction(
     traceability_path: Path,
     traceability_backup: bytes | None,
     traceability_payload: dict[str, Any] | None,
+    pre_archive_candidate_coverage: dict[str, object] | None = None,
 ) -> None:
     """Execute and roll back one archive mutation as a single transaction."""
     index_path = _archive_index_path()
@@ -772,6 +844,7 @@ def _execute_archive_transaction(
                     summary_target=summary_target,
                     archive_sequence=archive_sequence,
                     outcome_targets=[target_dir / path.name for path in outcome_paths],
+                    pre_archive_candidate_coverage=pre_archive_candidate_coverage,
                 ),
             )
 
@@ -983,6 +1056,18 @@ def main() -> int:
             print(f"  {src.relative_to(PROJECT_ROOT)} -> {target.relative_to(PROJECT_ROOT)}")
         return 0
 
+    pre_archive_candidate_coverage: dict[str, object] | None = None
+    # A non-Git fixture cannot model a post-archive commit or its coverage
+    # candidate. Real repository archive mutation is always fail-closed.
+    if (PROJECT_ROOT / ".git").exists():
+        try:
+            pre_archive_candidate_coverage = load_pre_archive_candidate_coverage(
+                contract_path=contract_path, contract=contract
+            )
+        except (TypeError, ValueError) as exc:
+            print(f"ERROR: archive mutation blocked: {exc}", file=sys.stderr)
+            return 1
+
     # Unit fixtures without a Git checkout cannot create branch projections.
     # A real repository must hold the explicit lease before archive mutates the
     # shared archive index, status, or task-report projections.
@@ -1013,6 +1098,7 @@ def main() -> int:
             traceability_path=traceability_path,
             traceability_backup=traceability_backup,
             traceability_payload=traceability_payload,
+            pre_archive_candidate_coverage=pre_archive_candidate_coverage,
         )
     except Exception as exc:  # noqa: BLE001 - archive mutation failures must fail closed with their diagnostic
         print(f"ERROR: Failed to archive Work Item: {exc}", file=sys.stderr)

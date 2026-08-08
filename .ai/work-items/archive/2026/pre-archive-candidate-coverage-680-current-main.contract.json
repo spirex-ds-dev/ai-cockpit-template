@@ -1,0 +1,338 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pre-archive-candidate-coverage-680-current-main",
+  "mode": "code",
+  "title": "P1: re-deliver pre-archive candidate coverage",
+  "rawUserRequest": "Execute the remaining authorized plan to convergence. Fix process defects in the current Work Item rather than creating temporary patches or unnecessary successor Work Items; do not bypass gates or release before the final audit. The user authorizes execution and requires that authority to be recorded in every Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-08-convergence-current-WI-repair",
+    "capturedAt": "2026-08-08",
+    "digest": "sha256:current-wi-root-cause-remediation-no-temporary-bypass"
+  },
+  "declaredIntent": {
+    "summary": "Redeliver #672 from current main with a complete scope: prove the actual uncommitted archive candidate, bind coverage into Outcome and archive manifest, and reject ambiguous foreign worktree state.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "d47403bc33cfeff603f9db51c1aa0c0bda0971e2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pre-archive-candidate-coverage-680-current-main.contract.json",
+    ".ai/work-items/active/pre-archive-candidate-coverage-680-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/active/pre-archive-candidate-coverage-680-current-main.outcome.json",
+    ".ai/work-items/active/pre-archive-candidate-coverage-680-current-main.outcome.md",
+    ".ai/guards/changed_critical_coverage_policy.json",
+    "scripts/check_changed_critical_coverage.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/schemas.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "tests/test_changed_critical_coverage.py",
+    "tests/test_core_gates.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_verification_evidence.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_end_to_end_adoption_validation.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py"
+  ],
+  "outOfScope": [
+    "Mutating, archiving, or rewriting the frozen #672 Work Item or any historical Contract, Summary, Outcome, or archive manifest.",
+    "Weakening coverage floors, accepting a path-only candidate digest, bypassing archive, PR, hosted, or release gates.",
+    "Creating a separate process-repair Work Item for a defect that this scope can correct.",
+    "Publishing a release, merging a PR, deleting branches, or changing GitHub runner/provider settings outside this Work Item lifecycle."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/680",
+      "reason": "Current-main successor acceptance and immutable-before-edit scope constraint."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/672",
+      "reason": "Frozen forensic evidence of the missing uncommitted-candidate model."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/pr-critical-coverage-gate-668-current.summary.json",
+      "reason": "Predecessor implementation evidence; its path-only worktree binding is the gap corrected here."
+    },
+    {
+      "path": "scripts/check_changed_critical_coverage.py",
+      "reason": "Current changed-critical candidate discovery and coverage-report binding."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Canonical Finish path that invokes the pre-archive coverage gate and derives Outcome evidence."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Canonical archive transaction and immutable manifest writer."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "User-facing lifecycle contract for pre-archive evidence."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and governed lifecycle boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "archive_integrity",
+      "coverage_enforcement",
+      "foreign_worktree_ownership",
+      "evidence_traceability"
+    ],
+    "reason": "A false candidate binding could authorize archival of untested code or silently absorb another Work Item's dirty state; evidence must remain immutable and fail closed.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The #672 forensic record, #680 successor acceptance, existing candidate checker, archive transaction, and focused regressions define the technical boundary. The remaining implementation choice is test-constrained engineering, not an unresolved human decision."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Archive integrity, coverage enforcement, and immutable evidence require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorization, #680 scope, #672 forensic record, predecessor evidence, acceptance, and verification plan are explicit."
+  },
+  "preReviewWarnings": [
+    "Review candidate identity for content rather than path-only status, including staged, unstaged, deleted, renamed, and untracked paths.",
+    "Review that only Contract-owned paths may contribute to the candidate and that the same successful evidence is preserved in Outcome and manifest.",
+    "Review that archive retries cannot reuse stale coverage evidence after any candidate mutation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The pre-archive changed-critical gate builds a deterministic candidate snapshot from Contract base, HEAD, staged, unstaged, deleted, renamed, and untracked Work Item content without creating an ordinary commit before archive.",
+    "The gate rejects an ambiguous base, unreadable candidate content, or dirty path outside the active Contract scope before running coverage or archive mutation.",
+    "A passing coverage result is bound to candidate tree/diff digest and recorded in active Summary/derived Outcome before archive; archive rejects missing, stale, or mismatched evidence.",
+    "The immutable archive manifest records candidate coverage binding and result digest alongside Contract, Summary, and Outcome digests.",
+    "Focused regressions cover a successful uncommitted candidate, changed content with unchanged status, staged/untracked content, foreign dirty paths, stale evidence, and manifest persistence.",
+    "Lifecycle documentation and generated capability/pre-release evidence describe the exact fail-closed boundary without claiming an ordinary pre-archive commit."
+  ],
+  "implementationSurface": {
+    "production": [
+      "scripts/check_changed_critical_coverage.py",
+      "scripts/ai_finish.py",
+      "scripts/ai_archive_work_item.py",
+      ".ai/guards/changed_critical_coverage_policy.json"
+    ],
+    "tests": [
+      "tests/test_changed_critical_coverage.py",
+      "tests/test_core_gates.py",
+      "tests/test_task_outcome_ai_finish_integration.py",
+      "tests/test_verification_evidence.py",
+      "tests/test_ai_check_summary.py",
+      "tests/test_ai_archive_work_item.py",
+      "tests/test_start_and_archive.py",
+      "tests/test_adoption_e2e.py",
+      "tests/test_end_to_end_adoption_validation.py",
+      "tests/test_finish_e2e.py",
+      "tests/test_project_governance_journey.py"
+    ],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/work-items/active/pre-archive-candidate-coverage-680-current-main.outcome.json",
+      ".ai/work-items/active/pre-archive-candidate-coverage-680-current-main.outcome.md",
+      ".ai/work-items/archive/index.json"
+    ],
+    "documentation": [
+      "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "docs/reference/schemas.md",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Work Item changes a critical archive runtime file only in the unstaged worktree.",
+      "expected": "The candidate snapshot and coverage result include the exact changed bytes, not only `<base>...HEAD` or a path-only status digest.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a focused checker regression that changes bytes without changing the path set and asserts the candidate digest changes."
+    },
+    {
+      "scenario": "A Work Item has staged and untracked Contract-owned candidate files before archive.",
+      "expected": "The snapshot binds both forms deterministically without creating an ordinary commit.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add candidate-snapshot tests for index and untracked content."
+    },
+    {
+      "scenario": "A dirty path is not declared by the active Contract or its generated lifecycle surfaces.",
+      "expected": "The coverage gate fails before pytest and archive mutation, identifying the foreign path.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add negative ownership regression and archive/Finish no-mutation assertion."
+    },
+    {
+      "scenario": "Candidate content changes after a green focused coverage result but before archive.",
+      "expected": "Archive rejects stale or mismatched evidence and leaves active evidence unarchived.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add archive transaction regression with mismatched candidate binding."
+    },
+    {
+      "scenario": "A valid candidate coverage result reaches a successful archive.",
+      "expected": "The active Outcome and immutable archive manifest contain the same candidate binding and result digest.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add Finish and archive-manifest regressions, then inspect generated outcome/manifest evidence."
+    }
+  ],
+  "guidelines": [
+    "Preserve immutable historical archive evidence byte-for-byte; add only new evidence for this Work Item.",
+    "Use deterministic, content-addressed candidate data; never authorize archive from a path-only status digest.",
+    "Fail closed on foreign or ambiguous worktree state instead of inferring ownership or applying a temporary bypass.",
+    "Keep generated capability and documentation evidence synchronized with implementation and tests."
+  ],
+  "intent": {
+    "problem": "#672 found that the #668 pre-archive gate could pass while inspecting `<base>...HEAD` plus only a path-level worktree digest. Canonical archive happens before the Work Item commit, so the gate lacked proof of the actual uncommitted bytes it was about to freeze; its result was also not rooted in the archive manifest.",
+    "constraints": [
+      "Do not amend or rewrite frozen #672 or historical archives.",
+      "Do not create an ordinary commit before archive solely to make coverage inspectable.",
+      "Do not weaken coverage thresholds, scope ownership, archive integrity, or Outcome requirements.",
+      "Correct every discovered process defect that is within this Work Item's declared scope."
+    ],
+    "rationale": "A deterministic candidate snapshot makes coverage evidence verifiable against exact pre-archive bytes, while strict ownership checks prevent unrelated work from being silently captured. Carrying its digest into Outcome and archive manifest gives later PR/release audits one immutable chain."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user gave standing authorization to execute the remaining plan automatically, record authority in each Contract, fix process defects in the current Work Item, and avoid temporary bypasses; this explicitly covers the required restricted changed-critical coverage policy mapping."
+  },
+  "rollbackNote": "Revert only this Work Item diff and regenerate source-bound documentation evidence. Do not modify #672 or any historical archive while rolling back.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 835
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/pre-archive-candidate-coverage-680-current-main.json",
+    "baseCommit": "d47403bc33cfeff603f9db51c1aa0c0bda0971e2",
+    "initialScopeDigest": "d9a814a13706e82d8e57fe9d6aa1a9d9a11bc3e134cb8ac372aa43980eba36c2",
+    "contractSkeletonDigest": "1853b4606603e3eeb607f628fcb6c36eedcc8ea798369ee7cdb220e74b3e37e7"
+  }
+}

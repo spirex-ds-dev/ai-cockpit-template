@@ -303,12 +303,9 @@ def test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry(tm
         "make",
         "-f",
         "Makefile.ai",
-        "ai-finish",
-        "TASK=e2e",
+        "archive-work-item",
+        f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}",
         f"PYTHON={sys.executable}",
-        "PROJECT_TEST=true",
-        "REPORT_LANGUAGE=en",
-        "ARCHIVE=true",
     )
     assert archived.returncode == 0, archived.stdout + archived.stderr
     assert not contract_path.exists()
@@ -345,11 +342,9 @@ def test_required_failure_keeps_active_and_retry_archives(tmp_path):
     archived = run(
         tmp_path,
         "make",
-        "ai-finish",
-        "TASK=e2e",
+        "archive-work-item",
+        f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}",
         f"PYTHON={sys.executable}",
-        "PROJECT_TEST=true",
-        "ARCHIVE=true",
     )
     assert archived.returncode == 0, archived.stdout + archived.stderr
     assert not contract_path.exists()

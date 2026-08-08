@@ -346,8 +346,17 @@ def worktree_digest(paths: list[str]) -> str:
 
 
 def worktree_digest_for_finish(paths: list[str], summary_path: str) -> str:
-    """Hash the Work Item state without the self-referential Summary file."""
-    return worktree_digest([path for path in paths if path != summary_path])
+    """Hash source state without lifecycle projections written after verification."""
+    outcome_stem = summary_path.removesuffix(".summary.json")
+    derived_paths = {
+        summary_path,
+        f"{outcome_stem}.outcome.json",
+        f"{outcome_stem}.outcome.md",
+        ".ai/cockpit/current_status.md",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+    }
+    return worktree_digest([path for path in paths if path not in derived_paths])
 
 
 def outcome_input_digest(summary: dict[str, Any]) -> str:
@@ -544,6 +553,59 @@ def run_pre_archive_critical_coverage(
     return code, output
 
 
+def prepare_pre_archive_candidate_coverage(
+    task: str, contract_data: dict[str, Any], *, obs: Any
+) -> tuple[int, str]:
+    """Produce and bind current candidate evidence for either archive lifecycle.
+
+    ``ai-finish`` may be followed by a separate explicit archive command.  The
+    same evidence is therefore required for ordinary finish and inline archive;
+    archive remains an independent stale-binding verifier.
+    """
+    code, output = run_pre_archive_critical_coverage(contract_data, obs=obs)
+    if code:
+        return code, output or "pre-archive critical coverage failed"
+    outcome_ok, outcome_message = bind_pre_archive_candidate_coverage_to_outcome(task)
+    if not outcome_ok:
+        return 1, outcome_message
+    return 0, ""
+
+
+def bind_pre_archive_candidate_coverage_to_outcome(task: str) -> tuple[bool, str]:
+    """Project the successful candidate report into the already-derived Outcome."""
+    from ai_check_task_outcome import validate_outcome
+    from ai_render_task_outcome import render_task_outcome
+
+    report_path = PROJECT_ROOT / "target" / "changed-critical-coverage.json"
+    json_path, markdown_path = _outcome_paths(task)
+    try:
+        report_bytes = report_path.read_bytes()
+        report = json.loads(report_bytes)
+        outcome = load_json(json_path)
+        binding = report.get("binding") if isinstance(report, dict) else None
+        if not isinstance(binding, dict):
+            return False, "pre-archive candidate coverage report is missing a binding"
+        required = ("baseCommit", "candidateHead", "candidateTreeDigest", "candidateDiffDigest")
+        if any(not isinstance(binding.get(key), str) or not binding[key] for key in required):
+            return False, "pre-archive candidate coverage binding is incomplete"
+        bindings = outcome.get("bindings")
+        if not isinstance(bindings, dict):
+            return False, "Task Outcome bindings are missing"
+        bindings["preArchiveCandidateCoverage"] = {
+            "reportSha256": hashlib.sha256(report_bytes).hexdigest(),
+            "binding": {key: binding[key] for key in required},
+        }
+        markdown = render_task_outcome(outcome)
+        validation = validate_outcome(outcome, markdown, expected_task_id=task)
+        if not validation.valid:
+            return False, "; ".join(f"{item.code}: {item.message}" for item in validation.errors)
+        save_json(json_path, outcome)
+        markdown_path.write_text(markdown, encoding="utf-8")
+    except (OSError, TypeError, ValueError) as exc:
+        return False, str(exc)
+    return True, "Task Outcome binds pre-archive candidate coverage"
+
+
 def verification_priority(item: dict[str, Any]) -> int:
     check_id = verification_key(item)
     if check_id == "sourceBoundEvidence":
@@ -623,6 +685,44 @@ def _human_report_paths() -> tuple[Path, Path]:
     return root.with_suffix(".json"), root.with_suffix(".md")
 
 
+def prepare_documentation_alignment_evidence(task: str, summary_path: Path) -> None:
+    """Bind already-declared generated Markdown before Finish validates docs.
+
+    A prior blocked Finish can already have produced its compact report.  The
+    next Finish must recognize that declared report as documentation evidence
+    before its first alignment check, rather than requiring a second retry.
+    """
+
+    summary = load_json(summary_path)
+    contract_path = PROJECT_ROOT / ".ai" / "work-items" / "active" / f"{task}.contract.json"
+    contract = load_json(contract_path) if contract_path.is_file() else {}
+    scope = contract.get("scope", []) if isinstance(contract, dict) else []
+    alignment = summary.get("documentationAlignment")
+    if not isinstance(alignment, dict):
+        return
+    checks = alignment.get("checks")
+    if not isinstance(checks, list):
+        return
+    report_markdown = _human_report_paths()[1].relative_to(PROJECT_ROOT).as_posix()
+    outcome_markdown = _outcome_paths(task)[1].relative_to(PROJECT_ROOT).as_posix()
+    documented_generated_paths = {report_markdown, outcome_markdown}
+    changed = summary.get("changedFiles", [])
+    declared_paths = {item.get("path") for item in changed if isinstance(item, dict)}
+    for check in checks:
+        if not isinstance(check, dict) or check.get("area") != "documentationCommandsCapability":
+            continue
+        evidence_paths = check.setdefault("evidence", [])
+        if isinstance(evidence_paths, list):
+            for generated_path in sorted(
+                candidate
+                for candidate in documented_generated_paths & declared_paths
+                if included(candidate, scope) and candidate not in evidence_paths
+            ):
+                evidence_paths.append(generated_path)
+        break
+    save_json(summary_path, summary)
+
+
 def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]:
     """Generate the compact review view from the validated Task Outcome."""
 
@@ -648,34 +748,8 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
             relative = path.relative_to(PROJECT_ROOT).as_posix()
             if included(relative, scope) and relative not in existing:
                 changed.append({"path": relative, "reason": reason})
-        alignment = summary.get("documentationAlignment")
-        report_markdown = markdown_path.relative_to(PROJECT_ROOT).as_posix()
-        outcome_markdown = _outcome_paths(task)[1].relative_to(PROJECT_ROOT).as_posix()
-        documented_generated_paths = {
-            report_markdown,
-            outcome_markdown,
-        }
-        declared_after_generation = {item.get("path") for item in changed if isinstance(item, dict)}
-        if isinstance(alignment, dict):
-            checks = alignment.get("checks")
-            if isinstance(checks, list):
-                for check in checks:
-                    if (
-                        not isinstance(check, dict)
-                        or check.get("area") != "documentationCommandsCapability"
-                    ):
-                        continue
-                    evidence_paths = check.setdefault("evidence", [])
-                    if isinstance(evidence_paths, list):
-                        for generated_path in sorted(
-                            candidate
-                            for candidate in documented_generated_paths & declared_after_generation
-                            if included(candidate, scope)
-                        ):
-                            if generated_path not in evidence_paths:
-                                evidence_paths.append(generated_path)
-                    break
         save_json(summary_path, summary)
+        prepare_documentation_alignment_evidence(task, summary_path)
     except (OSError, KeyError, TypeError, ValueError) as exc:
         return False, str(exc)
     return True, "Human Benefit Report pipeline passed"
@@ -1409,6 +1483,7 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             code=code,
         )
 
+    prepare_documentation_alignment_evidence(args.task, summary_path)
     alignment_issues = documentation_alignment_issues(summary_path, contract_data)
     if alignment_issues:
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
@@ -1492,18 +1567,20 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
                 failure_message=str(exc),
                 code=1,
             )
+        code, coverage_message = prepare_pre_archive_candidate_coverage(
+            args.task, contract_data, obs=obs
+        )
+        if code != 0:
+            obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+            return return_blocked_finish_failure(
+                task=args.task,
+                contract_path=contract_path,
+                summary_path=summary_path,
+                failed_check="preArchiveCandidateCoverage",
+                failure_message=coverage_message,
+                code=code,
+            )
         if args.archive:
-            code, output = run_pre_archive_critical_coverage(contract_data, obs=obs)
-            if code != 0:
-                obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-                return return_blocked_finish_failure(
-                    task=args.task,
-                    contract_path=contract_path,
-                    summary_path=summary_path,
-                    failed_check="preArchiveCriticalCoverage",
-                    failure_message=output or "pre-archive critical coverage failed",
-                    code=code,
-                )
             archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
             cmd_str = " ".join(archive_command)
             obs.check_started(check_id="archive-work-item", command=cmd_str)
@@ -1727,18 +1804,20 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
+    code, coverage_message = prepare_pre_archive_candidate_coverage(
+        args.task, contract_data, obs=obs
+    )
+    if code != 0:
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="preArchiveCandidateCoverage",
+            failure_message=coverage_message,
+            code=code,
+        )
     if args.archive:
-        code, output = run_pre_archive_critical_coverage(contract_data, obs=obs)
-        if code != 0:
-            obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-            return return_blocked_finish_failure(
-                task=args.task,
-                contract_path=contract_path,
-                summary_path=summary_path,
-                failed_check="preArchiveCriticalCoverage",
-                failure_message=output or "pre-archive critical coverage failed",
-                code=code,
-            )
         archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
         cmd_str = " ".join(archive_command)
         obs.check_started(check_id="archive-work-item", command=cmd_str)

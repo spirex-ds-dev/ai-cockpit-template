@@ -169,9 +169,8 @@ def test_first_adoption_finishes_and_passes_complete_pr_check(tmp_path):
     archive = run(
         tmp_path,
         "make",
-        "ai-finish",
-        "TASK=adopt_ai_cockpit",
-        "ARCHIVE=true",
+        "archive-work-item",
+        f"CONTRACT={contract.relative_to(tmp_path)}",
         f"PYTHON={sys.executable}",
     )
     assert archive.returncode == 0, archive.stdout + archive.stderr
