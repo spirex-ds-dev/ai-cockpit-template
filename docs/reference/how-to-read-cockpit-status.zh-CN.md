@@ -34,6 +34,21 @@ keywords:
 
 `Evidence Basis` 指向由 Contract、Summary 和验证证据派生的显示区块；它不是第二个事实源。`Next Action` 只是流程提示，不会授权 merge、release 或外部操作。
 
+## 活跃 Task Outcome
+
+每个活跃 Status 都包含 `Task Outcome` 投影。它与 `Key Conclusion` 是独立的生命周期信号，用于确认当前 Work Item 是否已由 `ai-finish` 输出 Outcome。
+
+两个信号有意回答不同问题，因此在 Finish 稳定证据期间颜色可以不同。`Signal Domain: governance_review` 表示 Contract/Summary 证据是否可供审查；`Signal Domain: work_item_lifecycle` 表示 Finish 是否已输出 Outcome。只能在其声明的 domain 内解读各自颜色，任何一方都不覆盖另一方。
+
+| Presence / traffic light | 含义 | 恢复边界 |
+| --- | --- | --- |
+| `absent` / `yellow` | Finish 尚未持久化 Outcome；在实现或验证进行中这是正常状态。 | 继续已声明的验证或运行 `make ai-finish`；不得将 Work Item 视为可归档。 |
+| `present` / `red` | 已绑定的 blocked 或 failed Outcome 记录失败 gate 和恢复条件。 | 完成所述恢复并重跑失败 gate。红色 Outcome 永不授权 archive、merge 或 release。 |
+| `present` / `green` | 已为这个准确的 Work Item 生成并绑定 completed Outcome。 | 继续标准的 review 与 archive 生命周期；绿色不授权 merge 或 release。 |
+
+该投影只从活跃 Contract、Summary 与同一 Work Item 的 Outcome JSON/Markdown 证据生成。畸形、陈旧、跨工单或与 Summary 矛盾的 Outcome 会使状态生成/检查 fail-closed；不要手工修复 `current_status.md`，也不要复制其他 Work Item 的 Outcome。
+如果先前已有绿色投影、但后续 Finish gate 变为阻塞，Finish 会在返回前从 blocked Outcome 重新生成 Status。若该刷新无法通过校验，系统会移除陈旧的生成状态，而不会保留错误的绿灯；请读取任务绑定的 blocked Outcome 并修复所报告的 gate。
+
 ## Recommendation 的含义
 
 | Recommendation | 含义 |

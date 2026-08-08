@@ -59,6 +59,21 @@ Preflight Review は Contract の証拠から実装準備度を導出します�
 
 `Evidence Basis` は Contract、Summary、検証結果から派生した表示セクションへのドリルダウン用ポインターです。別の事実源ではありません。`Next Action` は手順上の案内であり、merge、release、外部操作を自動承認しません。
 
+## Active Task Outcome
+
+すべての active Status には `Task Outcome` の projection があります。これは `Key Conclusion` とは別の lifecycle signal であり、現在の Work Item に対して `ai-finish` が Outcome を出力したかを確認するために使います。
+
+二つの signal は意図的に別の問いに答えるため、Finish が evidence を安定化している間は色が異なることがあります。`Signal Domain: governance_review` は Contract/Summary evidence が review-ready かを示し、`Signal Domain: work_item_lifecycle` は Finish が Outcome を出力したかを示します。各色は宣言された domain 内だけで読み、一方を他方の上書きとして扱いません。
+
+| Presence / traffic light | 意味 | 回復境界 |
+| --- | --- | --- |
+| `absent` / `yellow` | Finish はまだ Outcome を永続化していません。実装または検証中には正常な状態です。 | 宣言済みの検証を続行するか `make ai-finish` を実行します。archive-ready と扱ってはいけません。 |
+| `present` / `red` | binding 済みの blocked または failed Outcome が failed gate と recovery condition を記録しています。 | 記載された回復を完了して failed gate を再実行します。red Outcome は archive、merge、release を許可しません。 |
+| `present` / `green` | この Work Item 自身の completed Outcome が binding されています。 | canonical な review と archive lifecycle を続行します。green は merge や release の許可ではありません。 |
+
+projection は active Contract、Summary、および同一 Task の Outcome JSON/Markdown evidence から生成されます。malformed、stale、cross-task、または Summary と矛盾する Outcome は status generation/checking を fail closed にします。`current_status.md` を手編集したり、別 Work Item の Outcome をコピーしたりしてはいけません。
+先行する green projection の後で Finish の gate が block した場合、Finish は return 前に blocked Outcome から Status を再生成します。この refresh を validate できない場合は、誤った green signal を残す代わりに stale generated Status を削除します。task-bound blocked Outcome を読み、報告された gate を修復してください。
+
 `notCodable: true`、`executionDecision.status` が `block` / `defer` / `needs_human_decision`、または `agentCapability` が実装・検証不可や人間判断を示す場合は、直ちに `not_ready` になります。
 
 ## Active Work Item がない場合

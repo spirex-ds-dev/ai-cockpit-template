@@ -66,6 +66,33 @@ verification evidence. It is a drill-down pointer, not a second source of truth.
 `Next Action` is procedural guidance and does not authorize a merge, release, or
 external operation.
 
+## Active Task Outcome
+
+Every active Status includes a `Task Outcome` projection. It is a separate
+lifecycle signal from `Key Conclusion`: use it to determine whether `ai-finish`
+has emitted an Outcome for the current Work Item.
+
+The two signals deliberately answer different questions and can have different
+colors while Finish is stabilizing evidence. `Signal Domain: governance_review`
+answers whether the Contract/Summary evidence is ready for review;
+`Signal Domain: work_item_lifecycle` answers whether Finish emitted an Outcome.
+Read each color only within its declared domain; neither overrides the other.
+
+| Presence / traffic light | Meaning | Recovery boundary |
+| --- | --- | --- |
+| `absent` / `yellow` | Finish has not yet persisted an Outcome. This is normal while implementation or verification is in progress. | Continue the declared verification or run `make ai-finish`; do not treat the Work Item as archive-ready. |
+| `present` / `red` | A bound blocked or failed Outcome records its failed gate and recovery condition. | Complete the stated recovery and rerun the failed gate. A red Outcome never authorizes archive, merge, or release. |
+| `present` / `green` | A bound completed Outcome was produced for this exact Work Item. | Continue the canonical review and archive lifecycle; green is not merge or release authorization. |
+
+The projection is generated from the active Contract, Summary, and the
+same-task Outcome JSON/Markdown evidence. A malformed, stale, cross-task, or
+Summary-contradictory Outcome causes status generation/checking to fail closed;
+never repair `current_status.md` by hand or copy another Work Item's Outcome.
+If a later Finish gate blocks after an earlier green projection, Finish regenerates
+the Status from the blocked Outcome before returning. If that refresh cannot be
+validated, it removes the stale generated Status rather than leaving a false green
+signal; read the task-bound blocked Outcome and repair the reported gate.
+
 ## What the Preflight Review Means
 
 | Status | Meaning |

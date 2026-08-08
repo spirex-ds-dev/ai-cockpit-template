@@ -143,6 +143,24 @@ def test_default_coverage_policy_associates_linked_worktree_recovery_with_its_re
     ] == ["scripts/ai_linked_worktree_recovery.py"]
 
 
+def test_default_coverage_policy_associates_status_check_with_outcome_projection_regression(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        ai_check_coverage_guard, "POLICY", ROOT / ".ai" / "guards" / "coverage_policy.yaml"
+    )
+
+    assert (
+        ai_check_coverage_guard.detect(
+            [
+                "scripts/ai_check_status.py",
+                "tests/test_task_outcome_ai_finish_integration.py",
+            ]
+        )
+        == []
+    )
+
+
 def test_checkpoint_next_action_stops_on_unknowns():
     contract = {"notCodable": False, "unknowns": ["decision"], "verification": []}
     assert ai_checkpoint.next_action(contract, None).startswith("Stop coding")
@@ -617,6 +635,22 @@ def test_generate_status_main_handles_no_active_and_invalid_contract(tmp_path, m
     monkeypatch.setattr(
         __import__("sys"), "argv", ["ai_generate_status.py", str(broken), "--output", str(output)]
     )
+    assert ai_generate_status.main() == 1
+
+
+def test_generate_status_main_fails_closed_for_malformed_outcome_projection(tmp_path, monkeypatch):
+    output = tmp_path / "status.md"
+
+    def malformed_outcome(*_args, **_kwargs):
+        raise TypeError("taskOutcome must be an object")
+
+    monkeypatch.setattr(ai_generate_status, "write_active_status", malformed_outcome)
+    monkeypatch.setattr(
+        __import__("sys"),
+        "argv",
+        ["ai_generate_status.py", "contract.json", "--output", str(output)],
+    )
+
     assert ai_generate_status.main() == 1
 
 

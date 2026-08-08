@@ -434,6 +434,31 @@ def record_result(summary_path: Path, item: dict[str, Any]) -> None:
     save_json(summary_path, summary)
 
 
+def discard_stale_contract_verification(summary_path: Path, contract_hash: str) -> int:
+    """Remove active verification records that cannot attest the current Contract.
+
+    Active Summary evidence is a projection of the current Contract, not a
+    historical ledger.  A Contract amendment invalidates every verification
+    record bound to its prior hash; retaining those records makes ``aiSummary``
+    fail before Finish can record the replacement evidence, forcing a needless
+    retry.  Archive evidence preserves the historical record separately.
+    """
+    summary = load_json(summary_path)
+    values = summary.get("verification", [])
+    if not isinstance(values, list):
+        return 0
+    retained = [
+        item
+        for item in values
+        if isinstance(item, dict) and item.get("contractHash") == contract_hash
+    ]
+    removed = len(values) - len(retained)
+    if removed:
+        summary["verification"] = retained
+        save_json(summary_path, summary)
+    return removed
+
+
 def promote_review_readiness(
     summary: dict[str, Any], contract: dict[str, Any] | None = None
 ) -> dict[str, Any]:
@@ -755,6 +780,41 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
     return True, "Human Benefit Report pipeline passed"
 
 
+def refresh_active_status_after_blocked_outcome(
+    contract_path: Path, summary_path: Path
+) -> tuple[bool, str]:
+    """Regenerate and validate status after a Finish failure changes Outcome facts.
+
+    A successful earlier stabilization can have rendered a green completion
+    projection.  Once a later Finish gate persists a blocked Outcome, leaving
+    that projection in place would present contradictory lifecycle facts.  A
+    refresh failure removes the obsolete generated status rather than retaining
+    a stale green report; the task-bound blocked Outcome remains the recovery
+    record.
+    """
+    status_path = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
+    try:
+        contract = contract_path.relative_to(PROJECT_ROOT).as_posix()
+        summary = summary_path.relative_to(PROJECT_ROOT).as_posix()
+    except ValueError as exc:
+        return False, str(exc)
+    commands = [
+        ["make", "generate-cockpit-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
+        ["make", "check-ai-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
+        ["make", "check-ai-status-consistency"],
+    ]
+    for command in commands:
+        code, _duration, output = run(command)
+        if code == 0:
+            continue
+        try:
+            status_path.unlink(missing_ok=True)
+        except OSError as exc:
+            return False, f"{' '.join(command)} failed and stale status removal failed: {exc}"
+        return False, output or f"{' '.join(command)} failed"
+    return True, "active status refreshed from the blocked Outcome"
+
+
 def refresh_archived_human_report(task: str) -> tuple[bool, str]:
     """Rebind the Review Report after archive rewrites Outcome evidence paths."""
 
@@ -992,6 +1052,14 @@ def write_blocked_outcome(
         return (
             False,
             f"blocked Outcome persisted but Human Benefit Report refresh failed: {report_message}",
+        )
+    status_ok, status_message = refresh_active_status_after_blocked_outcome(
+        contract_path, summary_path
+    )
+    if not status_ok:
+        return (
+            False,
+            f"blocked Outcome persisted but active status refresh failed: {status_message}",
         )
     return True, "blocked Outcome and Human Benefit Report persisted"
 
@@ -1408,6 +1476,13 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             failed_check="aiCheckpoint",
             failure_message="Contract/checkpoint binding is stale",
             code=2,
+        )
+    stale_verification_count = discard_stale_contract_verification(summary_path, contract_hash)
+    if stale_verification_count:
+        print(
+            "Discarded "
+            f"{stale_verification_count} stale active verification record(s) "
+            "bound to a prior Contract."
         )
     declared = contract_data.get("verification", [])
     if not isinstance(declared, list):

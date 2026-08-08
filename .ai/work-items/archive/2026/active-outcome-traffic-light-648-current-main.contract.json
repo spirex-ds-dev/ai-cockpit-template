@@ -1,0 +1,199 @@
+{
+  "contractVersion": 2,
+  "workItemId": "active-outcome-traffic-light-648-current-main",
+  "mode": "code",
+  "title": "P1: expose active Outcome and traffic-light lifecycle state",
+  "baseCommit": "7a0d6c22bbb1e4774a8d7a996401d9a29ca39d08",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/active-outcome-traffic-light-648-current-main.contract.json",
+    ".ai/work-items/active/active-outcome-traffic-light-648-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/guards/changed_critical_coverage_policy.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/active-outcome-traffic-light-648-current-main.outcome.json",
+    ".ai/work-items/active/active-outcome-traffic-light-648-current-main.outcome.md",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_finish.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_core_gates.py",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "docs/reference/how-to-read-cockpit-status.ja.md",
+    "docs/reference/how-to-read-cockpit-status.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Manufacturing a completed Outcome before Finish.", "Changing unrelated hosted workflow scheduling or publishing a release."],
+  "sources": [
+    {
+      "path": "GitHub issue #648",
+      "reason": "Defines the required active lifecycle projection and failure modes."
+    },
+    {"path": "scripts/ai_generate_status.py", "reason": "Current generated operator-facing status projection."},
+    {"path": "scripts/ai_finish.py", "reason": "Creates authoritative blocked and completed Outcomes."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_projection", "operator_visibility"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The status and Outcome generation boundaries are inspected; changes are limited to their authoritative projection."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Lifecycle status, generated documentation, and regression surfaces require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic execution of the complete remediation plan; this Contract records that authority."
+  },
+  "preReviewWarnings": [
+    "Reject stale, cross-task, or contradictory active Outcome projections."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Generated active status always declares Outcome presence or absence, human color, current or last gate, and a recovery or next action.",
+    "No-Outcome/in-progress projects yellow without manufacturing a completed Outcome.",
+    "Blocked and completed active Outcomes project red and green respectively only when bound to the active Work Item.",
+    "Stale, cross-task, malformed, or contradictory Outcomes fail closed.",
+    "Generated Status explicitly declares governance-review and Work-Item-lifecycle signal domains so their independently derived colors cannot be misread as one fact.",
+    "A Contract amendment cannot leave stale active verification evidence that forces an otherwise-valid Finish retry; Finish discards evidence bound to a different Contract hash before recording the current run.",
+    "Regression tests cover no Outcome, in-progress, blocked, completed, and cross-task Outcome cases.",
+    "Operator documentation describes the traffic-light semantics and recovery boundary."
+  ],
+  "guidelines": [
+    "Generated status is authoritative and must not be hand-edited.",
+    "Outcome facts must be task-bound and fail closed on contradictions.",
+    "Public lifecycle semantics must be documented."
+  ],
+  "intent": {
+    "problem": "Operators cannot determine whether an active Work Item has emitted an Outcome or what its lifecycle state is while Finish is running.",
+    "constraints": ["Derive facts only from Contract, Summary, and task-bound Outcome evidence.", "Do not manufacture a completed Outcome before Finish.", "Preserve fail-closed handling of stale or cross-task evidence."],
+    "rationale": "A single generated projection gives operators visible red/yellow/green state without weakening lifecycle evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。#648: active Outcome and red/yellow/green lifecycle state must be visible before Finish terminality.",
+  "rawRequestSource": {"type": "human", "reference": "user-request: full remediation execution and GitHub issue #648", "capturedAt": "2026-08-09T00:00:00+09:00", "digest": "sha256:active-outcome-traffic-light-648-request"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Expose an authoritative active Outcome traffic-light lifecycle projection.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "implementationSurface": {"production": ["scripts/ai_generate_status.py", "scripts/ai_governance_compression.py", "scripts/ai_check_status.py", "scripts/ai_finish.py"], "tests": ["tests/test_guards_and_status.py", "tests/test_task_outcome_ai_finish_integration.py", "tests/test_core_gates.py"], "documentation": ["docs/reference/how-to-read-cockpit-status.md", "docs/reference/how-to-read-cockpit-status.ja.md", "docs/reference/how-to-read-cockpit-status.zh-CN.md"], "generated": ["docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"]},
+  "scenarioCoverage": [
+    {"id": "no-outcome-in-progress", "riskDomain": "operator_visibility", "scenario": "Active Contract/Summary has no Outcome during verification.", "expected": "Projection is yellow with Outcome absence and next action.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add status regression."},
+    {"id": "bound-outcome-colors", "riskDomain": "lifecycle_projection", "scenario": "Active task has blocked or completed bound Outcome.", "expected": "Projection is respectively red or green with gate/recovery facts.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add status regressions."},
+    {"id": "cross-task-rejected", "riskDomain": "evidence_integrity", "scenario": "Outcome belongs to another task or is malformed.", "expected": "Projection fails closed.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add rejection regression."}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User authorized automatic execution of the full remediation plan and required that authority in every Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 839
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/active-outcome-traffic-light-648-current-main.json",
+    "baseCommit": "7a0d6c22bbb1e4774a8d7a996401d9a29ca39d08",
+    "initialScopeDigest": "0d8707d529f1fa290756f2e497bb244040fe4b5edf3f2443543054f26507e366",
+    "contractSkeletonDigest": "bb55e024b5a77da981e2ffc2192f35bf7e8d7dcec10bdb5633972bb082c14296"
+  }
+}

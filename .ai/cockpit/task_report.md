@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task quality-aggregation-adopter-snapshot-613-current-main generated an evidence-derived outcome with status completed.
+Task active-outcome-traffic-light-648-current-main generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0

@@ -4,8 +4,10 @@ import sys
 import ai_check_agent_risk
 import ai_finish
 import ai_generate_human_report as human
+import ai_generate_status
 import pytest
 from ai_check_task_outcome import validate_outcome
+from ai_generate_task_outcome import generate_outcome, render_markdown
 from ai_governance_compression import render_active_status
 
 
@@ -338,6 +340,14 @@ def test_blocked_outcome_refreshes_the_exact_active_review_report(tmp_path, monk
     monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
     monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
     monkeypatch.setattr(ai_finish, "_human_report_paths", lambda: (report_json, report_markdown))
+    refreshed = []
+    monkeypatch.setattr(
+        ai_finish,
+        "refresh_active_status_after_blocked_outcome",
+        lambda actual_contract, actual_summary: (
+            refreshed.append((actual_contract, actual_summary)) or (True, "active status refreshed")
+        ),
+    )
 
     ok, message = ai_finish.write_blocked_outcome(
         task,
@@ -362,6 +372,32 @@ def test_blocked_outcome_refreshes_the_exact_active_review_report(tmp_path, monk
     assert human.validate_human_report(report, outcome) == []
     assert report_markdown.read_text(encoding="utf-8") == human.render_human_report(report)
     assert any("quality gate failed" in warning for warning in outcome["sections"]["warnings"])
+    assert refreshed == [(contract_path, summary_path)]
+
+
+def test_blocked_outcome_fails_closed_and_removes_stale_status_when_refresh_fails(
+    tmp_path, monkeypatch
+):
+    stale_status = tmp_path / ".ai" / "cockpit" / "current_status.md"
+    stale_status.parent.mkdir(parents=True)
+    stale_status.write_text("- Traffic Light: `green`\n", encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    calls = []
+
+    def failed_run(command, **_kwargs):
+        calls.append(command)
+        return 2, 1, "status generator failed"
+
+    monkeypatch.setattr(ai_finish, "run", failed_run)
+
+    ok, message = ai_finish.refresh_active_status_after_blocked_outcome(
+        tmp_path / "contract.json", tmp_path / "summary.json"
+    )
+
+    assert not ok
+    assert "status generator failed" in message
+    assert calls[0][:2] == ["make", "generate-cockpit-status"]
+    assert not stale_status.exists()
 
 
 def test_blocked_outcome_normalizes_coverage_metrics_for_valid_report(tmp_path, monkeypatch):
@@ -381,6 +417,9 @@ def test_blocked_outcome_normalizes_coverage_metrics_for_valid_report(tmp_path, 
     monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
     monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
     monkeypatch.setattr(ai_finish, "_human_report_paths", lambda: (report_json, report_markdown))
+    monkeypatch.setattr(
+        ai_finish, "refresh_active_status_after_blocked_outcome", lambda *_args: (True, "ok")
+    )
 
     ok, message = ai_finish.write_blocked_outcome(
         task,
@@ -415,6 +454,9 @@ def test_blocked_outcome_survives_report_refresh_failure(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
     monkeypatch.setattr(
         ai_finish, "run_human_report_pipeline", lambda *_args: (False, "report writer unavailable")
+    )
+    monkeypatch.setattr(
+        ai_finish, "refresh_active_status_after_blocked_outcome", lambda *_args: (True, "ok")
     )
 
     ok, message = ai_finish.write_blocked_outcome(
@@ -1053,7 +1095,117 @@ def test_status_contains_only_outcome_link_count_and_status_not_full_report():
     )
 
     assert "Task Outcome" in status
+    assert "- Signal Domain: `work_item_lifecycle`" in status
+    assert "Presence: `present`" in status
     assert "example-task.outcome.md" in status
     assert "Evidence Count: `3`" in status
     assert "Full Outcome" not in status
     assert "score" not in status.lower()
+
+
+def test_status_projects_missing_active_outcome_as_yellow_with_recovery_action():
+    status = render_active_status(
+        {
+            "recommendation": "needs_investigation",
+            "signals": [],
+            "evidence": {},
+            "decisionDrivers": [],
+        },
+        work_item_id="example-task",
+        mode="code",
+        contract_path="contract.json",
+        summary_path="summary.json",
+    )
+
+    assert "## Task Outcome" in status
+    assert "- Presence: `absent`" in status
+    assert "- Traffic Light: `yellow`" in status
+    assert "- Next Action: `continue verification or run make ai-finish`" in status
+
+
+def test_status_projects_blocked_outcome_as_red_with_gate_and_recovery():
+    status = render_active_status(
+        {"recommendation": "blocked", "signals": [], "evidence": {}, "decisionDrivers": []},
+        work_item_id="example-task",
+        mode="code",
+        contract_path="contract.json",
+        summary_path="summary.json",
+        task_outcome={
+            "status": "blocked",
+            "humanStatusColor": "red",
+            "failedCheck": "quality",
+            "recoveryCondition": "Run a passing quality retry.",
+            "markdownPath": ".ai/work-items/active/example-task.outcome.md",
+            "evidenceCount": 2,
+        },
+    )
+
+    assert "- Presence: `present`" in status
+    assert "- Traffic Light: `red`" in status
+    assert "- Failed Gate: `quality`" in status
+    assert "- Recovery Condition: `Run a passing quality retry.`" in status
+
+
+def test_outcome_projection_rejects_cross_task_outcome_file(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / f"{task}.contract.json"
+    outcome_path = tmp_path / f"{task}.outcome.json"
+    contract_path.write_text(json.dumps({"workItemId": task}), encoding="utf-8")
+    outcome_path.write_text(json.dumps({"workItemId": "other-task"}), encoding="utf-8")
+    monkeypatch.setattr(ai_generate_status, "PROJECT_ROOT", tmp_path)
+
+    with pytest.raises(RuntimeError, match="does not match active Work Item"):
+        ai_generate_status.project_active_task_outcome(
+            {"workItemId": task},
+            {
+                "taskOutcome": {
+                    "status": "completed",
+                    "jsonPath": outcome_path.name,
+                    "markdownPath": f"{task}.outcome.md",
+                }
+            },
+            contract_path,
+        )
+
+
+def test_outcome_projection_derives_green_from_bound_completed_outcome(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / f"{task}.contract.json"
+    outcome_path = tmp_path / f"{task}.outcome.json"
+    markdown_path = tmp_path / f"{task}.outcome.md"
+    bindings = {
+        "taskId": task,
+        "contractDigest": "a" * 64,
+        "summaryDigest": "b" * 64,
+        "verificationDigest": "c" * 64,
+        "baseCommit": "d" * 40,
+        "headCommit": "e" * 40,
+        "lifecycleStage": "pre_merge",
+        "pullRequest": {"state": "not_created"},
+        "aiCockpitVersion": "0.5.48",
+    }
+    outcome = generate_outcome(task, bindings)
+    outcome_path.write_text(json.dumps(outcome), encoding="utf-8")
+    markdown_path.write_text(render_markdown(outcome), encoding="utf-8")
+    monkeypatch.setattr(ai_generate_status, "PROJECT_ROOT", tmp_path)
+
+    projection = ai_generate_status.project_active_task_outcome(
+        {"workItemId": task},
+        {
+            "taskOutcome": {
+                "status": "completed",
+                "jsonPath": outcome_path.name,
+                "markdownPath": markdown_path.name,
+            }
+        },
+        contract_path,
+    )
+
+    assert projection == {
+        "status": "completed",
+        "humanStatusColor": "green",
+        "failedCheck": "",
+        "recoveryCondition": "",
+        "markdownPath": markdown_path.name,
+        "evidenceCount": 0,
+    }
