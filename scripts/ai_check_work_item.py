@@ -22,6 +22,7 @@ from ai_evidence_dependencies import (
 )
 from ai_external_identity import high_risk_approval_issues
 from ai_observability import create_observability, elapsed_ms
+from ai_projection_lease import BRANCH_INTEGRATED_GENERATED_PATHS
 from ai_start_receipt import receipt_path, validate_receipt
 
 REQUIRED_FIELDS = (
@@ -84,6 +85,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "rollbackPlan",
     "requiredEvidenceContext",
     "sourceBoundGeneratedEvidence",
+    "concurrencyBoundary",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -92,6 +94,53 @@ GOVERNANCE_PROFILES = {"light", "standard", "strict"}
 GOVERNANCE_PROFILE_SOURCES = {"automatic", "human_override"}
 INTENT_STRING_KEYS = {"businessGoal", "userGoal", "problem", "rationale"}
 INTENT_LIST_KEYS = {"constraints", "nonGoals"}
+
+
+def validate_concurrency_boundary(data: dict[str, Any]) -> list[str]:
+    """Validate explicit parallel ownership including every shared projection."""
+    boundary = data.get("concurrencyBoundary")
+    if boundary is None:
+        return []
+    if not isinstance(boundary, dict):
+        return ["concurrencyBoundary must be an object"]
+    issues: list[str] = []
+    if boundary.get("schemaVersion") != 1:
+        issues.append("concurrencyBoundary.schemaVersion must be 1")
+    task = data.get("workItemId")
+    for key in ("implementationPaths", "generatedEvidencePaths", "verificationOutputPaths"):
+        values = boundary.get(key)
+        if (
+            not isinstance(values, list)
+            or not values
+            or any(not non_empty_string(item) for item in values)
+        ):
+            issues.append(f"concurrencyBoundary.{key} must be a non-empty list of paths")
+            continue
+        for index, value in enumerate(values):
+            if not isinstance(value, str):
+                continue
+            if value.startswith("/") or ".." in Path(value).parts:
+                issues.append(
+                    f"concurrencyBoundary.{key}[{index}] must be a repository-relative path"
+                )
+            if "*" in value and (
+                key != "verificationOutputPaths" or value != f"target/quality/{task}/**"
+            ):
+                issues.append(
+                    f"concurrencyBoundary.{key}[{index}] may use ** only as target/quality/{task}/**"
+                )
+    serialized = boundary.get("serializedProjectionPaths")
+    if not isinstance(serialized, list) or any(not non_empty_string(item) for item in serialized):
+        issues.append("concurrencyBoundary.serializedProjectionPaths must be a string list")
+    elif set(serialized) != BRANCH_INTEGRATED_GENERATED_PATHS or len(serialized) != len(
+        set(serialized)
+    ):
+        issues.append(
+            "concurrencyBoundary.serializedProjectionPaths must exactly declare the closed branch-integrated projection inventory"
+        )
+    if not non_empty_string(boundary.get("reason")):
+        issues.append("concurrencyBoundary.reason must be a non-empty string")
+    return issues
 
 
 def validate_string_list(data: dict[str, Any], key: str, *, allow_empty: bool) -> list[str]:
@@ -657,6 +706,7 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
             )
     issues.extend(validate_governance_profile(data))
     issues.extend(validate_operation_escalations(data))
+    issues.extend(validate_concurrency_boundary(data))
     if "problemStatement" in data and not non_empty_string(data.get("problemStatement")):
         issues.append("problemStatement must be a non-empty string")
 

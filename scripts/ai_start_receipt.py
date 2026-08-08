@@ -100,7 +100,7 @@ def build_receipt(
         raise ValueError("Contract scope must be a string list for a Start Receipt")
     if not isinstance(base_commit, str) or not base_commit:
         raise ValueError("Contract baseCommit is required for a Start Receipt")
-    return {
+    receipt = {
         "receiptVersion": RECEIPT_SCHEMA_VERSION,
         "workItemId": work_item_id,
         "receiptPath": f"{RECEIPT_PREFIX}{work_item_id}.json",
@@ -110,15 +110,21 @@ def build_receipt(
         "initialScopeDigest": scope_digest(scope),
         "contractSkeletonDigest": skeleton_digest(contract),
     }
+    if contract.get("concurrencyBoundary") is not None:
+        receipt["concurrencyBoundaryDigest"] = _digest(contract["concurrencyBoundary"])
+    return receipt
 
 
 def receipt_binding(receipt: dict[str, Any]) -> dict[str, str]:
-    return {
+    binding = {
         "path": str(receipt["receiptPath"]),
         "baseCommit": str(receipt["baseCommit"]),
         "initialScopeDigest": str(receipt["initialScopeDigest"]),
         "contractSkeletonDigest": str(receipt["contractSkeletonDigest"]),
     }
+    if "concurrencyBoundaryDigest" in receipt:
+        binding["concurrencyBoundaryDigest"] = str(receipt["concurrencyBoundaryDigest"])
+    return binding
 
 
 def _is_digest(value: Any) -> bool:
@@ -523,6 +529,13 @@ def validate_receipt(
         or len(receipt["contractSkeletonDigest"]) != 64
     ):
         issues.append("Start Receipt contractSkeletonDigest must be a SHA-256 digest")
+    boundary = contract.get("concurrencyBoundary")
+    if boundary is not None:
+        digest = receipt.get("concurrencyBoundaryDigest")
+        if not _is_digest(digest):
+            issues.append("Start Receipt concurrencyBoundaryDigest must be a SHA-256 digest")
+        elif digest != _digest(boundary):
+            issues.append("Start Receipt concurrencyBoundaryDigest does not match Contract")
     binding = contract.get("startReceipt")
     if not isinstance(binding, dict):
         issues.append("Contract startReceipt binding is missing")

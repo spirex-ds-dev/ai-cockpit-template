@@ -22,6 +22,22 @@ schedule those tasks and a Work Item never becomes a shared global runtime
 lock. It validates the local record shape and fails closed for malformed,
 unpaired, mismatched, or non-dedicated active branches.
 
+### Branch-integrated generated projections
+
+Active Contract, Summary, Outcome, and Start Receipt files are task-namespaced
+worktree evidence. In contrast, `.ai/cockpit/current_status.md`, both
+`.ai/cockpit/task_report.*` projections, and `.ai/work-items/archive/index.json`
+are shared branch-integrated facts. An active status is therefore provisional:
+it cannot establish archive or PR ownership by itself.
+
+When a linked Work Item is active, `ai-start` requires a candidate
+`concurrencyBoundary` that declares the complete serialized-projection
+inventory plus exclusive implementation, generated-evidence, and quality paths.
+The Start Receipt binds the boundary digest. Finish and archive acquire one
+persistent projection lease, require the latest `origin/main`, and hold it
+through merged-PR lifecycle closure. A successor must rebase after the prior
+owner closes before it can regenerate shared projections.
+
 For a start request with a different Work Item ID, a malformed foreign
 linked-worktree identity is isolated rather than becoming a global start
 deadlock. The foreign Work Item is never edited or cleaned automatically;

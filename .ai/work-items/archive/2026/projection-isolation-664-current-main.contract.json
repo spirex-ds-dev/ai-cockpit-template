@@ -1,0 +1,269 @@
+{
+  "contractVersion": 2,
+  "workItemId": "projection-isolation-664-current-main",
+  "mode": "code",
+  "title": "Make parallel lifecycle projections merge-safe",
+  "baseCommit": "7c0788ceaa1a24634385d14a57937b4bd3c5a0fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/projection-isolation-664-current-main.contract.json",
+    ".ai/work-items/active/projection-isolation-664-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/projection-isolation-664-current-main.outcome.json",
+    ".ai/work-items/active/projection-isolation-664-current-main.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/guards/coverage_policy.yaml",
+    "Makefile",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "scripts/ai_projection_lease.py",
+    "scripts/ai_start.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_check_work_item.py",
+    "tests/test_projection_isolation.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_guards_and_status.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting or reviving the historical projection-isolation-664 archive and stale branch.",
+    "Enabling #659 parallel starts before this corrective Work Item is merged.",
+    "Weakening fail-closed handling of unknown or shared generated projections."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/664",
+      "reason": "Authoritative problem statement, dependency, and acceptance criteria."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/659",
+      "reason": "Parallel-start dependency that must remain blocked until this correction is merged."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Start-time generated projection behavior."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Finish-time generated projection behavior."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive projection behavior."
+    },
+    {
+      "path": "tests/test_projection_isolation.py",
+      "reason": "Existing projection-isolation regression surface and linked-worktree fixtures."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_integrity",
+      "concurrency",
+      "evidence_integrity"
+    ],
+    "reason": "Branch-integrated generated facts can conflict across linked Work Items; the corrective must serialize or namespace every such projection while preserving fail-closed behavior.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic governed execution and requires formal corrective Work Items instead of temporary process patches."
+  },
+  "preReviewWarnings": [
+    "Two allowed Work Items must merge without conflicting branch-integrated generated projections."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Every generated path emitted by ai-start, ai-finish, and archive is inventoried and classified as task/worktree-namespaced, non-committed, or executable serialized ownership.",
+    "Unknown or shared generated projections fail closed and cannot be omitted from the ownership boundary.",
+    "Two allowed linked Work Items can be integrated sequentially without generated-projection conflicts at merge level.",
+    "The corrected generated-projection model is consumed by the #659 parallel-start gate only after this Work Item merges."
+  ],
+  "guidelines": [
+    "Keep the projection inventory executable rather than relying on a prose-only path list.",
+    "Preserve task isolation and fail closed for unclassified branch-integrated projections.",
+    "Use linked-worktree and merge-level regressions, not only unit-level locking tests.",
+    "Document the lifecycle ownership boundary and preserve the stale predecessor as audit evidence."
+  ],
+  "intent": {
+    "problem": "Linked worktrees isolate physical files but not branch-integrated lifecycle facts, so status, task reports, and archive index can conflict when allowed Work Items are merged.",
+    "constraints": [
+      "Preserve the historical projection-isolation-664 archive and stale branch as immutable audit evidence.",
+      "Do not enable #659 parallel-start completion before this corrective merges.",
+      "Do not use manual profile downgrades, temporary patches, or implicit shared ownership.",
+      "Keep unknown or shared generated projections fail closed."
+    ],
+    "rationale": "An executable generated-projection ownership model plus real linked-worktree merge regression makes permitted parallel lifecycle work verifiable rather than merely plausible."
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。遇到流程问题，要先开工单修正，不要采用临时修补方案。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "current Codex conversation user authorization",
+    "capturedAt": "2026-08-08T08:02:00Z",
+    "digest": "user-authorized-governed-plan-continuation"
+  },
+  "declaredIntent": {
+    "summary": "Deliver #664's current-main corrective for branch-integrated lifecycle projections, with executable ownership and a real linked-worktree merge regression.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A generated lifecycle projection is classified for an allowed Work Item.",
+      "expected": "The executable ownership boundary assigns a safe projection policy.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused inventory and policy tests."
+    },
+    {
+      "scenario": "An unknown or shared branch-integrated projection appears.",
+      "expected": "The start or lifecycle guard fails closed before concurrent delivery.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Negative policy regression."
+    },
+    {
+      "scenario": "Two allowed linked Work Items are integrated in sequence.",
+      "expected": "Both branches merge without generated lifecycle-projection conflicts.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Linked-worktree plus merge-level integration regression."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user explicitly authorized automatic execution of the complete governed plan and required the authorization to be recorded in every Work Item Contract; this #664 scope requires Makefile and coverage-policy changes for its executable concurrency boundary."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 830
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/projection-isolation-664-current-main.json",
+    "baseCommit": "7c0788ceaa1a24634385d14a57937b4bd3c5a0fa",
+    "initialScopeDigest": "8bc0799fc4522bf2e2c74234402f0598d81fca7a24d18c2b8fd32585e3bcc32e",
+    "contractSkeletonDigest": "8581c44d80de49c648babda324ac4a4f9028d33ec3b702104bb6c05f9f5bfb8a"
+  }
+}
