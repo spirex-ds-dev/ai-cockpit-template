@@ -69,6 +69,35 @@ Cockpit Status, or task event. Repositories without one discoverable remote
 default branch retain fixture/bootstrap behavior, but that absence is not
 evidence that the current branch is safe.
 
+## Controlled corrective route during live calibration
+
+An `in_progress` or `paused` calibration Session blocks an ordinary
+`ai-start`: calibration readiness cannot be bypassed by creating a routine
+Work Item. When that Session itself exposes a template or workflow defect, use
+the explicit, bounded corrective declaration instead:
+
+```text
+make ai-start TASK=<task> MODE=code \
+  AI_START_CALIBRATION_CORRECTIVE='<JSON declaration>'
+```
+
+The declaration has schema version `1` and must contain exactly
+`sessionPath`, `sessionId`, `sessionState`, `sessionDigest`, `findingId`,
+`findingSummary`, `authority`, `repairPaths`, and `resumeCondition`. Its
+Session identity, live state, and SHA-256 digest must match
+`.ai/calibration/session.json` byte-for-byte. `repairPaths` must be unique,
+repository-relative, Contract-scoped paths and may not change the Session or
+activation state. The complete declaration is persisted in the Contract; its
+canonical JSON digest is bound into the immutable Start Receipt and checked
+again by active Contract validation. A missing, changed, inactive, or
+unreadable Session therefore fails closed after start as well as before it.
+
+The generated Cockpit Status shows this route as yellow. It records the
+Session, finding, repair paths, and resume condition, but is neither
+calibration completion nor authority to activate calibration, archive, merge,
+release, or skip the normal Work Item lifecycle. Complete the corrective Work
+Item, then resume calibration only through the Session workflow.
+
 ## Pre-finish hosted verification snapshot
 
 Some performance or environment-specific acceptance criteria require hosted

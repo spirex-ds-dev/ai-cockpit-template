@@ -27,3 +27,11 @@ For a code Contract with `implementationSurface`, use
 `make ai-preflight CONTRACT=<contract>` before `make ai-prepare-implementation`.
 The Preflight rejects an unowned, out-of-scope, malformed, forbidden, or
 unapproved restricted implementation path before `before_edit` is recorded.
+
+During an `in_progress` or `paused` calibration Session, ordinary `make
+ai-start` fails closed. For a Session-discovered template/workflow defect only,
+pass the complete JSON declaration through
+`AI_START_CALIBRATION_CORRECTIVE`; see [Controlled corrective route during live
+calibration](ai-cockpit-work-item-lifecycle.md#controlled-corrective-route-during-live-calibration).
+The declaration is not a general readiness override and is checked again by
+the active Contract and immutable Start Receipt.

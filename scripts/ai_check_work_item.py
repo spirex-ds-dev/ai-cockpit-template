@@ -9,8 +9,13 @@ import time
 from pathlib import Path
 from typing import Any
 
+from ai_calibration_corrective import (
+    calibration_corrective_binding_issue,
+    validate_calibration_corrective_shape,
+)
 from ai_check_guards import detect as detect_guard_items
 from ai_common import (
+    PROJECT_ROOT,
     contains_machine_path,
     load_check_registry,
     load_json,
@@ -88,6 +93,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "requiredEvidenceContext",
     "sourceBoundGeneratedEvidence",
     "concurrencyBoundary",
+    "calibrationCorrective",
     "implementationSurface",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
@@ -143,6 +149,33 @@ def validate_concurrency_boundary(data: dict[str, Any]) -> list[str]:
         )
     if not non_empty_string(boundary.get("reason")):
         issues.append("concurrencyBoundary.reason must be a non-empty string")
+    return issues
+
+
+def validate_calibration_corrective(data: dict[str, Any]) -> list[str]:
+    """Validate an optional controlled-calibration declaration in a Contract."""
+    value = data.get("calibrationCorrective")
+    if value is None:
+        return []
+    issue = validate_calibration_corrective_shape(value)
+    if issue:
+        return [issue]
+    if not isinstance(value, dict):
+        return ["calibrationCorrective must be a JSON object"]
+    repair_paths = value["repairPaths"]
+    if not isinstance(repair_paths, list):
+        return ["calibrationCorrective.repairPaths must be a list"]
+    scope = data.get("scope", [])
+    out_of_scope = data.get("outOfScope", [])
+    issues: list[str] = []
+    for index, path in enumerate(repair_paths):
+        if not isinstance(path, str):
+            issues.append(f"calibrationCorrective.repairPaths[{index}] must be a string")
+            continue
+        if not any(isinstance(pattern, str) and matches(pattern, path) for pattern in scope):
+            issues.append(f"calibrationCorrective.repairPaths[{index}] is not covered by scope")
+        if any(isinstance(pattern, str) and matches(pattern, path) for pattern in out_of_scope):
+            issues.append(f"calibrationCorrective.repairPaths[{index}] is covered by outOfScope")
     return issues
 
 
@@ -780,6 +813,7 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
     issues.extend(validate_governance_profile(data))
     issues.extend(validate_operation_escalations(data))
     issues.extend(validate_concurrency_boundary(data))
+    issues.extend(validate_calibration_corrective(data))
     if "problemStatement" in data and not non_empty_string(data.get("problemStatement")):
         issues.append("problemStatement must be a non-empty string")
 
@@ -809,6 +843,11 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
 
     scan_machine_paths(data, "contract")
     if contract_path and ".ai/work-items/active/" in Path(contract_path).as_posix():
+        corrective = data.get("calibrationCorrective")
+        if corrective is not None:
+            binding_issue = calibration_corrective_binding_issue(corrective, root=PROJECT_ROOT)
+            if binding_issue:
+                issues.append(binding_issue.removeprefix("ERROR: "))
         receipt_file = receipt_path(str(data.get("workItemId", "")))
         try:
             receipt = load_json(receipt_file)

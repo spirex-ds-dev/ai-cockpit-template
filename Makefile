@@ -549,7 +549,7 @@ ai-cockpit-quality:
 		$(QUALITY_MAKE) --no-print-directory "$$target" QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"
 
 ai-start:
-	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)" $(if $(AI_START_CONCURRENCY_BOUNDARY),--concurrency-boundary '$(AI_START_CONCURRENCY_BOUNDARY)',)
+	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)" $(if $(AI_START_CONCURRENCY_BOUNDARY),--concurrency-boundary '$(AI_START_CONCURRENCY_BOUNDARY)',) $(if $(AI_START_CALIBRATION_CORRECTIVE),--calibration-corrective '$(AI_START_CALIBRATION_CORRECTIVE)',)
 
 ai-resume-work-item:
 	@test -n "$(CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" || (echo "CONTRACT, BASE_REMOTE, and BASE_BRANCH are required" >&2; exit 2)

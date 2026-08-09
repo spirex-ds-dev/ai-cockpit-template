@@ -1,0 +1,259 @@
+{
+  "contractVersion": 2,
+  "workItemId": "calibration-corrective-route-614-current-main",
+  "mode": "code",
+  "title": "Allow controlled corrective Work Items during active calibration",
+  "baseCommit": "62dc2803ce4334d399850de9044b1859b112180a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/calibration-corrective-route-614-current-main.contract.json",
+    ".ai/work-items/active/calibration-corrective-route-614-current-main.summary.json",
+    ".ai/work-items/active/calibration-corrective-route-614-current-main.outcome.json",
+    ".ai/work-items/active/calibration-corrective-route-614-current-main.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "Makefile",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_start.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_calibration_corrective.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_governance_compression.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_installer.py",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_start_receipt.py",
+    "tests/test_guards_and_status.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/calibration-session-model.md",
+    "docs/reference/commands.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    ".ai/calibration/session.json",
+    ".ai/calibration/active.json",
+    "release/**",
+    ".github/workflows/**"
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/614",
+      "reason": "Authoritative P1 requirement for a calibration-bound corrective route."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Current Work Item start state machine and fail-closed lifecycle checks."
+    },
+    {
+      "path": "scripts/ai_calibrate.py",
+      "reason": "Authoritative persisted calibration Session state model."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Canonical Work Item and successor lifecycle boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_state_machine",
+      "authorization_boundary",
+      "backward_compatibility"
+    ],
+    "reason": "Start authorization and calibration evidence must remain fail-closed while preserving normal no-session starts.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The route changes governed lifecycle authorization, Contract validation, receipts, and visible status."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized autonomous execution and this Contract defines the bounded corrective route and verification."
+  },
+  "preReviewWarnings": [
+    "Reject every ordinary Work Item while a live calibration Session exists.",
+    "Do not write, resume, activate, or claim completion of a calibration Session from the corrective route.",
+    "Require exact Session digest and explicit correction authority; stale or malformed evidence must fail closed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record immutable scope before implementation and final evidence before Finish."
+  },
+  "acceptance": [
+    "When `.ai/calibration/session.json` records a live `in_progress` or `paused` Session, an ordinary `ai-start` request is rejected before it writes Contract, Summary, Start Receipt, or Cockpit Status.",
+    "A `calibrationCorrective` start is admitted only when its schema, Session path/digest/id/state, finding ID, authority evidence, bounded repair paths, and dedicated branch are all valid and current.",
+    "The corrective binding is persisted in the Contract and Start Receipt, validated on later lifecycle checks, and projected in active Cockpit status without changing the Session or declaring calibration complete.",
+    "A missing, malformed, cross-session, stale, non-live, or over-broad corrective declaration fails closed with an actionable recovery message; normal starts remain compatible when no live Session exists.",
+    "Focused unit and linked lifecycle regressions prove normal rejection, valid corrective admission, stale/tampered rejection, receipt binding, and status projection; lifecycle and command documentation describe the safe resume boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features.",
+    "Fail closed when lifecycle identity or authorization evidence is not exact."
+  ],
+  "intent": {
+    "problem": "A calibration workflow can uncover a template or governance defect, but a normal Work Item must not silently run beside an unfinished calibration. The existing start path neither identifies this state nor records an authorized corrective exception, leaving a lifecycle deadlock or an unprovable bypass.",
+    "constraints": [
+      "Keep calibration Session files outside the corrective Work Item write scope.",
+      "Do not infer human authority, correction findings, or Session identity from free text.",
+      "Preserve no-live-session start behavior and existing parallel Work Item boundaries.",
+      "Do not create a release, provider action, or calibration activation path."
+    ],
+    "rationale": "A content-addressed corrective declaration makes the exception auditable and narrow: it admits only the named repair against the exact live Session, while all ordinary starts remain blocked until calibration is resumed through its own workflow."
+  },
+  "rawUserRequest": "Fix the lifecycle deadlock so an active calibration can use a controlled corrective Work Item instead of blocking all repair or allowing an untracked bypass.",
+  "rawRequestSource": {
+    "type": "issue",
+    "reference": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/614",
+    "capturedAt": "2026-08-09T08:30:00+09:00",
+    "digest": "b5f28f36c68e7d6f0608777401a52ec1518b03f0582dcd1c5be1c6f2081842c0"
+  },
+  "declaredIntent": {
+    "summary": "Introduce a content-bound calibration corrective start exception while preserving ordinary-start rejection during live calibration.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "problemStatement": "Provide an explicit calibration-bound corrective Work Item route that is auditable, scope-limited, and fail-closed without changing calibration state.",
+  "scenarioCoverage": [
+    {
+      "id": "live-session-blocks-ordinary-start",
+      "riskDomain": "authorization_boundary",
+      "scenario": "A live calibration Session blocks an ordinary Work Item before lifecycle evidence is written.",
+      "expected": "The start command fails before Contract, Summary, Receipt, or status writes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a temporary-repository start regression."
+    },
+    {
+      "id": "bound-corrective-start",
+      "riskDomain": "calibration_identity",
+      "scenario": "A complete corrective declaration bound to the exact live Session starts and persists a verifiable Contract and Receipt binding.",
+      "expected": "The Contract and Start Receipt bind the same session digest, finding, repair boundary, and authority.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add start and receipt validation regressions."
+    },
+    {
+      "id": "invalid-corrective-rejected",
+      "riskDomain": "evidence_integrity",
+      "scenario": "Malformed, stale, foreign, or over-broad corrective declarations remain rejected and leave the calibration Session untouched.",
+      "expected": "The command rejects the declaration and no calibration or Work Item evidence is mutated.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add Contract and start-path negative regressions."
+    }
+  ],
+  "implementationSurface": {
+    "production": [
+    "Makefile",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_start.py",
+    "scripts/ai_installer_catalog.json",
+      "scripts/ai_check_work_item.py",
+      "scripts/ai_start_receipt.py",
+      "scripts/ai_calibration_corrective.py",
+      "scripts/ai_generate_status.py",
+      "scripts/ai_governance_compression.py"
+    ],
+    "tests": [
+    "tests/test_start_and_archive.py",
+    "tests/test_installer.py",
+      "tests/test_ai_check_work_item.py",
+      "tests/test_start_receipt.py",
+      "tests/test_guards_and_status.py"
+    ],
+    "documentation": [
+      "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "docs/reference/calibration-session-model.md",
+      "docs/reference/commands.md",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/work-items/archive/index.json"
+    ]
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User authorized automatic execution of the full remediation plan, including governed Makefile and lifecycle changes."
+  },
+  "rollbackNote": "Revert the corrective-route implementation and its tests/docs; the prior normal no-session start behavior remains intact.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 840
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/calibration-corrective-route-614-current-main.json",
+    "baseCommit": "62dc2803ce4334d399850de9044b1859b112180a",
+    "initialScopeDigest": "38eeb2d30ed4a97cb1bc10b64903c6e766164e4b4e8de728ab52362c97002bdd",
+    "contractSkeletonDigest": "bc2d932792e274f8ab00e83284be7cb35f29bfa57e7b8a0a92cedeb24c98621a"
+  }
+}

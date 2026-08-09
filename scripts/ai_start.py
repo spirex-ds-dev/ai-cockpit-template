@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
+from ai_calibration_corrective import calibration_start_issue
 from ai_check_diff_ownership import format_preview, preview
 from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
 from ai_check_summary import documentation_alignment_skeleton
@@ -93,6 +94,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--concurrency-boundary",
         help="JSON ownership declaration required when starting beside a linked Work Item.",
+    )
+    parser.add_argument(
+        "--calibration-corrective",
+        help="JSON declaration for the bounded corrective route while calibration is live.",
     )
     return parser.parse_args()
 
@@ -216,6 +221,19 @@ def parse_concurrency_boundary(
     if issues:
         return None, "ERROR: invalid --concurrency-boundary: " + "; ".join(issues)
     return boundary, None
+
+
+def parse_calibration_corrective(raw: str | None) -> tuple[dict[str, object] | None, str | None]:
+    """Parse the explicit corrective declaration before any lifecycle write."""
+    if raw is None:
+        return None, None
+    try:
+        corrective = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        return None, f"ERROR: --calibration-corrective must be valid JSON: {exc.msg}"
+    if not isinstance(corrective, dict):
+        return None, "ERROR: --calibration-corrective must be a JSON object"
+    return corrective, None
 
 
 def boundary_overlap(
@@ -739,11 +757,17 @@ def validate_start_state(
     force: bool,
     mode: str = "code",
     candidate_boundary: dict[str, object] | None = None,
+    calibration_corrective: dict[str, object] | None = None,
 ) -> tuple[Path, Path, str] | None:
     """Validate lifecycle state and return target paths plus trusted base commit."""
     branch_issue = default_branch_start_issue(root=PROJECT_ROOT)
     if branch_issue:
         print(branch_issue, file=sys.stderr)
+        return None
+
+    calibration_issue = calibration_start_issue(calibration_corrective, root=PROJECT_ROOT)
+    if calibration_issue:
+        print(calibration_issue, file=sys.stderr)
         return None
 
     if (
@@ -820,6 +844,12 @@ def main() -> int:
     if boundary_error:
         print(boundary_error, file=sys.stderr)
         return 2
+    calibration_corrective, calibration_error = parse_calibration_corrective(
+        args.calibration_corrective
+    )
+    if calibration_error:
+        print(calibration_error, file=sys.stderr)
+        return 2
 
     try:
         lock_context: contextlib.AbstractContextManager[None] = acquire_start_lock()
@@ -843,6 +873,7 @@ def main() -> int:
             force=args.force,
             mode=args.mode,
             candidate_boundary=candidate_boundary,
+            calibration_corrective=calibration_corrective,
         )
         if start_state is None:
             return 1
@@ -932,6 +963,8 @@ def main() -> int:
         }
         if candidate_boundary is not None:
             contract["concurrencyBoundary"] = candidate_boundary
+        if calibration_corrective is not None:
+            contract["calibrationCorrective"] = calibration_corrective
         summary = {
             "summaryVersion": 2,
             "workItemId": task,

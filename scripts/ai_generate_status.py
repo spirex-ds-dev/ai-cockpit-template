@@ -337,6 +337,14 @@ def project_active_task_outcome(
     }
 
 
+def project_calibration_corrective(contract: dict[str, Any]) -> dict[str, Any] | None:
+    """Project an active bounded-calibration exception without granting authority."""
+    corrective = contract.get("calibrationCorrective")
+    if not isinstance(corrective, dict):
+        return None
+    return corrective
+
+
 def load_preflight_review(
     contract: dict[str, Any],
     contract_path: Path,
@@ -488,6 +496,7 @@ def write_active_status(
         ownership_counts=ownership_counts,
         calibration_inventory=calibration_inventory,
         task_outcome=project_active_task_outcome(contract, summary, contract_path),
+        calibration_corrective=project_calibration_corrective(contract),
     )
     receipt_path = contract_path.with_name(
         f"{contract.get('workItemId', '')}.successor-receipt.json"

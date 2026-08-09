@@ -9,6 +9,7 @@ import ai_check_coverage_guard
 import ai_check_status_consistency
 import ai_checkpoint
 import ai_generate_status
+import ai_governance_compression
 import ai_preflight_review
 import pytest
 
@@ -164,6 +165,43 @@ def test_default_coverage_policy_associates_status_check_with_outcome_projection
 def test_checkpoint_next_action_stops_on_unknowns():
     contract = {"notCodable": False, "unknowns": ["decision"], "verification": []}
     assert ai_checkpoint.next_action(contract, None).startswith("Stop coding")
+
+
+def test_status_projects_a_bound_calibration_corrective_route():
+    contract = {
+        "workItemId": "corrective",
+        "mode": "code",
+        "notCodable": False,
+        "unknowns": [],
+        "acceptance": ["works"],
+        "verification": [],
+        "calibrationCorrective": {
+            "sessionId": "calibration-1",
+            "sessionState": "paused",
+            "sessionDigest": "a" * 64,
+            "findingId": "CAL-614-001",
+            "findingSummary": "Correct the calibration deadlock.",
+            "authority": "Explicit user authority.",
+            "repairPaths": ["scripts/ai_start.py"],
+            "resumeCondition": "Resume calibration through its own Session workflow.",
+        },
+    }
+    model = ai_governance_compression.derive_governance_status(contract, {"verification": []})
+
+    text = ai_governance_compression.render_active_status(
+        model,
+        work_item_id="corrective",
+        mode="code",
+        contract_path=".ai/work-items/active/corrective.contract.json",
+        summary_path=".ai/work-items/active/corrective.summary.json",
+        calibration_corrective=contract["calibrationCorrective"],
+    )
+
+    assert "## Calibration Corrective Route" in text
+    assert "- Traffic Light: `yellow`" in text
+    assert "- Session: `calibration-1` (`paused`)" in text
+    assert "- Finding: `CAL-614-001`" in text
+    assert "- Repair Paths: `scripts/ai_start.py`" in text
 
 
 def test_retry_circuit_breaker_counts_consecutive_failures(tmp_path):

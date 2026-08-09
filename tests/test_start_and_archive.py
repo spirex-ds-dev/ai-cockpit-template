@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import ai_archive_work_item
+import ai_calibration_corrective
 import ai_check_pr
 import ai_check_scope
 import ai_common
@@ -33,8 +34,137 @@ from ai_start_receipt import (
 )
 
 
+def test_ai_start_make_target_exposes_calibration_corrective_declaration() -> None:
+    makefile = Path(__file__).resolve().parents[1] / "Makefile"
+    target = makefile.read_text(encoding="utf-8").split("ai-resume-work-item:", 1)[0]
+
+    assert "AI_START_CALIBRATION_CORRECTIVE" in target
+    assert "--calibration-corrective" in target
+
+
 def test_lifecycle_phase_event_type_is_available_to_start_and_archive() -> None:
     assert AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
+
+
+def test_live_calibration_session_rejects_ordinary_start_before_lifecycle_writes(
+    tmp_path: Path,
+) -> None:
+    session_path = tmp_path / ".ai" / "calibration" / "session.json"
+    session_path.parent.mkdir(parents=True)
+    session_path.write_text(
+        json.dumps({"sessionId": "calibration-1", "state": "in_progress"}),
+        encoding="utf-8",
+    )
+
+    issue = ai_start.calibration_start_issue(root=tmp_path)
+
+    assert issue == (
+        "ERROR: live calibration Session calibration-1 is in_progress; "
+        "start requires a valid --calibration-corrective declaration before lifecycle writes."
+    )
+    assert not (tmp_path / ".ai" / "work-items" / "active").exists()
+
+
+def test_live_calibration_session_admits_only_exact_bound_corrective_declaration(
+    tmp_path: Path,
+) -> None:
+    session_path = tmp_path / ".ai" / "calibration" / "session.json"
+    session_path.parent.mkdir(parents=True)
+    session_path.write_text(
+        json.dumps({"sessionId": "calibration-1", "state": "paused"}),
+        encoding="utf-8",
+    )
+    corrective = {
+        "schemaVersion": 1,
+        "sessionPath": ".ai/calibration/session.json",
+        "sessionId": "calibration-1",
+        "sessionState": "paused",
+        "sessionDigest": hashlib.sha256(session_path.read_bytes()).hexdigest(),
+        "findingId": "CAL-614-001",
+        "findingSummary": "Start must expose a bounded corrective route.",
+        "authority": "user authorization recorded in issue #614",
+        "repairPaths": ["scripts/ai_start.py"],
+        "resumeCondition": "Resume calibration through its own Session workflow after closure.",
+    }
+
+    assert ai_start.calibration_start_issue(corrective, root=tmp_path) is None
+
+
+def test_calibration_corrective_shape_rejects_incomplete_or_unsafe_declarations() -> None:
+    assert (
+        ai_calibration_corrective.validate_calibration_corrective_shape(None)
+        == "calibrationCorrective must be a JSON object"
+    )
+    assert "missing" in ai_calibration_corrective.validate_calibration_corrective_shape({})
+
+    declaration = {
+        "schemaVersion": 1,
+        "sessionPath": ".ai/calibration/session.json",
+        "sessionId": "calibration-1",
+        "sessionState": "paused",
+        "sessionDigest": "a" * 64,
+        "findingId": "CAL-614-001",
+        "findingSummary": "bounded corrective route",
+        "authority": "direct user authorization",
+        "repairPaths": ["scripts/ai_start.py"],
+        "resumeCondition": "resume calibration after closure",
+    }
+    assert (
+        ai_calibration_corrective.validate_calibration_corrective_shape(
+            {**declaration, "schemaVersion": 2}
+        )
+        == "calibrationCorrective.schemaVersion must be 1"
+    )
+    assert (
+        ai_calibration_corrective.validate_calibration_corrective_shape(
+            {**declaration, "sessionPath": "/absolute"}
+        )
+        == "calibrationCorrective.sessionPath must be .ai/calibration/session.json"
+    )
+    assert (
+        ai_calibration_corrective.validate_calibration_corrective_shape(
+            {**declaration, "repairPaths": ["../outside.py"]}
+        )
+        == "calibrationCorrective.repairPaths must be unique repository-relative paths"
+    )
+    assert (
+        ai_calibration_corrective.validate_calibration_corrective_shape(
+            {**declaration, "repairPaths": [".ai/calibration/session.json"]}
+        )
+        == "calibrationCorrective.repairPaths cannot modify calibration Session state"
+    )
+
+
+def test_calibration_corrective_rejects_invalid_stale_and_non_live_sessions(tmp_path: Path) -> None:
+    session_path = tmp_path / ".ai" / "calibration" / "session.json"
+    session_path.parent.mkdir(parents=True)
+    session_path.write_text("not json", encoding="utf-8")
+    assert "Session is unreadable" in ai_calibration_corrective.calibration_start_issue(
+        root=tmp_path
+    )
+
+    session_path.write_text("[]", encoding="utf-8")
+    assert ai_calibration_corrective.calibration_start_issue(root=tmp_path) == (
+        "ERROR: calibration Session must be a JSON object"
+    )
+    session_path.write_text('{"sessionId": "", "state": "paused"}', encoding="utf-8")
+    assert (
+        "sessionId must be a non-empty string"
+        in ai_calibration_corrective.calibration_start_issue(root=tmp_path)
+    )
+
+    session_path.write_text('{"sessionId": "calibration-1", "state": "complete"}', encoding="utf-8")
+    assert ai_calibration_corrective.calibration_start_issue(root=tmp_path) is None
+    assert ai_calibration_corrective.calibration_start_issue({}, root=tmp_path) == (
+        "ERROR: calibration corrective requires a live in_progress or paused Session"
+    )
+    assert ai_calibration_corrective.calibration_corrective_binding_issue({}, root=tmp_path) == (
+        "ERROR: calibration corrective requires a live in_progress or paused Session"
+    )
+    session_path.unlink()
+    assert ai_calibration_corrective.calibration_corrective_binding_issue({}, root=tmp_path) == (
+        "ERROR: calibrationCorrective requires its bound live calibration Session"
+    )
 
 
 def test_linked_worktree_foreign_duplicate_allows_unrelated_task_with_recovery_route(
@@ -2210,6 +2340,69 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     receipt = tmp_path / ".ai" / "work-items" / "starts" / "sample.json"
     assert receipt.exists()
     assert json.loads(receipt.read_text(encoding="utf-8"))["workItemId"] == "sample"
+
+
+def test_ai_start_persists_bound_calibration_corrective_in_contract_and_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    session_path = tmp_path / ".ai" / "calibration" / "session.json"
+    session_path.parent.mkdir(parents=True)
+    session_path.write_text(
+        json.dumps({"sessionId": "calibration-1", "state": "in_progress"}),
+        encoding="utf-8",
+    )
+    corrective = {
+        "schemaVersion": 1,
+        "sessionPath": ".ai/calibration/session.json",
+        "sessionId": "calibration-1",
+        "sessionState": "in_progress",
+        "sessionDigest": hashlib.sha256(session_path.read_bytes()).hexdigest(),
+        "findingId": "CAL-614-001",
+        "findingSummary": "Start must expose a bounded corrective route.",
+        "authority": "user authorization recorded in issue #614",
+        "repairPaths": ["scripts/ai_start.py"],
+        "resumeCondition": "Resume calibration through its own Session workflow after closure.",
+    }
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
+    monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
+    stub_active_status(monkeypatch)
+    monkeypatch.setattr(
+        ai_start,
+        "create_observability",
+        lambda **_: type("Obs", (), {"work_item_started": lambda *a, **k: None})(),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_start.py",
+            "--task",
+            "corrective",
+            "--mode",
+            "code",
+            "--calibration-corrective",
+            json.dumps(corrective),
+        ],
+    )
+
+    assert ai_start.main() == 0
+
+    contract = json.loads((active / "corrective.contract.json").read_text(encoding="utf-8"))
+    receipt = json.loads(
+        (tmp_path / ".ai" / "work-items" / "starts" / "corrective.json").read_text(encoding="utf-8")
+    )
+    assert contract["calibrationCorrective"] == corrective
+    assert receipt["calibrationCorrectiveDigest"] == ai_start_receipt._digest(corrective)
+    assert validate_receipt(contract, receipt, project_root=tmp_path) == []
+    receipt["calibrationCorrectiveDigest"] = "0" * 64
+    assert "Start Receipt calibrationCorrectiveDigest does not match Contract" in validate_receipt(
+        contract, receipt, project_root=tmp_path
+    )
 
 
 def test_ai_start_fails_closed_when_preflight_gate_blocks(tmp_path, monkeypatch):
