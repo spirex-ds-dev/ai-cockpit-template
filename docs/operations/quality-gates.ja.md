@@ -45,6 +45,8 @@ Hosted snapshot preparation は同じ entrypoint を必要とし、quality が�
 
 Hosted CI は `if: always()` で session directory 全体と wrapper log を upload するため、success、failure、cancel、timeout のいずれでも診断証拠を保持します。timing または artifact 証拠がない場合は fail-closed とし、cache hit を最終証拠にはしません。
 
+`template-smoke` の唯一の完全 `make quality` 実行には 25 分の実行上限があります。`timeout` は最初の signal を無視する descendant process に対して、有限の 30 秒の強制終了 grace を続けます。heartbeat と診断証拠を保った terminal failed gate になり、PR が無期限に in-progress のままになることはありません。この上限は quality gate の skip や downgrade を許可しません。
+
 smoke を手動実行する時は purpose を明示します。source-bound な性能測定には
 `gh workflow run smoke.yml --ref <measurement-branch> -f purpose=hosted_measurement`
 を使います。`release_preparation` は引き続き厳格な default で release-state

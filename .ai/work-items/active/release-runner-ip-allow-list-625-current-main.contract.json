@@ -14,12 +14,17 @@
     ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.outcome.json",
     ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.outcome.md",
     ".github/workflows/release.yml",
+    ".github/workflows/smoke.yml",
     "Makefile",
     "scripts/ensure_locked_dev_environment.py",
     "tests/test_release_workflow.py",
+    "tests/test_ci_quality_orchestration.py",
     "tests/test_ensure_locked_dev_environment.py",
     "docs/reference/distribution.md",
     "docs/reference/distribution.ja.md",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/operations/quality-gates.zh-CN.md",
     "docs/reference/capability-truth-matrix.json",
     "docs/reference/capability-truth-matrix.md",
     "docs/reference/japanese-capability-assessment.json",
@@ -31,12 +36,16 @@
     "Creating, moving, deleting, or reusing any release tag or GitHub Release.",
     "Weakening same-SHA, rehearsal, smoke, compatibility, integrity, or public-install gates.",
     "Changing organization IP allow-list entries, runner groups, branch protection, or CodeQL configuration.",
-    "Changing any workflow other than the release workflow or unrelated template behavior."
+    "Changing unrelated workflow behavior, quality gates, or their required coverage; this Work Item may only make the existing smoke quality timeout terminate its own residual process tree after its stated bounded grace."
   ],
   "sources": [
     {
       "path": ".github/workflows/release.yml",
       "reason": "The failed rehearsal executed this workflow on ubuntu-latest and its exact-SHA dependency step calls the GitHub workflow-runs API."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Two same-SHA hosted smoke runs remained in the quality step far beyond its declared 25-minute bound, proving that the existing foreground timeout does not guarantee terminal evidence."
     },
     {
       "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31317496592",
@@ -49,6 +58,10 @@
     {
       "path": "tests/test_release_workflow.py",
       "reason": "Regression coverage protects ordering and non-publication behavior for the controlled release workflow."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Workflow regression coverage owns the bounded template-smoke quality invocation and heartbeat assertions."
     },
     {
       "path": "Makefile",
@@ -113,6 +126,7 @@
     "make quality invokes provisioning when .venv is absent or its Ruff direct pin differs from the development manifest; provisioning installs the hash-locked development lockfile, then quality re-executes with .venv/bin/python.",
     "Distribution guidance names AI_COCKPIT_RELEASE_RUNNER, requires an enterprise IP allow-list deployment to point it at a repository-authorized GitHub-hosted static-IP or self-hosted runner before release dispatch, and forbids a bypass.",
     "Regression tests prove the variable/fallback runner selection and preserve existing same-SHA rehearsal and non-publication guards.",
+    "The smoke workflow keeps the 25-minute full-quality policy and heartbeat while using a finite forced-termination grace; regression tests reject a timeout form that can wait indefinitely for a residual child.",
     "The repository variable AI_COCKPIT_RELEASE_RUNNER is set to the existing code-scanning runner label only after the Contract is ready, and the post-merge same-SHA rehearsal proves the API access and all release gates on that selected runner.",
     "The Contract, Summary, Outcome, hosted checks, PR, merge, lifecycle closure, and continued #625 release record the fail-closed result truthfully."
   ],
@@ -129,6 +143,7 @@
       "Keep ubuntu-latest as the default for adopters who do not configure an allow-listed runner.",
       "The configured runner label must be selected through a repository Actions variable, not hardcoded to this organization's runner name.",
       "Fresh linked worktrees invoke deterministic .venv provisioning before quality; provisioning installs requirements-dev.lock with --require-hashes and exits nonzero on failure.",
+      "The hosted template-smoke quality step must terminate deterministically after its existing 25-minute bound, including any residual child process, and must retain its failure logs and heartbeat evidence.",
       "Do not retry v0.5.49 publication until this corrective PR merges and a new exact-main-SHA rehearsal succeeds."
     ],
     "rationale": "An explicit, documented, optional runner label maintains template portability while allowing enterprises with IP allow lists to route release jobs that call GitHub APIs through an approved static-IP or self-hosted runner."
@@ -164,11 +179,13 @@
   "implementationSurface": {
     "production": [
       ".github/workflows/release.yml",
+      ".github/workflows/smoke.yml",
       "Makefile",
       "scripts/ensure_locked_dev_environment.py"
     ],
     "tests": [
       "tests/test_release_workflow.py",
+      "tests/test_ci_quality_orchestration.py",
       "tests/test_ensure_locked_dev_environment.py"
     ],
     "generated": [
@@ -184,6 +201,9 @@
     "documentation": [
       "docs/reference/distribution.md",
       "docs/reference/distribution.ja.md",
+      "docs/operations/quality-gates.md",
+      "docs/operations/quality-gates.ja.md",
+      "docs/operations/quality-gates.zh-CN.md",
       "docs/reference/capability-truth-matrix.json"
     ]
   },
@@ -216,6 +236,14 @@
       "scenario": "A fresh linked worktree has no locked virtual environment, or its installed Ruff version differs from the direct development pin.",
       "expected": "The common quality entrypoint provisions the worktree-local environment from the hash-locked development lockfile before running quality gates, or fails closed with the provisioning error.",
       "verificationPlan": "Unit tests cover absence, version drift, and the hash-locked provisioning command; hosted clean-check execution verifies the entrypoint behavior.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A hosted template-smoke quality process exceeds the existing 25-minute policy because a descendant process survives the graceful timeout signal.",
+      "expected": "The workflow sends a finite forced-termination signal after the documented grace, records a failed bounded quality gate, and permits downstream evidence collection rather than leaving the PR indefinitely in progress.",
+      "verificationPlan": "Workflow regression tests require the finite kill-after timeout form; a fresh hosted smoke run proves a terminal result on the exact PR head.",
       "required": true,
       "status": "unverified",
       "evidence": []

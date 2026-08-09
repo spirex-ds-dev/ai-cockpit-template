@@ -96,8 +96,8 @@ jobs:
         shell: bash
         run: |
           set -uo pipefail
-          echo 'Starting bounded repository quality gates (25 minute step timeout).'
-          timeout --foreground 25m make quality > >(tee "$RUNNER_TEMP/repository-quality.log") 2>&1 &
+          echo 'Starting bounded repository quality gates (25 minute execution limit, then 30 second forced-termination grace).'
+          timeout --foreground --kill-after=30s 25m make quality > >(tee "$RUNNER_TEMP/repository-quality.log") 2>&1 &
           quality_pid=$!
           (
             while kill -0 "$quality_pid" 2>/dev/null; do
@@ -110,7 +110,7 @@ jobs:
           quality_status=$?
           kill "$heartbeat_pid" 2>/dev/null || true
           wait "$heartbeat_pid" 2>/dev/null || true
-          if [[ "$quality_status" -eq 124 ]]; then
+          if [[ "$quality_status" -eq 124 || "$quality_status" -eq 137 ]]; then
             echo 'Repository quality gates exceeded the 25 minute bound.' >&2
           fi
           exit "$quality_status"

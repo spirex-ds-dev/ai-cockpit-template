@@ -42,6 +42,8 @@ Hosted snapshot 准备使用同一个入口。质量检查失败时不会写出 
 
 Hosted CI 使用 `if: always()` 上传完整 session 目录和外层日志，因此成功、失败、取消和超时都会保留诊断证据。缺失计时或工件证据即失败关闭；缓存命中不是最终证据。
 
+`template-smoke` 的唯一一次完整 `make quality` 有 25 分钟执行上限。对于忽略初始信号的残留子进程，`timeout` 随后仅给予有限的 30 秒强制终止宽限。这样仍保留心跳和诊断证据，但会得到终态失败门禁，PR 不会无限停留在 in-progress。该上限不允许跳过或降级任何质量门。
+
 手动触发 smoke 时必须声明用途。用于绑定源提交的性能测量时，执行
 `gh workflow run smoke.yml --ref <measurement-branch> -f purpose=hosted_measurement`。
 `release_preparation` 仍是严格默认值并执行发布状态证据检查；性能测量触发不声明发布意图。

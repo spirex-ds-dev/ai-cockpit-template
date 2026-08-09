@@ -79,6 +79,13 @@ Hosted CI uploads the complete session directory and wrapper log with
 diagnostics. Missing timing or artifact evidence is an error; a cache hit is
 not final evidence.
 
+`template-smoke` gives its one full `make quality` invocation a 25-minute
+execution limit. `timeout` then has a finite 30-second forced-termination
+grace for a descendant that ignores the initial signal. The result is a
+terminal failed gate with the same heartbeat and retained diagnostics, never an
+indefinite in-progress PR state. This bound is not permission to skip or
+downgrade any quality gate.
+
 Manual smoke dispatch must declare its purpose. Use
 `gh workflow run smoke.yml --ref <measurement-branch> -f purpose=hosted_measurement`
 for source-bound performance measurement. `release_preparation` remains the

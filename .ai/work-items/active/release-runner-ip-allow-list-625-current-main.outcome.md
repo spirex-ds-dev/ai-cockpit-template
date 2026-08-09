@@ -15,12 +15,17 @@ Governed Work Item: release-runner-ip-allow-list-625-current-main
 - .ai/cockpit/current_status.md
 - .ai/work-items/starts/release-runner-ip-allow-list-625-current-main.json
 - .github/workflows/release.yml
+- .github/workflows/smoke.yml
 - Makefile
 - scripts/ensure_locked_dev_environment.py
 - tests/test_release_workflow.py
+- tests/test_ci_quality_orchestration.py
 - tests/test_ensure_locked_dev_environment.py
 - docs/reference/distribution.md
 - docs/reference/distribution.ja.md
+- docs/operations/quality-gates.md
+- docs/operations/quality-gates.ja.md
+- docs/operations/quality-gates.zh-CN.md
 - docs/reference/capability-truth-matrix.json
 - docs/reference/capability-truth-matrix.md
 - docs/reference/japanese-capability-assessment.json
