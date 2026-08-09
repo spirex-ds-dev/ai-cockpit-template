@@ -124,6 +124,59 @@ def test_open_hosted_recovery_binds_exact_failed_provider_coverage_evidence(tmp_
     )
 
 
+def test_hosted_receipt_validation_is_offline_after_creation(tmp_path):
+    write_archive(tmp_path)
+    receipt = recovery.open_hosted_post_archive_recovery(
+        root=tmp_path,
+        task="example-task",
+        base_commit="a" * 40,
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        authority="user-authorized same Work Item recovery",
+        recovery_paths=["tests/test_resume.py"],
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=716,
+        failed_candidate_head="b" * 40,
+        run_id=42,
+        job_id=84,
+        fetch_provider=hosted_provider,
+        worktree_clean=lambda: True,
+    )
+
+    def provider_must_not_be_called(_endpoint):
+        pytest.fail("validation must use the provider facts captured when the receipt was created")
+
+    assert (
+        recovery.validate_recovery_receipt(
+            tmp_path, receipt, pr_base="a" * 40, fetch_provider=provider_must_not_be_called
+        )
+        == []
+    )
+
+
+def test_hosted_receipt_validation_rejects_an_incoherent_recorded_run_url(tmp_path):
+    write_archive(tmp_path)
+    receipt = recovery.open_hosted_post_archive_recovery(
+        root=tmp_path,
+        task="example-task",
+        base_commit="a" * 40,
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        authority="user-authorized same Work Item recovery",
+        recovery_paths=["tests/test_resume.py"],
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=716,
+        failed_candidate_head="b" * 40,
+        run_id=42,
+        job_id=84,
+        fetch_provider=hosted_provider,
+        worktree_clean=lambda: True,
+    )
+    receipt["provider"]["runUrl"] = "https://github.com/other/repository/actions/runs/42"
+
+    assert recovery.validate_recovery_receipt(tmp_path, receipt, pr_base="a" * 40) == [
+        "recorded provider run URL does not match its repository and run ID"
+    ]
+
+
 def functional_failure_provider(endpoint: str) -> bytes:
     responses = {
         "/repos/spirex-ds-dev/ai-cockpit-template/actions/runs/43": {

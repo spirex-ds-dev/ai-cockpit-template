@@ -471,8 +471,8 @@ def same_work_item_recovery_paths(
         if receipt_issues:
             blockers.append(
                 "BLOCKED: provider-bound recovery receipt cannot be verified: "
-                f"{'; '.join(receipt_issues)}. Recovery: configure the PR audit's GH_TOKEN "
-                "with read-only GitHub Actions access, then retry."
+                f"{'; '.join(receipt_issues)}. Recovery: regenerate the recovery receipt "
+                "from the failed hosted job."
             )
             continue
         values = receipt.get("recoveryPaths")

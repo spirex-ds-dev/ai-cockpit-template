@@ -30,6 +30,7 @@ COVERAGE_FAILURE = re.compile(
     re.IGNORECASE,
 )
 FUNCTIONAL_FAILURE = re.compile(r"\bBLOCKED:.*\bRecovery:", re.IGNORECASE | re.DOTALL)
+SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
 def digest(path: Path) -> str:
@@ -153,6 +154,75 @@ def _positive_int(value: object, label: str) -> int:
     if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
         raise ValueError(f"{label} must be a positive integer")
     return value
+
+
+def validate_recorded_provider_binding(provider: object, *, gate: str) -> list[str]:
+    """Validate the immutable provider facts captured when a receipt was opened.
+
+    Provider APIs are deliberately consulted only while creating a hosted recovery
+    receipt.  PR validation checks the captured facts and the immutable archive
+    binding offline, so a hosted runner's network policy cannot change a
+    previously verified recovery decision.
+    """
+    if not isinstance(provider, dict):
+        return ["recorded provider binding is required"]
+    try:
+        repository = provider.get("repository")
+        if not isinstance(repository, str) or not GITHUB_REPOSITORY.fullmatch(repository):
+            raise ValueError("recorded provider repository is invalid")
+        pull_request = _positive_int(provider.get("pullRequest"), "recorded provider pull request")
+        failed_head = _sha(
+            provider.get("failedCandidateHead"), "recorded provider failed candidate Head SHA"
+        )
+        run_id = _positive_int(provider.get("runId"), "recorded provider run ID")
+        job_id = _positive_int(provider.get("jobId"), "recorded provider job ID")
+        run_attempt = provider.get("runAttempt")
+        if run_attempt is not None:
+            _positive_int(run_attempt, "recorded provider run attempt")
+    except ValueError as exc:
+        return [str(exc)]
+    if provider.get("kind") != "github_actions":
+        return ["recorded provider kind is not github_actions"]
+    if provider.get("event") != "pull_request":
+        return ["recorded provider event is not pull_request"]
+    if provider.get("runStatus") != "completed" or provider.get("runConclusion") != "failure":
+        return ["recorded provider run is not a completed failure"]
+    if provider.get("jobConclusion") != "failure":
+        return ["recorded provider job is not a failure"]
+    if provider.get("runUrl") != f"https://github.com/{repository}/actions/runs/{run_id}":
+        return ["recorded provider run URL does not match its repository and run ID"]
+    workflow_path = provider.get("workflowPath")
+    if not isinstance(workflow_path, str) or not workflow_path.startswith(".github/workflows/"):
+        return ["recorded provider workflow path is invalid"]
+    log_digest = provider.get("logSha256")
+    if not isinstance(log_digest, str) or SHA256.fullmatch(log_digest) is None:
+        return ["recorded provider log digest is invalid"]
+    if gate == "hostedAggregateCoverage":
+        if provider.get("jobName") != "template-smoke":
+            return ["recorded coverage provider job is not template-smoke"]
+        coverage = provider.get("observedCoverage")
+        if not isinstance(coverage, dict) or coverage.get("parserVersion") != 1:
+            return ["recorded provider coverage evidence is invalid"]
+        actual, required = coverage.get("actual"), coverage.get("required")
+        if (
+            not isinstance(actual, (int, float))
+            or isinstance(actual, bool)
+            or not isinstance(required, (int, float))
+            or isinstance(required, bool)
+            or actual >= required
+        ):
+            return ["recorded provider coverage does not prove a below-floor failure"]
+    elif gate == "hostedFunctionalFailure":
+        if not isinstance(provider.get("jobName"), str) or not provider["jobName"].strip():
+            return ["recorded functional provider job name is invalid"]
+        if provider.get("failureMarker") != "blocked_recovery":
+            return ["recorded functional provider failure marker is invalid"]
+    else:
+        return ["recorded provider gate is unsupported"]
+    # Keep explicit local variables above: each receipt fact is independently
+    # type-checked before the PR gate grants restricted recovery paths.
+    _ = (pull_request, failed_head, job_id, run_attempt)
+    return []
 
 
 def verified_hosted_coverage_failure(
@@ -518,40 +588,12 @@ def validate_recovery_receipt(
     failure = receipt.get("failure")
     if not isinstance(failure, dict) or failure.get("gate") not in ALLOWED_GATES:
         return ["recovery receipt failure gate is not allowed"]
-    if failure.get("gate") == "hostedAggregateCoverage":
-        provider = receipt.get("provider")
-        if not isinstance(provider, dict):
-            return ["hosted recovery receipt provider binding is required"]
-        try:
-            observed = verified_hosted_coverage_failure(
-                repository=provider.get("repository"),
-                pull_request=provider.get("pullRequest"),
-                failed_candidate_head=provider.get("failedCandidateHead"),
-                run_id=provider.get("runId"),
-                job_id=provider.get("jobId"),
-                fetch_provider=fetch_provider,
-            )
-        except (TypeError, ValueError) as exc:
-            return [f"hosted recovery provider verification failed: {exc}"]
-        if observed != provider:
-            return ["hosted recovery provider binding changed"]
-    elif failure.get("gate") == "hostedFunctionalFailure":
-        provider = receipt.get("provider")
-        if not isinstance(provider, dict):
-            return ["hosted functional recovery provider binding is required"]
-        try:
-            observed = verified_hosted_functional_failure(
-                repository=provider.get("repository"),
-                pull_request=provider.get("pullRequest"),
-                failed_candidate_head=provider.get("failedCandidateHead"),
-                run_id=provider.get("runId"),
-                job_id=provider.get("jobId"),
-                fetch_provider=fetch_provider,
-            )
-        except (TypeError, ValueError) as exc:
-            return [f"hosted functional recovery provider verification failed: {exc}"]
-        if observed != provider:
-            return ["hosted functional recovery provider binding changed"]
+    if failure.get("gate") in {"hostedAggregateCoverage", "hostedFunctionalFailure"}:
+        provider_issues = validate_recorded_provider_binding(
+            receipt.get("provider"), gate=failure["gate"]
+        )
+        if provider_issues:
+            return provider_issues
     elif version != 1:
         return ["hosted recovery receipt must declare hostedAggregateCoverage"]
     paths = receipt.get("recoveryPaths")

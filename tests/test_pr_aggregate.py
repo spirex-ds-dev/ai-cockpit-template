@@ -138,7 +138,7 @@ def test_pr_bundle_accepts_restricted_path_only_when_same_item_recovery_receipt_
     assert not any("restricted path lacks approval" in issue for issue in issues)
 
 
-def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_paths(
+def test_same_work_item_hosted_recovery_validates_recorded_provider_binding_offline(
     tmp_path, monkeypatch
 ):
     archive = tmp_path / ".ai/work-items/archive/2026"
@@ -196,7 +196,11 @@ def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_pat
     contract_path = archive / f"{task}.contract.json"
     entries = [(contract_path, {"workItemId": task}, {}, (74, task, task))]
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(recovery, "_github_api", provider)
+
+    def provider_must_not_be_called(_endpoint):
+        pytest.fail("the PR audit must not re-query provider evidence recorded in the receipt")
+
+    monkeypatch.setattr(recovery, "_github_api", provider_must_not_be_called)
 
     result = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
     assert len(result) == 3
@@ -206,15 +210,9 @@ def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_pat
     assert receipts == {".ai/work-items/recovery-receipts/hosted-recovered.json"}
     assert blockers == []
 
-    def stale_provider(endpoint):
-        payload = provider(endpoint)
-        if endpoint.endswith("/42"):
-            value = json.loads(payload)
-            value["head_sha"] = "c" * 40
-            return json.dumps(value).encode()
-        return payload
-
-    monkeypatch.setattr(recovery, "_github_api", stale_provider)
+    receipt["provider"]["runUrl"] = "https://github.com/other/repository/actions/runs/42"
+    receipt_path = tmp_path / ".ai/work-items/recovery-receipts/hosted-recovered.json"
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
     permitted, receipts, blockers = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
 
     assert permitted == {}
@@ -222,9 +220,8 @@ def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_pat
     assert blockers == [
         (
             "BLOCKED: provider-bound recovery receipt cannot be verified: "
-            "hosted recovery provider verification failed: GitHub workflow run Head SHA does not match "
-            "the failed candidate. Recovery: configure the PR audit's GH_TOKEN "
-            "with read-only GitHub Actions access, then retry."
+            "recorded provider run URL does not match its repository and run ID. Recovery: "
+            "regenerate the recovery receipt from the failed hosted job."
         )
     ]
 

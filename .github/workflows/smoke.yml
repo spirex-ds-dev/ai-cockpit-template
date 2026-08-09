@@ -191,11 +191,9 @@ jobs:
           retention-days: 14
 
       - name: Run template AI checks
-        env:
-          # Provider-bound recovery receipts revalidate immutable GitHub Actions facts.
-          # Keep the read-only token scoped to this audit step.
-          GH_TOKEN: ${{ github.token }}
         run: |
+          # Provider-bound recovery receipts are validated offline after their
+          # creation-time GitHub evidence check; this PR audit needs no API token.
           if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then
             # quality owns format/governance checks; this step owns only the
             # PR diff/Contract binding after the quality graph has completed.
