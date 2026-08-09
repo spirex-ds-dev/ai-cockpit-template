@@ -1,5 +1,7 @@
 name: smoke
 
+run-name: smoke ${{ inputs.purpose || github.event_name }}${{ inputs.release_run_id && format(' for release {0}', inputs.release_run_id) || '' }}
+
 on:
   push:
     branches:
@@ -15,12 +17,18 @@ on:
         options:
           - hosted_measurement
           - release_preparation
+          - release_verification
+      release_run_id:
+        description: "Parent release workflow run ID for a strict release verification smoke run"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: smoke-${{ github.ref }}
+  group: smoke-${{ github.ref }}-${{ inputs.purpose || github.event_name }}-${{ inputs.release_run_id || 'shared' }}
   cancel-in-progress: true
 
 jobs:

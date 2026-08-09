@@ -346,7 +346,9 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           set -euo pipefail
-          gh workflow run smoke.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME"
+          gh workflow run smoke.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" \
+            -f purpose=release_verification \
+            -f release_run_id="$GITHUB_RUN_ID"
           run_id=""
           deadline=$((SECONDS + 120))
           while [[ -z "$run_id" ]]; do
@@ -356,8 +358,8 @@ jobs:
               --commit "$SOURCE_COMMIT" \
               --event workflow_dispatch \
               --limit 1 \
-              --json databaseId \
-              --jq '.[0].databaseId // empty')"
+              --json databaseId,displayTitle \
+              --jq 'map(select(.displayTitle == "smoke release_verification for release '"$GITHUB_RUN_ID"'"))[0].databaseId // empty')"
             if [[ -n "$run_id" ]]; then break; fi
             WAIT_DIAGNOSTIC="workflow=smoke.yml source_commit=$SOURCE_COMMIT elapsed_seconds=$SECONDS timeout window=120 dependent_run_ids=${run_id:-none}"
             echo "dependent run IDs: ${run_id:-none}"

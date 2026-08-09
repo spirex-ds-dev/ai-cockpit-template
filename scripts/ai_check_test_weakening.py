@@ -251,7 +251,12 @@ def _workflow_signals(path: str, before: str, after: str) -> list[dict[str, Any]
         signals.append(_signal("ci_continue_on_error_added", path, "critical"))
     if any("|| true" in line or re.search(r";\s*exit\s+0\b", line) for line in added):
         signals.append(_signal("test_command_success_bypass_added", path, "critical"))
-    if any(re.search(r"\brequired\s*:\s*false\b", line, re.IGNORECASE) for line in added):
+    optional_input_required_lines = _optional_workflow_input_required_lines(after)
+    if any(
+        re.search(r"\brequired\s*:\s*false\b", line, re.IGNORECASE)
+        and line.strip() not in optional_input_required_lines
+        for line in added
+    ):
         signals.append(_signal("required_check_made_nonblocking", path, "high"))
     before_test_paths = {
         token.rstrip("'\";,)")
@@ -271,6 +276,29 @@ def _workflow_signals(path: str, before: str, after: str) -> list[dict[str, Any]
             )
         )
     return signals
+
+
+def _optional_workflow_input_required_lines(workflow: str) -> set[str]:
+    """Return optional-input declarations, which are not CI check semantics."""
+    optional: set[str] = set()
+    inputs_indent: int | None = None
+    for line in workflow.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        indent = len(line) - len(line.lstrip())
+        if stripped == "inputs:":
+            inputs_indent = indent
+            continue
+        if inputs_indent is not None and indent <= inputs_indent:
+            inputs_indent = None
+        if (
+            inputs_indent is not None
+            and indent > inputs_indent
+            and re.fullmatch(r"required\s*:\s*false", stripped, re.IGNORECASE)
+        ):
+            optional.add(stripped)
+    return optional
 
 
 def _load_policy(path: Path | None) -> dict[str, float]:
