@@ -80,6 +80,8 @@ def main() -> int:
     if isinstance(work_item_id, str) and work_item_id:
         scope.extend(
             [
+                f".ai/work-items/active/{work_item_id}.contract.json",
+                f".ai/work-items/active/{work_item_id}.summary.json",
                 f".ai/work-items/active/{work_item_id}.outcome.json",
                 f".ai/work-items/active/{work_item_id}.outcome.md",
             ]

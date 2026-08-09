@@ -36,11 +36,15 @@ def test_start_receipt_binding_implicitly_owns_receipt_path():
     assert ownership.covers(owner, ".ai/work-items/starts/receipt.json") == (True, False)
 
 
-def test_active_owner_implicitly_owns_its_outcome_paths():
+def test_active_owner_implicitly_owns_its_evidence_paths():
     owner = ownership.Owner("active", "task", contract([]), None)
 
+    assert ownership.covers(owner, ".ai/work-items/active/task.contract.json") == (True, False)
+    assert ownership.covers(owner, ".ai/work-items/active/task.summary.json") == (True, False)
     assert ownership.covers(owner, ".ai/work-items/active/task.outcome.json") == (True, False)
     assert ownership.covers(owner, ".ai/work-items/active/task.outcome.md") == (True, False)
+    assert ownership.covers(owner, ".ai/work-items/active/other.contract.json") == (False, False)
+    assert ownership.covers(owner, ".ai/work-items/active/other.summary.json") == (False, False)
     assert ownership.covers(owner, ".ai/work-items/active/other.outcome.json") == (False, False)
 
 

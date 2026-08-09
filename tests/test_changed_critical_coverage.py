@@ -253,6 +253,7 @@ def test_candidate_snapshot_rejects_contract_unowned_dirty_path(monkeypatch, tmp
 def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_path):
     paths = [
         "fixture.txt",
+        ".ai/work-items/active/task.contract.json",
         ".ai/work-items/active/task.outcome.json",
         ".ai/cockpit/task_report.json",
         ".ai/work-items/starts/task.json",
@@ -261,7 +262,7 @@ def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_pat
         target = tmp_path / path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(path, encoding="utf-8")
-    contract = tmp_path / "task.contract.json"
+    contract = tmp_path / ".ai/work-items/active/task.contract.json"
     contract.write_text(
         json.dumps({"workItemId": "task", "scope": ["fixture.txt"], "baselineDirtyPaths": []}),
         encoding="utf-8",
@@ -286,6 +287,7 @@ def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_pat
     )
 
     assert [item["path"] for item in snapshot["candidateFiles"]] == [
+        ".ai/work-items/active/task.contract.json",
         ".ai/work-items/starts/task.json",
         "fixture.txt",
     ]

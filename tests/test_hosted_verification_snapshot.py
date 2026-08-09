@@ -290,6 +290,32 @@ def test_prepare_snapshot_binds_evidence_without_mutating_governed_state(tmp_pat
     assert git(root, "status", "--porcelain") == ""
 
 
+def test_snapshot_receipt_exposes_active_evidence_drift_after_preparation(tmp_path):
+    root, contract_path = fixture_repository(tmp_path)
+    summary_path = Path(str(contract_path).replace(".contract.json", ".summary.json"))
+    receipt = hosted.prepare_snapshot(
+        root=root,
+        contract_path=contract_path,
+        output=root / "target" / "hosted-verification.json",
+        quality_runner=passing_quality,
+    )
+
+    contract_path.write_text('{"changed": true}\n', encoding="utf-8")
+    summary_path.write_text('{"changed": true}\n', encoding="utf-8")
+
+    assert receipt["contractDigest"] != hashlib.sha256(contract_path.read_bytes()).hexdigest()
+    assert receipt["summaryDigest"] != hashlib.sha256(summary_path.read_bytes()).hexdigest()
+    with pytest.raises(
+        hosted.HostedVerificationError, match="Contract and Summary identity is invalid"
+    ):
+        hosted.prepare_snapshot(
+            root=root,
+            contract_path=contract_path,
+            output=root / "target" / "replacement-receipt.json",
+            quality_runner=passing_quality,
+        )
+
+
 def test_prepare_snapshot_ignores_codex_turn_diff_audit_refs(tmp_path):
     root, contract_path = fixture_repository(tmp_path)
 

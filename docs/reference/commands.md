@@ -35,3 +35,11 @@ pass the complete JSON declaration through
 calibration](ai-cockpit-work-item-lifecycle.md#controlled-corrective-route-during-live-calibration).
 The declaration is not a general readiness override and is checked again by
 the active Contract and immutable Start Receipt.
+## Active evidence and hosted snapshots
+
+Active Work Item Contract and Summary files are committed evidence on the
+dedicated Work Item branch. Do not force-add them: normal staging includes
+them, while local review JSON remains ignored. Before
+`ai-prepare-hosted-verification-snapshot`, commit the intended candidate and
+work from a clean whole worktree. The snapshot only validates and writes its
+receipt; it does not stage, commit, push, open a PR, merge, or archive.
