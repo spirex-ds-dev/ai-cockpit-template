@@ -43,6 +43,50 @@ def test_doctor_projects_blocked_outcome_traffic_light_gate_and_recovery(tmp_pat
     )
 
 
+def test_doctor_aggregates_conflicting_installation_facts_with_recovery(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        ai_doctor,
+        "installation_diagnosis",
+        lambda _root: {
+            "requestedVersion": "0.5.48",
+            "installedVersion": "0.5.42",
+            "sourceCommit": "a" * 40,
+            "releaseTag": "v0.5.42",
+            "assetDigests": {"template.tar.gz": "b" * 64},
+            "conflicts": ["requested version does not match installed version"],
+        },
+    )
+    monkeypatch.setattr(ai_doctor, "linked_worktree_identity_report", lambda **_kwargs: ([], []))
+
+    passed, _warnings, failures = ai_doctor.diagnose(tmp_path)
+
+    assert any("requestedVersion=0.5.48" in item for item in passed)
+    assert any("installedVersion=0.5.42" in item for item in passed)
+    assert any("assetDigest template.tar.gz=" + "b" * 64 in item for item in passed)
+    assert any("installation contradiction" in item and "Recovery:" in item for item in failures)
+
+
+def test_doctor_aggregates_targets_blocked_outcome_and_missing_hosted_snapshot(tmp_path):
+    (tmp_path / "Makefile").write_text(
+        "ai-doctor:\n\t@true\nai-prepare-hosted-verification-snapshot:\n\t@true\n",
+        encoding="utf-8",
+    )
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    (active / "task.outcome.json").write_text(
+        '{"workItemId":"task","status":"blocked","humanStatusColor":"red",'
+        '"failedGate":"quality","recoveryCondition":"retry quality"}',
+        encoding="utf-8",
+    )
+
+    facts = ai_doctor.runtime_diagnosis(tmp_path)
+
+    assert facts["availableTargets"] == ["ai-doctor", "ai-prepare-hosted-verification-snapshot"]
+    assert facts["outcomes"][0]["humanStatusColor"] == "red"
+    assert facts["hostedSnapshot"]["state"] == "not_ready"
+    assert "ai-prepare-hosted-verification-snapshot" in facts["hostedSnapshot"]["recovery"]
+
+
 def test_doctor_rejects_a_successor_receipt_with_a_foreign_outcome_digest(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)

@@ -1,0 +1,220 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ai-doctor-621-current-main",
+  "mode": "code",
+  "title": "Aggregate AI Cockpit installation and lifecycle diagnosis",
+  "rawUserRequest": "Execute the remaining plan automatically through completion and record that authorization in every Work Item Contract. Resolve issue #621 by making ai-doctor present requested and installed version, source commit, tag/digest installation facts, available Make targets, active or blocked Outcome, hosted snapshot readiness, contradictions, and deterministic recovery actions in one diagnostic output.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-thread: complete-plan-automatic-authorization-and-issue-621",
+    "capturedAt": "2026-08-09",
+    "digest": "sha256:automatic-plan-execution-ai-doctor-621"
+  },
+  "declaredIntent": {
+    "summary": "Give adopters and maintainers one deterministic, evidence-backed diagnosis of installation and lifecycle truth, including explicit contradictions and recovery actions.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e1b935bd3fc909e14a036277a5278dcc10e980a5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/ai-doctor-621-current-main.contract.json",
+    ".ai/work-items/active/ai-doctor-621-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/ai-doctor-621-current-main.outcome.json",
+    ".ai/work-items/active/ai-doctor-621-current-main.outcome.md",
+    "Makefile",
+    "scripts/ai_doctor.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_install_status.py",
+    "scripts/ai_lifecycle_facts.py",
+    "scripts/ai_work_item_state.py",
+    "docs/reference/commands.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "tests/test_doctor.py",
+    "tests/test_installer.py",
+    "tests/test_ai_project_doctor.py",
+    "tests/test_docs_metadata.py"
+  ],
+  "outOfScope": [
+    "Changing installation, version, release, Work Item, Outcome, or hosted receipt facts as a side effect of diagnosis.",
+    "Contacting GitHub, hosted CI, an adopter, or any other external provider from ai-doctor.",
+    "Adding a temporary or free-text diagnostic bypass that masks contradictions."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/621",
+      "reason": "Authoritative requested diagnostic facts, contradiction detection, and recovery-action acceptance."
+    },
+    {"path": "scripts/ai_doctor.py", "reason": "Existing local diagnostic entrypoint and current environment/adoption findings."},
+    {"path": "scripts/ai_install_status.py", "reason": "Version, requested/installed, source commit, tag, and digest installation-truth boundary."},
+    {"path": "scripts/ai_lifecycle_facts.py", "reason": "Canonical active and archived lifecycle/Outcome fact reader."},
+    {"path": "scripts/ai_work_item_state.py", "reason": "Canonical hosted-snapshot and Work Item state boundary."},
+    {"path": ".ai/glossary.md", "reason": "Canonical terms for repository truth, Outcome, evidence, human status color, and recovery signals."},
+    {"path": ".ai/work-items/archive/2026/external-execution-handoff-665-current-main.contract.json", "reason": "Most recent completed Contract and Outcome behavior, including external receipt and traffic-light truth."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_traceability", "false_completion_claim", "documentation_integrity"],
+    "reason": "A doctor that silently prefers one conflicting version, lifecycle, hosted receipt, or command fact can cause unsafe updates, unsupported operation, or a false completion diagnosis. The output must be deterministic, local, and fail closed on contradictory evidence.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "Issue #621 and existing local fact readers define the requested evidence and recovery boundaries; implementation does not require provider access."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item modifies lifecycle- and installation-truth diagnostics consumed by maintainers and adopters."
+    ],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized automatic execution of every remaining Work Item and requested that authorization be recorded in each Contract. #621 only reads local repository evidence and has deterministic acceptance and verification."
+  },
+  "preReviewWarnings": [
+    "Do not choose one version or lifecycle fact when evidence conflicts; report every source and a concrete recovery action.",
+    "Do not make ai-doctor mutate installation, Outcome, hosted receipt, branch, or provider state.",
+    "Keep commands and generated capability/documentation facts aligned with the executable diagnostic output."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "make ai-doctor reports in one deterministic, human-readable output the requested and installed template version, immutable source commit/tag/digest installation facts, and every detected contradiction with the exact source paths and recovery action.",
+    "The same output reports available relevant Make targets, active/blocked Outcome state and traffic-light color, and hosted-verification snapshot readiness or its explicit blockers without claiming an external action completed.",
+    "Malformed, absent, stale, or contradictory version metadata, manifests, Outcome records, and hosted-snapshot evidence fail closed as warnings or failures rather than being silently selected or hidden.",
+    "Focused regressions cover consistent facts, each requested contradiction category, blocked Outcome, missing/ready hosted snapshot, and deterministic recovery text; existing installation and project-doctor tests remain compatible.",
+    "The canonical command and lifecycle documentation enumerate ai-doctor's installation, lifecycle, Outcome, target, and hosted-snapshot sections with their recovery semantics; generated capability and multilingual alignment evidence state that same bounded fact model."
+  ],
+  "guidelines": [
+    "Use deterministic local evidence only; ai-doctor must never mutate repository or provider state or infer a fact that is absent.",
+    "Surface all contradictions with their evidence locations and actionable recovery; do not hide conflicts behind a preferred source.",
+    "Keep command output, tests, canonical documentation, and generated capability evidence semantically aligned.",
+    "Use existing public local fact-reader boundaries rather than importing private feature internals or duplicating their parsing logic."
+  ],
+  "intent": {
+    "problem": "Installation facts, version metadata, manifests, available commands, Outcome state, and hosted verification readiness are currently distributed across files and commands. When they disagree, maintainers must manually cross-check data and can incorrectly treat a stale or partial fact as authoritative.",
+    "constraints": ["Diagnosis must be deterministic and read-only.", "Every contradiction must identify its evidence and recovery action.", "The output must preserve fail-closed lifecycle and external-receipt semantics.", "No provider polling, credentials, machine-specific paths, or temporary bypass behavior may be added."],
+    "rationale": "A single evidence-derived diagnostic lets maintainers make a correct recovery decision without weakening the authority of immutable installation, Outcome, or hosted-receipt records."
+  },
+  "implementationSurface": {
+    "production": ["scripts/ai_doctor.py", "scripts/ai_install_status.py", "scripts/ai_lifecycle_facts.py", "scripts/ai_work_item_state.py", "Makefile"],
+    "tests": ["tests/test_doctor.py", "tests/test_ai_project_doctor.py", "tests/test_docs_metadata.py"],
+    "documentation": ["docs/reference/commands.md", "docs/reference/ai-cockpit-work-item-lifecycle.md"],
+    "generated": [".ai/cockpit/current_status.md", "docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"]
+  },
+  "scenarioCoverage": [
+    {"scenario": "All installation, lifecycle, target, Outcome, and hosted snapshot facts agree.", "required": true, "status": "unverified", "evidence": [], "expected": "ai-doctor prints the unified fact set and its ready or clean recovery signal deterministically.", "verificationPlan": "Focused consistent-fixture and CLI-output regression."},
+    {"scenario": "Version metadata, manifest, source commit, tag, or digest facts are missing, stale, or contradictory.", "required": true, "status": "unverified", "evidence": [], "expected": "ai-doctor reports each conflict with locations and a fail-closed recovery action rather than choosing one fact.", "verificationPlan": "Parameterized installation-truth contradiction regressions."},
+    {"scenario": "An active Outcome is blocked or incomplete.", "required": true, "status": "unverified", "evidence": [], "expected": "The state, human status color, failed gate, and recovery condition are visible in the unified diagnosis.", "verificationPlan": "Blocked Outcome fixture regression."},
+    {"scenario": "Hosted verification has no snapshot, a stale snapshot, or a matching ready receipt.", "required": true, "status": "unverified", "evidence": [], "expected": "The diagnosis accurately reports readiness or blocker without provider calls or completion claims.", "verificationPlan": "Snapshot lifecycle fact fixture regressions."},
+    {"scenario": "A maintainer needs the executable command and documented recovery guidance.", "required": true, "status": "unverified", "evidence": [], "expected": "Canonical docs and generated capability evidence match the diagnosed facts and recovery model.", "verificationPlan": "Documentation metadata/alignment regression and generated evidence checks."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized automatic execution of all remaining Work Items, Contract writes, PRs, lifecycle closure, final audit, and release."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 846
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/ai-doctor-621-current-main.json",
+    "baseCommit": "e1b935bd3fc909e14a036277a5278dcc10e980a5",
+    "initialScopeDigest": "ae310d19265ca0b36d80594040cde48446751a0ea41b9c1e40d6bd306db90948",
+    "contractSkeletonDigest": "30e5a7ec049c06fa2345bc373e808b91cd8049771a72b5a0302ea3cb42f996db"
+  }
+}
