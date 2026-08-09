@@ -139,6 +139,15 @@ worktree were not mutated. The receipt identifies only pushing that exact
 branch for hosted measurement as eligible and provides no human authorization.
 It is not review readiness and cannot authorize a PR,
 merge, tag, release, archive mutation, closure, or branch deletion. Release
+
+For the hosted execution, dispatch `smoke.yml` with `purpose=hosted_measurement`
+and the snapshot branch. A successful `ci-evidence` job uploads exactly one
+`hosted-measurement-receipt-<run-id>-<attempt>` artifact. Its JSON schema records
+the repository, workflow/run URL and identity, ref, exact `commitSha`, required
+job names and conclusions, and artifact name. Copy its facts into the active
+Summary only after independently confirming that its `commitSha` equals the
+snapshot receipt. The hosted receipt is evidence, not authority: it cannot
+authorize a PR, merge, release, archive mutation, closure, or branch deletion.
 intent, an archived Work Item, complete hosted evidence, a dirty/detached/base
 state, baseline mismatch, or failed quality stops the stage. Once hosted
 results are recorded in the active Summary, the Work Item must return to the

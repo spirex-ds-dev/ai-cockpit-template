@@ -43,3 +43,11 @@ them, while local review JSON remains ignored. Before
 `ai-prepare-hosted-verification-snapshot`, commit the intended candidate and
 work from a clean whole worktree. The snapshot only validates and writes its
 receipt; it does not stage, commit, push, open a PR, merge, or archive.
+
+For a hosted measurement only, after the snapshot receipt identifies the exact
+branch and the human has authorized its push, dispatch the smoke workflow with
+`purpose=hosted_measurement`. Retrieve the emitted
+`hosted-measurement-receipt-<run-id>-<attempt>` artifact and verify its
+`commitSha` equals the snapshot receipt before recording the run URL, job
+conclusions, and artifact in the active Summary. This receipt has no authority
+to open a PR, merge, release, archive, close a Work Item, or delete a branch.
