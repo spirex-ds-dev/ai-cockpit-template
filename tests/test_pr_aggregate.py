@@ -111,6 +111,33 @@ def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     assert not any("scripts/ai_finish.py" in issue for issue in issues)
 
 
+def test_pr_bundle_accepts_restricted_path_only_when_same_item_recovery_receipt_binds_it(
+    tmp_path, monkeypatch
+):
+    pair = write_pair(tmp_path, "recovered", [], [])
+    contract_path = pair.relative_to(tmp_path).as_posix()
+    summary_path = contract_path.replace(".contract", ".summary")
+    receipt_path = ".ai/work-items/recovery-receipts/recovered.json"
+    recovery_path = ".github/workflows/compatibility.yml"
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "same_work_item_recovery_paths",
+        lambda _base, _entries: ({"recovered": {recovery_path}}, {receipt_path}),
+    )
+    scope = tmp_path / "scope.yaml"
+    scope.write_text("allowAlways:\n", encoding="utf-8")
+    ownership = tmp_path / "ownership.yaml"
+    ownership.write_text(f"{recovery_path}:\n  aiWrite: restricted\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", scope)
+    monkeypatch.setattr(ai_check_pr, "OWNERSHIP_POLICY", ownership)
+    patch_changes(monkeypatch, [contract_path, summary_path, receipt_path, recovery_path])
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
+
+    assert not any("restricted path lacks approval" in issue for issue in issues)
+
+
 def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_paths(
     tmp_path, monkeypatch
 ):

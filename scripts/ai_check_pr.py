@@ -899,12 +899,14 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             )
             and path in changed_file_paths(entry[2])
         ]
+        same_item_recovery_owner = False
         if not owners:
             owners = [
                 entry
                 for entry in archive_entries
                 if path in same_item_recovery_paths.get(str(entry[1].get("workItemId", "")), set())
             ]
+            same_item_recovery_owner = bool(owners)
         if not owners:
             if is_archived_generated_evidence(path) or is_archive_bound_release_metadata(path):
                 continue
@@ -919,9 +921,12 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             _, owner = owner_match
             if owner.get("aiWrite") == "forbidden":
                 issues.append(f"complete PR diff contains forbidden write: {path}")
-            if owner.get("aiWrite") == "restricted" and not (
+            has_restricted_approval = (
                 isinstance(effective_contract.get("restrictedWriteApproval"), dict)
                 and effective_contract["restrictedWriteApproval"].get("approved") is True
+            )
+            if owner.get("aiWrite") == "restricted" and not (
+                has_restricted_approval or same_item_recovery_owner
             ):
                 issues.append(
                     f"complete PR diff restricted path lacks approval in a covering Contract: {path}"
