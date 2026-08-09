@@ -1,0 +1,232 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-v0550-current-main",
+  "mode": "code",
+  "title": "Publish v0.5.50 after strict same-SHA rehearsal",
+  "baseCommit": "7a8572e6304d20f437a3b5e86b4a2036f46eba7d",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish-v0550-current-main.contract.json",
+    ".ai/work-items/active/publish-v0550-current-main.summary.json",
+    ".ai/work-items/active/publish-v0550-current-main.events.jsonl",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "tests/test_core_gates.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/publish-v0550-current-main.outcome.json",
+    ".ai/work-items/active/publish-v0550-current-main.outcome.md"
+  ],
+  "outOfScope": [
+    "Changing repository source, workflows, release projections, documentation, installer behavior, or historical release assets, except the minimal status-checker parity correction and its required source-bound documentation projections.",
+    "Creating or mutating any version other than v0.5.50, or bypassing readiness, rehearsal, provider, or post-publication verification."
+  ],
+  "sources": [
+    {
+      "path": "release-state.json",
+      "reason": "Canonical candidate state identifies v0.5.50 as the next successor after published v0.5.49."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Authoritative v0.5.50 candidate projection."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The authoritative provider workflow for same-SHA rehearsal and immutable publication."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Read-only capability evidence required by the status generator's declared calibration-inventory projection; no matrix claims are changed by this parity correction."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Canonical derived Japanese reassessment must be refreshed after the source-bound Capability Truth evidence update."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Human-readable paired Japanese reassessment projection for the refreshed JSON evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Canonical source-bound pre-release documentation alignment projection must be refreshed after the paired Japanese reassessment changes."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Human-readable paired pre-release documentation alignment projection for the refreshed JSON evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0550-publication-current-main.outcome.md",
+      "reason": "Merged readiness-deadlock correction requires a fresh post-merge rehearsal and publication sequence."
+    },
+    {
+      "path": "github:issue:625",
+      "reason": "Release issue currently contains stale v0.5.49 wording and may close only after verified v0.5.50 publication."
+    },
+    {
+      "path": "conversation:2026-08-10-continuous-closure-and-release-authorization",
+      "reason": "User authorized this complete, gated release lifecycle and required the authority in every Contract."
+    }
+  ],
+  "rawUserRequest": "执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。发布之前确认没有遗漏、Issues/PR/远端/本地均清理。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-10-continuous-closure-and-release-authorization", "capturedAt": "2026-08-10", "digest": "sha256:operator-authorized-continuous-closure-release-v0550"},
+  "declaredIntent": {"summary": "Publish only the verified v0.5.50 successor from the latest merged default branch.", "requestedCapabilities": ["ai_governance"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "RayIori", "reference": "conversation:2026-08-10-continuous-closure-and-release-authorization", "scope": "Publish only v0.5.50 after readiness, same-SHA rehearsal, actual release, asset, installer, and cleanup evidence pass. No gate bypass, historical tag mutation, or blind retry is authorized."},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "immutable_release", "provider_workflow", "release_identity", "supply_chain_evidence"
+    ],
+    "reason": "This creates an immutable public tag and assets. Only exact current-main source, same-SHA rehearsal, provider evidence, and post-publication installation truth permit success.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly authorized gated publication after all required evidence is present."
+  },
+  "preReviewWarnings": [
+    "Require exact source/tag/rehearsal binding and verify tag, Release, assets, installer version, and cleanup facts independently."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Repository readiness passes and identifies v0.5.50 as the eligible next candidate on current origin/main.",
+    "A release.yml rehearsal succeeds for current origin/main SHA and v0.5.50, records a matching private receipt, and creates no tag, Release, or public asset.",
+    "The actual release.yml run consumes that exact receipt and succeeds with v0.5.50 tag, provider Release, assets, digests, provenance, installer, and strict smoke bound to one source SHA.",
+    "The provider-release action is recorded as a bound external handoff and may resume only with a matching provider receipt; the active status remains yellow while awaiting it.",
+    "The status checker accepts exactly the generator's valid external-handoff projection and rejects stale or altered status content.",
+    "Issue #625 is corrected to v0.5.50 and closed only after independent provider verification.",
+    "The Work Item emits its Outcome, closes lifecycle, and final audit has no open implementation PRs, unresolved release issues, or remote Work Item branches."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Readiness rejects a stale or inconsistent candidate before provider dispatch.", "expected": "Only v0.5.50 on current main is eligible.", "verificationPlan": "Run check-release-readiness and record evidence.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Rehearsal is same-SHA and non-publishing.", "expected": "Receipt binds v0.5.50/current main and no public identity exists before actual release.", "verificationPlan": "Inspect run, receipt, tags, and Releases.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Actual release verifies receipt and publishes only complete v0.5.50 identity.", "expected": "Provider workflow, assets, digest, installer, and final smoke agree on source/tag.", "verificationPlan": "Inspect run and public provider facts.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "guidelines": [
+    "Use only release.yml for immutable provider mutation.",
+    "Keep readiness → same-SHA rehearsal → actual release order fail closed.",
+    "Use Outcome as the visible interface for complete, blocked, or warning state."
+  ],
+  "intent": {
+    "problem": "The preceding readiness deadlock correction is merged. v0.5.50 is the next unreserved candidate after published v0.5.49 and needs a fresh exact-source rehearsal and controlled public publication.",
+    "constraints": ["Use only latest origin/main SHA 7a8572e6304d20f437a3b5e86b4a2036f46eba7d or a freshly re-resolved successor.", "Do not manually create or mutate tags/Releases.", "Do not close #625 before post-publication facts pass."],
+    "rationale": "The final release must make source identity and user-facing release truth reliable while preserving a recoverable fail-closed path."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": false,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "Explicit user authorization recorded above; writes are constrained to Work Item evidence and the authoritative v0.5.50 provider release workflow."
+  },
+  "rollbackNote": "Never move/delete an immutable tag. Preserve diagnostics for any failed hosted gate; after publication, use a distinct corrective Work Item only.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 853
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/publish-v0550-current-main.json",
+    "baseCommit": "7a8572e6304d20f437a3b5e86b4a2036f46eba7d",
+    "initialScopeDigest": "a4eea8c688cde66e8491bbafa79700f11bbd63726c690fb667fd35a373608334",
+    "contractSkeletonDigest": "202408e4d3d7066f5edae1030503d72e4f8ece15a0cfd59d616e7bd1c0f967ab"
+  }
+}

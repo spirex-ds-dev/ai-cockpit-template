@@ -394,6 +394,86 @@ def test_status_check_main_accepts_generated_status_with_unresolved_ownership(
     assert "diff ownership unresolved: 1" in text
 
 
+def test_status_check_accepts_generated_bound_external_handoff_and_rejects_stale_content(
+    tmp_path, monkeypatch
+):
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    status = tmp_path / "status.md"
+    contract_data = {
+        "workItemId": "task",
+        "mode": "code",
+        "acceptance": ["done"],
+        "riskAssessment": {"level": "low", "riskTypes": [], "reason": "fixture"},
+        "verification": [{"check": "quality", "required": True}],
+    }
+    summary_data = {
+        "verification": [{"check": "quality", "result": "passed"}],
+        "reviewReadiness": {
+            "status": "ready",
+            "reason": "fixture",
+            "expectedReviewFocus": [],
+        },
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "guidelinesCompliance": [],
+        "checkpointEvidence": [],
+        "residualRisks": [],
+        "externalHandoff": {
+            "handoffVersion": 1,
+            "state": "awaiting_external_receipt",
+            "bindings": {
+                "workItemId": "task",
+                "branch": "codex/task",
+                "headCommit": "a" * 40,
+                "tree": "b" * 40,
+                "contractDigest": "c" * 64,
+                "summaryDigest": "d" * 64,
+            },
+            "action": "provider_release.publish",
+            "fulfiller": "provider_release",
+            "receiptKind": "github_release_result",
+            "deadline": "2099-08-10T00:00:00Z",
+        },
+    }
+    contract.write_text(json.dumps(contract_data), encoding="utf-8")
+    summary.write_text(json.dumps(summary_data), encoding="utf-8")
+    monkeypatch.setattr(ai_generate_status, "PROJECT_ROOT", tmp_path)
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(ai_generate_status, "ownership_preview", lambda **_kwargs: [])
+    monkeypatch.setattr(ai_check_status, "ownership_preview", lambda **_kwargs: [])
+    monkeypatch.setattr(
+        ai_generate_status,
+        "create_observability",
+        lambda **_kwargs: type("Obs", (), {"status_generated": lambda *_args, **_kwargs: None})(),
+    )
+    monkeypatch.setattr(
+        ai_check_status, "create_observability", lambda **_kwargs: ObservabilityStub()
+    )
+    monkeypatch.setattr(ai_generate_status, "BACKTRACK_REPORT", tmp_path / "backtrack.json")
+    monkeypatch.setattr(ai_check_status, "BACKTRACK_REPORT", tmp_path / "backtrack.json")
+
+    ai_generate_status.write_active_status(
+        contract, summary, output=status, observability_log=tmp_path / "events.jsonl"
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_check_status.py",
+            "status.md",
+            "--contract",
+            "task.contract.json",
+            "--summary",
+            "task.summary.json",
+        ],
+    )
+
+    assert ai_check_status.main() == 0
+    status.write_text(status.read_text(encoding="utf-8") + "\nmanual drift\n", encoding="utf-8")
+    assert ai_check_status.main() == 1
+
+
 def test_status_consistency_covers_empty_paired_and_unpaired_states(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)
