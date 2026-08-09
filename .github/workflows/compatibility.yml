@@ -282,7 +282,11 @@ jobs:
           git add .
           git commit -qm initial
           "$GITHUB_WORKSPACE/install.sh" --stack "$STACK" --update-makefile
-          make ai-cockpit-quality
+          if [[ "$STACK" == java ]]; then
+            make ai-cockpit-quality AI_COCKPIT_JAVA_LANE=ci-java21 AI_COCKPIT_JAVA_REQUIRED_MAJOR=21
+          else
+            make ai-cockpit-quality
+          fi
 
   mobile-stack-quality:
     strategy:

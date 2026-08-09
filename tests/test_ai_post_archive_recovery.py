@@ -123,6 +123,62 @@ def test_open_hosted_recovery_binds_exact_failed_provider_coverage_evidence(tmp_
     )
 
 
+def functional_failure_provider(endpoint: str) -> bytes:
+    responses = {
+        "/repos/spirex-ds-dev/ai-cockpit-template/actions/runs/43": {
+            "id": 43,
+            "event": "pull_request",
+            "head_sha": "c" * 40,
+            "status": "completed",
+            "conclusion": "failure",
+            "path": ".github/workflows/compatibility.yml",
+            "html_url": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/43",
+            "pull_requests": [{"number": 765}],
+        },
+        "/repos/spirex-ds-dev/ai-cockpit-template/actions/jobs/85": {
+            "id": 85,
+            "run_id": 43,
+            "name": "extended-real-stack-quality (java)",
+            "status": "completed",
+            "conclusion": "failure",
+        },
+    }
+    if endpoint.endswith("/logs"):
+        return (
+            b"BLOCKED: required Java major is missing for lane 'default'. Recovery: configure it.\n"
+        )
+    return json.dumps(responses[endpoint]).encode()
+
+
+def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
+    write_archive(tmp_path)
+
+    receipt = recovery.open_hosted_functional_failure_recovery(
+        root=tmp_path,
+        task="example-task",
+        base_commit="a" * 40,
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/620",
+        authority="user-authorized same Work Item recovery",
+        recovery_paths=[".github/workflows/compatibility.yml"],
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=765,
+        failed_candidate_head="c" * 40,
+        run_id=43,
+        job_id=85,
+        fetch_provider=functional_failure_provider,
+        worktree_clean=lambda: True,
+    )
+
+    assert receipt["failure"]["gate"] == "hostedFunctionalFailure"
+    assert receipt["provider"]["jobName"] == "extended-real-stack-quality (java)"
+    assert (
+        recovery.validate_recovery_receipt(
+            tmp_path, receipt, pr_base="a" * 40, fetch_provider=functional_failure_provider
+        )
+        == []
+    )
+
+
 def test_open_hosted_recovery_rejects_a_stale_provider_head(tmp_path):
     write_archive(tmp_path)
 
