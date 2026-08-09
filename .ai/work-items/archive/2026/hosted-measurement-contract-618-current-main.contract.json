@@ -1,0 +1,54 @@
+{
+  "contractVersion": 2,
+  "workItemId": "hosted-measurement-contract-618-current-main",
+  "mode": "code",
+  "title": "Hosted measurement workflow and evidence-return contract",
+  "baseCommit": "de58045b70fcf6313c9f29879a084352334b9af6",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/hosted-measurement-contract-618-current-main.contract.json",
+    ".ai/work-items/active/hosted-measurement-contract-618-current-main.summary.json",
+    ".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md", ".ai/cockpit/sbom.json", ".ai/cockpit/provenance.json", ".ai/cockpit/release-digests.json", "release-state.json", "release.json",
+    ".ai/work-items/starts/**", ".ai/work-items/archive/**",
+    ".ai/work-items/active/hosted-measurement-contract-618-current-main.outcome.json",
+    ".ai/work-items/active/hosted-measurement-contract-618-current-main.outcome.md",
+    ".github/workflows/smoke.yml", "scripts/ai_prepare_hosted_verification.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md", "docs/reference/commands.md",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md",
+    "tests/test_hosted_verification_snapshot.py", "tests/test_workflows.py"
+  ],
+  "outOfScope": ["Release workflow, release version/tag changes, provider release/tag operations, PR merge, and branch deletion. The existing release.json is in scope only for its generated candidate supply-chain digest projection."],
+  "sources": [
+    {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/618","reason":"Authoritative hosted measurement and evidence-return requirement."},
+    {"path":".github/workflows/smoke.yml","reason":"Existing hosted dispatch, non-release purpose, and artifact behavior."},
+    {"path":"scripts/ai_prepare_hosted_verification.py","reason":"Existing exact commit, clean candidate, and receipt binding boundary."},
+    {"path":"docs/reference/ai-cockpit-work-item-lifecycle.md","reason":"Canonical lifecycle documentation to update."}
+  ],
+  "rawUserRequest":"Execute the complete remediation plan automatically; record authorization in every Work Item Contract. Use governed corrective work, no temporary repair, and preserve Outcome traffic-light visibility.",
+  "rawRequestSource":{"type":"human","reference":"user-goal: converge-and-complete-the-entire-current-plan; issue-618","capturedAt":"2026-08-09","digest":"sha256:user-authorized-plan-continuation"},
+  "declaredIntent":{"summary":"Make hosted measurement dispatch unambiguous and return reproducible, exact-commit evidence without granting provider-operation authority.","requestedCapabilities":["ai_governance","documentation","test_automation","software_design"]},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "unknowns": [], "notCodable": false,
+  "riskAssessment":{"level":"medium","riskTypes":["hosted_verification","evidence_integrity","workflow_semantics"],"reason":"Hosted workflow evidence must distinguish measurement from release and bind exact immutable candidate identity.","unknownsReviewComplete":true,"unknownsReviewReason":"Existing workflow and snapshot implementation provide the required evidence surface."},
+  "scenarioCoverage":[
+    {"scenario":"measurement dispatch is explicitly non-release and binds its branch/ref and exact commit","required":true,"status":"unverified","expected":"The workflow accepts only the explicit hosted_measurement purpose and records its measured source identity without treating the dispatch as release preparation.","verificationPlan":"Add workflow regression assertions and exercise snapshot receipt validation against the documented dispatch contract.","evidence":[]},
+    {"scenario":"returned receipt binds run URL, required jobs, artifact reference, and the exact measured commit","required":true,"status":"unverified","expected":"The documented receipt shape requires run URL, workflow/run identity, exact source commit, required jobs, conclusions, and artifact reference.","verificationPlan":"Add focused receipt-shape and mismatch regressions in the hosted snapshot test suite.","evidence":[]}
+  ],
+  "governanceProfile":{"selected":"strict","source":"human_override","reasons":["Hosted evidence and workflow semantics require full verification."],"override":{"approvalEvidence":"Standing user authorization in this thread.","reason":"Implement governed hosted measurement only; no provider operation.","risks":["hosted_verification","evidence_integrity"],"notRunChecks":["No live hosted dispatch is performed during implementation; hosted workflow behavior is verified by local workflow/receipt regressions and later PR CI."],"workItemOnly":true,"workItemId":"hosted-measurement-contract-618-current-main"}},
+  "agentCapability":{"canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""},
+  "executionDecision":{"status":"continue","reason":"User authorized automatic governed execution; implementation remains limited to workflow, receipt contract, docs, and tests."},
+  "preReviewWarnings":["Review that dispatch never authorizes PR, merge, release, archive, or branch deletion."],
+  "checkpointPolicy":{"requiredBeforeFinish":true,"requiredStages":["before_edit","before_finish"],"reason":"Bind implementation and final hosted-evidence semantics."},
+  "acceptance":[
+    "The template provides a hosted-measurement workflow path with explicit branch/ref, dispatch purpose, and non-release semantics.",
+    "The returned receipt contract records run URL, workflow/run identity, exact commit binding, required jobs, conclusions, artifacts, and a Summary write-back shape.",
+    "Documentation states that a hosted receipt is evidence only and never authorizes PR, merge, archive, release, or branch deletion.",
+    "Focused regressions prove dispatch/receipt semantics and fail closed on missing or mismatched exact-commit evidence."
+  ],
+  "guidelines":["Public commands and receipt schemas are documented with their authority boundary.","Workflow changes use immutable action references and preserve fail-closed verification."],
+  "intent":{"problem":"Hosted measurement was documented but lacked a complete workflow/evidence-return contract, so users could confuse a push or dispatch with a release-authorized action. The added pinned artifact action changes the committed SBOM and requires the existing candidate supply-chain projection to be refreshed atomically.","constraints":["Do not make snapshot preparation stage, commit, push, merge, archive, release, or delete.","Do not weaken exact commit, clean-tree, or required-job validation.","Do not change release workflow behavior or release version/tag facts.","Refresh only the generated candidate supply-chain evidence chain required to bind the changed SBOM."],"rationale":"A standardized receipt makes hosted measurement reproducible while retaining human control of provider operations. Refreshing the entire dependent evidence chain prevents contradictory candidate metadata."},
+  "verification":[{"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}],
+  "destructiveChangePolicy":{"allowed":false,"requiresHumanApproval":true,"allowPatterns":[]},"restrictedWriteApproval":{"approved":true,"approvedBy":"RayIori","reason":"User explicitly authorized automatic execution and Contract recording for every planned Work Item; this approval is limited to the #618 smoke workflow receipt contract, its tests/docs, and the dependent generated candidate supply-chain evidence refresh."},
+  "rollbackNote":"Revert this Work Item diff and retain archived receipt evidence.","budgetImpact":{"expectedMetrics":{"archiveGrowth":843}},
+  "startReceipt":{"path":".ai/work-items/starts/hosted-measurement-contract-618-current-main.json","baseCommit":"de58045b70fcf6313c9f29879a084352334b9af6","initialScopeDigest":"1499d28410de88c8979657d4e62832bdbd7730475bba222fd778b3d5d59a0f23","contractSkeletonDigest":"4fce16e996aa433c959e6791452fac93dbe92efa30425bc3a9f76e2d2db8b3cd"}
+}

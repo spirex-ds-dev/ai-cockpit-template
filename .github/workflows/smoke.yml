@@ -379,3 +379,46 @@ jobs:
             echo 'One or more required CI jobs did not succeed.' >&2
             exit 1
           fi
+
+      - name: Write hosted measurement receipt
+        if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
+        shell: bash
+        run: |
+          set -euo pipefail
+          receipt="$RUNNER_TEMP/hosted-measurement-receipt.json"
+          jq -n \
+            --arg purpose "${{ inputs.purpose }}" \
+            --arg repository "${{ github.repository }}" \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg run_attempt "$GITHUB_RUN_ATTEMPT" \
+            --arg workflow "smoke.yml" \
+            --arg commit_sha "${{ github.sha }}" \
+            --arg ref "${{ github.ref }}" \
+            --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{
+              format: "ai-cockpit-hosted-measurement-receipt",
+              schemaVersion: 1,
+              purpose: $purpose,
+              authorizationClaim: "not_provided_by_receipt",
+              forbiddenActions: ["pull_request", "merge", "release", "archive_mutation", "work_item_closure", "branch_deletion"],
+              repository: $repository,
+              workflowName: $workflow,
+              workflowRunId: $run_id,
+              workflowRunAttempt: $run_attempt,
+              runUrl: $run_url,
+              commitSha: $commit_sha,
+              ref: $ref,
+              requiredJobNames: ["template-smoke", "installation-smoke", "release-evidence"],
+              requiredJobConclusions: {"template-smoke": "${{ needs.template-smoke.result }}", "installation-smoke": "${{ needs.installation-smoke.result }}", "release-evidence": "${{ needs.release-evidence.result }}"},
+              artifactName: ("hosted-measurement-receipt-" + $run_id + "-" + $run_attempt)
+            }' > "$receipt"
+          cat "$receipt"
+
+      - name: Upload hosted measurement receipt
+        if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: hosted-measurement-receipt-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hosted-measurement-receipt.json
+          if-no-files-found: error
+          retention-days: 14

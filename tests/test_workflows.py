@@ -10,6 +10,20 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
     assert "  workflow_dispatch:" in workflow
 
 
+def test_smoke_hosted_measurement_dispatch_returns_a_non_authorizing_exact_commit_receipt():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    assert "- hosted_measurement" in workflow
+    assert "Write hosted measurement receipt" in workflow
+    assert "ai-cockpit-hosted-measurement-receipt" in workflow
+    assert 'authorizationClaim: "not_provided_by_receipt"' in workflow
+    assert "forbiddenActions" in workflow
+    assert "commitSha: $commit_sha" in workflow
+    assert "runUrl: $run_url" in workflow
+    assert "requiredJobConclusions" in workflow
+    assert "Upload hosted measurement receipt" in workflow
+    assert "hosted-measurement-receipt-${{ github.run_id }}-${{ github.run_attempt }}" in workflow
+
+
 def test_csharp_compatibility_uses_dependabot_setup_dotnet_600_pin():
     workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
     csharp_setup = workflow.split("uses: actions/setup-dotnet@", 1)[1].split("\n      - ", 1)[0]
