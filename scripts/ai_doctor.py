@@ -4,11 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 from ai_check_adoption_ready import (
     readiness_failures,
@@ -16,6 +19,7 @@ from ai_check_adoption_ready import (
     template_exemption,
 )
 from ai_common import clean_git_environment
+from ai_install_facts import InstallFactsError, validate_fact_bundle
 from ai_lifecycle_truth import validate_successor_receipt
 from ai_project_profile import load_profile
 from ai_start import linked_worktree_identity_report
@@ -44,10 +48,115 @@ def git_records(output: str) -> list[str]:
     return [line for line in output.splitlines() if line]
 
 
+def installation_diagnosis(root: Path) -> dict[str, Any]:
+    """Read immutable installation facts and retain every contradiction."""
+    try:
+        facts = validate_fact_bundle(root)
+    except InstallFactsError as exc:
+        return {"available": False, "reason": str(exc), "conflicts": []}
+    version = facts["version"]
+    manifest = facts["manifest"]
+    identity = facts["releaseIdentity"]
+    requested = manifest["source"].get("distributionVersion")
+    installed = version.get("distributionVersion")
+    conflicts: list[str] = []
+    if requested != installed:
+        conflicts.append("requested version does not match installed version")
+    return {
+        "available": True,
+        "requestedVersion": requested,
+        "installedVersion": installed,
+        "sourceCommit": version.get("sourceCommit"),
+        "releaseTag": identity.get("releaseTag"),
+        "assetDigests": identity.get("artifactDigests", {}),
+        "conflicts": conflicts,
+    }
+
+
+def runtime_diagnosis(root: Path) -> dict[str, Any]:
+    """Collect local lifecycle, command, Outcome, and snapshot readiness facts."""
+    makefile = root / "Makefile"
+    targets: list[str] = []
+    if makefile.is_file():
+        for line in makefile.read_text(encoding="utf-8").splitlines():
+            match = re.fullmatch(r"([A-Za-z0-9][A-Za-z0-9_.-]*):", line)
+            if match and match.group(1).startswith("ai-"):
+                targets.append(match.group(1))
+    active = root / ".ai" / "work-items" / "active"
+    outcomes: list[dict[str, Any]] = []
+    if active.is_dir():
+        for path in sorted(active.glob("*.outcome.json")):
+            try:
+                outcome = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                outcomes.append({"path": str(path.relative_to(root)), "state": "unreadable"})
+                continue
+            if isinstance(outcome, dict):
+                outcomes.append({"path": str(path.relative_to(root)), **outcome})
+    snapshot = root / "target" / "hosted-verification-snapshot.json"
+    hosted: dict[str, Any]
+    if snapshot.is_file():
+        try:
+            value = json.loads(snapshot.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            hosted = {
+                "state": "blocked",
+                "recovery": "Regenerate the hosted verification snapshot from a clean dedicated Work Item branch",
+            }
+        else:
+            hosted = {"state": "ready" if isinstance(value, dict) else "blocked", "receipt": value}
+    else:
+        hosted = {
+            "state": "not_ready",
+            "recovery": "Run make ai-prepare-hosted-verification-snapshot only when the active Contract explicitly requires hosted verification",
+        }
+    return {
+        "availableTargets": sorted(set(targets)),
+        "outcomes": outcomes,
+        "hostedSnapshot": hosted,
+    }
+
+
 def diagnose(root: Path) -> tuple[list[str], list[str], list[str]]:
     passed: list[str] = []
     warnings: list[str] = []
     failures: list[str] = []
+
+    install = installation_diagnosis(root)
+    if not install.get("available", True):
+        warnings.append(
+            "installation facts are unavailable (template-maintenance or uninstalled runtime): "
+            f"{install['reason']}. Recovery: run the published installer before diagnosing an adopter installation"
+        )
+    for key in ("requestedVersion", "installedVersion", "sourceCommit", "releaseTag"):
+        if install.get(key) is not None:
+            passed.append(f"installation {key}={install[key]}")
+    asset_digests = install.get("assetDigests", {})
+    if isinstance(asset_digests, dict):
+        for name, value in sorted(asset_digests.items()):
+            if isinstance(name, str) and isinstance(value, str):
+                passed.append(f"installation assetDigest {name}={value}")
+    for conflict in install.get("conflicts", []):
+        failures.append(
+            "installation contradiction: "
+            f"{conflict}. Recovery: reinstall from the selected immutable release tag and re-run make ai-doctor"
+        )
+
+    runtime = runtime_diagnosis(root)
+    targets = runtime["availableTargets"]
+    passed.append("available ai Make targets: " + (", ".join(targets) if targets else "none"))
+    for outcome in runtime["outcomes"]:
+        if outcome.get("status") == "blocked":
+            warnings.append(
+                "Outcome blocked "
+                f"(color={outcome.get('humanStatusColor', 'unknown')}, gate={outcome.get('failedGate', 'unknown')}, "
+                f"recovery={outcome.get('recoveryCondition', 'not recorded')})"
+            )
+    hosted = runtime["hostedSnapshot"]
+    if hosted.get("state") != "ready":
+        warnings.append(
+            f"hosted snapshot {hosted.get('state')}; Recovery: {hosted.get('recovery', 'inspect hosted snapshot evidence')}"
+        )
 
     python_version = (sys.version_info.major, sys.version_info.minor)
     if python_version >= (3, 11):

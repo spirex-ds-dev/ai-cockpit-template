@@ -57,6 +57,13 @@ starting that same Work Item remains fail-closed until its owner repairs the
 identity. Run `make ai-doctor` to see the isolated identity and its recovery
 boundary before deciding on a corrective Work Item.
 
+`make ai-doctor` is the single read-only diagnostic surface for installation
+and lifecycle facts. It presents immutable version/commit/tag/digest evidence,
+available `ai-*` targets, Outcome color and recovery, and hosted snapshot
+readiness together. If facts conflict, it reports the conflict and recovery
+instead of selecting a preferred value; it never performs provider polling or
+changes a Work Item, Outcome, snapshot, branch, or installation record.
+
 When a Work Item is a declared successor, it must wait for its predecessor to
 have evidence for PR merge, archive, local/remote branch deletion, and base
 synchronization. `make check-ai-serial-order` fails closed when that declared

@@ -19,10 +19,20 @@ lastVerifiedBy: capability-truth-matrix
 | Verify | `make quality-fast`, `make quality-full`, `make quality-release`, `make ai-cockpit-quality` | [Quality Gates](../operations/quality-gates.md) |
 | Finish and archive | `make ai-finish` | [Work Item Lifecycle](../operations/work-item-lifecycle.md) |
 | Close after merge | `make ai-close-work-item` | [Work Item Lifecycle Closure](work-item-lifecycle-closure.md) |
-| Diagnose | `make generate-cockpit-status`, `make cockpit-doctor` | [Troubleshooting](troubleshooting.md) |
+| Diagnose | `make ai-doctor`, `make generate-cockpit-status`, `make cockpit-doctor` | [Troubleshooting](troubleshooting.md) |
 | Await a bound external action | `make ai-record-external-handoff`, `make ai-ingest-external-receipt` | [Work Item Lifecycle](ai-cockpit-work-item-lifecycle.md#external-handoff-and-receipt) |
 
 Run `make help` in the exact installed revision for the executable command list.
+
+## Unified diagnosis
+
+`make ai-doctor` is read-only. It aggregates immutable installation facts
+(requested/installed version, source commit, release tag, and asset digests),
+available `ai-*` Make targets, active Outcome traffic-light state, and hosted
+snapshot readiness. It never chooses between contradictory facts or contacts a
+provider: each contradiction identifies a recovery action. A missing snapshot
+is only a readiness signal; run `make ai-prepare-hosted-verification-snapshot`
+only when the active Contract explicitly requires hosted verification.
 
 For a code Contract with `implementationSurface`, use
 `make ai-preflight CONTRACT=<contract>` before `make ai-prepare-implementation`.
