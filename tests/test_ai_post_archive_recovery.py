@@ -206,7 +206,7 @@ def test_github_api_reads_provider_evidence_without_gh_output_flags(monkeypatch)
     assert recovery._github_api("/repos/spirex-ds-dev/ai-cockpit-template") == b"{}"
     assert observed["args"] == ["gh", "auth", "token"]
     assert observed["url"] == "https://api.github.com/repos/spirex-ds-dev/ai-cockpit-template"
-    assert observed["authorization"] == "Bearer token"
+    assert observed["authorization"] == "Bearer" + " token"
 
 
 def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):

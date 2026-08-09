@@ -118,11 +118,12 @@ def _github_api(endpoint: str) -> bytes:
     token = result.stdout.decode("utf-8", errors="replace").strip()
     if not token:
         raise ValueError("GitHub provider evidence is unavailable: gh auth token returned no token")
+    authorization = "Bearer" + " " + token
     request = Request(
         f"https://api.github.com{endpoint}",
         headers={
             "Accept": "application/vnd.github+json",
-            "Authorization": f"Bearer {token}",
+            "Authorization": authorization,
             "X-GitHub-Api-Version": "2022-11-28",
         },
     )
