@@ -134,3 +134,8 @@ actual release must verify a successful receipt with the same resolved source SH
 and requested tag before any immutable mutation. If main changes afterwards, run
 a new rehearsal for that SHA; do not treat an old preparation snapshot as a reason
 to repeatedly create freeze Work Items.
+
+Readiness normally requires no active Work Item. The sole exception is the one
+explicitly authorized `repository_release.publish` Work Item that records the
+publication evidence; it must be the only active Contract. That exception is
+evidence custody only, never a bypass of rehearsal or release gates.

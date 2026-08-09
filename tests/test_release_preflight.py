@@ -547,6 +547,47 @@ def test_repository_readiness_keeps_policy_fail_closed_without_freeze_bytes():
     assert "archiveGrowth=201 exceeds configured maximum 200" in issues
 
 
+def test_repository_readiness_allows_only_current_authorized_release_work_item(tmp_path):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    contract = {
+        "workItemId": "release-v0550-publication-current-main",
+        "baseCommit": "a" * 40,
+        "requestedOperation": {
+            "target": "repository_release",
+            "action": "publish",
+            "environment": "public_provider",
+            "effect": "create_immutable_release_tag_and_public_assets",
+            "authorityRequired": True,
+        },
+        "authorityEvidence": {"type": "user_authorization", "authorizedBy": "RayIori"},
+        "executionDecision": {"status": "continue"},
+    }
+    (active / "release-v0550-publication-current-main.contract.json").write_text(
+        json.dumps(contract), encoding="utf-8"
+    )
+
+    assert (
+        preflight.release_readiness_active_work_item_issues(
+            tmp_path, ["release-v0550-publication-current-main"]
+        )
+        == []
+    )
+
+    contract["authorityEvidence"] = {}
+    (active / "release-v0550-publication-current-main.contract.json").write_text(
+        json.dumps(contract), encoding="utf-8"
+    )
+    assert preflight.release_readiness_active_work_item_issues(
+        tmp_path, ["release-v0550-publication-current-main"]
+    ) == ["active Work Items remain: release-v0550-publication-current-main"]
+
+    (active / "ordinary.contract.json").write_text("{}", encoding="utf-8")
+    assert preflight.release_readiness_active_work_item_issues(
+        tmp_path, ["ordinary", "release-v0550-publication-current-main"]
+    ) == ["active Work Items remain: ordinary, release-v0550-publication-current-main"]
+
+
 def test_repository_policy_context_reads_active_work_items_and_warning_policy(tmp_path):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)
