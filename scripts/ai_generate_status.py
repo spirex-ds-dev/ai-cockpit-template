@@ -363,6 +363,23 @@ def project_external_handoff(summary: dict[str, Any] | None) -> dict[str, str] |
         }
 
 
+def render_external_handoff(summary: dict[str, Any] | None) -> str:
+    """Render the sole status fragment for a validated external handoff."""
+    external_handoff = project_external_handoff(summary)
+    if not external_handoff:
+        return ""
+    return (
+        "\n\n## External Handoff\n\n"
+        f"- State: `{external_handoff['state']}`\n"
+        f"- Color: `{external_handoff['humanStatusColor']}`\n"
+        f"- Action: `{external_handoff.get('action', 'invalid')}`\n"
+        f"- Fulfiller: `{external_handoff.get('fulfiller', 'invalid')}`\n"
+        f"- Receipt Kind: `{external_handoff.get('receiptKind', 'invalid')}`\n"
+        f"- Deadline: `{external_handoff.get('deadline', 'invalid')}`\n"
+        f"- Recovery Condition: {external_handoff['recoveryCondition']}\n"
+    )
+
+
 def load_preflight_review(
     contract: dict[str, Any],
     contract_path: Path,
@@ -516,18 +533,7 @@ def write_active_status(
         task_outcome=project_active_task_outcome(contract, summary, contract_path),
         calibration_corrective=project_calibration_corrective(contract),
     )
-    external_handoff = project_external_handoff(summary)
-    if external_handoff:
-        status_text += (
-            "\n\n## External Handoff\n\n"
-            f"- State: `{external_handoff['state']}`\n"
-            f"- Color: `{external_handoff['humanStatusColor']}`\n"
-            f"- Action: `{external_handoff.get('action', 'invalid')}`\n"
-            f"- Fulfiller: `{external_handoff.get('fulfiller', 'invalid')}`\n"
-            f"- Receipt Kind: `{external_handoff.get('receiptKind', 'invalid')}`\n"
-            f"- Deadline: `{external_handoff.get('deadline', 'invalid')}`\n"
-            f"- Recovery Condition: {external_handoff['recoveryCondition']}\n"
-        )
+    status_text += render_external_handoff(summary)
     receipt_path = contract_path.with_name(
         f"{contract.get('workItemId', '')}.successor-receipt.json"
     )

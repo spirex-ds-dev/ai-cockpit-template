@@ -25,6 +25,7 @@ from ai_generate_status import (
     normalize_status_language,
     project_active_task_outcome,
     project_relative,
+    render_external_handoff,
     status_for,
 )
 from ai_governance_compression import derive_governance_status, render_active_status
@@ -145,6 +146,7 @@ def main() -> int:
         calibration_inventory=inventory,
         task_outcome=project_active_task_outcome(contract, summary, Path(args.contract)),
     )
+    expected += render_external_handoff(summary)
     expected = localize_status_markdown(expected, language)
 
     if normalize_generated_at(status) != normalize_generated_at(expected):
