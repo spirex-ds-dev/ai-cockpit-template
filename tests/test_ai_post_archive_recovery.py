@@ -176,48 +176,43 @@ def second_functional_failure_provider(endpoint: str) -> bytes:
     return json.dumps(responses[endpoint]).encode()
 
 
-def test_github_api_reads_provider_evidence_without_gh_output_flags(monkeypatch):
+def test_github_api_prefers_terminal_safe_gh_output_when_supported(monkeypatch):
     observed = {}
 
     def fake_run(args, **kwargs):
         observed["args"] = args
         observed["env"] = kwargs["env"]
-        return SimpleNamespace(returncode=0, stdout=b"token\n", stderr=b"")
-
-    class Response:
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *_args):
-            return False
-
-        def read(self):
-            return b"{}"
-
-    def fake_urlopen(request, *, timeout):
-        observed["url"] = request.full_url
-        observed["authorization"] = request.get_header("Authorization")
-        observed["timeout"] = timeout
-        return Response()
+        return SimpleNamespace(returncode=0, stdout=b"{}", stderr=b"")
 
     monkeypatch.setattr(recovery.subprocess, "run", fake_run)
-    monkeypatch.setattr(recovery, "urlopen", fake_urlopen)
 
     assert recovery._github_api("/repos/spirex-ds-dev/ai-cockpit-template") == b"{}"
-    assert observed["args"] == ["gh", "auth", "token"]
-    assert observed["url"] == "https://api.github.com/repos/spirex-ds-dev/ai-cockpit-template"
-    assert observed["authorization"] == "Bearer" + " token"
+    assert observed["args"] == [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "/repos/spirex-ds-dev/ai-cockpit-template",
+    ]
 
 
-def test_github_api_rejects_an_empty_runtime_auth_token(monkeypatch):
-    monkeypatch.setattr(
-        recovery.subprocess,
-        "run",
-        lambda *_args, **_kwargs: SimpleNamespace(returncode=0, stdout=b"\n", stderr=b""),
-    )
+def test_github_api_retries_without_terminal_flag_for_older_runners(monkeypatch):
+    calls = []
 
-    with pytest.raises(ValueError, match="returned no token"):
-        recovery._github_api("/repos/spirex-ds-dev/ai-cockpit-template")
+    def fake_run(args, **_kwargs):
+        calls.append(args)
+        if len(calls) == 1:
+            return SimpleNamespace(
+                returncode=1, stdout=b"", stderr=b"unknown flag: --allow-escape-sequences"
+            )
+        return SimpleNamespace(returncode=0, stdout=b"{}", stderr=b"")
+
+    monkeypatch.setattr(recovery.subprocess, "run", fake_run)
+
+    assert recovery._github_api("/repos/spirex-ds-dev/ai-cockpit-template") == b"{}"
+    assert calls == [
+        ["gh", "api", "--allow-escape-sequences", "/repos/spirex-ds-dev/ai-cockpit-template"],
+        ["gh", "api", "/repos/spirex-ds-dev/ai-cockpit-template"],
+    ]
 
 
 def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
@@ -403,25 +398,19 @@ def test_hosted_recovery_rejects_provider_unavailability():
         )
 
 
-def test_github_provider_log_reader_uses_the_same_rest_transport(monkeypatch):
+def test_github_provider_log_reader_uses_terminal_safe_gh_api_invocation(monkeypatch):
     captured = {}
 
     def run(command, **_kwargs):
         captured["command"] = command
-        return type("Result", (), {"returncode": 0, "stdout": b"token", "stderr": b""})()
-
-    class Response:
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *_args):
-            return False
-
-        def read(self):
-            return b"log"
+        return type("Result", (), {"returncode": 0, "stdout": b"log", "stderr": b""})()
 
     monkeypatch.setattr(recovery.subprocess, "run", run)
-    monkeypatch.setattr(recovery, "urlopen", lambda *_args, **_kwargs: Response())
 
     assert recovery._github_api("/repos/o/r/actions/jobs/1/logs") == b"log"
-    assert captured["command"] == ["gh", "auth", "token"]
+    assert captured["command"] == [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "/repos/o/r/actions/jobs/1/logs",
+    ]
