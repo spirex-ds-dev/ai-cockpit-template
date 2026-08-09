@@ -1,0 +1,296 @@
+{
+  "contractVersion": 2,
+  "workItemId": "final-audit-624-current-main",
+  "mode": "code",
+  "title": "Final release-readiness audit of all remediation evidence",
+  "baseCommit": "b4c912af630d274d39f4f4daab123813182a9b7b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/final-audit-624-current-main.contract.json",
+    ".ai/work-items/active/final-audit-624-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/final-audit-624-current-main.outcome.json",
+    ".ai/work-items/active/final-audit-624-current-main.outcome.md",
+    "docs/audits/final-release-readiness-audit.md"
+  ],
+  "outOfScope": [
+    "Product behavior, release version metadata, tags, and provider release assets; those belong only to the subsequent #625 release Work Item."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines the required governed lifecycle and closure evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ai-doctor-621-current-main.summary.json",
+      "reason": "Provides the final remediation evidence for the ai-doctor original finding."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Provides the authoritative archive inventory for completed remediation Work Items."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Maps original remediation findings to implementation evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues",
+      "reason": "Authoritative provider inventory for open and closed issue state."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pulls",
+      "reason": "Authoritative provider inventory for open and merged pull request state."
+    }
+  ],
+  "rawUserRequest": "Execute the plan until all Work Items are complete. Before the final release, verify that remote and local state are clean, every original finding is covered, all Issues and PRs are resolved, and no evidence or Outcome is missing. The user authorizes automatic execution and requests that authority be written into each Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-thread: complete-plan-automatic-authorization-final-audit-624",
+    "capturedAt": "2026-08-09",
+    "digest": "sha256:automatic-plan-execution-final-audit-624"
+  },
+  "declaredIntent": {
+    "summary": "Produce an evidence-backed release-readiness decision without publishing or modifying release facts.",
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_readiness",
+      "evidence_integrity",
+      "repository_cleanup"
+    ],
+    "reason": "A false-ready audit could allow a release with unresolved original findings, active provider work, stale local worktrees, or missing evidence. The audit must fail closed and report every unresolved item.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The user has authorized the full audit and the repository, provider, and lifecycle commands expose deterministic evidence; any residual finding becomes an explicit red or yellow audit result rather than an unknown implementation dependency."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item only produces governance evidence and does not publish a release; standard verification is proportionate."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user has explicitly authorized the audit and all evidence sources and acceptance criteria are declared."
+  },
+  "preReviewWarnings": [
+    "Do not infer Issue or PR resolution from branch names; query provider state and bind it to exact URLs and SHAs.",
+    "Do not start publication or mutate release metadata in this audit Work Item.",
+    "Stale local worktrees may be audit findings but must not be destructively removed unless a governed closure or explicit scope expansion authorizes their exact paths."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A tracked final audit report maps every original P1/P2/P3 finding to current implementation and verification evidence, or reports it red with a concrete recovery condition.",
+    "The audit queries GitHub Issues and Pull Requests and records exact open, closed, merged, and unresolved state without relying on local branch names.",
+    "The audit removes only the nine pre-inventoried superseded remote branches after recording their SHA and closed-or-absent PR state; it creates a reversible named Git stash for each of the 40 exact non-current dirty worktrees recorded in the audit report, then verifies that each retained worktree is clean.",
+    "The audit checks local worktrees, local branches, and remote codex branches, distinguishing harmless detached historical worktrees from active unclosed governed Work Items and reporting any blockers.",
+    "The audit verifies the #621 ai-doctor Work Item archived Outcome and closure receipt, and checks the release prerequisites without changing release metadata or publishing anything.",
+    "The generated Outcome uses an explicit green, yellow, or red human status color; only a green outcome permits #625 release preparation."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The original real-project installation assessment identified version truth, hosted verification, outcome reporting, evidence management, status generation, CI, Maven/JDK guidance, and diagnostics gaps. After remediation Work Items, a final independent evidence audit is required before releasing v0.5.49 so no original finding, remote issue, PR, or cleanup obligation is silently omitted.",
+    "constraints": [
+      "Remain on the current dedicated audit branch and do not publish, tag, or edit release metadata.",
+      "Use repository and GitHub provider facts rather than assertions or stale historical records.",
+      "Do not work around a failed audit gate; describe the failure in the Outcome and resolve it through the current Work Item when in scope, otherwise stop before release.",
+      "The user authorizes automatic evidence gathering, report creation, PR merge after green checks, and governed closure for this Work Item."
+    ],
+    "rationale": "A release gate is credible only if it traces every original requirement to live repository and provider evidence and makes remaining risks visible with a traffic-light Outcome."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Every original installation and governance finding has an evidence-backed disposition.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The audit report contains a one-to-one finding matrix with implementation, verification, and Outcome evidence or a red recovery condition.",
+      "verificationPlan": "Inspect the remediation traceability matrix, archive index, relevant scripts/docs/tests, and final audit report."
+    },
+    {
+      "scenario": "Provider and local repository state are release-ready.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "GitHub Issues/PRs and local/remote Work Item identities have no unresolved delivery blocker, or the Outcome is red/yellow with exact identities and recovery.",
+      "verificationPlan": "Query gh issue/pr lists, git worktree list, git branch inventory, and remote branch inventory; record results in the report."
+    },
+    {
+      "scenario": "Outcome and release boundary are explicit.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The audit creates a traffic-light Outcome and does not publish any release material.",
+      "verificationPlan": "Run ai-finish and inspect the archived Outcome plus audit report diff."
+    }
+  ],
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "externalSystem": "github",
+    "availableEvidence": [
+      "original finding traceability",
+      "archived Work Item and Outcome evidence",
+      "GitHub Issue and PR inventory",
+      "local and remote cleanup inventory",
+      "release metadata immutability check"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "codex/conflict-successor-outcome-709-current-main",
+      "codex/dependabot-governance-successor-663-current-main",
+      "codex/post-archive-premerge-ownership-739-current-main",
+      "codex/pre-archive-candidate-coverage-680-current-main",
+      "codex/projection-isolation-664",
+      "codex/quality-session-isolation-654-current-main",
+      "codex/reconcile-open-prs-issues-662",
+      "codex/retire-obsolete-shell-chain-666-successor",
+      "codex/trusted-self-hosted-recovery-validation-724",
+      "reversible Git stash quarantine only for the exact 40 non-current dirty worktree paths enumerated by the 2026-08-09 pre-stash inventory in docs/audits/final-release-readiness-audit.md"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "RayIori",
+      "reason": "The user explicitly authorized supersession/quarantine and automatic execution of the full plan, including exact stale remote identity cleanup before release.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "RayIori",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "user-thread: authorization supersession/quarantine and continue complete plan",
+          "directUserInstructionDigest": "sha256:6947dc311db5f40d9304e1c0d7a53ad2a91f3262bb95fdcdf894566142506b92",
+          "authorizedAt": "2026-08-09T12:00:00+09:00"
+        },
+        "scope": [
+          "codex/conflict-successor-outcome-709-current-main",
+          "codex/dependabot-governance-successor-663-current-main",
+          "codex/post-archive-premerge-ownership-739-current-main",
+          "codex/pre-archive-candidate-coverage-680-current-main",
+          "codex/projection-isolation-664",
+          "codex/quality-session-isolation-654-current-main",
+          "codex/reconcile-open-prs-issues-662",
+          "codex/retire-obsolete-shell-chain-666-successor",
+          "codex/trusted-self-hosted-recovery-validation-724",
+          "reversible Git stash quarantine only for the exact 40 non-current dirty worktree paths enumerated by the 2026-08-09 pre-stash inventory in docs/audits/final-release-readiness-audit.md"
+        ]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 847
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/final-audit-624-current-main.json",
+    "baseCommit": "b4c912af630d274d39f4f4daab123813182a9b7b",
+    "initialScopeDigest": "9c3a165562ecf195b317b135d2a8273802d218f0a485606d10616ad09fb3b807",
+    "contractSkeletonDigest": "93149a54cc5d41a8c2c850bb64d3111eea0360f0f2b979bfafe1a4d48bb6f9d4"
+  }
+}

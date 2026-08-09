@@ -1,0 +1,545 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "final-audit-624-current-main",
+  "contractPath": ".ai/work-items/archive/2026/final-audit-624-current-main.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/final-audit-624-current-main.contract.json",
+      "reason": "Records scope, automatic authority, exact remote cleanup, and reversible local quarantine."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/final-audit-624-current-main.summary.json",
+      "reason": "Records final audit, preservation, verification, and release-readiness evidence."
+    },
+    {
+      "path": "docs/audits/final-release-readiness-audit.md",
+      "reason": "Maps every original finding to implementation evidence and records provider, branch, worktree, stash, and release-boundary facts."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated active Work Item traffic-light status."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated machine-readable active Task Outcome report."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated human-readable active Task Outcome report."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.json",
+      "reason": "Mandatory machine-readable traffic-light Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.md",
+      "reason": "Mandatory human-readable traffic-light Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/final-audit-624-current-main.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "AGENTS.md",
+    ".ai/glossary.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/ai-doctor-621-current-main.summary.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/audits/final-release-readiness-audit.md",
+    "scripts/ai_doctor.py",
+    "Makefile",
+    "GitHub provider Issue and Pull Request inventories"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:34.902424+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "ac0764749fdf143911c150b12ca6698b0d6deca66f0345af8a609668794bfe7a",
+      "commandHash": "e0456ce43009f6bbd8ae2e85c593b7b2a02f9d0d2c6a5d7971bc09b4d4c3e806",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "476f0c58dc57afefd4e3d763ef04aed87b3b44086b4c2d6941453cc3d3cd27e0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/final-audit-624-current-main.contract.json work item contract check passed: .ai/work-items/active/final-audit-624-current-main.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/final-audit-624-current-main.contract.json work item contract check passed: .ai/work-items/active/final-audit-624-current-main.contract.json",
+      "outputBytes": 293
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:35.135691+00:00",
+      "exitCode": 0,
+      "durationMs": 142,
+      "outputDigest": "4bcc621159073134c64428f883179074ef937254a39d47faa8a0b438422b5537",
+      "commandHash": "8bdad7f78315d0bf783e32689bd1bcb2e8f78d65a1c10efbb71d6c7b31b2fff8",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "c174ff9e7af4675e87e958a83c41f3ef1d81cd073bb5534bf4054cd130137262",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/final-audit-624-current-main.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/final-audit-624-current-main.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputBytes": 237
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:35.373029+00:00",
+      "exitCode": 0,
+      "durationMs": 146,
+      "outputDigest": "88cfec5bd9aad0885ab4cad1bbe2944b9248a3c734aacc5dfac5447e3158d64a",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "a0330320218aba18fc3b7a8abd1e7935482a032345fb82dc75d405a89a4702af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 275
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:35.989040+00:00",
+      "exitCode": 0,
+      "durationMs": 371,
+      "outputDigest": "93bf99e91382d7258ddc99c8ee486927487bb19d7bc8fe715b45b955fd1dbec5",
+      "commandHash": "fd10fc8f84a077f206d8c5b9e3de326ffb027cda48c3350de9dd0091ae994d7d",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "fa944ab798c9f7509b9a46f793111ae16e9783f0a9e035fe18d00e064ee0aa29",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `final-audit-624-current-main` - Contract Hash: `e5451fc843f4e956` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0` - Required Check",
+      "outputTail": "e metadata or publishing anything. - The generated Outcome uses an explicit green, yellow, or red human status color; only a green outcome permits #625 release preparation. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: not_recorded - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: not_recorded - `aiStatus`: not_recorded - `aiStatusCheck`: not_recorded - `aiStatusConsistency`: not_recorded - `aiDiffOwnership`: passed - `quality`: failed ## Review Focus - Confirm v0.5.49 publication binds final tag, source, provider release, installer, metadata, and digests. - Do not drop or apply the quarantined historical stashes during release work. ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/final-audit-624-current-main.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/final-audit-624-current-main.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/final-audit-624-current-main.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/final-audit-624-current-main.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/final-audit-624-current-main.json` — covered by Contract scope - [active_owned] `docs/audits/final-release-readiness-audit.md` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 5369
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:36.232352+00:00",
+      "exitCode": 0,
+      "durationMs": 138,
+      "outputDigest": "8ade6e15c84a731d55785ee421c0cde412f4161fdc4daeba1e1698cf72ed8e1f",
+      "commandHash": "a5cc0bf68251e632f482fb30dfb0d7cc3dfeb770d65d72e4bc8ecfd595e4b125",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "c1265deeedf8ca5c5fe1dae4d4e0e6451359e3ff79ce80447b8fd31489408648",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/final-audit-624-current-main.summary.json review policy matched 7 path(s) [review] .ai/work-items/active/final-audit-624-current-main.contract.json [review] .ai/work-items/active/final-audit-624-current-main.outcome.json [review] .ai/work-items/active/final-audit-624-current-main.outcome.md [review] .ai/work-items/starts/final-audit-624-current-main.json [review] .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/final-audit-624-current-main.summary.json review policy matched 7 path(s) [review] .ai/work-items/active/final-audit-624-current-main.contract.json [review] .ai/work-items/active/final-audit-624-current-main.outcome.json [review] .ai/work-items/active/final-audit-624-current-main.outcome.md [review] .ai/work-items/starts/final-audit-624-current-main.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md review focus recorded: 2 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 713
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:36.464378+00:00",
+      "exitCode": 0,
+      "durationMs": 137,
+      "outputDigest": "470f5fb6f6e2bd7a8461008724d0dd9532731afaa7087c10a452e024987897d1",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "da06f4f64c0ba04ef7310f6eb567fb72f08c0f9c624a6628eddf7ff0e21cdc80",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 197
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:36.677244+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "bf0eeab5d1f9c6e35a2d4a984d1cacedcdb4fd6c3bfa6d43d0ddcd1c4e00b2d5",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "da13b0b3e97e0d0c8f7d5454360650ee195e4e05d7644e7fd8e6ef3327dad5be",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 206
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:36.824180+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "e372dd3a25a42c043204f19d62213b165dbfc57fdeb39cb4e615db5612ab8933",
+      "commandHash": "e330206c2a4dd009c720ee7a68c3f8119ed302ad5461a225fa5858411cc9a9d1",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "a9e56b36085dd395ce457390f5064939bc5a6694199f31efc8a602452365fc75",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 426
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:36.970681+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "b9042a2460b1563133df54b4db81f142fdbd00c3516534d70818c321c39bddc2",
+      "commandHash": "d5b2aca1f14e24461ac780b009348e75b5a5648af49cc7d378351482b57c140d",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "52bef85c6ea55d39fe207a29a54c56153d18d2ed19eea7e35347449d6c532e47",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputBytes": 341
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:07:37.386447+00:00",
+      "exitCode": 0,
+      "durationMs": 322,
+      "outputDigest": "d2c0a3055c725b43120c4cdccc0ec30b45aed8a2ac540763f7057be7c0fff675",
+      "commandHash": "eb965cdd6ee07b46a474c2e0ba177b53dee60639ead1ff11d77f98e4b74e83c0",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "8adce43d324280cdf40226e4a09d8a9bb1653c6807b2c05221da097b5c7e9fe7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/final-audit-624-current-main.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/final-audit-624-current-main.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/final-audit-624-current-main.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/final-audit-624-current-main.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/final-audit-624-current-main.json` — covered by Contract scope - [active_owned] `docs/audits/final-release-readiness-audit.md` — covered by Contract scope",
+      "outputBytes": 1343
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:17:36.896913+00:00",
+      "exitCode": 0,
+      "durationMs": 599297,
+      "outputDigest": "abdb9a8a744166a271805a337d6f2fbcdc4ba1f7240296944425b3ea8c7f05de",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "511249570fa36a8b96e5ccb05ece5c8a79734dbbbaf9ce7255eed570cc515f7f",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"trust\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"light\", \"base\": \"b4c912af630d274d39f4f4daab123813182a9b7b\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/final-audit-624-current-main.contract.json\", \".ai/work-items/active/final-audit-624-current-main.",
+      "outputTail": "ocumentation_alignment.py::test_capability_truth_regeneration_cannot_invalidate_japanese_assessment 2.62s call tests/test_pre_release_documentation_alignment.py::test_canonical_generator_chain_converges_in_an_isolated_repository 2.51s call tests/test_release_preflight.py::test_repository_readiness_accepts_included_content_after_historical_freeze 2.48s call tests/test_start_and_archive.py::test_conflicted_synchronization_binds_a_current_main_successor_without_source_mutation 2.41s call tests/test_start_and_archive.py::test_ai_start_journeys 2261 passed, 3 warnings in 584.58s (0:09:44) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.AVzIAegpVX/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.AVzIAegpVX/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.AVzIAegpVX/multi-workflow.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.AVzIAegpVX/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.AVzIAegpVX/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/b4c912af630d-local-20260809T120737Z-75227-0/summary.json",
+      "outputBytes": 90674
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:17:37.696560+00:00",
+      "exitCode": 0,
+      "durationMs": 355,
+      "outputDigest": "5dd457a944442c84aa9cdd60e5f9d6fb8db91d8ba791029c9c190d1d9d7ea3c9",
+      "commandHash": "ca9959af5390e2d8f935ba54f124c252835274f4ca6d5a8460c5baa2d0454581",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "1fdbe7d780b7cc93696608255f0b25c11d783ba398fe36d454299eb370daa4f4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 422
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:17:38.530785+00:00",
+      "exitCode": 0,
+      "durationMs": 385,
+      "outputDigest": "cb8711433aaa64755b21345100aad54e043bae20f2db39822c665f88571a6283",
+      "commandHash": "a57f828d319b07d0dc2a7701c0929f45a8b9483cecb55199cbd1278c6d92cf23",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "ef432d4cf45355eeb1cd2085c1f30eef6030b7f454e4b7cfe895fe2a7e3b5f6b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 366
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:17:39.281482+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "b187d28fe830a2b09f5c02be6f1905679b26cfaced00e9e8422e60d2d6c20ec5",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "99633cf5f3ca0a16f46661fad26c561a97d45571cc3daafb4f4c7a532a3c2c37",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 174
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:17:39.452743+00:00",
+      "exitCode": 0,
+      "durationMs": 67,
+      "outputDigest": "f3b9bce5cb7f2020a2659d1d821d25c4e9fd75d9ca3b7eef52d60bb7ae28463d",
+      "commandHash": "7e984e056cb5d0834be505bbc8d71f21b6ae176aeccfd9cd399463c641bc173f",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "725c4b96b962506d87c4fd60a1e3d2506e419a13cbb3f4057bd6dc5dc5b69467",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/final-audit-624-current-main.contract.json --summary .ai/work-items/active/final-audit-624-current-main.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 346
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/final-audit-624-current-main.summary.json CONTRACT=.ai/work-items/active/final-audit-624-current-main.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-09T12:17:41.049434+00:00",
+      "exitCode": 0,
+      "durationMs": 252,
+      "outputDigest": "e4f5f46fa3a66313c607ce81bf4081868727e64332179c3c3060aeb4b3f43248",
+      "commandHash": "d49cb05f330dbe42fe1b77476615a63a0fead0f132e4ff7d4353324e3ba05339",
+      "contractHash": "e5451fc843f4e95619487a3bea248ac2ec2080fe8f3cccbbebb4aa00566b5336",
+      "commitSha": "b4c912af630d274d39f4f4daab123813182a9b7b",
+      "executionContractPath": ".ai/work-items/active/final-audit-624-current-main.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/final-audit-624-current-main.summary.json",
+      "worktreeDigest": "a9da7448e8fbc07d4ea5a0df04a5ec6d8889bdedbcced740268175c57dbebf7c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/final-audit-624-current-main.summary.json --contract .ai/work-items/active/final-audit-624-current-main.contract.json ai summary check passed: .ai/work-items/active/final-audit-624-current-main.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/final-audit-624-current-main.summary.json --contract .ai/work-items/active/final-audit-624-current-main.contract.json ai summary check passed: .ai/work-items/active/final-audit-624-current-main.summary.json",
+      "outputBytes": 358,
+      "outcomeInputDigest": "f95488fd49123b66ff431e2adb3b2bf9e0c75e119cbc577fe30d7b50501a6812"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "This audit introduces no public API; the public audit report documents all user-visible release-readiness facts."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The audit uses provider, Git, archive, and existing public command evidence without importing product internals."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Medium: release readiness depends on truthful provider and local Git evidence. Remote stale refs were deleted only after exact inventory; 40 historical dirty worktrees were preserved in named stashes before their clean postcondition was accepted."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.json",
+    ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.md"
+  ],
+  "destructiveChanges": [
+    "Deleted the nine exact superseded origin/codex branches listed in docs/audits/final-release-readiness-audit.md after verifying their closed-or-absent PR state.",
+    "Preserved 40 non-current dirty historical worktrees in uniquely named ai-cockpit-quarantine-624 Git stashes; no reset, stash drop, or worktree deletion was performed."
+  ],
+  "observedIssues": [
+    "release.json remains the v0.5.42 published baseline while next-release.json is an unpublished v0.5.48 candidate; #625 must advance and bind v0.5.49 rather than treating either projection as the future release.",
+    "The first ai-finish attempt correctly emitted a red blocked Outcome when before_finish checkpoint evidence was absent; this confirms the Outcome-on-failure path rather than a silent exit."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "quarantined historical worktrees",
+      "detail": "Forty historical changes are recoverable only through their named ai-cockpit-quarantine-624 stashes; release work must not drop or apply them implicitly.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm v0.5.49 publication binds final tag, source, provider release, installer, metadata, and digests.",
+      "Do not drop or apply the quarantined historical stashes during release work."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    "The user required complete closure of all planned Work Items, explicit Contract authority, no omitted original findings, and a final remote/local cleanup audit before publication.",
+    "The user authorized automatic execution and supersession/quarantine; this audit records that authorization for exact remote cleanup and reversible local preservation."
+  ],
+  "userCorrectionSolidification": [
+    "The audit report contains a one-to-one original-finding matrix, provider inventory, remote cleanup record, named local recovery-stash boundary, and release-version boundary."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "ca92452f5f610e81",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "ca92452f5f610e81",
+      "previousContractHash": "ca92452f5f610e81",
+      "contractHash": "0857a451f31de857",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Recorded the user-authorized exact remote supersession cleanup discovered by the final audit; dirty historical local worktrees remain preserved and quarantined rather than deleted.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-09T11:58:09.042495+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "ca92452f5f610e81",
+      "previousContractHash": "0857a451f31de857",
+      "contractHash": "e5451fc843f4e956",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Applied the standing automatic-execution and supersession/quarantine authorization to preserve every exact non-current dirty worktree in a reversible named Git stash before release readiness is re-evaluated.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-09T12:02:17.692980+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "e5451fc843f4e956",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-09T12:25:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/audits/final-release-readiness-audit.md"
+        ],
+        "reason": "The audit report is the current final-plan evidence and explicitly preserves the #625 release boundary."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/final-audit-624-current-main.contract.json",
+          ".ai/work-items/archive/2026/final-audit-624-current-main.summary.json"
+        ],
+        "reason": "Contract scope, authority, acceptance, and the Summary record the same audit and quarantine facts."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "docs/audits/final-release-readiness-audit.md",
+          "scripts/ai_doctor.py",
+          "Makefile",
+          ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.md",
+          ".ai/cockpit/task_report.md"
+        ],
+        "reason": "The report cites implemented command and lifecycle evidence without claiming the future release is complete."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "This evidence-only audit does not change localized source text."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/audits/final-release-readiness-audit.md",
+          ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.md"
+        ],
+        "reason": "The report preserves recovery limitations and the active Outcome makes blocked and completed states explicit."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/final-audit-624-current-main.outcome.json",
+    "markdownPath": ".ai/work-items/active/final-audit-624-current-main.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2,
+    "humanStatusColor": "green",
+    "completionFact": "All declared finish checks passed.",
+    "recoveryCondition": ""
+  },
+  "archiveSequence": 845
+}
