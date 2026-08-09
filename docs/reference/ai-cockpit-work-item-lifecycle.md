@@ -544,10 +544,18 @@ and rehearsal sequence below rather than mutating or repeatedly regenerating it.
 
 For new release attempts, the committed premerge marker is historical preparation
 evidence, not the authority for a later default-branch source tree. Run
-`make check-release-readiness` only after there are no active Work Items. It
-checks stable candidate, policy, archive-growth, and mandatory Japanese evidence,
+`make check-release-readiness` normally runs only after there are no active Work
+Items. It checks stable candidate, policy, archive-growth, and mandatory Japanese evidence,
 but deliberately does not compare a historical `release-freeze.json` to current
 source bytes.
+
+One narrow exception prevents a lifecycle deadlock: the single active Work Item
+that performs the public release may carry this readiness evidence when its
+Contract declares the exact `repository_release.publish` operation, has
+identity-bound user authorization, and is explicitly allowed to continue. Any
+ordinary, additional, malformed, or unauthorized active Work Item remains a
+hard blocker. This exception does not authorize a tag or Release; the same-SHA
+rehearsal and actual release gates remain mandatory.
 
 The required sequence is: synchronized default branch → repository readiness →
 successful same-SHA rehearsal → actual hosted release. The rehearsal uses the

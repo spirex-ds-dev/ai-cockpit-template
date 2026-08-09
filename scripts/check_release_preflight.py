@@ -271,6 +271,50 @@ def repository_policy_context(root: Path) -> tuple[list[str], int, int, str]:
     return active, archive_count, archive_max, archive_enforcement
 
 
+def release_readiness_active_work_item_issues(
+    root: Path, active_work_items: list[str]
+) -> list[str]:
+    """Allow the one explicitly authorized publication Work Item to carry readiness evidence.
+
+    Repository readiness otherwise remains fail closed for every active Work
+    Item.  The narrow exception resolves the lifecycle deadlock where the
+    publication itself must have a Contract but readiness historically required
+    no Contract at all.
+    """
+    ordered = sorted(active_work_items)
+    blocked = f"active Work Items remain: {', '.join(ordered)}"
+    if len(ordered) != 1:
+        return [blocked]
+    path = root / ".ai" / "work-items" / "active" / f"{ordered[0]}.contract.json"
+    try:
+        contract = _load_object(path, "active release Work Item Contract")
+    except ReleasePreflightError:
+        return [blocked]
+    operation = contract.get("requestedOperation")
+    authority = contract.get("authorityEvidence")
+    decision = contract.get("executionDecision")
+    if (
+        contract.get("workItemId") != ordered[0]
+        or not isinstance(operation, dict)
+        or operation
+        != {
+            "target": "repository_release",
+            "action": "publish",
+            "environment": "public_provider",
+            "effect": "create_immutable_release_tag_and_public_assets",
+            "authorityRequired": True,
+        }
+        or not isinstance(authority, dict)
+        or authority.get("type") != "user_authorization"
+        or not isinstance(authority.get("authorizedBy"), str)
+        or not authority["authorizedBy"]
+        or not isinstance(decision, dict)
+        or decision.get("status") != "continue"
+    ):
+        return [blocked]
+    return []
+
+
 def validate_repository_readiness(
     *,
     state: dict[str, Any],
@@ -305,6 +349,7 @@ def main() -> int:
     release_state = _load_object(root / "release-state.json", "release-state.json")
     candidate = _load_object(root / "next-release.json", "next-release.json")
     active, archive_count, archive_max, archive_enforcement = repository_policy_context(root)
+    readiness_active = release_readiness_active_work_item_issues(root, active)
     readiness_issues = validate_repository_readiness(
         state=release_state,
         release=release,
@@ -314,6 +359,12 @@ def main() -> int:
         archive_max=archive_max,
         archive_enforcement=archive_enforcement,
     )
+    if active:
+        readiness_issues = [
+            issue
+            for issue in readiness_issues
+            if issue != f"active Work Items remain: {', '.join(active)}"
+        ] + readiness_active
     if args.mode == "repository-readiness":
         if readiness_issues:
             print("release readiness blocked:", file=sys.stderr)
