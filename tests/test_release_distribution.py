@@ -69,7 +69,15 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
         candidate_release_issues(
             candidate,
             published,
-            reserved_tags={"v0.5.43", "v0.5.44", "v0.5.45", "v0.5.46", "v0.5.47", "v0.5.48"},
+            reserved_tags={
+                "v0.5.43",
+                "v0.5.44",
+                "v0.5.45",
+                "v0.5.46",
+                "v0.5.47",
+                "v0.5.48",
+                "v0.5.49",
+            },
         )
         == []
     )
@@ -237,13 +245,16 @@ def test_post_publication_mode_uses_latest_tag_as_authoritative(monkeypatch, tmp
 def test_post_publication_inspection_binds_public_metadata_and_archive(monkeypatch, tmp_path):
     source = tmp_path / "tag-tree"
     source.mkdir()
-    (source / "release.json").write_text('{"releaseTag":"v0.5.42"}', encoding="utf-8")
+    (source / "release.json").write_text(
+        '{"releaseTag":"v0.5.42","releaseArchive":{"assetName":"v0.5.42.tar.gz"}}',
+        encoding="utf-8",
+    )
     (source / "install.sh").write_bytes(b"#!/bin/sh\nexit 0\n")
     candidate = tmp_path / "next-release.json"
     candidate.write_text(
         json.dumps(
             {
-                "releaseTag": "v0.5.43",
+                "releaseTag": "v0.5.44",
                 "releaseEvidenceAuthority": "release-assets-v1",
                 "publicContract": {"projectQualityTarget": "quality"},
                 "capabilities": {"sha256ArchiveVerification": {"supported": True}},
@@ -263,17 +274,19 @@ def test_post_publication_inspection_binds_public_metadata_and_archive(monkeypat
 
     projected = json.dumps({"releaseTag": "v0.5.43"}).encode()
     monkeypatch.setattr(release_distribution, "run_command", fake_run)
-    monkeypatch.setattr(
-        release_distribution,
-        "fetch_published_release_assets",
-        lambda _tag, extra_asset_names=None: {
+    requested_assets = []
+
+    def published_assets(_tag, extra_asset_names=None):
+        requested_assets.append(extra_asset_names)
+        return {
             "provenance.json": b"{}",
             "release-digests.json": b"{}",
             "sbom.json": b"{}",
             "v0.5.43.tar.gz": b"archive",
             "release.json": projected,
-        },
-    )
+        }
+
+    monkeypatch.setattr(release_distribution, "fetch_published_release_assets", published_assets)
     monkeypatch.setattr(release_distribution, "release_asset_identity_issues", lambda **_: [])
     monkeypatch.setattr(
         release_distribution, "public_release_asset_integrity_issues", lambda **_: []
@@ -287,6 +300,7 @@ def test_post_publication_inspection_binds_public_metadata_and_archive(monkeypat
     assert metadata["releaseArchive"]["assetName"] == "v0.5.43.tar.gz"
     assert installer == b"#!/bin/sh\nexit 0\n"
     assert issues == []
+    assert requested_assets == [{"release.json", "v0.5.43.tar.gz"}]
 
 
 def test_remote_default_branch_candidates_require_explicit_remote_head():

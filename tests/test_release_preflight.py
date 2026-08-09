@@ -70,6 +70,13 @@ def test_release_preflight_rejects_missing_malformed_or_mismatched_installer_dig
     )
 
 
+def test_release_preflight_rejects_source_version_that_disagrees_with_requested_tag():
+    assert preflight.validate_source_release_version({"releaseVersion": "0.5.32"}, "v0.5.50") == [
+        "source version.json releaseVersion '0.5.32' does not match requested release tag v0.5.50"
+    ]
+    assert preflight.validate_source_release_version({"releaseVersion": "0.5.50"}, "v0.5.50") == []
+
+
 def test_release_preflight_blocks_active_work_item_and_stale_digest():
     issues = validate_release_preflight(
         **_fixture(active_work_items=["task"], actual_archive_sha="new")
@@ -301,6 +308,10 @@ def _build_candidate_merge(tmp_path: Path) -> tuple[Path, Path, str]:
     (repo / ".ai" / "cockpit").mkdir(parents=True)
     (repo / ".ai" / "cockpit" / "current_status.md").write_text(
         "- State: `no_active_work_item`\n", encoding="utf-8"
+    )
+    _write_json(
+        repo / ".ai" / "cockpit" / "version.json",
+        {"distributionVersion": 2, "contractSchema": 2, "releaseVersion": "0.5.40"},
     )
     _write_json(repo / ".ai" / "cockpit" / "release-freeze.json", {"state": "candidate"})
     _write_json(
@@ -861,6 +872,11 @@ def test_main_accepts_frozen_candidate(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(preflight, "canonical_source_tree", lambda root, commit: "tree")
     monkeypatch.setattr(preflight, "resolve_source_commit", lambda root, ref: "a" * 40)
     monkeypatch.setattr(preflight, "source_file_sha256", lambda root, commit, path: "c" * 64)
+    monkeypatch.setattr(
+        preflight,
+        "source_json_object",
+        lambda root, commit, path: {"releaseVersion": "0.5.40"},
+    )
     monkeypatch.setattr(
         "sys.argv",
         ["check_release_preflight", "--root", str(tmp_path), "--source-commit", "HEAD"],

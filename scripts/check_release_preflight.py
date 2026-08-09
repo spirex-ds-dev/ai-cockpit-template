@@ -30,6 +30,24 @@ def validate_installer_digest(release: dict[str, Any], actual_installer_sha: str
     return []
 
 
+def validate_source_release_version(version: dict[str, Any], requested_tag: str) -> list[str]:
+    """Bind the source distribution version to the tag that release will create."""
+    release_version = version.get("releaseVersion")
+    expected_version = requested_tag.removeprefix("v") if isinstance(requested_tag, str) else ""
+    if not isinstance(release_version, str) or not re.fullmatch(
+        r"[0-9]+\.[0-9]+\.[0-9]+", release_version
+    ):
+        return ["source version.json releaseVersion is missing or invalid"]
+    if not expected_version or release_version != expected_version:
+        return [
+            (
+                "source version.json releaseVersion "
+                f"{release_version!r} does not match requested release tag {requested_tag}"
+            )
+        ]
+    return []
+
+
 def source_file_sha256(root: Path, source_commit: str, path: str) -> str:
     """Hash one file exactly as stored in the selected release source commit."""
     try:
@@ -43,6 +61,25 @@ def source_file_sha256(root: Path, source_commit: str, path: str) -> str:
             f"release source file cannot be read: {source_commit}:{path}"
         ) from exc
     return hashlib.sha256(result.stdout).hexdigest()
+
+
+def source_json_object(root: Path, source_commit: str, path: str) -> dict[str, Any]:
+    """Read one JSON object exactly as stored in the selected release source commit."""
+    try:
+        result = subprocess.run(  # nosec B603 B607
+            ["git", "-C", str(root), "show", f"{source_commit}:{path}"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        value = json.loads(result.stdout)
+    except (OSError, subprocess.CalledProcessError, json.JSONDecodeError) as exc:
+        raise ReleasePreflightError(
+            f"release source JSON cannot be read: {source_commit}:{path}"
+        ) from exc
+    if not isinstance(value, dict):
+        raise ReleasePreflightError(f"release source JSON must be an object: {path}")
+    return value
 
 
 def validate_release_projection(
@@ -313,6 +350,7 @@ def main() -> int:
                 root, freeze.get(field), f"freeze {field}"
             )
         actual_installer_sha = source_file_sha256(root, source_commit, "install.sh")
+        source_version = source_json_object(root, source_commit, ".ai/cockpit/version.json")
     except ReleasePreflightError as exc:
         print(f"release preflight blocked: {exc}", file=sys.stderr)
         return 1
@@ -350,6 +388,10 @@ def main() -> int:
         )
     )
     issues.extend(validate_installer_digest(release, actual_installer_sha))
+    requested_tag = candidate.get("releaseTag")
+    if not isinstance(requested_tag, str):
+        requested_tag = release.get("releaseTag", "")
+    issues.extend(validate_source_release_version(source_version, requested_tag))
     if issues:
         print(
             "release preflight diagnostics: "
