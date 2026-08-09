@@ -12,6 +12,8 @@ from install_ai_cockpit import RUNTIME_TARGETS, SCRIPT_NAMES, Installer
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_SCRIPTS = {
     "ai_evidence_dependencies.py",
+    "ai_external_handoff.py",
+    "ai_task_event_log.py",
     "ai_install_status.py",
     "ai_lifecycle_facts.py",
     "ai_upgrade_proposal.py",

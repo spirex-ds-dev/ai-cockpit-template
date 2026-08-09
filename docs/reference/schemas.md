@@ -22,6 +22,7 @@ lastVerifiedBy: capability-truth-matrix
 | Documentation context | [documentation-context-registry.json](documentation-context-registry.json) |
 | Archive discovery | `.ai/work-items/archive/index.json` and immutable archive manifests; each new manifest also records the content-addressed pre-archive candidate-coverage report digest and binding |
 | Work Item Intelligence Snapshot | `.ai/schemas/work-item-intelligence-snapshot.schema.json` and `scripts/ai_work_item_intelligence.py` |
+| External handoff | `.ai/schemas/external_handoff.schema.json` and `scripts/ai_external_handoff.py`; receipt bindings must exactly match the handoff |
 
 Examples are explanatory. The executable validators and versioned
 machine-readable records decide whether a concrete instance is valid.

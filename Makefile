@@ -59,7 +59,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	quality-fast quality-standard quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	quality-fast-owned quality-standard-owned quality-full-owned quality-release-owned project-test-owned \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
-	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report \
+	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report ai-record-external-handoff ai-ingest-external-receipt \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
 	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 	ai-work-item-status ai-work-item-intelligence-rebuild
@@ -755,6 +755,14 @@ check-ai-task-outcome:
 generate-human-benefit-report:
 	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
 	$(AI_PYTHON) scripts/ai_generate_human_report.py "$(OUTCOME)" "$(or $(OUTPUT_JSON),.ai/cockpit/task_report.json)" "$(or $(OUTPUT_MARKDOWN),.ai/cockpit/task_report.md)"
+
+ai-record-external-handoff:
+	@test -n "$(HANDOFF)" -a -n "$(EVENTS)" -a -n "$(NOW)" || (echo 'HANDOFF, EVENTS, and NOW are required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_external_handoff.py "$(HANDOFF)" --events "$(EVENTS)" --now "$(NOW)"
+
+ai-ingest-external-receipt:
+	@test -n "$(HANDOFF)" -a -n "$(RECEIPT)" -a -n "$(EVENTS)" -a -n "$(NOW)" || (echo 'HANDOFF, RECEIPT, EVENTS, and NOW are required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_external_handoff.py "$(HANDOFF)" --receipt "$(RECEIPT)" --events "$(EVENTS)" --now "$(NOW)"
 
 check-human-benefit-report:
 	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)

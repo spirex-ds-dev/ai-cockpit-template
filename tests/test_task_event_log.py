@@ -49,6 +49,9 @@ def test_all_supported_event_types_are_appendable(tmp_path: Path) -> None:
         "prevention",
         "completed",
         "cancelled",
+        "external_handoff",
+        "external_receipt_ingested",
+        "external_handoff_timeout",
     ]
     for index, event_type in enumerate(event_types):
         candidate = event(f"event-{index}", event_type)

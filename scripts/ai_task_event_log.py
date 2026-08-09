@@ -27,6 +27,9 @@ EVENT_TYPES = {
     "prevention",
     "completed",
     "cancelled",
+    "external_handoff",
+    "external_receipt_ingested",
+    "external_handoff_timeout",
 }
 IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 SECRET_KEY = re.compile(

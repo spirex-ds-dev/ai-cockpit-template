@@ -228,6 +228,35 @@ def test_project_relative_accepts_relative_repository_path():
     assert ai_generate_status.project_relative(path) == path.as_posix()
 
 
+def test_status_projects_bound_external_handoff_and_timeout_fail_closed():
+    handoff = {
+        "handoffVersion": 1,
+        "state": "awaiting_external_receipt",
+        "bindings": {
+            "workItemId": "task",
+            "branch": "codex/task",
+            "headCommit": "a" * 40,
+            "tree": "b" * 40,
+            "contractDigest": "c" * 64,
+            "summaryDigest": "d" * 64,
+        },
+        "action": "hosted_ci.run",
+        "fulfiller": "hosted_ci",
+        "receiptKind": "hosted_ci_receipt",
+        "deadline": "2099-08-10T00:00:00Z",
+    }
+    projected = ai_generate_status.project_external_handoff({"externalHandoff": handoff})
+    assert projected is not None
+    assert projected["state"] == "awaiting_external_receipt"
+    assert projected["humanStatusColor"] == "yellow"
+
+    handoff["deadline"] = "2020-01-01T00:00:00Z"
+    timed_out = ai_generate_status.project_external_handoff({"externalHandoff": handoff})
+    assert timed_out is not None
+    assert timed_out["state"] == "blocked"
+    assert timed_out["humanStatusColor"] == "red"
+
+
 def test_generate_active_status_renders_evidence_and_backtrack(tmp_path, monkeypatch):
     contract = tmp_path / "task.contract.json"
     summary = tmp_path / "task.summary.json"
