@@ -1,0 +1,215 @@
+{
+  "contractVersion": 2,
+  "workItemId": "post-publish-version-truth-v0549-current-main",
+  "mode": "code",
+  "title": "Correct source-bound release version truth after v0.5.49 post-publish audit",
+  "baseCommit": "5f1ab9c5523b31492fec97c358ae83e640be180c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/post-publish-version-truth-v0549-current-main.contract.json",
+    ".ai/work-items/active/post-publish-version-truth-v0549-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/post-publish-version-truth-v0549-current-main.outcome.json",
+    ".ai/work-items/active/post-publish-version-truth-v0549-current-main.outcome.md",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".github/workflows/release.yml",
+    "scripts/check_release_distribution.py",
+    "scripts/check_release_state_consistency.py",
+    "scripts/check_release_preflight.py",
+    "scripts/finalize_release_freeze.py",
+    "scripts/installer/legacy.py",
+    "tests/test_release_distribution.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_preflight.py",
+    "tests/test_installer.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "tests/test_release_workflow.py"
+  ],
+  "outOfScope": [
+    "Rewriting, deleting, or re-publishing immutable v0.5.49 tag or Release assets.",
+    "Bypassing public distribution, source identity, or provider asset verification.",
+    "Changing unrelated installer, governance, or adopter behavior."
+  ],
+  "sources": [
+    {
+      "path": "v0.5.49 public distribution audit",
+      "reason": "Post-publish check_release_distribution failure: source version.json releaseVersion 0.5.32 conflicts with requested tag v0.5.49."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Release finalization must bind source, tag, runtime projection, assets, and public verification."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Authoritative public installer and source identity verifier that detected the contradiction."
+    },
+    {
+      "path": ".ai/cockpit/version.json",
+      "reason": "Current stale source version fact that must be made source-bound for the corrective release."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_identity", "public_distribution", "immutable_publication"],
+    "reason": "A stable public release has exposed contradictory version metadata; correction must preserve immutable v0.5.49 evidence and publish only a verified successor.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Public release identity and immutable provider assets require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the complete plan and corrective release workflow; immutable v0.5.49 remains out of scope."
+  },
+  "preReviewWarnings": ["Review source-version, tag, Release asset, and public installation identity as one immutable tuple."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The post-publish public verifier rejects v0.5.49 with the exact stale version.json fact recorded; v0.5.49 remains immutable and is never claimed valid.",
+    "Release preparation and finalization derive one source-bound version fact so version.json, candidate metadata, requested tag, runtime release projection, Release assets, and public installer agree for the corrective successor.",
+    "Release preflight and the provider workflow fail closed before tag mutation when source version metadata disagrees with the requested release tag, with regression tests for stale and matched cases.",
+    "The corrective successor is v0.5.50 after reserved v0.5.49, with a release-ready handoff that requires same-SHA rehearsal, provider publication, post-publish public installation verification, and #625 closure only after the final cleanup audit."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。发布之前要确认没有遗漏；版本事实、Outcome、红黄绿状态、性能和真实安装体验都是一级标准。流程缺陷必须根治，不采用临时修补方案。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-09-continuous-closure-and-release-authorization", "capturedAt": "2026-08-10T00:00:00+09:00", "digest": "sha256:post-publish-version-truth-v0549-user-authorization"},
+  "declaredIntent": {"summary": "Correct the source-bound version truth failure exposed by v0.5.49 without mutating that immutable release, then publish only a fully verified successor.", "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation:2026-08-09-continuous-closure-and-release-authorization", "scope": "Create the required corrective Work Item and publish only a new successor after complete same-SHA rehearsal, provider evidence, public installation verification, and cleanup audit. No gate bypass or mutation of v0.5.49 is authorized."},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "implementationSurface": {"production": [".ai/cockpit/version.json", ".github/workflows/release.yml", "scripts/check_release_distribution.py", "scripts/check_release_state_consistency.py", "scripts/check_release_preflight.py", "scripts/finalize_release_freeze.py", "scripts/installer/legacy.py"], "tests": ["tests/test_release_distribution.py", "tests/test_release_state_consistency.py", "tests/test_release_preflight.py", "tests/test_installer.py", "tests/test_release_workflow.py"], "documentation": ["docs/reference/distribution.md", "docs/reference/distribution.ja.md"], "generated": ["release.json", "next-release.json", "release-state.json"]},
+  "scenarioCoverage": [
+    {"scenario": "Public installer sees a stale source version after provider publication.", "expected": "Post-publish verification is red with the exact conflicting fields; immutable release evidence is retained and no false valid claim is made.", "verificationPlan": "Run check-release-distribution-post-publish against v0.5.49 and capture its failure evidence.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Future source metadata disagrees with requested tag before mutation.", "expected": "Preflight and release workflow fail before tag or Release creation.", "verificationPlan": "Add stale-version regression tests for local preflight and workflow contract behavior.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Corrective release source, tag, runtime projection, assets, and installer agree.", "expected": "A new patch publishes only after same-SHA rehearsal and passes public distribution validation.", "verificationPlan": "Verify Release assets, tag target, release evidence, and tagged installation through the public checker.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "intent": {
+    "problem": "v0.5.49 provider publication succeeded but the public distribution verifier found version.json.releaseVersion 0.5.32 in the immutable source, creating multiple version truths and rejecting real installation.",
+    "constraints": ["Do not rewrite, delete, or claim validity for v0.5.49.", "Repair the generator and preflight boundary rather than manually editing an immutable release.", "Release only a new monotonically increasing patch after exact-source rehearsal, provider asset, and public installer evidence pass.", "Retain red/yellow/green Outcome and failure recovery evidence."],
+    "rationale": "A source-bound version fact must be verified before mutation and carried through public installation so users can trust one version identity across selection, source, tag, Release, assets, and diagnostics."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user explicitly authorized automatic execution, durable workflow correction, release completion, and recording that authority in every Work Item Contract; this does not authorize bypasses or mutation of v0.5.49."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 850
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/post-publish-version-truth-v0549-current-main.json",
+    "baseCommit": "5f1ab9c5523b31492fec97c358ae83e640be180c",
+    "initialScopeDigest": "6738be002f00a1b0cddf51c062b902e3d5d6f80655089bad182340b44a91465a",
+    "contractSkeletonDigest": "3fc6e19cc3f7cbe2f68facc2fe3196fc26312310634dd9563b499886cd6ad3ff"
+  }
+}

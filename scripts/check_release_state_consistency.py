@@ -128,7 +128,12 @@ def check_repository(root: Path) -> list[str]:
             if (
                 not isinstance(tag_value, str)
                 or not TAG_PATTERN.fullmatch(tag_value)
-                or item.get("kind") not in {"stable_release_unverified", "tag_only"}
+                or item.get("kind")
+                not in {
+                    "stable_release_invalid_public_distribution",
+                    "stable_release_unverified",
+                    "tag_only",
+                }
                 or not isinstance(item.get("reason"), str)
                 or not item["reason"].strip()
                 or not isinstance(item.get("evidence"), str)

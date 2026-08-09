@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task release-runner-ip-allow-list-625-current-main generated an evidence-derived outcome with status completed.
+Task post-publish-version-truth-v0549-current-main generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0

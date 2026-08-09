@@ -70,6 +70,83 @@ def test_release_preflight_rejects_missing_malformed_or_mismatched_installer_dig
     )
 
 
+def test_release_preflight_rejects_source_version_that_disagrees_with_requested_tag():
+    assert preflight.validate_source_release_version({"releaseVersion": "0.5.32"}, "v0.5.50") == [
+        "source version.json releaseVersion '0.5.32' does not match requested release tag v0.5.50"
+    ]
+    assert preflight.validate_source_release_version({"releaseVersion": "0.5.50"}, "v0.5.50") == []
+
+
+def test_release_preflight_source_readers_bind_and_reject_exact_source_bytes(monkeypatch, tmp_path):
+    def source_bytes(*_args, **_kwargs):
+        return SimpleNamespace(stdout=b"source installer\n")
+
+    monkeypatch.setattr(preflight.subprocess, "run", source_bytes)
+    assert (
+        preflight.source_file_sha256(tmp_path, "a" * 40, "install.sh")
+        == hashlib.sha256(b"source installer\n").hexdigest()
+    )
+
+    def source_json(*_args, **_kwargs):
+        return SimpleNamespace(stdout='{"releaseVersion":"0.5.50"}')
+
+    monkeypatch.setattr(preflight.subprocess, "run", source_json)
+    assert preflight.source_json_object(tmp_path, "a" * 40, ".ai/cockpit/version.json") == {
+        "releaseVersion": "0.5.50"
+    }
+
+    def unreadable_source(*_args, **_kwargs):
+        raise subprocess.CalledProcessError(1, ["git", "show"])
+
+    monkeypatch.setattr(preflight.subprocess, "run", unreadable_source)
+    with pytest.raises(ReleasePreflightError, match="release source file cannot be read"):
+        preflight.source_file_sha256(tmp_path, "a" * 40, "install.sh")
+    with pytest.raises(ReleasePreflightError, match="release source JSON cannot be read"):
+        preflight.source_json_object(tmp_path, "a" * 40, ".ai/cockpit/version.json")
+
+    monkeypatch.setattr(
+        preflight.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(stdout="[]"),
+    )
+    with pytest.raises(ReleasePreflightError, match="release source JSON must be an object"):
+        preflight.source_json_object(tmp_path, "a" * 40, ".ai/cockpit/version.json")
+
+
+def test_release_preflight_reports_projection_and_identity_tuple_drift():
+    projection_issues = preflight.validate_release_projection(
+        state={
+            "state": "candidate_prepared",
+            "releaseTag": "v0.5.50",
+            "previousRelease": "v0.5.48",
+        },
+        release={"releaseTag": "v0.5.49"},
+        candidate={"releaseTag": "v0.5.51", "basedOnReleaseTag": "v0.5.48"},
+    )
+    assert projection_issues == [
+        "canonical candidate releaseTag does not match next-release.json",
+        "canonical previousRelease does not match release.json releaseTag",
+        "next-release.json basedOnReleaseTag does not match release.json releaseTag",
+    ]
+
+    identity_issues = validate_release_identity(
+        release={"releaseTag": "v0.5.50"},
+        freeze={"releaseTag": "v0.5.49"},
+        release_digests={"releaseTag": "v0.5.49"},
+        source_commit="invalid",
+        tag_target="b" * 40,
+        metadata_commit="",
+    )
+    assert "sourceCommit must be a concrete 40-character lowercase SHA" in identity_issues
+    assert "metadataCommit must be a concrete 40-character lowercase SHA" in identity_issues
+    assert "sourceCommit and tagTarget must identify the same commit" in identity_issues
+    assert "freeze sourceCommit does not match the release identity tuple" in identity_issues
+    assert (
+        "release-digests tagTarget must be a concrete 40-character lowercase SHA" in identity_issues
+    )
+    assert "releaseTag must match between release.json and release-freeze.json" in identity_issues
+
+
 def test_release_preflight_blocks_active_work_item_and_stale_digest():
     issues = validate_release_preflight(
         **_fixture(active_work_items=["task"], actual_archive_sha="new")
@@ -301,6 +378,10 @@ def _build_candidate_merge(tmp_path: Path) -> tuple[Path, Path, str]:
     (repo / ".ai" / "cockpit").mkdir(parents=True)
     (repo / ".ai" / "cockpit" / "current_status.md").write_text(
         "- State: `no_active_work_item`\n", encoding="utf-8"
+    )
+    _write_json(
+        repo / ".ai" / "cockpit" / "version.json",
+        {"distributionVersion": 2, "contractSchema": 2, "releaseVersion": "0.5.40"},
     )
     _write_json(repo / ".ai" / "cockpit" / "release-freeze.json", {"state": "candidate"})
     _write_json(
@@ -861,6 +942,11 @@ def test_main_accepts_frozen_candidate(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(preflight, "canonical_source_tree", lambda root, commit: "tree")
     monkeypatch.setattr(preflight, "resolve_source_commit", lambda root, ref: "a" * 40)
     monkeypatch.setattr(preflight, "source_file_sha256", lambda root, commit, path: "c" * 64)
+    monkeypatch.setattr(
+        preflight,
+        "source_json_object",
+        lambda root, commit, path: {"releaseVersion": "0.5.40"},
+    )
     monkeypatch.setattr(
         "sys.argv",
         ["check_release_preflight", "--root", str(tmp_path), "--source-commit", "HEAD"],

@@ -188,7 +188,9 @@ def test_install_replaces_stale_lifecycle_version_metadata(tmp_path):
     assert installer.install() == 0
 
     facts = validate_fact_bundle(tmp_path)
-    assert facts["version"]["releaseVersion"] == "0.5.32"
+    source_version = json.loads((ROOT / ".ai/cockpit/version.json").read_text(encoding="utf-8"))
+    assert facts["version"]["releaseVersion"] == source_version["releaseVersion"]
+    assert facts["version"]["releaseVersion"] != "0.5.32"
     assert facts["version"]["installationId"]
     assert facts["releaseIdentity"]["manifestHash"] == facts["version"]["manifestHash"]
 

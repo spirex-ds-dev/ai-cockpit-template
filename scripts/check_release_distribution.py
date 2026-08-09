@@ -924,24 +924,12 @@ def inspect_tagged_release(
             raise RuntimeError(f"{tag}: invalid release.json: {exc}") from exc
         if not isinstance(metadata, dict):
             raise InvalidProviderPayloadError(f"{tag}: release.json must contain an object")
-        if metadata.get("releaseTag") != tag:
-            if not allow_historical_metadata:
-                raise RuntimeError(
-                    f"{tag}: tag release.json declares {metadata.get('releaseTag')!r}"
-                )
-            # The release workflow publishes a source-bound release projection
-            # in the Release assets while the immutable Tag tree retains the
-            # historical repository projection. Use the candidate metadata as
-            # the claim source, then bind its archive fields to downloaded
-            # public assets below.
-            candidate_path = CANDIDATE_RELEASE
-            if not candidate_path.is_file():
-                raise RuntimeError(f"{tag}: candidate release metadata is missing")
-            metadata = json.loads(candidate_path.read_text(encoding="utf-8"))
-            if metadata.get("releaseTag") != tag:
-                raise RuntimeError(
-                    f"{tag}: candidate release metadata declares {metadata.get('releaseTag')!r}"
-                )
+        if metadata.get("releaseTag") != tag and not allow_historical_metadata:
+            raise RuntimeError(f"{tag}: tag release.json declares {metadata.get('releaseTag')!r}")
+            # The immutable tag deliberately retains the historical repository
+            # projection.  Its public Release asset is the only claim source
+            # for post-publication validation: a later next-release candidate
+            # must neither override nor block verification of this tag.
         installer = clone_dir / "install.sh"
         if not installer.is_file():
             raise RuntimeError(f"{tag}: cloned release is missing install.sh")
@@ -949,19 +937,23 @@ def inspect_tagged_release(
         # authoritative from the public Release assets, not the historical
         # candidate files retained in the immutable Tag tree.
         issues = [] if allow_historical_metadata else supply_chain_issues(metadata, root=clone_dir)
-        if metadata.get("releaseEvidenceAuthority") == "release-assets-v1":
+        if (
+            allow_historical_metadata
+            or metadata.get("releaseEvidenceAuthority") == "release-assets-v1"
+        ):
             tag_target = run_command(
                 ["git", "rev-parse", "HEAD"], cwd=clone_dir, env=clone_git_environment()
             ).stdout.strip()
-            archive_metadata = metadata.get("releaseArchive")
             extra_assets = set()
-            if isinstance(archive_metadata, dict) and isinstance(
-                archive_metadata.get("assetName"), str
-            ):
-                extra_assets.add(archive_metadata["assetName"])
-            elif allow_historical_metadata:
+            if allow_historical_metadata:
                 extra_assets.add(f"{tag}.tar.gz")
                 extra_assets.add("release.json")
+            else:
+                archive_metadata = metadata.get("releaseArchive")
+                if isinstance(archive_metadata, dict) and isinstance(
+                    archive_metadata.get("assetName"), str
+                ):
+                    extra_assets.add(archive_metadata["assetName"])
             try:
                 assets = fetch_published_release_assets(tag, extra_asset_names=extra_assets)
                 provenance = json.loads(assets["provenance.json"].decode("utf-8"))
