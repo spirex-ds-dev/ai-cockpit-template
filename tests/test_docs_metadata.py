@@ -477,3 +477,21 @@ def test_installation_command_check_rejects_missing_primary_contract_markers(tmp
         in errors
     )
     assert "docs/getting-started/30-second-start.md: wizard entry is missing" in errors
+
+
+def test_installation_command_check_distinguishes_audit_history_from_current_release_claims(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+
+    errors = installation_command_errors(tmp_path)
+    assert not any(error.startswith("docs/audits/") for error in errors)
+
+    current_claim = tmp_path / "docs" / "reference" / "current-release-claim.md"
+    current_claim.write_text("The current installer release is v0.5.48.\n", encoding="utf-8")
+
+    errors = installation_command_errors(tmp_path)
+    assert (
+        "docs/reference/current-release-claim.md:1: documented release v0.5.48 does not "
+        "match release.json v0.5.42"
+    ) in errors

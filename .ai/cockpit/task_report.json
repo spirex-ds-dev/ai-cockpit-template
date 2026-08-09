@@ -1,39 +1,64 @@
 {
   "reportVersion": 1,
-  "workItemId": "final-audit-624-current-main",
+  "workItemId": "release-v0549-625-current-main",
   "phase": "review",
-  "result": "completed",
+  "result": "blocked",
   "sourceOutcome": {
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1,
-    "digest": "315cc5e4db70352447d519c917e22dee49cc3e464c4e808b6ae281186a868e6d"
+    "digest": "6913463e31dd043e1081aa2572bef606556054aeec980b6a29b719c3c1a288f5"
   },
   "task": {
-    "summary": "Task final-audit-624-current-main generated an evidence-derived outcome with status completed.",
+    "summary": "Task release-v0549-625-current-main generated an evidence-derived outcome with status blocked.",
     "deliveredChanges": [
-      ".ai/work-items/archive/2026/final-audit-624-current-main.contract.json",
-      ".ai/work-items/archive/2026/final-audit-624-current-main.summary.json",
-      "docs/audits/final-release-readiness-audit.md",
+      ".ai/work-items/active/release-v0549-625-current-main.contract.json",
+      ".ai/work-items/active/release-v0549-625-current-main.summary.json",
+      "next-release.json",
+      "release-state.json",
+      "tests/test_release_state_consistency.py",
+      "tests/test_release_distribution.py",
+      ".ai/cockpit/release-freeze.json",
+      ".ai/cockpit/release-digests.json",
+      "release.json",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md",
       ".ai/cockpit/current_status.md",
-      ".ai/cockpit/task_report.json",
-      ".ai/cockpit/task_report.md",
-      ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.json",
-      ".ai/work-items/archive/2026/final-audit-624-current-main.outcome.md"
+      ".ai/work-items/starts/release-v0549-625-current-main.json",
+      ".ai/work-items/active/release-v0549-625-current-main.outcome.json",
+      ".ai/work-items/active/release-v0549-625-current-main.outcome.md"
     ]
   },
   "issues": {
-    "detected": 0,
+    "detected": 1,
     "hardStops": 0,
-    "warnings": 0,
+    "warnings": 1,
     "resolved": 0,
-    "unresolved": 0
+    "unresolved": 1
   },
   "preventedRisks": [],
   "interventions": [],
   "forcedStops": [],
   "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
+  "limitations": [
+    {
+      "sourceWarning": "Finish blocked at quality: a required declared verification check failed",
+      "title": "Finish verification is blocked",
+      "affectedClaims": [
+        "completion_claim",
+        "archive_readiness"
+      ],
+      "requiredEvidence": [
+        "a passing quality retry"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this Work Item is complete or archive-ready."
+      ]
+    }
+  ],
+  "forbiddenClaims": [
+    "Do not claim a blocked Work Item has completed verification or may be archived."
+  ],
   "remainingRisks": [],
   "nextSafeAction": "Review the pull request and provider checks before merge."
 }

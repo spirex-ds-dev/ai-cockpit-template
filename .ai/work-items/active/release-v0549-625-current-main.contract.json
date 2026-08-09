@@ -27,7 +27,9 @@
     "docs/reference/pre-release-documentation-alignment.json",
     "docs/reference/pre-release-documentation-alignment.md",
     "tests/test_release_state_consistency.py",
-    "tests/test_release_distribution.py"
+    "tests/test_release_distribution.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py"
   ],
   "outOfScope": [
     "Changing release workflow security controls, provider configuration, branch protection, signing infrastructure, or supply-chain generators.",
@@ -79,6 +81,14 @@
     {
       "path": "tests/test_release_distribution.py",
       "reason": "Candidate-sequencing regression must prove v0.5.49 immediately follows the newly reserved v0.5.48."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Release-version validation must distinguish a historical provider fact in a governed audit from a current installer release claim."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Regression coverage must preserve validation of current install claims while allowing governed audit history."
     }
   ],
   "unknowns": [],
@@ -127,9 +137,10 @@
   },
   "acceptance": [
     "v0.5.48 is classified as unavailable for reuse, and next-release.json plus release-state.json name exactly v0.5.49 as the sole unpublished candidate based on the published v0.5.42 projection.",
-    "Candidate metadata, regenerated evidence, and candidate release freeze pass strict release preflight/readiness on the dedicated branch before the candidate PR is created.",
+    "Candidate metadata, regenerated evidence, and candidate release freeze are created on the dedicated branch; after the green Outcome is archived, premerge freeze and strict release preflight/readiness pass before the candidate PR is created.",
     "After the candidate PR merges and its Work Item evidence is archived, a fresh release.yml rehearsal succeeds for the freshly resolved origin/main SHA and v0.5.49; publication receives only that same-SHA rehearsal receipt.",
     "The controlled provider workflow alone creates v0.5.49 and provider assets, and provider-bound post-publication evidence verifies tag target, Release state, asset names and digests, SBOM, provenance, CI evidence, and tagged quick installation.",
+    "The documentation fact gate distinguishes governed historical provider evidence from a current installer-release claim, with a regression test that retains rejection of the latter.",
     "The Contract, Summary, red-or-green Outcome, PR, hosted checks, merge, ai-close-work-item, branch cleanup, and main synchronization truthfully record completion or an exact fail-closed recovery condition."
   ],
   "guidelines": [
