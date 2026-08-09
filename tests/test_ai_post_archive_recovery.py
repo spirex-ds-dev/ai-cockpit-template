@@ -179,6 +179,44 @@ def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
     )
 
 
+@pytest.mark.parametrize(
+    ("repository", "provider", "message"),
+    [
+        ("not a repository", functional_failure_provider, "owner/name"),
+        (
+            "spirex-ds-dev/ai-cockpit-template",
+            lambda endpoint: (
+                b"not a governed failure"
+                if endpoint.endswith("/logs")
+                else functional_failure_provider(endpoint)
+            ),
+            "canonical fail-closed functional failure",
+        ),
+        (
+            "spirex-ds-dev/ai-cockpit-template",
+            lambda endpoint: (
+                functional_failure_provider(endpoint).replace(
+                    b'"name": "extended-real-stack-quality (java)"', b'"name": ""'
+                )
+                if endpoint.endswith("/85")
+                else functional_failure_provider(endpoint)
+            ),
+            "job name",
+        ),
+    ],
+)
+def test_hosted_functional_recovery_rejects_unbound_provider_facts(repository, provider, message):
+    with pytest.raises(ValueError, match=message):
+        recovery.verified_hosted_functional_failure(
+            repository=repository,
+            pull_request=765,
+            failed_candidate_head="c" * 40,
+            run_id=43,
+            job_id=85,
+            fetch_provider=provider,
+        )
+
+
 def test_open_hosted_recovery_rejects_a_stale_provider_head(tmp_path):
     write_archive(tmp_path)
 
