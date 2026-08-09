@@ -1,0 +1,340 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-runner-ip-allow-list-625-current-main",
+  "mode": "code",
+  "title": "Fix release runner selection for IP allow-list environments",
+  "baseCommit": "3c9dde5144965143963daeab43e131a7ca7a7179",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.contract.json",
+    ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.outcome.json",
+    ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.outcome.md",
+    ".github/workflows/release.yml",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "scripts/ensure_locked_dev_environment.py",
+    "tests/test_release_workflow.py",
+    "tests/test_ci_quality_orchestration.py",
+    "tests/test_ensure_locked_dev_environment.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Creating, moving, deleting, or reusing any release tag or GitHub Release.",
+    "Weakening same-SHA, rehearsal, smoke, compatibility, integrity, or public-install gates.",
+    "Changing organization IP allow-list entries, runner groups, branch protection, or CodeQL configuration.",
+    "Changing unrelated workflow behavior, quality gates, or their required coverage; this Work Item may only make the existing smoke quality timeout terminate its own residual process tree after its stated bounded grace."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The failed rehearsal executed this workflow on ubuntu-latest and its exact-SHA dependency step calls the GitHub workflow-runs API."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Two same-SHA hosted smoke runs remained in the quality step far beyond its declared 25-minute bound, proving that the existing foreground timeout does not guarantee terminal evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31317496592",
+      "reason": "Authoritative failed rehearsal log: the dependency query received HTTP 403 because the enterprise IP allow list did not permit the standard hosted runner address."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/625",
+      "reason": "The still-open release Work Item requires a successful same-SHA rehearsal before v0.5.49 publication."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Regression coverage protects ordering and non-publication behavior for the controlled release workflow."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Workflow regression coverage owns the bounded template-smoke quality invocation and heartbeat assertions."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Its current conditional PYTHON selection explains why a fresh linked worktree falls back to an arbitrary system Ruff before quality gates can run."
+    },
+    {
+      "path": "scripts/check_dev_tool_versions.py",
+      "reason": "Its fail-closed Ruff mismatch and documented recovery commands define the root behavior that must become deterministic at the quality entrypoint."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Maintainer guidance owns the release workflow's exact-SHA evidence and runner prerequisites."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Requires a governed corrective Work Item and fail-closed diagnosis rather than an ad-hoc retry or bypass."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_workflow_configuration",
+      "hosted_runner_network_boundary"
+    ],
+    "reason": "The release workflow is a release-blocking control. Its runner choice must preserve every existing gate while allowing the GitHub API calls required by the enterprise IP allow-list policy.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The scope changes a release-blocking workflow configuration but does not publish a release; standard governance with explicit hosted rehearsal is required."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized complete governed execution. The published runner label is already configured by the organization; this Work Item only makes the release workflow select it through an explicit repository Actions variable."
+  },
+  "preReviewWarnings": [
+    "Verify the runner expression remains template-safe when no repository variable is configured.",
+    "Verify that a configured allow-listed runner is selected before the GitHub API dependency query without weakening any release gate."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.yml selects an optional repository Actions variable named AI_COCKPIT_RELEASE_RUNNER for its release job and retains ubuntu-latest as the template-safe fallback when that variable is unset.",
+    "make quality invokes provisioning when .venv is absent or its Ruff direct pin differs from the development manifest; provisioning installs the hash-locked development lockfile, then quality re-executes with .venv/bin/python.",
+    "Distribution guidance names AI_COCKPIT_RELEASE_RUNNER, requires an enterprise IP allow-list deployment to point it at a repository-authorized GitHub-hosted static-IP or self-hosted runner before release dispatch, and forbids a bypass.",
+    "Regression tests prove the variable/fallback runner selection and preserve existing same-SHA rehearsal and non-publication guards.",
+    "The smoke workflow keeps the 25-minute full-quality policy and heartbeat while using a finite forced-termination grace; regression tests reject a timeout form that can wait indefinitely for a residual child.",
+    "The repository variable AI_COCKPIT_RELEASE_RUNNER is set to the existing code-scanning runner label only after the Contract is ready, and the post-merge same-SHA rehearsal proves the API access and all release gates on that selected runner.",
+    "The Contract, Summary, Outcome, hosted checks, PR, merge, lifecycle closure, and continued #625 release record the fail-closed result truthfully."
+  ],
+  "guidelines": [
+    "Keep the runner selection explicit, minimally scoped, and template-safe for repositories without an enterprise IP allow list.",
+    "Make locked local-toolchain provisioning deterministic and idempotent; never silently accept an arbitrary system tool version or install an unhashed dependency set.",
+    "Do not weaken or reorder any source identity, rehearsal, release evidence, tag, draft, publication, or quick-install control.",
+    "Document the external runner prerequisite in English and Japanese without exposing organization-specific IP addresses or credentials."
+  ],
+  "intent": {
+    "problem": "The v0.5.49 rehearsal for merged main commit 3c9dde5144965143963daeab43e131a7ca7a7179 failed before any release side effect because release.yml runs on ubuntu-latest and its required exact-SHA workflow-runs API query was rejected by the enterprise IP allow list. The PR's smoke and compatibility workflows do not issue that API call, so their green results did not expose this release-only incompatibility.",
+    "constraints": [
+      "No tag, GitHub Release, asset, public installation claim, or gate bypass is allowed in this corrective Work Item.",
+      "Keep ubuntu-latest as the default for adopters who do not configure an allow-listed runner.",
+      "The configured runner label must be selected through a repository Actions variable, not hardcoded to this organization's runner name.",
+      "Fresh linked worktrees invoke deterministic .venv provisioning before quality; provisioning installs requirements-dev.lock with --require-hashes and exits nonzero on failure.",
+      "The hosted template-smoke quality step must terminate deterministically after its existing 25-minute bound, including any residual child process, and must retain its failure logs and heartbeat evidence.",
+      "Do not retry v0.5.49 publication until this corrective PR merges and a new exact-main-SHA rehearsal succeeds."
+    ],
+    "rationale": "An explicit, documented, optional runner label maintains template portability while allowing enterprises with IP allow lists to route release jobs that call GitHub APIs through an approved static-IP or self-hosted runner."
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。流程问题不是临时修改，要根除；发布之前必须确认没有遗漏。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-09-continuous-closure-and-release-authorization",
+    "capturedAt": "2026-08-09T23:00:00+09:00",
+    "digest": "sha256:35cec4cd0f9a03713bf8e16e53f2da11ce4a53c82a5c01e7bf4fa238390d0f4a"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-09-continuous-closure-and-release-authorization",
+    "scope": "Create corrective Work Items and apply durable workflow, documentation, test, and repository configuration changes needed to complete the plan, with no gate bypass or release publication until all gates pass."
+  },
+  "declaredIntent": {
+    "summary": "Repair the release workflow's runner selection so an enterprise can bind its GitHub API-using release path to a repository-authorized allow-listed runner without weakening release controls or losing template portability.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "implementationSurface": {
+    "production": [
+      ".github/workflows/release.yml",
+      ".github/workflows/smoke.yml",
+      "Makefile",
+      "scripts/ensure_locked_dev_environment.py"
+    ],
+    "tests": [
+      "tests/test_release_workflow.py",
+      "tests/test_ci_quality_orchestration.py",
+      "tests/test_ensure_locked_dev_environment.py"
+    ],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.outcome.json",
+      ".ai/work-items/active/release-runner-ip-allow-list-625-current-main.outcome.md",
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ],
+    "documentation": [
+      "docs/reference/distribution.md",
+      "docs/reference/distribution.ja.md",
+      "docs/operations/quality-gates.md",
+      "docs/operations/quality-gates.ja.md",
+      "docs/operations/quality-gates.zh-CN.md",
+      "docs/reference/capability-truth-matrix.json"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "No repository runner variable is configured.",
+      "expected": "The template release job continues to use ubuntu-latest.",
+      "verificationPlan": "Regression test inspects the runner expression and documents the fallback.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "An enterprise IP allow list rejects the standard hosted runner's GitHub API call.",
+      "expected": "The configured repository-authorized runner label is selected and the same-SHA rehearsal can complete the dependency query without bypassing it.",
+      "verificationPlan": "Set the non-secret repository variable to code-scanning after preflight, merge the corrective PR, then run a same-SHA rehearsal and inspect its runner and result.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A release workflow is dispatched in rehearsal mode.",
+      "expected": "No immutable tag, GitHub Release, or public asset is created.",
+      "verificationPlan": "Existing release-workflow regression tests and hosted rehearsal result remain green.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A fresh linked worktree has no locked virtual environment, or its installed Ruff version differs from the direct development pin.",
+      "expected": "The common quality entrypoint provisions the worktree-local environment from the hash-locked development lockfile before running quality gates, or fails closed with the provisioning error.",
+      "verificationPlan": "Unit tests cover absence, version drift, and the hash-locked provisioning command; hosted clean-check execution verifies the entrypoint behavior.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A hosted template-smoke quality process exceeds the existing 25-minute policy because a descendant process survives the graceful timeout signal.",
+      "expected": "The workflow sends a finite forced-termination signal after the documented grace, records a failed bounded quality gate, and permits downstream evidence collection rather than leaving the PR indefinitely in progress.",
+      "verificationPlan": "Workflow regression tests require the finite kill-after timeout form; a fresh hosted smoke run proves a terminal result on the exact PR head.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized automatic execution, durable workflow correction, PR merge, release completion, and recording the authority in every Work Item Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 849
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-runner-ip-allow-list-625-current-main.json",
+    "baseCommit": "3c9dde5144965143963daeab43e131a7ca7a7179",
+    "initialScopeDigest": "39e236901214738bec2e1be0d5a25f7e051659d4e479244395929428f3d35e23",
+    "contractSkeletonDigest": "9bf42d2f72a909a4db612325c6d52a1f039dba21ecc8f515efd3b249fbfa5745"
+  }
+}

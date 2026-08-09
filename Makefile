@@ -35,7 +35,7 @@ QUALITY_SESSION_LOCK ?= target/quality/session.lock
 QUALITY_SESSION_LOCK_HELD ?= false
 
 .PHONY: help \
-	test check-quality-toolchain project-format-check project-test project-lint diff-check quality quality-gates \
+	test ensure-locked-dev-environment check-quality-toolchain project-format-check project-test project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 check-docs-metadata check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
@@ -366,8 +366,14 @@ define RUN_QUALITY_SESSION
 	fi
 endef
 
+# Fresh worktrees must not inherit arbitrary globally-installed developer tools.
+# This target is idempotent and fail-closed: it creates .venv only when the
+# direct Ruff pin cannot be verified, then installs requirements-dev.lock with hashes.
+ensure-locked-dev-environment:
+	python3 scripts/ensure_locked_dev_environment.py --root .
+
 # Fast is intentionally narrower than Full.  It never implies release readiness.
-quality-fast:
+quality-fast: ensure-locked-dev-environment
 	$(call RUN_QUALITY_SESSION,quality-fast)
 
 quality-fast-owned:
@@ -408,7 +414,7 @@ qg-check-ai-test-weakening-fast:
 
 # Standard reuses existing gate owners and replaces the Fast weakening sample
 # with the full diff analysis. It intentionally excludes Full/Release groups.
-quality-standard:
+quality-standard: ensure-locked-dev-environment
 	$(call RUN_QUALITY_SESSION,quality-standard)
 
 quality-standard-owned:
@@ -466,7 +472,7 @@ qg-check-instruction-traceability:
 qg-check-ai-test-weakening:
 	$(call RUN_QUALITY_GATE,check-ai-test-weakening,project-consistency)
 
-quality-full:
+quality-full: ensure-locked-dev-environment
 	$(call RUN_QUALITY_SESSION,quality-full)
 
 quality-full-owned:
@@ -503,7 +509,7 @@ quality-installation:
 quality-release-evidence:
 	$(QUALITY_MAKE) --no-print-directory check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence
 
-quality-release:
+quality-release: ensure-locked-dev-environment
 	$(call RUN_QUALITY_SESSION,quality-release)
 
 quality-release-owned:

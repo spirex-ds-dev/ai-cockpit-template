@@ -128,7 +128,8 @@ def test_full_quality_has_one_workflow_owner():
     assert compatibility.count("make quality") == 0
     assert smoke.count("make quality") == 1
     assert "Run repository quality gates" in smoke
-    assert "timeout --foreground 25m make quality" in smoke
+    assert "timeout --foreground --kill-after=30s 25m make quality" in smoke
+    assert "timeout --foreground 25m make quality" not in smoke
     assert "quality heartbeat" in smoke
     assert "Publish quality timing summary" in smoke
     assert "$GITHUB_STEP_SUMMARY" in smoke
