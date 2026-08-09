@@ -113,6 +113,40 @@ def test_release_preflight_source_readers_bind_and_reject_exact_source_bytes(mon
         preflight.source_json_object(tmp_path, "a" * 40, ".ai/cockpit/version.json")
 
 
+def test_release_preflight_reports_projection_and_identity_tuple_drift():
+    projection_issues = preflight.validate_release_projection(
+        state={
+            "state": "candidate_prepared",
+            "releaseTag": "v0.5.50",
+            "previousRelease": "v0.5.48",
+        },
+        release={"releaseTag": "v0.5.49"},
+        candidate={"releaseTag": "v0.5.51", "basedOnReleaseTag": "v0.5.48"},
+    )
+    assert projection_issues == [
+        "canonical candidate releaseTag does not match next-release.json",
+        "canonical previousRelease does not match release.json releaseTag",
+        "next-release.json basedOnReleaseTag does not match release.json releaseTag",
+    ]
+
+    identity_issues = validate_release_identity(
+        release={"releaseTag": "v0.5.50"},
+        freeze={"releaseTag": "v0.5.49"},
+        release_digests={"releaseTag": "v0.5.49"},
+        source_commit="invalid",
+        tag_target="b" * 40,
+        metadata_commit="",
+    )
+    assert "sourceCommit must be a concrete 40-character lowercase SHA" in identity_issues
+    assert "metadataCommit must be a concrete 40-character lowercase SHA" in identity_issues
+    assert "sourceCommit and tagTarget must identify the same commit" in identity_issues
+    assert "freeze sourceCommit does not match the release identity tuple" in identity_issues
+    assert (
+        "release-digests tagTarget must be a concrete 40-character lowercase SHA" in identity_issues
+    )
+    assert "releaseTag must match between release.json and release-freeze.json" in identity_issues
+
+
 def test_release_preflight_blocks_active_work_item_and_stale_digest():
     issues = validate_release_preflight(
         **_fixture(active_work_items=["task"], actual_archive_sha="new")
