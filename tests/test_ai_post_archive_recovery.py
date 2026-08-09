@@ -177,6 +177,59 @@ def test_hosted_receipt_validation_rejects_an_incoherent_recorded_run_url(tmp_pa
     ]
 
 
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (
+            lambda provider: provider.update(kind="other"),
+            "recorded provider kind is not github_actions",
+        ),
+        (
+            lambda provider: provider.update(event="push"),
+            "recorded provider event is not pull_request",
+        ),
+        (
+            lambda provider: provider.update(runStatus="queued"),
+            "recorded provider run is not a completed failure",
+        ),
+        (
+            lambda provider: provider.update(jobConclusion="success"),
+            "recorded provider job is not a failure",
+        ),
+        (
+            lambda provider: provider.update(logSha256="invalid"),
+            "recorded provider log digest is invalid",
+        ),
+        (
+            lambda provider: provider["observedCoverage"].update(actual=85.1),
+            "recorded provider coverage does not prove a below-floor failure",
+        ),
+    ],
+)
+def test_hosted_coverage_receipt_validation_rejects_incoherent_recorded_facts(
+    tmp_path, mutate, message
+):
+    write_archive(tmp_path)
+    receipt = recovery.open_hosted_post_archive_recovery(
+        root=tmp_path,
+        task="example-task",
+        base_commit="a" * 40,
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        authority="user-authorized same Work Item recovery",
+        recovery_paths=["tests/test_resume.py"],
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=716,
+        failed_candidate_head="b" * 40,
+        run_id=42,
+        job_id=84,
+        fetch_provider=hosted_provider,
+        worktree_clean=lambda: True,
+    )
+    mutate(receipt["provider"])
+
+    assert recovery.validate_recovery_receipt(tmp_path, receipt, pr_base="a" * 40) == [message]
+
+
 def functional_failure_provider(endpoint: str) -> bytes:
     responses = {
         "/repos/spirex-ds-dev/ai-cockpit-template/actions/runs/43": {
