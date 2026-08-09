@@ -26,6 +26,10 @@ tag、GitHub Release、public asset を作成できません。実際の公開�
 その後 main が変わった場合は新しい SHA 用のリハーサルを実行します。古い準備
 スナップショットを理由に freeze Work Item を繰り返し作成してはいけません。
 
+共通の quality entrypoint は、worktree-local の `.venv` が存在しない、利用不能、または `requirements-dev.in` の直接 Ruff pin と異なる場合、gate の前に環境を provision します。provision は `requirements-dev.lock` だけを `--require-hashes` で install し、直接 pin を再確認します。収束しなければ fail closed します。グローバルに install された formatter や linter は同等の証拠として扱わないため、新しい linked worktree でも保守担当者の手作業なしに同一 toolchain を再現できます。
+
+Release job の通常の runner は `ubuntu-latest` です。GitHub IP allow list を有効にし、標準 hosted runner の egress からの GitHub API 呼び出しを拒否する企業では、リポジトリーの Actions variable `AI_COCKPIT_RELEASE_RUNNER` に、許可済み static IP range を持つリポジトリー認可済み GitHub-hosted runner の label、または認可済み self-hosted runner の label を設定します。Workflow は exact-SHA evidence query を含む release job 全体でその label を選択します。これは gate bypass ではなく routing の前提条件です。runner が未設定、未認可、または利用不可の場合は release を blocked のままにし、この variable を設定しないリポジトリーは portable な `ubuntu-latest` を使用します。
+
 ## PR を起点とするリリース手順
 
 各リリース試行は一つの不変な Identity Tuple を持ちます。`sourceCommit` はマージ済み既定ブランチのコミット、`tagTarget` は同じコミット、`metadataCommit` は候補メタデータを含むコミット（明示必須）、`releaseTag` は要求されたタグです。`HEAD` は証拠として使いません。候補の Freeze メタデータは PR 境界より前にコミットし、マージ後に Workflow が既定ブランチを一度だけ解決して、この Tuple を Preflight、CI 証拠、tag、Provider Asset まで引き継ぎます。close 後のコマンドで Tuple やリリースメタデータを書き換えません。
