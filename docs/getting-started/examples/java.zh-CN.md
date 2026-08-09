@@ -40,6 +40,22 @@ Maven 或 Gradle 文件，并不代表 JDK、wrapper、service、凭据或 hoste
 `blocked`，写清缺失事实和 recovery condition：取得 project owner 的 approved configuration，记录到 Work Item，
 然后重新执行已声明的 project command。此模板不会配置 Maven、安装 JDK、访问 private repository，也不证明 adopter build 已通过。
 
+## Java runtime lane gate
+
+已安装的 Java preset 会在每个 formatter、test 或 lint command 前检查 runtime。在
+`Makefile.ai.stack` 中记录工程已批准的 lane 和 major；它们是需要校准的事实，不能从 build file 推断：
+
+```make
+AI_COCKPIT_JAVA_LANE = java17
+AI_COCKPIT_JAVA_REQUIRED_MAJOR = 17
+AI_COCKPIT_JAVA_COMMAND = java
+```
+
+如果工程已批准的 environment manager 通过 `JAVA_HOME` 选择 runtime，检查器会观察
+`JAVA_HOME/bin/java`；否则观察 `AI_COCKPIT_JAVA_COMMAND`（默认是 `PATH` 中的 `java`）。major
+缺失或不匹配时，会在 delegated command 执行前 **blocked**。应选择工程已批准的 runtime，或修正记录的
+major，再 retry。preset 不会安装、切换或修改 JDK、`JAVA_HOME` 或 environment manager。
+
 <!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->
 <!-- platform-next: calibration-and-recovery -->
 ## 需要帮助？

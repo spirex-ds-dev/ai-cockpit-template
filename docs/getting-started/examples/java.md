@@ -54,6 +54,26 @@ record it in the Work Item, then rerun the declared project command. This
 template does not configure Maven, install a JDK, access a private repository,
 or prove that an adopter build passed.
 
+## Java runtime lane gate
+
+The installed Java preset checks the runtime before each formatter, test, or
+lint command. In `Makefile.ai.stack`, record the project-approved lane and
+major; these are facts to calibrate, not values inferred from a build file:
+
+```make
+AI_COCKPIT_JAVA_LANE = java17
+AI_COCKPIT_JAVA_REQUIRED_MAJOR = 17
+AI_COCKPIT_JAVA_COMMAND = java
+```
+
+When the project-approved environment manager selects a runtime through
+`JAVA_HOME`, the check observes `JAVA_HOME/bin/java`; otherwise it observes
+`AI_COCKPIT_JAVA_COMMAND` (default: `java` from `PATH`). A missing or
+mismatched major is **blocked** before the delegated command runs. Recover by
+selecting the project-approved runtime or correcting the recorded major, then
+retry. The preset does not install, switch, or modify a JDK, `JAVA_HOME`, or an
+environment manager.
+
 <!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->
 <!-- platform-next: calibration-and-recovery -->
 ## Need help?
