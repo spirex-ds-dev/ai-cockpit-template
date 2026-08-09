@@ -279,6 +279,21 @@ def test_beginner_route_rejects_platform_page_without_evidence_boundary_or_with_
     )
 
 
+def test_java_multimodule_maven_correction_template_preserves_safety_boundaries():
+    expected_markers = {
+        "java.md": ("reactor command", "settings.xml", "actual `java`", "**blocked**"),
+        "java.ja.md": ("reactor command", "settings.xml", "actual major", "**blocked**"),
+        "java.zh-CN.md": ("reactor command", "settings.xml", "actual major", "**blocked**"),
+    }
+
+    for name, markers in expected_markers.items():
+        text = (ROOT / "docs" / "getting-started" / "examples" / name).read_text(encoding="utf-8")
+        for marker in markers:
+            assert marker in text
+        assert "private repository URL" in " ".join(text.split())
+        assert "does not" in text or "しません" in text or "不会" in text
+
+
 def test_layer_checker_rejects_missing_language_document(tmp_path):
     copy_documentation(tmp_path)
     (tmp_path / "docs/getting-started/30-second-start.ja.md").unlink()

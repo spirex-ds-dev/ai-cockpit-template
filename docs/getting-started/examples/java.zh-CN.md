@@ -24,6 +24,22 @@ credential、命令或 CI 事实。写入前必须等待我的确认。
 Agent 会创建可审核的校准 Work Item。你先确认计划，再只批准其中列出的修改。仅发现
 Maven 或 Gradle 文件，并不代表 JDK、wrapper、service、凭据或 hosted CI 已准备好。
 
+## Maven 多模块修正模板
+
+仅在 Maven 失败可能涉及内部模块、私有 mirror 或多个 Java lane 时使用。把下面事实记录到 active Work Item；
+不要从 `pom.xml` 猜测值。
+
+1. 选择一个构建路径：单个由工程声明的 **reactor command**，或明确声明的 module dependency order。记录所选
+   command 或有序 module list、working directory，以及它为何适用于该工程。不能仅因存在 directory 就单独运行 module。
+2. 执行 Maven 前，记录选定 `settings.xml` 的 path、approved mirror 是否可达、所需 private-repository access
+   是否可用。不得在 Work Item 或 command transcript 中粘贴 credential、token、password 或 private repository URL。
+3. 每个 Java lane 都要记录所需 Java major，以及 Maven command 选择的实际 `java` runtime。actual major 不同的
+   lane 为 **blocked**；先选择 approved toolchain 或修正 lane declaration，再 retry。
+
+如果缺少 settings file、mirror、access grant、reactor command、dependency order 或 Java-major 事实，应报告
+`blocked`，写清缺失事实和 recovery condition：取得 project owner 的 approved configuration，记录到 Work Item，
+然后重新执行已声明的 project command。此模板不会配置 Maven、安装 JDK、访问 private repository，也不证明 adopter build 已通过。
+
 <!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->
 <!-- platform-next: calibration-and-recovery -->
 ## 需要帮助？
