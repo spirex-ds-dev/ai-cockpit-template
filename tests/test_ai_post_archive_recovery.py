@@ -176,18 +176,37 @@ def second_functional_failure_provider(endpoint: str) -> bytes:
     return json.dumps(responses[endpoint]).encode()
 
 
-def test_github_api_uses_gh_api_flags_supported_by_hosted_runners(monkeypatch):
+def test_github_api_reads_provider_evidence_without_gh_output_flags(monkeypatch):
     observed = {}
 
     def fake_run(args, **kwargs):
         observed["args"] = args
         observed["env"] = kwargs["env"]
-        return SimpleNamespace(returncode=0, stdout=b"{}", stderr=b"")
+        return SimpleNamespace(returncode=0, stdout=b"token\n", stderr=b"")
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self):
+            return b"{}"
+
+    def fake_urlopen(request, *, timeout):
+        observed["url"] = request.full_url
+        observed["authorization"] = request.get_header("Authorization")
+        observed["timeout"] = timeout
+        return Response()
 
     monkeypatch.setattr(recovery.subprocess, "run", fake_run)
+    monkeypatch.setattr(recovery, "urlopen", fake_urlopen)
 
     assert recovery._github_api("/repos/spirex-ds-dev/ai-cockpit-template") == b"{}"
-    assert observed["args"] == ["gh", "api", "/repos/spirex-ds-dev/ai-cockpit-template"]
+    assert observed["args"] == ["gh", "auth", "token"]
+    assert observed["url"] == "https://api.github.com/repos/spirex-ds-dev/ai-cockpit-template"
+    assert observed["authorization"] == "Bearer token"
 
 
 def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
@@ -373,14 +392,25 @@ def test_hosted_recovery_rejects_provider_unavailability():
         )
 
 
-def test_github_provider_log_reader_uses_runner_compatible_gh_api_invocation(monkeypatch):
+def test_github_provider_log_reader_uses_the_same_rest_transport(monkeypatch):
     captured = {}
 
     def run(command, **_kwargs):
         captured["command"] = command
-        return type("Result", (), {"returncode": 0, "stdout": b"log", "stderr": b""})()
+        return type("Result", (), {"returncode": 0, "stdout": b"token", "stderr": b""})()
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self):
+            return b"log"
 
     monkeypatch.setattr(recovery.subprocess, "run", run)
+    monkeypatch.setattr(recovery, "urlopen", lambda *_args, **_kwargs: Response())
 
     assert recovery._github_api("/repos/o/r/actions/jobs/1/logs") == b"log"
-    assert captured["command"] == ["gh", "api", "/repos/o/r/actions/jobs/1/logs"]
+    assert captured["command"] == ["gh", "auth", "token"]

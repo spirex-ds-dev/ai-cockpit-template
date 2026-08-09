@@ -10,6 +10,8 @@ import subprocess  # nosec B404 - all process calls below use fixed list-form co
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from ai_common import PROJECT_ROOT, clean_git_environment
 
@@ -100,9 +102,9 @@ def receipt_target(directory: Path, task: str, provider: dict | None = None) -> 
 
 
 def _github_api(endpoint: str) -> bytes:
-    """Read one GitHub API resource through the authenticated GitHub CLI."""
+    """Read provider evidence without depending on a runner-specific ``gh api`` output flag."""
     result = subprocess.run(  # nosec B603 B607 - fixed executable and repository-validated endpoint
-        ["gh", "api", endpoint],
+        ["gh", "auth", "token"],
         cwd=PROJECT_ROOT,
         env=clean_git_environment(),
         capture_output=True,
@@ -110,8 +112,25 @@ def _github_api(endpoint: str) -> bytes:
     )
     if result.returncode != 0:
         detail = result.stderr.decode("utf-8", errors="replace").strip()
-        raise ValueError(f"GitHub provider evidence is unavailable: {detail or 'gh api failed'}")
-    return result.stdout
+        raise ValueError(
+            f"GitHub provider evidence is unavailable: {detail or 'gh auth token failed'}"
+        )
+    token = result.stdout.decode("utf-8", errors="replace").strip()
+    if not token:
+        raise ValueError("GitHub provider evidence is unavailable: gh auth token returned no token")
+    request = Request(
+        f"https://api.github.com{endpoint}",
+        headers={
+            "Accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {token}",
+            "X-GitHub-Api-Version": "2022-11-28",
+        },
+    )
+    try:
+        with urlopen(request, timeout=30) as response:  # nosec B310 - repository-validated GitHub API endpoint
+            return response.read()
+    except (HTTPError, URLError, OSError) as exc:
+        raise ValueError(f"GitHub provider evidence is unavailable: {exc}") from exc
 
 
 def _provider_json(fetch_provider: Callable[[str], bytes], endpoint: str) -> dict:
