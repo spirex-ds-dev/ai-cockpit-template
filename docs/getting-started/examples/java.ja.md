@@ -47,6 +47,24 @@ settings file、mirror、access grant、reactor command、dependency order、Jav
 取得して Work Item に記録し、宣言済み project command を再実行します。このテンプレートは Maven の設定、JDK の
 install、private repository への access、adopter build の成功を行ったり証明したりしません。
 
+## Java runtime lane gate
+
+インストール済み Java preset は formatter、test、lint の各 command の前に runtime を確認します。
+`Makefile.ai.stack` には project-approved lane と major を記録します。これは build file から推測する値ではなく、
+校正する事実です。
+
+```make
+AI_COCKPIT_JAVA_LANE = java17
+AI_COCKPIT_JAVA_REQUIRED_MAJOR = 17
+AI_COCKPIT_JAVA_COMMAND = java
+```
+
+project-approved environment manager が `JAVA_HOME` で runtime を選ぶ場合、check は
+`JAVA_HOME/bin/java` を確認します。そうでない場合は `AI_COCKPIT_JAVA_COMMAND`（既定は `PATH` の
+`java`）を確認します。major が不足または不一致なら delegated command の前に **blocked** になります。
+project-approved runtime を選択するか記録済み major を修正してから retry してください。preset は JDK、
+`JAVA_HOME`、environment manager を install、switch、変更しません。
+
 <!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->
 <!-- platform-next: calibration-and-recovery -->
 ## 困ったとき

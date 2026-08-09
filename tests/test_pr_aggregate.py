@@ -96,7 +96,7 @@ def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     monkeypatch.setattr(
         ai_check_pr,
         "same_work_item_recovery_paths",
-        lambda _base, _entries: ({"recovered": {"scripts/ai_finish.py"}}, {receipt_path}),
+        lambda _base, _entries: ({"recovered": {"scripts/ai_finish.py"}}, {receipt_path}, []),
     )
     policy = tmp_path / "scope.yaml"
     policy.write_text("allowAlways:\n", encoding="utf-8")
@@ -111,7 +111,34 @@ def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     assert not any("scripts/ai_finish.py" in issue for issue in issues)
 
 
-def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_paths(
+def test_pr_bundle_accepts_restricted_path_only_when_same_item_recovery_receipt_binds_it(
+    tmp_path, monkeypatch
+):
+    pair = write_pair(tmp_path, "recovered", [], [])
+    contract_path = pair.relative_to(tmp_path).as_posix()
+    summary_path = contract_path.replace(".contract", ".summary")
+    receipt_path = ".ai/work-items/recovery-receipts/recovered.json"
+    recovery_path = ".github/workflows/compatibility.yml"
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "same_work_item_recovery_paths",
+        lambda _base, _entries: ({"recovered": {recovery_path}}, {receipt_path}, []),
+    )
+    scope = tmp_path / "scope.yaml"
+    scope.write_text("allowAlways:\n", encoding="utf-8")
+    ownership = tmp_path / "ownership.yaml"
+    ownership.write_text(f"{recovery_path}:\n  aiWrite: restricted\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", scope)
+    monkeypatch.setattr(ai_check_pr, "OWNERSHIP_POLICY", ownership)
+    patch_changes(monkeypatch, [contract_path, summary_path, receipt_path, recovery_path])
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
+
+    assert not any("restricted path lacks approval" in issue for issue in issues)
+
+
+def test_same_work_item_hosted_recovery_validates_recorded_provider_binding_offline(
     tmp_path, monkeypatch
 ):
     archive = tmp_path / ".ai/work-items/archive/2026"
@@ -169,26 +196,34 @@ def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_pat
     contract_path = archive / f"{task}.contract.json"
     entries = [(contract_path, {"workItemId": task}, {}, (74, task, task))]
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(recovery, "_github_api", provider)
 
-    permitted, receipts = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+    def provider_must_not_be_called(_endpoint):
+        pytest.fail("the PR audit must not re-query provider evidence recorded in the receipt")
+
+    monkeypatch.setattr(recovery, "_github_api", provider_must_not_be_called)
+
+    result = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+    assert len(result) == 3
+    permitted, receipts, blockers = result
 
     assert permitted == {task: {"tests/test_resume.py"}}
     assert receipts == {".ai/work-items/recovery-receipts/hosted-recovered.json"}
+    assert blockers == []
 
-    def stale_provider(endpoint):
-        payload = provider(endpoint)
-        if endpoint.endswith("/42"):
-            value = json.loads(payload)
-            value["head_sha"] = "c" * 40
-            return json.dumps(value).encode()
-        return payload
-
-    monkeypatch.setattr(recovery, "_github_api", stale_provider)
-    permitted, receipts = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+    receipt["provider"]["runUrl"] = "https://github.com/other/repository/actions/runs/42"
+    receipt_path = tmp_path / ".ai/work-items/recovery-receipts/hosted-recovered.json"
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+    permitted, receipts, blockers = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
 
     assert permitted == {}
     assert receipts == set()
+    assert blockers == [
+        (
+            "BLOCKED: provider-bound recovery receipt cannot be verified: "
+            "recorded provider run URL does not match its repository and run ID. Recovery: "
+            "regenerate the recovery receipt from the failed hosted job."
+        )
+    ]
 
 
 def test_pr_boundary_rejects_dirty_worktree(monkeypatch):

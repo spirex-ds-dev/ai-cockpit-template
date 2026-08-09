@@ -447,7 +447,7 @@ def historical_recovery_receipts() -> list[tuple[str, Any]]:
 def same_work_item_recovery_paths(
     base: str,
     entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
-) -> tuple[dict[str, set[str]], set[str]]:
+) -> tuple[dict[str, set[str]], set[str], list[str]]:
     """Return only receipt-bound repair paths for archives in this exact PR."""
     known_tasks = {
         contract.get("workItemId")
@@ -456,9 +456,10 @@ def same_work_item_recovery_paths(
     }
     permitted: dict[str, set[str]] = {}
     receipts: set[str] = set()
+    blockers: list[str] = []
     directory = PROJECT_ROOT / RECEIPT_DIRECTORY
     if not directory.is_dir():
-        return permitted, receipts
+        return permitted, receipts, blockers
     for path in sorted(directory.glob("*.json")):
         try:
             receipt = load_json(path)
@@ -466,7 +467,13 @@ def same_work_item_recovery_paths(
             continue
         if not isinstance(receipt, dict) or receipt.get("workItemId") not in known_tasks:
             continue
-        if validate_recovery_receipt(PROJECT_ROOT, receipt, pr_base=base):
+        receipt_issues = validate_recovery_receipt(PROJECT_ROOT, receipt, pr_base=base)
+        if receipt_issues:
+            blockers.append(
+                "BLOCKED: provider-bound recovery receipt cannot be verified: "
+                f"{'; '.join(receipt_issues)}. Recovery: regenerate the recovery receipt "
+                "from the failed hosted job."
+            )
             continue
         values = receipt.get("recoveryPaths")
         if not isinstance(values, list) or not all(isinstance(value, str) for value in values):
@@ -474,7 +481,7 @@ def same_work_item_recovery_paths(
         task = receipt["workItemId"]
         permitted.setdefault(task, set()).update(values)
         receipts.add(path.relative_to(PROJECT_ROOT).as_posix())
-    return permitted, receipts
+    return permitted, receipts, blockers
 
 
 def archive_pair_addition_commits(contract_path: Path) -> list[str]:
@@ -753,10 +760,11 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         if not archive_base_is_compatible(entry[1], base)
         and is_verified_merged_child_archive(entry, base)
     )
-    same_item_recovery_paths, same_item_receipts = same_work_item_recovery_paths(
+    same_item_recovery_paths, same_item_receipts, recovery_blockers = same_work_item_recovery_paths(
         base, archive_entries
     )
     audit_paths.update(same_item_receipts)
+    issues.extend(recovery_blockers)
 
     for contract_path, contract, summary, _rank in archive_entries:
         if (
@@ -899,12 +907,14 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             )
             and path in changed_file_paths(entry[2])
         ]
+        same_item_recovery_owner = False
         if not owners:
             owners = [
                 entry
                 for entry in archive_entries
                 if path in same_item_recovery_paths.get(str(entry[1].get("workItemId", "")), set())
             ]
+            same_item_recovery_owner = bool(owners)
         if not owners:
             if is_archived_generated_evidence(path) or is_archive_bound_release_metadata(path):
                 continue
@@ -919,9 +929,12 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             _, owner = owner_match
             if owner.get("aiWrite") == "forbidden":
                 issues.append(f"complete PR diff contains forbidden write: {path}")
-            if owner.get("aiWrite") == "restricted" and not (
+            has_restricted_approval = (
                 isinstance(effective_contract.get("restrictedWriteApproval"), dict)
                 and effective_contract["restrictedWriteApproval"].get("approved") is True
+            )
+            if owner.get("aiWrite") == "restricted" and not (
+                has_restricted_approval or same_item_recovery_owner
             ):
                 issues.append(
                     f"complete PR diff restricted path lacks approval in a covering Contract: {path}"

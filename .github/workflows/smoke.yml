@@ -192,6 +192,8 @@ jobs:
 
       - name: Run template AI checks
         run: |
+          # Provider-bound recovery receipts are validated offline after their
+          # creation-time GitHub evidence check; this PR audit needs no API token.
           if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then
             # quality owns format/governance checks; this step owns only the
             # PR diff/Contract binding after the quality graph has completed.

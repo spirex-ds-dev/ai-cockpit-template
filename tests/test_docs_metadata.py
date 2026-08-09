@@ -294,6 +294,20 @@ def test_java_multimodule_maven_correction_template_preserves_safety_boundaries(
         assert "does not" in text or "しません" in text or "不会" in text
 
 
+def test_java_guidance_configures_runtime_lane_validation_without_managing_a_jdk():
+    expected_markers = {
+        "java.md": ("AI_COCKPIT_JAVA_LANE", "AI_COCKPIT_JAVA_REQUIRED_MAJOR", "JAVA_HOME"),
+        "java.ja.md": ("AI_COCKPIT_JAVA_LANE", "AI_COCKPIT_JAVA_REQUIRED_MAJOR", "JAVA_HOME"),
+        "java.zh-CN.md": ("AI_COCKPIT_JAVA_LANE", "AI_COCKPIT_JAVA_REQUIRED_MAJOR", "JAVA_HOME"),
+    }
+
+    for name, markers in expected_markers.items():
+        text = (ROOT / "docs" / "getting-started" / "examples" / name).read_text(encoding="utf-8")
+        for marker in markers:
+            assert marker in text
+        assert "install" in text or "インストール" in text or "安装" in text
+
+
 def test_layer_checker_rejects_missing_language_document(tmp_path):
     copy_documentation(tmp_path)
     (tmp_path / "docs/getting-started/30-second-start.ja.md").unlink()

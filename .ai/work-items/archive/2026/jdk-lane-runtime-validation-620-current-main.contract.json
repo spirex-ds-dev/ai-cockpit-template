@@ -1,0 +1,278 @@
+{
+  "contractVersion": 2,
+  "workItemId": "jdk-lane-runtime-validation-620-current-main",
+  "mode": "code",
+  "title": "Validate JDK lane runtime or toolchain alignment",
+  "baseCommit": "d9d7fd4193c7f50d5b1fd1d2676166647187f612",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/jdk-lane-runtime-validation-620-current-main.contract.json",
+    ".ai/work-items/active/jdk-lane-runtime-validation-620-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/jdk-lane-runtime-validation-620-current-main.outcome.json",
+    ".ai/work-items/active/jdk-lane-runtime-validation-620-current-main.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "templates/stacks/java.mk",
+    "scripts/ai_validate_java_runtime.py",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_ai_validate_java_runtime.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_installer.py",
+    "docs/configuration.md",
+    "docs/configuration.ja.md",
+    "docs/getting-started/examples/java.md",
+    "docs/getting-started/examples/java.ja.md",
+    "docs/getting-started/examples/java.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Adopter Maven or Gradle build files, module selection, toolchain installation or switching, JAVA_HOME mutation, private repository settings and credentials, hosted CI configuration, release publication, and the generic project-quality contract."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/620",
+      "reason": "Authoritative requirement: Java lane selection must validate the actual runtime or declared toolchain and fail closed on a mismatch."
+    },
+    {
+      "path": "templates/stacks/java.mk",
+      "reason": "Current installed Java stack preset delegates its project commands without runtime-major validation."
+    },
+    {
+      "path": "docs/configuration.md",
+      "reason": "Canonical public configuration boundary says adopters retain their own JDK choice and must calibrate it."
+    },
+    {
+      "path": "scripts/installer/legacy.py",
+      "reason": "Installer distribution glob ships ai_ helper scripts and Java stack preset files to adopters."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Distribution regression surface for installed runtime helpers."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["toolchain_configuration", "adopter_command_execution", "documentation_integrity"],
+    "reason": "A false match would let an adopter run a Java 8/17 lane on Java 21, while an over-broad check could attempt to manage the adopter toolchain. The implementation must only observe the selected runtime and block missing or mismatched facts.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The exact adopter command, module path, and runtime manager are intentionally project-owned configuration; this Work Item defines only a portable validation interface."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The change adds a fail-closed installed-stack validation boundary and focused regression coverage."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic execution of the complete remediation plan and requested that this authority be recorded in every Work Item Contract; no gate bypass is authorized."
+  },
+  "preReviewWarnings": [
+    "Verify that validation observes the exact runtime selected by JAVA_HOME or PATH and never installs, switches, or silently substitutes an adopter JDK.",
+    "Verify that missing required-major configuration and invalid/mismatched runtime produce actionable blocked recovery messages."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The installed Java preset accepts a declared lane identifier and required Java major, then verifies the Java executable selected by the declared JAVA_HOME or PATH before every project quality command.",
+    "A missing required Java major, missing executable, unparsable runtime version, or runtime-major mismatch fails closed with a lane-specific recovery message and never executes the delegated project command.",
+    "A matching legacy Java version string and a matching modern Java version string permit the delegated command, while a mismatched command is rejected by focused regression tests.",
+    "The installer distributes the runtime validator to an adopter, and English, Japanese, and Simplified Chinese Java configuration guidance describe only observation and recovery—not toolchain installation, switching, or private configuration."
+  ],
+  "guidelines": [
+    "The validator must use only Python standard-library process and text parsing APIs so the installed template has no new runtime dependency.",
+    "Public configuration names, failure semantics, and recovery guidance must be documented consistently in English, Japanese, and Simplified Chinese.",
+    "Do not change the adopter's Java executable, JAVA_HOME, Maven/Gradle command, module path, credentials, or toolchain manager."
+  ],
+  "intent": {
+    "problem": "Selecting a Java lane can currently change only a project command or module path; it does not prove that the Maven or Gradle process will run on the lane's required Java major. An adopter using Java 21 can therefore label a command as a Java 8 lane and get an unsafe, misleading execution.",
+    "constraints": [
+      "Keep the validation portable and dependency-free for installation into adopter repositories.",
+      "Observe the executable selected by the declared JAVA_HOME or PATH; never install, switch, mutate, or infer a toolchain.",
+      "Block before every delegated Java quality command when configuration is absent or the actual Java major does not match.",
+      "Keep module selection, Maven settings, private repository access, credentials, hosted CI, and release work outside this Work Item."
+    ],
+    "rationale": "A small explicit configuration contract couples the declared lane to the runtime that will actually execute the command, restoring trustworthy Java-lane evidence without taking control of adopter environments."
+  },
+  "rawUserRequest": "Execute the complete remediation plan automatically; record authorization in every Work Item Contract. For #620, validate JDK lane against the actual Java runtime or verified toolchain and fail closed with recovery guidance on mismatch. Do not use temporary workarounds or omit related documentation.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-thread: complete-remediation-plan-and-issue-620",
+    "capturedAt": "2026-08-09",
+    "digest": "sha256:authorized-automatic-remediation-620"
+  },
+  "declaredIntent": {
+    "summary": "Make Java lane evidence trustworthy by checking the actual selected Java runtime against an adopter-declared required major before project quality commands execute.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Java lane declares major 8 and the selected executable reports legacy Java version 1.8.0_*. ",
+      "required": true,
+      "status": "unverified",
+      "expected": "The validator identifies major 8 and permits the delegated project command.",
+      "verificationPlan": "Add a subprocess-based unit test with a fake executable reporting 1.8.0_*, then assert success and delegated-command permission.",
+      "evidence": []
+    },
+    {
+      "scenario": "A lane declares major 17 but the executable selected through JAVA_HOME or PATH reports Java 21.",
+      "required": true,
+      "status": "unverified",
+      "expected": "The validator returns a blocked mismatch diagnostic before the delegated command runs.",
+      "verificationPlan": "Add focused tests for both explicit runtime selection and mismatch output.",
+      "evidence": []
+    },
+    {
+      "scenario": "The preset omits required-major configuration or points to a missing/unparseable Java executable.",
+      "required": true,
+      "status": "unverified",
+      "expected": "The preset fails closed with the missing fact and recovery condition; it never selects or installs a toolchain.",
+      "verificationPlan": "Test missing configuration, missing executable, and unparsable version cases; assert the recovery text and nonzero result.",
+      "evidence": []
+    },
+    {
+      "scenario": "An adopter installs the Java preset and reads its configuration guidance.",
+      "required": true,
+      "status": "unverified",
+      "expected": "The validator is present in the distribution and the three language variants preserve the observation-only boundary.",
+      "verificationPlan": "Extend installer and documentation metadata regressions to assert the shipped helper and canonical configuration markers.",
+      "evidence": []
+    }
+  ],
+  "implementationSurface": {
+    "production": ["templates/stacks/java.mk", "scripts/ai_validate_java_runtime.py", "scripts/ai_installer_catalog.json"],
+    "tests": ["tests/test_ai_validate_java_runtime.py", "tests/test_docs_metadata.py", "tests/test_installer.py"],
+    "generated": [
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ],
+    "documentation": [
+      "docs/configuration.md",
+      "docs/configuration.ja.md",
+      "docs/getting-started/examples/java.md",
+      "docs/getting-started/examples/java.ja.md",
+      "docs/getting-started/examples/java.zh-CN.md"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 844
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/jdk-lane-runtime-validation-620-current-main.json",
+    "baseCommit": "d9d7fd4193c7f50d5b1fd1d2676166647187f612",
+    "initialScopeDigest": "f567f801d2185eda6cf2ee6fd95ac8b2cc67fd5bc0b2d5c34303098c52628122",
+    "contractSkeletonDigest": "e1409187b4f2f14c01522653de31ad6e639ea26054cee9f236cc97991eb16a9c"
+  }
+}

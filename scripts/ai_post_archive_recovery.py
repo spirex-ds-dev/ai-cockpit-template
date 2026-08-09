@@ -19,14 +19,18 @@ ALLOWED_GATES = {
     "changedCriticalCoverage",
     "archiveEvidence",
     "hostedAggregateCoverage",
+    "hostedFunctionalFailure",
 }
 HOSTED_RECEIPT_VERSION = 2
+HOSTED_FUNCTIONAL_RECEIPT_VERSION = 3
 GITHUB_REPOSITORY = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 COVERAGE_FAILURE = re.compile(
     r"Required test coverage of (?P<required>\d+(?:\.\d+)?)% not reached\.\s*"
     r"Total coverage:\s*(?P<actual>\d+(?:\.\d+)?)%",
     re.IGNORECASE,
 )
+FUNCTIONAL_FAILURE = re.compile(r"\bBLOCKED:.*\bRecovery:", re.IGNORECASE | re.DOTALL)
+SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
 def digest(path: Path) -> str:
@@ -77,8 +81,27 @@ def normalized_paths(paths: list[str]) -> list[str]:
     return normalized
 
 
+def receipt_target(directory: Path, task: str, provider: dict | None = None) -> Path:
+    """Allocate an append-only receipt path, preserving the original task filename."""
+    primary = directory / f"{task}.json"
+    if not primary.exists():
+        return primary
+    if isinstance(provider, dict):
+        run_id = provider.get("runId")
+        job_id = provider.get("jobId")
+        if isinstance(run_id, int) and isinstance(job_id, int):
+            target = directory / f"{task}-{run_id}-{job_id}.json"
+            if not target.exists():
+                return target
+            raise ValueError(f"recovery receipt already exists: {target}")
+    index = 2
+    while (target := directory / f"{task}-{index}.json").exists():
+        index += 1
+    return target
+
+
 def _github_api(endpoint: str) -> bytes:
-    """Read one GitHub API resource through the authenticated GitHub CLI."""
+    """Read provider evidence across GitHub CLI versions used by hosted runners."""
     result = subprocess.run(  # nosec B603 B607 - fixed executable and repository-validated endpoint
         ["gh", "api", "--allow-escape-sequences", endpoint],
         cwd=PROJECT_ROOT,
@@ -88,7 +111,22 @@ def _github_api(endpoint: str) -> bytes:
     )
     if result.returncode != 0:
         detail = result.stderr.decode("utf-8", errors="replace").strip()
-        raise ValueError(f"GitHub provider evidence is unavailable: {detail or 'gh api failed'}")
+        if "unknown flag: --allow-escape-sequences" not in detail:
+            raise ValueError(
+                f"GitHub provider evidence is unavailable: {detail or 'gh api failed'}"
+            )
+        result = subprocess.run(  # nosec B603 B607 - fixed executable and repository-validated endpoint
+            ["gh", "api", endpoint],
+            cwd=PROJECT_ROOT,
+            env=clean_git_environment(),
+            capture_output=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            detail = result.stderr.decode("utf-8", errors="replace").strip()
+            raise ValueError(
+                f"GitHub provider evidence is unavailable: {detail or 'gh api failed'}"
+            )
     return result.stdout
 
 
@@ -116,6 +154,75 @@ def _positive_int(value: object, label: str) -> int:
     if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
         raise ValueError(f"{label} must be a positive integer")
     return value
+
+
+def validate_recorded_provider_binding(provider: object, *, gate: str) -> list[str]:
+    """Validate the immutable provider facts captured when a receipt was opened.
+
+    Provider APIs are deliberately consulted only while creating a hosted recovery
+    receipt.  PR validation checks the captured facts and the immutable archive
+    binding offline, so a hosted runner's network policy cannot change a
+    previously verified recovery decision.
+    """
+    if not isinstance(provider, dict):
+        return ["recorded provider binding is required"]
+    try:
+        repository = provider.get("repository")
+        if not isinstance(repository, str) or not GITHUB_REPOSITORY.fullmatch(repository):
+            raise ValueError("recorded provider repository is invalid")
+        pull_request = _positive_int(provider.get("pullRequest"), "recorded provider pull request")
+        failed_head = _sha(
+            provider.get("failedCandidateHead"), "recorded provider failed candidate Head SHA"
+        )
+        run_id = _positive_int(provider.get("runId"), "recorded provider run ID")
+        job_id = _positive_int(provider.get("jobId"), "recorded provider job ID")
+        run_attempt = provider.get("runAttempt")
+        if run_attempt is not None:
+            _positive_int(run_attempt, "recorded provider run attempt")
+    except ValueError as exc:
+        return [str(exc)]
+    if provider.get("kind") != "github_actions":
+        return ["recorded provider kind is not github_actions"]
+    if provider.get("event") != "pull_request":
+        return ["recorded provider event is not pull_request"]
+    if provider.get("runStatus") != "completed" or provider.get("runConclusion") != "failure":
+        return ["recorded provider run is not a completed failure"]
+    if provider.get("jobConclusion") != "failure":
+        return ["recorded provider job is not a failure"]
+    if provider.get("runUrl") != f"https://github.com/{repository}/actions/runs/{run_id}":
+        return ["recorded provider run URL does not match its repository and run ID"]
+    workflow_path = provider.get("workflowPath")
+    if not isinstance(workflow_path, str) or not workflow_path.startswith(".github/workflows/"):
+        return ["recorded provider workflow path is invalid"]
+    log_digest = provider.get("logSha256")
+    if not isinstance(log_digest, str) or SHA256.fullmatch(log_digest) is None:
+        return ["recorded provider log digest is invalid"]
+    if gate == "hostedAggregateCoverage":
+        if provider.get("jobName") != "template-smoke":
+            return ["recorded coverage provider job is not template-smoke"]
+        coverage = provider.get("observedCoverage")
+        if not isinstance(coverage, dict) or coverage.get("parserVersion") != 1:
+            return ["recorded provider coverage evidence is invalid"]
+        actual, required = coverage.get("actual"), coverage.get("required")
+        if (
+            not isinstance(actual, (int, float))
+            or isinstance(actual, bool)
+            or not isinstance(required, (int, float))
+            or isinstance(required, bool)
+            or actual >= required
+        ):
+            return ["recorded provider coverage does not prove a below-floor failure"]
+    elif gate == "hostedFunctionalFailure":
+        if not isinstance(provider.get("jobName"), str) or not provider["jobName"].strip():
+            return ["recorded functional provider job name is invalid"]
+        if provider.get("failureMarker") != "blocked_recovery":
+            return ["recorded functional provider failure marker is invalid"]
+    else:
+        return ["recorded provider gate is unsupported"]
+    # Keep explicit local variables above: each receipt fact is independently
+    # type-checked before the PR gate grants restricted recovery paths.
+    _ = (pull_request, failed_head, job_id, run_attempt)
+    return []
 
 
 def verified_hosted_coverage_failure(
@@ -257,9 +364,138 @@ def open_hosted_post_archive_recovery(
     }
     directory = root / RECEIPT_DIRECTORY
     directory.mkdir(parents=True, exist_ok=True)
-    target = directory / f"{task}.json"
-    if target.exists():
-        raise ValueError(f"recovery receipt already exists: {target.relative_to(root)}")
+    target = receipt_target(directory, task, provider)
+    target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return receipt
+
+
+def verified_hosted_functional_failure(
+    *,
+    repository: object,
+    pull_request: object,
+    failed_candidate_head: object,
+    run_id: object,
+    job_id: object,
+    fetch_provider: Callable[[str], bytes] | None = None,
+) -> dict:
+    """Bind a completed fail-closed hosted functional failure to one PR candidate."""
+    if not isinstance(repository, str) or not GITHUB_REPOSITORY.fullmatch(repository):
+        raise ValueError("GitHub repository must be an owner/name identifier")
+    fetch_provider = fetch_provider or _github_api
+    pull_request = _positive_int(pull_request, "GitHub pull request")
+    run_id = _positive_int(run_id, "GitHub workflow run")
+    job_id = _positive_int(job_id, "GitHub workflow job")
+    failed_candidate_head = _sha(failed_candidate_head, "failed candidate Head SHA")
+    run_endpoint = f"/repos/{repository}/actions/runs/{run_id}"
+    job_endpoint = f"/repos/{repository}/actions/jobs/{job_id}"
+    run = _provider_json(fetch_provider, run_endpoint)
+    job = _provider_json(fetch_provider, job_endpoint)
+    if run.get("id") != run_id or run.get("event") != "pull_request":
+        raise ValueError("GitHub workflow run is not the requested pull_request run")
+    if _sha(run.get("head_sha"), "GitHub workflow run Head SHA") != failed_candidate_head:
+        raise ValueError("GitHub workflow run Head SHA does not match the failed candidate")
+    if run.get("status") != "completed" or run.get("conclusion") != "failure":
+        raise ValueError("GitHub workflow run is not a completed failure")
+    pull_requests = run.get("pull_requests")
+    if not isinstance(pull_requests, list) or not any(
+        isinstance(item, dict) and item.get("number") == pull_request for item in pull_requests
+    ):
+        raise ValueError("GitHub workflow run does not bind the requested pull request")
+    job_name = job.get("name")
+    if not isinstance(job_name, str) or not job_name.strip():
+        raise ValueError("GitHub workflow job name is invalid")
+    if job.get("id") != job_id or job.get("run_id") != run_id:
+        raise ValueError("GitHub workflow job does not belong to the requested run")
+    if job.get("status") != "completed" or job.get("conclusion") != "failure":
+        raise ValueError("GitHub workflow job is not a completed failure")
+    log = fetch_provider(f"{job_endpoint}/logs")
+    if not isinstance(log, bytes):
+        raise TypeError("GitHub workflow job log is unavailable")
+    text = log.decode("utf-8", errors="replace")
+    if FUNCTIONAL_FAILURE.search(text) is None:
+        raise ValueError("GitHub workflow job log has no canonical fail-closed functional failure")
+    run_url = run.get("html_url")
+    workflow_path = run.get("path")
+    if not isinstance(run_url, str) or not run_url.startswith("https://github.com/"):
+        raise ValueError("GitHub workflow run URL is invalid")
+    if not isinstance(workflow_path, str) or not workflow_path.startswith(".github/workflows/"):
+        raise ValueError("GitHub workflow path is invalid")
+    return {
+        "kind": "github_actions",
+        "repository": repository,
+        "pullRequest": pull_request,
+        "failedCandidateHead": failed_candidate_head,
+        "runId": run_id,
+        "runUrl": run_url,
+        "workflowPath": workflow_path,
+        "event": "pull_request",
+        "runAttempt": run.get("run_attempt"),
+        "jobId": job_id,
+        "jobName": job_name,
+        "runStatus": "completed",
+        "runConclusion": "failure",
+        "jobConclusion": "failure",
+        "logSha256": hashlib.sha256(log).hexdigest(),
+        "failureMarker": "blocked_recovery",
+    }
+
+
+def open_hosted_functional_failure_recovery(
+    *,
+    root: Path,
+    task: str,
+    base_commit: str,
+    issue: str,
+    authority: str,
+    recovery_paths: list[str],
+    repository: str,
+    pull_request: int,
+    failed_candidate_head: str,
+    run_id: int,
+    job_id: int,
+    worktree_clean: Callable[[], bool],
+    fetch_provider: Callable[[str], bytes] | None = None,
+) -> dict:
+    """Open same-Work-Item recovery for a provider-bound fail-closed hosted defect."""
+    if len(base_commit) != 40:
+        raise ValueError("PR base commit must be a 40-character SHA")
+    if not issue.startswith(f"https://github.com/{repository}/issues/"):
+        raise ValueError("hosted recovery Issue must belong to the GitHub repository")
+    if not authority.strip():
+        raise ValueError("human authority is required")
+    if not worktree_clean():
+        raise ValueError("post-archive recovery must start from a clean committed worktree")
+    artifacts = archive_files(root, task)
+    outcome = json.loads(artifacts["outcome"].read_text(encoding="utf-8"))
+    if outcome.get("workItemId") != task or outcome.get("status") != "completed":
+        raise ValueError("same-Work-Item recovery requires a completed archived Outcome")
+    provider = verified_hosted_functional_failure(
+        repository=repository,
+        pull_request=pull_request,
+        failed_candidate_head=failed_candidate_head,
+        run_id=run_id,
+        job_id=job_id,
+        fetch_provider=fetch_provider,
+    )
+    receipt = {
+        "receiptVersion": HOSTED_FUNCTIONAL_RECEIPT_VERSION,
+        "kind": "same_work_item_post_archive_recovery",
+        "workItemId": task,
+        "prBaseCommit": base_commit,
+        "issue": issue,
+        "humanAuthorization": {"type": "human", "reference": authority},
+        "failure": {"gate": "hostedFunctionalFailure"},
+        "provider": provider,
+        "archive": {
+            name: {"path": path.relative_to(root).as_posix(), "sha256": digest(path)}
+            for name, path in artifacts.items()
+        },
+        "recoveryPaths": normalized_paths(recovery_paths),
+        "openedAt": datetime.now(UTC).isoformat(),
+    }
+    directory = root / RECEIPT_DIRECTORY
+    directory.mkdir(parents=True, exist_ok=True)
+    target = receipt_target(directory, task, provider)
     target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
 
@@ -316,9 +552,7 @@ def open_post_archive_recovery(
     }
     directory = root / RECEIPT_DIRECTORY
     directory.mkdir(parents=True, exist_ok=True)
-    target = directory / f"{task}.json"
-    if target.exists():
-        raise ValueError(f"recovery receipt already exists: {target.relative_to(root)}")
+    target = receipt_target(directory, task)
     target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
 
@@ -334,7 +568,7 @@ def validate_recovery_receipt(
         return ["recovery receipt must be an object"]
     version = receipt.get("receiptVersion")
     if (
-        version not in {1, HOSTED_RECEIPT_VERSION}
+        version not in {1, HOSTED_RECEIPT_VERSION, HOSTED_FUNCTIONAL_RECEIPT_VERSION}
         or receipt.get("kind") != "same_work_item_post_archive_recovery"
     ):
         return ["recovery receipt has an unsupported schema"]
@@ -354,23 +588,12 @@ def validate_recovery_receipt(
     failure = receipt.get("failure")
     if not isinstance(failure, dict) or failure.get("gate") not in ALLOWED_GATES:
         return ["recovery receipt failure gate is not allowed"]
-    if failure.get("gate") == "hostedAggregateCoverage":
-        provider = receipt.get("provider")
-        if not isinstance(provider, dict):
-            return ["hosted recovery receipt provider binding is required"]
-        try:
-            observed = verified_hosted_coverage_failure(
-                repository=provider.get("repository"),
-                pull_request=provider.get("pullRequest"),
-                failed_candidate_head=provider.get("failedCandidateHead"),
-                run_id=provider.get("runId"),
-                job_id=provider.get("jobId"),
-                fetch_provider=fetch_provider,
-            )
-        except (TypeError, ValueError) as exc:
-            return [f"hosted recovery provider verification failed: {exc}"]
-        if observed != provider:
-            return ["hosted recovery provider binding changed"]
+    if failure.get("gate") in {"hostedAggregateCoverage", "hostedFunctionalFailure"}:
+        provider_issues = validate_recorded_provider_binding(
+            receipt.get("provider"), gate=failure["gate"]
+        )
+        if provider_issues:
+            return provider_issues
     elif version != 1:
         return ["hosted recovery receipt must declare hostedAggregateCoverage"]
     paths = receipt.get("recoveryPaths")
@@ -431,6 +654,9 @@ def main() -> int:
     parser.add_argument("--hosted-candidate-head")
     parser.add_argument("--hosted-run-id", type=int)
     parser.add_argument("--hosted-job-id", type=int)
+    parser.add_argument(
+        "--hosted-failure-kind", choices=("coverage", "functional"), default="coverage"
+    )
     args = parser.parse_args()
     try:
         hosted_values = (
@@ -445,7 +671,12 @@ def main() -> int:
                 raise ValueError(
                     "hosted repository, pull request, candidate Head, run ID, and job ID are required together"
                 )
-            receipt = open_hosted_post_archive_recovery(
+            open_recovery = (
+                open_hosted_functional_failure_recovery
+                if args.hosted_failure_kind == "functional"
+                else open_hosted_post_archive_recovery
+            )
+            receipt = open_recovery(
                 root=PROJECT_ROOT,
                 task=args.task,
                 base_commit=args.base,

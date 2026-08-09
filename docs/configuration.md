@@ -62,6 +62,15 @@ Those lines illustrate variable names only. The shipped generic preset fails clo
 
 Presets are editable starting points rather than dependency installers or universal compatibility guarantees. Before using one, make sure its formatter, test runner, SDK, and build plugins are configured in the target repository. Compatibility CI uses JDK 21 for Java and JDK 17 for the Android smoke project; neither value is a universal project requirement. AI Cockpit does not install, switch, or version-manage JDKs: use the version required by the project's Gradle Wrapper and Android Gradle Plugin (AGP). For Android projects, the preset task names are calibration starting points: replace `testDebugUnitTest`, `spotlessCheck`, and `lint` with the actual `test<Flavor><BuildType>UnitTest` and `lint<Variant>` commands exposed by the Gradle wrapper. The Python preset expects Ruff and pytest. `examples/` demonstrates selected stacks and does not mirror every available preset.
 
+The Java preset additionally requires `AI_COCKPIT_JAVA_LANE` and
+`AI_COCKPIT_JAVA_REQUIRED_MAJOR`. Before each project-owned Java quality
+command, it verifies the runtime selected through `JAVA_HOME/bin/java`, or the
+configured `AI_COCKPIT_JAVA_COMMAND` when `JAVA_HOME` is absent. This is an
+observation gate: a missing, unreadable, or mismatched major blocks with
+recovery guidance; the preset never installs, switches, or changes a JDK or
+environment manager. See [Java calibration](getting-started/examples/java.md)
+for the configuration example.
+
 Stack selection changes quality commands only; it does not install a stack-specific guard policy. The default Coverage Guard includes several common layouts (`src/`, `lib/`, Android `app/src/main/`, Swift `Sources/`, and C# files), but repositories must review production/test patterns and `associations` in `.ai/guards/coverage_policy.yaml` before treating the gate as complete framework coverage. Android adopters should keep that policy report-only at first, then narrow module and flavor boundaries after the real source-set layout is confirmed.
 
 Examples:

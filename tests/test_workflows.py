@@ -107,6 +107,16 @@ def test_extended_gradle_fixtures_ignore_generated_state_before_baseline_commit(
     assert "src/test" not in ignore_block
 
 
+def test_extended_java_fixture_declares_the_runtime_lane_required_by_the_java_preset():
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    extended = workflow.split("  extended-real-stack-quality:", 1)[1].split(
+        "  mobile-stack-quality:", 1
+    )[0]
+
+    assert "AI_COCKPIT_JAVA_LANE=ci-java21" in extended
+    assert "AI_COCKPIT_JAVA_REQUIRED_MAJOR=21" in extended
+
+
 def test_latest_compatibility_probe_uses_distinct_current_tool_commands():
     workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
     latest = workflow.split("  latest-ecosystem-probe:", 1)[1].split("  compatibility-gate:", 1)[0]
@@ -358,6 +368,16 @@ def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
     assert workflow.index("timeout-minutes: 30") < workflow.index("Run repository quality gates")
     assert "timeout-minutes: 25" in workflow
     assert "quality heartbeat" in workflow
+
+
+def test_smoke_pr_audit_does_not_receive_a_github_api_token_for_offline_recovery_validation():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    audit = workflow.split("      - name: Run template AI checks", 1)[1].split(
+        "\n  installation-smoke:", 1
+    )[0]
+
+    assert "GH_TOKEN:" not in audit
+    assert "Provider-bound recovery receipts are validated offline" in audit
 
 
 def test_smoke_quality_failure_publishes_detailed_gate_logs():
