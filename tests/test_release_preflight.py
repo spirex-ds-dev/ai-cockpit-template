@@ -77,6 +77,42 @@ def test_release_preflight_rejects_source_version_that_disagrees_with_requested_
     assert preflight.validate_source_release_version({"releaseVersion": "0.5.50"}, "v0.5.50") == []
 
 
+def test_release_preflight_source_readers_bind_and_reject_exact_source_bytes(monkeypatch, tmp_path):
+    def source_bytes(*_args, **_kwargs):
+        return SimpleNamespace(stdout=b"source installer\n")
+
+    monkeypatch.setattr(preflight.subprocess, "run", source_bytes)
+    assert (
+        preflight.source_file_sha256(tmp_path, "a" * 40, "install.sh")
+        == hashlib.sha256(b"source installer\n").hexdigest()
+    )
+
+    def source_json(*_args, **_kwargs):
+        return SimpleNamespace(stdout='{"releaseVersion":"0.5.50"}')
+
+    monkeypatch.setattr(preflight.subprocess, "run", source_json)
+    assert preflight.source_json_object(tmp_path, "a" * 40, ".ai/cockpit/version.json") == {
+        "releaseVersion": "0.5.50"
+    }
+
+    def unreadable_source(*_args, **_kwargs):
+        raise subprocess.CalledProcessError(1, ["git", "show"])
+
+    monkeypatch.setattr(preflight.subprocess, "run", unreadable_source)
+    with pytest.raises(ReleasePreflightError, match="release source file cannot be read"):
+        preflight.source_file_sha256(tmp_path, "a" * 40, "install.sh")
+    with pytest.raises(ReleasePreflightError, match="release source JSON cannot be read"):
+        preflight.source_json_object(tmp_path, "a" * 40, ".ai/cockpit/version.json")
+
+    monkeypatch.setattr(
+        preflight.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(stdout="[]"),
+    )
+    with pytest.raises(ReleasePreflightError, match="release source JSON must be an object"):
+        preflight.source_json_object(tmp_path, "a" * 40, ".ai/cockpit/version.json")
+
+
 def test_release_preflight_blocks_active_work_item_and_stale_digest():
     issues = validate_release_preflight(
         **_fixture(active_work_items=["task"], actual_archive_sha="new")
