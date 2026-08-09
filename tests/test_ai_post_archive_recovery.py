@@ -209,6 +209,17 @@ def test_github_api_reads_provider_evidence_without_gh_output_flags(monkeypatch)
     assert observed["authorization"] == "Bearer" + " token"
 
 
+def test_github_api_rejects_an_empty_runtime_auth_token(monkeypatch):
+    monkeypatch.setattr(
+        recovery.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(returncode=0, stdout=b"\n", stderr=b""),
+    )
+
+    with pytest.raises(ValueError, match="returned no token"):
+        recovery._github_api("/repos/spirex-ds-dev/ai-cockpit-template")
+
+
 def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
     write_archive(tmp_path)
 
