@@ -7,6 +7,7 @@ import ai_check_review_policy
 import ai_check_scope
 import ai_check_status
 import ai_check_status_consistency
+import ai_check_summary
 import ai_checkpoint
 import ai_common
 import ai_finish
@@ -14,6 +15,13 @@ import ai_generate_human_report
 import ai_generate_status
 import ai_governance_compression
 import pytest
+
+
+def finish_summary_with_alignment():
+    return {
+        "verification": [],
+        "documentationAlignment": ai_check_summary.complete_generated_documentation_alignment([]),
+    }
 
 
 def test_governance_entrypoints_can_clean_ambient_git_environment():
@@ -1217,7 +1225,7 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    summary.write_text(json.dumps(finish_summary_with_alignment()), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
@@ -1410,7 +1418,7 @@ def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, mo
         ),
         encoding="utf-8",
     )
-    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    summary.write_text(json.dumps(finish_summary_with_alignment()), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
@@ -1535,7 +1543,7 @@ def test_finish_main_deduplicates_explicit_source_bound_check(tmp_path, monkeypa
         ),
         encoding="utf-8",
     )
-    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    summary.write_text(json.dumps(finish_summary_with_alignment()), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
@@ -1669,7 +1677,7 @@ def test_finish_main_rejects_skip_quality_for_required_check(tmp_path, monkeypat
         ),
         encoding="utf-8",
     )
-    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    summary.write_text(json.dumps(finish_summary_with_alignment()), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(
@@ -1694,7 +1702,7 @@ def test_finish_main_reports_unknown_check_id(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    summary.write_text(json.dumps(finish_summary_with_alignment()), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
@@ -1884,7 +1892,7 @@ def test_finish_main_rejects_inline_command_verification(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    summary.write_text(json.dumps(finish_summary_with_alignment()), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(

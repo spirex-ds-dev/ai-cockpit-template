@@ -1545,6 +1545,24 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             failure_message="one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope",
             code=1,
         )
+    # Evidence shape is deterministic and inexpensive to validate.  Check it
+    # before the required quality route so an active Work Item gets its
+    # canonical red Outcome without paying for a quality run that cannot make
+    # malformed documentation evidence archive-ready.  The same validation is
+    # deliberately repeated after Outcome/report generation below because that
+    # pipeline mutates self-referential documentation surfaces.
+    prepare_documentation_alignment_evidence(args.task, summary_path)
+    alignment_issues = documentation_alignment_issues(summary_path, contract_data)
+    if alignment_issues:
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="documentationAlignment",
+            failure_message="; ".join(alignment_issues[:3]),
+            code=1,
+        )
     existing_summary = load_json(summary_path)
     reuse_archive_verification = args.archive and reusable_archive_verification(
         existing_summary,

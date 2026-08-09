@@ -312,6 +312,30 @@ def test_release_workflow_runs_strict_smoke_before_tag_and_release_mutations():
     assert '--commit "$SOURCE_COMMIT"' in dispatch
 
 
+def test_release_strict_smoke_uses_a_distinct_release_run_concurrency_identity():
+    release = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
+    smoke = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+
+    strict_smoke = release[
+        release.index("Dispatch strict smoke verification") : release.index(
+            "Create exact-SHA tag and Draft GitHub Release"
+        )
+    ]
+
+    assert "-f purpose=release_verification" in strict_smoke
+    assert '-f release_run_id="$GITHUB_RUN_ID"' in strict_smoke
+    assert 'displayTitle == "smoke release_verification for release ' in strict_smoke
+    assert "GITHUB_RUN_ID" in strict_smoke
+    assert "release_verification" in smoke
+    assert "release_run_id:" in smoke
+    assert (
+        "smoke-${{ github.ref }}-${{ inputs.purpose || github.event_name }}-${{ inputs.release_run_id || 'shared' }}"
+        in smoke
+    )
+    assert "run-name: smoke ${{ inputs.purpose || github.event_name }}" in smoke
+    assert "format(' for release {0}', inputs.release_run_id)" in smoke
+
+
 def test_release_workflow_bootstraps_pinned_tool_before_lockfile_reproducibility():
     workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
     install = "python3 -m pip install --disable-pip-version-check pip==25.2 pip-tools==7.6.0 typing-extensions==4.16.0"

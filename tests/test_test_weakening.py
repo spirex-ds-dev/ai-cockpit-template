@@ -532,6 +532,25 @@ def test_required_check_made_nonblocking_requires_review(tmp_path: Path) -> None
     assert report["signals"][0]["type"] == "required_check_made_nonblocking"
 
 
+def test_optional_workflow_dispatch_input_is_not_a_nonblocking_check(tmp_path: Path) -> None:
+    repo, base = _repository(
+        tmp_path,
+        {
+            ".github/workflows/ci.yml": """on:\n  workflow_dispatch:\n    inputs:\n      mode:\n        required: true\n"""
+        },
+    )
+    _write(
+        repo,
+        ".github/workflows/ci.yml",
+        """on:\n  workflow_dispatch:\n    inputs:\n      mode:\n        required: true\n      release_run_id:\n        required: false\n""",
+    )
+
+    result = _run(repo, base)
+
+    assert result.returncode == 0
+    assert json.loads(result.stdout)["signals"] == []
+
+
 def test_policy_thresholds_are_applied_and_malformed_policy_fails_closed(
     tmp_path: Path,
 ) -> None:

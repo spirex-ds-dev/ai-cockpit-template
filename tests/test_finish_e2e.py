@@ -351,6 +351,40 @@ def test_required_failure_keeps_active_and_retry_archives(tmp_path):
     assert list((tmp_path / ".ai/work-items/archive").rglob("e2e.contract.json"))
 
 
+def test_documentation_alignment_failure_emits_red_outcome_before_quality(tmp_path):
+    contract_path, _ = prepare_work_item(tmp_path)
+    summary_path = tmp_path / ".ai/work-items/active/e2e.summary.json"
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["documentationAlignment"]["checks"][0]["evidence"] = [
+        "https://example.invalid/non-repository-evidence"
+    ]
+    summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+
+    result = run(
+        tmp_path,
+        "make",
+        "ai-finish",
+        "TASK=e2e",
+        f"PYTHON={sys.executable}",
+        "PROJECT_TEST=false",
+    )
+
+    assert result.returncode != 0
+    finished_summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert not any(
+        item.get("check") == "quality"
+        for item in finished_summary.get("verification", [])
+        if isinstance(item, dict)
+    )
+    outcome = json.loads(
+        (tmp_path / ".ai/work-items/active/e2e.outcome.json").read_text(encoding="utf-8")
+    )
+    assert outcome["status"] == "blocked"
+    assert outcome["humanStatusColor"] == "red"
+    assert outcome["failedGate"] == "documentationAlignment"
+    assert contract_path.exists()
+
+
 def test_archive_collision_fails_after_checks_and_preserves_active(tmp_path):
     contract_path, collision_path = prepare_work_item(tmp_path, archive_collision=True)
     result = run(

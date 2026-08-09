@@ -1,0 +1,258 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-strict-smoke-concurrency-v0550-current-main",
+  "mode": "code",
+  "title": "Fix release strict-smoke concurrency cancellation",
+  "baseCommit": "f6cf11027546afd3fd0002152d2c73b312bafca2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/smoke.yml",
+    ".github/workflows/release.yml",
+    "tests/test_workflows.py",
+    "scripts/ai_finish.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_core_gates.py",
+    "scripts/ai_check_test_weakening.py",
+    "tests/test_test_weakening.py",
+    "docs/reference/ci-release-evidence.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/test-weakening-guard.md",
+    "docs/reference/test-weakening-guard.ja.md",
+    "docs/reference/test-weakening-guard.zh-CN.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/features/task-outcome-report.md",
+    ".ai/work-items/active/release-strict-smoke-concurrency-v0550-current-main.contract.json",
+    ".ai/work-items/active/release-strict-smoke-concurrency-v0550-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-strict-smoke-concurrency-v0550-current-main.outcome.json",
+    ".ai/work-items/active/release-strict-smoke-concurrency-v0550-current-main.outcome.md"
+  ],
+  "outOfScope": [
+    "Creating, moving, deleting, or publishing any release tag or GitHub Release.",
+    "Weakening strict smoke, compatibility, source-SHA, rehearsal, or public-install verification gates.",
+    "Changing unrelated workflow concurrency groups or runner configuration."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31331127915",
+      "reason": "Provider-bound failed v0.5.50 publication run: strict smoke dispatched by release was canceled before tag or Release mutation."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Defines the smoke workflow's ref-scoped concurrency group and dispatch purpose inputs."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Dispatches strict smoke and waits for the exact source-bound workflow-dispatch run before immutable publication actions."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Existing executable workflow contract tests for strict smoke ordering and dispatch semantics."
+    },
+    {
+      "path": "scripts/ai_check_test_weakening.py",
+      "reason": "The complete quality run proved its required-check detector incorrectly classifies an optional workflow_dispatch input as a nonblocking check."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "The current Work Item exposed that Finish runs the expensive quality route before discovering deterministic Summary documentation-alignment defects."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Lifecycle integration tests provide the executable boundary that a deterministic readiness defect emits a blocked Outcome before project quality is invoked."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Focused Finish unit fixtures must provide the active Summary documentation-alignment precondition so they continue testing their declared verification failure paths."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_workflow", "ci_concurrency"],
+    "reason": "A workflow change controls the boundary immediately before immutable release publication; failure must remain fail-closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["Release workflow and CI concurrency change require the Standard profile plus release verification escalation."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized automatic, root-cause remediation and recovery of the v0.5.50 release path without bypassing gates."
+  },
+  "preReviewWarnings": ["Review the workflow-dispatch identity selector and concurrency group together; a change must not select a stale or unrelated smoke run."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A release-triggered strict smoke run on main does not cancel itself through smoke workflow concurrency.",
+    "The release workflow selects and waits for the exact strict-smoke dispatch it created, bound to SOURCE_COMMIT and an explicit release purpose.",
+    "Existing main and hosted-measurement smoke paths retain their current concurrency and non-authorizing receipt behavior.",
+    "Regression tests fail against the pre-fix workflow text and pass only when the distinct strict-smoke concurrency contract is present.",
+    "The test-weakening guard continues to reject actual required-check weakening while recognizing optional workflow_dispatch inputs as inputs rather than checks.",
+    "ai-finish validates deterministic active-evidence readiness, including documentation alignment, before it starts an expensive required quality route; such a failure persists the canonical red Outcome with its gate and recovery condition.",
+    "The final post-quality documentation-alignment validation remains fail-closed so a later Outcome/report mutation cannot make a completed state stale.",
+    "All required AI Cockpit and quality gates pass; a post-fix rehearsal and actual release are separately re-run only after this Work Item closes."
+  ],
+  "guidelines": [
+    "Keep external workflow behavior documented by explicit inputs and testable text contracts.",
+    "Do not weaken, bypass, or make optional any release evidence or quality gate."
+  ],
+  "intent": {
+    "problem": "Release run 31331127915 reached strict smoke after successful rehearsal and exact-source preflight, then its workflow-dispatched smoke was canceled by the smoke workflow's ref-only concurrency group. The release stopped before tag or Release mutation, so v0.5.50 remains unpublished. During the corrective finish, deterministic documentation-alignment defects were discovered only after the ten-minute required quality route, which makes the Outcome recovery loop unnecessarily slow.",
+    "constraints": [
+      "Preserve immutable tag and public-release safeguards.",
+      "Preserve strict smoke and exact SOURCE_COMMIT evidence requirements.",
+      "Make only the minimum concurrency/identity change needed to avoid release self-cancellation.",
+      "Preserve fail-closed outcome and post-quality consistency checks while moving deterministic readiness validation before expensive verification.",
+      "Do not retry publication until the corrective Work Item has passed its governed lifecycle."
+    ],
+    "rationale": "The release failure is deterministic workflow coupling, not transient CI. Separating strict release verification from ordinary ref-scoped smoke concurrency removes that root cause while retaining independent, provider-bound verification. The finish-loop defect is likewise deterministic ordering: cheap evidence validation must occur before costly execution, while the final validation remains to protect against later self-referential mutations."
+  },
+  "rawUserRequest": "Outcome is an important interaction interface. Continue the authorized release plan, root-fix process defects in the current governed path, do not use temporary bypasses, and publish only after complete verification.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-09-outcome-release-root-cause",
+    "capturedAt": "2026-08-09",
+    "digest": "sha256:user-authorized-root-cause-release-recovery"
+  },
+  "declaredIntent": {
+    "summary": "Remove the deterministic release strict-smoke self-cancellation while preserving exact-SHA, independent CI evidence, and immutable-publication gates.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Actual release dispatch starts strict smoke while a normal main smoke concurrency group exists.",
+      "riskType": "ci_concurrency",
+      "expected": "The strict smoke run retains a distinct concurrency identity, completes, and is selected by the release workflow without canceling itself.",
+      "required": true,
+      "verificationPlan": "Add workflow-text regression assertions for explicit purpose, unique concurrency identity, and exact run selection; verify in hosted rehearsal after merge.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A normal main push or hosted measurement smoke run is dispatched.",
+      "riskType": "release_workflow",
+      "expected": "Its existing path remains available and does not receive release publication authority.",
+      "required": true,
+      "verificationPlan": "Assert the existing purpose values and receipt constraints remain present in the workflow tests.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User authorized automatic root-cause remediation of the release workflow concurrency failure and its directly exposed Finish/Outcome lifecycle defect, without bypassing release gates. Approval is limited to the declared Contract scope."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 851
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-strict-smoke-concurrency-v0550-current-main.json",
+    "baseCommit": "f6cf11027546afd3fd0002152d2c73b312bafca2",
+    "initialScopeDigest": "189d8fb0667bd9d9e61e97fb2e797d5204c8dea9dc24eae74b8be88b596ffca1",
+    "contractSkeletonDigest": "912604e974d67bd06053c240c32215edbc811b01a6ae31f5cc9e141efa0eb6f7"
+  }
+}
