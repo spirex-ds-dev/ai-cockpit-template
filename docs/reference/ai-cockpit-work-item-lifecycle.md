@@ -566,3 +566,9 @@ repository's `project-format-check` and governance policy from the latest templa
 default branch. An installed adopter uses its own configured formatter, remote
 default branch, base commit, and governance policy; it must not copy the template's
 absolute line or archive budgets.
+
+## External handoff and receipt
+
+When a Work Item needs hosted CI, provider release, human confirmation, or adopter execution, create a versioned handoff bound to the Work Item, branch, HEAD, tree, Contract and Summary digests, action, fulfiller, receipt kind, and deadline. The visible state is `awaiting_external_receipt` (yellow). Do not poll or claim external completion.
+
+Only a receipt with every matching binding and the declared fulfiller/kind may resolve the handoff. On expiry, project `blocked` (red), preserve the recovery condition, and create a new bound handoff if the external action is still required. Timeout alone never resumes a Work Item.

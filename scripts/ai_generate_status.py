@@ -16,6 +16,7 @@ from ai_check_diff_ownership import counts as ownership_counts_for
 from ai_check_diff_ownership import preview as ownership_preview
 from ai_check_task_outcome import validate_outcome
 from ai_common import PROJECT_ROOT, changed_paths, load_json
+from ai_external_handoff import HandoffError, project_handoff
 from ai_governance_compression import derive_governance_status, render_active_status
 from ai_lifecycle_truth import validate_successor_receipt
 from ai_observability import DEFAULT_LOG_PATH, create_observability
@@ -345,6 +346,23 @@ def project_calibration_corrective(contract: dict[str, Any]) -> dict[str, Any] |
     return corrective
 
 
+def project_external_handoff(summary: dict[str, Any] | None) -> dict[str, str] | None:
+    """Project only a validated external wait; never infer external completion."""
+    handoff = summary.get("externalHandoff") if isinstance(summary, dict) else None
+    if not isinstance(handoff, dict):
+        return None
+    try:
+        return project_handoff(
+            handoff, now=datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        )
+    except HandoffError as exc:
+        return {
+            "state": "blocked",
+            "humanStatusColor": "red",
+            "recoveryCondition": f"External handoff is invalid: {exc}",
+        }
+
+
 def load_preflight_review(
     contract: dict[str, Any],
     contract_path: Path,
@@ -498,6 +516,18 @@ def write_active_status(
         task_outcome=project_active_task_outcome(contract, summary, contract_path),
         calibration_corrective=project_calibration_corrective(contract),
     )
+    external_handoff = project_external_handoff(summary)
+    if external_handoff:
+        status_text += (
+            "\n\n## External Handoff\n\n"
+            f"- State: `{external_handoff['state']}`\n"
+            f"- Color: `{external_handoff['humanStatusColor']}`\n"
+            f"- Action: `{external_handoff.get('action', 'invalid')}`\n"
+            f"- Fulfiller: `{external_handoff.get('fulfiller', 'invalid')}`\n"
+            f"- Receipt Kind: `{external_handoff.get('receiptKind', 'invalid')}`\n"
+            f"- Deadline: `{external_handoff.get('deadline', 'invalid')}`\n"
+            f"- Recovery Condition: {external_handoff['recoveryCondition']}\n"
+        )
     receipt_path = contract_path.with_name(
         f"{contract.get('workItemId', '')}.successor-receipt.json"
     )

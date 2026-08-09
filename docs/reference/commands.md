@@ -20,6 +20,7 @@ lastVerifiedBy: capability-truth-matrix
 | Finish and archive | `make ai-finish` | [Work Item Lifecycle](../operations/work-item-lifecycle.md) |
 | Close after merge | `make ai-close-work-item` | [Work Item Lifecycle Closure](work-item-lifecycle-closure.md) |
 | Diagnose | `make generate-cockpit-status`, `make cockpit-doctor` | [Troubleshooting](troubleshooting.md) |
+| Await a bound external action | `make ai-record-external-handoff`, `make ai-ingest-external-receipt` | [Work Item Lifecycle](ai-cockpit-work-item-lifecycle.md#external-handoff-and-receipt) |
 
 Run `make help` in the exact installed revision for the executable command list.
 
@@ -35,6 +36,10 @@ pass the complete JSON declaration through
 calibration](ai-cockpit-work-item-lifecycle.md#controlled-corrective-route-during-live-calibration).
 The declaration is not a general readiness override and is checked again by
 the active Contract and immutable Start Receipt.
+
+## External handoff
+
+Use `make ai-record-external-handoff HANDOFF=<handoff.json> EVENTS=<events.jsonl> NOW=<utc-z-time>` only after the active Work Item declares the external action and exact receipt contract. It contacts no provider. It appends the handoff evidence only. Resume only with `make ai-ingest-external-receipt HANDOFF=<handoff.json> RECEIPT=<receipt.json> EVENTS=<events.jsonl> NOW=<utc-z-time>`. A deadline expiry is blocked evidence, not permission to retry, poll, or resume.
 ## Active evidence and hosted snapshots
 
 Active Work Item Contract and Summary files are committed evidence on the

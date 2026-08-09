@@ -135,6 +135,8 @@ def _status(
     types = {event.get("eventType") for event in events}
     if "cancelled" in types:
         return "cancelled"
+    if "external_handoff_timeout" in types:
+        return "blocked"
     if "stop" in types:
         return "needs_human_confirmation"
     return "completed_with_warnings" if warnings else "completed"

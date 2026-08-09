@@ -1,0 +1,148 @@
+{
+  "contractVersion": 2,
+  "workItemId": "external-execution-handoff-665-current-main",
+  "mode": "code",
+  "title": "Model bound external-execution handoff and receipt resume",
+  "rawUserRequest": "Execute the full remaining plan automatically through completion and record that authorization in every Work Item Contract. Issue #665 must model external execution handoff and awaited receipts, update the reusable Agent Skill and documentation, remove obsolete workflow guidance, and never use a temporary bypass for a process defect.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-thread: complete-plan-automatic-authorization-and-issue-665",
+    "capturedAt": "2026-08-09",
+    "digest": "sha256:automatic-plan-execution-bound-external-handoff-665"
+  },
+  "declaredIntent": {
+    "summary": "Make externally owned steps visible, identity-bound, receipt-driven, and safely resumable so an Agent never polls or claims external completion without authoritative evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "7455cf8fb3fd6191582dbfe0e318451959c925d3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/external-execution-handoff-665-current-main.contract.json",
+    ".ai/work-items/active/external-execution-handoff-665-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/external-execution-handoff-665-current-main.outcome.json",
+    ".ai/work-items/active/external-execution-handoff-665-current-main.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/schemas/task_outcome.schema.json",
+    ".ai/schemas/external_handoff.schema.json",
+    "Makefile",
+    "scripts/ai_external_handoff.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_task_event_log.py",
+    "scripts/ai_work_item_state.py",
+    "scripts/ai_domain_model.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_check_task_outcome.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/commands.md",
+    "docs/reference/schemas.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "skill:ai-cockpit/SKILL.md",
+    "tests/test_ai_external_handoff.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_task_event_log.py",
+    "tests/test_work_item_state_machine.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_docs_metadata.py"
+  ],
+  "outOfScope": [
+    "Polling, modifying, or impersonating any external provider, hosted CI, human, adopter, release, or GitHub account.",
+    "Automatic PR merge, release publication, approval, archive mutation, or branch cleanup outside this Work Item lifecycle.",
+    "Changing immutable archived evidence except for this Work Item's new archive artifacts.",
+    "A free-text wait state, timeout-based resume, credentials, machine-specific paths, or a global scheduler."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/665", "reason": "Authoritative P1 requirements and acceptance for bound external handoff, receipt ingestion, outcome/status visibility, Skill, and documentation."},
+    {"path": "scripts/ai_work_item_state.py", "reason": "Existing lifecycle transition boundary to extend without weakening canonical states."},
+    {"path": "scripts/ai_task_event_log.py", "reason": "Existing append-only event evidence primitive for handoff and resolution records."},
+    {"path": "scripts/ai_generate_status.py", "reason": "Generated active Cockpit status and traffic-light projection boundary."},
+    {"path": "scripts/ai_generate_task_outcome.py", "reason": "Evidence-derived Outcome boundary which must distinguish awaiting, blocked, and completed."},
+    {"path": ".ai/work-items/archive/2026/jdk-lane-runtime-validation-620-current-main.contract.json", "reason": "Current prior Work Item demonstrates the authorized Contract fields and lifecycle evidence format."},
+    {"path": ".ai/glossary.md", "reason": "Canonical terminology for Work Items, evidence, human status color, and repository governance boundaries."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["lifecycle_integrity", "evidence_traceability", "false_completion_claim", "documentation_integrity"],
+    "reason": "An unbound external wait can cause unsafe resume, hidden blocking, or a false claim that a hosted system or human completed an action. The state, receipt, status, Outcome, and instructions must agree and fail closed.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "Issue #665 supplies the required states, bindings, external cases, and failure semantics; implementation choices are constrained by existing local lifecycle and event primitives."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["The change controls lifecycle evidence, human-visible blocked/awaiting status, and safe resumption after external actions."],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized automatic execution of every remaining Work Item and requested that authorization be recorded in each Contract; #665 has complete issue acceptance and no external action is being performed by this implementation."
+  },
+  "preReviewWarnings": [
+    "Reject any handoff or receipt whose Work Item, branch, commit, tree, Contract, Summary, or declared external action does not bind exactly.",
+    "Ensure a timeout records a visible blocked/incomplete Outcome with recovery condition; it must never resume work or silently poll.",
+    "Ensure Skill and docs instruct an Agent to create, wait, ingest, and resume only through the executable paths."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record before-edit and before-finish evidence for this lifecycle-critical change."},
+  "acceptance": [
+    "A versioned, bounded external-handoff record binds the active Work Item identity, branch, HEAD, tree, Contract/Summary digests, exact external action, authorized fulfiller class, expected receipt schema, and deadline; malformed, free-text, stale, or foreign handoffs fail closed.",
+    "A canonical command records an append-only handoff event and an explicit receipt-ingest/resume command validates a bound receipt before appending the only valid resolution event; a timeout alone produces a blocked/incomplete Outcome and never resumes execution.",
+    "Generated current status, Human Benefit Report, and Outcome distinguish active work, awaiting external receipt (yellow), blocked/incomplete (red), and completed (green), with owner, requested action, receipt condition, deadline, and recovery visible without an external completion claim.",
+    "Positive and negative regressions cover hosted CI, provider release, human confirmation, and adopter execution; they reject identity mismatch, invalid receipt shape, unauthorized fulfiller, stale deadline, duplicate/resume-before-receipt, and timeout-only resume.",
+    "The canonical lifecycle/command/schema documentation and installed ai-cockpit Skill explain the executable handoff, wait, timeout, receipt-ingest, and resume procedure; obsolete shell-chain or polling guidance is removed rather than retained as an alternative.",
+    "All public command and schema facts are represented in generated capability and multilingual release-alignment evidence without claiming that this Work Item performed an external action."
+  ],
+  "implementationSurface": {
+    "production": ["scripts/ai_external_handoff.py", "scripts/ai_task_event_log.py", "scripts/ai_work_item_state.py", "scripts/ai_domain_model.py", "scripts/ai_generate_status.py", "scripts/ai_governance_compression.py", "scripts/ai_generate_task_outcome.py", "scripts/ai_check_task_outcome.py", "Makefile", ".ai/schemas/task_outcome.schema.json", ".ai/schemas/external_handoff.schema.json"],
+    "tests": ["tests/test_ai_external_handoff.py", "tests/test_task_event_log.py", "tests/test_work_item_state_machine.py", "tests/test_guards_and_status.py", "tests/test_task_outcome_generator.py", "tests/test_task_outcome_validator.py", "tests/test_docs_metadata.py"],
+    "documentation": ["docs/reference/ai-cockpit-work-item-lifecycle.md", "docs/reference/commands.md", "docs/reference/schemas.md", "skill:ai-cockpit/SKILL.md"],
+    "generated": [".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md", "docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"]
+  },
+  "scenarioCoverage": [
+    {"scenario": "A hosted CI handoff is created for the exact active branch/commit and later receives a matching hosted receipt.", "required": true, "status": "unverified", "evidence": [], "expected": "The handoff projects yellow awaiting state; only the valid bound receipt appends resolution and permits resume.", "verificationPlan": "Focused CLI and status/Outcome regression."},
+    {"scenario": "A provider release, human confirmation, or adopter execution handoff uses the shared schema.", "required": true, "status": "unverified", "evidence": [], "expected": "Each declares its permitted fulfiller and receipt kind explicitly, with no provider-specific credential or automatic completion claim.", "verificationPlan": "Parameterized positive and negative handoff tests plus Skill/documentation assertions."},
+    {"scenario": "A receipt differs in task, branch, commit, tree, Contract/Summary digest, action, owner, or required evidence shape.", "required": true, "status": "unverified", "evidence": [], "expected": "Receipt ingestion rejects it fail closed and leaves the Work Item in awaiting state.", "verificationPlan": "Parameterized negative receipt-validation regression."},
+    {"scenario": "The deadline passes without a valid receipt.", "required": true, "status": "unverified", "evidence": [], "expected": "The projection is red blocked/incomplete with the exact recovery condition; no timeout-based resume or polling occurs.", "verificationPlan": "Clock-controlled timeout, Status, and Outcome regressions."},
+    {"scenario": "An Agent follows the installed Skill and canonical docs after an external handoff.", "required": true, "status": "unverified", "evidence": [], "expected": "It uses the declared commands and receipt schema, preserves lifecycle boundaries, and does not use obsolete shell chains or ad-hoc polling.", "verificationPlan": "Documentation metadata and Skill content assertions."}
+  ],
+  "guidelines": [
+    "Use deterministic, standard-library-only local validation; do not contact or impersonate an external actor during handoff creation or receipt ingestion.",
+    "Treat every external result as untrusted until the exact declared identity and receipt schema validate; timeout is evidence of blocking, never evidence of completion.",
+    "Keep all human-visible status, Outcome, command, schema, documentation, and Skill wording behaviorally consistent.",
+    "Remove obsolete process guidance when it conflicts with the canonical executable flow; do not retain a temporary bypass path."
+  ],
+  "intent": {
+    "problem": "Current Work Items can wait on hosted CI, provider publication, human approval, or adopter execution, but no canonical state records the exact handoff, identity-bound expected receipt, owner, deadline, or safe resume condition. Agents can therefore poll, conflate waiting with failure, or claim external completion without a bound receipt.",
+    "constraints": ["Do not perform external actions or make provider calls as a side effect of the local state commands.", "Bind every handoff and receipt to immutable active Work Item facts and append-only events.", "Preserve existing canonical lifecycle ordering, Outcome evidence, and human status colors.", "Timeout must become visible blocked/incomplete evidence, not an automatic resume or hidden retry loop.", "Update the installed Agent Skill and remove obsolete conflicting guidance."],
+    "rationale": "A narrow local handoff state machine makes responsibility and evidence explicit while keeping external systems outside AI Cockpit's authority. Shared validation and projections give agents and reviewers one truthful recovery path across all supported external-wait cases."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized automatic execution of all remaining Work Items, Contract writes, PRs, lifecycle closure, final audit, and release."},
+  "rollbackNote": "Revert this Work Item diff; existing Work Item lifecycle behavior remains available and no external actor is mutated by these local commands.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 1200}},
+  "startReceipt": {"path": ".ai/work-items/starts/external-execution-handoff-665-current-main.json", "baseCommit": "7455cf8fb3fd6191582dbfe0e318451959c925d3", "initialScopeDigest": "70acfb10cd0e477190c5f17f639397bc1ce55316d5e5ada1d36f2393f656c365", "contractSkeletonDigest": "b5c7bea31551c2a84d075deae878ae45084df11c617ecd8b6c8bdbbc9284377c"}
+}

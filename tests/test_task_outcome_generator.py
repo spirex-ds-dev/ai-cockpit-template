@@ -194,6 +194,16 @@ def test_statuses_and_output_are_deterministic() -> None:
     assert "score" not in repr(first).lower()
 
 
+def test_external_handoff_timeout_is_a_red_blocked_outcome() -> None:
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        events=[event("timeout-1", "external_handoff_timeout", reason="receipt deadline expired")],
+    )
+    assert outcome["status"] == "blocked"
+    assert outcome["humanStatusColor"] == "red"
+
+
 def test_structured_evidence_is_carried_without_secret_fields() -> None:
     outcome = generate_outcome(
         "task-outcome-generator",
