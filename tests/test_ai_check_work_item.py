@@ -1,3 +1,6 @@
+import hashlib
+import json
+
 import ai_check_work_item
 
 
@@ -55,6 +58,80 @@ def test_contract_schema_accepts_synchronization_history_field():
     assert "unknown field: synchronizationHistory" not in ai_check_work_item.validate_contract(
         contract
     )
+
+
+def test_calibration_corrective_contract_field_requires_a_bounded_repair_declaration():
+    contract = valid_contract()
+    contract["calibrationCorrective"] = {
+        "schemaVersion": 1,
+        "sessionPath": ".ai/calibration/session.json",
+        "sessionId": "calibration-1",
+        "sessionState": "in_progress",
+        "sessionDigest": "a" * 64,
+        "findingId": "CAL-614-001",
+        "findingSummary": "Correct the live calibration deadlock.",
+        "authority": "Explicit user authority.",
+        "repairPaths": [".ai/calibration/session.json"],
+        "resumeCondition": "Resume through the calibration Session workflow.",
+    }
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert "unknown field: calibrationCorrective" not in issues
+    assert "calibrationCorrective.repairPaths cannot modify calibration Session state" in issues
+
+
+def test_calibration_corrective_repair_paths_must_be_owned_by_contract_scope():
+    contract = valid_contract()
+    contract["scope"] = ["scripts/ai_start.py"]
+    contract["calibrationCorrective"] = {
+        "schemaVersion": 1,
+        "sessionPath": ".ai/calibration/session.json",
+        "sessionId": "calibration-1",
+        "sessionState": "in_progress",
+        "sessionDigest": "a" * 64,
+        "findingId": "CAL-614-001",
+        "findingSummary": "Correct the live calibration deadlock.",
+        "authority": "Explicit user authority.",
+        "repairPaths": ["scripts/ai_finish.py"],
+        "resumeCondition": "Resume through the calibration Session workflow.",
+    }
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert "calibrationCorrective.repairPaths[0] is not covered by scope" in issues
+
+
+def test_active_calibration_corrective_revalidates_the_bound_live_session(tmp_path, monkeypatch):
+    session_path = tmp_path / ".ai" / "calibration" / "session.json"
+    session_path.parent.mkdir(parents=True)
+    session_path.write_text(
+        json.dumps({"sessionId": "calibration-1", "state": "in_progress"}), encoding="utf-8"
+    )
+    contract = valid_contract()
+    contract["scope"] = ["scripts/ai_start.py"]
+    contract["calibrationCorrective"] = {
+        "schemaVersion": 1,
+        "sessionPath": ".ai/calibration/session.json",
+        "sessionId": "calibration-1",
+        "sessionState": "in_progress",
+        "sessionDigest": hashlib.sha256(session_path.read_bytes()).hexdigest(),
+        "findingId": "CAL-614-001",
+        "findingSummary": "Correct the live calibration deadlock.",
+        "authority": "Explicit user authority.",
+        "repairPaths": ["scripts/ai_start.py"],
+        "resumeCondition": "Resume through the calibration Session workflow.",
+    }
+    session_path.write_text(
+        json.dumps({"sessionId": "calibration-1", "state": "paused"}), encoding="utf-8"
+    )
+    monkeypatch.setattr(ai_check_work_item, "PROJECT_ROOT", tmp_path)
+
+    issues = ai_check_work_item.validate_contract(
+        contract, contract_path=".ai/work-items/active/task.contract.json"
+    )
+
+    assert "calibrationCorrective.sessionState does not match live calibration Session" in issues
 
 
 def test_implementation_surface_accepts_complete_owned_runtime_and_test_paths():

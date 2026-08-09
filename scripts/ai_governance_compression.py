@@ -724,6 +724,7 @@ def render_active_status(
     ownership_counts: dict[str, int] | None = None,
     calibration_inventory: dict[str, Any] | None = None,
     task_outcome: dict[str, Any] | None = None,
+    calibration_corrective: dict[str, Any] | None = None,
 ) -> str:
     """Render compressed governance signals and optional Outcome link metadata."""
     timestamp = generated_at or datetime.now(UTC).isoformat()
@@ -867,6 +868,29 @@ def render_active_status(
         lines.append("- Status: `in_progress`")
         lines.append("- Traffic Light: `yellow`")
         lines.append("- Next Action: `continue verification or run make ai-finish`")
+
+    if isinstance(calibration_corrective, dict):
+        lines.extend(["", "## Calibration Corrective Route", ""])
+        lines.append("- Traffic Light: `yellow`")
+        lines.append(
+            "- Authority: `bounded corrective exception; not calibration completion authority`"
+        )
+        lines.append(
+            "- Session: `"
+            + str(calibration_corrective.get("sessionId", "unknown"))
+            + "` (`"
+            + str(calibration_corrective.get("sessionState", "unknown"))
+            + "`)"
+        )
+        lines.append(f"- Finding: `{calibration_corrective.get('findingId', 'unknown')}`")
+        repair_paths = calibration_corrective.get("repairPaths")
+        if isinstance(repair_paths, list):
+            lines.append("- Repair Paths: `" + "; ".join(map(str, repair_paths)) + "`")
+        lines.append(
+            "- Resume Condition: `"
+            + str(calibration_corrective.get("resumeCondition", "unknown"))
+            + "`"
+        )
 
     if isinstance(calibration_inventory, dict):
         lines.extend(["", "## Calibration Inventory", ""])

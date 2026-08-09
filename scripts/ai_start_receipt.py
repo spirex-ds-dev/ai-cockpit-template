@@ -112,6 +112,8 @@ def build_receipt(
     }
     if contract.get("concurrencyBoundary") is not None:
         receipt["concurrencyBoundaryDigest"] = _digest(contract["concurrencyBoundary"])
+    if contract.get("calibrationCorrective") is not None:
+        receipt["calibrationCorrectiveDigest"] = _digest(contract["calibrationCorrective"])
     return receipt
 
 
@@ -124,6 +126,8 @@ def receipt_binding(receipt: dict[str, Any]) -> dict[str, str]:
     }
     if "concurrencyBoundaryDigest" in receipt:
         binding["concurrencyBoundaryDigest"] = str(receipt["concurrencyBoundaryDigest"])
+    if "calibrationCorrectiveDigest" in receipt:
+        binding["calibrationCorrectiveDigest"] = str(receipt["calibrationCorrectiveDigest"])
     return binding
 
 
@@ -536,6 +540,13 @@ def validate_receipt(
             issues.append("Start Receipt concurrencyBoundaryDigest must be a SHA-256 digest")
         elif digest != _digest(boundary):
             issues.append("Start Receipt concurrencyBoundaryDigest does not match Contract")
+    corrective = contract.get("calibrationCorrective")
+    if corrective is not None:
+        digest = receipt.get("calibrationCorrectiveDigest")
+        if not _is_digest(digest):
+            issues.append("Start Receipt calibrationCorrectiveDigest must be a SHA-256 digest")
+        elif digest != _digest(corrective):
+            issues.append("Start Receipt calibrationCorrectiveDigest does not match Contract")
     binding = contract.get("startReceipt")
     if not isinstance(binding, dict):
         issues.append("Contract startReceipt binding is missing")
