@@ -1,5 +1,6 @@
 import hashlib
 import json
+from types import SimpleNamespace
 
 import ai_post_archive_recovery as recovery
 import pytest
@@ -173,6 +174,20 @@ def second_functional_failure_provider(endpoint: str) -> bytes:
     if endpoint.endswith("/logs"):
         return b"BLOCKED: provider-bound recovery audit lacks token. Recovery: provide a token.\n"
     return json.dumps(responses[endpoint]).encode()
+
+
+def test_github_api_uses_gh_api_flags_supported_by_hosted_runners(monkeypatch):
+    observed = {}
+
+    def fake_run(args, **kwargs):
+        observed["args"] = args
+        observed["env"] = kwargs["env"]
+        return SimpleNamespace(returncode=0, stdout=b"{}", stderr=b"")
+
+    monkeypatch.setattr(recovery.subprocess, "run", fake_run)
+
+    assert recovery._github_api("/repos/spirex-ds-dev/ai-cockpit-template") == b"{}"
+    assert observed["args"] == ["gh", "api", "/repos/spirex-ds-dev/ai-cockpit-template"]
 
 
 def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
@@ -358,7 +373,7 @@ def test_hosted_recovery_rejects_provider_unavailability():
         )
 
 
-def test_github_provider_log_reader_allows_terminal_escape_sequences(monkeypatch):
+def test_github_provider_log_reader_uses_runner_compatible_gh_api_invocation(monkeypatch):
     captured = {}
 
     def run(command, **_kwargs):
@@ -368,9 +383,4 @@ def test_github_provider_log_reader_allows_terminal_escape_sequences(monkeypatch
     monkeypatch.setattr(recovery.subprocess, "run", run)
 
     assert recovery._github_api("/repos/o/r/actions/jobs/1/logs") == b"log"
-    assert captured["command"] == [
-        "gh",
-        "api",
-        "--allow-escape-sequences",
-        "/repos/o/r/actions/jobs/1/logs",
-    ]
+    assert captured["command"] == ["gh", "api", "/repos/o/r/actions/jobs/1/logs"]

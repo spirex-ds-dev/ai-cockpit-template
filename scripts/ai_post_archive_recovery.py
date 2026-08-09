@@ -102,7 +102,7 @@ def receipt_target(directory: Path, task: str, provider: dict | None = None) -> 
 def _github_api(endpoint: str) -> bytes:
     """Read one GitHub API resource through the authenticated GitHub CLI."""
     result = subprocess.run(  # nosec B603 B607 - fixed executable and repository-validated endpoint
-        ["gh", "api", "--allow-escape-sequences", endpoint],
+        ["gh", "api", endpoint],
         cwd=PROJECT_ROOT,
         env=clean_git_environment(),
         capture_output=True,
