@@ -69,7 +69,7 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
         candidate_release_issues(
             candidate,
             published,
-            reserved_tags={"v0.5.43", "v0.5.44", "v0.5.45", "v0.5.46", "v0.5.47"},
+            reserved_tags={"v0.5.43", "v0.5.44", "v0.5.45", "v0.5.46", "v0.5.47", "v0.5.48"},
         )
         == []
     )

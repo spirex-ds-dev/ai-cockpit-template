@@ -297,6 +297,60 @@ def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_pat
     ]
 
 
+def test_candidate_snapshot_ignores_derived_outcome_changes_in_diff_binding(monkeypatch, tmp_path):
+    """Outcome persistence must not invalidate the candidate it records."""
+    fixture = tmp_path / "fixture.txt"
+    fixture.write_text("candidate\n", encoding="utf-8")
+    contract = tmp_path / ".ai/work-items/active/task.contract.json"
+    contract.parent.mkdir(parents=True)
+    contract.write_text(
+        json.dumps({"workItemId": "task", "scope": ["fixture.txt"], "baselineDirtyPaths": []}),
+        encoding="utf-8",
+    )
+    outcome = tmp_path / ".ai/work-items/active/task.outcome.json"
+    outcome.write_text("first outcome\n", encoding="utf-8")
+    paths = [
+        "fixture.txt",
+        ".ai/work-items/active/task.contract.json",
+        ".ai/work-items/active/task.outcome.json",
+    ]
+
+    def run(command, **_kwargs):
+        command = tuple(command)
+        if command == ("git", "rev-parse", "HEAD"):
+            output = "b" * 40 + "\n"
+        elif command in {
+            ("git", "diff", "--name-only", "a" * 40 + "...HEAD"),
+            ("git", "diff", "--name-only"),
+        }:
+            output = "\n".join(paths) + "\n"
+        elif command == ("git", "diff", "--cached", "--name-only") or command == (
+            "git",
+            "ls-files",
+            "--others",
+            "--exclude-standard",
+        ):
+            output = ""
+        elif command == ("git", "diff", "--binary"):
+            output = f"derived outcome: {outcome.read_text(encoding='utf-8')}"
+        else:
+            output = ""
+        return SimpleNamespace(returncode=0, stdout=output, stderr="")
+
+    monkeypatch.setattr(check_changed_critical_coverage.subprocess, "run", run)
+    first = check_changed_critical_coverage.candidate_snapshot(
+        base="a" * 40, project_root=tmp_path, contract_path=contract
+    )
+    outcome.write_text("second outcome\n", encoding="utf-8")
+    second = check_changed_critical_coverage.candidate_snapshot(
+        base="a" * 40, project_root=tmp_path, contract_path=contract
+    )
+
+    assert first["candidateDiffDigest"] == second["candidateDiffDigest"]
+    assert first["candidateTreeDigest"] == second["candidateTreeDigest"]
+    assert first["excludedDerivedPaths"] == [".ai/work-items/active/task.outcome.json"]
+
+
 def test_not_applicable_coverage_writes_a_bound_receipt(monkeypatch, tmp_path):
     policy_path = tmp_path / "policy.json"
     report_path = tmp_path / "target" / "coverage.json"

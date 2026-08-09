@@ -235,18 +235,10 @@ def candidate_snapshot(
             state = "deleted"
         files.append({"path": path, "state": state, "sha256": digest})
 
-    untracked_paths = set(
-        _git_text(
-            ["git", "ls-files", "--others", "--exclude-standard"], project_root=project_root
-        ).splitlines()
-    )
     diff_payload = {
-        "baseDiff": _git_text(
-            ["git", "diff", "--binary", f"{base}...HEAD"], project_root=project_root
-        ),
-        "indexDiff": _git_text(["git", "diff", "--binary", "--cached"], project_root=project_root),
-        "worktreeDiff": _git_text(["git", "diff", "--binary"], project_root=project_root),
-        "untracked": [item for item in files if item["path"] in untracked_paths],
+        "baseCommit": base,
+        "candidateHead": head,
+        "candidateFiles": files,
     }
     candidate_tree_payload: dict[str, object] = {
         "baseCommit": base,

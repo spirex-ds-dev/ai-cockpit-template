@@ -611,7 +611,12 @@ def installation_command_errors(root: Path) -> list[str]:
                 )
             for tag in re.findall(r"v\d+\.\d+\.\d+", line):
                 if relative.startswith(
-                    ("docs/releases/", "docs/superpowers/plans/", "docs/superpowers/specs/")
+                    (
+                        "docs/releases/",
+                        "docs/audits/",
+                        "docs/superpowers/plans/",
+                        "docs/superpowers/specs/",
+                    )
                 ):
                     continue
                 if tag not in documented_release_tags:
