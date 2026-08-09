@@ -100,6 +100,27 @@ Item, then resume calibration only through the Session workflow.
 
 ## Pre-finish hosted verification snapshot
 
+### Active-evidence commit boundary
+
+Active Contract, Summary, Start Receipt, and any generated active Outcome are
+dedicated Work Item evidence. They are ordinary branch content, not ignored
+local state: include them with the same dedicated-branch commit as the
+implementation candidate. This makes their snapshot digests reproducible
+without `git add -f`.
+
+When Finish starts, it records the exact active Contract and Summary in its
+Change Summary automatically, so retry and archive validation retain the same
+evidence boundary without hand-written duplicate entries.
+
+Diff ownership recognizes only the exact active Work Item's Contract, Summary,
+and Outcome as its intrinsic evidence. A different Work Item's active evidence
+remains unowned unless its own Contract covers it.
+
+The snapshot command remains read-only with respect to Git: it never stages,
+commits, pushes, or selects unrelated files. It still rejects every dirty or
+untracked path. Resolve unrelated changes before measuring; do not weaken the
+clean-tree boundary to accommodate active evidence.
+
 Some performance or environment-specific acceptance criteria require hosted
 execution from a committed source before the final Summary can truthfully
 report completion. For only that case, the active Contract must explicitly

@@ -710,6 +710,34 @@ def _human_report_paths() -> tuple[Path, Path]:
     return root.with_suffix(".json"), root.with_suffix(".md")
 
 
+def ensure_active_evidence_changed_files(task: str, summary_path: Path) -> None:
+    """Declare the active Contract and Summary as committed Work Item evidence.
+
+    These exact paths are intrinsic to the current Work Item. Recording them
+    here lets normal staging carry the active evidence through retries and
+    archive validation without asking users or legacy fixtures to force-add or
+    duplicate the paths in every hand-written changedFiles list.
+    """
+    summary = load_json(summary_path)
+    changed = summary.get("changedFiles")
+    if not isinstance(changed, list):
+        return
+    existing = {item.get("path") for item in changed if isinstance(item, dict)}
+    for path, reason in (
+        (
+            f".ai/work-items/active/{task}.contract.json",
+            "Active Work Item Contract is committed snapshot evidence.",
+        ),
+        (
+            f".ai/work-items/active/{task}.summary.json",
+            "Active AI Change Summary is committed snapshot evidence.",
+        ),
+    ):
+        if path not in existing:
+            changed.append({"path": path, "reason": reason})
+    save_json(summary_path, summary)
+
+
 def prepare_documentation_alignment_evidence(task: str, summary_path: Path) -> None:
     """Bind already-declared generated Markdown before Finish validates docs.
 
@@ -1453,6 +1481,7 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
                 failure_message="the Work Item preflight review is not ready",
                 code=preflight_code,
             )
+    ensure_active_evidence_changed_files(args.task, summary_path)
     contract_hash = hashlib.sha256(contract_path.read_bytes()).hexdigest()
     commit_sha = current_head()
     from ai_check_agent_risk import validate_checkpoint_bindings

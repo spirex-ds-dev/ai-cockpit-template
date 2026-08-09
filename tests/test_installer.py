@@ -340,12 +340,45 @@ def test_installed_distribution_contains_adoption_files(tmp_path):
     assert "- State: `no_active_work_item`" in (
         tmp_path / ".ai" / "cockpit" / "current_status.md"
     ).read_text(encoding="utf-8")
-    assert ".ai/work-items/active/*.contract.json" in (tmp_path / ".gitignore").read_text(
+    assert ".ai/work-items/active/*.contract.json" not in (tmp_path / ".gitignore").read_text(
         encoding="utf-8"
     )
     assert ".ai/work-items/active/*.review.json" in (tmp_path / ".gitignore").read_text(
         encoding="utf-8"
     )
+    contract = tmp_path / ".ai" / "work-items" / "active" / "snapshot.contract.json"
+    summary = tmp_path / ".ai" / "work-items" / "active" / "snapshot.summary.json"
+    review = tmp_path / ".ai" / "work-items" / "active" / "snapshot.review.json"
+    contract.write_text("{}\n", encoding="utf-8")
+    summary.write_text("{}\n", encoding="utf-8")
+    review.write_text("{}\n", encoding="utf-8")
+    run(tmp_path, "git", "init", "-q")
+    assert (
+        run(tmp_path, "git", "check-ignore", "-q", str(contract.relative_to(tmp_path))).returncode
+        == 1
+    )
+    assert (
+        run(tmp_path, "git", "check-ignore", "-q", str(summary.relative_to(tmp_path))).returncode
+        == 1
+    )
+    assert (
+        run(tmp_path, "git", "check-ignore", "-q", str(review.relative_to(tmp_path))).returncode
+        == 0
+    )
+    assert (
+        run(
+            tmp_path,
+            "git",
+            "add",
+            str(contract.relative_to(tmp_path)),
+            str(summary.relative_to(tmp_path)),
+        ).returncode
+        == 0
+    )
+    assert run(tmp_path, "git", "diff", "--cached", "--name-only").stdout.splitlines() == [
+        str(contract.relative_to(tmp_path)),
+        str(summary.relative_to(tmp_path)),
+    ]
     assert ".ai/cockpit/upgrade-backups/" in (tmp_path / ".gitignore").read_text(encoding="utf-8")
     makefile_ai = (tmp_path / "Makefile.ai").read_text(encoding="utf-8")
     assert "check-ai-pr:" in makefile_ai

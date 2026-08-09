@@ -133,6 +133,8 @@ def covers(owner: Owner, path: str) -> tuple[bool, bool]:
     if isinstance(binding, dict) and binding.get("path") == path:
         scoped = True
     if owner.kind == "active" and path in {
+        f".ai/work-items/active/{owner.work_item_id}.contract.json",
+        f".ai/work-items/active/{owner.work_item_id}.summary.json",
         f".ai/work-items/active/{owner.work_item_id}.outcome.json",
         f".ai/work-items/active/{owner.work_item_id}.outcome.md",
     }:

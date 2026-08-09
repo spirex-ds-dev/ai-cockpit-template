@@ -1,0 +1,206 @@
+{
+  "contractVersion": 2,
+  "workItemId": "evidence-snapshot-reconciliation-616-current-main",
+  "mode": "code",
+  "title": "Reconcile active evidence and hosted snapshots",
+  "baseCommit": "ab79c8e1d2ae3491cfc404be6a1828b74192d437",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/evidence-snapshot-reconciliation-616-current-main.contract.json",
+    ".ai/work-items/active/evidence-snapshot-reconciliation-616-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/evidence-snapshot-reconciliation-616-current-main.outcome.json",
+    ".ai/work-items/active/evidence-snapshot-reconciliation-616-current-main.outcome.md",
+    "scripts/ai_prepare_hosted_verification.py",
+    "scripts/ai_start.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_check_diff_ownership.py",
+    "scripts/ai_check_scope.py",
+    "scripts/ai_finish.py",
+    "scripts/check_changed_critical_coverage.py",
+    "scripts/installer/legacy.py",
+    ".gitignore",
+    "tests/test_hosted_verification_snapshot.py",
+    "tests/test_diff_ownership.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_installer.py",
+    "tests/test_changed_critical_coverage.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/commands.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["release/**", ".github/workflows/**"],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/616",
+      "reason": "Authoritative remediation request and acceptance boundary."
+    },
+    {"path": "scripts/ai_prepare_hosted_verification.py", "reason": "Current snapshot receipt implementation."},
+    {"path": "scripts/ai_start.py", "reason": "Current active Work Item evidence creation path."},
+    {"path": "AGENTS.md", "reason": "Canonical lifecycle and archive constraints."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "lifecycle_consistency"],
+    "reason": "A snapshot must bind exact active evidence without turning ignored working evidence into unrelated commits.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Issue #616 provides a bounded lifecycle remediation with local and hosted-snapshot regressions."
+  },
+  "preReviewWarnings": ["Review that receipt binding cannot authorize a push, merge, archive, or unrelated evidence commit."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A hosted snapshot automatically includes and digest-binds the active Contract, Summary, and required active evidence without a manual force-add.",
+    "The snapshot fails closed when active evidence is dirty, omitted, or drifts after receipt creation, while unrelated files are not staged or committed by the snapshot command.",
+    "Clean and drift lifecycle regressions prove reproducible snapshot creation and receipt validation.",
+    "Lifecycle and command documentation explain the automatic evidence boundary and retain that snapshots do not grant provider-operation authority."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Active Contract and Summary are ignored by default, but hosted verification requires a clean committed candidate and binds their digests. Users currently need manual force-add, which is error-prone and can pollute unrelated commits.",
+    "constraints": ["Do not make the snapshot command stage, commit, push, merge, archive, or delete files.", "Do not loosen digest or clean-tree validation.", "Keep unrelated working files outside the active-evidence policy."],
+    "rationale": "A declared and validated active-evidence boundary makes the measurement candidate reproducible without requiring unsafe manual staging."
+  },
+  "rawUserRequest": "Issue #616: reconcile ignored active Contracts/Summaries with clean committed hosted snapshots through one automatic, reproducible active-evidence policy.",
+  "rawRequestSource": {"type": "issue", "reference": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/616", "capturedAt": "2026-08-09T09:00:00+09:00", "digest": "c9e17c023c3c9dc838961228e1c0a7ed77e171bccb9de2209d15f16afd975d65"},
+  "declaredIntent": {"summary": "Repair repository-governance evidence lifecycle consistency without provider-side operations.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "problemStatement": "Manual force-add of ignored active evidence makes hosted measurement fragile and risks unrelated commit pollution.",
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "implementationSurface": {
+    "production": [".gitignore", "scripts/ai_prepare_hosted_verification.py", "scripts/ai_start.py", "scripts/ai_start_receipt.py", "scripts/ai_check_work_item.py", "scripts/installer/legacy.py"],
+    "tests": ["tests/test_hosted_verification_snapshot.py", "tests/test_start_and_archive.py", "tests/test_installer.py"],
+    "documentation": ["docs/reference/ai-cockpit-work-item-lifecycle.md", "docs/reference/commands.md", "docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"],
+    "generated": [".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md", ".ai/work-items/archive/index.json"]
+  },
+  "scenarioCoverage": [
+    {"id": "clean-active-evidence-snapshot", "riskDomain": "evidence_integrity", "scenario": "A clean Work Item candidate includes the designated active evidence automatically.", "expected": "The receipt binds exact active evidence digests without a manual force-add.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add an isolated repository snapshot regression."},
+    {"id": "active-evidence-drift-rejected", "riskDomain": "evidence_integrity", "scenario": "Active evidence changes after snapshot preparation or is omitted.", "expected": "Validation fails closed with a recovery instruction and no provider operation.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add receipt drift and omission regressions."},
+    {"id": "unrelated-files-excluded", "riskDomain": "scope_boundary", "scenario": "An unrelated working file exists while active evidence is prepared.", "expected": "The automatic policy neither stages nor binds the unrelated file.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add a clean-boundary regression."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": false,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "User authorized automatic execution for the full remediation plan."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 841
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/evidence-snapshot-reconciliation-616-current-main.json",
+    "baseCommit": "ab79c8e1d2ae3491cfc404be6a1828b74192d437",
+    "initialScopeDigest": "fc304d457ecc2b79173028c1149343c50510833cb46d21c7890bb7304ea03a33",
+    "contractSkeletonDigest": "b69c6b9e89167d41244bf82bef138ab8348b4a7c37dc184daafecefdd6d87045"
+  }
+}

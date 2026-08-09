@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task calibration-corrective-route-614-current-main generated an evidence-derived outcome with status completed.
+Task evidence-snapshot-reconciliation-616-current-main generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0

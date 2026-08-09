@@ -2003,7 +2003,7 @@ def test_scope_guard_adds_bound_receipt_path(monkeypatch):
     assert ai_check_scope.main() == 0
 
 
-def test_scope_guard_adds_bound_active_outcome_paths(monkeypatch):
+def test_scope_guard_adds_bound_active_evidence_paths(monkeypatch):
     class Observation:
         def check_passed(self, **_kwargs):
             return None
@@ -2020,6 +2020,8 @@ def test_scope_guard_adds_bound_active_outcome_paths(monkeypatch):
         ai_check_scope,
         "changed_paths",
         lambda _contract: [
+            ".ai/work-items/active/outcome_task.contract.json",
+            ".ai/work-items/active/outcome_task.summary.json",
             ".ai/work-items/active/outcome_task.outcome.json",
             ".ai/work-items/active/outcome_task.outcome.md",
         ],

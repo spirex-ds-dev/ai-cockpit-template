@@ -89,8 +89,7 @@ AGENT_MARKER = "<!-- AI_COCKPIT_SECTION -->"
 AGENT_END_MARKER = "<!-- /AI_COCKPIT_SECTION -->"
 GITIGNORE_MARKER = "# AI Cockpit local state"
 GITIGNORE_SECTION = """# AI Cockpit local state
-.ai/work-items/active/*.contract.json
-.ai/work-items/active/*.summary.json
+# Active Contract and Summary evidence is committed with the Work Item branch.
 .ai/work-items/active/*.review.json
 .ai/cockpit/upgrade-backups/
 .ai/project_profile.proposed.yaml
