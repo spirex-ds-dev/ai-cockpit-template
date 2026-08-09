@@ -29,7 +29,9 @@
     "tests/test_release_state_consistency.py",
     "tests/test_release_distribution.py",
     "scripts/check_docs_metadata.py",
-    "tests/test_docs_metadata.py"
+    "tests/test_docs_metadata.py",
+    "scripts/check_changed_critical_coverage.py",
+    "tests/test_changed_critical_coverage.py"
   ],
   "outOfScope": [
     "Changing release workflow security controls, provider configuration, branch protection, signing infrastructure, or supply-chain generators.",
@@ -141,6 +143,7 @@
     "After the candidate PR merges and its Work Item evidence is archived, a fresh release.yml rehearsal succeeds for the freshly resolved origin/main SHA and v0.5.49; publication receives only that same-SHA rehearsal receipt.",
     "The controlled provider workflow alone creates v0.5.49 and provider assets, and provider-bound post-publication evidence verifies tag target, Release state, asset names and digests, SBOM, provenance, CI evidence, and tagged quick installation.",
     "The documentation fact gate distinguishes governed historical provider evidence from a current installer-release claim, with a regression test that retains rejection of the latter.",
+    "Pre-archive candidate coverage remains stable when its own derived Outcome, Summary, and status evidence is written, while any non-derived candidate content change still invalidates the binding.",
     "The Contract, Summary, red-or-green Outcome, PR, hosted checks, merge, ai-close-work-item, branch cleanup, and main synchronization truthfully record completion or an exact fail-closed recovery condition."
   ],
   "guidelines": [

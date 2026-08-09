@@ -1,12 +1,10 @@
 # Task Outcome: release-v0549-625-current-main
 
-Status: `blocked`
-Human Status: `red`
-Failed Gate: `quality`
-Recovery Condition: Run a passing quality retry.
+Status: `completed`
+Human Status: `green`
 
 ## Outcome Summary
-Task release-v0549-625-current-main generated an evidence-derived outcome with status blocked.
+Task release-v0549-625-current-main generated an evidence-derived outcome with status completed.
 
 ## Task Overview
 Governed Work Item: release-v0549-625-current-main
@@ -22,8 +20,14 @@ Governed Work Item: release-v0549-625-current-main
 - .ai/cockpit/release-digests.json
 - release.json
 - docs/reference/capability-truth-matrix.json
+- docs/reference/japanese-capability-assessment.json
+- docs/reference/japanese-capability-assessment.md
 - docs/reference/pre-release-documentation-alignment.json
 - docs/reference/pre-release-documentation-alignment.md
+- scripts/check_docs_metadata.py
+- tests/test_docs_metadata.py
+- scripts/check_changed_critical_coverage.py
+- tests/test_changed_critical_coverage.py
 - .ai/cockpit/current_status.md
 - .ai/work-items/starts/release-v0549-625-current-main.json
 - .ai/work-items/active/release-v0549-625-current-main.outcome.json
@@ -36,16 +40,16 @@ None
 None
 
 ## Warnings
-- Finish blocked at quality: a required declared verification check failed
+None
 
 ## Limitations
-- Finish verification is blocked
+None
 
 ## Non-Risk Explanations
-- {"evidence": [], "reason": "The failed Finish gate is recorded as a recovery condition, not a completed result.", "sourceWarning": "Finish blocked at quality: a required declared verification check failed"}
+None
 
 ## Forbidden Claims
-- Do not claim a blocked Work Item has completed verification or may be archived.
+None
 
 ## Interventions
 None
