@@ -150,6 +150,31 @@ def functional_failure_provider(endpoint: str) -> bytes:
     return json.dumps(responses[endpoint]).encode()
 
 
+def second_functional_failure_provider(endpoint: str) -> bytes:
+    responses = {
+        "/repos/spirex-ds-dev/ai-cockpit-template/actions/runs/44": {
+            "id": 44,
+            "event": "pull_request",
+            "head_sha": "d" * 40,
+            "status": "completed",
+            "conclusion": "failure",
+            "path": ".github/workflows/smoke.yml",
+            "html_url": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/44",
+            "pull_requests": [{"number": 765}],
+        },
+        "/repos/spirex-ds-dev/ai-cockpit-template/actions/jobs/86": {
+            "id": 86,
+            "run_id": 44,
+            "name": "template-smoke",
+            "status": "completed",
+            "conclusion": "failure",
+        },
+    }
+    if endpoint.endswith("/logs"):
+        return b"BLOCKED: provider-bound recovery audit lacks token. Recovery: provide a token.\n"
+    return json.dumps(responses[endpoint]).encode()
+
+
 def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
     write_archive(tmp_path)
 
@@ -177,6 +202,44 @@ def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
         )
         == []
     )
+
+
+def test_hosted_functional_recovery_appends_a_distinct_receipt_for_the_same_work_item(tmp_path):
+    write_archive(tmp_path)
+    common = {
+        "root": tmp_path,
+        "task": "example-task",
+        "base_commit": "a" * 40,
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/620",
+        "authority": "user-authorized same Work Item recovery",
+        "repository": "spirex-ds-dev/ai-cockpit-template",
+        "pull_request": 765,
+        "worktree_clean": lambda: True,
+    }
+    recovery.open_hosted_functional_failure_recovery(
+        **common,
+        recovery_paths=[".github/workflows/compatibility.yml"],
+        failed_candidate_head="c" * 40,
+        run_id=43,
+        job_id=85,
+        fetch_provider=functional_failure_provider,
+    )
+
+    receipt = recovery.open_hosted_functional_failure_recovery(
+        **common,
+        recovery_paths=[".github/workflows/smoke.yml"],
+        failed_candidate_head="d" * 40,
+        run_id=44,
+        job_id=86,
+        fetch_provider=second_functional_failure_provider,
+    )
+
+    receipts = tmp_path / ".ai/work-items/recovery-receipts"
+    assert receipt["provider"]["runId"] == 44
+    assert sorted(path.name for path in receipts.glob("*.json")) == [
+        "example-task-44-86.json",
+        "example-task.json",
+    ]
 
 
 @pytest.mark.parametrize(

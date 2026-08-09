@@ -370,6 +370,16 @@ def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
     assert "quality heartbeat" in workflow
 
 
+def test_smoke_pr_audit_receives_a_scoped_github_api_token_for_provider_bound_recovery():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    audit = workflow.split("      - name: Run template AI checks", 1)[1].split(
+        "\n  installation-smoke:", 1
+    )[0]
+
+    assert "GH_TOKEN: ${{ github.token }}" in audit
+    assert audit.index("GH_TOKEN: ${{ github.token }}") < audit.index("make check-ai-pr-core")
+
+
 def test_smoke_quality_failure_publishes_detailed_gate_logs():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
 

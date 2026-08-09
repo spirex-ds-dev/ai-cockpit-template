@@ -80,6 +80,25 @@ def normalized_paths(paths: list[str]) -> list[str]:
     return normalized
 
 
+def receipt_target(directory: Path, task: str, provider: dict | None = None) -> Path:
+    """Allocate an append-only receipt path, preserving the original task filename."""
+    primary = directory / f"{task}.json"
+    if not primary.exists():
+        return primary
+    if isinstance(provider, dict):
+        run_id = provider.get("runId")
+        job_id = provider.get("jobId")
+        if isinstance(run_id, int) and isinstance(job_id, int):
+            target = directory / f"{task}-{run_id}-{job_id}.json"
+            if not target.exists():
+                return target
+            raise ValueError(f"recovery receipt already exists: {target}")
+    index = 2
+    while (target := directory / f"{task}-{index}.json").exists():
+        index += 1
+    return target
+
+
 def _github_api(endpoint: str) -> bytes:
     """Read one GitHub API resource through the authenticated GitHub CLI."""
     result = subprocess.run(  # nosec B603 B607 - fixed executable and repository-validated endpoint
@@ -260,9 +279,7 @@ def open_hosted_post_archive_recovery(
     }
     directory = root / RECEIPT_DIRECTORY
     directory.mkdir(parents=True, exist_ok=True)
-    target = directory / f"{task}.json"
-    if target.exists():
-        raise ValueError(f"recovery receipt already exists: {target.relative_to(root)}")
+    target = receipt_target(directory, task, provider)
     target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
 
@@ -393,9 +410,7 @@ def open_hosted_functional_failure_recovery(
     }
     directory = root / RECEIPT_DIRECTORY
     directory.mkdir(parents=True, exist_ok=True)
-    target = directory / f"{task}.json"
-    if target.exists():
-        raise ValueError(f"recovery receipt already exists: {target.relative_to(root)}")
+    target = receipt_target(directory, task, provider)
     target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
 
@@ -452,9 +467,7 @@ def open_post_archive_recovery(
     }
     directory = root / RECEIPT_DIRECTORY
     directory.mkdir(parents=True, exist_ok=True)
-    target = directory / f"{task}.json"
-    if target.exists():
-        raise ValueError(f"recovery receipt already exists: {target.relative_to(root)}")
+    target = receipt_target(directory, task)
     target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
 

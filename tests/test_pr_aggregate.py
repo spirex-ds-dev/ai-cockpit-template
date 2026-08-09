@@ -96,7 +96,7 @@ def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     monkeypatch.setattr(
         ai_check_pr,
         "same_work_item_recovery_paths",
-        lambda _base, _entries: ({"recovered": {"scripts/ai_finish.py"}}, {receipt_path}),
+        lambda _base, _entries: ({"recovered": {"scripts/ai_finish.py"}}, {receipt_path}, []),
     )
     policy = tmp_path / "scope.yaml"
     policy.write_text("allowAlways:\n", encoding="utf-8")
@@ -123,7 +123,7 @@ def test_pr_bundle_accepts_restricted_path_only_when_same_item_recovery_receipt_
     monkeypatch.setattr(
         ai_check_pr,
         "same_work_item_recovery_paths",
-        lambda _base, _entries: ({"recovered": {recovery_path}}, {receipt_path}),
+        lambda _base, _entries: ({"recovered": {recovery_path}}, {receipt_path}, []),
     )
     scope = tmp_path / "scope.yaml"
     scope.write_text("allowAlways:\n", encoding="utf-8")
@@ -198,10 +198,13 @@ def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_pat
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(recovery, "_github_api", provider)
 
-    permitted, receipts = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+    result = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+    assert len(result) == 3
+    permitted, receipts, blockers = result
 
     assert permitted == {task: {"tests/test_resume.py"}}
     assert receipts == {".ai/work-items/recovery-receipts/hosted-recovered.json"}
+    assert blockers == []
 
     def stale_provider(endpoint):
         payload = provider(endpoint)
@@ -212,10 +215,18 @@ def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_pat
         return payload
 
     monkeypatch.setattr(recovery, "_github_api", stale_provider)
-    permitted, receipts = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+    permitted, receipts, blockers = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
 
     assert permitted == {}
     assert receipts == set()
+    assert blockers == [
+        (
+            "BLOCKED: provider-bound recovery receipt cannot be verified: "
+            "hosted recovery provider verification failed: GitHub workflow run Head SHA does not match "
+            "the failed candidate. Recovery: configure the PR audit's GH_TOKEN "
+            "with read-only GitHub Actions access, then retry."
+        )
+    ]
 
 
 def test_pr_boundary_rejects_dirty_worktree(monkeypatch):
