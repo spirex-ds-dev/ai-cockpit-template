@@ -570,6 +570,14 @@ wrong-tag receipt before runtime finalization or immutable mutation. The gate
 still runs only after runtime freeze on the exact merged `SOURCE_COMMIT`; exact
 archive, digest, installer, and identity checks remain mandatory at that boundary.
 
+The receipt is a result, not a cache hit. It may replace a second strict-smoke
+dispatch only when the workflow rechecks its source SHA, Git tree digest,
+release tag, strict-smoke workflow/run/job conclusions, collection and shard
+receipt, coverage and source set, provider artifact digests, integrity digest,
+and unexpired validity window. Any missing, cancelled, failed, stale, or
+mismatched field fails closed before tag creation; runtime freeze, preflight,
+release evidence, Draft asset verification, and Quick Install still run.
+
 A later included-source change invalidates the rehearsal SHA and requires a new
 same-SHA rehearsal, not another committed freeze. If exact-source validation
 fails after a successful rehearsal, stop, preserve diagnostics, and open a

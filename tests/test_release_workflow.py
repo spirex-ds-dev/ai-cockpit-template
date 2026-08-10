@@ -44,6 +44,52 @@ def test_release_workflow_requires_same_source_nonpublishing_rehearsal():
     assert "if: ${{ !inputs.rehearsal }}" in publish_step
 
 
+def test_actual_release_reuses_only_a_complete_exact_source_rehearsal_receipt():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    receipt_validation = workflow.index("Validate successful exact-source rehearsal")
+    reuse = workflow.index("Reuse strict smoke verification from exact-source rehearsal receipt")
+    strict_smoke = workflow.index("Dispatch strict smoke verification for verified source commit")
+    tag = workflow.index("Create exact-SHA tag and Draft GitHub Release")
+
+    assert receipt_validation < reuse < strict_smoke < tag
+    assert "if: ${{ !inputs.rehearsal }}" in workflow[reuse:strict_smoke]
+    assert (
+        "if: ${{ inputs.rehearsal }}"
+        in workflow[strict_smoke : workflow.index("Record exact-source rehearsal receipt")]
+    )
+    for field in (
+        "treeDigest",
+        "strictSmokeRunId",
+        "strictSmokeEvidenceDigest",
+        "requiredJobNames",
+        "testCollection",
+        "coverage",
+        "artifactDigests",
+        "validUntil",
+    ):
+        assert field in workflow[receipt_validation:tag]
+
+
+def test_rehearsal_receipt_reuse_rejects_incomplete_or_mismatched_evidence_before_tagging():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    reuse = workflow.index("Reuse strict smoke verification from exact-source rehearsal receipt")
+    tag = workflow.index("Create exact-SHA tag and Draft GitHub Release")
+    receipt = workflow.index("Record exact-source rehearsal receipt")
+    validation = workflow[reuse:tag]
+    receipt_creation = workflow[receipt : workflow.index("Upload exact-source rehearsal receipt")]
+
+    assert "gh run view" in validation
+    assert 'conclusion == "success"' in validation
+    assert 'workflowName == "smoke"' in validation
+    assert "release_verification" in validation
+    assert "validUntil" in validation
+    assert "sha256sum" in validation
+    assert 'git rev-parse "${SOURCE_COMMIT}^{tree}"' in receipt_creation
+    assert "quality-diagnostics" in receipt_creation
+
+
 def test_rehearsal_guards_every_public_release_side_effect():
     workflow = WORKFLOW.read_text(encoding="utf-8")
     public_steps = (

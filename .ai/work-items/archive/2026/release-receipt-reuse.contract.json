@@ -1,0 +1,260 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-receipt-reuse",
+  "mode": "code",
+  "title": "Reuse exact-source release rehearsal receipts",
+  "baseCommit": "2da2f24a0a5a7c402c1acf639ed1acec07437b2d",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-08-10-release-receipt-reuse.md",
+    ".ai/work-items/active/release-receipt-reuse.contract.json",
+    ".ai/work-items/active/release-receipt-reuse.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-receipt-reuse.outcome.json",
+    ".ai/work-items/active/release-receipt-reuse.outcome.md"
+  ],
+  "outOfScope": [
+    "Do not change public installer behavior or any immutable release tag, including v0.5.50 and v0.5.51.",
+    "Do not reduce smoke, compatibility, coverage, artifact, Quick Install, or release-evidence validation."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Current release workflow dispatches a second full strict smoke after an equivalent successful rehearsal."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Existing executable release-workflow contract tests."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Canonical lifecycle documentation for rehearsal and publication."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Public distribution guidance for rehearsal and publication."
+    },
+    {
+      "path": "GitHub Actions run 31383570450",
+      "reason": "Successful exact-source rehearsal for v0.5.52 at source 2da2f24a0a5a7c402c1acf639ed1acec07437b2d."
+    },
+    {
+      "path": "GitHub Actions run 31384310498",
+      "reason": "Cancelled before tag creation after it redundantly dispatched strict smoke despite the valid rehearsal receipt."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_workflow", "evidence_integrity", "performance"],
+    "reason": "A release workflow change can incorrectly reuse stale or incomplete evidence; every identity, gate, artifact and failure condition must remain fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Release evidence and public publication require strict evidence integrity and independent reviewer visibility."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized the correction and authorized release after all gates, receipts, hosted verification and future-adopter validation succeed."
+  },
+  "preReviewWarnings": [
+    "Review that publication validates the rehearsal receipt before it reuses it, and that all missing, stale, wrong-SHA, changed-gate, missing-artifact, cancellation and failure cases reject reuse."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An actual release with a valid same-source rehearsal receipt reuses the receipt-bound strict smoke result instead of dispatching a second full strict smoke.",
+    "Receipt reuse is allowed only when source SHA, tree digest, release tag, workflow identity, required gate names/results, test collection, coverage, artifact digests, outcome and expiry are exactly valid.",
+    "A missing, malformed, expired, cancelled, failed, wrong-SHA, wrong-tree, wrong-tag, changed-gate, missing-artifact or insufficient-coverage receipt fails closed before tag creation or publication.",
+    "The actual release still performs runtime freeze, release preflight, source-bound evidence generation, draft-asset checks, Quick Install, and public-release validation.",
+    "Tests and English/Japanese lifecycle and distribution documentation specify that reuse is evidence consumption, not a cache hit or gate bypass.",
+    "A v0.5.52 correction release is published only after this Work Item has local and hosted green evidence, and a future empty adopter repository installs it successfully."
+  ],
+  "guidelines": [
+    "Public workflow behavior and recovery conditions must be documented in English and Japanese.",
+    "Receipt validation must remain source-bound, deterministic and fail closed; ordinary caches must never substitute for verification.",
+    "Do not remove, skip, xfail, quarantine or weaken release, smoke, compatibility, coverage, artifact or Quick Install gates."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized all required confirmations, including corrective publication after complete verification, and requested the authorization be recorded in the Contract."
+  },
+  "rawUserRequest": "用户确认应修正发布路径的重复严格验证；授权将正式发布改为复用同 SHA、未过期演练 receipt，并要求把授权写入 Contract。此前已授权完成全部工单、发布和未来 adopter 验证。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-10 release receipt reuse authorization",
+    "capturedAt": "2026-08-10",
+    "digest": "sha256:user-authorized-release-receipt-reuse"
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-10 release receipt reuse authorization",
+    "scope": "Repair duplicate release verification and publish only v0.5.52 after complete local, hosted, rehearsal, public-release and future-adopter evidence passes; no gate bypass, cache substitution or historical tag mutation is authorized."
+  },
+  "declaredIntent": {
+    "summary": "Eliminate duplicate release verification by consuming only a complete, exact-source and unexpired rehearsal receipt while retaining every release gate fail closed.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "intent": {
+    "problem": "v0.5.52 的成功同源演练已经完整执行 strict smoke，但实际发布又调度相同严格 smoke，造成不必要的开发者等待，并违反了可复用完全等价、未过期 receipt 的性能目标。",
+    "constraints": [
+      "严格 smoke 的验证范围、覆盖率、Outcome、JUnit、gate log、receipt、失败证据和 Quick Install 验证必须保留。",
+      "复用必须绑定 source SHA、tree digest、release tag、工作流身份、所需 gates、测试集合、coverage、artifact digest 和有效期。",
+      "任何不等价、缺失、失败、取消或过期都必须在创建 tag 前 fail closed。",
+      "用户已授权本 Work Item 的后续 PR、合并、v0.5.52 发布和未来 adopter 安装验证。"
+    ],
+    "rationale": "将已验证且完全等价的 receipt 作为可审计的验证结果消费，消除重复工作，同时由完整的字段校验保留与重新执行同等的安全边界。"
+  },
+  "scenarioCoverage": [
+      {
+        "scenario": "A valid exact-source rehearsal receipt is reused",
+        "riskDomain": "release_workflow",
+        "required": true,
+        "status": "unverified",
+        "evidence": [],
+        "expected": "正式发布消费完整同源 receipt，不再调度第二次 strict smoke，并继续执行剩余发布门禁。",
+        "verificationPlan": "Focused workflow tests plus real v0.5.52 rehearsal/publication receipts."
+      },
+      {
+        "scenario": "A stale, incomplete, cancelled or mismatched rehearsal receipt is rejected",
+        "riskDomain": "evidence_integrity",
+        "required": true,
+        "status": "unverified",
+        "evidence": [],
+        "expected": "任何 receipt 身份、完整性、失败状态、取消状态、覆盖率或有效期错误都会在 tag 前失败。",
+        "verificationPlan": "Focused negative workflow contract tests assert required validation fields and ordering."
+      },
+      {
+        "scenario": "A future adopter installs the corrected public release",
+        "riskDomain": "public_distribution",
+        "required": true,
+        "status": "unverified",
+        "evidence": [],
+        "expected": "空 adopter repository 从公开 v0.5.52 资产完成安装并保留 release evidence。",
+        "verificationPlan": "Post-publish distribution verification against the public release."
+      }
+  ],
+  "rollbackNote": "Revert this Work Item diff; do not delete a published tag or release. A failed release remains failed with its evidence preserved.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 857
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-receipt-reuse.json",
+    "baseCommit": "2da2f24a0a5a7c402c1acf639ed1acec07437b2d",
+    "initialScopeDigest": "699941fc95aba85df228d1befecaa6a35587e91f4f62120c8e6d6932c0d1e95a",
+    "contractSkeletonDigest": "b56db0fe6376d90efddba145ca0b4aa34da544bec5c6214c936b7e2d4b5db3a7"
+  }
+}
