@@ -2238,7 +2238,7 @@ def stub_active_status(monkeypatch):
 
 def stub_ownership_preview(monkeypatch):
     """Keep lifecycle unit tests focused on their own temporary repository state."""
-    monkeypatch.setattr(ai_start, "preview", lambda: [])
+    monkeypatch.setattr(ai_start, "preview", list)
 
 
 def test_ai_start_refreshes_only_stale_no_active_status(monkeypatch):
