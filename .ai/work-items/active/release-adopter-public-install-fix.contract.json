@@ -20,6 +20,7 @@
     "scripts/check_release_distribution.py",
     ".github/workflows/release.yml",
     "tests/test_release_distribution.py",
+    "tests/test_release_state_consistency.py",
     "tests/test_install_sh.py",
     "tests/test_release_workflow.py",
     "release.json",
@@ -35,6 +36,9 @@
     ,"docs/reference/pre-release-documentation-alignment.md"
     ,"docs/reference/japanese-capability-assessment.json"
     ,"docs/reference/japanese-capability-assessment.md"
+    ,"docs/getting-started/security-release-verification.md"
+    ,"docs/getting-started/security-release-verification.zh-CN.md"
+    ,"docs/getting-started/security-release-verification.ja.md"
     ,"install.sh"
   ],
   "outOfScope": [
@@ -59,7 +63,7 @@
   "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["Release distribution and future-adopter installation require strict evidence handling."], "override": null},
   "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
   "executionDecision": {"status": "continue", "reason": "The user authorized necessary release actions and required that authorization be recorded here."},
-  "preReviewWarnings": ["Review the workflow pre-publication Quick Install against an independent post-publish installation; workflow success alone is insufficient."],
+  "preReviewWarnings": ["Review the workflow pre-publication Quick Install against an independent post-publish installation; workflow success alone is insufficient.", "Avoid dual authority: tag-tree release-digests.json is a historical baseline, while the released asset is authoritative for a selected public tag."],
   "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints around an externally published release."},
   "acceptance": [
     "A future adopter can install the newly published correction tag through the public Quick Install path, and the installer accepts only release-bound evidence whose tag and source commit match that tag.",
@@ -83,7 +87,7 @@
     {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
   ],
   "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
-  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted governance path is authorized."},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user authorized the necessary, fully gated repair and corrective publication in this Contract; approval is limited to .github/workflows/release.yml and source-bound release evidence/version projections in this Work Item."},
   "rollbackNote": "Revert this Work Item diff; do not alter historical releases.",
   "budgetImpact": {"expectedMetrics": {"archiveGrowth": 1200}},
   "startReceipt": {"path": ".ai/work-items/starts/release-adopter-public-install-fix.json", "baseCommit": "b4a88208367ab82d3b0432d10fd28f1ea3c365bd", "initialScopeDigest": "c2ac031af0c1ae763c28ff6a87c596013b6425944c56b12ba43946819d51fd37", "contractSkeletonDigest": "268a68ad6b5d8b4a540aa45a6cc235cd1eb6c332c8202a8c7878b580f5d0e59b"}

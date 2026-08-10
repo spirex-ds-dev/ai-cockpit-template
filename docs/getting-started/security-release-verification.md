@@ -49,6 +49,15 @@ canonical tag, version, source/tag/metadata commit, and artifact-digest tuple
 in its validated lifecycle facts; disagreement fails before any installer
 write. Do not select the highest tag as a substitute.
 
+For a selected public tag, `release-digests.json` is a release asset generated
+after the source commit is fixed. The Quick Install script fetches that asset
+into its disposable tag clone, then validates its tag, source commit, and
+artifact digests before it can write to the adopter. A tag-tree copy may be a
+historical baseline and is not authority for a later release. If this fetch or
+validation fails, do not replace the file or bypass the failure: preserve the
+error, verify the public release assets against the exact tag, and publish a
+new correction tag if the immutable historical release is wrong.
+
 ### Maintainer route
 
 Validate the candidate and freeze evidence first. After provider publication,
