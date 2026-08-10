@@ -1,0 +1,280 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-adopter-performance-delivery-v051",
+  "mode": "code",
+  "title": "Release performance improvements to adopters",
+  "baseCommit": "348d9f7810402fdac94fc330ce9606a2703dc554",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-adopter-performance-delivery-v051.contract.json",
+    ".ai/work-items/active/release-adopter-performance-delivery-v051.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/work-items/active/release-adopter-performance-delivery-v051.outcome.json",
+    ".ai/work-items/active/release-adopter-performance-delivery-v051.outcome.md",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "install.sh",
+    ".ai/cockpit/version.json",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "tests/test_release_distribution.py",
+    "scripts/check_release_distribution.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_workflow.py"
+    ,"tests/test_docs_metadata.py"
+  ],
+  "outOfScope": [
+    "Modifying, moving, deleting, rebuilding, or re-publishing v0.5.50 or any existing semantic tag/provider Release.",
+    "Manual creation of tags, Releases, or public assets; only the authoritative release.yml workflow may perform immutable provider mutations.",
+    "Claiming that a specific existing adopter was upgraded; this Work Item proves the published future-adopter installation path only.",
+    "Weakening quality, release, identity, installer, coverage, or supply-chain gates."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-critical-path-hci-performance-v2.summary.json",
+      "reason": "Records the merged performance improvements and the source-bound acceptance evidence that the new public template version must carry."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical tag reservation and projection state; v0.5.50 is published/reserved so v0.5.51 is the only eligible successor."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate projection to advance to v0.5.51."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Authoritative same-SHA rehearsal, immutable tag/Release creation, asset publication, and tagged Quick Install verification."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Canonical future-adopter Quick Install and upgrade distribution contract."
+    },
+    {
+      "path": "conversation:2026-08-10-adopter-performance-delivery",
+      "reason": "User clarified that delivery means future installed adopter projects, and authorized necessary confirmations to be recorded in the Contract."
+    }
+  ],
+  "rawUserRequest": "将已验收的性能收益交付给未来安装的 adopter 工程；不要修改 v0.5.50。用户授权必要确认并要求写入 Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-10-adopter-performance-delivery",
+    "capturedAt": "2026-08-10",
+    "digest": "sha256:future-adopter-performance-delivery-v051"
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-10-adopter-performance-delivery",
+    "scope": "Publish only v0.5.51 after candidate readiness, exact-SHA rehearsal, hosted checks, authoritative provider workflow, immutable tag/Release/assets, and post-publication tagged Quick Install verification pass. No gate bypass, historical tag mutation, or blind retry is authorized."
+  },
+  "declaredIntent": {
+    "summary": "Publish v0.5.51 and prove that a future adopter can install the released template through the public, immutable distribution path.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "immutable_release",
+      "provider_workflow",
+      "release_identity",
+      "supply_chain_evidence",
+      "installer"
+    ],
+    "reason": "The Work Item creates an immutable public release and must prove its installer path for future adopters against one exact default-branch source and tag.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Public immutable release and installer-distribution verification require strict release governance."
+    ],
+    "override": {
+      "approvalEvidence": "User authorized necessary confirmations and required they be recorded in the Contract while directing performance benefit delivery to future adopter installations.",
+      "reason": "Immutable public release and post-publication installer verification require strict governance.",
+      "risks": ["immutable_release", "provider_workflow", "release_identity", "supply_chain_evidence", "installer"],
+      "notRunChecks": ["No required verification is omitted; immutable provider publication checks run only after the release-preparation PR merges and are recorded as external release evidence."],
+      "workItemOnly": true,
+      "workItemId": "release-adopter-performance-delivery-v051"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the governed publication and required its future-adopter benefit to be proven by the released installation path."
+  },
+  "preReviewWarnings": [
+    "v0.5.50 is immutable historical release evidence and must not be rewritten.",
+    "A green outcome requires post-publication tagged Quick Install evidence, not merely a merged release-preparation PR."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Canonical metadata advances only to v0.5.51, one patch after the highest immutable v0.5.50 tag; all earlier tags and provider Releases remain immutable.",
+    "The premerge candidate is internally consistent: release-state.json, release.json, next-release.json, version.json, freeze, release-digests, SBOM, and provenance pass the release checks without claiming public publication before it occurs.",
+    "The Work Item is archived, merged, and the exact merged origin/main SHA has successful smoke and compatibility evidence before release dispatch.",
+    "A same-SHA release.yml rehearsal for v0.5.51 succeeds and produces a receipt while creating no tag, provider Release, or public asset.",
+    "The authoritative release.yml publication succeeds using that exact rehearsal receipt, creates only v0.5.51, and proves exact tag target, release assets, SBOM/provenance/digests, installer identity, and final strict smoke.",
+    "A clean future-adopter installation from the published v0.5.51 Release succeeds through the tagged Quick Install path and verifies the installed version-bound lifecycle/quality surface.",
+    "Any missing, stale, mismatched, failed, cancelled, or incomplete release/adopter-installation evidence ends with yellow/red Outcome and recovery conditions; only complete evidence allows green closure."
+  ],
+  "guidelines": [
+    "Use only the authoritative release workflow for immutable provider mutations; never create tags or Releases manually.",
+    "Preserve strict readiness, same-SHA rehearsal, publication, and post-publication installer verification ordering; fail closed on identity mismatch.",
+    "Treat future-adopter delivery as a verified public tagged-install path, not as a claim based only on merged source or a local fixture.",
+    "Record user authorization, red/yellow failure recovery, and green completion evidence truthfully in Contract, Summary, Outcome, and archive."
+  ],
+  "intent": {
+    "problem": "The performance Work Item is merged and closed on template main, but future adopter projects consume only published immutable template releases. Without a successor release and tagged installation proof, the measured speed improvements are unavailable to those projects.",
+    "constraints": [
+      "Do not change or rebuild v0.5.50, and never reuse a reserved semantic version.",
+      "Release only through the repository release.yml workflow after exact-source same-SHA rehearsal and fresh hosted checks.",
+      "Do not claim a named existing adopter upgrade; prove the public installation path intended for future adopters.",
+      "Retain all quality, coverage, security, supply-chain, Outcome, receipt, and recovery gates."
+    ],
+    "rationale": "A public immutable release plus its actual tagged Quick Install verification is the stable distribution boundary that makes the validated template performance behavior available to future adopter projects."
+  },
+  "requiredEvidenceContext": {
+    "externalSystem": "GitHub Releases and GitHub Actions",
+    "destructiveLevel": "none",
+    "availableEvidence": ["local_quality_receipts", "hosted_workflow_receipts", "rehearsal_receipt", "provider_release_receipt", "tag", "commit", "digest", "sbom", "provenance", "asset_availability"]
+  },
+  "implementationSurface": {
+    "production": ["release.json", "next-release.json", "release-state.json", ".ai/cockpit/version.json", ".ai/cockpit/release-freeze.json", ".ai/cockpit/release-digests.json", ".ai/cockpit/sbom.json", ".ai/cockpit/provenance.json"],
+    "tests": ["tests/test_release_distribution.py", "tests/test_release_state_consistency.py", "tests/test_release_preflight.py", "tests/test_release_workflow.py"],
+    "generated": [".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"],
+    "documentation": ["docs/reference/distribution.md", "docs/reference/distribution.ja.md", "docs/reference/capability-truth-matrix.json", "docs/reference/documentation-context-registry.json"]
+  },
+  "scenarioCoverage": [
+    {"scenario":"Release metadata attempts to reuse v0.5.50 or has inconsistent published/candidate projections.","expected":"Release readiness fails before provider dispatch; only v0.5.51 is eligible.","verificationPlan":"Run release state, distribution, and preflight checks with focused regression tests.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"A rehearsal source/tag differs from the merged default-branch source or creates public/immutable release state.","expected":"The workflow fails closed or records a private same-SHA receipt without a v0.5.51 tag/Release.","verificationPlan":"Dispatch release.yml rehearsal and validate its receipt plus provider tag/Release absence.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"Publication has a stale or mismatched rehearsal, failed dependent checks, incomplete assets, or mismatched source identity.","expected":"release.yml refuses public promotion and records an actionable failure condition.","verificationPlan":"Use workflow regression coverage and inspect the actual release run evidence.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"A future adopter installs from the public v0.5.51 tag but receives incomplete, mismatched, or non-executable runtime files.","expected":"Tagged Quick Install fails closed; green delivery requires a clean installation receipt and installed lifecycle/quality verification.","verificationPlan":"Inspect the workflow's tagged Quick Install result and run the repository published distribution verifier after publication.","required":true,"status":"unverified","evidence":[]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": false,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized necessary confirmations and required the authorization to be recorded in the Contract; immutable publication remains restricted to release.yml after all fail-closed gates pass."
+  },
+  "rollbackNote": "Before publication, revert the candidate metadata through this Work Item. After immutable publication, never retag/delete/move v0.5.51; preserve evidence and use a separate corrective Work Item.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 855
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-adopter-performance-delivery-v051.json",
+    "baseCommit": "348d9f7810402fdac94fc330ce9606a2703dc554",
+    "initialScopeDigest": "2c3dc35e41915a8fbfe724066434bc0add0d2ed398dd311b1e21673aa0459cd7",
+    "contractSkeletonDigest": "ed2647e770f29a7ccd75e943a83fe224ec72cbb6187472249a80450f2d9a59ea"
+  }
+}

@@ -61,8 +61,8 @@ def test_repository_candidate_advances_past_reserved_release_failures():
     state = json.loads((ROOT / "release-state.json").read_text(encoding="utf-8"))
     candidate = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))
 
-    assert candidate["releaseTag"] == "v0.5.50"
-    assert state["releaseTag"] == "v0.5.50"
+    assert candidate["releaseTag"] == "v0.5.51"
+    assert state["releaseTag"] == "v0.5.51"
     assert "v0.5.45" in state["reservedTags"]
     assert "v0.5.46" in state["reservedTags"]
     assert "v0.5.47" in state["reservedTags"]
