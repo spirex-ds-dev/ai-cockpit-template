@@ -263,6 +263,23 @@ def test_worktree_archive_uses_current_tracked_file_bytes(tmp_path: Path):
     assert len(release_archive.canonical_archive_sha(tmp_path, source)) == 64
 
 
+def test_worktree_archive_includes_runtime_release_digests_when_export_ignored(tmp_path: Path):
+    source = _commit_worktree_file(
+        tmp_path, ".gitattributes", ".ai/cockpit/release-digests.json export-ignore\n"
+    )
+    digest_path = tmp_path / ".ai" / "cockpit" / "release-digests.json"
+    digest_path.parent.mkdir(parents=True)
+    digest_path.write_text('{"runtime":true}\n', encoding="utf-8")
+
+    archive = release_archive.canonical_tar_from_worktree(
+        tmp_path, source, include_runtime_digests=True
+    )
+    with tarfile.open(fileobj=io.BytesIO(archive), mode="r:") as contents:
+        member = contents.extractfile("ai-cockpit/.ai/cockpit/release-digests.json")
+        assert member is not None
+        assert member.read() == b'{"runtime":true}\n'
+
+
 def test_worktree_archive_rejects_symlinked_tracked_member(tmp_path: Path):
     source = _commit_worktree_file(tmp_path, "tracked.txt", "before\n")
     external = tmp_path / "external.txt"

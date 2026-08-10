@@ -7,14 +7,14 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task release-v0-5-53-source-version generated an evidence-derived outcome with status completed_with_warnings.
+Task release-runtime-digest-archive-fix generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 2
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 2
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 2
+- Unresolved: 1
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,8 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Hosted rehearsal and public actual release are not yet run.
-- Unresolved evidence is explicitly limited: Fresh-adopter installation and Work Item branch closure occur only after verified public delivery.
+- Unresolved evidence is explicitly limited: Hosted rehearsal, public release, fresh-adopter installation and lifecycle closure remain required after merge.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
