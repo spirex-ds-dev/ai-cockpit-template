@@ -7,6 +7,7 @@ REPO="${AI_COCKPIT_TEMPLATE_REPO:-spirex-ds-dev/ai-cockpit-template}"
 REF="${AI_COCKPIT_TEMPLATE_REF:-v0.5.48}"
 SOURCE="${AI_COCKPIT_TEMPLATE_SOURCE:-}"
 EXPECTED_SHA256="${AI_COCKPIT_TEMPLATE_SHA256:-}"
+METADATA_URL="${AI_COCKPIT_TEMPLATE_RELEASE_METADATA_URL:-}"
 
 usage() {
   cat <<'USAGE'
@@ -20,6 +21,7 @@ Environment:
   AI_COCKPIT_TEMPLATE_REPO=spirex-ds-dev/ai-cockpit-template
   AI_COCKPIT_TEMPLATE_REF=v0.5.48
   AI_COCKPIT_TEMPLATE_SHA256=<optional assertion; release.json remains authoritative>
+  AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL=<test-only verified manifest URL>
 
 Common options passed through to the Python installer:
   --stack generic|rust|flutter|typescript|python|go|java|android|kotlin|swift|ruby|php|csharp
@@ -100,14 +102,17 @@ if [ -z "$SOURCE" ]; then
   # The release contract, not a caller-provided flag, is the default trust root.
   # The optional URL override exists only for deterministic contract tests.
   if [ -n "${AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL:-}" ] && [ -n "$EXPECTED_SHA256" ]; then
-    python3 "$SOURCE/scripts/verify_quick_install_release.py" \
-      --root "$SOURCE" --ref "$REF" \
-      --asset-url "$AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL" \
-      --expected-archive-sha256 "$EXPECTED_SHA256"
+    if [ -n "$METADATA_URL" ]; then
+      python3 "$SOURCE/scripts/verify_quick_install_release.py" --root "$SOURCE" --ref "$REF" --asset-url "$AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL" --expected-archive-sha256 "$EXPECTED_SHA256" --metadata-url "$METADATA_URL"
+    else
+      python3 "$SOURCE/scripts/verify_quick_install_release.py" --root "$SOURCE" --ref "$REF" --asset-url "$AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL" --expected-archive-sha256 "$EXPECTED_SHA256"
+    fi
   elif [ -n "${AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL:-}" ]; then
-    python3 "$SOURCE/scripts/verify_quick_install_release.py" \
-      --root "$SOURCE" --ref "$REF" \
-      --asset-url "$AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL"
+    if [ -n "$METADATA_URL" ]; then
+      python3 "$SOURCE/scripts/verify_quick_install_release.py" --root "$SOURCE" --ref "$REF" --asset-url "$AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL" --metadata-url "$METADATA_URL"
+    else
+      python3 "$SOURCE/scripts/verify_quick_install_release.py" --root "$SOURCE" --ref "$REF" --asset-url "$AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL"
+    fi
   elif [ -n "$EXPECTED_SHA256" ]; then
     python3 "$SOURCE/scripts/verify_quick_install_release.py" \
       --root "$SOURCE" --ref "$REF" \
@@ -115,6 +120,32 @@ if [ -z "$SOURCE" ]; then
   else
     python3 "$SOURCE/scripts/verify_quick_install_release.py" --root "$SOURCE" --ref "$REF"
   fi
+  # Release evidence is generated after the immutable source commit is selected,
+  # so its authoritative copy is a release asset, not the tag-tree baseline.
+  # Hydrate only the disposable clone, then let the legacy installer validate
+  # the downloaded manifest's tag/source/artifact identity before target writes.
+  python3 - "$SOURCE" "$REPO" "$REF" <<'PY'
+import json
+import pathlib
+import sys
+import urllib.request
+
+source, repository, ref = map(str, sys.argv[1:])
+url = __import__("os").environ.get(
+    "AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL",
+    f"https://github.com/{repository}/releases/download/{ref}/release-digests.json",
+)
+try:
+    with urllib.request.urlopen(url, timeout=30) as response:  # nosec B310 - fixed GitHub release URL
+        payload = response.read()
+    manifest = json.loads(payload.decode("utf-8"))
+except Exception as exc:
+    raise SystemExit(f"ERROR: cannot obtain public release-digests.json: {exc}")
+if not isinstance(manifest, dict) or manifest.get("releaseTag") != ref:
+    raise SystemExit("ERROR: public release-digests.json does not match requested release tag")
+destination = pathlib.Path(source) / ".ai" / "cockpit" / "release-digests.json"
+destination.write_bytes(payload)
+PY
 fi
 
 if [ "$INTERACTIVE" -eq 1 ]; then

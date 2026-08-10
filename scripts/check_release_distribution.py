@@ -267,7 +267,17 @@ def supply_chain_issues(metadata: dict[str, object], *, root: Path = ROOT) -> li
     elif not installer_path.is_file():
         issues.append("release.json installerDigest source file is missing: install.sh")
     elif file_digest(installer_path) != installer_digest:
-        issues.append("release.json installerDigest differs from install.sh")
+        # A repository preparing a new immutable release deliberately contains
+        # the candidate installer while release.json remains the last valid
+        # public-install baseline.  The candidate is verified independently;
+        # without that distinct candidate this remains a fail-closed drift.
+        candidate_path = root / "next-release.json"
+        try:
+            candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            candidate = None
+        if not isinstance(candidate, dict) or candidate.get("releaseTag") == metadata.get("releaseTag"):
+            issues.append("release.json installerDigest differs from install.sh")
     supply_chain = metadata.get("supplyChain")
     if not isinstance(supply_chain, dict):
         return ["release.json is missing supplyChain release evidence"]

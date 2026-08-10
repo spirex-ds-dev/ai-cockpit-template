@@ -18,6 +18,9 @@ def test_remote_archive_url_supports_branch_tag_and_sha_refs():
     assert 'URL="$REPO"' in script
     assert "verify_quick_install_release.py" in script
     assert "release.json remains authoritative" in script
+    assert "release-digests.json" in script
+    assert "AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL" in script
+    assert "public release-digests.json does not match requested release tag" in script
 
 
 def test_quick_install_does_not_reference_candidate_release_metadata():
