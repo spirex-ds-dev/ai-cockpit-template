@@ -431,6 +431,7 @@ def test_smoke_hosted_project_test_uses_independent_shards_and_a_fail_closed_agg
     assert "project-test-core" in aggregate
     assert "project-test-release" in aggregate
     assert "make project-test-aggregate" in aggregate
+    assert "include-hidden-files: true" in aggregate
     template = workflow.split("  template-smoke:", 1)[1].split("\n  installation-smoke:", 1)[0]
     assert "needs: project-test-aggregate" in template
     assert "Download aggregate project-test evidence" in template
