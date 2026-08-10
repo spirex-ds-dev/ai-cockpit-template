@@ -1,12 +1,10 @@
 # Task Outcome: release-adopter-performance-delivery-v051
 
-Status: `blocked`
-Human Status: `red`
-Failed Gate: `quality`
-Recovery Condition: Run a passing quality retry.
+Status: `completed_with_warnings`
+Human Status: `yellow`
 
 ## Outcome Summary
-Task release-adopter-performance-delivery-v051 generated an evidence-derived outcome with status blocked.
+Task release-adopter-performance-delivery-v051 generated an evidence-derived outcome with status completed_with_warnings.
 
 ## Task Overview
 Governed Work Item: release-adopter-performance-delivery-v051
@@ -18,6 +16,25 @@ Governed Work Item: release-adopter-performance-delivery-v051
 - .ai/work-items/active/release-adopter-performance-delivery-v051.outcome.md
 - .ai/cockpit/task_report.json
 - .ai/cockpit/task_report.md
+- .ai/cockpit/provenance.json
+- .ai/cockpit/release-digests.json
+- .ai/cockpit/release-freeze.json
+- .ai/cockpit/sbom.json
+- .ai/cockpit/version.json
+- docs/reference/capability-truth-matrix.json
+- docs/reference/japanese-capability-assessment.json
+- docs/reference/japanese-capability-assessment.md
+- docs/reference/pre-release-documentation-alignment.json
+- docs/reference/pre-release-documentation-alignment.md
+- install.sh
+- next-release.json
+- release-state.json
+- release.json
+- scripts/check_release_distribution.py
+- tests/test_docs_metadata.py
+- tests/test_release_distribution.py
+- tests/test_release_state_consistency.py
+- tests/test_release_workflow.py
 
 ## Findings
 None
@@ -26,19 +43,15 @@ None
 None
 
 ## Warnings
-- Finish blocked at quality: a required declared verification check failed
 - Replace this before finishing the Work Item.
 
 ## Limitations
 - Unresolved evidence is explicitly limited
-- Finish verification is blocked
 
 ## Non-Risk Explanations
 - {"evidence": [], "reason": "The Summary records this item as an unresolved gap rather than a verified result.", "sourceWarning": "Replace this before finishing the Work Item."}
-- {"evidence": [], "reason": "The failed Finish gate is recorded as a recovery condition, not a completed result.", "sourceWarning": "Finish blocked at quality: a required declared verification check failed"}
 
 ## Forbidden Claims
-- Do not claim a blocked Work Item has completed verification or may be archived.
 - Do not claim an unresolved warning was verified or resolved.
 
 ## Interventions

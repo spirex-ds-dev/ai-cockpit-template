@@ -1,20 +1,20 @@
 # AI Cockpit Task Report
 
 Phase: `review`
-Result: `blocked`
+Result: `completed_with_warnings`
 
 ## 任务结论 / Task conclusion
-Task Outcome status: `blocked`.
+Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task release-adopter-performance-delivery-v051 generated an evidence-derived outcome with status blocked.
+Task release-adopter-performance-delivery-v051 generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 2
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 2
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 2
+- Unresolved: 1
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -33,10 +33,8 @@ None recorded.
 
 ## 未执行验证 / Not-run verification
 - Unresolved evidence is explicitly limited: Replace this before finishing the Work Item.
-- Finish verification is blocked: Finish blocked at quality: a required declared verification check failed
 
 ## 当前禁止声明 / Forbidden claims
-- Do not claim a blocked Work Item has completed verification or may be archived.
 - Do not claim an unresolved warning was verified or resolved.
 
 ## 需要人的决定 / Human decisions
