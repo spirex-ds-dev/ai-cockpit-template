@@ -379,10 +379,11 @@ def test_smoke_dispatch_declares_explicit_measurement_or_release_purpose():
 
 def test_smoke_workflow_has_release_blocking_delegated_secret_scan():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    secret_scan = workflow.split("  secret-scan:\n", 1)[1].split("\n  project-test-manifest:", 1)[0]
     assert "Delegated secret scanning (release-blocking)" in workflow
     assert "github.com/zricethezav/gitleaks/v8@9c72c5f9f05200fdc06e3f1b16e9aaa89fbe9f75" in workflow
-    assert "fetch-depth: 0" in workflow
-    assert 'gitleaks" detect --source="$GITHUB_WORKSPACE"' in workflow
+    assert "fetch-depth: 0" in secret_scan
+    assert 'gitleaks" detect --source="$GITHUB_WORKSPACE"' in secret_scan
 
 
 def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
@@ -433,9 +434,10 @@ def test_smoke_hosted_project_test_uses_independent_shards_and_a_fail_closed_agg
     assert "make project-test-aggregate" in aggregate
     assert "include-hidden-files: true" in aggregate
     template = workflow.split("  template-smoke:", 1)[1].split("\n  installation-smoke:", 1)[0]
-    assert "needs: project-test-aggregate" in template
+    assert "needs: [project-test-aggregate, secret-scan]" in template
     assert "Download aggregate project-test evidence" in template
     assert "PROJECT_TEST_GATE=project-test-receipt" in template
+    assert "Delegated secret scanning (release-blocking)" not in template
 
 
 def test_smoke_pr_audit_does_not_receive_a_github_api_token_for_offline_recovery_validation():

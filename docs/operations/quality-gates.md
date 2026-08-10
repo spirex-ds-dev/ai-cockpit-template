@@ -55,6 +55,11 @@ when quality fails. Recover by setting the missing variable in
   it rejects missing, cancelled, failed, stale, wrong-SHA, or incomplete shard
   evidence before `template-smoke` may reuse its aggregate receipt. Local
   `make project-test` remains the serial diagnostic equivalent.
+- The release-blocking full-history secret scan has one independent owner,
+  `secret-scan`, and starts alongside the project-test graph. `template-smoke`
+  waits for both the successful source checkout scan and the fail-closed
+  aggregate receipt; this removes only avoidable tail waiting, not a security
+  verification.
 - The adopter distribution contains runtime skeletons, policies, and required
   baselines, but not template-maintenance Work Item starts, decision history,
   or archive history. The installer prunes those trees before traversal and

@@ -34,6 +34,7 @@ Hosted snapshot 准备使用同一个入口。质量检查失败时不会写出 
 - `quality-release` 追加安装和发布证据检查。快速结果或缓存结果不能替代发布证据。
 - 兼容性任务只验证解释器/平台矩阵，不运行完整质量图。
 - Hosted smoke 为完整 `project-test` 集合中的每个条目分配唯一所有者：按历史时长均衡的 `project-test-core`、`project-test-governance`、`project-test-installer`、`project-test-lifecycle` 与 `project-test-release` runner。每个 runner 发布绑定源的 JUnit、coverage、timing、log 和 receipt 工件。`project-test-aggregate` 是 `always()` 的失败关闭消费者：缺失、取消、失败、过期、SHA 不匹配或不完整 shard 都会被拒绝，`template-smoke` 不能复用 aggregate receipt。本地 `make project-test` 保留为串行诊断等价入口。
+- 阻断发布的全历史 secret scan 由唯一独立 owner `secret-scan` 执行，并与 project-test 图并行启动。`template-smoke` 同时等待该 source checkout scan 成功和失败关闭 aggregate receipt；这只移除可避免的尾部等待，不会移除安全验证。
 - 安装给采用方的发行内容包含运行时骨架、策略和必要基线，但不包含模板维护用的 Work Item starts、decision 历史或 archive 历史。安装器在遍历前剪枝这些目录，并在单次安装中复用不可变的源文件清单。
 
 ## 证据与失败行为

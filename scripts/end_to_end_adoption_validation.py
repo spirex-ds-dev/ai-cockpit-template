@@ -649,7 +649,6 @@ def _run_fixture(
         "ai-finish",
         "TASK=adopt_ai_cockpit",
         "ARCHIVE=true",
-        "SKIP_QUALITY=true",
         f"PYTHON={sys.executable}",
         env=env,
     )
@@ -658,9 +657,12 @@ def _run_fixture(
         _phase(
             "finish",
             "passed" if finished else "failed",
-            "governance finish checks and immutable archive completed; project toolchain quality is separately not_run",
-            command="make ai-finish ARCHIVE=true SKIP_QUALITY=true",
-            evidence=[f"archiveExit={archive.returncode}", "humanRelay=not_run_in_fixture"],
+            "governance finish checks, declared project quality, and immutable archive completed",
+            command="make ai-finish ARCHIVE=true",
+            evidence=[
+                f"archiveExit={archive.returncode}",
+                "qualityRoute=declared_fixture_commands",
+            ],
         )
     )
     if not finished:
@@ -763,7 +765,6 @@ def _failure_fixture(
             "ai-finish",
             "TASK=adopt_ai_cockpit",
             "ARCHIVE=true",
-            "SKIP_QUALITY=true",
             f"PYTHON={sys.executable}",
             env=finish_env,
         )

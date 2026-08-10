@@ -32,6 +32,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Delegated secret scanning (release-blocking)
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/gitleaks-bin"
+          GOBIN="$RUNNER_TEMP/gitleaks-bin" go install github.com/zricethezav/gitleaks/v8@9c72c5f9f05200fdc06e3f1b16e9aaa89fbe9f75
+          "$RUNNER_TEMP/gitleaks-bin/gitleaks" detect --source="$GITHUB_WORKSPACE" --log-opts="--all" --no-banner
+
   project-test-manifest:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -249,7 +264,7 @@ jobs:
           include-hidden-files: true
 
   template-smoke:
-    needs: project-test-aggregate
+    needs: [project-test-aggregate, secret-scan]
     runs-on: ubuntu-latest
     # Keep the quality gate bounded; timeout is fail-closed and prevents an
     # ambiguous PR state from waiting indefinitely for later required gates.
@@ -272,13 +287,6 @@ jobs:
         with:
           name: project-test-aggregate-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality/project-test-aggregate
-
-      - name: Delegated secret scanning (release-blocking)
-        shell: bash
-        run: |
-          mkdir -p "$RUNNER_TEMP/gitleaks-bin"
-          GOBIN="$RUNNER_TEMP/gitleaks-bin" go install github.com/zricethezav/gitleaks/v8@9c72c5f9f05200fdc06e3f1b16e9aaa89fbe9f75
-          "$RUNNER_TEMP/gitleaks-bin/gitleaks" detect --source="$GITHUB_WORKSPACE" --log-opts="--all" --no-banner
 
       - name: Select governance diff baseline
         shell: bash
