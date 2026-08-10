@@ -212,9 +212,7 @@ def test_preparation_mode_accepts_historical_projection_with_next_unreserved_can
     assert release_distribution.main() == 0
 
 
-def test_preparation_mode_uses_public_release_assets_for_historical_tag_tree(
-    monkeypatch, tmp_path
-):
+def test_preparation_mode_uses_public_release_assets_for_historical_tag_tree(monkeypatch, tmp_path):
     published = {
         "releaseTag": "v0.5.50",
         "releaseEvidenceAuthority": "release-assets-v1",
@@ -1074,7 +1072,7 @@ def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tm
     monkeypatch.setattr(
         release_distribution,
         "inspect_tagged_release",
-            lambda _tag, **_kwargs: (
+        lambda _tag, **_kwargs: (
             json.loads(release_json.read_text(encoding="utf-8")),
             b"",
             ["supplyChain drift"],
