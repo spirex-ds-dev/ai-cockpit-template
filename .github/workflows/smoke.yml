@@ -80,6 +80,7 @@ jobs:
           path: target/quality/shards/core
           if-no-files-found: error
           retention-days: 14
+          include-hidden-files: true
 
   project-test-governance:
     needs: project-test-manifest
@@ -107,6 +108,7 @@ jobs:
           path: target/quality/shards/governance
           if-no-files-found: error
           retention-days: 14
+          include-hidden-files: true
 
   project-test-installer:
     needs: project-test-manifest
@@ -134,6 +136,7 @@ jobs:
           path: target/quality/shards/installer
           if-no-files-found: error
           retention-days: 14
+          include-hidden-files: true
 
   project-test-lifecycle:
     needs: project-test-manifest
@@ -161,6 +164,7 @@ jobs:
           path: target/quality/shards/lifecycle
           if-no-files-found: error
           retention-days: 14
+          include-hidden-files: true
 
   project-test-release:
     needs: project-test-manifest
@@ -188,6 +192,7 @@ jobs:
           path: target/quality/shards/release
           if-no-files-found: error
           retention-days: 14
+          include-hidden-files: true
 
   project-test-aggregate:
     needs: [project-test-core, project-test-governance, project-test-installer, project-test-lifecycle, project-test-release]

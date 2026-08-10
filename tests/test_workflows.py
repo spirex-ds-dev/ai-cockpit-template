@@ -423,6 +423,7 @@ def test_smoke_hosted_project_test_uses_independent_shards_and_a_fail_closed_agg
         )[0]
         assert "path: target/quality" in download
         assert "actions/upload-artifact@" in job
+        assert "include-hidden-files: true" in job
     aggregate = workflow.split("  project-test-aggregate:\n", 1)[1].split("\n  template-smoke:", 1)[
         0
     ]
