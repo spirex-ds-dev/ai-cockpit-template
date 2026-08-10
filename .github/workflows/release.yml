@@ -315,6 +315,8 @@ jobs:
             --workflow-run-sha "$GITHUB_SHA" \
             --release-tag "$RELEASE_TAG" \
             --output-dir "$RUNNER_TEMP/release-evidence"
+          cp "$RUNNER_TEMP/release-evidence/release-digests.json" \
+            "$GITHUB_WORKSPACE/.ai/cockpit/release-digests.json"
           sbom_digest="$(sha256sum "$RUNNER_TEMP/release-evidence/sbom.json" | cut -d' ' -f1)"
           provenance_digest="$(sha256sum "$RUNNER_TEMP/release-evidence/provenance.json" | cut -d' ' -f1)"
           jq -n \
@@ -345,9 +347,15 @@ jobs:
           archive_name="$(jq -r '.releaseArchive.assetName' release.json)"
           python3 scripts/release_archive.py --root "$GITHUB_WORKSPACE" \
             --source-commit "$SOURCE_COMMIT" \
+            --use-worktree \
             --output "$RUNNER_TEMP/release-evidence/$archive_name"
           archive_sha="$(sha256sum "$RUNNER_TEMP/release-evidence/$archive_name" | cut -d' ' -f1)"
           test "$archive_sha" = "$(jq -r '.releaseArchive.sha256' release.json)"
+          tar -xOf "$RUNNER_TEMP/release-evidence/$archive_name" \
+            "ai-cockpit/.ai/cockpit/release-digests.json" \
+            > "$RUNNER_TEMP/archive-release-digests.json"
+          cmp -s "$RUNNER_TEMP/archive-release-digests.json" \
+            "$RUNNER_TEMP/release-evidence/release-digests.json"
 
       - name: Verify source-bound release evidence subjects
         shell: bash
