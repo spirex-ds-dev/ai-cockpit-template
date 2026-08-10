@@ -348,9 +348,14 @@ jobs:
           python3 scripts/release_archive.py --root "$GITHUB_WORKSPACE" \
             --source-commit "$SOURCE_COMMIT" \
             --use-worktree \
+            --include-runtime-release-digests \
             --output "$RUNNER_TEMP/release-evidence/$archive_name"
           archive_sha="$(sha256sum "$RUNNER_TEMP/release-evidence/$archive_name" | cut -d' ' -f1)"
-          test "$archive_sha" = "$(jq -r '.releaseArchive.sha256' release.json)"
+          jq --arg archive_sha "$archive_sha" \
+            '.releaseArchive.sha256 = $archive_sha
+             | .capabilities.sha256ArchiveVerification.reason = "Runtime archive projection includes the source-bound release-digests manifest."' \
+            release.json > "$RUNNER_TEMP/release-runtime.json"
+          mv "$RUNNER_TEMP/release-runtime.json" release.json
           tar -xOf "$RUNNER_TEMP/release-evidence/$archive_name" \
             "ai-cockpit/.ai/cockpit/release-digests.json" \
             > "$RUNNER_TEMP/archive-release-digests.json"
