@@ -144,6 +144,7 @@ except Exception as exc:
 if not isinstance(manifest, dict) or manifest.get("releaseTag") != ref:
     raise SystemExit("ERROR: public release-digests.json does not match requested release tag")
 destination = pathlib.Path(source) / ".ai" / "cockpit" / "release-digests.json"
+destination.parent.mkdir(parents=True, exist_ok=True)
 destination.write_bytes(payload)
 PY
 fi
