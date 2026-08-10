@@ -418,6 +418,10 @@ def test_smoke_hosted_project_test_uses_independent_shards_and_a_fail_closed_agg
         assert "needs: project-test-manifest" in job
         assert f"make project-test-shard SHARD={shard}" in job
         assert "actions/download-artifact@" in job
+        download = job.split("      - name: Download project-test plan", 1)[1].split(
+            f"      - name: Run {shard} project-test shard", 1
+        )[0]
+        assert "path: target/quality" in download
         assert "actions/upload-artifact@" in job
     aggregate = workflow.split("  project-test-aggregate:\n", 1)[1].split("\n  template-smoke:", 1)[
         0
