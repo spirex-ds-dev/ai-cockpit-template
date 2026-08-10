@@ -1,0 +1,256 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-53-source-version",
+  "mode": "code",
+  "title": "Synchronize v0.5.53 source version before publication",
+  "baseCommit": "45670aafb3a3b27c92879cf8bf3feab363ab820c",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Complete all Work Items through a corrected public release, future-adopter verification, and cleanup; authorization is recorded in this Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-10 complete-all-work-items authorization",
+    "capturedAt": "2026-08-11",
+    "digest": "sha256:user-authorized-v0-5-53-source-version"
+  },
+  "declaredIntent": {
+    "summary": "Correct the release-preflight source version mismatch discovered by v0.5.53 rehearsal without weakening release gates.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scope": [
+    ".ai/cockpit/version.json",
+    "tests/test_release_preflight.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-08-11-release-v0-5-53-source-version.md",
+    ".ai/work-items/active/release-v0-5-53-source-version.contract.json",
+    ".ai/work-items/active/release-v0-5-53-source-version.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-53-source-version.outcome.json",
+    ".ai/work-items/active/release-v0-5-53-source-version.outcome.md"
+  ],
+  "outOfScope": [
+    "Do not modify or rebuild historic v0.5.50, v0.5.51, or v0.5.52 evidence.",
+    "Do not remove, skip, xfail, quarantine or weaken any release, smoke, compatibility, coverage, artifact or Quick Install gate."
+  ],
+  "sources": [
+    {
+      "path": ".ai/cockpit/version.json",
+      "reason": "Source release identity rejected by provider rehearsal."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "v0.5.53 candidate identity."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Exact preflight caller."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31401190106",
+      "reason": "Provider failure evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_identity",
+      "public_distribution"
+    ],
+    "reason": "A source/tag mismatch must fail closed before immutable release mutation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Public release identity correction."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized corrective release and verification."
+  },
+  "preReviewWarnings": [
+    "Review source tag/version equivalence and no-regression release gates."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Release identity must remain auditable."
+  },
+  "acceptance": [
+    "The source .ai/cockpit/version.json releaseVersion is 0.5.53 and exact release preflight accepts v0.5.53.",
+    "A regression test covers the repository source-version identity for v0.5.53.",
+    "All release checks, coverage and test scope remain intact.",
+    "After merge, v0.5.53 rehearsal and actual release complete with public archive/Draft identity and fresh-adopter proof.",
+    "Closure cleans Work Item branches only after verified public delivery."
+  ],
+  "guidelines": [
+    "Public workflow behavior and recovery conditions must be documented in English and Japanese.",
+    "Release identity must be source-bound, deterministic and fail closed; ordinary caches must never substitute for verification.",
+    "Do not remove, skip, xfail, quarantine or weaken release, smoke, compatibility, coverage, artifact or Quick Install gates."
+  ],
+  "intent": {
+    "problem": "Run 31401190106 correctly rejected v0.5.53 before tag creation because source version.json still declared 0.5.52.",
+    "constraints": [
+      "Preserve failed v0.5.52 evidence.",
+      "Use only v0.5.53 identity.",
+      "Keep preflight failure behavior and all gates."
+    ],
+    "rationale": "Synchronizing the source contract with the candidate tag makes release identity unambiguous for future adopters while keeping mismatch rejection executable."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Source version matches requested v0.5.53 tag",
+      "riskDomain": "release_identity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "preflight accepts exact identity",
+      "verificationPlan": "Focused preflight test and rehearsal."
+    },
+    {
+      "scenario": "Mismatched source version fails before tag creation",
+      "riskDomain": "evidence_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "fail closed",
+      "verificationPlan": "Existing negative test and provider rehearsal."
+    },
+    {
+      "scenario": "Future adopter receives v0.5.53",
+      "riskDomain": "public_distribution",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "public evidence matches source",
+      "verificationPlan": "Post-publish install."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-10",
+    "scope": "User authorized all required release, verification and cleanup actions."
+  },
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized completing the corrected public release, verification, and local/remote cleanup: 到发布最新版本为止，做好优化和自检。明天，我要看到修正完整的新版本（包括远程和本地的的清理）。"
+  },
+  "rollbackNote": "Revert only this unmerged source-version correction; never rewrite release tags.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 860
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-53-source-version.json",
+    "baseCommit": "45670aafb3a3b27c92879cf8bf3feab363ab820c",
+    "initialScopeDigest": "78c211cf1c39246def174e27fb774c89c38f4fa786ca53e66b5741bc706c4a67",
+    "contractSkeletonDigest": "6e48b3fc3bc6b2b077714407f626ca01be03c225b384aff16307109fc21d30a9"
+  }
+}
