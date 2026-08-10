@@ -19,6 +19,10 @@ Governed Work Item: release-v0-5-54-final-metadata-binding
 - docs/reference/pre-release-documentation-alignment.json
 - docs/reference/pre-release-documentation-alignment.md
 - .ai/cockpit/current_status.md
+- .ai/work-items/active/release-v0-5-54-final-metadata-binding.outcome.json
+- .ai/work-items/active/release-v0-5-54-final-metadata-binding.outcome.md
+- .ai/cockpit/task_report.json
+- .ai/cockpit/task_report.md
 
 ## Findings
 None
