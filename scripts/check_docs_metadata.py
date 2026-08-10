@@ -563,10 +563,13 @@ def installation_command_errors(root: Path) -> list[str]:
     release_tag = release["releaseTag"]
     candidate_path = root / "next-release.json"
     documented_release_tags = {release_tag}
+    installer_tag = release_tag
     if candidate_path.is_file():
-        documented_release_tags.add(
-            json.loads(candidate_path.read_text(encoding="utf-8")).get("releaseTag")
-        )
+        candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+        candidate_tag = candidate.get("releaseTag")
+        documented_release_tags.add(candidate_tag)
+        if candidate.get("releaseState") == "candidate" and candidate.get("published") is False:
+            installer_tag = candidate_tag
     archive_capability = release["capabilities"]["sha256ArchiveVerification"]
     if isinstance(archive_capability, dict):
         sha256_published = (
@@ -679,8 +682,10 @@ def installation_command_errors(root: Path) -> list[str]:
                 )
         if language == "en" and "--interactive" not in text:
             errors.append("docs/getting-started/30-second-start.md: wizard entry is missing")
-    if f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{release_tag}}}"' not in install_script:
-        errors.append("install.sh: default ref does not match release.json")
+    if not isinstance(installer_tag, str) or (
+        f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{installer_tag}}}"' not in install_script
+    ):
+        errors.append("install.sh: default ref does not match canonical release candidate")
     return errors
 
 

@@ -78,7 +78,7 @@ def run_remote_install(tmp_path: Path, expected_sha256: str) -> subprocess.Compl
     archive = tmp_path / "source.tar.gz"
     make_archive(archive)
     source_commit = "a" * 40
-    release_tag = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))["releaseTag"]
+    release_tag = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))["releaseTag"]
     (source_dir / "release.json").write_text(
         json.dumps(
             {
@@ -98,6 +98,8 @@ def run_remote_install(tmp_path: Path, expected_sha256: str) -> subprocess.Compl
         ),
         encoding="utf-8",
     )
+    release_digests = source_dir / "release-digests.json"
+    release_digests.write_text(json.dumps({"releaseTag": release_tag}), encoding="utf-8")
     if expected_sha256 == "MATCH":
         expected_sha256 = hashlib.sha256(archive.read_bytes()).hexdigest()
     make_fake_git(fake_bin)
@@ -110,6 +112,8 @@ def run_remote_install(tmp_path: Path, expected_sha256: str) -> subprocess.Compl
             "URL_LOG": str(tmp_path / "url.txt"),
             "FAKE_SOURCE_COMMIT": "a" * 40,
             "AI_COCKPIT_TEMPLATE_SHA256": expected_sha256,
+            "AI_COCKPIT_TEMPLATE_RELEASE_METADATA_URL": (source_dir / "release.json").as_uri(),
+            "AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL": release_digests.as_uri(),
         }
     )
     return subprocess.run(
@@ -138,11 +142,13 @@ def test_remote_install_rejects_sha256_mismatch_before_extraction(tmp_path):
     assert "stub installer" not in result.stdout
 
 
-def test_remote_install_default_ref_is_published_release_not_candidate_metadata():
+def test_remote_install_default_ref_is_the_canonical_unpublished_candidate():
     script = (ROOT / "install.sh").read_text(encoding="utf-8")
     candidate = (ROOT / "next-release.json").read_text(encoding="utf-8")
 
-    release = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))
-    assert f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{release["releaseTag"]}}}"' in script
+    candidate_tag = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))[
+        "releaseTag"
+    ]
+    assert f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{candidate_tag}}}"' in script
     assert "next-release.json" not in script
     assert '"published": false' in candidate

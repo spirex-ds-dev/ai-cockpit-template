@@ -23,8 +23,10 @@ def test_remote_archive_url_supports_branch_tag_and_sha_refs():
     assert "public release-digests.json does not match requested release tag" in script
 
 
-def test_quick_install_does_not_reference_candidate_release_metadata():
+def test_quick_install_uses_candidate_tag_without_reading_candidate_metadata_at_runtime():
     script = (ROOT / "install.sh").read_text(encoding="utf-8")
     assert "next-release.json" not in script
-    release_tag = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))["releaseTag"]
-    assert f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{release_tag}}}"' in script
+    candidate_tag = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))[
+        "releaseTag"
+    ]
+    assert f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{candidate_tag}}}"' in script

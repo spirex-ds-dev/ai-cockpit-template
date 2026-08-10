@@ -23,6 +23,7 @@ from ai_common import InvalidDataShapeError, InvalidProviderPayloadError
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = ROOT / "release.json"
 CANDIDATE_RELEASE = ROOT / "next-release.json"
+RELEASE_STATE = ROOT / "release-state.json"
 CANONICAL_REPOSITORY = "spirex-ds-dev/ai-cockpit-template"
 PUBLIC_REPOSITORY = os.environ.get(
     "AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY",
@@ -1095,6 +1096,30 @@ def fetch_public_releases() -> object:
         return json.loads(response.read().decode("utf-8"))
 
 
+def declared_invalid_public_release(tag: str) -> bool:
+    """Return whether canonical state retains *tag* as an invalid immutable release.
+
+    This is deliberately narrow: it permits candidate preparation to advance past
+    a documented historical public-distribution failure, but never treats an
+    unrecorded provider inconsistency as acceptable.
+    """
+    try:
+        state = json.loads(RELEASE_STATE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    unavailable = state.get("unavailableTags") if isinstance(state, dict) else None
+    return isinstance(unavailable, list) and any(
+        isinstance(item, dict)
+        and item.get("tag") == tag
+        and item.get("kind") == "stable_release_invalid_public_distribution"
+        and isinstance(item.get("reason"), str)
+        and item["reason"].strip()
+        and isinstance(item.get("evidence"), str)
+        and item["evidence"].strip()
+        for item in unavailable
+    )
+
+
 def main() -> int:
     preparation_mode = os.environ.get("AI_RELEASE_PREPARATION") == "1"
     post_publication_mode = os.environ.get("AI_RELEASE_POST_PUBLISH") == "1"
@@ -1104,6 +1129,8 @@ def main() -> int:
     metadata_path = RELEASE
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     tag = metadata["releaseTag"]
+    historical_invalid = declared_invalid_public_release(tag)
+    preparation_mode = preparation_mode or historical_invalid
     supported = archive_verification_supported(metadata)
     quality_target = metadata["publicContract"]["projectQualityTarget"]
     local_source = os.environ.get("AI_COCKPIT_TEMPLATE_SOURCE")
@@ -1146,7 +1173,7 @@ def main() -> int:
             )
             print(f"post-publication release distribution check passed: {tag}")
             return 0
-        if tag != latest_stable_release_tag:
+        if tag != latest_stable_release_tag or historical_invalid:
             candidate_tag = candidate.get("releaseTag") if preparation_mode else None
             preparation_tag = (
                 candidate_tag if preparation_mode and isinstance(candidate_tag, str) else None

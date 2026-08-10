@@ -150,7 +150,12 @@ def test_published_projection_is_not_promoted_in_repository():
     published = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))
     candidate = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))
 
-    assert published["releaseTag"] == "v0.5.48"
+    assert published["releaseTag"] == "v0.5.53"
+    assert (
+        published["releaseArchive"]["sha256"]
+        == "6f00b72fc87fef3e67e36b0b9a315fd8e433d592acae1fb4e32c3c7fb6549cf6"
+    )
+    assert candidate["releaseTag"] == "v0.5.54"
     assert candidate["releaseTag"] != published["releaseTag"]
     assert candidate["releaseTag"].startswith("v")
     assert candidate["basedOnReleaseTag"] == published["releaseTag"]

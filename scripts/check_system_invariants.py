@@ -119,6 +119,7 @@ def invariant_issues(root: Path = ROOT) -> list[str]:
             (root / MANIFEST.relative_to(ROOT)).read_text(encoding="utf-8")
         )
         release = json.loads((root / "release.json").read_text(encoding="utf-8"))
+        candidate = json.loads((root / "next-release.json").read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         return [*issues, f"failed to load invariant metadata: {exc}"]
     issues.extend(release_contract_issues(root, release))
@@ -218,8 +219,13 @@ def invariant_issues(root: Path = ROOT) -> list[str]:
         re.MULTILINE,
     )
     release_tag = release.get("releaseTag")
-    if not default_ref_match or default_ref_match.group(1) != release_tag:
-        issues.append("install.sh default version differs from release.json")
+    installer_tag = (
+        candidate.get("releaseTag")
+        if candidate.get("releaseState") == "candidate" and candidate.get("published") is False
+        else release_tag
+    )
+    if not default_ref_match or default_ref_match.group(1) != installer_tag:
+        issues.append("install.sh default version differs from canonical release candidate")
     if not default_sha_match:
         issues.append("install.sh default archive digest is missing")
     elif default_sha_match.group(1) and isinstance(release_tag, str):
