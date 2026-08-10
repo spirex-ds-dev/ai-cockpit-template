@@ -141,3 +141,22 @@ def test_matches_reuses_compiled_segment_patterns(monkeypatch):
     assert ai_common.matches("docs/**/*.md", "docs/quality/gates.md") is True
 
     assert calls == ["docs", "[^/]*\\.md"]
+
+
+def test_matches_retains_the_full_ownership_preview_segment_working_set(monkeypatch):
+    ai_common._compiled_segment_pattern.cache_clear()
+    original_compile = ai_common.re.compile
+    calls = []
+
+    def count_compile(pattern):
+        calls.append(pattern)
+        return original_compile(pattern)
+
+    monkeypatch.setattr(ai_common.re, "compile", count_compile)
+    patterns = [f"archive-{index}.json" for index in range(300)]
+
+    for _ in range(2):
+        for pattern in patterns:
+            assert ai_common.matches(pattern, pattern) is True
+
+    assert len(calls) == len(patterns)

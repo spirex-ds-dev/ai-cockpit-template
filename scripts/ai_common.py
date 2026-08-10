@@ -474,7 +474,7 @@ def fnmatch_translate(pattern: str) -> str:
     return "".join(translated)
 
 
-@lru_cache(maxsize=256)
+@lru_cache(maxsize=8192)
 def _compiled_segment_pattern(pattern: str) -> re.Pattern[str]:
     """Compile each segment glob once while retaining exact path-boundary semantics."""
     return re.compile(fnmatch_translate(pattern))
