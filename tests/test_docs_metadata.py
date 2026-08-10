@@ -488,10 +488,10 @@ def test_installation_command_check_distinguishes_audit_history_from_current_rel
     assert not any(error.startswith("docs/audits/") for error in errors)
 
     current_claim = tmp_path / "docs" / "reference" / "current-release-claim.md"
-    current_claim.write_text("The current installer release is v0.5.48.\n", encoding="utf-8")
+    current_claim.write_text("The current installer release is v0.5.42.\n", encoding="utf-8")
 
     errors = installation_command_errors(tmp_path)
     assert (
-        "docs/reference/current-release-claim.md:1: documented release v0.5.48 does not "
+        "docs/reference/current-release-claim.md:1: documented release v0.5.42 does not "
         "match release.json v0.5.48"
     ) in errors
