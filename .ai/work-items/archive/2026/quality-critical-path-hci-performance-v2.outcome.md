@@ -48,6 +48,8 @@ Governed Work Item: quality-critical-path-hci-performance-v2
 - docs/reference/japanese-capability-assessment.json
 - docs/reference/japanese-capability-assessment.md
 - .ai/cockpit/current_status.md
+- .ai/cockpit/task_report.json
+- .ai/cockpit/task_report.md
 - .ai/decisions/HDR-3e1f2a784e6660ec-e31dfa3b.evidence.json
 - .ai/decisions/HDR-3e1f2a784e6660ec-e31dfa3b.request.json
 - .ai/decisions/HDR-659bc1b4935f92eb-33c7a425.evidence.json
@@ -62,6 +64,8 @@ Governed Work Item: quality-critical-path-hci-performance-v2
 - .ai/decisions/HDR-d9d7a8e76b84d531-1333b58a.request.json
 - .ai/decisions/HDR-ff467982261462dd-6e61d571.evidence.json
 - .ai/decisions/HDR-ff467982261462dd-6e61d571.request.json
+- .ai/decisions/HDR-c12078ec681f8407-85018457.evidence.json
+- .ai/decisions/HDR-c12078ec681f8407-85018457.request.json
 
 ## Findings
 None
