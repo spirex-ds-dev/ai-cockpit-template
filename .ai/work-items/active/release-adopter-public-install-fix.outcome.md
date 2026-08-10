@@ -1,12 +1,10 @@
 # Task Outcome: release-adopter-public-install-fix
 
-Status: `blocked`
-Human Status: `red`
-Failed Gate: `quality`
-Recovery Condition: Run a passing quality retry.
+Status: `completed`
+Human Status: `green`
 
 ## Outcome Summary
-Task release-adopter-public-install-fix generated an evidence-derived outcome with status blocked.
+Task release-adopter-public-install-fix generated an evidence-derived outcome with status completed.
 
 ## Task Overview
 Governed Work Item: release-adopter-public-install-fix
@@ -27,6 +25,11 @@ Governed Work Item: release-adopter-public-install-fix
 - docs/reference/capability-truth-matrix.json
 - docs/reference/pre-release-documentation-alignment.json
 - docs/reference/pre-release-documentation-alignment.md
+- docs/reference/japanese-capability-assessment.json
+- docs/reference/japanese-capability-assessment.md
+- docs/getting-started/security-release-verification.md
+- docs/getting-started/security-release-verification.zh-CN.md
+- docs/getting-started/security-release-verification.ja.md
 - .ai/work-items/active/release-adopter-public-install-fix.contract.json
 - .ai/work-items/active/release-adopter-public-install-fix.summary.json
 - .ai/cockpit/current_status.md
@@ -43,16 +46,16 @@ None
 None
 
 ## Warnings
-- Finish blocked at quality: a required declared verification check failed
+None
 
 ## Limitations
-- Finish verification is blocked
+None
 
 ## Non-Risk Explanations
-- {"evidence": [], "reason": "The failed Finish gate is recorded as a recovery condition, not a completed result.", "sourceWarning": "Finish blocked at quality: a required declared verification check failed"}
+None
 
 ## Forbidden Claims
-- Do not claim a blocked Work Item has completed verification or may be archived.
+None
 
 ## Interventions
 None
