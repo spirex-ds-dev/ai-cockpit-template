@@ -276,7 +276,9 @@ def supply_chain_issues(metadata: dict[str, object], *, root: Path = ROOT) -> li
             candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             candidate = None
-        if not isinstance(candidate, dict) or candidate.get("releaseTag") == metadata.get("releaseTag"):
+        if not isinstance(candidate, dict) or candidate.get("releaseTag") == metadata.get(
+            "releaseTag"
+        ):
             issues.append("release.json installerDigest differs from install.sh")
     supply_chain = metadata.get("supplyChain")
     if not isinstance(supply_chain, dict):

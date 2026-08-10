@@ -76,9 +76,9 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
                 "v0.5.46",
                 "v0.5.47",
                 "v0.5.48",
-                    "v0.5.49",
-                    "v0.5.50",
-                    "v0.5.51",
+                "v0.5.49",
+                "v0.5.50",
+                "v0.5.51",
             },
         )
         == []
