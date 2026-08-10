@@ -115,7 +115,10 @@ def test_draft_quick_install_verification_uses_authenticated_asset_api_after_upl
     draft_upload = workflow[create:verify]
     quick_install = workflow[verify:publish]
 
-    assert 'cp "$RUNNER_TEMP/release-projection.json" "$RUNNER_TEMP/release.json"' in draft_upload
+    assert 'cp release.json "$RUNNER_TEMP/release.json"' in draft_upload
+    assert (
+        'cp "$RUNNER_TEMP/release-projection.json" "$RUNNER_TEMP/release.json"' not in draft_upload
+    )
     assert '"$RUNNER_TEMP/release.json#release.json"' in draft_upload
     assert "gh release download" not in quick_install
     assert (

@@ -467,3 +467,15 @@ def test_smoke_quality_failure_publishes_detailed_gate_logs():
     assert workflow.index("Publish failed quality gate logs") < workflow.index(
         "Publish quality timing summary"
     )
+
+
+def test_release_workflow_uploads_final_runtime_metadata_not_stale_projection():
+    workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
+    draft = workflow.index("Create exact-SHA tag and Draft GitHub Release")
+    publish = workflow.index("Publish verified Draft Release")
+    draft_block = workflow[draft:publish]
+
+    assert 'cp release.json "$RUNNER_TEMP/release.json"' in draft_block
+    assert (
+        'cp "$RUNNER_TEMP/release-projection.json" "$RUNNER_TEMP/release.json"' not in draft_block
+    )

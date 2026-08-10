@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task release-runtime-digest-archive-fix generated an evidence-derived outcome with status completed_with_warnings.
+Task release-v0-5-54-final-metadata-binding generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Hosted rehearsal, public release, fresh-adopter installation and lifecycle closure remain required after merge.
+- Unresolved evidence is explicitly limited: Hosted rehearsal, public v0.5.54 release, fresh-adopter installation, and lifecycle closure remain required.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.

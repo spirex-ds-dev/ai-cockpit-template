@@ -485,7 +485,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           set -euo pipefail
-          cp "$RUNNER_TEMP/release-projection.json" "$RUNNER_TEMP/release.json"
+          cp release.json "$RUNNER_TEMP/release.json"
           git push origin "$SOURCE_COMMIT:refs/tags/$RELEASE_TAG"
           gh release create "$RELEASE_TAG" \
             --repo "$GITHUB_REPOSITORY" \
