@@ -214,6 +214,57 @@ def test_preparation_mode_accepts_historical_projection_with_next_unreserved_can
     assert release_distribution.main() == 0
 
 
+def test_recorded_invalid_public_release_uses_candidate_preparation_without_environment_override(
+    monkeypatch, tmp_path
+):
+    published = {
+        "releaseTag": "v0.5.53",
+        "releaseEvidenceAuthority": "release-assets-v1",
+        "publicContract": {"projectQualityTarget": "ai-cockpit-quality"},
+    }
+    candidate = {
+        "releaseTag": "v0.5.54",
+        "releaseState": "candidate",
+        "published": False,
+        "basedOnReleaseTag": "v0.5.53",
+        "releaseEvidenceAuthority": "release-assets-v1",
+        "publicContract": {},
+        "capabilities": {},
+        "supplyChain": {},
+    }
+    release_path = tmp_path / "release.json"
+    candidate_path = tmp_path / "next-release.json"
+    state_path = tmp_path / "release-state.json"
+    release_path.write_text(json.dumps(published), encoding="utf-8")
+    candidate_path.write_text(json.dumps(candidate), encoding="utf-8")
+    state_path.write_text(
+        json.dumps(
+            {
+                "unavailableTags": [
+                    {
+                        "tag": "v0.5.53",
+                        "kind": "stable_release_invalid_public_distribution",
+                        "reason": "public asset digest mismatch",
+                        "evidence": "https://example.invalid/v0.5.53",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(release_distribution, "RELEASE", release_path)
+    monkeypatch.setattr(release_distribution, "CANDIDATE_RELEASE", candidate_path)
+    monkeypatch.setattr(release_distribution, "RELEASE_STATE", state_path)
+    monkeypatch.setattr(
+        release_distribution, "list_remote_tags", lambda _repository: "a refs/tags/v0.5.53\n"
+    )
+    monkeypatch.setattr(release_distribution, "supply_chain_issues", lambda _metadata: [])
+    monkeypatch.setattr(release_distribution, "exercise_installer", lambda *args, **kwargs: None)
+    monkeypatch.delenv("AI_RELEASE_PREPARATION", raising=False)
+
+    assert release_distribution.main() == 0
+
+
 def test_preparation_mode_uses_public_release_assets_for_historical_tag_tree(monkeypatch, tmp_path):
     published = {
         "releaseTag": "v0.5.50",
@@ -254,6 +305,7 @@ def test_preparation_mode_uses_public_release_assets_for_historical_tag_tree(mon
     monkeypatch.setattr(
         release_distribution, "exercise_public_distribution", lambda *args, **kwargs: None
     )
+    monkeypatch.setattr(release_distribution, "declared_invalid_public_release", lambda _tag: False)
     monkeypatch.setenv("AI_RELEASE_PREPARATION", "1")
 
     assert release_distribution.main() == 0
@@ -1109,6 +1161,7 @@ def test_main_rejects_tag_missing_evidence_even_when_worktree_has_it(monkeypatch
             ],
         ),
     )
+    monkeypatch.setattr(release_distribution, "declared_invalid_public_release", lambda _tag: False)
 
     assert release_distribution.main() == 1
     error = capsys.readouterr().err
