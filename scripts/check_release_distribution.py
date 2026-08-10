@@ -1160,7 +1160,9 @@ def main() -> int:
                     reserved_tag=latest_reserved_tag,
                 )
             )
-        tag_metadata, script, issues = inspect_tagged_release(tag)
+        tag_metadata, script, issues = inspect_tagged_release(
+            tag, allow_historical_metadata=preparation_mode
+        )
         if release_claims(tag_metadata) != release_claims(metadata):
             raise RuntimeError(
                 f"{tag}: release.json claims differ between the worktree and the inspected tag"

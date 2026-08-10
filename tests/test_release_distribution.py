@@ -77,6 +77,7 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
                 "v0.5.47",
                 "v0.5.48",
                 "v0.5.49",
+                "v0.5.50",
             },
         )
         == []
@@ -206,6 +207,53 @@ def test_preparation_mode_accepts_historical_projection_with_next_unreserved_can
     )
     monkeypatch.setattr(release_distribution, "supply_chain_issues", lambda _metadata: [])
     monkeypatch.setattr(release_distribution, "exercise_installer", lambda *args, **kwargs: None)
+    monkeypatch.setenv("AI_RELEASE_PREPARATION", "1")
+
+    assert release_distribution.main() == 0
+
+
+def test_preparation_mode_uses_public_release_assets_for_historical_tag_tree(
+    monkeypatch, tmp_path
+):
+    published = {
+        "releaseTag": "v0.5.50",
+        "releaseEvidenceAuthority": "release-assets-v1",
+        "publicContract": {"projectQualityTarget": "quality"},
+        "capabilities": {"sha256ArchiveVerification": {"supported": True}},
+        "supplyChain": {},
+    }
+    candidate = {
+        **published,
+        "releaseTag": "v0.5.51",
+        "releaseState": "candidate",
+        "published": False,
+        "basedOnReleaseTag": "v0.5.50",
+    }
+    release_path = tmp_path / "release.json"
+    candidate_path = tmp_path / "next-release.json"
+    release_path.write_text(json.dumps(published), encoding="utf-8")
+    candidate_path.write_text(json.dumps(candidate), encoding="utf-8")
+    monkeypatch.setattr(release_distribution, "RELEASE", release_path)
+    monkeypatch.setattr(release_distribution, "CANDIDATE_RELEASE", candidate_path)
+    monkeypatch.setattr(
+        release_distribution, "list_remote_tags", lambda _repository: "a refs/tags/v0.5.50\n"
+    )
+    monkeypatch.setattr(
+        release_distribution,
+        "fetch_public_releases",
+        lambda: [{"tag_name": "v0.5.50", "draft": False, "prerelease": False}],
+    )
+
+    def inspect(tag, *, allow_historical_metadata=False):
+        assert tag == "v0.5.50"
+        assert allow_historical_metadata is True
+        return published, b"#!/bin/sh\nexit 0\n", []
+
+    monkeypatch.setattr(release_distribution, "inspect_tagged_release", inspect)
+    monkeypatch.setattr(release_distribution, "exercise_installer", lambda *args, **kwargs: None)
+    monkeypatch.setattr(
+        release_distribution, "exercise_public_distribution", lambda *args, **kwargs: None
+    )
     monkeypatch.setenv("AI_RELEASE_PREPARATION", "1")
 
     assert release_distribution.main() == 0
@@ -1026,7 +1074,7 @@ def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tm
     monkeypatch.setattr(
         release_distribution,
         "inspect_tagged_release",
-        lambda _tag: (
+            lambda _tag, **_kwargs: (
             json.loads(release_json.read_text(encoding="utf-8")),
             b"",
             ["supplyChain drift"],
