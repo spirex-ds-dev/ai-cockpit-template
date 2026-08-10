@@ -133,12 +133,52 @@ jobs:
           gh run download "$REHEARSAL_RUN_ID" --repo "$GITHUB_REPOSITORY" \
             --name "release-rehearsal" --dir "$rehearsal_dir"
           receipt="$rehearsal_dir/release-rehearsal.json"
+          source_tree="$(git rev-parse "${SOURCE_COMMIT}^{tree}")"
           jq -e \
             --arg source "$SOURCE_COMMIT" \
+            --arg source_tree "$source_tree" \
             --arg tag "$RELEASE_TAG" \
             --arg run "$REHEARSAL_RUN_ID" \
-            '(.format == "ai-cockpit-release-rehearsal" and .version == 1 and .mode == "rehearsal" and .sourceCommit == $source and .releaseTag == $tag and (.runId | tostring) == $run)' \
+            '(.format == "ai-cockpit-release-rehearsal" and .version == 2 and .mode == "rehearsal" and .sourceCommit == $source and .treeDigest == $source_tree and .releaseTag == $tag and (.runId | tostring) == $run and (.strictSmokeRunId | type == "string") and (.strictSmokeEvidenceDigest | test("^[0-9a-f]{64}$")) and (.requiredJobNames | type == "array" and length > 0) and (.testCollection | type == "object") and (.coverage | type == "object") and (.artifactDigests | type == "object" and length > 0) and (.validUntil | type == "string"))' \
             "$receipt" > /dev/null
+
+      - name: Reuse strict smoke verification from exact-source rehearsal receipt
+        if: ${{ !inputs.rehearsal }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          receipt="$RUNNER_TEMP/rehearsal-receipt/release-rehearsal.json"
+          source_tree="$(git rev-parse "${SOURCE_COMMIT}^{tree}")"
+          jq -e --arg tree "$source_tree" --arg now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '(.treeDigest == $tree and .validUntil > $now)' "$receipt" > /dev/null
+          strict_run_id="$(jq -r '.strictSmokeRunId' "$receipt")"
+          strict_run="$(gh run view "$strict_run_id" --repo "$GITHUB_REPOSITORY" --json conclusion,headSha,workflowName,event,displayTitle,jobs)"
+          jq -e --arg source "$SOURCE_COMMIT" --arg rehearsal "$REHEARSAL_RUN_ID" \
+            '(.conclusion == "success" and .headSha == $source and .workflowName == "smoke" and .event == "workflow_dispatch" and (.displayTitle | contains("release_verification for release " + $rehearsal)) and ([.jobs[] | select(.conclusion != "success")] | length == 0))' \
+            <<<"$strict_run" > /dev/null
+          required_jobs="$(jq -c '[.jobs[].name] | unique' <<<"$strict_run")"
+          jq -e --argjson jobs "$required_jobs" '.requiredJobNames == $jobs' "$receipt" > /dev/null
+          artifacts="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${strict_run_id}/artifacts?per_page=100")"
+          artifact_digests="$(jq -c '[.artifacts[] | select(.expired == false) | {key: .name, value: .digest}] | from_entries' <<<"$artifacts")"
+          jq -e --argjson digests "$artifact_digests" '.artifactDigests == $digests' "$receipt" > /dev/null
+          receipt_payload="$(jq -c 'del(.strictSmokeEvidenceDigest)' "$receipt")"
+          test "$(printf '%s' "$receipt_payload" | sha256sum | cut -d' ' -f1)" = "$(jq -r '.strictSmokeEvidenceDigest' "$receipt")"
+          quality_artifact="$(jq -r 'keys[] | select(startswith("quality-diagnostics-"))' <<<"$artifact_digests" | head -1)"
+          aggregate_artifact="$(jq -r 'keys[] | select(startswith("project-test-aggregate-"))' <<<"$artifact_digests" | head -1)"
+          [[ -n "$quality_artifact" && -n "$aggregate_artifact" ]]
+          receipt_evidence="$RUNNER_TEMP/reused-rehearsal-evidence"
+          mkdir -p "$receipt_evidence"
+          gh run download "$strict_run_id" --repo "$GITHUB_REPOSITORY" --name "$quality_artifact" --dir "$receipt_evidence/quality"
+          gh run download "$strict_run_id" --repo "$GITHUB_REPOSITORY" --name "$aggregate_artifact" --dir "$receipt_evidence/aggregate"
+          coverage_path="$(find "$receipt_evidence/aggregate" -name coverage.json -type f | head -1)"
+          aggregate_path="$(find "$receipt_evidence/aggregate" -name receipt.json -type f | head -1)"
+          timing_path="$(find "$receipt_evidence/aggregate" -name timing.json -type f | head -1)"
+          [[ -n "$coverage_path" && -n "$aggregate_path" && -n "$timing_path" ]]
+          coverage="$(jq -c '{percent: .totals.percent_covered, sourceFiles: ([.files | keys[]] | sort)}' "$coverage_path")"
+          test_collection="$(jq -cn --slurpfile receipt "$aggregate_path" --slurpfile timing "$timing_path" '{manifestDigest: $receipt[0].manifestDigest, planDigest: $receipt[0].planDigest, shards: $timing[0].shards}')"
+          jq -e --argjson coverage "$coverage" --argjson collection "$test_collection" \
+            '(.coverage == $coverage and .testCollection == $collection and .coverage.percent >= 85.10)' "$receipt" > /dev/null
+          echo "STRICT_SMOKE_REUSED_RUN_ID=$strict_run_id" >> "$GITHUB_ENV"
 
       - name: Materialize exact-source runtime release freeze
         shell: bash
@@ -343,6 +383,7 @@ jobs:
           echo "EVIDENCE_BUNDLE_DIGEST=$bundle_digest" >> "$GITHUB_ENV"
 
       - name: Dispatch strict smoke verification for verified source commit
+        if: ${{ inputs.rehearsal }}
         working-directory: ${{ github.workspace }}
         run: |
           set -euo pipefail
@@ -371,17 +412,51 @@ jobs:
             sleep 5
           done
           gh run watch "$run_id" --repo "$GITHUB_REPOSITORY" --exit-status
+          echo "STRICT_SMOKE_RUN_ID=$run_id" >> "$GITHUB_ENV"
 
       - name: Record exact-source rehearsal receipt
         if: ${{ inputs.rehearsal }}
         shell: bash
         run: |
           set -euo pipefail
-          jq -n \
+          [[ "$STRICT_SMOKE_RUN_ID" =~ ^[0-9]+$ ]]
+          source_tree="$(git rev-parse "${SOURCE_COMMIT}^{tree}")"
+          strict_run="$(gh run view "$STRICT_SMOKE_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,headSha,workflowName,event,displayTitle,jobs)"
+          jq -e --arg source "$SOURCE_COMMIT" --arg run "$GITHUB_RUN_ID" \
+            '(.conclusion == "success" and .headSha == $source and .workflowName == "smoke" and .event == "workflow_dispatch" and (.displayTitle | contains("release_verification for release " + $run)) and ([.jobs[] | select(.conclusion != "success")] | length == 0))' \
+            <<<"$strict_run" > /dev/null
+          required_jobs="$(jq -c '[.jobs[].name] | unique' <<<"$strict_run")"
+          artifacts="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${STRICT_SMOKE_RUN_ID}/artifacts?per_page=100")"
+          artifact_digests="$(jq -c '[.artifacts[] | select(.expired == false) | {key: .name, value: .digest}] | from_entries' <<<"$artifacts")"
+          jq -e 'has("quality-diagnostics-" + env.STRICT_SMOKE_RUN_ID) or ([keys[] | startswith("quality-diagnostics-")] | any)' <<<"$artifact_digests" > /dev/null
+          quality_artifact="$(jq -r 'keys[] | select(startswith("quality-diagnostics-"))' <<<"$artifact_digests" | head -1)"
+          aggregate_artifact="$(jq -r 'keys[] | select(startswith("project-test-aggregate-"))' <<<"$artifact_digests" | head -1)"
+          [[ -n "$quality_artifact" && -n "$aggregate_artifact" ]]
+          receipt_evidence="$RUNNER_TEMP/rehearsal-receipt-evidence"
+          mkdir -p "$receipt_evidence"
+          gh run download "$STRICT_SMOKE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "$quality_artifact" --dir "$receipt_evidence/quality"
+          gh run download "$STRICT_SMOKE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "$aggregate_artifact" --dir "$receipt_evidence/aggregate"
+          coverage_path="$(find "$receipt_evidence/aggregate" -name coverage.json -type f | head -1)"
+          aggregate_path="$(find "$receipt_evidence/aggregate" -name receipt.json -type f | head -1)"
+          timing_path="$(find "$receipt_evidence/aggregate" -name timing.json -type f | head -1)"
+          [[ -n "$coverage_path" && -n "$aggregate_path" && -n "$timing_path" ]]
+          coverage="$(jq -c '{percent: .totals.percent_covered, sourceFiles: ([.files | keys[]] | sort)}' "$coverage_path")"
+          test_collection="$(jq -cn --slurpfile receipt "$aggregate_path" --slurpfile timing "$timing_path" '{manifestDigest: $receipt[0].manifestDigest, planDigest: $receipt[0].planDigest, shards: $timing[0].shards}')"
+          valid_until="$(date -u -d '+24 hours' +%Y-%m-%dT%H:%M:%SZ)"
+          receipt_payload="$(jq -cn \
             --arg source "$SOURCE_COMMIT" \
+            --arg tree "$source_tree" \
             --arg tag "$RELEASE_TAG" \
             --arg run "$GITHUB_RUN_ID" \
-            '{format:"ai-cockpit-release-rehearsal",version:1,mode:"rehearsal",sourceCommit:$source,releaseTag:$tag,runId:$run}' \
+            --arg strict_run "$STRICT_SMOKE_RUN_ID" \
+            --arg valid_until "$valid_until" \
+            --argjson jobs "$required_jobs" \
+            --argjson collection "$test_collection" \
+            --argjson coverage "$coverage" \
+            --argjson artifacts "$artifact_digests" \
+            '{format:"ai-cockpit-release-rehearsal",version:2,mode:"rehearsal",sourceCommit:$source,treeDigest:$tree,releaseTag:$tag,runId:$run,strictSmokeRunId:$strict_run,requiredJobNames:$jobs,testCollection:$collection,coverage:$coverage,artifactDigests:$artifacts,validUntil:$valid_until}')"
+          evidence_digest="$(printf '%s' "$receipt_payload" | sha256sum | cut -d' ' -f1)"
+          jq --arg digest "$evidence_digest" '. + {strictSmokeEvidenceDigest: $digest}' <<<"$receipt_payload" \
             > "$RUNNER_TEMP/release-rehearsal.json"
 
       - name: Upload exact-source rehearsal receipt

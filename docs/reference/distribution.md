@@ -135,6 +135,13 @@ and requested tag before any immutable mutation. If main changes afterwards, run
 a new rehearsal for that SHA; do not treat an old preparation snapshot as a reason
 to repeatedly create freeze Work Items.
 
+For an unexpired same-source rehearsal, publication consumes the strict-smoke
+result instead of dispatching it again. This is not a weaker verification path:
+the receipt must exactly bind the Git tree, tag, successful jobs, test collection
+and shards, coverage/source set, provider artifact digests and its own integrity
+digest. A missing, stale, cancelled, failed or mismatched field stops publication
+before the tag; runtime release checks and Draft Quick Install remain mandatory.
+
 Readiness normally requires no active Work Item. The sole exception is the one
 explicitly authorized `repository_release.publish` Work Item that records the
 publication evidence; it must be the only active Contract. That exception is
