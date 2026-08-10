@@ -47,11 +47,14 @@ when quality fails. Recover by setting the missing variable in
   cached results never substitute for release evidence.
 - Compatibility jobs validate the interpreter/platform matrix and do not run
   the full quality graph.
-- Hosted smoke has explicit `template-smoke` (the single full-quality owner),
-  `installation-smoke`, and `release-evidence` jobs. These jobs start
-  independently, never invoke the full graph twice, and feed an `always()`
-  terminal `ci-evidence` job that fails closed on failure, cancellation, or
-  skip.
+- Hosted smoke assigns every complete `project-test` entry one owner: the
+  duration-balanced `project-test-core`, `project-test-governance`,
+  `project-test-installer`, `project-test-lifecycle`, and `project-test-release`
+  runners. Each uploads source-bound JUnit, coverage, timing, log, and receipt
+  artifacts. `project-test-aggregate` is an `always()` fail-closed consumer:
+  it rejects missing, cancelled, failed, stale, wrong-SHA, or incomplete shard
+  evidence before `template-smoke` may reuse its aggregate receipt. Local
+  `make project-test` remains the serial diagnostic equivalent.
 - The adopter distribution contains runtime skeletons, policies, and required
   baselines, but not template-maintenance Work Item starts, decision history,
   or archive history. The installer prunes those trees before traversal and
@@ -71,15 +74,16 @@ publication. Valid Make jobserver descriptors are preserved through the
 telemetry wrapper; invalid or unavailable descriptors are not forwarded.
 `project-test` also writes JUnit evidence and the log contains its slowest-test
 report. `scripts/summarize_quality_gates.py` writes JSON and Markdown summaries
-with wall time, total gate time, parallel efficiency, slowest gate, failures,
-failure tails, skips, and the final decision.
+with source and runner identity, per-gate wall time, CPU/cache facts, total
+gate time, parallel efficiency, slowest gate, failures, failure tails, skips,
+and the final decision.
 
 Hosted CI uploads the complete session directory and wrapper log with
 `if: always()`, so success, failure, cancellation, and timeout retain
 diagnostics. Missing timing or artifact evidence is an error; a cache hit is
 not final evidence.
 
-`template-smoke` gives its one full `make quality` invocation a 25-minute
+`template-smoke` gives its remaining quality invocation a 25-minute
 execution limit. `timeout` then has a finite 30-second forced-termination
 grace for a descendant that ignores the initial signal. The result is a
 terminal failed gate with the same heartbeat and retained diagnostics, never an
@@ -91,6 +95,10 @@ Manual smoke dispatch must declare its purpose. Use
 for source-bound performance measurement. `release_preparation` remains the
 strict default and runs release-state evidence checks; measurement dispatch
 does not claim release intent.
+
+Baseline and candidate samples are separate receipts. Each comparison requires
+at least five successful, unique workflow run/attempt samples on one exact
+SHA/tree and runner class; a cache hit is never verification evidence.
 
 Hosted before/after timing is an evidence claim, not an assumption. If a WI-20
 baseline or a hosted run cannot be retrieved, record a structured `not-run`

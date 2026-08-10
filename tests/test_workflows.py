@@ -394,6 +394,44 @@ def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
     assert "quality heartbeat" in workflow
 
 
+def test_smoke_workflow_reports_hci_quality_progress_every_thirty_seconds():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    quality_step = workflow.split("      - name: Run repository quality gates", 1)[1].split(
+        "      - name: Publish failed quality gate logs", 1
+    )[0]
+
+    assert "🟡 quality-full running" in quality_step
+    assert "Current gate:" in quality_step
+    assert "Evidence: target/quality/sessions/" in quality_step
+    assert "sleep 30" in quality_step
+    assert "🟢 quality-full completed" in quality_step
+    assert "Coverage:" in quality_step
+    assert "Outcome:" in quality_step
+
+
+def test_smoke_hosted_project_test_uses_independent_shards_and_a_fail_closed_aggregate():
+    """Regression: Hosted speedup cannot omit a shard or make template-smoke trust a cache."""
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+
+    for shard in ("core", "governance", "installer", "lifecycle", "release"):
+        job = workflow.split(f"  project-test-{shard}:\n", 1)[1].split("\n  project-test-", 1)[0]
+        assert "needs: project-test-manifest" in job
+        assert f"make project-test-shard SHARD={shard}" in job
+        assert "actions/download-artifact@" in job
+        assert "actions/upload-artifact@" in job
+    aggregate = workflow.split("  project-test-aggregate:\n", 1)[1].split("\n  template-smoke:", 1)[
+        0
+    ]
+    assert "if: always()" in aggregate
+    assert "project-test-core" in aggregate
+    assert "project-test-release" in aggregate
+    assert "make project-test-aggregate" in aggregate
+    template = workflow.split("  template-smoke:", 1)[1].split("\n  installation-smoke:", 1)[0]
+    assert "needs: project-test-aggregate" in template
+    assert "Download aggregate project-test evidence" in template
+    assert "PROJECT_TEST_GATE=project-test-receipt" in template
+
+
 def test_smoke_pr_audit_does_not_receive_a_github_api_token_for_offline_recovery_validation():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
     audit = workflow.split("      - name: Run template AI checks", 1)[1].split(

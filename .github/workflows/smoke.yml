@@ -32,7 +32,218 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  project-test-manifest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Install development quality tools
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+      - name: Build deterministic project-test plan
+        run: make project-test-manifest
+      - name: Upload project-test plan
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            target/quality/project-test-manifest.json
+            target/quality/project-test-shard-plan.json
+          if-no-files-found: error
+          retention-days: 14
+
+  project-test-core:
+    needs: project-test-manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Install development quality tools
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+      - name: Download project-test plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .
+      - name: Run core project-test shard
+        run: make project-test-shard SHARD=core
+      - name: Upload core shard evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: project-test-shard-core-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/core
+          if-no-files-found: error
+          retention-days: 14
+
+  project-test-governance:
+    needs: project-test-manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Install development quality tools
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+      - name: Download project-test plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .
+      - name: Run governance project-test shard
+        run: make project-test-shard SHARD=governance
+      - name: Upload governance shard evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: project-test-shard-governance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/governance
+          if-no-files-found: error
+          retention-days: 14
+
+  project-test-installer:
+    needs: project-test-manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Install development quality tools
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+      - name: Download project-test plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .
+      - name: Run installer project-test shard
+        run: make project-test-shard SHARD=installer
+      - name: Upload installer shard evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: project-test-shard-installer-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/installer
+          if-no-files-found: error
+          retention-days: 14
+
+  project-test-lifecycle:
+    needs: project-test-manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Install development quality tools
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+      - name: Download project-test plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .
+      - name: Run lifecycle project-test shard
+        run: make project-test-shard SHARD=lifecycle
+      - name: Upload lifecycle shard evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: project-test-shard-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/lifecycle
+          if-no-files-found: error
+          retention-days: 14
+
+  project-test-release:
+    needs: project-test-manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Install development quality tools
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+      - name: Download project-test plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .
+      - name: Run release project-test shard
+        run: make project-test-shard SHARD=release
+      - name: Upload release shard evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: project-test-shard-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/release
+          if-no-files-found: error
+          retention-days: 14
+
+  project-test-aggregate:
+    needs: [project-test-core, project-test-governance, project-test-installer, project-test-lifecycle, project-test-release]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Install development quality tools
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+      - name: Download project-test plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .
+      - name: Download core shard evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-shard-core-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/core
+      - name: Download governance shard evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-shard-governance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/governance
+      - name: Download installer shard evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-shard-installer-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/installer
+      - name: Download lifecycle shard evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-shard-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/lifecycle
+      - name: Download release shard evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-shard-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/shards/release
+      - name: Aggregate project-test evidence
+        run: make project-test-aggregate
+      - name: Upload aggregate project-test evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: project-test-aggregate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/project-test-aggregate
+          if-no-files-found: error
+          retention-days: 14
+
   template-smoke:
+    needs: project-test-aggregate
     runs-on: ubuntu-latest
     # Keep the quality gate bounded; timeout is fail-closed and prevents an
     # ambiguous PR state from waiting indefinitely for later required gates.
@@ -43,6 +254,18 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
+
+      - name: Download project-test plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .
+
+      - name: Download aggregate project-test evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: project-test-aggregate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: target/quality/project-test-aggregate
 
       - name: Delegated secret scanning (release-blocking)
         shell: bash
@@ -104,13 +327,41 @@ jobs:
         shell: bash
         run: |
           set -uo pipefail
+          echo '🟡 quality-full running'
+          echo 'Current gate: initializing'
+          echo 'Elapsed: 00:00'
+          echo 'Completed: 0/unknown gates'
+          echo 'Last progress: 0s ago'
+          echo 'Evidence: target/quality/sessions/<pending>/'
           echo 'Starting bounded repository quality gates (25 minute execution limit, then 30 second forced-termination grace).'
-          timeout --foreground --kill-after=30s 25m make quality > >(tee "$RUNNER_TEMP/repository-quality.log") 2>&1 &
+          quality_started_epoch="$(date +%s)"
+          timeout --foreground --kill-after=30s 25m make quality PROJECT_TEST_GATE=project-test-receipt > >(tee "$RUNNER_TEMP/repository-quality.log") 2>&1 &
           quality_pid=$!
           (
+            started_epoch="$(date +%s)"
             while kill -0 "$quality_pid" 2>/dev/null; do
+              now_epoch="$(date +%s)"
+              elapsed=$((now_epoch - started_epoch))
+              session_id=''
+              current_gate='initializing'
+              completed=0
+              total='unknown'
+              last_progress='0'
+              if [[ -f target/quality/current-session.txt ]]; then
+                session_id="$(cat target/quality/current-session.txt)"
+                session_root="target/quality/sessions/$session_id"
+                if compgen -G "$session_root/timing/*.json" > /dev/null; then
+                  read -r current_gate completed total last_progress < <(python3 -c 'import json,sys; from pathlib import Path; records=[json.loads(path.read_text(encoding="utf-8")) for path in Path(sys.argv[1]).glob("*.json")]; latest=max(records,key=lambda item:item.get("startedAt","")); print(latest.get("gate","initializing"),sum(item.get("result")=="passed" for item in records),len(records),0)' "$session_root/timing")
+                fi
+              fi
+              echo '🟡 quality-full running'
+              echo "Current gate: $current_gate"
+              printf 'Elapsed: %02d:%02d\n' $((elapsed / 60)) $((elapsed % 60))
+              echo "Completed: $completed/$total gates"
+              echo "Last progress: ${last_progress}s ago"
+              echo "Evidence: target/quality/sessions/${session_id:-<pending>}/"
               echo "::notice title=quality heartbeat::repository quality gates still running at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-              sleep 60
+              sleep 30
             done
           ) &
           heartbeat_pid=$!
@@ -118,6 +369,21 @@ jobs:
           quality_status=$?
           kill "$heartbeat_pid" 2>/dev/null || true
           wait "$heartbeat_pid" 2>/dev/null || true
+          if [[ "$quality_status" -eq 0 ]]; then
+            completed_elapsed=$(( $(date +%s) - quality_started_epoch ))
+            coverage='unknown'
+            if [[ -f target/coverage.json ]]; then
+              coverage="$(python3 -c 'import json; print(json.load(open("target/coverage.json", encoding="utf-8"))["totals"]["percent_covered"])')"
+            fi
+            session_id='unknown'
+            if [[ -f target/quality/current-session.txt ]]; then
+              session_id="$(cat target/quality/current-session.txt)"
+            fi
+            echo '🟢 quality-full completed'
+            printf 'Wall time: %02d:%02d\n' $((completed_elapsed / 60)) $((completed_elapsed % 60))
+            echo "Coverage: $coverage"
+            echo "Outcome: target/quality/sessions/$session_id/summary.json"
+          fi
           if [[ "$quality_status" -eq 124 || "$quality_status" -eq 137 ]]; then
             echo 'Repository quality gates exceeded the 25 minute bound.' >&2
           fi
