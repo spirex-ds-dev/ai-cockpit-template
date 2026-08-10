@@ -299,6 +299,31 @@ def test_release_archive_cli_writes_canonical_git_archive(monkeypatch, tmp_path:
     assert output.read_bytes() == release_archive.canonical_archive_bytes(tmp_path, source)
 
 
+def test_release_archive_cli_can_project_current_worktree_bytes(monkeypatch, tmp_path: Path):
+    source = _commit_worktree_file(tmp_path, "tracked.txt", "before\n")
+    (tmp_path / "tracked.txt").write_text("after\n", encoding="utf-8")
+    output = tmp_path / "archive.tar.gz"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "release_archive",
+            "--root",
+            str(tmp_path),
+            "--source-commit",
+            source,
+            "--output",
+            str(output),
+            "--use-worktree",
+        ],
+    )
+
+    assert release_archive.main() == 0
+    assert output.read_bytes() == release_archive.canonical_archive_bytes_from_worktree(
+        tmp_path, source
+    )
+
+
 def _git(repo: Path, *args: str) -> str:
     return subprocess.run(
         ["git", "-C", str(repo), *args],

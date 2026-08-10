@@ -117,8 +117,19 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--source-commit", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--use-worktree",
+        action="store_true",
+        help="archive Git-selected paths with current regular worktree bytes",
+    )
     args = parser.parse_args()
-    args.output.write_bytes(canonical_archive_bytes(args.root.resolve(), args.source_commit))
+    root = args.root.resolve()
+    archive = (
+        canonical_archive_bytes_from_worktree(root, args.source_commit)
+        if args.use_worktree
+        else canonical_archive_bytes(root, args.source_commit)
+    )
+    args.output.write_bytes(archive)
     return 0
 
 

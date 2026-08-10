@@ -128,6 +128,19 @@ def test_draft_quick_install_verification_uses_authenticated_asset_api_after_upl
     assert "download_draft_asset release.json" in quick_install
 
 
+def test_release_archive_projects_and_compares_the_runtime_digest_manifest():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    evidence = workflow.index("Generate source-bound release evidence")
+    verification = workflow.index("Verify source-bound release evidence subjects")
+    segment = workflow[evidence:verification]
+
+    assert 'cp "$RUNNER_TEMP/release-evidence/release-digests.json"' in segment
+    assert '"$GITHUB_WORKSPACE/.ai/cockpit/release-digests.json"' in segment
+    assert "--use-worktree" in segment
+    assert '"ai-cockpit/.ai/cockpit/release-digests.json"' in segment
+    assert 'cmp -s "$RUNNER_TEMP/archive-release-digests.json"' in segment
+
+
 def test_published_projection_is_not_promoted_in_repository():
     import json
 

@@ -1,0 +1,253 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-archive-digest-projection",
+  "mode": "code",
+  "title": "Release archive digest projection correction",
+  "baseCommit": "0b19698bf0b1762b980e523e279b313e9d02bb14",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/release.yml",
+    "scripts/release_archive.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_workflow.py",
+    "tests/test_release_distribution.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-08-10-release-archive-digest-projection.md",
+    ".ai/work-items/active/release-archive-digest-projection.contract.json",
+    ".ai/work-items/active/release-archive-digest-projection.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-archive-digest-projection.outcome.json",
+    ".ai/work-items/active/release-archive-digest-projection.outcome.md"
+  ],
+  "outOfScope": [
+    "Do not modify or rebuild v0.5.50 or v0.5.51.",
+    "Do not reduce test scope, coverage, strict smoke, Quick Install, release-evidence, or fail-closed checks."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The failed v0.5.52 Draft Quick Install log proves the archive projection is generated before its embedded release digest is refreshed."
+    },
+    {
+      "path": "scripts/release_archive.py",
+      "reason": "Defines the source archive boundary that must contain the exact runtime release digest projection."
+    },
+    {
+      "path": "GitHub release run 31390801439 and Draft v0.5.52",
+      "reason": "Authoritative failure evidence: Draft asset release-digests.json is v0.5.52 but the archive-internal digest is v0.5.48."
+    },
+    {
+      "path": "conversation:2026-08-10",
+      "reason": "User authorized complete remediation, release publication, and future-adopter verification with authority recorded in Contract."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "public_release",
+      "release_identity",
+      "destructive_cleanup"
+    ],
+    "reason": "The correction touches public release evidence and requires cleanup of one unpublic Draft/tag only after exact identity confirmation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Public release and release workflow ownership require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorization and fail-closed release evidence are recorded."
+  },
+  "preReviewWarnings": [
+    "Review archive-internal release digest identity separately from the Draft asset identity.",
+    "Verify failed v0.5.52 Draft/tag cleanup targets exactly the unpublic correction attempt."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release archive contains the same source-bound release-digests.json identity as the Draft asset, including release tag, source SHA and correlation fields.",
+    "A missing, stale or mismatched archive-internal release digest fails before Draft publication and is covered by focused regression tests.",
+    "Actual release still validates a downloaded Draft asset and a clean adopter, and fails closed before public publication on any identity mismatch.",
+    "The failed unpublic v0.5.52 Draft release and tag are deleted only after their exact target, draft state and zero-download condition are recorded; the correction is re-released from a new source/tag according to candidate state.",
+    "English/Japanese documentation identifies both the Draft asset and archive-internal manifest as source-bound release identity surfaces.",
+    "A new public correction release and a clean future-adopter installation pass before this Work Item is closed."
+  ],
+  "guidelines": [
+    "Public workflow behavior and recovery conditions must be documented in English and Japanese.",
+    "Archive and Draft release identity must be source-bound, deterministic and fail closed; ordinary caches must never substitute for verification.",
+    "Do not remove, skip, xfail, quarantine or weaken release, smoke, compatibility, coverage, artifact or Quick Install gates."
+  ],
+  "intent": {
+    "problem": "The v0.5.52 actual-release run 31390801439 correctly reused its rehearsal receipt but failed before publication because the archive still embedded the historical v0.5.48 release-digests.json while the Draft asset was v0.5.52.",
+    "constraints": [
+      "Preserve all release gates and historic v0.5.50/v0.5.51 evidence.",
+      "A release must never publish when Draft asset and archive-internal release identity differ.",
+      "User authorizes PR, merge, cleanup of only the confirmed unpublic failed v0.5.52 Draft/tag, corrective public release, and fresh-adopter verification."
+    ],
+    "rationale": "Projecting the exact generated release digest into the archive before archiving makes the installer consume the same source-bound identity that the Draft asset declares, while a regression gate prevents recurrence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-10 complete all Work Items; authorization must be written into Contract",
+    "scope": "User authorizes all confirmations needed for this remediation, including PR, merge, deletion only of the confirmed unpublic v0.5.52 Draft release/tag, corrective release publication, clean future-adopter verification, and local/remote Work Item branch cleanup. The requested delivery boundary is a complete corrected newest public version visible by tomorrow, not an unverified Draft or architecture-only change."
+  },
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。用户明确要求根治发布版本号、文档和 JSON 不一致，并将收益交付未来 adopter。到发布最新版本为止，做好优化和自检。明天，我要看到修正完整的新版本（包括远程和本地的的清理）。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-10 complete-all-work-items authorization",
+    "capturedAt": "2026-08-10",
+    "digest": "sha256:user-authorized-release-archive-digest-projection"
+  },
+  "declaredIntent": {
+    "summary": "Root-cause and correct archive-internal release digest drift so public installer identity is coherent with Draft assets and future adopters receive a verified correction.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "scenarioCoverage": [
+    {"scenario":"Draft asset and archive-internal digest agree", "riskDomain":"release_identity", "required":true, "status":"unverified", "evidence":[], "expected":"Both declare the requested tag, source SHA and correlation.", "verificationPlan":"Focused archive/workflow regression test plus failed-Draft retry evidence."},
+    {"scenario":"Archive mismatch fails before publication", "riskDomain":"evidence_integrity", "required":true, "status":"unverified", "evidence":[], "expected":"Quick Install/Draft verification rejects a stale embedded manifest.", "verificationPlan":"Focused negative workflow test and fail-closed Draft Quick Install step."},
+    {"scenario":"Future adopter installs corrected public release", "riskDomain":"public_distribution", "required":true, "status":"unverified", "evidence":[], "expected":"A clean adopter installs a public correction release with matching release evidence.", "verificationPlan":"Post-publish clean-adopter installation and distribution verification against the public successor release."}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": ["GitHub Draft release v0.5.52", "Git tag refs/tags/v0.5.52"],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "User authorization recorded in authorityEvidence; targets must be confirmed draft, unpublic, exact SHA 0b19698bf0b1762b980e523e279b313e9d02bb14 and zero downloads immediately before deletion.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "user",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "conversation:2026-08-10 complete-all-work-items authorization",
+          "directUserInstructionDigest": "sha256:ea76f0b2a5def6d9954677172685601a150291b1e01ab9c44c5ecb8be7adece2",
+          "authorizedAt": "2026-08-10T00:00:00+09:00"
+        },
+        "scope": ["GitHub Draft release v0.5.52", "Git tag refs/tags/v0.5.52"]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray (explicit authorization in this conversation)",
+    "reason": "User explicitly authorized completion through PR, merge, corrected public release, future-adopter verification, and lifecycle cleanup; this includes the scoped release workflow correction."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 858
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-archive-digest-projection.json",
+    "baseCommit": "0b19698bf0b1762b980e523e279b313e9d02bb14",
+    "initialScopeDigest": "fffa7871c71535e53580e10adeccd1c1cadd6f264585e80ff6b8e8a99863624c",
+    "contractSkeletonDigest": "41a3f75f0c8eefa16f8301f8aa7fafa86c06e475d40b4fb844419ce35c030ef8"
+  }
+}
