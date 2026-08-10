@@ -40,6 +40,33 @@ def test_fixture_catalog_contains_the_seven_required_real_project_shapes():
         assert fixture.installer_stack in validation.INSTALLER_STACKS
 
 
+def test_immutable_fixture_cache_is_tree_digest_bound_and_targets_are_isolated(tmp_path):
+    source = tmp_path / "source"
+    source.mkdir()
+    (source / "app.py").write_text("value = 1\n", encoding="utf-8")
+    (source / "test_app.py").write_text("def test_value(): pass\n", encoding="utf-8")
+    fixture = validation.Fixture(
+        root=source,
+        project_type="python-service",
+        stack="python",
+        installer_stack="python",
+        toolchain="python",
+        platforms=(),
+        safe_change_path=source / "app.py",
+        test_path=source / "test_app.py",
+    )
+
+    immutable = validation.prepare_immutable_fixture(fixture, tmp_path / "cache")
+    first, second = tmp_path / "first", tmp_path / "second"
+    validation.copy_immutable_fixture(immutable, first)
+    validation.copy_immutable_fixture(immutable, second)
+    (first / "app.py").write_text("value = 2\n", encoding="utf-8")
+
+    assert immutable.name.startswith("python-service-")
+    assert (immutable / "app.py").read_text(encoding="utf-8") == "value = 1\n"
+    assert (second / "app.py").read_text(encoding="utf-8") == "value = 1\n"
+
+
 def test_policy_probes_fail_closed_without_promoting_warnings_or_missing_evidence():
     probes = validation.run_policy_probes()
 
@@ -66,6 +93,9 @@ def test_complete_matrix_executes_real_local_lifecycle_and_failure_cases(tmp_pat
         assert phases["install"]["status"] == "passed"
         assert phases["calibrate"]["status"] == "passed"
         assert phases["finish"]["status"] == "passed"
+        assert phases["finish"]["command"] == "make ai-finish ARCHIVE=true"
+        assert "qualityRoute=declared_fixture_commands" in phases["finish"]["evidence"]
+        assert "humanRelay=not_run_in_fixture" not in phases["finish"]["evidence"]
         assert phases["pr_evidence"]["evidenceKind"] == "local_provider_simulation"
         assert phases["close_work_item"]["status"] == "passed"
         assert phases["upgrade"]["status"] == "passed"

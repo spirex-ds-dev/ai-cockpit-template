@@ -74,6 +74,29 @@ def test_runner_function_covers_relative_output_and_cache_metadata(tmp_path):
     assert evidence["runId"] == "42"
 
 
+def test_runner_emits_source_and_environment_identity(tmp_path):
+    args = Namespace(
+        repository=str(ROOT),
+        output=str(tmp_path / "timing.json"),
+        log=str(tmp_path / "gate.log"),
+        gate="identity",
+        category="test",
+        timeout_seconds=None,
+        cache_applicable=False,
+        cache_hit=False,
+        session_id="identity-session",
+        run_id="identity-run",
+        command=["--", sys.executable, "-c", "print('identity')"],
+    )
+
+    assert run_quality_gate.run_gate(args) == 0
+    evidence = json.loads((tmp_path / "timing.json").read_text(encoding="utf-8"))
+    assert evidence["treeDigest"].startswith("sha256:")
+    assert evidence["environment"]["os"]
+    assert evidence["environment"]["python"] == sys.version.split()[0]
+    assert evidence["environment"]["cpuCount"] >= 1
+
+
 def test_runner_preserves_valid_make_jobserver_descriptors(monkeypatch):
     read_fd, write_fd = os.pipe()
     try:
@@ -240,6 +263,9 @@ def test_runner_preserves_failure_and_timeout_evidence(tmp_path):
     failure, output, _ = _run(tmp_path, [sys.executable, "-c", "raise SystemExit(3)"])
     assert failure.returncode == 3
     assert json.loads(output.read_text(encoding="utf-8"))["result"] == "failed"
+    assert "🔴 quality-full blocked" in failure.stderr
+    assert "Failed gate: sample" in failure.stderr
+    assert "Recovery:" in failure.stderr
     timeout, output, _ = _run(
         tmp_path, [sys.executable, "-c", "import time; time.sleep(2)"], timeout=1
     )

@@ -24,6 +24,30 @@ def test_check_ai_pr_uses_aggregate_validator():
     )
 
 
+def test_project_test_parallel_entrypoints_use_the_fail_closed_manifest_runner():
+    shard = subprocess.run(
+        ["make", "-n", "project-test-shard", "SHARD=core"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    aggregate = subprocess.run(
+        ["make", "-n", "project-test-aggregate"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert shard.returncode == 0, shard.stdout + shard.stderr
+    assert "quality_test_manifest.py run-shard" in shard.stdout
+    assert '--shard "core"' in shard.stdout
+    assert "quality_test_manifest.py --root" not in shard.stdout
+    assert aggregate.returncode == 0, aggregate.stdout + aggregate.stderr
+    assert "quality_test_manifest.py aggregate" in aggregate.stdout
+
+
 def test_check_ai_pr_runs_fast_predictors_before_aggregate_validation():
     result = subprocess.run(
         ["make", "-n", "check-ai-pr", "AI_BASE_COMMIT=abc123"],
@@ -282,6 +306,20 @@ def test_project_test_uses_stricter_coverage_floor():
 
     assert result.returncode == 0, result.stdout + result.stderr
     assert "--cov-fail-under=85.10" in result.stdout
+
+
+def test_project_test_manifest_is_a_public_make_target_with_live_collection():
+    result = subprocess.run(
+        ["make", "-n", "project-test-manifest"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "scripts/quality_test_manifest.py" in result.stdout
+    assert "--output target/quality/project-test-manifest.json" in result.stdout
+    assert "--plan-output target/quality/project-test-shard-plan.json" in result.stdout
 
 
 def test_coverage_floor_rejects_a_result_that_only_rounds_to_85(tmp_path):

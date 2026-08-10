@@ -276,6 +276,7 @@ def test_ai_start_main_creates_unrelated_contract_despite_real_foreign_duplicate
     monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
+    stub_ownership_preview(monkeypatch)
     monkeypatch.setattr(
         ai_start,
         "create_observability",
@@ -321,6 +322,7 @@ def test_ai_start_main_creates_unrelated_contract_despite_foreign_canonical_acti
     monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
+    stub_ownership_preview(monkeypatch)
     monkeypatch.setattr(
         ai_start,
         "create_observability",
@@ -2234,6 +2236,11 @@ def stub_active_status(monkeypatch):
     monkeypatch.setattr(ai_start, "run_make", lambda *_args, **_kwargs: (0, ""))
 
 
+def stub_ownership_preview(monkeypatch):
+    """Keep lifecycle unit tests focused on their own temporary repository state."""
+    monkeypatch.setattr(ai_start, "preview", list)
+
+
 def test_ai_start_refreshes_only_stale_no_active_status(monkeypatch):
     stale = (
         "cockpit status Changed Files do not match current Git changes; run `make repair-ai-status`"
@@ -2303,6 +2310,7 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
+    stub_ownership_preview(monkeypatch)
     monkeypatch.setattr(
         ai_start,
         "create_observability",
@@ -2373,6 +2381,7 @@ def test_ai_start_persists_bound_calibration_corrective_in_contract_and_receipt(
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
+    stub_ownership_preview(monkeypatch)
     monkeypatch.setattr(
         ai_start,
         "create_observability",
@@ -3054,6 +3063,7 @@ def test_ai_start_journeys(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
+    stub_ownership_preview(monkeypatch)
     monkeypatch.setattr(
         ai_start,
         "create_observability",
@@ -3101,6 +3111,7 @@ def test_ai_start_generates_active_status(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
+    stub_ownership_preview(monkeypatch)
     monkeypatch.setattr(
         ai_start,
         "write_active_status",

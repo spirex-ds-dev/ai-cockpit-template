@@ -174,6 +174,8 @@ def run_gate(args: argparse.Namespace) -> int:
         "result": result_name,
         "exitCode": exit_code,
         "commitSha": commit_sha(repository),
+        "treeDigest": tree_digest(repository),
+        "environment": environment_identity(),
         "sessionId": getattr(args, "session_id", "local"),
         "runId": getattr(args, "run_id", "local"),
         "cache": {"applicable": args.cache_applicable, "hit": args.cache_hit},
@@ -185,10 +187,41 @@ def run_gate(args: argparse.Namespace) -> int:
     output.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     if result_name != "passed":
         print(
-            f"Gate failed: {args.gate}\nRetry: {evidence['command']}\nLog: {evidence['logPath']}",
+            "\n".join(
+                (
+                    "🔴 quality-full blocked",
+                    f"Failed gate: {args.gate}",
+                    f"Recovery: {evidence['command']}",
+                    f"Outcome: {display_path(output, repository)}",
+                    f"Log: {evidence['logPath']}",
+                )
+            ),
             file=sys.stderr,
         )
     return exit_code
+
+
+def tree_digest(repository: Path) -> str:
+    """Return a portable SHA-256 digest of the committed source tree listing."""
+    result = subprocess.run(  # nosec B603 B607 - fixed git executable and revision-independent arguments.
+        ["git", "ls-tree", "-r", "-z", "HEAD"],
+        cwd=repository,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return "unknown"
+    return f"sha256:{hashlib.sha256(result.stdout).hexdigest()}"
+
+
+def environment_identity() -> dict[str, str | int]:
+    """Describe the execution environment without treating it as success evidence."""
+    return {
+        "runnerImage": os.environ.get("ImageOS", "local"),
+        "os": os.uname().sysname if hasattr(os, "uname") else os.name,
+        "python": sys.version.split()[0],
+        "cpuCount": os.cpu_count() or 1,
+    }
 
 
 def main() -> int:

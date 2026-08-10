@@ -12,6 +12,7 @@ import shlex
 import subprocess
 from collections.abc import Callable
 from datetime import datetime
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -448,7 +449,7 @@ def matches(pattern: str, path: str) -> bool:
                 return False
             if path_index >= len(path_parts):
                 return False
-            if not re.fullmatch(fnmatch_translate(token), path_parts[path_index]):
+            if not _compiled_segment_pattern(token).fullmatch(path_parts[path_index]):
                 return False
             pattern_index += 1
             path_index += 1
@@ -471,6 +472,12 @@ def fnmatch_translate(pattern: str) -> str:
             translated.append(re.escape(char))
         i += 1
     return "".join(translated)
+
+
+@lru_cache(maxsize=8192)
+def _compiled_segment_pattern(pattern: str) -> re.Pattern[str]:
+    """Compile each segment glob once while retaining exact path-boundary semantics."""
+    return re.compile(fnmatch_translate(pattern))
 
 
 def included(path: str, patterns: list[str]) -> bool:

@@ -379,10 +379,11 @@ def test_smoke_dispatch_declares_explicit_measurement_or_release_purpose():
 
 def test_smoke_workflow_has_release_blocking_delegated_secret_scan():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    secret_scan = workflow.split("  secret-scan:\n", 1)[1].split("\n  project-test-manifest:", 1)[0]
     assert "Delegated secret scanning (release-blocking)" in workflow
     assert "github.com/zricethezav/gitleaks/v8@9c72c5f9f05200fdc06e3f1b16e9aaa89fbe9f75" in workflow
-    assert "fetch-depth: 0" in workflow
-    assert 'gitleaks" detect --source="$GITHUB_WORKSPACE"' in workflow
+    assert "fetch-depth: 0" in secret_scan
+    assert 'gitleaks" detect --source="$GITHUB_WORKSPACE"' in secret_scan
 
 
 def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
@@ -392,6 +393,51 @@ def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
     assert workflow.index("timeout-minutes: 30") < workflow.index("Run repository quality gates")
     assert "timeout-minutes: 25" in workflow
     assert "quality heartbeat" in workflow
+
+
+def test_smoke_workflow_reports_hci_quality_progress_every_thirty_seconds():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    quality_step = workflow.split("      - name: Run repository quality gates", 1)[1].split(
+        "      - name: Publish failed quality gate logs", 1
+    )[0]
+
+    assert "🟡 quality-full running" in quality_step
+    assert "Current gate:" in quality_step
+    assert "Evidence: target/quality/sessions/" in quality_step
+    assert "sleep 30" in quality_step
+    assert "🟢 quality-full completed" in quality_step
+    assert "Coverage:" in quality_step
+    assert "Outcome:" in quality_step
+
+
+def test_smoke_template_smoke_owns_fail_closed_project_test_aggregate_and_remaining_quality():
+    """Regression: the critical-path job must aggregate evidence before remaining gates."""
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+
+    for shard in ("core", "governance", "installer", "lifecycle", "release"):
+        job = workflow.split(f"  project-test-{shard}:\n", 1)[1].split("\n  project-test-", 1)[0]
+        assert "needs: project-test-manifest" in job
+        assert f"make project-test-shard SHARD={shard}" in job
+        assert "actions/download-artifact@" in job
+        download = job.split("      - name: Download project-test plan", 1)[1].split(
+            f"      - name: Run {shard} project-test shard", 1
+        )[0]
+        assert "path: target/quality" in download
+        assert "actions/upload-artifact@" in job
+        assert "include-hidden-files: true" in job
+    template = workflow.split("  template-smoke:\n", 1)[1].split("\n  installation-smoke:", 1)[0]
+    assert "if: always()" in template
+    assert "project-test-core" in template
+    assert "project-test-release" in template
+    assert "secret-scan" in template
+    assert "make project-test-aggregate" in template
+    assert "include-hidden-files: true" in template
+    assert "Run repository quality gates" in template
+    assert "PROJECT_TEST_GATE=project-test-receipt" in template
+    assert "Download aggregate project-test evidence" not in template
+    assert "Delegated secret scanning (release-blocking)" not in template
+    assert template.count("Install development quality tools") == 1
+    assert template.count("make check-ai-status-consistency") == 1
 
 
 def test_smoke_pr_audit_does_not_receive_a_github_api_token_for_offline_recovery_validation():

@@ -29,13 +29,15 @@ QUALITY_SUMMARY_DIR ?= target/quality
 QUALITY_PROFILE ?= unknown
 QUALITY_ESCALATIONS ?=
 QUALITY_ESCALATION_REASONS ?=
+PROJECT_TEST_GATE ?= project-test
+PROJECT_TEST_RECEIPT ?= target/quality/project-test-aggregate/receipt.json
 GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 QUALITY_SESSION_LOCK ?= target/quality/session.lock
 QUALITY_SESSION_LOCK_HELD ?= false
 
 .PHONY: help \
-	test ensure-locked-dev-environment check-quality-toolchain project-format-check project-test project-lint diff-check quality quality-gates \
+	test ensure-locked-dev-environment check-quality-toolchain project-format-check project-test project-test-manifest project-test-shard project-test-aggregate project-test-receipt project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 check-docs-metadata check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
@@ -153,6 +155,21 @@ check-instruction-traceability:
 
 project-test:
 	$(call RUN_QUALITY_SESSION,project-test)
+
+project-test-manifest:
+	$(AI_PYTHON) scripts/quality_test_manifest.py --root . --junit target/quality/junit/project-test.xml --output target/quality/project-test-manifest.json --plan-output target/quality/project-test-shard-plan.json
+
+project-test-shard:
+	test -n "$(SHARD)"
+	test -f target/quality/project-test-manifest.json
+	test -f target/quality/project-test-shard-plan.json
+	$(AI_PYTHON) scripts/quality_test_manifest.py run-shard --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --shard "$(SHARD)" --output "target/quality/shards/$(SHARD)"
+
+project-test-aggregate:
+	$(AI_PYTHON) scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate
+
+project-test-receipt:
+	$(AI_PYTHON) scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt "$(PROJECT_TEST_RECEIPT)"
 
 project-test-owned:
 	mkdir -p "$(QUALITY_JUNIT_DIR)"
@@ -432,7 +449,7 @@ quality-tests-group:
 quality-tests-group: qg-project-test
 
 qg-project-test:
-	$(call RUN_QUALITY_GATE,project-test,tests)
+	$(call RUN_QUALITY_GATE,$(PROJECT_TEST_GATE),tests)
 
 quality-evidence-group:
 quality-evidence-group: qg-unsupported-claim-regression qg-adopter-long-cycle qg-check-release-evidence qg-check-release-state-consistency qg-check-dependency-vulnerabilities

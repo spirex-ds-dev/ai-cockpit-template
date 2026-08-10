@@ -23,9 +23,28 @@ def test_quality_entry_points_have_explicit_compatibility_semantics():
     assert "quality-gates: quality-full" in text
     assert "define RUN_QUALITY_GATE" in text
     assert "$(call RUN_QUALITY_GATE,project-format-check,static)" in text
-    assert "$(call RUN_QUALITY_GATE,project-test,tests)" in text
     assert "$(call RUN_QUALITY_GATE,check-sbom,supply-chain)" in text
     assert "scripts/summarize_quality_gates.py" in text
+
+    local = subprocess.run(
+        ["make", "-n", "qg-project-test"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    hosted = subprocess.run(
+        ["make", "-n", "qg-project-test", "PROJECT_TEST_GATE=project-test-receipt"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert local.returncode == 0, local.stdout + local.stderr
+    assert "--gate project-test --category tests" in local.stdout
+    assert hosted.returncode == 0, hosted.stdout + hosted.stderr
+    assert "--gate project-test-receipt --category tests" in hosted.stdout
 
 
 def test_public_quality_paths_use_one_worktree_local_nonblocking_lock():

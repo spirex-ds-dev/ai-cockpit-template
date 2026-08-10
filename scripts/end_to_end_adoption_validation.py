@@ -217,6 +217,27 @@ def _copy_fixture(fixture: Fixture, target: Path) -> None:
     )
 
 
+def prepare_immutable_fixture(fixture: Fixture, cache_root: Path) -> Path:
+    """Materialize a digest-named, read-only fixture source once per source tree."""
+    digest = _tree_digest(fixture.root)
+    immutable = cache_root / f"{fixture.project_type}-{digest}"
+    if not immutable.exists():
+        immutable.parent.mkdir(parents=True, exist_ok=True)
+        _copy_fixture(fixture, immutable)
+        for path in immutable.rglob("*"):
+            if path.is_file():
+                path.chmod(0o444)
+    return immutable
+
+
+def copy_immutable_fixture(immutable: Path, target: Path) -> None:
+    """Create a writable, per-test copy without sharing mutable fixture state."""
+    shutil.copytree(immutable, target, copy_function=shutil.copy2)
+    for path in target.rglob("*"):
+        if path.is_file():
+            path.chmod(0o644)
+
+
 def _initialize_repository(repo: Path, remote: Path) -> str:
     _git(repo, "init", "-q", "-b", "main")
     _git(repo, "config", "user.email", "fixture@example.invalid")
@@ -475,12 +496,14 @@ def _upgrade_and_rollback(
     return upgrade, rollback
 
 
-def _run_fixture(template_root: Path, fixture: Fixture, workspace: Path) -> dict[str, Any]:
+def _run_fixture(
+    template_root: Path, fixture: Fixture, workspace: Path, immutable_root: Path
+) -> dict[str, Any]:
     fixture_workspace = workspace / fixture.project_type
     repo = fixture_workspace / "repository"
     remote = fixture_workspace / "origin.git"
     fixture_workspace.mkdir(parents=True)
-    _copy_fixture(fixture, repo)
+    copy_immutable_fixture(prepare_immutable_fixture(fixture, immutable_root), repo)
     base = _initialize_repository(repo, remote)
     phases: list[dict[str, Any]] = []
 
@@ -626,7 +649,6 @@ def _run_fixture(template_root: Path, fixture: Fixture, workspace: Path) -> dict
         "ai-finish",
         "TASK=adopt_ai_cockpit",
         "ARCHIVE=true",
-        "SKIP_QUALITY=true",
         f"PYTHON={sys.executable}",
         env=env,
     )
@@ -635,9 +657,12 @@ def _run_fixture(template_root: Path, fixture: Fixture, workspace: Path) -> dict
         _phase(
             "finish",
             "passed" if finished else "failed",
-            "governance finish checks and immutable archive completed; project toolchain quality is separately not_run",
-            command="make ai-finish ARCHIVE=true SKIP_QUALITY=true",
-            evidence=[f"archiveExit={archive.returncode}", "humanRelay=not_run_in_fixture"],
+            "governance finish checks, declared project quality, and immutable archive completed",
+            command="make ai-finish ARCHIVE=true",
+            evidence=[
+                f"archiveExit={archive.returncode}",
+                "qualityRoute=declared_fixture_commands",
+            ],
         )
     )
     if not finished:
@@ -740,7 +765,6 @@ def _failure_fixture(
             "ai-finish",
             "TASK=adopt_ai_cockpit",
             "ARCHIVE=true",
-            "SKIP_QUALITY=true",
             f"PYTHON={sys.executable}",
             env=finish_env,
         )
@@ -826,7 +850,11 @@ def run_validation(template_root: Path, *, workspace: Path | None = None) -> dic
 def _run_validation_in(
     template_root: Path, fixtures: list[Fixture], workspace: Path
 ) -> dict[str, Any]:
-    results = [_run_fixture(template_root, fixture, workspace / "fixtures") for fixture in fixtures]
+    immutable_root = workspace / "immutable-fixtures"
+    results = [
+        _run_fixture(template_root, fixture, workspace / "fixtures", immutable_root)
+        for fixture in fixtures
+    ]
     failure_fixture = next(item for item in fixtures if item.project_type == "python-service")
     failures = [
         _failure_fixture(template_root, failure_fixture, workspace / "failures" / case, case)
