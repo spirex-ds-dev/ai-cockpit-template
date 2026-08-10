@@ -51,14 +51,15 @@ when quality fails. Recover by setting the missing variable in
   duration-balanced `project-test-core`, `project-test-governance`,
   `project-test-installer`, `project-test-lifecycle`, and `project-test-release`
   runners. Each uploads source-bound JUnit, coverage, timing, log, and receipt
-  artifacts. `project-test-aggregate` is an `always()` fail-closed consumer:
-  it rejects missing, cancelled, failed, stale, wrong-SHA, or incomplete shard
-  evidence before `template-smoke` may reuse its aggregate receipt. Local
+  artifacts. `template-smoke` itself is the `always()` fail-closed aggregate
+  consumer: it rejects missing, cancelled, failed, stale, wrong-SHA, or
+  incomplete shard evidence before it runs the remaining quality gates. Local
   `make project-test` remains the serial diagnostic equivalent.
 - The release-blocking full-history secret scan has one independent owner,
   `secret-scan`, and starts alongside the project-test graph. `template-smoke`
-  waits for both the successful source checkout scan and the fail-closed
-  aggregate receipt; this removes only avoidable tail waiting, not a security
+  waits for both the successful source checkout scan and all shard evidence,
+  then merges coverage and runs the remaining quality gates in that same
+  runner. This removes only avoidable tail waiting, not a security
   verification.
 - The adopter distribution contains runtime skeletons, policies, and required
   baselines, but not template-maintenance Work Item starts, decision history,

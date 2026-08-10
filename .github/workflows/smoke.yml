@@ -209,11 +209,14 @@ jobs:
           retention-days: 14
           include-hidden-files: true
 
-  project-test-aggregate:
-    needs: [project-test-core, project-test-governance, project-test-installer, project-test-lifecycle, project-test-release]
+  template-smoke:
+    needs: [project-test-core, project-test-governance, project-test-installer, project-test-lifecycle, project-test-release, secret-scan]
     if: always()
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # This job now owns the former aggregate and template quality stages, so
+    # retain the template stage's overall bound while keeping its inner quality
+    # command independently bounded below.
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -263,31 +266,6 @@ jobs:
           retention-days: 14
           include-hidden-files: true
 
-  template-smoke:
-    needs: [project-test-aggregate, secret-scan]
-    runs-on: ubuntu-latest
-    # Keep the quality gate bounded; timeout is fail-closed and prevents an
-    # ambiguous PR state from waiting indefinitely for later required gates.
-    timeout-minutes: 30
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          fetch-depth: 0
-
-      - name: Download project-test plan
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
-          path: target/quality
-
-      - name: Download aggregate project-test evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          name: project-test-aggregate-${{ github.run_id }}-${{ github.run_attempt }}
-          path: target/quality/project-test-aggregate
-
       - name: Select governance diff baseline
         shell: bash
         run: |
@@ -308,9 +286,6 @@ jobs:
           AI_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           make check-dependabot-intake GITHUB_EVENT_NAME="${{ github.event_name }}" AI_PR_AUTHOR="$AI_PR_AUTHOR" AI_PR_URL="$AI_PR_URL" AI_PR_HEAD_SHA="$AI_PR_HEAD_SHA"
-
-      - name: Install development quality tools
-        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
 
       - name: Determine release preparation scope
         env:
@@ -487,7 +462,6 @@ jobs:
             # PR diff/Contract binding after the quality graph has completed.
             make check-ai-pr-core AI_BASE_COMMIT="$AI_BASE_COMMIT"
           else
-            make check-ai-status-consistency
             make check-ai-backtrack
             make check-ai-coverage-guard
             make check-ai-diff-ownership

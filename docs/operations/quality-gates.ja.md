@@ -36,8 +36,8 @@ Hosted snapshot preparation は同じ entrypoint を必要とし、quality が�
 - `quality-full` は完全なテスト、証拠、サプライチェーン、プロジェクト整合性を追加します。個別の Trust テストはデバッグ用の独立 target として残し、完全な pytest 後に再実行しません。
 - `quality-release` はインストールとリリース証拠を追加します。Fast の結果やキャッシュ結果はリリース証拠の代わりになりません。
 - Compatibility job は Python/platform matrix の検証だけを行い、完全な quality graph は実行しません。
-- Hosted smoke では完全な `project-test` 集合の各 entry に唯一の owner を割り当てます。履歴 duration で均衡化した `project-test-core`、`project-test-governance`、`project-test-installer`、`project-test-lifecycle`、`project-test-release` runner が source-bound な JUnit、coverage、timing、log、receipt artifact を publish します。`project-test-aggregate` は `always()` の fail-closed consumer であり、missing、cancelled、failed、stale、wrong-SHA、不完全な shard evidence を拒否してからでなければ `template-smoke` は aggregate receipt を再利用できません。ローカルの `make project-test` は serial diagnostic の等価入口として残ります。
-- release-blocking の全履歴 secret scan には唯一の独立 owner `secret-scan` を割り当て、project-test graph と並行して開始します。`template-smoke` は source checkout scan の成功と fail-closed aggregate receipt の両方を待機します。これは回避可能な終端待機だけを除去し、security verification は除去しません。
+- Hosted smoke では完全な `project-test` 集合の各 entry に唯一の owner を割り当てます。履歴 duration で均衡化した `project-test-core`、`project-test-governance`、`project-test-installer`、`project-test-lifecycle`、`project-test-release` runner が source-bound な JUnit、coverage、timing、log、receipt artifact を publish します。`template-smoke` 自身が `always()` の fail-closed aggregate consumer であり、missing、cancelled、failed、stale、wrong-SHA、不完全な shard evidence を拒否してから残りの quality gate を実行します。ローカルの `make project-test` は serial diagnostic の等価入口として残ります。
+- release-blocking の全履歴 secret scan には唯一の独立 owner `secret-scan` を割り当て、project-test graph と並行して開始します。`template-smoke` は source checkout scan の成功とすべての shard evidence を待機してから、同じ runner で coverage を merge し残りの quality gate を実行します。これは回避可能な終端待機だけを除去し、security verification は除去しません。
 - Adopter 向け配布物には runtime skeleton、policy、必要な baseline を含めますが、template 保守用の Work Item starts、decision 履歴、archive 履歴は含めません。Installer は走査前にそれらの tree を除外し、一回の install 中では不変の source inventory を再利用します。
 
 ## 証拠と fail-closed

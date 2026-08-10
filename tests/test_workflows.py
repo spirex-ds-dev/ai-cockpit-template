@@ -410,8 +410,8 @@ def test_smoke_workflow_reports_hci_quality_progress_every_thirty_seconds():
     assert "Outcome:" in quality_step
 
 
-def test_smoke_hosted_project_test_uses_independent_shards_and_a_fail_closed_aggregate():
-    """Regression: Hosted speedup cannot omit a shard or make template-smoke trust a cache."""
+def test_smoke_template_smoke_owns_fail_closed_project_test_aggregate_and_remaining_quality():
+    """Regression: the critical-path job must aggregate evidence before remaining gates."""
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
 
     for shard in ("core", "governance", "installer", "lifecycle", "release"):
@@ -425,19 +425,19 @@ def test_smoke_hosted_project_test_uses_independent_shards_and_a_fail_closed_agg
         assert "path: target/quality" in download
         assert "actions/upload-artifact@" in job
         assert "include-hidden-files: true" in job
-    aggregate = workflow.split("  project-test-aggregate:\n", 1)[1].split("\n  template-smoke:", 1)[
-        0
-    ]
-    assert "if: always()" in aggregate
-    assert "project-test-core" in aggregate
-    assert "project-test-release" in aggregate
-    assert "make project-test-aggregate" in aggregate
-    assert "include-hidden-files: true" in aggregate
-    template = workflow.split("  template-smoke:", 1)[1].split("\n  installation-smoke:", 1)[0]
-    assert "needs: [project-test-aggregate, secret-scan]" in template
-    assert "Download aggregate project-test evidence" in template
+    template = workflow.split("  template-smoke:\n", 1)[1].split("\n  installation-smoke:", 1)[0]
+    assert "if: always()" in template
+    assert "project-test-core" in template
+    assert "project-test-release" in template
+    assert "secret-scan" in template
+    assert "make project-test-aggregate" in template
+    assert "include-hidden-files: true" in template
+    assert "Run repository quality gates" in template
     assert "PROJECT_TEST_GATE=project-test-receipt" in template
+    assert "Download aggregate project-test evidence" not in template
     assert "Delegated secret scanning (release-blocking)" not in template
+    assert template.count("Install development quality tools") == 1
+    assert template.count("make check-ai-status-consistency") == 1
 
 
 def test_smoke_pr_audit_does_not_receive_a_github_api_token_for_offline_recovery_validation():
