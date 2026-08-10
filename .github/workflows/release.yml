@@ -457,6 +457,7 @@ jobs:
           }
           download_draft_asset "$archive_name"
           download_draft_asset release.json
+          download_draft_asset release-digests.json
           verified_archive="$download_dir/$archive_name"
           test "$(sha256sum "$verified_archive" | cut -d' ' -f1)" = \
             "$(jq -r '.releaseArchive.sha256' release.json)"
@@ -468,6 +469,18 @@ jobs:
             --ref "$RELEASE_TAG" \
             --metadata-url "file://$download_dir/release.json" \
             --asset-url "$verified_archive_url"
+          adopter_dir="$RUNNER_TEMP/tagged-adopter"
+          mkdir -p "$adopter_dir"
+          git -C "$adopter_dir" init -q
+          git -C "$adopter_dir" -c user.name=release -c user.email=release@example.invalid commit --allow-empty -qm initial
+          (
+            cd "$adopter_dir"
+            AI_COCKPIT_TEMPLATE_REF="$RELEASE_TAG" \
+            AI_COCKPIT_TEMPLATE_RELEASE_ASSET_URL="$verified_archive_url" \
+            AI_COCKPIT_TEMPLATE_RELEASE_METADATA_URL="file://$download_dir/release.json" \
+            AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL="file://$download_dir/release-digests.json" \
+            "$GITHUB_WORKSPACE/install.sh" --stack generic --dry-run
+          )
 
       - name: Publish verified Draft Release
         if: ${{ !inputs.rehearsal }}

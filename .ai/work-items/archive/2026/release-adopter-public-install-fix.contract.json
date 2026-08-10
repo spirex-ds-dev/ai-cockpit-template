@@ -1,0 +1,96 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-adopter-public-install-fix",
+  "mode": "code",
+  "title": "Repair public Quick Install evidence and deliver correction release",
+  "baseCommit": "b4a88208367ab82d3b0432d10fd28f1ea3c365bd",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。目标是把收益交付给未来安装的对象工程；不发版本不能交付。release-digests.json 错误声明是反复出现的问题。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-10 future-adopter delivery and release-digests recurrence", "capturedAt": "2026-08-10", "digest": "sha256:user-authorized-public-install-fix"},
+  "declaredIntent": {"summary": "Repair the future-adopter public Quick Install proof and publish exactly one corrected immutable release after all gates pass.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation:2026-08-10 future-adopter delivery and continuous completion", "scope": "Repair the public installer proof and publish one correction release only after all local, hosted, rehearsal, actual-release, and post-publication gates pass; no historical tag mutation or bypass is authorized."},
+  "scope": [
+    ".ai/work-items/active/release-adopter-public-install-fix.*",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/installer/legacy.py",
+    "scripts/verify_quick_install_release.py",
+    "scripts/check_release_distribution.py",
+    ".github/workflows/release.yml",
+    "tests/test_release_distribution.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_install_sh.py",
+    "tests/test_release_workflow.py",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/release-*.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json"
+    ,"docs/reference/capability-truth-matrix.json"
+    ,"docs/reference/capability-truth-matrix.md"
+    ,"docs/reference/pre-release-documentation-alignment.json"
+    ,"docs/reference/pre-release-documentation-alignment.md"
+    ,"docs/reference/japanese-capability-assessment.json"
+    ,"docs/reference/japanese-capability-assessment.md"
+    ,"docs/getting-started/security-release-verification.md"
+    ,"docs/getting-started/security-release-verification.zh-CN.md"
+    ,"docs/getting-started/security-release-verification.ja.md"
+    ,"install.sh"
+  ],
+  "outOfScope": [
+    "Do not modify, rebuild, retag, delete, or replace v0.5.50 or v0.5.51.",
+    "Do not reduce tests, coverage, security gates, release gates, or use SKIP_QUALITY.",
+    "Do not deliver the fix by weakening source/tag identity validation."
+  ],
+  "sources": [
+    {"path": ".ai/work-items/archive/2026/release-adopter-performance-delivery-v051.contract.json", "reason": "Prior future-adopter delivery authorization and release boundary."},
+    {"path": "scripts/installer/legacy.py", "reason": "validate_source_release_identity() produced the public installer failure."},
+    {"path": "scripts/check_release_distribution.py", "reason": "Independent post-publish verifier reproduced the v0.5.51 failure."},
+    {"path": ".github/workflows/release.yml", "reason": "Must prove the same public installer path before publication."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_distribution", "installer_identity", "supply_chain_evidence"],
+    "reason": "A published tag cannot be repaired in place. The correction must preserve fail-closed identity checks while ensuring the public tag-install path consumes release-bound evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["Release distribution and future-adopter installation require strict evidence handling."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user authorized necessary release actions and required that authorization be recorded here."},
+  "preReviewWarnings": ["Review the workflow pre-publication Quick Install against an independent post-publish installation; workflow success alone is insufficient.", "Avoid dual authority: tag-tree release-digests.json is a historical baseline, while the released asset is authoritative for a selected public tag."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints around an externally published release."},
+  "acceptance": [
+    "A future adopter can install the newly published correction tag through the public Quick Install path, and the installer accepts only release-bound evidence whose tag and source commit match that tag.",
+    "The release workflow pre-publication tagged Quick Install uses the same public installer path and fails when the tag-tree digest declaration conflicts with the release tag.",
+    "An independent post-publish distribution check passes for the correction tag, verifies public assets, and proves the corrected public installation path.",
+    "v0.5.50 and v0.5.51 remain immutable historical releases; no test, coverage, security, or release gate is weakened.",
+    "An exact-SHA rehearsal and actual release succeed before a green delivery outcome is claimed."
+  ],
+  "guidelines": ["Keep public release evidence source-bound and fail closed.", "Do not import internal modules across feature boundaries.", "Document the public installer identity rule and its failure recovery."],
+  "intent": {
+    "problem": "Independent post-publish verification proved v0.5.51 public Quick Install fails because the tag source tree declares release-digests.json releaseTag v0.5.48 even though release assets declare v0.5.51. The green release workflow did not exercise the exact public clone-and-install path used by future adopters.",
+    "constraints": ["Publish only a new correction release after exact-SHA rehearsal and actual release verification.", "Preserve historical release immutability, test scope, coverage, gates, failure evidence, and fail-closed behavior.", "Bind evidence to tag, source commit, installer digest, and public asset digest; cache is not validation.", "Use a public future-adopter install path before and after publication."],
+    "rationale": "Release evidence is materialized after source selection, so a public tagged installer must verify authoritative published evidence rather than reject a historical in-tree baseline. The workflow must test that exact rule before publication."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Public correction-tag Quick Install", "riskDomain": "installer_identity", "required": true, "status": "unverified", "evidence": [], "expected": "A clean temporary adopter installs from the new tag and records matching tag, source commit, and release asset digest.", "verificationPlan": "Run the release workflow tagged public-install check and make check-release-distribution-post-publish after publication."},
+    {"scenario": "Stale tag-tree release digest", "riskDomain": "supply_chain_evidence", "required": true, "status": "unverified", "evidence": [], "expected": "Workflow and public verifier fail rather than accepting a stale tag-tree declaration.", "verificationPlan": "Add focused regression tests and run release distribution tests."},
+    {"scenario": "Historical release immutability", "riskDomain": "release_distribution", "required": true, "status": "unverified", "evidence": [], "expected": "No historical tag or asset changes; correction uses the next patch tag only.", "verificationPlan": "Inspect historical tag targets and release state before and after publication."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user authorized the necessary, fully gated repair and corrective publication in this Contract; approval is limited to .github/workflows/release.yml and source-bound release evidence/version projections in this Work Item."},
+  "rollbackNote": "Revert this Work Item diff; do not alter historical releases.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 1200}},
+  "startReceipt": {"path": ".ai/work-items/starts/release-adopter-public-install-fix.json", "baseCommit": "b4a88208367ab82d3b0432d10fd28f1ea3c365bd", "initialScopeDigest": "c2ac031af0c1ae763c28ff6a87c596013b6425944c56b12ba43946819d51fd37", "contractSkeletonDigest": "268a68ad6b5d8b4a540aa45a6cc235cd1eb6c332c8202a8c7878b580f5d0e59b"}
+}

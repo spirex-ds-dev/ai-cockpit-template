@@ -78,6 +78,7 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
                 "v0.5.48",
                 "v0.5.49",
                 "v0.5.50",
+                "v0.5.51",
             },
         )
         == []
@@ -1037,7 +1038,7 @@ def test_release_network_commands_strip_ambient_git_auth(monkeypatch, tmp_path):
             assert key not in env
 
 
-def test_release_preparation_evidence_matches_local_metadata():
+def test_release_preparation_allows_candidate_installer_to_differ_from_public_baseline():
     metadata = json.loads(release_distribution.RELEASE.read_text(encoding="utf-8"))
     issues = release_distribution.supply_chain_issues(metadata)
 
