@@ -40,6 +40,10 @@ def write_projection_root(tmp_path: Path) -> Path:
     (root / ".ai" / "cockpit" / "version.json").write_text(
         '{"releaseVersion":"0.5.56"}\n', encoding="utf-8"
     )
+    (root / "install.sh").write_text(
+        'REF="${AI_COCKPIT_TEMPLATE_REF:-v0.5.56}"\n  AI_COCKPIT_TEMPLATE_REF=v0.5.56\n',
+        encoding="utf-8",
+    )
     return root
 
 
@@ -85,6 +89,23 @@ def test_sync_promotes_verified_public_projection_and_advances_candidate(tmp_pat
         json.loads((root / ".ai" / "cockpit" / "version.json").read_text())["releaseVersion"]
         == "0.5.57"
     )
+
+
+def test_sync_advances_installer_default_with_the_candidate_projection(tmp_path):
+    root = write_projection_root(tmp_path)
+    release_bytes, digest_bytes = published_assets()
+
+    projection.synchronize_projection(
+        root,
+        release_tag="v0.5.56",
+        source_commit=SOURCE_COMMIT,
+        release_json_bytes=release_bytes,
+        release_digests_bytes=digest_bytes,
+    )
+
+    installer = (root / "install.sh").read_text(encoding="utf-8")
+    assert 'REF="${AI_COCKPIT_TEMPLATE_REF:-v0.5.57}"' in installer
+    assert "AI_COCKPIT_TEMPLATE_REF=v0.5.57" in installer
 
 
 def test_sync_records_the_verified_historical_release_status(tmp_path):

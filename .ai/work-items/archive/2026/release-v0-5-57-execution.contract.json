@@ -1,0 +1,236 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-57-execution",
+  "mode": "code",
+  "title": "Correct invalid v0.5.57 public metadata and prepare the v0.5.58 delivery path",
+  "baseCommit": "184077fc90f38a3cf9c73d6d5a7c332fd5b1c3bd",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-57-execution.contract.json",
+    ".ai/work-items/active/release-v0-5-57-execution.summary.json",
+    ".ai/work-items/active/release-v0-5-57-execution.events.jsonl",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/evidence/test-weakening/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-57-execution.outcome.json",
+    ".ai/work-items/active/release-v0-5-57-execution.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "install.sh",
+    ".github/workflows/release.yml",
+    "scripts/check_supply_chain.py",
+    "scripts/sync_published_release_projection.py",
+    "tests/test_install_sh.py",
+    "tests/test_release_workflow.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_sync_published_release_projection.py",
+    "tests/test_release_distribution.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_supply_chain.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "target/release-v0-5-57-execution/**",
+    "target/task-closure-receipts/**"
+  ],
+  "outOfScope": [
+    "Do not alter, recreate, delete, or relabel immutable v0.5.50 through v0.5.57 tags, Releases, or assets.",
+    "Do not change the test collection, coverage floor, security gates, installer gates, release gates, or failure-evidence gates. Only the declared synchronizer and release-workflow source-binding fixes and their regressions are in scope.",
+    "Do not use SKIP_QUALITY, ordinary cache hits as validation receipts, or hand-edit generated public-release evidence."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Canonical same-SHA rehearsal, hosted publication, asset, and future-adopter verification sequence."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Provider workflow that validates the rehearsal receipt before creating the immutable tag and public assets."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783",
+      "reason": "Issue remains open until a fresh public full-HTTPS installation succeeds."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-publication.summary.json",
+      "reason": "Merged corrective release-workflow evidence; it is not itself publication proof."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "immutable_release",
+      "public_adopter_delivery",
+      "evidence_integrity"
+    ],
+    "reason": "This Work Item authorizes the irreversible public v0.5.57 tag and Release only after an exact-source rehearsal and independently verifiable adopter installation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "An immutable public release and a future-adopter installation require strict source-bound evidence."
+    ],
+    "override": {
+      "approvalEvidence": "conversation:2026-08-11-complete-all-work-items-release-authorization",
+      "reason": "The user authorized release publication, Issue handling, and cleanup in this bounded Work Item while forbidding gate bypasses.",
+      "risks": ["immutable_release", "public_adopter_delivery", "evidence_integrity"],
+      "notRunChecks": ["Fresh same-SHA rehearsal, provider publication, public asset verification, and a clean HTTPS adopter installation remain mandatory."],
+      "workItemOnly": true,
+      "workItemId": "release-v0-5-57-execution"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "Publication is prohibited unless every same-source receipt, provider asset, and clean adopter-installation check passes."
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The recorded user authorization and explicit source-bound verification plan permit release execution; each external step remains fail closed."
+  },
+  "preReviewWarnings": [
+    "Review exact SHA/tree/tag binding, immutable historical release preservation, and proof from a clean future-adopter HTTPS installation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The immutable v0.5.57 tag and Release remain unchanged and are recorded as stable_release_invalid_public_distribution because its public release.json lock hash (43548eb1f986…) does not equal the exact tagged source dependency-lock hash (b07fca668d49…).",
+    "The post-publication synchronizer promotes the provider assets while advancing install.sh and next-release consistently to v0.5.58, and records the v0.5.57 invalid-public-distribution reason and evidence without treating cache data as proof.",
+    "The release workflow independently regenerates exact-source SBOM/provenance evidence, rebinds the dependency-lock, SBOM, and provenance SHA-256 values in runtime release.json, then regenerates release-digests.json; an executable regression fails if any binding is absent.",
+    "Candidate evidence refresh updates next-release.json without mutating the provider-backed release.json projection; check-release-evidence validates the candidate digests and rejects an unrecorded invalid public projection.",
+    "Focused regressions and the declared local verification pass without reducing the test collection, coverage floor, or gates.",
+    "After archive and before merge, the hosted PR checks for this corrective change must pass on its exact head SHA; no archive Outcome, PR, or merge may claim that evidence early.",
+    "A later v0.5.58 Work Item obtains fresh same-SHA receipts, publication evidence, and a clean future-adopter HTTPS installation before Issue #783 closes."
+  ],
+  "guidelines": [
+    "Keep the source-binding repair minimal, fail closed, and covered by regression tests; preserve all immutable provider evidence.",
+    "Do not claim publication, installation, or issue resolution without provider-bound evidence."
+  ],
+  "intent": {
+    "problem": "Provider evidence shows that v0.5.57 released stale candidate supply-chain fields in its public runtime release.json: the requirements lock digest differs from the exact tagged source. The immutable release cannot deliver trustworthy adopter evidence and must be preserved as invalid while its process defect is repaired for v0.5.58.",
+    "constraints": ["Preserve immutable historical releases through v0.5.56.", "Do not reduce the 85.10% coverage floor, test collection, security, release, installer, Outcome, JUnit, or failure-evidence gates.", "No SKIP_QUALITY or cache-as-proof; all external results must be identity-bound receipts.", "The recorded human approval covers dispatch, publication, Issue closure, PR merge, and local/remote cleanup, but never permits bypassing a gate."],
+    "rationale": "A release is the delivery mechanism for the already-merged performance capability. Exact source-bound public metadata is a prerequisite to trustworthy artifacts and a clean future-adopter installation; v0.5.58, not the immutable invalid v0.5.57, must provide that delivery."
+  },
+  "rawUserRequest": "目标是把收益交付给 adopter。不是现成已有的具体某个项目，是未来安装的对象工程。到发布最新版本为止，做好优化和自检。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "capturedAt": "2026-08-11T14:52:00+00:00", "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"},
+  "declaredIntent": {"summary": "Repair the v0.5.57 public-metadata defect and prepare a trustworthy v0.5.58 delivery path for future adopters.", "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "scope": "Complete the verified current-release correction, subsequent current-version publication, fresh adopter proof, Issue handling, and exact local/remote branch cleanup; no gate bypass or historical release mutation is authorized."},
+  "requiredEvidenceContext": {"externalSystem": "GitHub Releases and GitHub Actions", "destructiveLevel": "none", "availableEvidence": ["same_sha_rehearsal_receipt", "provider_release_receipt", "tag", "commit", "digest", "sbom", "provenance", "asset_availability", "public_installation"]},
+  "scenarioCoverage": [
+    {"scenario": "The immutable v0.5.57 public projection is detected as invalid when its provider release metadata does not bind the exact tagged source.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "The invalid-public-distribution state is explicit and cannot be silently promoted as adopter delivery.", "verificationPlan": "Validate release-state and public-projection checks against the preserved v0.5.57 provider assets."},
+    {"scenario": "Candidate refresh attempts to overwrite provider-backed public release projection data.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "Candidate evidence changes only next-release projection while public projection mismatch fails closed unless recorded as invalid distribution.", "verificationPlan": "Run the supply-chain candidate/public projection regressions and release evidence gate."},
+    {"scenario": "A future release workflow would publish stale candidate supply-chain fields into runtime release metadata.", "required": true, "riskDomain": "release_distribution", "status": "unverified", "evidence": [], "expected": "Exact-source lock, SBOM, and provenance values are rebound before public digest generation.", "verificationPlan": "Run the release workflow regression and local quality-release evidence checks."},
+    {"scenario": "The corrective source fix is mistaken for v0.5.58 publication, adopter delivery, or Issue #783 closure.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "The active Outcome remains limited to the corrective source change and requires a successor Work Item for same-SHA publication and HTTPS adopter proof.", "verificationPlan": "Inspect Contract, Summary, generated Outcome, and status before archive."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "conversation:2026-08-11-complete-all-work-items-release-authorization explicitly authorizes the bounded release-process correction, publication, Issue handling, and cleanup; immutable release history and all gates remain protected."
+  },
+  "rollbackNote": "Before publication, abandon only this execution branch if a gate fails. After an immutable v0.5.57 tag exists, preserve all evidence and repair through a later patch; never move, delete, or recreate a tag or Release.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 1200
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-57-execution.json",
+    "baseCommit": "184077fc90f38a3cf9c73d6d5a7c332fd5b1c3bd",
+    "initialScopeDigest": "a707c04811879d7bbcc23cc05ca82320ebdf184c7a1be67f241e1b1f57d61ce3",
+    "contractSkeletonDigest": "bb51521b3184dfd79384de5510c621dbb0badd70153b4ca1d8a509ad71f109df"
+  }
+}

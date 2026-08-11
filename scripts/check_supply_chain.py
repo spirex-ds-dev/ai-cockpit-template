@@ -442,33 +442,99 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def synchronize_release_supply_chain_digests() -> None:
-    """Bind the local release projection to the already-written candidate evidence."""
-    release = load_json(RELEASE_JSON)
-    supply_chain = release.get("supplyChain")
+def synchronize_candidate_supply_chain_digests() -> None:
+    """Bind the unpublished candidate, never the provider-backed projection."""
+    candidate = load_json(NEXT_RELEASE_JSON)
+    supply_chain = candidate.get("supplyChain")
     if not isinstance(supply_chain, dict):
-        raise InvalidDataShapeError("release.json is missing supplyChain release evidence")
+        raise InvalidDataShapeError("next-release.json is missing supplyChain candidate evidence")
     for key in ("requirementsLockDigest", "sbomDigest", "provenanceDigest"):
         if not isinstance(supply_chain.get(key), str):
-            raise InvalidDataShapeError(f"release.json supplyChain.{key} is missing")
+            raise InvalidDataShapeError(f"next-release.json supplyChain.{key} is missing")
     supply_chain["requirementsLockDigest"] = sha256_text(read_text(LOCK_FILE))
     supply_chain["sbomDigest"] = sha256_bytes(SBOM_BASELINE.read_bytes())
     supply_chain["provenanceDigest"] = sha256_bytes(PROVENANCE_BASELINE.read_bytes())
-    write_json(RELEASE_JSON, release)
+    write_json(NEXT_RELEASE_JSON, candidate)
 
 
-def synchronize_release_state_metadata_digests() -> None:
-    """Keep the canonical state projection bound to the refreshed release metadata."""
+def synchronize_candidate_state_metadata_digest() -> None:
+    """Keep only the candidate digest bound to a refreshed candidate projection."""
     state = load_json(RELEASE_STATE)
     metadata_digests = state.get("metadataDigests")
     if not isinstance(metadata_digests, dict):
         raise InvalidDataShapeError("release-state.json is missing metadataDigests")
-    published_digest = metadata_digests.get("published")
-    if not isinstance(published_digest, str):
+    if not isinstance(metadata_digests.get("published"), str):
         raise InvalidDataShapeError("release-state.json metadataDigests.published is missing")
-    metadata_digests["published"] = sha256_bytes(RELEASE_JSON.read_bytes())
     metadata_digests["candidate"] = sha256_bytes(NEXT_RELEASE_JSON.read_bytes())
     write_json(RELEASE_STATE, state)
+
+
+def candidate_supply_chain_issues(*, root: Path = ROOT) -> list[str]:
+    """Validate only the unpublished candidate against the local checkout."""
+    candidate = load_json(NEXT_RELEASE_JSON)
+    supply_chain = candidate.get("supplyChain")
+    if not isinstance(supply_chain, dict):
+        return ["next-release.json is missing supplyChain candidate evidence"]
+    paths = {
+        "requirementsLockDigest": LOCK_FILE,
+        "sbomDigest": SBOM_BASELINE,
+        "provenanceDigest": PROVENANCE_BASELINE,
+    }
+    issues: list[str] = []
+    for field, path in paths.items():
+        expected = supply_chain.get(field)
+        if not isinstance(expected, str) or not expected:
+            issues.append(f"next-release.json supplyChain.{field} is missing")
+        elif not path.is_file():
+            issues.append(f"next-release.json supplyChain.{field} source file is missing")
+        elif sha256_bytes(path.read_bytes()) != expected:
+            issues.append(f"next-release.json supplyChain.{field} differs from local evidence")
+    if supply_chain.get("secretScanning") is not True:
+        issues.append("next-release.json supplyChain.secretScanning must be true")
+    return issues
+
+
+def public_projection_issues() -> list[str]:
+    """Require an invalid provider projection to remain explicitly quarantined."""
+    release = load_json(RELEASE_JSON)
+    manifest = load_json(RELEASE_DIGESTS_BASELINE)
+    state = load_json(RELEASE_STATE)
+    tag = release.get("releaseTag")
+    supply_chain = release.get("supplyChain")
+    artifacts = manifest.get("artifacts")
+    if (
+        not isinstance(tag, str)
+        or not isinstance(supply_chain, dict)
+        or not isinstance(artifacts, dict)
+    ):
+        return ["published release projection is malformed"]
+    mapping = {
+        "requirementsLockDigest": "requirements-dev.lock",
+        "sbomDigest": ".ai/cockpit/sbom.json",
+        "provenanceDigest": ".ai/cockpit/provenance.json",
+    }
+    mismatched = [
+        field
+        for field, artifact in mapping.items()
+        if supply_chain.get(field) != artifacts.get(artifact)
+    ]
+    if not mismatched:
+        return []
+    unavailable = state.get("unavailableTags")
+    recorded = isinstance(unavailable, list) and any(
+        isinstance(item, dict)
+        and item.get("tag") == tag
+        and item.get("kind") == "stable_release_invalid_public_distribution"
+        for item in unavailable
+    )
+    if recorded:
+        return []
+    return [
+        (
+            "published release projection supply-chain mismatch is not recorded as "
+            "stable_release_invalid_public_distribution"
+        )
+    ]
 
 
 def refresh_candidate_evidence(source_commit: str | None = None) -> None:
@@ -477,9 +543,8 @@ def refresh_candidate_evidence(source_commit: str | None = None) -> None:
     provenance = build_provenance(sbom, source_commit)
     write_json(SBOM_BASELINE, sbom)
     write_json(PROVENANCE_BASELINE, provenance)
-    synchronize_release_supply_chain_digests()
-    synchronize_release_state_metadata_digests()
-    write_json(RELEASE_DIGESTS_BASELINE, build_release_digests(sbom, provenance))
+    synchronize_candidate_supply_chain_digests()
+    synchronize_candidate_state_metadata_digest()
 
 
 def write_release_assets(
@@ -718,13 +783,11 @@ def main() -> int:
                 write=bool(args.write),
             )
         elif args.command == "release":
-            sbom = build_sbom(args.source_commit)
-            provenance = build_provenance(sbom, args.source_commit)
-            issues = compare_or_write(
-                RELEASE_DIGESTS_BASELINE,
-                build_release_digests(sbom, provenance),
-                write=bool(args.write),
-            )
+            if args.write:
+                raise ValueError(
+                    "release evidence is provider-backed and cannot be rewritten locally"
+                )
+            issues = public_projection_issues() + candidate_supply_chain_issues()
         elif args.command == "release-assets":
             write_release_assets(
                 args.output_dir,

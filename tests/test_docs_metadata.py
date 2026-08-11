@@ -492,7 +492,8 @@ def test_installation_command_check_distinguishes_audit_history_from_current_rel
     current_claim.write_text("The current installer release is v0.5.42.\n", encoding="utf-8")
 
     errors = installation_command_errors(tmp_path)
+    release_tag = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))["releaseTag"]
     assert (
         "docs/reference/current-release-claim.md:1: documented release v0.5.42 does not "
-        "match release.json v0.5.56"
+        f"match release.json {release_tag}"
     ) in errors

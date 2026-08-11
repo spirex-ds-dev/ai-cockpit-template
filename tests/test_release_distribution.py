@@ -1094,8 +1094,18 @@ def test_release_network_commands_strip_ambient_git_auth(monkeypatch, tmp_path):
 def test_release_preparation_allows_candidate_installer_to_differ_from_public_baseline():
     metadata = json.loads(release_distribution.RELEASE.read_text(encoding="utf-8"))
     issues = release_distribution.supply_chain_issues(metadata)
+    state = json.loads(
+        (release_distribution.ROOT / "release-state.json").read_text(encoding="utf-8")
+    )
 
-    assert issues == []
+    assert len(issues) == 3
+    assert all("supplyChain." in issue for issue in issues)
+    assert {
+        "tag": "v0.5.57",
+        "kind": "stable_release_invalid_public_distribution",
+        "reason": state["unavailableTags"][-1]["reason"],
+        "evidence": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.57",
+    } == state["unavailableTags"][-1]
 
 
 def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tmp_path, capsys):

@@ -13,6 +13,8 @@ from typing import Any
 
 TAG = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
 COMMIT = re.compile(r"^[0-9a-f]{40}$")
+INSTALLER_DEFAULT_REF = re.compile(r"(AI_COCKPIT_TEMPLATE_REF:-)v\d+\.\d+\.\d+")
+INSTALLER_USAGE_REF = re.compile(r"(AI_COCKPIT_TEMPLATE_REF=)v\d+\.\d+\.\d+")
 
 
 class ProjectionSyncError(ValueError):
@@ -39,6 +41,23 @@ def next_patch(tag: str) -> str:
 
 def write_json(path: Path, value: dict[str, Any]) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def synchronized_installer_bytes(path: Path, candidate_tag: str) -> bytes:
+    """Advance both public installer default references with the candidate."""
+    try:
+        installer = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise ProjectionSyncError("install.sh is required for projection synchronization") from exc
+    installer, default_count = INSTALLER_DEFAULT_REF.subn(
+        rf"\g<1>{candidate_tag}", installer, count=1
+    )
+    installer, usage_count = INSTALLER_USAGE_REF.subn(rf"\g<1>{candidate_tag}", installer, count=1)
+    if default_count != 1 or usage_count != 1:
+        raise ProjectionSyncError(
+            "install.sh must contain exactly one default ref and one documented ref"
+        )
+    return installer.encode("utf-8")
 
 
 def synchronize_projection(
@@ -76,6 +95,7 @@ def synchronize_projection(
     state = load_object(state_path.read_bytes(), "release-state.json")
     version = load_object(version_path.read_bytes(), "version.json")
     candidate_tag = next_patch(release_tag)
+    installer_bytes = synchronized_installer_bytes(root / "install.sh", candidate_tag)
     candidate["releaseTag"] = candidate_tag
     candidate["releaseState"] = "candidate"
     candidate["published"] = False
@@ -120,6 +140,7 @@ def synchronize_projection(
     # All validation completes before this first write, preventing partial projection promotion.
     (root / "release.json").write_bytes(release_json_bytes)
     (root / ".ai" / "cockpit" / "release-digests.json").write_bytes(release_digests_bytes)
+    (root / "install.sh").write_bytes(installer_bytes)
     write_json(next_release_path, candidate)
     write_json(state_path, state)
     write_json(version_path, version)
