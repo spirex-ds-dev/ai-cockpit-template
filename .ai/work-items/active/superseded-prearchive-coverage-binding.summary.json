@@ -77,72 +77,7 @@
     "docs/reference/ai-cockpit-work-item-lifecycle.md",
     "AGENTS.md"
   ],
-  "verification": [
-    {
-      "check": "aiWorkItem",
-      "result": "not_run"
-    },
-    {
-      "check": "aiScope",
-      "result": "not_run"
-    },
-    {
-      "check": "aiGuards",
-      "result": "not_run"
-    },
-    {
-      "check": "aiCheckpoint",
-      "result": "not_run"
-    },
-    {
-      "check": "aiAgentRisk",
-      "result": "not_run"
-    },
-    {
-      "check": "aiReviewPolicy",
-      "result": "not_run"
-    },
-    {
-      "check": "aiBacktrack",
-      "result": "not_run"
-    },
-    {
-      "check": "aiCoverage",
-      "result": "not_run"
-    },
-    {
-      "check": "aiScenarioCoverage",
-      "result": "not_run"
-    },
-    {
-      "check": "aiGuidelines",
-      "result": "not_run"
-    },
-    {
-      "check": "aiSummary",
-      "result": "not_run"
-    },
-    {
-      "check": "aiStatus",
-      "result": "not_run"
-    },
-    {
-      "check": "aiStatusCheck",
-      "result": "not_run"
-    },
-    {
-      "check": "aiStatusConsistency",
-      "result": "not_run"
-    },
-    {
-      "check": "aiDiffOwnership",
-      "result": "not_run"
-    },
-    {
-      "check": "quality",
-      "result": "not_run"
-    }
-  ],
+  "verification": [],
   "guidelinesCompliance": [
     {
       "guideline": "New public APIs must be documented.",
@@ -272,8 +207,11 @@
         "status": "aligned",
         "evidence": [
           "docs/reference/work-item-lifecycle-closure.md",
+          "docs/reference/pre-release-documentation-alignment.md",
           "scripts/ai_archive_work_item.py",
-          "scripts/ai_lifecycle_truth.py"
+          "scripts/ai_lifecycle_truth.py",
+          ".ai/cockpit/task_report.md",
+          ".ai/work-items/active/superseded-prearchive-coverage-binding.outcome.md"
         ],
         "reason": "The reference describes the implemented absent-only historical binding exception and unchanged current-report requirement."
       },
@@ -293,5 +231,14 @@
         "reason": "The prior partial corrective and this remaining archive edge are explicit; no historical Outcome is rewritten."
       }
     ]
+  },
+  "taskOutcome": {
+    "status": "blocked",
+    "jsonPath": ".ai/work-items/active/superseded-prearchive-coverage-binding.outcome.json",
+    "markdownPath": ".ai/work-items/active/superseded-prearchive-coverage-binding.outcome.md",
+    "rawEvidencePath": "derived:blocked_finish",
+    "failedCheck": "documentationAlignment",
+    "error": "documentationAlignment.checks[2].evidence path '.ai/work-items/active/superseded-prearchive-coverage-binding.outcome.md' does not exist; documentationAlignment evidence is missing changed documentation/command surface: docs/reference/pre-release-documentation-alignment.md",
+    "humanStatusColor": "red"
   }
 }
