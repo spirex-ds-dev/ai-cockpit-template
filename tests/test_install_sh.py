@@ -21,6 +21,7 @@ def test_remote_archive_url_supports_branch_tag_and_sha_refs():
     assert "release-digests.json" in script
     assert "AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL" in script
     assert "public release-digests.json does not match requested release tag" in script
+    assert 'public_release_asset_url(repository, ref, "release-digests.json")' in script
 
 
 def test_quick_install_uses_candidate_tag_without_reading_candidate_metadata_at_runtime():

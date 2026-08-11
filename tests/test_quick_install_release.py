@@ -109,6 +109,31 @@ def test_quick_install_normalizes_full_https_git_url_for_historical_tag_metadata
     ]
 
 
+def test_public_release_asset_url_normalizes_full_https_git_url_for_every_asset():
+    assert verifier.public_release_asset_url(
+        "https://github.com/spirex-ds-dev/ai-cockpit-template.git",
+        "v0.5.57",
+        "release-digests.json",
+    ) == (
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/"
+        "releases/download/v0.5.57/release-digests.json"
+    )
+
+
+@pytest.mark.parametrize(
+    ("repository", "ref", "asset_name"),
+    [
+        ("https://example.invalid/owner/repository.git", "v0.5.57", "release-digests.json"),
+        ("invalid-repository", "v0.5.57", "release-digests.json"),
+        ("owner/repository", "../v0.5.57", "release-digests.json"),
+        ("owner/repository", "v0.5.57", "nested/release-digests.json"),
+    ],
+)
+def test_public_release_asset_url_fails_closed_for_unsafe_identity(repository, ref, asset_name):
+    with pytest.raises(verifier.ReleaseVerificationError):
+        verifier.public_release_asset_url(repository, ref, asset_name)
+
+
 def test_unverified_capability_fails_closed_before_download(monkeypatch, tmp_path):
     root, _archive = make_contract(tmp_path)
     metadata_path = root / "release.json"

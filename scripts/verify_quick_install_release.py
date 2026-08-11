@@ -88,6 +88,18 @@ def canonical_github_repository(value: str) -> str | None:
     return normalized if re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", normalized) else None
 
 
+def public_release_asset_url(repository: str, ref: str, asset_name: str) -> str:
+    """Build a public GitHub release-asset URL from one canonical repository identity."""
+    canonical_repository = canonical_github_repository(repository)
+    if canonical_repository is None:
+        raise ReleaseVerificationError("repository is not a supported public GitHub repository")
+    if not ref or "/" in ref or "\\" in ref:
+        raise ReleaseVerificationError("release tag is unsafe")
+    if not asset_name or "/" in asset_name or "\\" in asset_name:
+        raise ReleaseVerificationError("release asset name is unsafe")
+    return f"https://github.com/{canonical_repository}/releases/download/{ref}/{asset_name}"
+
+
 def declared_archive(metadata: dict[str, Any]) -> tuple[dict[str, Any], bool]:
     capabilities = metadata.get("capabilities")
     capability = (
@@ -121,13 +133,13 @@ def verify_release(
     metadata = load_release_metadata(root)
     if metadata.get("releaseTag") != ref:
         if not metadata_url:
-            repository = canonical_github_repository(
-                os.environ.get("AI_COCKPIT_TEMPLATE_REPO", "spirex-ds-dev/ai-cockpit-template")
+            repository = os.environ.get(
+                "AI_COCKPIT_TEMPLATE_REPO", "spirex-ds-dev/ai-cockpit-template"
             )
-            if repository:
-                metadata_url = (
-                    f"https://github.com/{repository}/releases/download/{ref}/release.json"
-                )
+            try:
+                metadata_url = public_release_asset_url(repository, ref, "release.json")
+            except ReleaseVerificationError:
+                metadata_url = None
         if not metadata_url:
             raise ReleaseVerificationError(
                 f"release tag mismatch (expected={ref!r}, declared={metadata.get('releaseTag')!r})"

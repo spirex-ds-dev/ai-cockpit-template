@@ -34,6 +34,7 @@ def copy_documentation(target: Path) -> None:
     shutil.copy2(ROOT / ".ai" / "README.md", target / ".ai" / "README.md")
     shutil.copy2(ROOT / ".ai" / "glossary.md", target / ".ai" / "glossary.md")
     shutil.copy2(ROOT / "release.json", target / "release.json")
+    shutil.copy2(ROOT / "next-release.json", target / "next-release.json")
     shutil.copy2(ROOT / "install.sh", target / "install.sh")
     shutil.copy2(ROOT / "Makefile", target / "Makefile")
 
@@ -493,5 +494,5 @@ def test_installation_command_check_distinguishes_audit_history_from_current_rel
     errors = installation_command_errors(tmp_path)
     assert (
         "docs/reference/current-release-claim.md:1: documented release v0.5.42 does not "
-        "match release.json v0.5.55"
+        "match release.json v0.5.56"
     ) in errors

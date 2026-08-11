@@ -77,12 +77,12 @@ def test_release_preflight_rejects_source_version_that_disagrees_with_requested_
     assert preflight.validate_source_release_version({"releaseVersion": "0.5.50"}, "v0.5.50") == []
 
 
-def test_repository_source_version_matches_the_v056_candidate():
+def test_repository_source_version_matches_the_v057_candidate():
     root = Path(__file__).resolve().parents[1]
     version = json.loads((root / ".ai" / "cockpit" / "version.json").read_text(encoding="utf-8"))
 
-    assert version["releaseVersion"] == "0.5.56"
-    assert preflight.validate_source_release_version(version, "v0.5.56") == []
+    assert version["releaseVersion"] == "0.5.57"
+    assert preflight.validate_source_release_version(version, "v0.5.57") == []
 
 
 def test_release_preflight_source_readers_bind_and_reject_exact_source_bytes(monkeypatch, tmp_path):
@@ -965,6 +965,24 @@ def test_finalize_release_freeze_candidate_mode_binds_to_work_item_branch(monkey
     assert freeze["lifecycle"]["state"] == "candidate_prepared"
     assert freeze["lifecycle"]["candidateBranch"] == "codex/task"
     assert freeze["lifecycle"]["defaultBranch"] == "main"
+
+
+def test_finalize_release_freeze_candidate_preserves_published_release_projection(
+    monkeypatch, tmp_path
+):
+    _configure_finalizer(
+        monkeypatch,
+        tmp_path,
+        branch="codex/task",
+        head="candidate-commit",
+        remote_head="default-commit",
+        active_task="task",
+    )
+    published_before = (tmp_path / "release.json").read_bytes()
+
+    assert finalizer.main(candidate_task="task") == 0
+
+    assert (tmp_path / "release.json").read_bytes() == published_before
 
 
 def test_finalize_release_freeze_premerge_requires_archived_work_item(monkeypatch, tmp_path):

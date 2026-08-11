@@ -242,6 +242,7 @@ def main(
     metadata_digests = release_state.get("metadataDigests")
     if not isinstance(metadata_digests, dict):
         return _fail("release-state.json metadataDigests must contain an object")
+    materialize_published_projection = candidate_task is None and premerge_task is None
     freeze.update(
         {
             "state": "frozen",
@@ -284,7 +285,7 @@ def main(
         installer_sha = hashlib.sha256(installer_path.read_bytes()).hexdigest()
     except OSError as exc:
         return _fail(f"install.sh is missing or unreadable: {exc}")
-    if premerge_task is None:
+    if materialize_published_projection:
         release.setdefault("releaseArchive", {})["sha256"] = archive_sha
         release["installerDigest"] = installer_sha
         capabilities = release.setdefault("capabilities", {})
@@ -302,7 +303,7 @@ def main(
     freeze_path.write_text(
         json.dumps(freeze, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    if premerge_task is None:
+    if materialize_published_projection:
         release_path.write_text(
             json.dumps(release, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
