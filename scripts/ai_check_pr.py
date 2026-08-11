@@ -26,6 +26,7 @@ from ai_common import (
     run_git,
     simple_yaml_lists,
 )
+from ai_lifecycle_truth import superseded_summary_validation_exception
 from ai_post_archive_recovery import RECEIPT_DIRECTORY, validate_recovery_receipt
 from ai_start_receipt import validate_receipt, validate_resume_history_structure
 
@@ -711,17 +712,20 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             issues.append(f"{contract_rel}: PR archive evidence requires contractVersion 2")
         issues.extend(f"{contract_rel}: {issue}" for issue in validate_contract(contract))
         legacy_archive = is_legacy_archive(contract, summary)
-        issues.extend(
-            f"{summary_rel}: {issue}"
-            for issue in validate_summary(
-                summary,
-                contract,
-                expected_contract_hash=hashlib.sha256(contract_path.read_bytes()).hexdigest(),
-                contract_path=contract_rel,
-                summary_path=summary_rel,
-                legacy_archive=legacy_archive,
-            )
+        summary_issues = validate_summary(
+            summary,
+            contract,
+            expected_contract_hash=hashlib.sha256(contract_path.read_bytes()).hexdigest(),
+            contract_path=contract_rel,
+            summary_path=summary_rel,
+            legacy_archive=legacy_archive,
         )
+        if not superseded_summary_validation_exception(
+            contract_path=contract_path,
+            work_item_id=str(contract.get("workItemId", "")),
+            summary_issues=summary_issues,
+        ):
+            issues.extend(f"{summary_rel}: {issue}" for issue in summary_issues)
         sequence_issue = archive_sequence_issue(contract, summary)
         if sequence_issue:
             issues.append(f"{summary_rel}: {sequence_issue}")
