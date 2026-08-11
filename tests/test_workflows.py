@@ -12,16 +12,40 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
 
 def test_smoke_hosted_measurement_dispatch_returns_a_non_authorizing_exact_commit_receipt():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    builder = (ROOT / "scripts" / "quality_measurements.py").read_text(encoding="utf-8")
     assert "- hosted_measurement" in workflow
     assert "Write hosted measurement receipt" in workflow
-    assert "ai-cockpit-hosted-measurement-receipt" in workflow
-    assert 'authorizationClaim: "not_provided_by_receipt"' in workflow
-    assert "forbiddenActions" in workflow
-    assert "commitSha: $commit_sha" in workflow
-    assert "runUrl: $run_url" in workflow
-    assert "requiredJobConclusions" in workflow
+    assert '"ai-cockpit-hosted-measurement-receipt"' in builder
+    assert '"authorizationClaim": "not_provided_by_receipt"' in builder
+    assert '"forbiddenActions"' in builder
+    assert '"commitSha": commit_sha' in builder
+    assert '"treeDigest": tree_digest' in builder
+    assert '"workflow"' in builder
     assert "Upload hosted measurement receipt" in workflow
     assert "hosted-measurement-receipt-${{ github.run_id }}-${{ github.run_attempt }}" in workflow
+
+
+def test_smoke_hosted_measurement_receipt_consumes_source_bound_test_evidence():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    evidence = workflow.split("  ci-evidence:", 1)[1]
+
+    assert "actions: read" in workflow
+    for name in (
+        "project-test-plan-",
+        "project-test-shard-core-",
+        "project-test-shard-governance-",
+        "project-test-shard-installer-",
+        "project-test-shard-lifecycle-",
+        "project-test-shard-release-",
+        "project-test-aggregate-",
+    ):
+        assert name in evidence
+    assert "actions/runs/$GITHUB_RUN_ID/jobs" in evidence
+    assert "github.event.repository.private" in evidence
+    assert "Hosted metadata API access blocked for a private repository" in evidence
+    assert "scripts/quality_measurements.py build-receipt" in evidence
+    assert "--provider-run" in evidence
+    assert "--provider-jobs" in evidence
 
 
 def test_csharp_compatibility_uses_dependabot_setup_dotnet_600_pin():

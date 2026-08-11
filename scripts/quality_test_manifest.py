@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import os
+import platform
 import subprocess  # nosec B404 - all invocations below use fixed executables and validated args.
 import sys
 from collections import Counter
@@ -28,6 +29,18 @@ PROJECT_TEST_COMMANDS = (
     ("shell:tests/test_ci_release_evidence.sh", "shell", "shard"),
 )
 HOSTED_SHARDS = ("core", "governance", "installer", "lifecycle", "release")
+
+
+def runner_facts() -> dict[str, Any]:
+    """Return stable facts needed to compare Hosted runner populations."""
+    image_os = os.environ.get("ImageOS", "local")
+    image_version = os.environ.get("ImageVersion", "unversioned")
+    return {
+        "image": f"{image_os}@{image_version}",
+        "os": os.environ.get("RUNNER_OS", platform.system()),
+        "python": platform.python_version(),
+        "cpuCount": os.cpu_count() or 1,
+    }
 
 
 def document_digest(document: dict[str, Any]) -> str:
@@ -60,7 +73,7 @@ def historical_durations(junit_path: Path) -> dict[str, int]:
 
 
 def load_file_timing_baseline(path: Path) -> dict[str, int]:
-    """Load checked-in historical file costs; reject malformed evidence instead of guessing."""
+    """Load checked-in file and exact-node costs; reject malformed evidence."""
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -79,6 +92,20 @@ def load_file_timing_baseline(path: Path) -> dict[str, int]:
         ):
             raise ManifestError(f"invalid timing baseline entry: {filename}")
         durations[filename] = duration
+    node_durations = payload.get("nodeDurationsMs", {})
+    if not isinstance(node_durations, dict):
+        raise ManifestError(f"invalid timing baseline nodeDurationsMs: {path}")
+    for node_id, duration in node_durations.items():
+        if (
+            not isinstance(node_id, str)
+            or not node_id.startswith("tests/")
+            or ".py::" not in node_id
+            or not isinstance(duration, int)
+            or isinstance(duration, bool)
+            or duration < 0
+        ):
+            raise ManifestError(f"invalid timing baseline node entry: {node_id}")
+        durations[node_id] = duration
     return durations
 
 
@@ -264,6 +291,8 @@ def run_shard(
         "artifactRoot": artifact_root(root, output),
         "result": result,
         "recovery": recovery,
+        "runner": runner_facts(),
+        "cache": {"status": "not_configured"},
         "artifacts": {
             "junit": junit.name,
             "coverage": coverage.name,
@@ -518,7 +547,8 @@ def build_manifest(
         if not isinstance(node_id, str) or not node_id.startswith("tests/") or "::" not in node_id:
             raise ManifestError(f"invalid pytest node ID: {node_id}")
         filename = node_id.split("::", 1)[0]
-        fallback = max(1, round(file_durations_ms.get(filename, 0) / nodes_per_file[filename]))
+        file_fallback = max(1, round(file_durations_ms.get(filename, 0) / nodes_per_file[filename]))
+        fallback = file_durations_ms.get(node_id, file_fallback)
         duration = historical_durations_ms.get(node_id, fallback)
         if not isinstance(duration, int) or isinstance(duration, bool) or duration < 0:
             raise ManifestError(f"invalid historical duration for {node_id}")
