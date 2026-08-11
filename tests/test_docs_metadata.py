@@ -493,5 +493,5 @@ def test_installation_command_check_distinguishes_audit_history_from_current_rel
     errors = installation_command_errors(tmp_path)
     assert (
         "docs/reference/current-release-claim.md:1: documented release v0.5.42 does not "
-        "match release.json v0.5.54"
+        "match release.json v0.5.55"
     ) in errors
