@@ -174,6 +174,15 @@ def test_canonical_superseded_summary_exception_accepts_only_bound_red_evidence(
     )
 
 
+def test_canonical_superseded_transition_predicate_accepts_bound_red_evidence(tmp_path):
+    contract, _, _, _ = write_superseded_predecessor(tmp_path)
+
+    assert ai_lifecycle_truth.is_valid_superseded_transition(
+        contract_path=contract,
+        work_item_id="task",
+    )
+
+
 @pytest.mark.parametrize(
     "invalid_case",
     [
@@ -218,6 +227,10 @@ def test_canonical_superseded_summary_exception_rejects_invalid_evidence(tmp_pat
         contract_path=contract,
         work_item_id="task",
         summary_issues=["required verification is not passed: quality"],
+    )
+    assert not ai_lifecycle_truth.is_valid_superseded_transition(
+        contract_path=contract,
+        work_item_id="task",
     )
 
 
@@ -351,6 +364,90 @@ def test_pre_archive_candidate_coverage_requires_matching_outcome_binding(tmp_pa
         )
         == coverage
     )
+
+
+def test_pre_archive_coverage_accepts_only_missing_historical_binding_for_superseded(
+    tmp_path, monkeypatch
+):
+    active = tmp_path / ".ai/work-items/active"
+    target = tmp_path / "target"
+    active.mkdir(parents=True)
+    target.mkdir()
+    contract, outcome, _, _ = write_superseded_predecessor(active)
+    contract_payload = {"workItemId": "task", "baseCommit": "a" * 40}
+    contract.write_text(json.dumps(contract_payload), encoding="utf-8")
+    outcome_before = outcome.read_bytes()
+    binding = {
+        "baseCommit": "a" * 40,
+        "candidateHead": "b" * 40,
+        "candidateTreeDigest": "c" * 64,
+        "candidateDiffDigest": "d" * 64,
+    }
+    report_bytes = (json.dumps({"binding": binding}, sort_keys=True) + "\n").encode()
+    (target / "changed-critical-coverage.json").write_bytes(report_bytes)
+    coverage = {"reportSha256": hashlib.sha256(report_bytes).hexdigest(), "binding": binding}
+
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    import check_changed_critical_coverage
+
+    monkeypatch.setattr(
+        check_changed_critical_coverage, "candidate_snapshot", lambda **_kwargs: binding
+    )
+
+    assert (
+        ai_archive_work_item.load_pre_archive_candidate_coverage(
+            contract_path=contract,
+            contract=contract_payload,
+        )
+        == coverage
+    )
+    assert outcome.read_bytes() == outcome_before
+
+
+def test_pre_archive_coverage_rejects_existing_mismatch_even_when_superseded(tmp_path, monkeypatch):
+    active = tmp_path / ".ai/work-items/active"
+    target = tmp_path / "target"
+    active.mkdir(parents=True)
+    target.mkdir()
+    contract, outcome, receipt_path, receipt = write_superseded_predecessor(active)
+    contract_payload = {"workItemId": "task", "baseCommit": "a" * 40}
+    contract.write_text(json.dumps(contract_payload), encoding="utf-8")
+    binding = {
+        "baseCommit": "a" * 40,
+        "candidateHead": "b" * 40,
+        "candidateTreeDigest": "c" * 64,
+        "candidateDiffDigest": "d" * 64,
+    }
+    report_bytes = (json.dumps({"binding": binding}, sort_keys=True) + "\n").encode()
+    (target / "changed-critical-coverage.json").write_bytes(report_bytes)
+    wrong_coverage = {"reportSha256": "0" * 64, "binding": binding}
+    outcome.write_text(
+        json.dumps(
+            {
+                "workItemId": "task",
+                "status": "blocked",
+                "bindings": {"preArchiveCandidateCoverage": wrong_coverage},
+            }
+        ),
+        encoding="utf-8",
+    )
+    receipt["predecessorOutcomeDigest"] = hashlib.sha256(outcome.read_bytes()).hexdigest()
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    import check_changed_critical_coverage
+
+    monkeypatch.setattr(
+        check_changed_critical_coverage, "candidate_snapshot", lambda **_kwargs: binding
+    )
+
+    with pytest.raises(ValueError, match="does not bind"):
+        ai_archive_work_item.load_pre_archive_candidate_coverage(
+            contract_path=contract,
+            contract=contract_payload,
+        )
 
 
 def test_current_worktree_digest_excludes_self_referential_lifecycle_projections(monkeypatch):

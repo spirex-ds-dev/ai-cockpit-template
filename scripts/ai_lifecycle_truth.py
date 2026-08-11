@@ -105,18 +105,8 @@ def validate_successor_receipt(
     return None
 
 
-def superseded_summary_validation_exception(
-    *, contract_path: Path, work_item_id: str, summary_issues: list[str]
-) -> bool:
-    """Accept only failed-verification issues bound to a superseded blocked predecessor."""
-    permitted_prefixes = (
-        "Summary is missing required verification:",
-        "required verification is not passed:",
-    )
-    if not summary_issues or any(
-        not issue.startswith(permitted_prefixes) for issue in summary_issues
-    ):
-        return False
+def is_valid_superseded_transition(*, contract_path: Path, work_item_id: str) -> bool:
+    """Return whether exact successor evidence supersedes this blocked Outcome."""
     outcome_path = contract_path.with_name(f"{work_item_id}.outcome.json")
     receipt_path = contract_path.with_name(f"{work_item_id}.successor-receipt.json")
     try:
@@ -131,6 +121,24 @@ def superseded_summary_validation_exception(
             receipt=receipt,
         )
         is None
+    )
+
+
+def superseded_summary_validation_exception(
+    *, contract_path: Path, work_item_id: str, summary_issues: list[str]
+) -> bool:
+    """Accept only failed-verification issues bound to a superseded blocked predecessor."""
+    permitted_prefixes = (
+        "Summary is missing required verification:",
+        "required verification is not passed:",
+    )
+    if not summary_issues or any(
+        not issue.startswith(permitted_prefixes) for issue in summary_issues
+    ):
+        return False
+    return is_valid_superseded_transition(
+        contract_path=contract_path,
+        work_item_id=work_item_id,
     )
 
 
