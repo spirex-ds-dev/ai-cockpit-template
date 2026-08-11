@@ -154,7 +154,7 @@ jobs:
           strict_run_id="$(jq -r '.strictSmokeRunId' "$receipt")"
           strict_run="$(gh run view "$strict_run_id" --repo "$GITHUB_REPOSITORY" --json conclusion,headSha,workflowName,event,displayTitle,jobs)"
           jq -e --arg source "$SOURCE_COMMIT" --arg rehearsal "$REHEARSAL_RUN_ID" \
-            '(.conclusion == "success" and .headSha == $source and .workflowName == "smoke" and .event == "workflow_dispatch" and (.displayTitle | contains("release_verification for release " + $rehearsal)) and ([.jobs[] | select(.conclusion != "success")] | length == 0))' \
+            '(.conclusion == "success" and .headSha == $source and .workflowName == "smoke" and .event == "workflow_dispatch" and (.displayTitle | contains("release_verification for release " + $rehearsal)) and any(.jobs[]; .name == "template-smoke" and .conclusion == "success") and any(.jobs[]; .name == "ci-evidence" and .conclusion == "success"))' \
             <<<"$strict_run" > /dev/null
           required_jobs="$(jq -c '[.jobs[].name] | unique' <<<"$strict_run")"
           jq -e --argjson jobs "$required_jobs" '.requiredJobNames == $jobs' "$receipt" > /dev/null
@@ -436,7 +436,7 @@ jobs:
           source_tree="$(git rev-parse "${SOURCE_COMMIT}^{tree}")"
           strict_run="$(gh run view "$STRICT_SMOKE_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,headSha,workflowName,event,displayTitle,jobs)"
           jq -e --arg source "$SOURCE_COMMIT" --arg run "$GITHUB_RUN_ID" \
-            '(.conclusion == "success" and .headSha == $source and .workflowName == "smoke" and .event == "workflow_dispatch" and (.displayTitle | contains("release_verification for release " + $run)) and ([.jobs[] | select(.conclusion != "success")] | length == 0))' \
+            '(.conclusion == "success" and .headSha == $source and .workflowName == "smoke" and .event == "workflow_dispatch" and (.displayTitle | contains("release_verification for release " + $run)) and any(.jobs[]; .name == "template-smoke" and .conclusion == "success") and any(.jobs[]; .name == "ci-evidence" and .conclusion == "success"))' \
             <<<"$strict_run" > /dev/null
           required_jobs="$(jq -c '[.jobs[].name] | unique' <<<"$strict_run")"
           artifacts="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${STRICT_SMOKE_RUN_ID}/artifacts?per_page=100")"

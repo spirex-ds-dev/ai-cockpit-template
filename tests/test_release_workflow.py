@@ -90,6 +90,19 @@ def test_rehearsal_receipt_reuse_rejects_incomplete_or_mismatched_evidence_befor
     assert "quality-diagnostics" in receipt_creation
 
 
+def test_rehearsal_receipt_uses_successful_fail_closed_aggregate_evidence_not_stale_shard_api_state():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    receipt = workflow.index("Record exact-source rehearsal receipt")
+    receipt_creation = workflow[receipt : workflow.index("Upload exact-source rehearsal receipt")]
+
+    assert (
+        'any(.jobs[]; .name == "template-smoke" and .conclusion == "success")' in receipt_creation
+    )
+    assert 'any(.jobs[]; .name == "ci-evidence" and .conclusion == "success")' in receipt_creation
+    assert '[.jobs[] | select(.conclusion != "success")]' not in receipt_creation
+
+
 def test_rehearsal_guards_every_public_release_side_effect():
     workflow = WORKFLOW.read_text(encoding="utf-8")
     public_steps = (

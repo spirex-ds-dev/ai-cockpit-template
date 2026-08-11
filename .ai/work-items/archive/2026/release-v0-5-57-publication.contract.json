@@ -1,0 +1,250 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-57-publication",
+  "mode": "code",
+  "title": "Publish v0.5.57 and verify future-adopter delivery",
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。目标是把收益交付给 adopter；发布最新版本为止，做好优化和自检；明天要看到修正完整的新版本（包括远程和本地清理）。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:publish-v0.5.57-adopter-delivery",
+    "capturedAt": "2026-08-12",
+    "digest": "sha256:publish-v057-adopter-delivery"
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "declaredIntent": {
+    "summary": "Publish the one approved v0.5.57 source-bound release only after same-SHA rehearsal, provider evidence, and public HTTPS installer verification succeed.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-12-v057-adopter-delivery",
+    "scope": "Publish v0.5.57 after all gates, close #783 after fresh proof, and perform governed cleanup. No gate bypass or mutation of v0.5.56 is authorized."
+  },
+  "baseCommit": "af6169fd3fe6d5062e74423dfd43ac49831b3477",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-57-publication.contract.json",
+    ".ai/work-items/active/release-v0-5-57-publication.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-57-publication.outcome.json",
+    ".ai/work-items/active/release-v0-5-57-publication.outcome.md"
+  ],
+  "outOfScope": [
+    "Changing v0.5.56 or any existing immutable tag or Release.",
+    "Changing implementation, test scope, coverage threshold, security gates, or release workflow logic except the narrowly scoped receipt parser correction required to consume existing fail-closed aggregate evidence.",
+    "Claiming publication, adopter delivery, or Issue #783 resolution without provider-bound evidence and a fresh full-HTTPS installation."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Authoritative exact-source rehearsal and publication procedure."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Public release, asset, and future-adopter verification contract."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "The sole v0.5.57 unpublished candidate identity."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-adopter-delivery.closure.json",
+      "reason": "Closed predecessor evidence and final merged source lineage."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783",
+      "reason": "The installation defect that this public release must prove resolved before closure."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["production_release", "evidence_integrity", "adopter_installation"],
+    "reason": "Publication creates an immutable provider tag and public assets; exact-source rehearsal, release assets, and fresh HTTPS installation evidence are required.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized exact-source publication, verification, Issue closure, and governed local/remote cleanup."
+  },
+  "preReviewWarnings": [
+    "Do not dispatch publication until a successful same-SHA rehearsal receipt exists; do not close #783 until fresh full-HTTPS installer proof succeeds."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A successful same-SHA v0.5.57 release rehearsal receipt exists before publication is dispatched.",
+    "The provider release publishes immutable tag v0.5.57 from the final origin/main SHA with all required source-bound assets and evidence.",
+    "A fresh temporary repository installs from the public full HTTPS template URL at v0.5.57 and proves canonical asset hydration, version consistency, and successful distribution validation.",
+    "Issue #783 is closed only after the fresh installation evidence is recorded; this Work Item is archived, merged if it has a documentation-only PR, closed, and its local and remote branches are cleaned by governed closure."
+  ],
+  "guidelines": [
+    "Provider publication is authorized only for v0.5.57 and only after all exact-source gates pass.",
+    "Do not weaken coverage, test collection, security, smoke, compatibility, release, or evidence gates.",
+    "Treat provider assets and a fresh installation as the authority for adopter delivery."
+  ],
+  "intent": {
+    "problem": "The performance and installer-repair capability has merged to main but future adopters cannot receive it until immutable v0.5.57 provider assets are released and a real full-HTTPS installation proves the release projection is consistent.",
+    "constraints": [
+      "Do not change, delete, move, or republish existing versions including v0.5.56.",
+      "Do not bypass rehearsal, strict smoke, compatibility, asset, source-binding, coverage, or public distribution verification.",
+      "A release failure must remain red/yellow with recovery evidence; no chat-only success claim.",
+      "Close Issue #783 only after fresh black-box proof and record the proof in the Work Item Summary."
+    ],
+    "rationale": "A release workflow binds the final default-branch source to immutable provider assets, while a clean external installation is the only credible proof that future adopter projects receive the repaired installer and performance capability."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A rehearsal is bound to the exact final main SHA, required smoke jobs, test collection, coverage, and artifacts.",
+      "expected": "The workflow produces a same-SHA receipt; a missing or cross-SHA receipt fails before publication.",
+      "verificationPlan": "Dispatch rehearsal against the final main SHA and inspect its receipt and required jobs.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "unverified",
+      "evidence": [".github/workflows/release.yml", "release-state.json"]
+    },
+    {
+      "scenario": "Publication rejects a stale SHA, missing rehearsal receipt, missing asset, or invalid public distribution evidence.",
+      "expected": "The workflow fails closed before or during draft verification and cannot publish an invalid Release.",
+      "verificationPlan": "Use the provider release workflow's exact-source validation and post-publish distribution checker.",
+      "required": true,
+      "riskDomain": "production_release",
+      "status": "unverified",
+      "evidence": [".github/workflows/release.yml", "scripts/check_release_distribution.py"]
+    },
+    {
+      "scenario": "A clean temporary repository using the full HTTPS template URL installs v0.5.57 without a nested GitHub URL and verifies the public release assets.",
+      "expected": "Installation succeeds, records v0.5.57 consistently, and validates canonical release assets from the public URL.",
+      "verificationPlan": "Run an isolated fresh install using the documented full HTTPS template URL after publication.",
+      "required": true,
+      "riskDomain": "adopter_installation",
+      "status": "unverified",
+      "evidence": ["install.sh", "scripts/verify_quick_install_release.py"]
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all necessary confirmations, v0.5.57 publication, Issue #783 closure after proof, merge, and local/remote governed cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 878
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-57-publication.json",
+    "baseCommit": "af6169fd3fe6d5062e74423dfd43ac49831b3477",
+    "initialScopeDigest": "40954ecf5ec577698b95fc303bdce5ad4941b83de0a09c4915d24137d48811e9",
+    "contractSkeletonDigest": "6510e5d2395a465222bc5e25ada29212c2d61b8015cb33f2e3ef293410807220"
+  }
+}
