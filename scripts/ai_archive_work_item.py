@@ -545,7 +545,7 @@ def load_pre_archive_candidate_coverage(
 
 def _run_git_metadata(args: list[str]) -> subprocess.CompletedProcess[str]:
     """Run read-only Git metadata queries for archive evidence validation."""
-    return subprocess.run(  # nosec B603: fixed Git executable and metadata-only arguments
+    return subprocess.run(  # nosec B603 B607 - fixed Git metadata command
         ["git", *args],
         cwd=PROJECT_ROOT,
         env=clean_git_environment(),
