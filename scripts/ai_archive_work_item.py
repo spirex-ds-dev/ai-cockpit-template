@@ -31,7 +31,10 @@ from ai_common import (
     save_json,
     verification_key,
 )
-from ai_lifecycle_truth import superseded_summary_validation_exception
+from ai_lifecycle_truth import (
+    is_valid_superseded_transition,
+    superseded_summary_validation_exception,
+)
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
@@ -521,9 +524,17 @@ def load_pre_archive_candidate_coverage(
     except (OSError, ValueError) as exc:
         raise ValueError(f"cannot read Outcome candidate coverage binding: {exc}") from exc
     bindings = outcome.get("bindings") if isinstance(outcome, dict) else None
-    if not isinstance(bindings, dict) or bindings.get("preArchiveCandidateCoverage") != coverage:
-        raise ValueError("Task Outcome does not bind the current pre-archive candidate coverage")
-    return coverage
+    bound_coverage = (
+        bindings.get("preArchiveCandidateCoverage") if isinstance(bindings, dict) else None
+    )
+    if bound_coverage == coverage:
+        return coverage
+    if bound_coverage is None and is_valid_superseded_transition(
+        contract_path=contract_path,
+        work_item_id=work_item,
+    ):
+        return coverage
+    raise ValueError("Task Outcome does not bind the current pre-archive candidate coverage")
 
 
 def _archive_sequence_key(item: object) -> int:

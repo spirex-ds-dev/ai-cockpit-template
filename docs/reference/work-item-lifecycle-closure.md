@@ -44,6 +44,14 @@ archived-evidence eligibility check; the merged PR, exact Head SHA, clean
 worktree, fast-forward base synchronization, closure receipt, remote absence,
 and local branch cleanup checks below remain mandatory and unchanged.
 
+Real archive mutation still requires a current changed-critical-coverage report
+whose Contract base, candidate Head, tree digest, and diff digest match the
+candidate exactly. The archive manifest binds that report. A historical blocked
+Outcome created before `preArchiveCandidateCoverage` existed may omit only that
+field when the same exact `transition=superseded` evidence validates; its bytes
+and digest remain unchanged. An existing but unequal Outcome binding, a missing
+or stale current report, or invalid successor evidence remains fail closed.
+
 Its ordered protocol is:
 
 ```text
