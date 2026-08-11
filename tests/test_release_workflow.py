@@ -157,18 +157,30 @@ def test_release_archive_projects_and_compares_the_runtime_digest_manifest():
     assert 'cmp -s "$RUNNER_TEMP/archive-release-digests.json"' in segment
 
 
+def test_runtime_projection_rebinds_supply_chain_to_exact_source_evidence():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    evidence = workflow.index("Generate source-bound release evidence")
+    verification = workflow.index("Verify source-bound release evidence subjects")
+    segment = workflow[evidence:verification]
+
+    assert "sha256sum requirements-dev.lock" in segment
+    assert 'sha256sum "$RUNNER_TEMP/release-evidence/sbom.json"' in segment
+    assert 'sha256sum "$RUNNER_TEMP/release-evidence/provenance.json"' in segment
+    assert ".supplyChain.requirementsLockDigest = $lock_sha" in segment
+    assert ".supplyChain.sbomDigest = $sbom_sha" in segment
+    assert ".supplyChain.provenanceDigest = $provenance_sha" in segment
+
+
 def test_published_projection_is_synchronized_from_provider_before_next_candidate():
     import json
+    import re
 
     published = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))
     candidate = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))
 
-    assert published["releaseTag"] == "v0.5.56"
-    assert (
-        published["releaseArchive"]["sha256"]
-        == "aff7fd8790d4b2dd632dbb72d56a4a5a6ff9c98a97e0d609470f4c803489f2bb"
-    )
-    assert candidate["releaseTag"] == "v0.5.57"
+    assert re.fullmatch(r"v\d+\.\d+\.\d+", published["releaseTag"])
+    assert re.fullmatch(r"[0-9a-f]{64}", published["releaseArchive"]["sha256"])
+    assert re.fullmatch(r"v\d+\.\d+\.\d+", candidate["releaseTag"])
     assert candidate["releaseTag"] != published["releaseTag"]
     assert candidate["releaseTag"].startswith("v")
     assert candidate["basedOnReleaseTag"] == published["releaseTag"]

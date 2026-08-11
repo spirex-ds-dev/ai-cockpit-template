@@ -448,7 +448,22 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
         },
     }
     release.write_text(json.dumps(original, indent=2) + "\n", encoding="utf-8")
-    candidate.write_text('{"releaseTag":"v0.5.43","published":false}\n', encoding="utf-8")
+    candidate.write_text(
+        json.dumps(
+            {
+                "releaseTag": "v0.5.43",
+                "published": False,
+                "supplyChain": {
+                    "requirementsLockDigest": "stale-lock",
+                    "sbomDigest": "stale-sbom",
+                    "provenanceDigest": "stale-provenance",
+                    "secretScanning": True,
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     release_state.write_text(
         json.dumps(
             {
@@ -492,28 +507,83 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
     assert refreshed["releaseArchive"] == original["releaseArchive"]
     assert refreshed["publicContract"] == original["publicContract"]
     assert refreshed["capabilities"] == original["capabilities"]
-    assert refreshed["supplyChain"][
-        "requirementsLockDigest"
-    ] == check_release_distribution.file_digest(lock)
-    assert (
-        refreshed["supplyChain"]["requirementsLockDigest"]
-        != original["supplyChain"]["requirementsLockDigest"]
+    assert refreshed["supplyChain"] == original["supplyChain"]
+    refreshed_candidate = json.loads(candidate.read_text(encoding="utf-8"))
+    assert refreshed_candidate["supplyChain"]["requirementsLockDigest"] == (
+        check_release_distribution.file_digest(lock)
     )
-    assert refreshed["supplyChain"]["secretScanning"] is True
-    assert refreshed["supplyChain"]["sbomDigest"] == check_release_distribution.file_digest(
-        cockpit / "sbom.json"
-    )
-    assert refreshed["supplyChain"]["provenanceDigest"] == check_release_distribution.file_digest(
-        cockpit / "provenance.json"
-    )
+    assert refreshed_candidate["supplyChain"]["secretScanning"] is True
+    assert refreshed_candidate["supplyChain"][
+        "sbomDigest"
+    ] == check_release_distribution.file_digest(cockpit / "sbom.json")
+    assert refreshed_candidate["supplyChain"][
+        "provenanceDigest"
+    ] == check_release_distribution.file_digest(cockpit / "provenance.json")
     refreshed_state = json.loads(release_state.read_text(encoding="utf-8"))
-    assert refreshed_state["metadataDigests"][
-        "published"
-    ] == check_release_distribution.file_digest(release)
+    assert refreshed_state["metadataDigests"]["published"] == "stale-release"
     assert refreshed_state["metadataDigests"][
         "candidate"
     ] == check_release_distribution.file_digest(candidate)
-    assert check_release_distribution.supply_chain_issues(refreshed, root=tmp_path) == []
+    assert check_supply_chain.candidate_supply_chain_issues(root=tmp_path) == []
+
+
+def test_public_projection_mismatch_requires_an_invalid_distribution_record(tmp_path, monkeypatch):
+    cockpit = tmp_path / ".ai" / "cockpit"
+    cockpit.mkdir(parents=True)
+    release = tmp_path / "release.json"
+    state = tmp_path / "release-state.json"
+    manifest = cockpit / "release-digests.json"
+    release.write_text(
+        json.dumps(
+            {
+                "releaseTag": "v0.5.57",
+                "supplyChain": {
+                    "requirementsLockDigest": "stale",
+                    "sbomDigest": "stale",
+                    "provenanceDigest": "stale",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    manifest.write_text(
+        json.dumps(
+            {
+                "artifacts": {
+                    "requirements-dev.lock": "current",
+                    ".ai/cockpit/sbom.json": "current",
+                    ".ai/cockpit/provenance.json": "current",
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    state.write_text('{"unavailableTags": []}', encoding="utf-8")
+    monkeypatch.setattr(check_supply_chain, "RELEASE_JSON", release)
+    monkeypatch.setattr(check_supply_chain, "RELEASE_DIGESTS_BASELINE", manifest)
+    monkeypatch.setattr(check_supply_chain, "RELEASE_STATE", state)
+
+    assert check_supply_chain.public_projection_issues() == [
+        (
+            "published release projection supply-chain mismatch is not recorded as "
+            "stable_release_invalid_public_distribution"
+        )
+    ]
+
+    state.write_text(
+        json.dumps(
+            {
+                "unavailableTags": [
+                    {
+                        "tag": "v0.5.57",
+                        "kind": "stable_release_invalid_public_distribution",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert check_supply_chain.public_projection_issues() == []
 
 
 def test_sbom_reports_generated_direct_transitive_and_hash_coverage(tmp_path, monkeypatch):
