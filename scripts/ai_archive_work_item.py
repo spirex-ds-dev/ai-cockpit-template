@@ -33,7 +33,9 @@ from ai_common import (
     verification_key,
 )
 from ai_lifecycle_truth import (
+    archived_outcome_projection,
     is_valid_superseded_transition,
+    rewrite_exact_path_references,
     superseded_summary_validation_exception,
 )
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
@@ -123,16 +125,7 @@ def _restore_files(files_to_move: list[tuple[Path, Path]]) -> None:
 
 def _rewrite_archived_path_references(value: Any, replacements: dict[str, str]) -> Any:
     """Rewrite exact active-artifact paths anywhere in archived evidence."""
-    if isinstance(value, dict):
-        return {
-            key: _rewrite_archived_path_references(item, replacements)
-            for key, item in value.items()
-        }
-    if isinstance(value, list):
-        return [_rewrite_archived_path_references(item, replacements) for item in value]
-    if isinstance(value, str):
-        return replacements.get(value, value)
-    return value
+    return rewrite_exact_path_references(value, replacements)
 
 
 _SUMMARY_PATH_VALUE_FIELDS = frozenset({"path", "contractPath", "summaryPath", "location"})
@@ -816,7 +809,12 @@ def _execute_archive_transaction(
                 if path.name.endswith(".outcome.json"):
                     outcome_target = target_dir / path.name
                     outcome = load_json(outcome_target)
-                    rewritten_outcome = _rewrite_archived_path_references(outcome, replacements)
+                    rewritten_outcome = archived_outcome_projection(
+                        outcome,
+                        root=PROJECT_ROOT,
+                        contract_path=target_dir / contract_path.name,
+                        work_item_id=contract_path.name.removesuffix(".contract.json"),
+                    )
                     if not preserve_superseded_outcome:
                         save_json(outcome_target, rewritten_outcome)
                     if any(content is not None for content in report_backups.values()):
