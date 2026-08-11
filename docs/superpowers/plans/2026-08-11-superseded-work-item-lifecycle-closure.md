@@ -1,4 +1,16 @@
+---
+author: Ray
+title: "Superseded Work Item Lifecycle Closure Implementation Plan"
+description: "TDD plan for one fail-closed successor-receipt rule across archive and closure."
+status: historical
+authority: implementation_record
+---
+
 # Superseded Work Item Lifecycle Closure Implementation Plan
+
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

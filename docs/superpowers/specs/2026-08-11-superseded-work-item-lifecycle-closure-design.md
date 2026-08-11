@@ -2,9 +2,15 @@
 author: Ray
 title: "Superseded Work Item Lifecycle Closure Design"
 description: A fail-closed design for applying one successor-receipt rule to archive and closure.
+status: historical
+authority: implementation_record
 ---
 
 # Superseded Work Item Lifecycle Closure Design
+
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
 
 ## Problem
 

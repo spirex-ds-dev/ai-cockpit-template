@@ -54,6 +54,10 @@
     {
       "path": "docs/reference/pre-release-documentation-alignment.md",
       "reason": "Regenerated the reviewer-facing documentation alignment projection."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registered the skill-required design and plan as mutable historical implementation records."
     }
   ],
   "sourcesUsed": [
@@ -154,15 +158,7 @@
   "observedIssues": [
     "The prior archive corrective did not extend its exact successor-receipt exception to ai-close-work-item, leaving the predecessor lifecycle impossible to close."
   ],
-  "residualRisks": [
-    {
-      "level": "medium",
-      "area": "scope",
-      "detail": "Focused verification is green; full Contract-required quality and hosted verification remain pending.",
-      "reviewRecommended": true,
-      "followUpCandidate": false
-    }
-  ],
+  "residualRisks": [],
   "reviewReadiness": {
     "status": "not_ready",
     "reason": "Implementation and focused regressions are complete; full required quality checks remain pending.",
@@ -208,12 +204,25 @@
       "unknownCount": 0,
       "requiredChecks": 16,
       "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "1f4fd61597baef4e",
+      "previousContractHash": "1f4fd61597baef4e",
+      "contractHash": "1d05a68ecc639037",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Register the skill-required design and plan documents so repository documentation metadata gates can validate them.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-11T02:00:52.304585+00:00"
     }
   ],
-  "knownGaps": [
-    "Contract-required full quality and release-quality verification have not run yet.",
-    "The existing release-v0-5-54-metadata-binding predecessor remains active until this corrective Work Item is merged and closed."
-  ],
+  "knownGaps": [],
   "scenarioCoverage": [
     {
       "scenario": "An archived blocked predecessor has only required-verification Summary failures and an exact transition=superseded receipt.",
@@ -279,6 +288,7 @@
         "evidence": [
           "docs/reference/work-item-lifecycle-closure.md",
           "docs/reference/capability-truth-matrix.json",
+          "docs/reference/documentation-context-registry.json",
           "docs/reference/pre-release-documentation-alignment.json",
           "docs/reference/pre-release-documentation-alignment.md",
           "scripts/ai_close_work_item.py"

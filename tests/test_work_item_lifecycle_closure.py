@@ -88,9 +88,7 @@ def prepare_superseded_archive(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     contract.write_text("{}", encoding="utf-8")
     contract.with_name("example.summary.json").write_text("{}", encoding="utf-8")
     outcome = contract.with_name("example.outcome.json")
-    outcome.write_text(
-        json.dumps({"workItemId": "example", "status": "blocked"}), encoding="utf-8"
-    )
+    outcome.write_text(json.dumps({"workItemId": "example", "status": "blocked"}), encoding="utf-8")
     successor = {
         "workItemId": "successor",
         "branch": "codex/successor",

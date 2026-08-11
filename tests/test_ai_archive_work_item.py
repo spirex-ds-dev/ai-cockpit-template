@@ -188,9 +188,7 @@ def test_canonical_superseded_summary_exception_accepts_only_bound_red_evidence(
         "missing_reason",
     ],
 )
-def test_canonical_superseded_summary_exception_rejects_invalid_evidence(
-    tmp_path, invalid_case
-):
+def test_canonical_superseded_summary_exception_rejects_invalid_evidence(tmp_path, invalid_case):
     contract, outcome_path, receipt_path, receipt = write_superseded_predecessor(tmp_path)
     if invalid_case == "missing_receipt":
         receipt_path.unlink()
