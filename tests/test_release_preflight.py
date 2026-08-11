@@ -984,6 +984,18 @@ def test_finalize_release_freeze_premerge_requires_archived_work_item(monkeypatc
     assert freeze["lifecycle"]["command"] == "make finalize-release-freeze-premerge TASK=task"
 
 
+def test_finalize_release_freeze_premerge_preserves_published_release_projection(
+    monkeypatch, tmp_path
+):
+    _configure_finalizer(monkeypatch, tmp_path, branch="codex/task")
+    _archive_finalizer_task(tmp_path)
+    published_before = json.loads((tmp_path / "release.json").read_text(encoding="utf-8"))
+
+    assert _finalize_premerge("origin/main") == 0
+
+    assert json.loads((tmp_path / "release.json").read_text(encoding="utf-8")) == published_before
+
+
 def test_finalize_release_freeze_premerge_rejects_unresolved_source_identity(monkeypatch, tmp_path):
     _archive_finalizer_task(tmp_path)
     materialized = _configure_finalizer(monkeypatch, tmp_path, branch="codex/task")
