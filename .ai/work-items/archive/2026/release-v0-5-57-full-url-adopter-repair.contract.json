@@ -1,0 +1,219 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-57-full-url-adopter-repair",
+  "mode": "code",
+  "title": "Repair full HTTPS repository URL installer hydration and publish v0.5.57",
+  "baseCommit": "1de3bd2fefa94feb0ac0adf41b66dfa1b2868d45",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-57-full-url-adopter-repair.contract.json",
+    ".ai/work-items/active/release-v0-5-57-full-url-adopter-repair.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-57-full-url-adopter-repair.outcome.json",
+    ".ai/work-items/active/release-v0-5-57-full-url-adopter-repair.outcome.md",
+    "install.sh",
+    "scripts/verify_quick_install_release.py",
+    "tests/test_quick_install_release.py",
+    "tests/test_install_sh.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_workflow.py",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/release-freeze.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "target/release-*/**"
+  ],
+  "outOfScope": [
+    "Do not alter, recreate, delete, or relabel immutable v0.5.50 through v0.5.56 tags, Releases, or assets.",
+    "Do not weaken test count, coverage, installer, security, smoke, release, or failure-evidence gates.",
+    "Do not hand-edit generated release evidence, immutable tags, provider Releases, or installer state."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/release-v0-5-56-adopter-delivery.outcome.json",
+      "reason": "Blocked immutable v0.5.56 adopter proof: a full HTTPS repository URL reaches an invalid release-digests URL and returns HTTP 404."
+    },
+    {
+      "path": ".ai/work-items/active/release-v0-5-56-adopter-delivery.successor-receipt.json",
+      "reason": "Authorized quarantine transition binding this corrective successor to the predecessor red Outcome and issue #783."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Remote installer hydration path that must use the canonical GitHub repository identity."
+    },
+    {
+      "path": "scripts/verify_quick_install_release.py",
+      "reason": "Existing canonical GitHub repository normalization function to reuse for verification and hydration."
+    },
+    {
+      "path": "tests/test_quick_install_release.py",
+      "reason": "Regression coverage for public Quick Install release identity handling."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783",
+      "reason": "Open adopter installation issue that remains unresolved until a fresh public install succeeds."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["installer_integrity", "immutable_release", "public_adopter_delivery", "evidence_integrity"],
+    "reason": "A published immutable release failed its full-URL adopter path after public asset verification; the corrective patch must preserve prior evidence and independently prove the exact public route.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["Public installer correction and a new immutable release require strict verification."],
+    "override": {"approvalEvidence": "User authorization recorded in conversation:2026-08-11-complete-all-work-items-release-authorization.", "reason": "Strict public corrective release after an immutable adopter-install failure.", "risks": ["installer_integrity", "immutable_release", "public_adopter_delivery", "evidence_integrity"], "notRunChecks": ["Same-SHA rehearsal, public v0.5.57 publication, and fresh-adopter proof are pending the repair and must not be claimed before execution."], "workItemOnly": true, "workItemId": "release-v0-5-57-full-url-adopter-repair"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "No active implementation block; external release remains gated by successful verification."
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The predecessor red Outcome, explicit user authorization, scoped code surface, regression plan, and public-release verification define an executable corrective delivery."
+  },
+  "preReviewWarnings": ["Review that all remote release-metadata URLs use one canonical owner/repository identity and that no v0.5.56 evidence is rewritten."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A full HTTPS GitHub repository URL is canonicalized once and is used both by release verification and by release-digests hydration; unsupported repository forms fail closed before target writes.",
+    "Focused regression tests cover a full HTTPS URL and prove the hydration URL resolves to https://github.com/spirex-ds-dev/ai-cockpit-template/releases/download/v0.5.57/release-digests.json rather than a nested invalid URL.",
+    "Strict local quality and same-SHA hosted rehearsal pass without lowering tests, coverage, security, installer, or release gates.",
+    "The actual v0.5.57 Release has an immutable tag, source-bound archive, SBOM, provenance, installer digest, and release-digests correlation that match its workflow receipt.",
+    "A fresh Git repository using v0.5.57/install.sh with AI_COCKPIT_TEMPLATE_REPO=https://github.com/spirex-ds-dev/ai-cockpit-template.git installs successfully and records the v0.5.57 identity before target writes; only then may #783 be closed."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "v0.5.56 correctly normalizes a full public GitHub URL for release verification, but install.sh separately constructs its release-digests asset URL from the unnormalized input. The public black-box installer therefore fails with HTTP 404 after verification and before target writes, so future adopter projects using a full HTTPS URL cannot receive the delivery.",
+    "constraints": ["Preserve all immutable historical releases including v0.5.56.", "Do not weaken coverage, tests, security, release, or evidence gates.", "Use only source-bound release receipts and actual public black-box installation proof.", "The user authorized necessary confirmations and requires complete local and remote cleanup."],
+    "rationale": "A single canonical repository identity removes divergent URL construction while retaining fail-closed validation. Because v0.5.56 is immutable, a new patch release with independent evidence is the only truthful delivery route."
+  },
+  "rawUserRequest": "目标是把收益交付给 adopter。不是现成已有的具体某个项目，是未来安装的对象工程。到发布最新版本为止，做好优化和自检。明天，我要看到修正完整的新版本（包括远程和本地的清理）。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "capturedAt": "2026-08-11T11:59:00+00:00", "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"},
+  "declaredIntent": {"summary": "Correct the remaining full-HTTPS repository URL divergence, publish the required immutable repair, and prove it in a fresh future-adopter repository.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "scope": "Complete this corrective Work Item through verified v0.5.57 publication, public adopter proof, PR/Issue handling, and exact local/remote branch cleanup; no gate bypass or historical release mutation is authorized."},
+  "scenarioCoverage": [
+    {"scenario": "A future adopter supplies the full HTTPS GitHub repository URL and a release tag.", "required": true, "riskDomain": "public_adopter_delivery", "status": "unverified", "evidence": [], "expected": "Verification and release-digests hydration use the same canonical owner/repository identity; installation completes before target writes are claimed.", "verificationPlan": "Add focused regression coverage, then run a fresh public v0.5.57 installer in a new Git repository."},
+    {"scenario": "A repository value is malformed or unsupported.", "required": true, "riskDomain": "installer_integrity", "status": "unverified", "evidence": [], "expected": "The installer fails closed without a target write or a fabricated release URL.", "verificationPlan": "Exercise focused negative tests for canonicalization."},
+    {"scenario": "The correction is released after immutable v0.5.56 evidence failed.", "required": true, "riskDomain": "immutable_release", "status": "unverified", "evidence": [], "expected": "v0.5.56 remains unchanged; v0.5.57 is the sole corrective patch and binds a new rehearsal, public assets, and adopter proof.", "verificationPlan": "Run strict local quality, same-SHA rehearsal, actual release workflow, asset identity verification, and public fresh install."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human user",
+    "reason": "The user explicitly authorized required confirmations and instructed completion through the latest corrected release with local and remote cleanup."
+  },
+  "rollbackNote": "Do not mutate v0.5.56. If validation fails before publication, abandon only the v0.5.57 branch; if a new immutable release fails, preserve the evidence and publish a later corrective patch.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 876
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-57-full-url-adopter-repair.json",
+    "baseCommit": "1de3bd2fefa94feb0ac0adf41b66dfa1b2868d45",
+    "initialScopeDigest": "e6f7985bc62567299f8da14549adf14a1e06962700232368cf8f8e1adb20fe8c",
+    "contractSkeletonDigest": "2e080eb67c343509f3e1ff7f2c0d382edba48061b88e1d97f39dc1b7dfa7adc2"
+  }
+}
