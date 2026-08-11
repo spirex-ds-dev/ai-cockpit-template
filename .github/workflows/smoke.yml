@@ -82,7 +82,7 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
       - name: Download project-test plan
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality
@@ -110,7 +110,7 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
       - name: Download project-test plan
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality
@@ -138,7 +138,7 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
       - name: Download project-test plan
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality
@@ -166,7 +166,7 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
       - name: Download project-test plan
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality
@@ -194,7 +194,7 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
       - name: Download project-test plan
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality
@@ -226,32 +226,32 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
       - name: Download project-test plan
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality
       - name: Download core shard evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-core-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality/shards/core
       - name: Download governance shard evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-governance-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality/shards/governance
       - name: Download installer shard evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-installer-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality/shards/installer
       - name: Download lifecycle shard evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality/shards/lifecycle
       - name: Download release shard evidence
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-release-${{ github.run_id }}-${{ github.run_attempt }}
           path: target/quality/shards/release
@@ -580,49 +580,49 @@ jobs:
 
       - name: Download hosted project-test plan
         if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-plan-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/hosted-measurement/plan
 
       - name: Download hosted core shard evidence
         if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-core-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/hosted-measurement/shards/core
 
       - name: Download hosted governance shard evidence
         if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-governance-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/hosted-measurement/shards/governance
 
       - name: Download hosted installer shard evidence
         if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-installer-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/hosted-measurement/shards/installer
 
       - name: Download hosted lifecycle shard evidence
         if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/hosted-measurement/shards/lifecycle
 
       - name: Download hosted release shard evidence
         if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-shard-release-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/hosted-measurement/shards/release
 
       - name: Download hosted aggregate project-test evidence
         if: github.event_name == 'workflow_dispatch' && inputs.purpose == 'hosted_measurement'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: project-test-aggregate-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/hosted-measurement/aggregate
