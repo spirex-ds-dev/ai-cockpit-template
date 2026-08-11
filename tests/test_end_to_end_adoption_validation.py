@@ -1,6 +1,8 @@
 import json
 import subprocess
 import sys
+import threading
+import time
 from pathlib import Path
 
 import end_to_end_adoption_validation as validation
@@ -79,6 +81,26 @@ def test_policy_probes_fail_closed_without_promoting_warnings_or_missing_evidenc
     assert all(probe["status"] == "blocked" for probe in probes)
     assert all(probe["evidenceKind"] == "policy_probe" for probe in probes)
     assert all(probe["recovery"] for probe in probes)
+
+
+def test_ordered_parallel_execution_is_bounded_concurrent_and_deterministic(monkeypatch):
+    monkeypatch.setenv("AI_COCKPIT_E2E_WORKERS", "3")
+    lock = threading.Lock()
+    active = 0
+    maximum = 0
+
+    def execute(value: int) -> int:
+        nonlocal active, maximum
+        with lock:
+            active += 1
+            maximum = max(maximum, active)
+        time.sleep(0.03)
+        with lock:
+            active -= 1
+        return value * 10
+
+    assert validation.ordered_parallel(execute, [3, 1, 2]) == [30, 10, 20]
+    assert maximum == 3
 
 
 def test_complete_matrix_executes_real_local_lifecycle_and_failure_cases(tmp_path):

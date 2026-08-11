@@ -13,16 +13,21 @@ import shutil
 import subprocess  # nosec B404 - this disposable-harness runner executes only fixed, repository-owned commands
 import sys
 import tempfile
+import threading
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar
 
 from ai_check_test_weakening import analyze as analyze_test_weakening
 from ai_input_trust import GovernanceRequest, SourceType, evaluate_governance_request
 from install_ai_cockpit import STACKS, Installer
 
 INSTALLER_STACKS = frozenset(STACKS)
+_INSTALL_OUTPUT_LOCK = threading.Lock()
+T = TypeVar("T")
+R = TypeVar("R")
 LIFECYCLE_PHASES = (
     "install",
     "configure",
@@ -73,6 +78,22 @@ def _load_object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise TypeError(f"{path}: expected a JSON object")
     return value
+
+
+def ordered_parallel(function: Callable[[T], R], items: list[T]) -> list[R]:
+    """Execute isolated lifecycle items concurrently while preserving report order."""
+    if not items:
+        return []
+    raw_workers = os.environ.get("AI_COCKPIT_E2E_WORKERS", "4")
+    try:
+        configured = int(raw_workers)
+    except ValueError as error:
+        raise ValueError("AI_COCKPIT_E2E_WORKERS must be a positive integer") from error
+    if configured < 1:
+        raise ValueError("AI_COCKPIT_E2E_WORKERS must be a positive integer")
+    workers = min(len(items), configured, os.cpu_count() or 1)
+    with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="adopter-e2e") as executor:
+        return list(executor.map(function, items))
 
 
 def discover_fixtures(fixtures_root: Path) -> list[Fixture]:
@@ -263,8 +284,17 @@ def _install(template_root: Path, repo: Path, stack: str, **kwargs: Any) -> tupl
         update_makefile=True,
         **kwargs,
     )
+    return _run_installer(installer)
+
+
+def _run_installer(installer: Installer) -> tuple[int, str]:
+    """Capture one in-process installer without sharing process-global streams."""
     output = io.StringIO()
-    with contextlib.redirect_stdout(output), contextlib.redirect_stderr(output):
+    with (
+        _INSTALL_OUTPUT_LOCK,
+        contextlib.redirect_stdout(output),
+        contextlib.redirect_stderr(output),
+    ):
         code = installer.install()
     return code, output.getvalue()
 
@@ -442,9 +472,7 @@ def _upgrade_and_rollback(
         raise RuntimeError("deliberate failed-upgrade validation")
 
     installer.validate_managed_installation = fail_validation  # type: ignore[method-assign]
-    output = io.StringIO()
-    with contextlib.redirect_stdout(output), contextlib.redirect_stderr(output):
-        failed_code = installer.install()
+    failed_code, _ = _run_installer(installer)
     failed_branch = _git(repo, "branch", "--show-current")
     failed_status = _git(repo, "status", "--porcelain")
     failed_branches = _git(repo, "branch", "--format=%(refname:short)")
@@ -731,11 +759,11 @@ def _run_fixture(
 
 
 def _failure_fixture(
-    template_root: Path, fixture: Fixture, root: Path, case: str
+    template_root: Path, fixture: Fixture, immutable: Path, root: Path, case: str
 ) -> dict[str, Any]:
     repo, remote = root / "repository", root / "origin.git"
     root.mkdir(parents=True)
-    _copy_fixture(fixture, repo)
+    copy_immutable_fixture(immutable, repo)
     _initialize_repository(repo, remote)
 
     if case == "dirty_worktree":
@@ -816,10 +844,7 @@ def _failure_fixture(
             raise RuntimeError("deliberate detached install failure")
 
         installer.validate_managed_installation = fail_validation  # type: ignore[method-assign]
-        output_buffer = io.StringIO()
-        with contextlib.redirect_stdout(output_buffer), contextlib.redirect_stderr(output_buffer):
-            code = installer.install()
-        output = output_buffer.getvalue()
+        code, output = _run_installer(installer)
     else:
         code, output = _install(template_root, repo, fixture.installer_stack, create_adoption=True)
     restored = (
@@ -851,22 +876,32 @@ def _run_validation_in(
     template_root: Path, fixtures: list[Fixture], workspace: Path
 ) -> dict[str, Any]:
     immutable_root = workspace / "immutable-fixtures"
-    results = [
-        _run_fixture(template_root, fixture, workspace / "fixtures", immutable_root)
-        for fixture in fixtures
-    ]
+    results = ordered_parallel(
+        lambda fixture: _run_fixture(
+            template_root, fixture, workspace / "fixtures", immutable_root
+        ),
+        fixtures,
+    )
     failure_fixture = next(item for item in fixtures if item.project_type == "python-service")
-    failures = [
-        _failure_fixture(template_root, failure_fixture, workspace / "failures" / case, case)
-        for case in (
-            "dirty_worktree",
-            "marker_conflict",
-            "makefile_conflict",
-            "detached_head",
-            "network_unavailable",
-            "invalid_release_metadata",
-        )
+    failure_immutable = prepare_immutable_fixture(failure_fixture, immutable_root)
+    failure_cases = [
+        "dirty_worktree",
+        "marker_conflict",
+        "makefile_conflict",
+        "detached_head",
+        "network_unavailable",
+        "invalid_release_metadata",
     ]
+    failures = ordered_parallel(
+        lambda case: _failure_fixture(
+            template_root,
+            failure_fixture,
+            failure_immutable,
+            workspace / "failures" / case,
+            case,
+        ),
+        failure_cases,
+    )
     return {
         "schemaVersion": 1,
         "mode": "complete",
