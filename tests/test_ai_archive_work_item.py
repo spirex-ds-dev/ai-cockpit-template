@@ -101,7 +101,35 @@ def test_outcome_artifact_paths_are_stable_and_ordered(tmp_path):
         "task.outcome.json",
         "task.outcome.md",
         "task.events.jsonl",
+        "task.successor-receipt.json",
     ]
+
+
+def test_bound_superseded_receipt_is_the_only_failed_verification_archive_exception(
+    tmp_path, monkeypatch
+):
+    contract = tmp_path / "task.contract.json"
+    receipt = tmp_path / "task.successor-receipt.json"
+    receipt.write_text(json.dumps({"transition": "superseded"}), encoding="utf-8")
+    monkeypatch.setattr(ai_archive_work_item, "validate_successor_receipt", lambda **_kwargs: None)
+
+    issues = [
+        "Summary is missing required verification: aiStatus",
+        "required verification is not passed: quality",
+    ]
+    assert ai_archive_work_item.superseded_archive_validation_exception(
+        contract_path=contract, work_item_id="task", summary_issues=issues
+    )
+
+    receipt.write_text(json.dumps({"transition": "quarantined"}), encoding="utf-8")
+    assert not ai_archive_work_item.superseded_archive_validation_exception(
+        contract_path=contract, work_item_id="task", summary_issues=issues
+    )
+    assert not ai_archive_work_item.superseded_archive_validation_exception(
+        contract_path=contract,
+        work_item_id="task",
+        summary_issues=["summary contractHash does not match Contract"],
+    )
 
 
 def test_next_archive_sequence_prefers_existing_index(tmp_path, monkeypatch):

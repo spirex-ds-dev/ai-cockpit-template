@@ -31,6 +31,7 @@ from ai_common import (
     save_json,
     verification_key,
 )
+from ai_lifecycle_truth import validate_successor_receipt
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
@@ -53,7 +54,37 @@ def outcome_artifact_paths(contract_path: Path) -> list[Path]:
         contract_path.with_name(f"{stem}.outcome.json"),
         contract_path.with_name(f"{stem}.outcome.md"),
         contract_path.with_name(f"{stem}.events.jsonl"),
+        contract_path.with_name(f"{stem}.successor-receipt.json"),
     ]
+
+
+def superseded_archive_validation_exception(
+    *, contract_path: Path, work_item_id: str, summary_issues: list[str]
+) -> bool:
+    """Allow only a bound superseded blocked predecessor to archive its red evidence."""
+    permitted_prefixes = (
+        "Summary is missing required verification:",
+        "required verification is not passed:",
+    )
+    if not summary_issues or any(
+        not issue.startswith(permitted_prefixes) for issue in summary_issues
+    ):
+        return False
+    outcome_path = contract_path.with_name(f"{work_item_id}.outcome.json")
+    receipt_path = contract_path.with_name(f"{work_item_id}.successor-receipt.json")
+    try:
+        receipt = load_json(receipt_path)
+    except (OSError, TypeError, ValueError, json.JSONDecodeError):
+        return False
+    return (
+        receipt.get("transition") == "superseded"
+        and validate_successor_receipt(
+            predecessor_outcome=outcome_path,
+            predecessor_work_item_id=work_item_id,
+            receipt=receipt,
+        )
+        is None
+    )
 
 
 def _archive_index_path() -> Path:
@@ -630,15 +661,20 @@ def _validate_archive_inputs(
     contract_rel = contract_path.relative_to(PROJECT_ROOT).as_posix()
     summary_rel = summary_path.relative_to(PROJECT_ROOT).as_posix()
     contract_hash = hashlib.sha256(contract_path.read_bytes()).hexdigest()
-    issues.extend(
-        validate_summary(
-            summary,
-            contract,
-            expected_contract_hash=contract_hash,
-            contract_path=contract_rel,
-            summary_path=summary_rel,
-        )
+    summary_issues = validate_summary(
+        summary,
+        contract,
+        expected_contract_hash=contract_hash,
+        contract_path=contract_rel,
+        summary_path=summary_rel,
     )
+    if not issues and superseded_archive_validation_exception(
+        contract_path=contract_path,
+        work_item_id=str(contract.get("workItemId", "")),
+        summary_issues=summary_issues,
+    ):
+        return []
+    issues.extend(summary_issues)
     return issues
 
 
