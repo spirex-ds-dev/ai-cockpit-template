@@ -1,0 +1,278 @@
+{
+  "contractVersion": 2,
+  "workItemId": "repository-stale-worktree-branch-cleanup",
+  "mode": "code",
+  "title": "Clean stale merged branches and detached worktrees",
+  "baseCommit": "1f4bd788bb497c4ea2b1a8d227cde0c6a8cfc871",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/repository-stale-worktree-branch-cleanup.contract.json",
+    ".ai/work-items/active/repository-stale-worktree-branch-cleanup.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/repository-stale-worktree-branch-cleanup.outcome.json",
+    ".ai/work-items/active/repository-stale-worktree-branch-cleanup.outcome.md"
+  ],
+  "outOfScope": [
+    "Do not delete any Dependabot branch or modify/close any of the seven open Dependabot pull requests.",
+    "Do not delete, force-push, retag, or rewrite any release tag or provider Release.",
+    "Do not delete the unmerged codex/release-v0-5-57-full-url-adopter-repair branch or its worktree without a separate evidence-backed disposition.",
+    "Do not delete the dirty active codex/release-v0-5-56-adopter-delivery worktree; it requires a separate lifecycle recovery or closure Work Item.",
+    "Do not change product code, tests, workflows, release metadata, or quality gates."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-55-adopter-delivery.summary.json",
+      "reason": "Provides archived lifecycle evidence for the already-merged v0.5.55 branch."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-public-installer-metadata.summary.json",
+      "reason": "Provides archived lifecycle evidence for the detached v0.5.56 metadata worktree."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-58-execution.summary.json",
+      "reason": "Records the most recent completed governed lifecycle and its cleanup boundary."
+    },
+    {
+      "path": ".ai/work-items/active/repository-stale-worktree-branch-cleanup.contract.json",
+      "reason": "Records the user-authorized exact cleanup scope and evidence rules."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines the required Work Item closure and branch-deletion lifecycle."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Implements the fail-closed lifecycle closure used for this Work Item's own branch cleanup."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pulls",
+      "reason": "Provider state identifies the seven retained Dependabot pull-request branches."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "branch_cleanup",
+      "worktree_cleanup",
+      "remote_state"
+    ],
+    "reason": "Deleting a stale branch or worktree is destructive and must be limited to exact, independently verified targets. The unmerged v0.5.57 patch has no equivalence evidence and is a retained exclusion, not an open cleanup unknown.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Finish produces human-benefit reports classified as a trust surface, which requires strict verification.",
+      "Branch/worktree cleanup needs lifecycle, scope, and ownership verification."
+    ]
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "none"
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorization is recorded; deletion remains conditional on exact merge, PR, worktree, and cleanliness evidence."
+  },
+  "preReviewWarnings": [
+    "Review branch ancestry, open PR ownership, worktree status, and post-deletion absence before any destructive command."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The already-merged codex/release-v0-5-55-adopter-delivery branch is absent both locally and on origin after cleanup receipts prove it has no open PR and is an ancestor of origin/main.",
+    "The clean detached v0.5.56 metadata worktree and clean detached quality-acceptance worktree are removed from Git worktree registration and filesystem only after exact HEAD/status evidence is recorded.",
+    "The unmerged v0.5.57 branch/worktree and all seven Dependabot PR branches remain intact and are explicitly recorded as retained exclusions.",
+    "The dirty active v0.5.56 adopter-delivery worktree remains intact and is recorded as a separate lifecycle-recovery obligation rather than being deleted.",
+    "The Work Item is archived through the normal governed PR lifecycle, then its own local and remote branch are removed by ai-close-work-item."
+  ],
+  "guidelines": [
+    "Preserve evidence before any destructive action and fail closed on an unmerged branch, an open PR, a dirty worktree, or an unresolved ownership record.",
+    "Make no product behavior, release, test, or security-gate changes while performing repository hygiene."
+  ],
+  "intent": {
+    "problem": "The prior v0.5.58 Work Item cleanup completed its own branch lifecycle but historical release branches and detached worktrees remained, so the repository was not actually free of stale local/remote execution identities.",
+    "constraints": [
+      "Only exact targets proven merged, clean, unowned by an open PR, and outside retained exclusions may be deleted.",
+      "Retain the unmerged v0.5.57 recovery branch/worktree and all seven open Dependabot branches.",
+      "Use the governed Work Item lifecycle; do not bypass quality, archive, PR, merge, or closure gates."
+    ],
+    "rationale": "A clean repository is part of delivery integrity: future work must not accidentally reuse obsolete release identities or ambiguous worktrees."
+  },
+  "rawUserRequest": "The branch cleanup is incomplete; finish all cleanup and record the authorization in the Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-12-user-requires-complete-branch-cleanup",
+    "capturedAt": "2026-08-12T07:03:00+09:00",
+    "digest": "sha256:7d491a5f5bd4b9bfa2ad7ea6bffdb00b8ef70ccf095348c6003aa33f304fe074"
+  },
+  "declaredIntent": {
+    "summary": "Remove only evidence-proven stale merged branches and clean detached worktrees, while retaining active or unmerged identities.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A target branch is not an ancestor of origin/main or owns an open PR.",
+      "required": true,
+      "riskDomain": "branch_cleanup",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Cleanup fails closed and retains the branch.",
+      "verificationPlan": "Check merge ancestry and enumerate open PR heads before deletion."
+    },
+    {
+      "scenario": "A candidate detached worktree has uncommitted content or is not the declared exact HEAD.",
+      "required": true,
+      "riskDomain": "worktree_cleanup",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Cleanup fails closed and retains the worktree.",
+      "verificationPlan": "Capture porcelain status, HEAD, and worktree registration before removal."
+    },
+    {
+      "scenario": "Post-cleanup, deleted local or remote identities remain reachable or registered.",
+      "required": true,
+      "riskDomain": "remote_state",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Closure fails until local, remote, and worktree absence is proven.",
+      "verificationPlan": "Use git branch, ls-remote, and git worktree list after cleanup."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "local branch codex/release-v0-5-55-adopter-delivery",
+      "remote branch origin/codex/release-v0-5-55-adopter-delivery",
+      "detached worktree .worktrees/release-v0-5-56-public-installer-metadata",
+      "detached worktree .worktrees/quality-critical-path-hci-performance-v2-acceptance"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "conversation:2026-08-12-user-requires-complete-branch-cleanup authorizes the exact, evidence-bound stale branch and clean detached worktree removal in this Contract.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "user",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "conversation:2026-08-12-user-requires-complete-branch-cleanup",
+          "directUserInstructionDigest": "sha256:7d491a5f5bd4b9bfa2ad7ea6bffdb00b8ef70ccf095348c6003aa33f304fe074",
+          "authorizedAt": "2026-08-12T07:03:00+09:00"
+        },
+        "scope": [
+          "local branch codex/release-v0-5-55-adopter-delivery",
+          "remote branch origin/codex/release-v0-5-55-adopter-delivery",
+          "detached worktree .worktrees/release-v0-5-56-public-installer-metadata",
+          "detached worktree .worktrees/quality-critical-path-hci-performance-v2-acceptance"
+        ]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "conversation:2026-08-12-user-requires-complete-branch-cleanup authorizes exact evidence-bound cleanup and requires it be written into this Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 882
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/repository-stale-worktree-branch-cleanup.json",
+    "baseCommit": "1f4bd788bb497c4ea2b1a8d227cde0c6a8cfc871",
+    "initialScopeDigest": "ad90e3201660ee56a95b10925c21757a66996b69e27b9965e8d7f3cb32f5e64c",
+    "contractSkeletonDigest": "be6dd0233339cde6a09ba5838cdda45ff14ee169639d774b63cfe9732706af7c"
+  }
+}
