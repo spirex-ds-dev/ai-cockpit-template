@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task release-v0-5-57-adopter-delivery generated an evidence-derived outcome with status completed_with_warnings.
+Task release-v0-5-57-publication generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: No hosted PR, public release, or black-box adopter proof exists yet.
+- Unresolved evidence is explicitly limited: The corrective workflow has only local verification: it still requires a merged hosted PR, a fresh same-SHA rehearsal receipt, v0.5.57 provider publication, public full-HTTPS installer proof, and Issue #783 closure before adopter delivery can be claimed.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
