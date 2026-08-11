@@ -4,7 +4,7 @@ set -eu
 REPO="${AI_COCKPIT_TEMPLATE_REPO:-spirex-ds-dev/ai-cockpit-template}"
 # This default is the published release.json tag. Candidate metadata is never
 # consulted by Quick Install; use AI_COCKPIT_TEMPLATE_REF explicitly for tests.
-REF="${AI_COCKPIT_TEMPLATE_REF:-v0.5.56}"
+REF="${AI_COCKPIT_TEMPLATE_REF:-v0.5.57}"
 SOURCE="${AI_COCKPIT_TEMPLATE_SOURCE:-}"
 EXPECTED_SHA256="${AI_COCKPIT_TEMPLATE_SHA256:-}"
 METADATA_URL="${AI_COCKPIT_TEMPLATE_RELEASE_METADATA_URL:-}"
@@ -19,7 +19,7 @@ Usage:
 Environment:
   AI_COCKPIT_TEMPLATE_SOURCE=/path/to/ai-cockpit-template
   AI_COCKPIT_TEMPLATE_REPO=spirex-ds-dev/ai-cockpit-template
-  AI_COCKPIT_TEMPLATE_REF=v0.5.56
+  AI_COCKPIT_TEMPLATE_REF=v0.5.57
   AI_COCKPIT_TEMPLATE_SHA256=<optional assertion; release.json remains authoritative>
   AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL=<test-only verified manifest URL>
 
@@ -131,9 +131,16 @@ import sys
 import urllib.request
 
 source, repository, ref = map(str, sys.argv[1:])
+sys.path.insert(0, str(pathlib.Path(source) / "scripts"))
+from verify_quick_install_release import ReleaseVerificationError, public_release_asset_url
+
+try:
+    default_url = public_release_asset_url(repository, ref, "release-digests.json")
+except ReleaseVerificationError as exc:
+    raise SystemExit(f"ERROR: cannot construct public release-digests.json URL: {exc}") from exc
 url = __import__("os").environ.get(
     "AI_COCKPIT_TEMPLATE_RELEASE_DIGESTS_URL",
-    f"https://github.com/{repository}/releases/download/{ref}/release-digests.json",
+    default_url,
 )
 try:
     with urllib.request.urlopen(url, timeout=30) as response:  # nosec B310 - fixed GitHub release URL

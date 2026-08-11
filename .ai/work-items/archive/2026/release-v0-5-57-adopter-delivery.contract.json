@@ -1,0 +1,243 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-57-adopter-delivery",
+  "mode": "code",
+  "title": "Deliver v0.5.57 performance capability to future adopters",
+  "baseCommit": "d4bef54bb46b8e8d0cfe7907b89b88b258409a47",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-57-adopter-delivery.contract.json",
+    ".ai/work-items/active/release-v0-5-57-adopter-delivery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-57-adopter-delivery.outcome.json",
+    ".ai/work-items/active/release-v0-5-57-adopter-delivery.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "install.sh",
+    "scripts/verify_quick_install_release.py",
+    "scripts/finalize_release_freeze.py",
+    "scripts/check_release_preflight.py",
+    "scripts/sync_published_release_projection.py",
+    "tests/test_quick_install_release.py",
+    "tests/test_install_sh.py",
+    "tests/test_release_preflight.py",
+    "tests/test_sync_published_release_projection.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_workflow.py",
+    "tests/test_docs_metadata.py",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/release-freeze.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "target/release-*/**"
+  ],
+  "outOfScope": [
+    "Do not alter, recreate, delete, or relabel immutable v0.5.50 through v0.5.56 tags, Releases, or assets.",
+    "Do not weaken the test collection, 85.10% coverage floor, security, installer, smoke, release, or failure-evidence gates.",
+    "Do not use SKIP_QUALITY, ordinary cache hits as validation receipts, or hand-edit generated public-release evidence."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783",
+      "reason": "Open adopter-installation issue; it remains open until a fresh public full-HTTPS installation succeeds."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/798",
+      "reason": "Superseded failed repair attempt: retain its failure evidence, do not revive its branch or reuse its release claim."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/799",
+      "reason": "Merged corrective predecessor proving premerge freeze preserves the published release projection."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Future-adopter public installer hydration path that must consume one canonical GitHub repository identity."
+    },
+    {
+      "path": "scripts/verify_quick_install_release.py",
+      "reason": "Canonical public release identity and asset verification helpers."
+    },
+    {
+      "path": "release.json",
+      "reason": "Current published projection; v0.5.55 facts must remain internally consistent until v0.5.57 is truthfully published."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["installer_integrity", "immutable_release", "public_adopter_delivery", "evidence_integrity"],
+    "reason": "A full public HTTPS installer URL previously reached a malformed release-digests URL after verification. The repair and immutable public release must preserve historical evidence, bind new assets to their source, and prove a future-adopter installation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Public installer correction and a new immutable release require strict verification."
+    ],
+    "override": {
+      "approvalEvidence": "conversation:2026-08-11-complete-all-work-items-release-authorization",
+      "reason": "The user authorized bounded implementation, publication, PR merge, and cleanup, while forbidding gate bypasses.",
+      "risks": ["installer_integrity", "immutable_release", "public_adopter_delivery", "evidence_integrity"],
+      "notRunChecks": ["Focused regressions, strict quality, governed release rehearsal, public v0.5.57 publication, and fresh-adopter proof remain required."],
+      "workItemOnly": true,
+      "workItemId": "release-v0-5-57-adopter-delivery"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "No implementation block. Public release remains prohibited unless all strict evidence succeeds."
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorization, bounded corrective scope, explicit scenario verification, and strict release gates permit implementation; publication still depends on real provider evidence."
+  },
+  "preReviewWarnings": [
+    "Review canonical repository identity use in both verification and installer hydration, immutable historical release preservation, and source/asset/receipt binding."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A full HTTPS GitHub repository URL is canonicalized once and is used by both release verification and release-digests hydration; malformed forms fail closed before target writes.",
+    "Focused regressions prove the full HTTPS hydration URL is https://github.com/spirex-ds-dev/ai-cockpit-template/releases/download/v0.5.57/release-digests.json, never a nested invalid URL, and preserve negative-path failure behavior.",
+    "Strict local quality, release preparation/rehearsal, and hosted PR verification pass without reducing tests, coverage, security, installer, release, Outcome, JUnit, or failure-evidence gates.",
+    "Actual v0.5.57 publication binds an immutable tag, source archive, SBOM, provenance, installer digest, release-digests asset, published projection, and workflow receipt to one release identity.",
+    "A fresh temporary Git repository installs v0.5.57 using AI_COCKPIT_TEMPLATE_REPO=https://github.com/spirex-ds-dev/ai-cockpit-template.git and records the v0.5.57 identity before target writes; only then may #783 close.",
+    "The performance capability already merged in #795 is demonstrably obtainable by a future adopter via the published v0.5.57 installation path."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The performance improvement is merged but not yet safely deliverable to future adopters because the full-HTTPS public installer path has a divergent release-digests URL construction and the repository published release projection remains stale after v0.5.56. A public installer must make the correct new version discoverable and installable without requiring an adopter to infer local tag or JSON inconsistencies.",
+    "constraints": ["Preserve immutable historical releases including v0.5.56.", "Do not reduce coverage below 85.10%, test collection size, security gates, release gates, or failure evidence.", "Use source-bound receipts and a real public black-box future-adopter installation; a successful local cache is not proof.", "The user's recorded approval covers required bounded confirmations, writes, PRs, merge, publication, issue closure, and local/remote cleanup, but never bypasses a gate."],
+    "rationale": "A canonical repository identity shared by verification and hydration eliminates the divergence at its source. A new immutable patch release with independently bound assets and a fresh installation is the only truthful way to deliver the performance benefit after immutable v0.5.56 evidence proved inadequate."
+  },
+  "rawUserRequest": "目标是把收益交付给 adopter。不是现成已有的具体某个项目，是未来安装的对象工程。到发布最新版本为止，做好优化和自检。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "capturedAt": "2026-08-11T14:52:00+00:00", "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"},
+  "declaredIntent": {"summary": "Deliver the completed performance capability to future adopters through a corrected, source-bound, independently proven v0.5.57 public installation path.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "scope": "Complete this Work Item through verified v0.5.57 publication, fresh adopter proof, PR/Issue handling, and exact local/remote branch cleanup; no gate bypass or historical release mutation is authorized."},
+  "implementationSurface": {
+    "production": ["install.sh", "scripts/verify_quick_install_release.py", "scripts/finalize_release_freeze.py", "scripts/check_release_preflight.py", "scripts/sync_published_release_projection.py", "release.json", "next-release.json", "release-state.json"],
+    "tests": ["tests/test_quick_install_release.py", "tests/test_install_sh.py", "tests/test_release_preflight.py", "tests/test_release_state_consistency.py", "tests/test_release_workflow.py", "tests/test_docs_metadata.py", "tests/test_sync_published_release_projection.py"],
+    "generated": [".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md", ".ai/cockpit/version.json", ".ai/cockpit/sbom.json", ".ai/cockpit/provenance.json", ".ai/cockpit/release-digests.json", ".ai/cockpit/release-freeze.json", ".ai/work-items/active/release-v0-5-57-adopter-delivery.outcome.json", ".ai/work-items/active/release-v0-5-57-adopter-delivery.outcome.md"],
+    "documentation": ["docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"]
+  },
+  "requiredEvidenceContext": {"externalSystem": "GitHub Releases and GitHub Actions", "destructiveLevel": "none", "availableEvidence": ["local_quality_receipts", "hosted_workflow_receipts", "rehearsal_receipt", "provider_release_receipt", "tag", "commit", "digest", "sbom", "provenance", "asset_availability"]},
+  "scenarioCoverage": [
+    {"scenario": "A future adopter supplies the full HTTPS GitHub repository URL and v0.5.57.", "required": true, "riskDomain": "public_adopter_delivery", "status": "unverified", "evidence": [], "expected": "Verification and hydration use one canonical owner/repository identity; installation succeeds and records v0.5.57 before target writes are claimed.", "verificationPlan": "Focused regressions followed by a fresh public v0.5.57 install in a new Git repository."},
+    {"scenario": "A repository value is malformed or unsupported.", "required": true, "riskDomain": "installer_integrity", "status": "unverified", "evidence": [], "expected": "The installer fails closed with no target write and no fabricated release URL.", "verificationPlan": "Focused negative canonicalization and installer tests."},
+    {"scenario": "The correction follows immutable v0.5.56 and stale published projection facts.", "required": true, "riskDomain": "immutable_release", "status": "unverified", "evidence": [], "expected": "Historical releases remain unchanged; v0.5.57 independently binds source, freeze, assets, JSON projection, receipts, and installation proof.", "verificationPlan": "Strict quality, governed preparation/rehearsal, actual release workflow, asset verification, and public fresh install."},
+    {"scenario": "A release/premerge failure or provider cancellation occurs.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "A red or yellow Outcome, JUnit/gate log/receipt, and actionable recovery condition are retained; no green release claim is made.", "verificationPlan": "Exercise existing release failure-evidence regressions and inspect workflow receipts."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human user",
+    "reason": "The user explicitly authorized required confirmations and instructed completion through the latest corrected release with local and remote cleanup."
+  },
+  "rollbackNote": "Do not mutate v0.5.56. If validation fails before publication, abandon only this v0.5.57 branch; if an immutable v0.5.57 release fails, preserve evidence and issue a later corrective patch rather than rewriting history.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 877
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-57-adopter-delivery.json",
+    "baseCommit": "d4bef54bb46b8e8d0cfe7907b89b88b258409a47",
+    "initialScopeDigest": "c09300e12d9b3068d59f3cdea00649a57b772d9d258eed0ed512df3e3b5f6c35",
+    "contractSkeletonDigest": "8c255c28f5dbbff93f5a3c39c7725c739b9c37c99d7e17056a6c6e976f4a99b6"
+  }
+}
