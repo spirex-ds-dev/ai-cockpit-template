@@ -27,6 +27,23 @@ The command requires the Work Item Contract and Summary to be archived, no
 active Work Item evidence, a consistent no-active Cockpit Status, and a merged
 PR whose head branch and Head SHA match the current local Work Item branch.
 
+## Superseded predecessor evidence
+
+A blocked predecessor does not become successful when a corrective successor
+replaces it. Its Outcome remains red and its failed verification remains in the
+archived Summary. Archive and closure may accept that failed Summary only when
+all reported Summary issues are missing or failed required-verification items
+and a sibling `transition=superseded` receipt exactly binds the blocked Outcome,
+predecessor identity, successor Work Item/branch/base, Outcome digest,
+repository Issue, human authority, and reason.
+
+A missing, malformed, quarantined, mismatched, non-blocked, stale-digest, or
+foreign receipt remains fail closed. A valid receipt also cannot mask a
+Contract error or any unrelated Summary error. This exception changes only the
+archived-evidence eligibility check; the merged PR, exact Head SHA, clean
+worktree, fast-forward base synchronization, closure receipt, remote absence,
+and local branch cleanup checks below remain mandatory and unchanged.
+
 Its ordered protocol is:
 
 ```text

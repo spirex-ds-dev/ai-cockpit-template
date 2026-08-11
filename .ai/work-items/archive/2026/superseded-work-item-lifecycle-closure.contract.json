@@ -1,0 +1,341 @@
+{
+  "contractVersion": 2,
+  "workItemId": "superseded-work-item-lifecycle-closure",
+  "mode": "code",
+  "title": "Close successor-bound superseded Work Items",
+  "baseCommit": "fc1cd030b0ab620f250cfe8db0dcc8429e4fc1d9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/superseded-work-item-lifecycle-closure.contract.json",
+    ".ai/work-items/active/superseded-work-item-lifecycle-closure.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/superseded-work-item-lifecycle-closure.outcome.json",
+    ".ai/work-items/active/superseded-work-item-lifecycle-closure.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_lifecycle_truth.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_close_work_item.py",
+    ".ai/guards/coverage_policy.yaml",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_lifecycle_truth_core_677.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/superpowers/specs/2026-08-11-superseded-work-item-lifecycle-closure-design.md",
+    "docs/superpowers/plans/2026-08-11-superseded-work-item-lifecycle-closure.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/documentation-context-registry.json"
+  ],
+  "outOfScope": [
+    "Do not change the blocked predecessor Outcome or claim that its failed verification passed.",
+    "Do not accept quarantined, missing, malformed, mismatched, or non-blocked successor receipts.",
+    "Do not weaken merged-PR identity, exact Head SHA, clean-worktree, fast-forward base synchronization, remote-absence, or local-branch cleanup checks.",
+    "Do not change release versions, release assets, performance gates, workflow matrices, or v0.5.54 artifacts in this Work Item."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Current strict archived-evidence verification and fail-closed branch cleanup implementation."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Verified archive exception for an exact successor-bound superseded predecessor."
+    },
+    {
+      "path": "scripts/ai_lifecycle_truth.py",
+      "reason": "Canonical successor receipt and blocked Outcome binding validation."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Source of truth for production-to-test associations enforced by the coverage guard."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Existing closure precondition, provider binding, synchronization, and cleanup regressions."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/superseded-work-item-archive-closure.contract.json",
+      "reason": "Predecessor corrective Work Item that permits archive only for a valid superseded receipt and requires lifecycle closure afterward."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Current documented closure contract and fail-closed ordering."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository-required Work Item, PR, closure, and cleanup lifecycle."
+    }
+  ],
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。包括远程和本地的清理。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:complete-all-work-items-and-authorize-confirmations",
+    "capturedAt": "2026-08-11",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "declaredIntent": {
+    "summary": "Make successor-bound superseded Work Item closure consume the same exact fail-closed evidence rule as archival, then use the governed lifecycle to close remaining Work Items.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "user-message:complete-all-work-items-and-authorize-confirmations",
+    "scope": "Complete this governed corrective Work Item, merge it after all required checks, and delete only the exact local and remote Work Item branches through verified lifecycle closure."
+  },
+  "implementationSurface": {
+    "production": [
+      "scripts/ai_lifecycle_truth.py",
+      "scripts/ai_archive_work_item.py",
+      "scripts/ai_close_work_item.py",
+      ".ai/guards/coverage_policy.yaml"
+    ],
+    "tests": [
+      "tests/test_ai_archive_work_item.py",
+      "tests/test_lifecycle_truth_core_677.py",
+      "tests/test_work_item_lifecycle_closure.py"
+    ],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/work-items/active/superseded-work-item-lifecycle-closure.outcome.json",
+      ".ai/work-items/active/superseded-work-item-lifecycle-closure.outcome.md",
+      ".ai/work-items/archive/index.json"
+    ],
+    "documentation": [
+      "docs/reference/work-item-lifecycle-closure.md",
+      "docs/superpowers/specs/2026-08-11-superseded-work-item-lifecycle-closure-design.md",
+      "docs/superpowers/plans/2026-08-11-superseded-work-item-lifecycle-closure.md",
+      "docs/reference/documentation-context-registry.json"
+    ]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "destructive_cleanup"
+    ],
+    "reason": "Closure may delete exact local and remote Work Item branches, so the new evidence exception must be narrower than all existing cleanup preconditions and must remain fail closed for every invalid receipt."
+    ,
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The change affects evidence integrity and the eligibility boundary for destructive lifecycle cleanup."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized all required confirmations and cleanup; the implementation and fail-closed verification boundary are fully specified."
+  },
+  "preReviewWarnings": [
+    "Review that only transition=superseded with an exact blocked Outcome digest can bypass failed Summary verification during closure.",
+    "Review that PR, SHA, base synchronization, remote absence, and local branch deletion checks are unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A Contract-valid archived predecessor whose only Summary issues are missing or failed required verification can pass closure evidence verification only when its sibling red Outcome and transition=superseded receipt pass the canonical exact binding validator.",
+    "Missing, malformed, transition=quarantined, wrong-work-item, non-blocked, wrong-digest, foreign-issue, missing-authority, missing-reason, or extra Summary validation errors remain fail closed before provider lookup or branch cleanup.",
+    "The archive and closure paths consume one shared lifecycle-truth predicate so their eligibility semantics cannot drift.",
+    "Normal completed Work Item closure and all PR identity, Head SHA, base synchronization, clean worktree, remote absence, and local deletion checks retain their behavior and order.",
+    "The existing release-v0-5-54-metadata-binding predecessor can be archived and closed without changing its red Outcome after this Work Item is independently verified, merged, and closed."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The archive path now recognizes an exact successor-bound superseded predecessor, but ai-close-work-item re-runs strict Summary validation without the same narrow exception. The predecessor can therefore be archived yet can never complete lifecycle closure or safe local/remote cleanup.",
+    "constraints": [
+      "Preserve the blocked predecessor Outcome and failed verification evidence exactly.",
+      "Accept only transition=superseded; quarantined and every malformed or mismatched receipt remain ineligible.",
+      "Do not weaken any provider, PR, SHA, base synchronization, worktree cleanliness, or branch-deletion postcondition.",
+      "Ship the shared rule through the existing adopter runtime files without introducing a template-only implementation."
+    ],
+    "rationale": "One canonical predicate for the exceptional Summary-validation boundary keeps archive and closure consistent while leaving all destructive cleanup eligibility and postcondition checks unchanged."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An archived blocked predecessor has only required-verification Summary failures and an exact transition=superseded receipt.",
+      "expected": "Archived-evidence verification accepts the pair and closure proceeds to the unchanged provider and cleanup preconditions.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a red-first unit regression around _verify_archived_evidence using a real blocked Outcome and canonical receipt binding."
+    },
+    {
+      "scenario": "The receipt is missing, malformed, quarantined, mismatched, or bound to a non-blocked or different Outcome.",
+      "expected": "Closure rejects archived evidence before provider lookup or any local/remote branch mutation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add parameterized fail-closed regressions for every invalid receipt class and assert provider/cleanup is not reached."
+    },
+    {
+      "scenario": "The Summary contains an error outside the exact missing/failed required-verification allowlist.",
+      "expected": "The successor receipt cannot mask the extra Contract or Summary error and closure remains blocked.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inject an unrelated Summary validation issue and assert the shared exception returns false."
+    },
+    {
+      "scenario": "A normal completed archived Work Item closes through the existing strict validation path.",
+      "expected": "Existing closure behavior and cleanup ordering remain unchanged.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the existing work-item lifecycle closure suite and assert all ordering regressions remain green."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "codex/superseded-work-item-lifecycle-closure",
+      "codex/release-v0-5-54-metadata-binding"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "The user explicitly authorized every required confirmation plus complete remote and local cleanup.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "user",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "user-message:complete-all-work-items-and-authorize-confirmations",
+          "directUserInstructionDigest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74",
+          "authorizedAt": "2026-08-11T00:00:00+09:00"
+        },
+        "scope": [
+          "codex/superseded-work-item-lifecycle-closure",
+          "codex/release-v0-5-54-metadata-binding"
+        ]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized all required confirmations, complete Work Item lifecycles, and remote/local cleanup, and required that authorization be recorded in the Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 866
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/superseded-work-item-lifecycle-closure.json",
+    "baseCommit": "fc1cd030b0ab620f250cfe8db0dcc8429e4fc1d9",
+    "initialScopeDigest": "f1363f5167946cd74e77c5ef97d8865cd4d757bcc9ebe0af23fbe4b0df5781d1",
+    "contractSkeletonDigest": "b2a1652825a76e4a838b2c515f909b8b50a4c658c813f07911396b318a1d7f01"
+  }
+}

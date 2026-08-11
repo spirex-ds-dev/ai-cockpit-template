@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import inspect
 import json
 import os
@@ -78,6 +79,78 @@ def test_make_close_work_item_forwards_explicit_worktree_argument() -> None:
 def test_archived_evidence_uses_strict_summary_validation() -> None:
     source = inspect.getsource(closure._verify_archived_evidence)
     assert "legacy_archive=False" in source
+
+
+def prepare_superseded_archive(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    archive = tmp_path / ".ai/work-items/archive"
+    contract = archive / "2026/example.contract.json"
+    contract.parent.mkdir(parents=True)
+    contract.write_text("{}", encoding="utf-8")
+    contract.with_name("example.summary.json").write_text("{}", encoding="utf-8")
+    outcome = contract.with_name("example.outcome.json")
+    outcome.write_text(json.dumps({"workItemId": "example", "status": "blocked"}), encoding="utf-8")
+    successor = {
+        "workItemId": "successor",
+        "branch": "codex/successor",
+        "baseCommit": "a" * 40,
+    }
+    contract.with_name("example.successor-receipt.json").write_text(
+        json.dumps(
+            {
+                "schemaVersion": 1,
+                "transition": "superseded",
+                "predecessor": {"workItemId": "example"},
+                "predecessorOutcomeDigest": hashlib.sha256(outcome.read_bytes()).hexdigest(),
+                "successor": successor,
+                "successorWorkItemId": successor["workItemId"],
+                "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/1",
+                "authority": "user",
+                "reason": "A verified successor owns the corrective delivery.",
+            }
+        ),
+        encoding="utf-8",
+    )
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text("- State: `no_active_work_item`\n", encoding="utf-8")
+    monkeypatch.setattr(closure, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(closure, "ARCHIVE_DIR", archive)
+    monkeypatch.setattr(closure, "ACTIVE_DIR", active)
+    monkeypatch.setattr(closure, "STATUS_PATH", status)
+    monkeypatch.setattr(closure, "validate_contract", lambda _contract: [])
+    return contract
+
+
+def test_superseded_archived_evidence_accepts_bound_failed_verification_summary(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    contract = prepare_superseded_archive(tmp_path, monkeypatch)
+    monkeypatch.setattr(
+        closure,
+        "validate_summary",
+        lambda *_args, **_kwargs: ["required verification is not passed: quality"],
+    )
+
+    assert closure._verify_archived_evidence("example") == contract
+
+
+def test_superseded_archived_evidence_rejects_unrelated_summary_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    prepare_superseded_archive(tmp_path, monkeypatch)
+    monkeypatch.setattr(
+        closure,
+        "validate_summary",
+        lambda *_args, **_kwargs: [
+            "required verification is not passed: quality",
+            "summary contractHash does not match Contract",
+        ],
+    )
+
+    with pytest.raises(RuntimeError, match="summary contractHash does not match Contract"):
+        closure._verify_archived_evidence("example")
 
 
 def test_final_human_report_binds_provider_facts_outside_source_history(

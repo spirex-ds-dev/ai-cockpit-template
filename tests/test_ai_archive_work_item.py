@@ -5,7 +5,35 @@ from argparse import Namespace
 import ai_archive_work_item
 import ai_check_status_consistency
 import ai_generate_human_report
+import ai_lifecycle_truth
 import pytest
+
+
+def write_superseded_predecessor(tmp_path, *, work_item_id="task"):
+    contract = tmp_path / f"{work_item_id}.contract.json"
+    outcome = tmp_path / f"{work_item_id}.outcome.json"
+    outcome.write_text(
+        json.dumps({"workItemId": work_item_id, "status": "blocked"}), encoding="utf-8"
+    )
+    successor = {
+        "workItemId": "successor",
+        "branch": "codex/successor",
+        "baseCommit": "a" * 40,
+    }
+    receipt = {
+        "schemaVersion": 1,
+        "transition": "superseded",
+        "predecessor": {"workItemId": work_item_id},
+        "predecessorOutcomeDigest": hashlib.sha256(outcome.read_bytes()).hexdigest(),
+        "successor": successor,
+        "successorWorkItemId": successor["workItemId"],
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/1",
+        "authority": "user",
+        "reason": "A verified successor owns the corrective delivery.",
+    }
+    receipt_path = tmp_path / f"{work_item_id}.successor-receipt.json"
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+    return contract, outcome, receipt_path, receipt
 
 
 def test_archive_growth_requires_projected_same_work_item_reservation():
@@ -105,14 +133,8 @@ def test_outcome_artifact_paths_are_stable_and_ordered(tmp_path):
     ]
 
 
-def test_bound_superseded_receipt_is_the_only_failed_verification_archive_exception(
-    tmp_path, monkeypatch
-):
-    contract = tmp_path / "task.contract.json"
-    receipt = tmp_path / "task.successor-receipt.json"
-    receipt.write_text(json.dumps({"transition": "superseded"}), encoding="utf-8")
-    monkeypatch.setattr(ai_archive_work_item, "validate_successor_receipt", lambda **_kwargs: None)
-
+def test_bound_superseded_receipt_is_the_only_failed_verification_archive_exception(tmp_path):
+    contract, _, receipt, receipt_data = write_superseded_predecessor(tmp_path)
     issues = [
         "Summary is missing required verification: aiStatus",
         "required verification is not passed: quality",
@@ -121,7 +143,8 @@ def test_bound_superseded_receipt_is_the_only_failed_verification_archive_except
         contract_path=contract, work_item_id="task", summary_issues=issues
     )
 
-    receipt.write_text(json.dumps({"transition": "quarantined"}), encoding="utf-8")
+    receipt_data["transition"] = "quarantined"
+    receipt.write_text(json.dumps(receipt_data), encoding="utf-8")
     assert not ai_archive_work_item.superseded_archive_validation_exception(
         contract_path=contract, work_item_id="task", summary_issues=issues
     )
@@ -129,6 +152,72 @@ def test_bound_superseded_receipt_is_the_only_failed_verification_archive_except
         contract_path=contract,
         work_item_id="task",
         summary_issues=["summary contractHash does not match Contract"],
+    )
+
+
+def test_canonical_superseded_summary_exception_accepts_only_bound_red_evidence(tmp_path):
+    contract, _, _, _ = write_superseded_predecessor(tmp_path)
+    issues = [
+        "Summary is missing required verification: aiStatus",
+        "required verification is not passed: quality",
+    ]
+
+    assert ai_lifecycle_truth.superseded_summary_validation_exception(
+        contract_path=contract,
+        work_item_id="task",
+        summary_issues=issues,
+    )
+    assert not ai_lifecycle_truth.superseded_summary_validation_exception(
+        contract_path=contract,
+        work_item_id="task",
+        summary_issues=[*issues, "summary contractHash does not match Contract"],
+    )
+
+
+@pytest.mark.parametrize(
+    "invalid_case",
+    [
+        "missing_receipt",
+        "malformed_receipt",
+        "quarantined",
+        "wrong_digest",
+        "wrong_predecessor",
+        "non_blocked",
+        "foreign_issue",
+        "missing_authority",
+        "missing_reason",
+    ],
+)
+def test_canonical_superseded_summary_exception_rejects_invalid_evidence(tmp_path, invalid_case):
+    contract, outcome_path, receipt_path, receipt = write_superseded_predecessor(tmp_path)
+    if invalid_case == "missing_receipt":
+        receipt_path.unlink()
+    elif invalid_case == "malformed_receipt":
+        receipt_path.write_text("{", encoding="utf-8")
+    elif invalid_case == "quarantined":
+        receipt["transition"] = "quarantined"
+    elif invalid_case == "wrong_digest":
+        receipt["predecessorOutcomeDigest"] = "0" * 64
+    elif invalid_case == "wrong_predecessor":
+        receipt["predecessor"] = {"workItemId": "other"}
+    elif invalid_case == "non_blocked":
+        outcome_path.write_text(
+            json.dumps({"workItemId": "task", "status": "completed"}), encoding="utf-8"
+        )
+        receipt["predecessorOutcomeDigest"] = hashlib.sha256(outcome_path.read_bytes()).hexdigest()
+    elif invalid_case == "foreign_issue":
+        receipt["issue"] = "https://example.test/issues/1"
+    elif invalid_case == "missing_authority":
+        receipt["authority"] = ""
+    elif invalid_case == "missing_reason":
+        receipt["reason"] = ""
+    if invalid_case not in {"missing_receipt", "malformed_receipt"}:
+        receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+    assert not ai_lifecycle_truth.superseded_summary_validation_exception(
+        contract_path=contract,
+        work_item_id="task",
+        summary_issues=["required verification is not passed: quality"],
     )
 
 

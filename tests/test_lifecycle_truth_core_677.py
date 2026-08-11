@@ -8,6 +8,8 @@ import json
 import sys
 from pathlib import Path
 
+from ai_common import simple_yaml_lists
+
 
 def _runtime():
     """Load the new single-source runtime; absence is the intentional RED state."""
@@ -359,10 +361,13 @@ def test_status_doctor_and_outcome_share_one_traffic_light_diagnostic_model(tmp_
 
 
 def test_lifecycle_truth_runtime_has_a_declared_coverage_guard_association() -> None:
-    policy = (Path(__file__).resolve().parents[1] / ".ai/guards/coverage_policy.yaml").read_text(
-        encoding="utf-8"
+    policy = simple_yaml_lists(
+        Path(__file__).resolve().parents[1] / ".ai/guards/coverage_policy.yaml"
     )
 
-    assert "lifecycleTruthCore:" in policy
-    assert '"scripts/ai_lifecycle_truth.py"' in policy
-    assert '"tests/test_lifecycle_truth_core_677.py"' in policy
+    assert policy["associations.lifecycleTruthCore.production"] == ["scripts/ai_lifecycle_truth.py"]
+    assert policy["associations.lifecycleTruthCore.tests"] == [
+        "tests/test_lifecycle_truth_core_677.py",
+        "tests/test_ai_archive_work_item.py",
+        "tests/test_work_item_lifecycle_closure.py",
+    ]
