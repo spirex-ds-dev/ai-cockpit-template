@@ -1,0 +1,177 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-58-publication",
+  "mode": "code",
+  "title": "Prepare v0.5.58 publication with an explicit post-merge execution boundary",
+  "baseCommit": "bc60ef2a2258f9ef6ad158698e72fade7cb2ac42",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-58-publication.contract.json",
+    ".ai/work-items/active/release-v0-5-58-publication.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-58-publication.outcome.json",
+    ".ai/work-items/active/release-v0-5-58-publication.outcome.md",
+    ".ai/work-items/active/release-v0-5-58-publication.events.jsonl",
+    ".ai/evidence/**", ".ai/cockpit/**", "release.json", "next-release.json", "release-state.json", "install.sh", ".github/workflows/release.yml", "docs/reference/**", "target/release-v0-5-58-publication/**", "target/task-closure-receipts/**"
+  ],
+  "outOfScope": ["Do not alter, recreate, delete, or relabel immutable releases through v0.5.57.", "Do not lower coverage, reduce tests, use SKIP_QUALITY, or treat cache hits as verification.", "Do not create a v0.5.58 provider release, claim adopter delivery, promote v0.5.59, or close Issue #783 from this pre-merge Work Item; these actions require the immediate successor execution Work Item on merged main."],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-execution.summary.json",
+      "reason": "Merged corrective source-binding evidence and successor boundary."
+    },
+    {"path": "release-state.json", "reason": "Declares v0.5.58 candidate and v0.5.57 invalid public distribution."},
+    {"path": ".github/workflows/release.yml", "reason": "Exact-source release workflow and receipt producer."},
+    {"path": ".ai/cockpit/version.json", "reason": "Release/candidate version projection."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release", "release_distribution", "installer", "ci"],
+    "reason": "Creates an immutable public release and must prove future-adopter delivery from exact source evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["Public release and installer delivery require strict source-bound verification."],
+    "override": {"approvalEvidence": "conversation:2026-08-11-complete-all-work-items-release-authorization", "reason": "Strict release verification is required for immutable public publication and future-adopter delivery.", "risks": ["release", "release_distribution", "installer", "ci"], "notRunChecks": ["none; all release and distribution checks are required"], "workItemOnly": true, "workItemId": "release-v0-5-58-publication"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "none"
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorization is recorded; each provider action remains conditional on exact evidence."
+  },
+  "preReviewWarnings": ["Review exact source/tag/tree bindings, public assets, HTTPS installer identity, and no-claim boundaries."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The immutable pre-merge archive records that v0.5.58 publication, public metadata validation, full HTTPS adopter proof, v0.5.59 promotion, and Issue #783 closure are not yet complete and may not be claimed.",
+    "The archived Contract preserves the exact post-merge execution criteria: one source SHA for rehearsal and formal provider publication, coherent release metadata/assets, a clean HTTPS future-adopter proof, v0.5.59 projection, and Issue #783 closure only after provider-bound success.",
+    "The initial hosted failure is retained as red fail-closed evidence, and the repaired hosted PR checks must pass on the exact archive head before merge.",
+    "No release tag, provider Release, public asset, installer target, or Issue state is mutated by this preparation Work Item."
+  ],
+  "guidelines": [
+    "Preserve exact source identity and immutable historical evidence; fail closed on mismatches.",
+    "Do not claim publication, adopter delivery, or Issue resolution without provider-bound receipts."
+  ],
+  "intent": {
+    "problem": "v0.5.57 is an immutable invalid public distribution because its released runtime metadata had a stale dependency-lock digest. The merged corrective source change makes v0.5.58 the first eligible future-adopter delivery, but the release workflow legally permits formal publication only from merged main while the PR gate requires an archive first.",
+    "constraints": ["Use v0.5.58 only; preserve v0.5.57 evidence.", "Same-SHA hosted evidence and clean HTTPS adopter proof remain mandatory in the post-merge execution Work Item.", "No gate bypass or test/coverage reduction."],
+    "rationale": "The archive-first PR lifecycle and main-only release workflow require a preparation Work Item followed immediately by an execution Work Item. The preparation Outcome must remain yellow so a release is never claimed before the adopter evidence exists."
+  },
+  "rawUserRequest": "Complete all Work Items through the latest corrected public version, with all approvals recorded in Contract; deliver the benefit to future adopters and clean local/remote branches.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "capturedAt": "2026-08-11T18:40:00Z", "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"},
+  "declaredIntent": {"summary": "Archive and merge the exact v0.5.58 publication prerequisites without a publication claim; immediately create a successor on merged main to publish only after same-SHA provider verification, prove clean HTTPS future-adopter installation, close #783 only on proof, then promote v0.5.59.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "scope": "v0.5.58 publication, Issue handling, merge, and cleanup; never gate bypass."},
+  "requiredEvidenceContext": {"externalSystem": "GitHub Releases and GitHub Actions", "destructiveLevel": "none", "availableEvidence": ["same_sha_rehearsal_receipt", "provider_release_receipt", "tag", "commit", "digest", "sbom", "provenance", "asset_availability", "public_installation"]},
+  "scenarioCoverage": [
+    {"scenario": "A PR branch attempts to treat local or hosted preparation evidence as a formal v0.5.58 publication.", "required": true, "riskDomain": "evidence_integrity", "status": "verified", "evidence": ["release workflow requires the current default-branch SHA", "Work Item Summary knownGaps and Outcome forbid a publication claim"], "expected": "Publication remains blocked until a successor runs on merged main.", "verificationPlan": "Inspect release workflow source guard and archived Outcome."},
+    {"scenario": "The PR archive is missing when the PR aggregate gate validates Work Item ownership.", "required": true, "riskDomain": "ci", "status": "verified", "evidence": ["smoke run 31524199760 template-smoke failure: PR diff must contain at least one archived Work Item Contract"], "expected": "The aggregate fails closed until the archive is present.", "verificationPlan": "Archive this Work Item, push the exact archive head, and require a new green hosted run."},
+    {"scenario": "The later execution Work Item omits public metadata or full HTTPS adopter proof.", "required": true, "riskDomain": "release_distribution", "status": "verified", "evidence": ["rawUserRequest", "outOfScope", "declaredIntent"], "expected": "The successor Contract must retain these requirements before provider publication or Issue closure.", "verificationPlan": "Create and preflight the successor from merged main before any release dispatch."},
+    {"scenario": "Hosted failure/cancellation/timeout is hidden by aggregate evidence.", "required": true, "riskDomain": "ci", "status": "verified", "evidence": ["smoke run 31524199760", "ci-evidence failed after template-smoke failure"], "expected": "No success or Issue closure claim; red/yellow Outcome and recovery evidence remain.", "verificationPlan": "Retain the failed run URL in the Summary and require exact-head success before merge."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "conversation:2026-08-11-complete-all-work-items-release-authorization authorizes publication, Issue handling, merge, and cleanup while preserving all gates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 880
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-58-publication.json",
+    "baseCommit": "bc60ef2a2258f9ef6ad158698e72fade7cb2ac42",
+    "initialScopeDigest": "705f73049a886f2b8a24eaa5ec557bdd7205d135d99629b64ea2965953909a1f",
+    "contractSkeletonDigest": "15d5eab2ff992eb04d84a27e8588522cf3a4f725ed106b7c7a891ab7f9d8ce02"
+  }
+}
