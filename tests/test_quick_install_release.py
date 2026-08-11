@@ -81,6 +81,34 @@ def test_quick_install_can_use_published_metadata_when_tag_tree_is_historical(
     assert evidence["releaseTag"] == "v1.2.4"
 
 
+def test_quick_install_normalizes_full_https_git_url_for_historical_tag_metadata(
+    monkeypatch, tmp_path
+):
+    root, _archive = make_contract(tmp_path)
+    published_metadata = json.loads((root / "release.json").read_text(encoding="utf-8"))
+    historical_metadata = dict(published_metadata)
+    historical_metadata["releaseTag"] = "v1.2.2"
+    (root / "release.json").write_text(json.dumps(historical_metadata), encoding="utf-8")
+    requested_urls: list[str] = []
+    monkeypatch.setattr(verifier, "run_git", lambda *_args: SOURCE_COMMIT)
+    monkeypatch.setenv(
+        "AI_COCKPIT_TEMPLATE_REPO", "https://github.com/spirex-ds-dev/ai-cockpit-template.git"
+    )
+
+    def load_published_metadata(url: str):
+        requested_urls.append(url)
+        return published_metadata
+
+    monkeypatch.setattr(verifier, "load_release_metadata_url", load_published_metadata)
+
+    evidence = verifier.verify_release(root, ref="v1.2.3")
+
+    assert evidence["releaseTag"] == "v1.2.3"
+    assert requested_urls == [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/download/v1.2.3/release.json"
+    ]
+
+
 def test_unverified_capability_fails_closed_before_download(monkeypatch, tmp_path):
     root, _archive = make_contract(tmp_path)
     metadata_path = root / "release.json"
