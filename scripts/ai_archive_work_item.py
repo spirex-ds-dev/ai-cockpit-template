@@ -31,7 +31,7 @@ from ai_common import (
     save_json,
     verification_key,
 )
-from ai_lifecycle_truth import validate_successor_receipt
+from ai_lifecycle_truth import superseded_summary_validation_exception
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
@@ -62,28 +62,10 @@ def superseded_archive_validation_exception(
     *, contract_path: Path, work_item_id: str, summary_issues: list[str]
 ) -> bool:
     """Allow only a bound superseded blocked predecessor to archive its red evidence."""
-    permitted_prefixes = (
-        "Summary is missing required verification:",
-        "required verification is not passed:",
-    )
-    if not summary_issues or any(
-        not issue.startswith(permitted_prefixes) for issue in summary_issues
-    ):
-        return False
-    outcome_path = contract_path.with_name(f"{work_item_id}.outcome.json")
-    receipt_path = contract_path.with_name(f"{work_item_id}.successor-receipt.json")
-    try:
-        receipt = load_json(receipt_path)
-    except (OSError, TypeError, ValueError, json.JSONDecodeError):
-        return False
-    return (
-        receipt.get("transition") == "superseded"
-        and validate_successor_receipt(
-            predecessor_outcome=outcome_path,
-            predecessor_work_item_id=work_item_id,
-            receipt=receipt,
-        )
-        is None
+    return superseded_summary_validation_exception(
+        contract_path=contract_path,
+        work_item_id=work_item_id,
+        summary_issues=summary_issues,
     )
 
 

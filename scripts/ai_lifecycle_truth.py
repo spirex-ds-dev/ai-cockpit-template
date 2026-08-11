@@ -105,6 +105,35 @@ def validate_successor_receipt(
     return None
 
 
+def superseded_summary_validation_exception(
+    *, contract_path: Path, work_item_id: str, summary_issues: list[str]
+) -> bool:
+    """Accept only failed-verification issues bound to a superseded blocked predecessor."""
+    permitted_prefixes = (
+        "Summary is missing required verification:",
+        "required verification is not passed:",
+    )
+    if not summary_issues or any(
+        not issue.startswith(permitted_prefixes) for issue in summary_issues
+    ):
+        return False
+    outcome_path = contract_path.with_name(f"{work_item_id}.outcome.json")
+    receipt_path = contract_path.with_name(f"{work_item_id}.successor-receipt.json")
+    try:
+        receipt = _read(receipt_path)
+    except (OSError, TypeError, ValueError):
+        return False
+    return (
+        receipt.get("transition") == "superseded"
+        and validate_successor_receipt(
+            predecessor_outcome=outcome_path,
+            predecessor_work_item_id=work_item_id,
+            receipt=receipt,
+        )
+        is None
+    )
+
+
 @dataclass(frozen=True)
 class FinishFailure:
     exitCode: int
