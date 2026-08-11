@@ -61,10 +61,10 @@ def test_repository_candidate_advances_past_reserved_release_failures():
     state = json.loads((ROOT / "release-state.json").read_text(encoding="utf-8"))
     candidate = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))
 
-    assert candidate["releaseTag"] == "v0.5.58"
-    assert candidate["basedOnReleaseTag"] == "v0.5.57"
-    assert state["releaseTag"] == "v0.5.58"
-    assert state["previousRelease"] == "v0.5.57"
+    assert candidate["releaseTag"] == "v0.5.59"
+    assert candidate["basedOnReleaseTag"] == "v0.5.58"
+    assert state["releaseTag"] == "v0.5.59"
+    assert state["previousRelease"] == "v0.5.58"
     assert "v0.5.45" in state["reservedTags"]
     assert "v0.5.46" in state["reservedTags"]
     assert "v0.5.47" in state["reservedTags"]
@@ -76,6 +76,7 @@ def test_repository_candidate_advances_past_reserved_release_failures():
     assert "v0.5.55" in state["reservedTags"]
     assert "v0.5.56" in state["reservedTags"]
     assert "v0.5.57" in state["reservedTags"]
+    assert "v0.5.58" in state["reservedTags"]
     unavailable = {item["tag"]: item for item in state["unavailableTags"]}
     assert unavailable["v0.5.45"]["kind"] == "tag_only"
     assert "30609474406" in unavailable["v0.5.45"]["reason"]
@@ -100,7 +101,9 @@ def test_repository_candidate_advances_past_reserved_release_failures():
     assert "full HTTPS repository URL" in unavailable["v0.5.56"]["reason"]
     assert unavailable["v0.5.57"]["kind"] == "stable_release_invalid_public_distribution"
     assert "43548eb1f986" in unavailable["v0.5.57"]["reason"]
-    assert '"releaseTag": "v0.5.57"' in (ROOT / "release.json").read_text(encoding="utf-8")
+    assert unavailable["v0.5.58"]["kind"] == "stable_release_unverified"
+    assert "full-HTTPS installer validation" in unavailable["v0.5.58"]["reason"]
+    assert '"releaseTag": "v0.5.58"' in (ROOT / "release.json").read_text(encoding="utf-8")
     assert check_release_state_consistency.check_repository(ROOT) == []
 
 

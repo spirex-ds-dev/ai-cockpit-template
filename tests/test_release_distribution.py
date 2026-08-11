@@ -1098,13 +1098,13 @@ def test_release_preparation_allows_candidate_installer_to_differ_from_public_ba
         (release_distribution.ROOT / "release-state.json").read_text(encoding="utf-8")
     )
 
-    assert len(issues) == 3
+    assert len(issues) == 2
     assert all("supplyChain." in issue for issue in issues)
     assert {
-        "tag": "v0.5.57",
-        "kind": "stable_release_invalid_public_distribution",
+        "tag": "v0.5.58",
+        "kind": "stable_release_unverified",
         "reason": state["unavailableTags"][-1]["reason"],
-        "evidence": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.57",
+        "evidence": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.58",
     } == state["unavailableTags"][-1]
 
 
