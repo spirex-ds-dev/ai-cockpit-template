@@ -770,6 +770,7 @@ def _execute_archive_transaction(
     traceability_backup: bytes | None,
     traceability_payload: dict[str, Any] | None,
     pre_archive_candidate_coverage: dict[str, object] | None = None,
+    preserve_superseded_outcome: bool = False,
 ) -> None:
     """Execute and roll back one archive mutation as a single transaction."""
     index_path = _archive_index_path()
@@ -814,10 +815,10 @@ def _execute_archive_transaction(
             for path in outcome_paths:
                 if path.name.endswith(".outcome.json"):
                     outcome_target = target_dir / path.name
-                    outcome = _rewrite_archived_path_references(
-                        load_json(outcome_target), replacements
-                    )
-                    save_json(outcome_target, outcome)
+                    outcome = load_json(outcome_target)
+                    rewritten_outcome = _rewrite_archived_path_references(outcome, replacements)
+                    if not preserve_superseded_outcome:
+                        save_json(outcome_target, rewritten_outcome)
                     if any(content is not None for content in report_backups.values()):
                         if not all(path.is_file() for path in report_paths):
                             raise ValueError(
@@ -828,7 +829,7 @@ def _execute_archive_transaction(
                             render_human_report,
                         )
 
-                        report = generate_human_report(outcome, phase="review")
+                        report = generate_human_report(rewritten_outcome, phase="review")
                         save_json(report_paths[0], report)
                         report_paths[1].write_text(render_human_report(report), encoding="utf-8")
                         refreshed_report_paths = True
@@ -1142,6 +1143,11 @@ def main() -> int:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
 
+    preserve_superseded_outcome = has_summary and is_valid_superseded_transition(
+        contract_path=contract_path,
+        work_item_id=str(work_item_id),
+    )
+
     if args.dry_run:
         print("Dry run: files that would be archived:")
         for src, target in files_to_move:
@@ -1191,6 +1197,7 @@ def main() -> int:
             traceability_backup=traceability_backup,
             traceability_payload=traceability_payload,
             pre_archive_candidate_coverage=pre_archive_candidate_coverage,
+            preserve_superseded_outcome=preserve_superseded_outcome,
         )
     except Exception as exc:  # noqa: BLE001 - archive mutation failures must fail closed with their diagnostic
         print(f"ERROR: Failed to archive Work Item: {exc}", file=sys.stderr)

@@ -44,6 +44,13 @@ archived-evidence eligibility check; the merged PR, exact Head SHA, clean
 worktree, fast-forward base synchronization, closure receipt, remote absence,
 and local branch cleanup checks below remain mandatory and unchanged.
 
+When the canonical transition predicate succeeds before archive mutation, the
+receipt-bound Outcome JSON is moved byte-for-byte. Archive path rewriting still
+applies to normal Outcomes; a rewritten in-memory copy may feed derived human
+reports without altering the immutable red Outcome. The archive manifest binds
+the moved Outcome and sibling receipt digests, so closure can validate the same
+historical proof after archival.
+
 Real archive mutation still requires a current changed-critical-coverage report
 whose Contract base, candidate Head, tree digest, and diff digest match the
 candidate exactly. The archive manifest binds that report. A historical blocked

@@ -301,6 +301,105 @@ def test_archive_manifest_binds_outcome_artifact_digests(tmp_path, monkeypatch):
     assert len(manifest["outcomeArtifacts"][0]["sha256"]) == 64
 
 
+def test_superseded_archive_transaction_preserves_receipt_bound_outcome_bytes(
+    tmp_path, monkeypatch
+):
+    active = tmp_path / ".ai/work-items/active"
+    cockpit = tmp_path / ".ai/cockpit"
+    target = tmp_path / ".ai/work-items/archive/2026"
+    active.mkdir(parents=True)
+    cockpit.mkdir(parents=True)
+    target.mkdir(parents=True)
+    (target.parent / "index.json").write_text('{"indexVersion": 1, "entries": []}\n')
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    outcome = active / "task.outcome.json"
+    receipt = active / "task.successor-receipt.json"
+    contract.write_text('{"workItemId":"task"}\n', encoding="utf-8")
+    summary.write_text('{"changedFiles":[]}\n', encoding="utf-8")
+    outcome.write_text(
+        json.dumps(
+            {
+                "workItemId": "task",
+                "status": "blocked",
+                "sections": {
+                    "evidence": [
+                        {
+                            "source": ".ai/work-items/active/task.contract.json",
+                            "subject": "Contract",
+                        }
+                    ]
+                },
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    outcome_before = outcome.read_bytes()
+    receipt.write_text(
+        json.dumps(
+            {
+                "schemaVersion": 1,
+                "transition": "superseded",
+                "predecessor": {"workItemId": "task"},
+                "predecessorOutcomeDigest": hashlib.sha256(outcome_before).hexdigest(),
+                "successor": {
+                    "workItemId": "successor",
+                    "branch": "codex/successor",
+                    "baseCommit": "a" * 40,
+                },
+                "successorWorkItemId": "successor",
+                "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/1",
+                "authority": "user",
+                "reason": "A verified successor owns the corrective delivery.",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_archive_work_item, "ARCHIVE_BASE_DIR", tmp_path / ".ai/work-items/archive"
+    )
+    monkeypatch.setattr(ai_archive_work_item, "_generate_status", lambda _command: None)
+
+    sources = (contract, summary, outcome, receipt)
+    ai_archive_work_item._execute_archive_transaction(
+        contract_path=contract,
+        summary_path=summary,
+        review_path=active / "task.review.json",
+        success_path=active / "task.success.json",
+        outcome_paths=[outcome, receipt],
+        files_to_move=[(path, target / path.name) for path in sources],
+        target_dir=target,
+        summary_tmp=target / ".task.summary.tmp",
+        manifest_target=target / "task.archive-manifest.json",
+        has_summary=True,
+        has_review=False,
+        has_success=False,
+        archive_sequence=1,
+        traceability_path=tmp_path / "docs/reference/traceability.json",
+        traceability_backup=None,
+        traceability_payload=None,
+        preserve_superseded_outcome=True,
+    )
+
+    archived_outcome = target / outcome.name
+    assert archived_outcome.read_bytes() == outcome_before
+    assert ai_lifecycle_truth.is_valid_superseded_transition(
+        contract_path=target / contract.name,
+        work_item_id="task",
+    )
+    manifest = json.loads((target / "task.archive-manifest.json").read_text(encoding="utf-8"))
+    artifact_digests = {item["path"]: item["sha256"] for item in manifest["outcomeArtifacts"]}
+    assert (
+        artifact_digests[archived_outcome.relative_to(tmp_path).as_posix()]
+        == hashlib.sha256(outcome_before).hexdigest()
+    )
+
+
 def test_archive_manifest_binds_content_addressed_pre_archive_coverage(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
     contract = tmp_path / "task.contract.json"
