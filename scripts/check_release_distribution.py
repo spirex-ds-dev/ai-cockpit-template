@@ -1139,6 +1139,15 @@ def main() -> int:
         facts = release_provider_facts(list_remote_tags(PUBLIC_REPOSITORY), fetch_public_releases())
         latest_reserved_tag = str(facts["highestReservedTag"])
         latest_stable_release_tag = str(facts["highestStableReleaseTag"])
+        # Once the repository projection has advanced past a published stable
+        # release, validate the source candidate as release preparation rather
+        # than re-reading stale candidate metadata from the immutable tag tree.
+        if (
+            not preparation_mode
+            and CANDIDATE_RELEASE.is_file()
+            and tag == latest_stable_release_tag
+        ):
+            preparation_mode = True
         if preparation_mode:
             if not CANDIDATE_RELEASE.is_file():
                 raise RuntimeError("next-release.json is required in release preparation mode")
