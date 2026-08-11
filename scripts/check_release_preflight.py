@@ -237,7 +237,9 @@ def validate_release_preflight(
     if freeze.get("archiveSha256") != actual_archive_sha:
         issues.append("release freeze archiveSha256 does not match regenerated archive")
     declared = release.get("releaseArchive", {}).get("sha256")
-    if declared != actual_archive_sha:
+    if (
+        not isinstance(lifecycle, dict) or lifecycle.get("state") != "premerge_finalized"
+    ) and declared != actual_archive_sha:
         issues.append("release.json releaseArchive.sha256 does not match regenerated archive")
     if (
         release_digests is not None

@@ -1,0 +1,186 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-freeze-published-projection-repair",
+  "mode": "code",
+  "title": "Repair release freeze published projection boundary",
+  "baseCommit": "1de3bd2fefa94feb0ac0adf41b66dfa1b2868d45",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-freeze-published-projection-repair.contract.json",
+    ".ai/work-items/active/release-freeze-published-projection-repair.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-freeze-published-projection-repair.outcome.json",
+    ".ai/work-items/active/release-freeze-published-projection-repair.outcome.md",
+    "scripts/finalize_release_freeze.py",
+    "scripts/check_release_preflight.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_workflow.py",
+    "release.json",
+    "release-state.json",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Do not alter, recreate, delete, or relabel immutable v0.5.50 through v0.5.56 tags, Releases, or assets.", "Do not lower coverage, test count, or release/installer/security gates."],
+  "sources": [
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "The unconditional release.json mutation is the confirmed source of hosted lifecycle shard failure."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Hosted failure artifact identifies test_published_projection_is_not_promoted_in_repository as the regression witness."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31497677074/job/93799535395",
+      "reason": "Hosted lifecycle shard evidence: release.json archive digest changed from published v0.5.56 asset digest to pre-merge candidate archive digest."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_distribution", "evidence_integrity", "ci"],
+    "reason": "A pre-merge generator incorrectly rewrites immutable published projection fields, risking both false release metadata and blocked hosted shard aggregation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["Release metadata correction requires strict verification."],
+    "override": {"approvalEvidence": "conversation:2026-08-11-complete-all-work-items-release-authorization", "reason": "User authorized complete corrective release work without gate bypass.", "risks": ["release_distribution", "evidence_integrity", "ci"], "notRunChecks": ["Provider release and public adopter proof remain deferred until the successor PR is merged."], "workItemOnly": true, "workItemId": "release-freeze-published-projection-repair"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Hosted artifact identifies a deterministic generator defect and the user authorized complete corrective delivery."
+  },
+  "preReviewWarnings": ["Verify a pre-merge freeze never changes the archived/published release.json archive digest, while runtime release materialization remains source-bound."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Pre-merge freeze preserves release.json releaseTag, releaseArchive.sha256, installerDigest, and published metadata digest for the already-published release.",
+    "Pre-merge freeze still binds candidate source/tree/archive facts only through release-freeze.json and release-digests.json without promoting candidate bytes into the published projection.",
+    "A focused regression test fails against the current unconditional mutation and passes after the minimal fix; hosted lifecycle shard is rerun on the successor PR.",
+    "No immutable release, test set, coverage floor, release gate, or failure evidence is weakened."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The v0.5.57 predecessor PR's pre-merge freeze rewrote the current published v0.5.56 release archive digest to the candidate worktree archive digest. Hosted lifecycle shard test_published_projection_is_not_promoted_in_repository correctly failed.",
+    "constraints": ["Preserve immutable historical releases and published projection truth.", "Use a fresh Work Item from origin/main; do not revive archived unmerged PR #798.", "Keep candidate binding in candidate/freeze evidence, not published release.json."],
+    "rationale": "Published release metadata is an immutable-provider projection and must not be mutated by candidate pre-merge finalization; separating these namespaces removes the recurrence at the source."
+  },
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。目标是把收益交付给未来安装的 adopter。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization", "capturedAt": "2026-08-11T13:52:00+00:00", "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"},
+  "declaredIntent": {"summary": "Repair the candidate-freeze mutation that corrupts a prior published projection, then deliver the full-URL installer correction through a clean successor release path.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [{"scenario": "Pre-merge freeze on a corrective candidate after an immutable published release.", "required": true, "riskDomain": "release_distribution", "status": "unverified", "evidence": [], "expected": "Published projection remains byte-stable while candidate freeze evidence binds the worktree source.", "verificationPlan": "Add a regression test that invokes premerge finalization in an isolated repository fixture."}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human user",
+    "reason": "The user explicitly authorized the required corrective release work and governed cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 876
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-freeze-published-projection-repair.json",
+    "baseCommit": "1de3bd2fefa94feb0ac0adf41b66dfa1b2868d45",
+    "initialScopeDigest": "753d8b320b24cf9e2c8e58f4460a3492249ed9e84de6fb02e504e84298dc4da1",
+    "contractSkeletonDigest": "c85971835a49a5ef4ed610ba035ef2af270dbdc6b03808b8693bfb817c950cb5"
+  }
+}
