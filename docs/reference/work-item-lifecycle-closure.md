@@ -52,6 +52,16 @@ field when the same exact `transition=superseded` evidence validates; its bytes
 and digest remain unchanged. An existing but unequal Outcome binding, a missing
 or stale current report, or invalid successor evidence remains fail closed.
 
+When that immutable Contract base predates already-merged corrections, a valid
+superseded predecessor may instead bind the current archive transaction to the
+unique remote-default tracking tip. This exception is accepted only when the
+report base, candidate Head, and remote-default tip are the same commit, so no
+committed Work Item change can be excluded. Candidate ownership still rejects
+every foreign dirty path, and the successor receipt is lifecycle-owned but
+content-addressed in the candidate digests. An arbitrary ancestor, branch
+commit, stale or ambiguous remote default, invalid receipt, or normal Work Item
+cannot use this alternate base.
+
 Its ordered protocol is:
 
 ```text

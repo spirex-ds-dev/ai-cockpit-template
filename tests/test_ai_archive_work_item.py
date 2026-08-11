@@ -405,6 +405,98 @@ def test_pre_archive_coverage_accepts_only_missing_historical_binding_for_supers
     assert outcome.read_bytes() == outcome_before
 
 
+def test_pre_archive_coverage_accepts_superseded_remote_default_tip_base(tmp_path, monkeypatch):
+    active = tmp_path / ".ai/work-items/active"
+    target = tmp_path / "target"
+    active.mkdir(parents=True)
+    target.mkdir()
+    contract, outcome, _, _ = write_superseded_predecessor(active)
+    contract_payload = {"workItemId": "task", "baseCommit": "a" * 40}
+    contract.write_text(json.dumps(contract_payload), encoding="utf-8")
+    outcome_before = outcome.read_bytes()
+    binding = {
+        "baseCommit": "b" * 40,
+        "candidateHead": "b" * 40,
+        "candidateTreeDigest": "c" * 64,
+        "candidateDiffDigest": "d" * 64,
+    }
+    report_bytes = (json.dumps({"binding": binding}, sort_keys=True) + "\n").encode()
+    (target / "changed-critical-coverage.json").write_bytes(report_bytes)
+    coverage = {"reportSha256": hashlib.sha256(report_bytes).hexdigest(), "binding": binding}
+
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_archive_work_item, "_unique_remote_default_tip", lambda: "b" * 40)
+    import check_changed_critical_coverage
+
+    def snapshot(**kwargs):
+        assert kwargs["base"] == "b" * 40
+        return binding
+
+    monkeypatch.setattr(check_changed_critical_coverage, "candidate_snapshot", snapshot)
+
+    assert (
+        ai_archive_work_item.load_pre_archive_candidate_coverage(
+            contract_path=contract,
+            contract=contract_payload,
+        )
+        == coverage
+    )
+    assert outcome.read_bytes() == outcome_before
+
+
+@pytest.mark.parametrize(
+    ("report_base", "candidate_head", "remote_tip"),
+    [
+        ("b" * 40, "c" * 40, "b" * 40),
+        ("b" * 40, "b" * 40, "c" * 40),
+    ],
+)
+def test_pre_archive_coverage_rejects_untrusted_superseded_alternate_base(
+    tmp_path, monkeypatch, report_base, candidate_head, remote_tip
+):
+    active = tmp_path / ".ai/work-items/active"
+    target = tmp_path / "target"
+    active.mkdir(parents=True)
+    target.mkdir()
+    contract, _, _, _ = write_superseded_predecessor(active)
+    contract_payload = {"workItemId": "task", "baseCommit": "a" * 40}
+    contract.write_text(json.dumps(contract_payload), encoding="utf-8")
+    binding = {
+        "baseCommit": report_base,
+        "candidateHead": candidate_head,
+        "candidateTreeDigest": "c" * 64,
+        "candidateDiffDigest": "d" * 64,
+    }
+    (target / "changed-critical-coverage.json").write_text(
+        json.dumps({"binding": binding}) + "\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_archive_work_item, "_unique_remote_default_tip", lambda: remote_tip)
+
+    with pytest.raises(ValueError, match="remote default tip"):
+        ai_archive_work_item.load_pre_archive_candidate_coverage(
+            contract_path=contract,
+            contract=contract_payload,
+        )
+
+
+@pytest.mark.parametrize(
+    "candidates",
+    [[], [("origin", "main"), ("upstream", "main")]],
+)
+def test_unique_remote_default_tip_rejects_missing_or_ambiguous_identity(monkeypatch, candidates):
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "discover_remote_default_candidates",
+        lambda _runner: candidates,
+    )
+
+    with pytest.raises(ValueError, match="one unique remote default tip"):
+        ai_archive_work_item._unique_remote_default_tip()
+
+
 def test_pre_archive_coverage_rejects_existing_mismatch_even_when_superseded(tmp_path, monkeypatch):
     active = tmp_path / ".ai/work-items/active"
     target = tmp_path / "target"

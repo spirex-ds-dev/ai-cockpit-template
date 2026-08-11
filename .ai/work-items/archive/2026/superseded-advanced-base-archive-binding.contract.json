@@ -1,0 +1,315 @@
+{
+  "contractVersion": 2,
+  "workItemId": "superseded-advanced-base-archive-binding",
+  "mode": "code",
+  "title": "superseded-advanced-base-archive-binding",
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。包括远程和本地的清理。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:complete-all-work-items-and-authorize-confirmations",
+    "capturedAt": "2026-08-11",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "declaredIntent": {
+    "summary": "Allow an immutable superseded predecessor to archive after the remote default branch advanced, without hiding committed Work Item changes or rewriting historical evidence.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "user-message:complete-all-work-items-and-authorize-confirmations",
+    "scope": "Complete this corrective Work Item, merge it after all required checks, and clean only its exact local and remote branch through verified lifecycle closure."
+  },
+  "baseCommit": "c9800ea3f9c722ff4504cf552b5e8b6e94485217",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/superseded-advanced-base-archive-binding.contract.json",
+    ".ai/work-items/active/superseded-advanced-base-archive-binding.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/superseded-advanced-base-archive-binding.outcome.json",
+    ".ai/work-items/active/superseded-advanced-base-archive-binding.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/check_changed_critical_coverage.py",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_changed_critical_coverage.py",
+    "tests/test_ai_archive_work_item.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/superpowers/specs/2026-08-11-superseded-advanced-base-archive-binding-design.md",
+    "docs/superpowers/plans/2026-08-11-superseded-advanced-base-archive-binding.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not rewrite the historical predecessor Contract, Summary, red Outcome, successor receipt, or start receipt.",
+    "Do not accept an arbitrary, stale, non-default, or merely ancestor base as a superseded archive base.",
+    "Do not hide committed Work Item changes by choosing the candidate HEAD as the coverage base.",
+    "Do not change normal completed Work Item coverage binding, archive, PR, closure, or release behavior.",
+    "Do not modify release versions, release assets, performance workflows, or v0.5.54 artifacts in this Work Item."
+  ],
+  "sources": [
+    {
+      "path": "scripts/check_changed_critical_coverage.py",
+      "reason": "Candidate ownership and content-digest logic currently assumes the historical Contract base."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive revalidation currently reconstructs every candidate strictly from Contract baseCommit."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Canonical discovery of the unique remote default branch identity."
+    },
+    {
+      "path": "tests/test_changed_critical_coverage.py",
+      "reason": "Candidate ownership and digest regression coverage."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Archive coverage-binding and superseded transition regressions."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/superseded-prearchive-coverage-binding.contract.json",
+      "reason": "Prior corrective preserves immutable historical Outcome bytes but still assumes Contract base for the current report."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository-required fail-closed archive, PR, closure, and cleanup lifecycle."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "destructive_cleanup"
+    ],
+    "reason": "The exception changes which base may authorize immutable archive mutation, so it must be limited to the exact remote-default tip with no committed Work Item delta.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The change affects source-bound archive authorization and later lifecycle cleanup eligibility."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorization is recorded and the exceptional base identity is exact and testable."
+  },
+  "preReviewWarnings": [
+    "Confirm the alternate base must equal candidate HEAD and the unique remote-default tracking SHA.",
+    "Confirm successor receipt bytes are included in candidate ownership and content digest.",
+    "Confirm normal and mismatched coverage bindings remain fail closed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Normal Work Items still require a report bound to Contract baseCommit and the exact current candidate.",
+    "A valid superseded predecessor whose Contract base is historical may use an alternate report base only when report base, candidate HEAD, and the unique remote-default tracking SHA are identical.",
+    "The alternate-base snapshot rejects every non-lifecycle untracked or dirty path, and a committed Work Item delta cannot be hidden behind the alternate base.",
+    "The successor receipt is recognized as lifecycle-owned and its bytes are included in candidateTreeDigest and candidateDiffDigest.",
+    "Missing, malformed, mismatched, stale, non-default, or non-superseded evidence remains fail closed before archive mutation.",
+    "The historical predecessor evidence remains byte-for-byte unchanged and the archive manifest binds the current report."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The historical release predecessor was fast-forwarded to current main so its archive PR contains only preserved lifecycle evidence. Its immutable Contract still names the old base. Candidate coverage against that old base correctly rejects later main changes as Contract-unowned, while choosing current HEAD as base would be unsafe unless that HEAD is independently bound to the unique remote-default tip. The predecessor therefore remains unarchivable after the prior missing-binding correction.",
+    "constraints": [
+      "Preserve the predecessor Contract, failed Summary verification, red Outcome, successor receipt, and start receipt bytes exactly.",
+      "Do not permit an arbitrary ancestor, local branch commit, stale remote ref, or dirty non-lifecycle path to become the alternate archive base.",
+      "Require alternate base, candidate HEAD, and unique remote-default tracking SHA to be identical so committed Work Item changes cannot be excluded.",
+      "Keep candidate content digests, current report revalidation, archive-manifest binding, and all later closure postconditions mandatory."
+    ],
+    "rationale": "A remote-default-tip exception proves that all committed changes are already on the trusted base; the report then measures only the exact uncommitted lifecycle archive transaction, including the successor receipt."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A valid superseded predecessor is checked out exactly at the unique remote-default tip with only its preserved lifecycle evidence untracked.",
+      "expected": "Coverage report and archive revalidation accept the remote-default tip as the transaction base and bind every lifecycle artifact byte.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add red-first candidate and archive binding tests using an exact remote-default tip."
+    },
+    {
+      "scenario": "The alternate base differs from candidate HEAD or from the unique remote-default tracking SHA.",
+      "expected": "Archive revalidation fails before mutation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add fail-closed tests for branch commits, stale refs, arbitrary ancestors, and ambiguous default remotes."
+    },
+    {
+      "scenario": "The candidate contains a non-lifecycle dirty or untracked path.",
+      "expected": "Candidate ownership rejects the path even at the remote-default tip.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Extend the Contract ownership regression with a foreign path."
+    },
+    {
+      "scenario": "The successor receipt is present beside the historical Outcome.",
+      "expected": "It is lifecycle-owned and its exact bytes affect both candidate content digests.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a digest mutation regression for successor-receipt.json."
+    },
+    {
+      "scenario": "A normal completed Work Item or invalid superseded transition provides an alternate-base report.",
+      "expected": "The existing Contract-base rule remains mandatory and the alternate report is rejected.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run existing exact-binding tests and add invalid-transition alternate-base coverage."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "codex/superseded-advanced-base-archive-binding"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "The user explicitly authorized all required confirmations and exact local and remote Work Item branch cleanup in this thread.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "user",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "user-message:complete-all-work-items-and-authorize-confirmations",
+          "directUserInstructionDigest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74",
+          "authorizedAt": "2026-08-11T00:00:00+09:00"
+        },
+        "scope": [
+          "codex/superseded-advanced-base-archive-binding"
+        ]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 868
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/superseded-advanced-base-archive-binding.json",
+    "baseCommit": "c9800ea3f9c722ff4504cf552b5e8b6e94485217",
+    "initialScopeDigest": "8702d2b8b3299b28cfdb20f3446d510de7f2727abdd500d9e52423eb699ac7a5",
+    "contractSkeletonDigest": "e0f74dcdc064f93c8765699bb6cad2b32f783c7d0afd5f591bbdb63b248d08ee"
+  }
+}

@@ -255,6 +255,7 @@ def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_pat
         "fixture.txt",
         ".ai/work-items/active/task.contract.json",
         ".ai/work-items/active/task.outcome.json",
+        ".ai/work-items/active/task.successor-receipt.json",
         ".ai/cockpit/task_report.json",
         ".ai/work-items/starts/task.json",
     ]
@@ -288,6 +289,7 @@ def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_pat
 
     assert [item["path"] for item in snapshot["candidateFiles"]] == [
         ".ai/work-items/active/task.contract.json",
+        ".ai/work-items/active/task.successor-receipt.json",
         ".ai/work-items/starts/task.json",
         "fixture.txt",
     ]
@@ -295,6 +297,46 @@ def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_pat
         ".ai/cockpit/task_report.json",
         ".ai/work-items/active/task.outcome.json",
     ]
+
+
+def test_candidate_snapshot_binds_successor_receipt_bytes(monkeypatch, tmp_path):
+    contract = tmp_path / ".ai/work-items/active/task.contract.json"
+    contract.parent.mkdir(parents=True)
+    contract.write_text(
+        json.dumps({"workItemId": "task", "scope": [], "baselineDirtyPaths": []}),
+        encoding="utf-8",
+    )
+    receipt = contract.with_name("task.successor-receipt.json")
+    receipt.write_text('{"transition":"superseded"}\n', encoding="utf-8")
+    paths = [
+        ".ai/work-items/active/task.contract.json",
+        ".ai/work-items/active/task.successor-receipt.json",
+    ]
+
+    def run(command, **_kwargs):
+        command = tuple(command)
+        if command == ("git", "rev-parse", "HEAD"):
+            output = "b" * 40 + "\n"
+        elif command in {
+            ("git", "diff", "--name-only", "a" * 40 + "...HEAD"),
+            ("git", "diff", "--name-only"),
+        }:
+            output = "\n".join(paths) + "\n"
+        else:
+            output = ""
+        return SimpleNamespace(returncode=0, stdout=output, stderr="")
+
+    monkeypatch.setattr(check_changed_critical_coverage.subprocess, "run", run)
+    first = check_changed_critical_coverage.candidate_snapshot(
+        base="a" * 40, project_root=tmp_path, contract_path=contract
+    )
+    receipt.write_text('{"transition":"superseded","revision":2}\n', encoding="utf-8")
+    second = check_changed_critical_coverage.candidate_snapshot(
+        base="a" * 40, project_root=tmp_path, contract_path=contract
+    )
+
+    assert first["candidateTreeDigest"] != second["candidateTreeDigest"]
+    assert first["candidateDiffDigest"] != second["candidateDiffDigest"]
 
 
 def test_candidate_snapshot_ignores_derived_outcome_changes_in_diff_binding(monkeypatch, tmp_path):
