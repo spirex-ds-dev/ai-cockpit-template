@@ -203,6 +203,7 @@ def candidate_snapshot(
             lifecycle_surface_paths = {
                 *derived_paths,
                 f"{active}.contract.json",
+                f"{active}.successor-receipt.json",
                 f".ai/work-items/starts/{work_item}.json",
             }
         else:

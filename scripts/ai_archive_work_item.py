@@ -22,6 +22,7 @@ from ai_common import (
     InvalidDataShapeError,
     changed_paths,
     clean_git_environment,
+    discover_remote_default_candidates,
     load_json,
     non_empty_string,
     numeric_value,
@@ -499,13 +500,18 @@ def load_pre_archive_candidate_coverage(
         raise ValueError(f"missing readable pre-archive candidate coverage report: {exc}") from exc
     if not isinstance(report, dict) or not isinstance(report.get("binding"), dict):
         raise TypeError("pre-archive candidate coverage report is missing a binding")
-    base = contract.get("baseCommit")
-    if not isinstance(base, str) or not base:
+    contract_base = contract.get("baseCommit")
+    if not isinstance(contract_base, str) or not contract_base:
         raise ValueError("pre-archive candidate coverage requires Contract baseCommit")
     from check_changed_critical_coverage import candidate_snapshot
 
-    current = candidate_snapshot(base=base, project_root=PROJECT_ROOT, contract_path=contract_path)
     binding = report["binding"]
+    base = _pre_archive_candidate_base(
+        contract_path=contract_path,
+        contract=contract,
+        binding=binding,
+    )
+    current = candidate_snapshot(base=base, project_root=PROJECT_ROOT, contract_path=contract_path)
     required = ("baseCommit", "candidateHead", "candidateTreeDigest", "candidateDiffDigest")
     if any(binding.get(key) != current.get(key) for key in required):
         raise ValueError(
@@ -535,6 +541,63 @@ def load_pre_archive_candidate_coverage(
     ):
         return coverage
     raise ValueError("Task Outcome does not bind the current pre-archive candidate coverage")
+
+
+def _run_git_metadata(args: list[str]) -> subprocess.CompletedProcess[str]:
+    """Run read-only Git metadata queries for archive evidence validation."""
+    return subprocess.run(  # nosec B603: fixed Git executable and metadata-only arguments
+        ["git", *args],
+        cwd=PROJECT_ROOT,
+        env=clean_git_environment(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def _unique_remote_default_tip() -> str:
+    """Return the exact locally tracked tip of the unique remote default branch."""
+    candidates = discover_remote_default_candidates(_run_git_metadata)
+    if len(candidates) != 1:
+        raise ValueError("superseded alternate coverage requires one unique remote default tip")
+    remote, branch = candidates[0]
+    result = _run_git_metadata(["rev-parse", "--verify", f"refs/remotes/{remote}/{branch}"])
+    tip = result.stdout.strip()
+    if result.returncode or len(tip) != 40:
+        raise ValueError("superseded alternate coverage cannot resolve remote default tip")
+    return tip
+
+
+def _pre_archive_candidate_base(
+    *, contract_path: Path, contract: dict[str, object], binding: dict[str, object]
+) -> str:
+    """Select the strict Contract base or the exact superseded transaction base."""
+    contract_base = contract.get("baseCommit")
+    report_base = binding.get("baseCommit")
+    if not isinstance(contract_base, str) or not contract_base:
+        raise ValueError("pre-archive candidate coverage requires Contract baseCommit")
+    if report_base == contract_base:
+        return contract_base
+    work_item = contract.get("workItemId")
+    if (
+        not isinstance(report_base, str)
+        or not isinstance(work_item, str)
+        or not work_item
+        or not is_valid_superseded_transition(
+            contract_path=contract_path,
+            work_item_id=work_item,
+        )
+    ):
+        raise ValueError(
+            "superseded alternate coverage base must match candidate HEAD and remote default tip"
+        )
+    candidate_head = binding.get("candidateHead")
+    remote_tip = _unique_remote_default_tip()
+    if report_base != candidate_head or report_base != remote_tip:
+        raise ValueError(
+            "superseded alternate coverage base must match candidate HEAD and remote default tip"
+        )
+    return report_base
 
 
 def _archive_sequence_key(item: object) -> int:
