@@ -85,6 +85,39 @@ def test_validate_aggregate_rejects_each_missing_artifact_and_wrong_source():
         )
 
 
+def test_run_shard_receipt_records_comparable_runner_and_cache_facts(tmp_path, monkeypatch):
+    root = tmp_path / "repository"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+    subprocess.run(
+        ["git", "-C", str(root), "config", "user.email", "test@example.invalid"], check=True
+    )
+    (root / "tracked.txt").write_text("source\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(root), "add", "tracked.txt"], check=True)
+    subprocess.run(["git", "-C", str(root), "commit", "-qm", "source"], check=True)
+    monkeypatch.setenv("ImageOS", "ubuntu24")
+    monkeypatch.setenv("ImageVersion", "20260801.1")
+    monkeypatch.setenv("RUNNER_OS", "Linux")
+
+    receipt = quality_test_manifest.run_shard(
+        root,
+        {
+            "schemaVersion": 1,
+            "entries": [{"id": "shell:pass.sh", "kind": "shell", "stage": "shard"}],
+        },
+        {"schemaVersion": 1, "shards": {"core": ["shell:pass.sh"]}},
+        "core",
+        root / "target" / "quality" / "shards" / "core",
+    )
+
+    assert receipt["runner"]["image"] == "ubuntu24@20260801.1"
+    assert receipt["runner"]["os"] == "Linux"
+    assert receipt["runner"]["python"]
+    assert receipt["runner"]["cpuCount"] >= 1
+    assert receipt["cache"] == {"status": "not_configured"}
+
+
 def test_build_manifest_preserves_collected_nodes_and_non_pytest_project_test_commands():
     manifest = quality_test_manifest.build_manifest(
         ["tests/test_core.py::test_fast", "tests/test_installer.py::test_install"],

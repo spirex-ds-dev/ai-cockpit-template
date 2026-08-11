@@ -1,0 +1,321 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-critical-path-hci-performance-v2-acceptance",
+  "mode": "code",
+  "title": "Complete performance v2 hosted acceptance and adopter delivery",
+  "rawUserRequest": "原始目标：在不减少验证范围、不降低覆盖率、不绕过门禁、不牺牲 Outcome 和失败证据的前提下，缩短开发者获得可信反馈的等待时间。性能与正确性、合规性同为一级标准，以 HCI 可感知等待时间作为验收依据。只有五次可比较 hosted 测量全部完成并达到量化目标，才允许绿色 Outcome。目标是把收益交付给未来安装的 adopter；完成全部工单为止不要停，需要确认的已授权并写入 Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-10-to-2026-08-11-performance-v2-adopter-delivery",
+    "capturedAt": "2026-08-11",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "declaredIntent": {
+    "summary": "Prove and complete the second-stage quality critical-path optimization with five comparable Hosted measurements, then provide release-ready evidence for future adopter installation delivery.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "5f08ae09eae946aeea2355f3ba24d02ea214bb50",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/quality-critical-path-hci-performance-v2-acceptance.contract.json",
+    ".ai/work-items/active/quality-critical-path-hci-performance-v2-acceptance.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "release-state.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/quality-critical-path-hci-performance-v2-acceptance.outcome.json",
+    ".ai/work-items/active/quality-critical-path-hci-performance-v2-acceptance.outcome.md",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "scripts/run_quality_gate.py",
+    "scripts/run_quality_session.py",
+    "scripts/summarize_quality_gates.py",
+    "scripts/quality_test_manifest.py",
+    "scripts/quality_measurements.py",
+    "scripts/quality_progress.py",
+    "scripts/end_to_end_adoption_validation.py",
+    "scripts/ai_common.py",
+    "tests/test_makefile.py",
+    "tests/test_workflows.py",
+    "tests/test_quality_telemetry.py",
+    "tests/test_quality_test_manifest.py",
+    "tests/test_quality_measurements.py",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_quality_progress.py",
+    "tests/test_end_to_end_adoption_validation.py",
+    "tests/test_baseline_diff.py",
+    "tests/test_start_and_archive.py",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/project-test-timing-baseline.json",
+    "docs/superpowers/specs/2026-08-10-quality-critical-path-hci-performance-v2-design.md",
+    "docs/superpowers/plans/2026-08-10-quality-critical-path-hci-performance-v2.md"
+  ],
+  "outOfScope": [
+    "Do not modify or rebuild v0.5.50 or mutate any existing release tag or provider Release.",
+    "Do not reduce test count, coverage below 85.10%, security/release/governance gates, Outcome visibility, or failure evidence.",
+    "Do not use SKIP_QUALITY, add unexplained skip/xfail/quarantine, treat a normal cache hit as validation, or use a single run as success proof.",
+    "Publishing the new adopter release is a subsequent governed release Work Item created from merged performance evidence; this Work Item must produce its exact release-readiness handoff."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-critical-path-hci-performance-v2.contract.json",
+      "reason": "Preserves the original quantitative requirements, strict boundaries, and five-run acceptance rule."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-critical-path-hci-performance-v2.summary.json",
+      "reason": "Shows the previous green claim lacked the mandatory five comparable Hosted candidate measurements."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Defines Hosted shards, measurement receipts, aggregate evidence, progress output, and template-smoke critical path."
+    },
+    {
+      "path": "docs/reference/project-test-timing-baseline.json",
+      "reason": "Defines versioned historical duration weights for deterministic shard balancing."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-10-quality-critical-path-hci-performance-v2-design.md",
+      "reason": "Approved design for measurement, sharding, immutable fixtures, HCI output, and fail-closed aggregation."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-10-quality-critical-path-hci-performance-v2.md",
+      "reason": "Implementation and verification sequence for the original performance Work Item."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "ci",
+      "installer",
+      "evidence_integrity",
+      "performance_measurement",
+      "hosted_verification"
+    ],
+    "reason": "Performance, Hosted orchestration, and release-readiness evidence can silently omit tests or misstate percentiles unless every sample and artifact is source-bound and fail-closed.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The user fixed the thresholds, sample rules, boundaries, and adopter delivery goal; current repository sources expose all implementation and measurement surfaces."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "This Work Item changes Hosted CI, project-test performance, installer behavior, and release-blocking evidence."
+    ],
+    "override": {
+      "approvalEvidence": "The user authorized all necessary confirmations, Hosted measurements, completion, and cleanup in the Contract.",
+      "reason": "Strict verification is mandatory because speed cannot weaken correctness or compliance.",
+      "risks": ["ci", "installer", "evidence_integrity", "performance_measurement"],
+      "notRunChecks": ["Candidate Hosted measurements require an exact snapshot commit and cannot run before implementation and local verification."],
+      "workItemOnly": true,
+      "workItemId": "quality-critical-path-hci-performance-v2-acceptance"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized full completion, measurements, required confirmations, adopter delivery, and cleanup."
+  },
+  "preReviewWarnings": [
+    "Green completion is forbidden unless five same-SHA comparable candidate Hosted measurements all meet every threshold."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Baseline and candidate data are strictly separated; each population has at least five sequential successful hosted_measurement runs at one exact source SHA/tree and identical runner image, OS, Python, workflow, and runner class, with sample count and nearest-rank p50/p95 recorded.",
+    "quality-fast local trustworthy-feedback p95 is <=60 seconds and deterministic lint, format, scope, Status, and Contract failures appear within 30 seconds.",
+    "Hosted project-test p50 is <=420 seconds, p95 is <=480 seconds, and p95 improves at least 25% from 655 seconds; template-smoke total p95 is <=480 seconds.",
+    "Every 30 seconds quality output identifies current gate/progress/evidence; a failure names its gate within 30 seconds and preserves red Outcome, JUnit, gate log, and recovery condition; complete evidence produces green Outcome.",
+    "The full test node set and coverage source set are preserved, coverage remains >=85.10%, and no unexplained skip/xfail/quarantine is added.",
+    "Deterministic duration-balanced core, governance, installer, lifecycle, and release shards each emit isolated JUnit/coverage/timing; aggregate fails on missing, skipped, cancelled, failed, stale, wrong-SHA, unowned, or malformed shard evidence.",
+    "Machine regressions reject node deletion/rename/unowned placement, skip/xfail growth, coverage-source loss, missing shard/JUnit/coverage/receipt fields, wrong SHA, and incomplete aggregate membership.",
+    "The required local commands pass: make quality-fast, make quality-full, make quality-release, make check-quality-architecture, make check-instruction-traceability, make check-ai-status-consistency, and make ai-prepare-hosted-verification-snapshot CONTRACT=<contract>.",
+    "The Summary contains raw baseline and candidate samples, comparable-environment decisions, artifact bindings, p50/p95 calculations, test/coverage equivalence, and a truthful red/yellow/green Outcome; architecture improvement alone cannot produce green.",
+    "After merge and lifecycle closure, a separate release Work Item publishes a new version, verifies release-digests/version/docs consistency and a clean future-adopter installation, then removes all local and remote delivery branches."
+  ],
+  "guidelines": [
+    "Never trade test-set completeness, coverage, security, release gates, Outcome visibility, or failure evidence for speed.",
+    "Use tree-digest-bound immutable inputs and per-test/per-shard isolated mutable outputs.",
+    "Treat missing, cancelled, stale, malformed, mismatched-SHA, or cache-only evidence as failure.",
+    "Only report green after all five comparable candidate Hosted measurements meet every quantitative target."
+  ],
+  "intent": {
+    "problem": "The prior performance-v2 archive claimed green without the mandatory five comparable Hosted measurements. Current local full quality remains roughly 590–639 seconds, and Hosted installer shards vary from about 108 to 363 seconds, so the quantitative HCI benefit is neither proven nor stable.",
+    "constraints": [
+      "Retain the complete test set, coverage >=85.10%, all security/release/governance gates, red/green Outcome behavior, JUnit, logs, recovery instructions, and fail-closed aggregate semantics.",
+      "Do not change v0.5.50, use SKIP_QUALITY, count mixed SHA/runner samples, or treat cache presence as completed verification.",
+      "Collect baseline and candidate statistics only from their own five or more sequential same-SHA/tree, same-environment hosted_measurement samples."
+    ],
+    "rationale": "The correction must measure the actual long tail, optimize repeatable installer/lifecycle work without shared mutable state, and prove end-to-end feedback latency with source-bound evidence before an adopter release is allowed."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Any shard, JUnit, coverage file, receipt field, or aggregate member is missing, failed, cancelled, stale, or bound to a different SHA.",
+      "riskDomain": "evidence_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Aggregate fails closed and preserves red Outcome, logs, JUnit, and recovery evidence.",
+      "verificationPlan": "Run focused mutation regressions and inspect all five candidate artifacts."
+    },
+    {
+      "scenario": "Optimization deletes, renames, leaves tests unowned, increases skip/xfail, or loses coverage sources.",
+      "riskDomain": "test_automation",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Manifest and weakening gates reject the candidate before success.",
+      "verificationPlan": "Compare baseline/candidate manifests, skip/xfail counts, and merged coverage."
+    },
+    {
+      "scenario": "Installer or lifecycle execution shares mutable Git, environment, lock, Status, Outcome, or target state.",
+      "riskDomain": "installer",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Each test uses a tree-bound immutable fixture and isolated mutable copy while all failure paths remain.",
+      "verificationPlan": "Run isolation/cache-key regressions and Hosted installer/lifecycle shards."
+    },
+    {
+      "scenario": "Five baseline or candidate samples are incomparable or miss any quantitative threshold.",
+      "riskDomain": "performance_measurement",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Outcome is red or yellow and release handoff is blocked.",
+      "verificationPlan": "Run five sequential measurements per population and validate receipt-bound statistics."
+    },
+    {
+      "scenario": "A deterministic quality gate fails, times out, or is cancelled.",
+      "riskDomain": "ci",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Gate identity appears within 30 seconds, progress remains visible every 30 seconds, and recovery evidence is retained.",
+      "verificationPlan": "Run progress/failure tests and inspect candidate logs."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized required CI, Makefile, governance, measurement, release-handoff, and cleanup changes for complete delivery."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 873
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-critical-path-hci-performance-v2-acceptance.json",
+    "baseCommit": "5f08ae09eae946aeea2355f3ba24d02ea214bb50",
+    "initialScopeDigest": "66cfba46819be5f363a5c613a3ca22266c600f5e4c033230f25f3da01746fbe0",
+    "contractSkeletonDigest": "42188114151e9fa3a2bb5ac3096c90a66a5e6eb4049f904debcd02ba9f9df460"
+  }
+}

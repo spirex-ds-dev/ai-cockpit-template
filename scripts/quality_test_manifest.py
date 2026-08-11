@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import os
+import platform
 import subprocess  # nosec B404 - all invocations below use fixed executables and validated args.
 import sys
 from collections import Counter
@@ -28,6 +29,18 @@ PROJECT_TEST_COMMANDS = (
     ("shell:tests/test_ci_release_evidence.sh", "shell", "shard"),
 )
 HOSTED_SHARDS = ("core", "governance", "installer", "lifecycle", "release")
+
+
+def runner_facts() -> dict[str, Any]:
+    """Return stable facts needed to compare Hosted runner populations."""
+    image_os = os.environ.get("ImageOS", "local")
+    image_version = os.environ.get("ImageVersion", "unversioned")
+    return {
+        "image": f"{image_os}@{image_version}",
+        "os": os.environ.get("RUNNER_OS", platform.system()),
+        "python": platform.python_version(),
+        "cpuCount": os.cpu_count() or 1,
+    }
 
 
 def document_digest(document: dict[str, Any]) -> str:
@@ -264,6 +277,8 @@ def run_shard(
         "artifactRoot": artifact_root(root, output),
         "result": result,
         "recovery": recovery,
+        "runner": runner_facts(),
+        "cache": {"status": "not_configured"},
         "artifacts": {
             "junit": junit.name,
             "coverage": coverage.name,
