@@ -1,0 +1,189 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-54-metadata-binding",
+  "mode": "code",
+  "title": "Publish the final runtime archive digest in release metadata",
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {"type": "human", "reference": "conversation", "capturedAt": "2026-08-11", "digest": "sha256:user-authorized-release-metadata-remediation"},
+  "declaredIntent": {"summary": "Repair the public release metadata binding and deliver a verified next patch release for future adopters.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "baseCommit": "6b2f0053a7976fce0b68e59b63745e0e94b7b914",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-54-metadata-binding.contract.json",
+    ".ai/work-items/active/release-v0-5-54-metadata-binding.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".github/workflows/release.yml",
+    "tests/test_workflows.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-54-metadata-binding.outcome.json",
+    ".ai/work-items/active/release-v0-5-54-metadata-binding.outcome.md"
+  ],
+  "outOfScope": ["Do not alter or delete the immutable v0.5.53 tag, release, or its failed evidence.", "Do not publish v0.5.54 before successful same-SHA rehearsal."],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Release asset projection and upload boundary."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.53",
+      "reason": "Public release evidence showing archive SHA mismatch."
+    },
+    {
+      "path": "scripts/release_archive.py",
+      "reason": "Canonical archive construction semantics."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_identity",
+      "evidence_integrity"
+    ],
+    "reason": "Public release metadata must bind the exact archive bytes without reviving an immutable failed release.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["Public release evidence integrity requires strict verification."],
+    "override": {"approvalEvidence":"User explicitly authorized correction, publication, and cleanup in this thread.","reason":"Strict public-release evidence review.","risks":["release_identity","evidence_integrity"],"notRunChecks":["Hosted rehearsal and public v0.5.54 publication are pending the corrected candidate commit."],"workItemOnly":true,"workItemId":"release-v0-5-54-metadata-binding"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly authorized correction, publication, and cleanup."
+  },
+  "preReviewWarnings": [
+    "Review the final public release.json asset, not only the archive-local projection."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The public release.json asset declares the SHA-256 of the exact uploaded release archive.",
+    "The runtime release-digests manifest remains byte-identical in the archive and release asset.",
+    "Workflow regression coverage fails if the upload path selects a stale projection after final archive digest binding.",
+    "A same-SHA rehearsal and public v0.5.54 release complete before closure."
+  ],
+  "guidelines": [
+    "Release identity and artifact bytes must be source-bound, deterministic and fail closed.",
+    "Do not weaken release, smoke, coverage, artifact, or Quick Install gates."
+  ],
+  "intent": {
+    "problem": "v0.5.53 public release.json uploaded the stale release-projection.json after release.yml had rebound the worktree release.json to the final archive digest; consumers therefore saw an incorrect archive SHA.",
+    "constraints": ["Preserve v0.5.53 as immutable failure evidence.", "Use the next available patch version.", "Do not publish before same-SHA rehearsal succeeds."],
+    "rationale": "Using the final verified worktree release.json for the Release asset prevents the stale-projection substitution while preserving the archive's deterministic source content."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {"scenario":"Public release metadata binds exact archive SHA","riskDomain":"evidence_integrity","required":true,"status":"unverified","evidence":[],"expected":"Downloaded release.json SHA equals downloaded archive SHA","verificationPlan":"Rehearsal and post-publish download validation."},
+    {"scenario":"Immutable failed release remains preserved","riskDomain":"release_identity","required":true,"status":"unverified","evidence":[],"expected":"v0.5.53 remains untouched and v0.5.54 uses a new tag","verificationPlan":"Provider tag/release inspection."}
+  ],
+  "requestedOperation": {"target":"repository_release","action":"publish","environment":"public_provider","effect":"create_immutable_release_tag_and_public_assets","authorityRequired":true},
+  "authorityEvidence": {"type":"user_authorization","authorizedBy":"user","reference":"conversation","scope":"Complete corrective release publication and cleanup."},
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized correction, publication, and cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 862
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-54-metadata-binding.json",
+    "baseCommit": "6b2f0053a7976fce0b68e59b63745e0e94b7b914",
+    "initialScopeDigest": "e795db1a4d482ab62e0ee48f0bf48aca4d0d4aa425aa8c2346295bc8d54110ac",
+    "contractSkeletonDigest": "45f7b9b1f13175daa7dcd0fb57c77ab8d6d17cce766ae517acae3639e302eb46"
+  }
+}
