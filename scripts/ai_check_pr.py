@@ -26,7 +26,11 @@ from ai_common import (
     run_git,
     simple_yaml_lists,
 )
-from ai_lifecycle_truth import superseded_summary_validation_exception
+from ai_lifecycle_truth import (
+    archived_outcome_projection,
+    is_valid_superseded_transition,
+    superseded_summary_validation_exception,
+)
 from ai_post_archive_recovery import RECEIPT_DIRECTORY, validate_recovery_receipt
 from ai_start_receipt import validate_receipt, validate_resume_history_structure
 
@@ -610,6 +614,17 @@ def human_benefit_report_issues(contract_path: Path) -> list[str]:
         markdown = markdown_path.read_text(encoding="utf-8")
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return [f"Human Benefit Review Report cannot be loaded: {exc}"]
+    work_item_id = outcome.get("workItemId") if isinstance(outcome, dict) else None
+    if isinstance(work_item_id, str) and is_valid_superseded_transition(
+        contract_path=contract_path,
+        work_item_id=work_item_id,
+    ):
+        outcome = archived_outcome_projection(
+            outcome,
+            root=PROJECT_ROOT,
+            contract_path=contract_path,
+            work_item_id=work_item_id,
+        )
     return validate_human_report(report, outcome, phase="review", markdown=markdown)
 
 

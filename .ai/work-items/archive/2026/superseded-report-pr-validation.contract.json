@@ -1,0 +1,248 @@
+{
+  "contractVersion": 2,
+  "workItemId": "superseded-report-pr-validation",
+  "mode": "code",
+  "title": "Validate superseded archive reports consistently in PRs",
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-11-complete-all-work-items",
+    "capturedAt": "2026-08-11",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "declaredIntent": {
+    "summary": "Align superseded archive Human Benefit Report validation between archive creation and aggregate PR checks without weakening evidence gates.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e6f8e0068001043906fd00224b7e234f99555f65",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/superseded-report-pr-validation.contract.json",
+    ".ai/work-items/active/superseded-report-pr-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/superseded-report-pr-validation.outcome.json",
+    ".ai/work-items/active/superseded-report-pr-validation.outcome.md",
+    "scripts/ai_lifecycle_truth.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_pr.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not relax Human Benefit Report validation for ordinary archived or active Work Items.",
+    "Do not modify preserved superseded predecessor Outcome or successor receipt bytes.",
+    "Do not merge or delete PR #792 until every required hosted check passes."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive creation preserves a valid superseded Outcome while generating the report from its virtual archive-path projection."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR validation currently validates the report against the preserved unprojected Outcome and rejects the archive transaction."
+    },
+    {
+      "path": "scripts/ai_lifecycle_truth.py",
+      "reason": "Canonical authority for exact receipt-bound superseded transitions and the appropriate home for shared projection semantics."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Archive regression tests define byte preservation and report projection behavior."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Aggregate PR tests define fail-closed Human Benefit Report validation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "evidence_integrity",
+      "lifecycle_closure"
+    ],
+    "reason": "A broad report exception could accept stale or forged evidence; only an exact receipt-bound superseded transition may use the deterministic archive-path projection."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized corrective completion and cleanup; the observed mismatch and fail-closed boundary are fully specified."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "PR validation accepts the archive-generated Human Benefit Report for an exact receipt-bound superseded transition by validating against the same deterministic archive-path Outcome projection used during archive creation.",
+    "Ordinary Outcomes, malformed or missing receipts, stale reports, unrelated report mutations, and incomplete report pairs continue to fail closed.",
+    "Archive creation and PR validation share one projection helper, with regression tests proving byte-preserved Outcome evidence and matching report behavior.",
+    "Focused tests and all declared quality and governance gates pass without changing the historical predecessor Outcome or receipt bytes."
+  ],
+  "guidelines": [
+    "Keep supersession authority and archive-path projection semantics centralized in ai_lifecycle_truth.",
+    "Do not suppress Human Benefit Report validation errors; transform only the validated comparison input for an exact superseded transition.",
+    "Preserve ordinary fail-closed report ownership, freshness, pair completeness, and Markdown validation."
+  ],
+  "intent": {
+    "problem": "A valid superseded archive deliberately preserves the predecessor's red Outcome bytes while its Human Benefit Report is generated from a virtual archive-path rewrite. Aggregate PR validation compares that report to the preserved unrewritten Outcome, so the same archive transaction is rejected as stale after the Summary exception is applied.",
+    "constraints": [
+      "The original superseded Outcome and successor receipt bytes must remain unchanged.",
+      "The virtual rewrite must be deterministic and identical in archive creation and PR validation.",
+      "Every non-superseded or malformed report remains subject to ordinary strict validation."
+    ],
+    "rationale": "Sharing one projection helper aligns archive creation and PR aggregation while retaining red failure evidence and fail-closed validation."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Valid receipt-bound superseded archive report is accepted",
+      "riskDomain": "lifecycle_closure",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_human_benefit_report_uses_archive_projection_only_for_valid_supersession[True-expected_issues0]",
+        "tests/test_ai_archive_work_item.py::test_superseded_archive_transaction_preserves_receipt_bound_outcome_bytes"
+      ],
+      "expected": "PR validation compares the report with the same archive-path Outcome projection used by archive creation while preserving Outcome bytes.",
+      "verificationPlan": "Add a focused aggregate-PR regression and run archive plus PR validation suites."
+    },
+    {
+      "scenario": "Unbound, malformed, or stale report remains rejected",
+      "riskDomain": "evidence_integrity",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_human_benefit_report_uses_archive_projection_only_for_valid_supersession[False-expected_issues1]",
+        "tests/test_pr_aggregate.py::test_human_benefit_report_issues_rejects_stale_review_report"
+      ],
+      "expected": "Without an exact valid superseded transition, report validation uses the stored Outcome and fails on any mismatch.",
+      "verificationPlan": "Add negative cases and retain existing stale-report and archive mutation coverage."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 871
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/superseded-report-pr-validation.json",
+    "baseCommit": "e6f8e0068001043906fd00224b7e234f99555f65",
+    "initialScopeDigest": "f304f66716f951155e9cd648be4172d44f8dfb3b5ec55d4a0ce141d882c66436",
+    "contractSkeletonDigest": "c7aa68b2fe5ee1161ef7fb7e1661f0a5ff165a3215c49c1bb99a49014f021a5d"
+  }
+}

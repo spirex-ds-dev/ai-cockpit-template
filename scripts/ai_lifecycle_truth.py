@@ -20,6 +20,16 @@ from typing import Any
 RUNTIME_NAME = "ai_lifecycle_truth.py"
 REQUIRED_RUNTIME = (RUNTIME_NAME,)
 _REPOSITORY_ISSUE_PREFIX = "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/"
+_ARCHIVE_PROJECTION_SUFFIXES = (
+    ".contract.json",
+    ".summary.json",
+    ".review.json",
+    ".success.json",
+    ".outcome.json",
+    ".outcome.md",
+    ".events.jsonl",
+    ".successor-receipt.json",
+)
 
 
 def _digest(value: bytes) -> str:
@@ -48,6 +58,40 @@ def _read(path: Path) -> dict[str, Any]:
 
 def _nonempty(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def rewrite_exact_path_references(value: Any, replacements: dict[str, str]) -> Any:
+    """Return a deep copy with only exact repository-path values replaced."""
+    if isinstance(value, dict):
+        return {
+            key: rewrite_exact_path_references(item, replacements) for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [rewrite_exact_path_references(item, replacements) for item in value]
+    if isinstance(value, str):
+        return replacements.get(value, value)
+    return value
+
+
+def archived_outcome_projection(
+    outcome: dict[str, Any], *, root: Path, contract_path: Path, work_item_id: str
+) -> dict[str, Any]:
+    """Project active artifact paths to an existing archive transaction."""
+    archive_dir = contract_path.parent
+    active_dir = root / ".ai" / "work-items" / "active"
+    replacements: dict[str, str] = {}
+    for suffix in _ARCHIVE_PROJECTION_SUFFIXES:
+        name = f"{work_item_id}{suffix}"
+        archived_path = archive_dir / name
+        if not archived_path.is_file():
+            continue
+        replacements[(active_dir / name).relative_to(root).as_posix()] = archived_path.relative_to(
+            root
+        ).as_posix()
+    projected = rewrite_exact_path_references(outcome, replacements)
+    if not isinstance(projected, dict):  # pragma: no cover - input type guarantees this
+        raise TypeError("archived Outcome projection must remain an object")
+    return projected
 
 
 def _repository_issue(issue: object) -> bool:

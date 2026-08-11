@@ -1685,3 +1685,74 @@ def test_human_benefit_report_issues_rejects_stale_review_report(tmp_path, monke
     assert ai_check_pr.human_benefit_report_issues(contract_path) == [
         "report is stale or inconsistent with Task Outcome"
     ]
+
+
+@pytest.mark.parametrize(
+    ("superseded", "expected_issues"),
+    [
+        (True, []),
+        (False, ["report is stale or inconsistent with Task Outcome"]),
+    ],
+)
+def test_human_benefit_report_uses_archive_projection_only_for_valid_supersession(
+    tmp_path, monkeypatch, superseded, expected_issues
+):
+    from ai_generate_human_report import generate_human_report, render_human_report
+
+    task = "superseded-report"
+    archive_dir = tmp_path / ".ai/work-items/archive/2026"
+    archive_dir.mkdir(parents=True)
+    contract_path = archive_dir / f"{task}.contract.json"
+    contract_path.write_text(json.dumps({"workItemId": task}), encoding="utf-8")
+    active_outcome = f".ai/work-items/active/{task}.outcome.json"
+    archived_outcome = f".ai/work-items/archive/2026/{task}.outcome.json"
+    outcome = {
+        "format": "ai-cockpit-task-outcome",
+        "schemaVersion": 1,
+        "workItemId": task,
+        "status": "blocked",
+        "bindings": {
+            "taskId": task,
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "d" * 40,
+            "headCommit": "e" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.0",
+        },
+        "sections": {
+            "outcomeSummary": "Blocked.",
+            "taskOverview": "Superseded predecessor.",
+            "deliveredChanges": [active_outcome],
+            "findings": [],
+            "risks": [],
+            "warnings": [],
+            "interventions": [],
+            "forcedStops": [],
+            "resolutions": [],
+            "recurrencePrevention": [],
+            "avoidedImpact": [],
+            "residualRisks": [],
+            "humanDecisions": [],
+            "evidence": [{"source": active_outcome, "subject": "Outcome"}],
+        },
+    }
+    (archive_dir / f"{task}.outcome.json").write_text(json.dumps(outcome), encoding="utf-8")
+    projected = json.loads(json.dumps(outcome).replace(active_outcome, archived_outcome))
+    cockpit = tmp_path / ".ai/cockpit"
+    cockpit.mkdir(parents=True)
+    report = generate_human_report(projected, phase="review")
+    (cockpit / "task_report.json").write_text(json.dumps(report), encoding="utf-8")
+    (cockpit / "task_report.md").write_text(render_human_report(report), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "is_valid_superseded_transition",
+        lambda **_kwargs: superseded,
+        raising=False,
+    )
+
+    assert ai_check_pr.human_benefit_report_issues(contract_path) == expected_issues
