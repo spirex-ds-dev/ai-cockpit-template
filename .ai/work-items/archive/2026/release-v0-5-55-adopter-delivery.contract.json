@@ -1,0 +1,284 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-55-adopter-delivery",
+  "mode": "code",
+  "title": "Publish v0.5.55 performance delivery for future adopters",
+  "baseCommit": "ef000c8cac2346cf349b8b5bdef5fb672f4d2b45",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-55-adopter-delivery.contract.json",
+    ".ai/work-items/active/release-v0-5-55-adopter-delivery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-55-adopter-delivery.outcome.json",
+    ".ai/work-items/active/release-v0-5-55-adopter-delivery.outcome.md",
+    "target/task-closure-receipts/**",
+    "target/release-*/**",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "install.sh",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "scripts/check_release_distribution.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_workflow.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not alter, recreate, or delete v0.5.50 or any earlier immutable tag, Release, or asset.",
+    "Do not lower test count, coverage, security, release, smoke, or installer gates.",
+    "Do not hand-edit generated release evidence, tags, Releases, or installer state."
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Published projection currently declares v0.5.54 and its immutable archive contract."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Canonical next candidate declares v0.5.55."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical state records the v0.5.55 pending provider-evidence transition."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Only authorized mechanism for rehearsal, immutable tag creation, asset validation, and publication."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Documents exact source, release-assets authority, and future-adopter verification rules."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.55",
+      "reason": "Provider Release evidence: v0.5.55 is stable, targets ef000c8c, and contains the named release assets."
+    },
+    {
+      "path": "https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/main/release.json",
+      "reason": "The documented default discovery endpoint still projects v0.5.54 after v0.5.55 publication and is the reproduced delivery gap."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "production_release",
+      "release_identity",
+      "evidence_integrity",
+      "adopter_installation"
+    ],
+    "reason": "Publishing an immutable public tag and installer assets is externally visible; the workflow, receipt, and post-publish installer verification must all bind to one exact source.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Public provider release requires strict identity and evidence verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized completing all Work Items through the corrected public release, future-adopter installation proof, and local/remote cleanup."
+  },
+  "preReviewWarnings": [
+    "Dispatch only the exact v0.5.55 candidate from synchronized origin/main after its same-SHA rehearsal succeeds; inspect tag, Release, named assets, release-digests correlation, and a clean future-adopter installation before reporting success."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release eligibility check identifies v0.5.55 as the sole next patch after public v0.5.54 on synchronized origin/main.",
+    "A same-SHA v0.5.55 rehearsal succeeds without creating a tag, provider Release, or public asset and produces a receipt bound to that source/tag tuple.",
+    "The actual release workflow consumes only that successful rehearsal receipt, creates v0.5.55, and verifies the immutable tag target, provider Release, named assets, archive hash, SBOM, provenance, and release-digests correlation.",
+    "After publication, main/release.json has releaseTag v0.5.55 and release-state.json has releaseTag v0.5.56 with previousRelease v0.5.55; the public default discovery URL returns v0.5.55 rather than v0.5.54.",
+    "A clean Git repository invoking the public raw v0.5.55 installer after default discovery receives releaseTag v0.5.55, sourceCommit ef000c8cac2346cf349b8b5bdef5fb672f4d2b45, archive SHA-256 2ebc8299488a4f89d20bdb31f742619d4d0d1907aee0dcb1c16816d5dd83d2f1, and a matching release-digests manifest.",
+    "The Work Item ends with truthful Outcome evidence, completes PR/merge/closure, and leaves no local or remote Work Item branch."
+  ],
+  "guidelines": [
+    "Do not bypass release.yml or manually mutate immutable release objects.",
+    "Keep published projection, canonical release state, provider release assets, and future-adopter facts distinguishable and source-bound.",
+    "Do not claim a version is published until tag, stable provider Release, named assets, and clean installation are all verified."
+  ],
+  "intent": {
+    "problem": "The performance capability has been merged and proven, but it does not benefit future adopter projects until it is delivered through a new trustworthy public release. Past release-digests/version inconsistencies made it difficult for installers to know which version to trust.",
+    "constraints": [
+      "Publish exactly the next eligible patch, v0.5.55, from the latest synchronized origin/main source, then synchronize the default published projection to that immutable release and prepare only v0.5.56 as a future candidate.",
+      "Preserve v0.5.50 and every prior immutable release unchanged.",
+      "Require same-SHA rehearsal, provider release evidence, and independent clean installation; do not turn a fast or partial run into success.",
+      "No weakening of quality, coverage, security, release, installer, or failure-evidence gates.",
+      "Close the Work Item and clean its local and remote branch after merge."
+    ],
+    "rationale": "A public release backed by exact source-bound assets and a clean installer proof is the only reliable way to deliver the measured performance improvement to projects installed in the future; the default discovery projection must also name that published release."
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "rawUserRequest": "目标是把收益交付给 adopter。不是现成已有的具体某个项目，是未来安装的对象工程。到发布最新版本为止，做好优化和自检。明天，我要看到修正完整的新版本（包括远程和本地的清理）。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-11-performance-delivery-release-authorization",
+    "capturedAt": "2026-08-11",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-11-performance-delivery-release-authorization",
+    "scope": "Publish only v0.5.55 after mandatory readiness, exact-source rehearsal, controlled release workflow, immutable tag, provider assets, future-adopter installation verification, and final Work Item cleanup pass. No gate bypass, historical-tag mutation, or blind retry is authorized."
+  },
+  "declaredIntent": {
+    "summary": "Deliver the merged quality-critical-path performance capability to future adopter projects through a single verified public v0.5.55 release.",
+    "requestedCapabilities": [
+      "ai_governance"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized complete publication, provider-side verification, future-adopter installation proof, and cleanup."
+  },
+  "rollbackNote": "Do not alter an immutable tag or published Release. If rehearsal or publication validation fails, retain its evidence, leave it unpublished or quarantined as the workflow requires, repair through a successor Work Item, and advance to a new patch only when required.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 2500
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-55-adopter-delivery.json",
+    "baseCommit": "ef000c8cac2346cf349b8b5bdef5fb672f4d2b45",
+    "initialScopeDigest": "198399dd0ac928ad52a19f526b1d2a21a2f725c45569a3138a935a2ca3cd3b02",
+    "contractSkeletonDigest": "48dc1ac18b234466d90a265452c7dd94718579d98e1bcf815ee4dedd7860431c"
+  }
+  ,
+  "scenarioCoverage": [
+    {
+      "scenario": "candidate eligibility and identity",
+      "riskDomain": "release_identity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Only v0.5.55 on synchronized origin/main is eligible; v0.5.54 remains published predecessor.",
+      "verificationPlan": "Run release-readiness/state/distribution checks and capture resolved source and candidate identity."
+    },
+    {
+      "scenario": "same-source rehearsal",
+      "riskDomain": "evidence_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Rehearsal receipt binds v0.5.55 to the exact main SHA and causes no immutable or public publication mutation.",
+      "verificationPlan": "Dispatch release.yml rehearsal, inspect receipt, then independently query tag and provider Release absence."
+    },
+    {
+      "scenario": "published assets and future adopter",
+      "riskDomain": "adopter_installation",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Published v0.5.55 assets and a clean installation agree on tag, source, archive, installer, and release-digests identity.",
+      "verificationPlan": "Inspect workflow/provider assets and run the public Quick Install verifier in a fresh repository."
+    }
+  ]
+}
