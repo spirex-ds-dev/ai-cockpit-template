@@ -1,0 +1,173 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-55-postpublish-sync",
+  "mode": "code",
+  "title": "release-v0-5-55-postpublish-sync",
+  "baseCommit": "0dd4b83058c6be781e599a2d298836ece6b4b80c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-55-postpublish-sync.contract.json",
+    ".ai/work-items/active/release-v0-5-55-postpublish-sync.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-55-postpublish-sync.outcome.json",
+    ".ai/work-items/active/release-v0-5-55-postpublish-sync.outcome.md",
+    "release.json", "next-release.json", "release-state.json", ".ai/cockpit/version.json", "install.sh",
+    "scripts/check_release_distribution.py", "scripts/ai_check_diff_ownership.py", "scripts/check_docs_metadata.py", "scripts/check_system_invariants.py",
+    "tests/test_release_state_consistency.py", "tests/test_release_distribution.py", "tests/test_docs_metadata.py", "tests/test_install_script.py", "tests/test_release_preflight.py", "tests/test_release_workflow.py", "tests/test_diff_ownership.py",
+    ".ai/cockpit/sbom.json", ".ai/cockpit/provenance.json", ".ai/cockpit/release-digests.json",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Do not alter the immutable v0.5.53 or v0.5.54 public releases or tags.", "Do not lower test, coverage, release, security, smoke, or Quick Install gates."],
+  "sources": [
+    {
+      "path": "release-state.json", "reason": "The v0.5.54 publication left candidate metadata at an already reserved tag."
+    },
+    {"path": "release.json", "reason": "Published v0.5.54 predecessor evidence."},
+    {"path": "next-release.json", "reason": "Current stale candidate evidence."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.54", "reason": "Published public release evidence."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_integrity", "adopter_installation"
+    ],
+    "reason": "Post-publish source metadata directly controls future adopter defaults.", "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Public release metadata and future adopter installation require strict release evidence."
+    ],
+    "override": {"approvalEvidence": "User explicitly authorized correction, publication, and cleanup in this thread.", "reason": "Strict post-publish lineage remediation.", "risks": ["release_identity", "evidence_integrity", "adopter_install"], "notRunChecks": ["Hosted checks remain required before merge."], "workItemOnly": true, "workItemId": "release-v0-5-55-postpublish-sync"}
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "User authorized completion through publication and cleanup."
+  },
+  "preReviewWarnings": ["Review that published v0.5.54 is the immutable predecessor and v0.5.55 is the sole unpublished candidate."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Committed release.json records public v0.5.54 as the immutable predecessor with its actual public archive digest.",
+    "next-release.json and source version declare only unpublished v0.5.55 as the next candidate.",
+    "Post-publish distribution and future-adopter installation checks pass without treating a published candidate as reusable.",
+    "Regression tests fail for stale predecessor, tag reuse, or incorrect installer metadata."
+  ],
+  "guidelines": [
+    "Release identity and artifact bytes must be source-bound and fail closed.", "Do not weaken release, coverage, smoke, or Quick Install gates.", "Future adopter defaults must identify an unambiguous published predecessor and unpublished successor."
+  ],
+  "intent": {
+    "problem": "v0.5.54 was correctly published, but source next-release metadata still names the now-reserved v0.5.54 candidate; post-publish distribution validation fails and future adopter state is ambiguous.",
+    "constraints": ["Publish no further release merely to repair metadata.", "Preserve public release history and require full release-quality verification."],
+    "rationale": "Advancing the source metadata to v0.5.55 immediately after v0.5.54 publication restores a coherent immutable predecessor/successor chain for future adopters."
+  },
+  "rawUserRequest": "到发布最新版本为止，做好优化和自检。明天，我要看到修正完整的新版本（包括远程和本地的的清理）。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {"type": "human", "reference": "conversation", "capturedAt": "2026-08-11", "digest": "sha256:user-authorized-release-lineage-remediation"},
+  "declaredIntent": {"summary": "Repair the post-publish source lineage after v0.5.54 so future adopters have v0.5.54 as immutable predecessor and v0.5.55 as the only candidate.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation", "scope": "Complete corrective release publication and cleanup."},
+  "scenarioCoverage": [{"scenario": "published predecessor advances", "riskDomain": "release_identity", "required": true, "status": "unverified", "evidence": [], "expected": "v0.5.54 becomes predecessor and v0.5.55 is the sole candidate", "verificationPlan": "check-release-distribution and state regressions"}, {"scenario": "future adopter candidate", "riskDomain": "adopter_install", "required": true, "status": "unverified", "evidence": [], "expected": "installer resolves an unambiguous future candidate", "verificationPlan": "installer regression and quality-release"}, {"scenario": "reserved tag reuse", "riskDomain": "evidence_integrity", "required": true, "status": "unverified", "evidence": [], "expected": "published v0.5.54 cannot remain a candidate", "verificationPlan": "distribution regression and post-publish check"}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the complete corrective release, verification, and cleanup; regenerated source-bound cockpit release evidence is required by this Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 864
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-55-postpublish-sync.json",
+    "baseCommit": "0dd4b83058c6be781e599a2d298836ece6b4b80c",
+    "initialScopeDigest": "a7826f6bf891625d2883ab2455d7951d86d8a69ccb8ed2f785eadd374a98ee07",
+    "contractSkeletonDigest": "44dd7c41c3136033acff63671719230f8aef41d280e0b133aa1d4eb06494918c"
+  }
+}

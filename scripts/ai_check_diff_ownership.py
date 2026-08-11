@@ -235,6 +235,10 @@ def generated_human_report_owner(path: str, contract: dict[str, Any] | None) -> 
     work_item_id = contract.get("workItemId") if isinstance(contract, dict) else None
     if isinstance(work_item_id, str) and work_item_id:
         outcome_path = ACTIVE_DIR / f"{work_item_id}.outcome.json"
+        if not outcome_path.is_file():
+            archived_outcomes = sorted(ARCHIVE_DIR.rglob(f"{work_item_id}.outcome.json"))
+            if len(archived_outcomes) == 1:
+                outcome_path = archived_outcomes[0]
     else:
         outcomes = sorted(ACTIVE_DIR.glob("*.outcome.json"))
         if len(outcomes) != 1:
@@ -254,9 +258,10 @@ def generated_human_report_owner(path: str, contract: dict[str, Any] | None) -> 
         return None
     if issues or outcome.get("workItemId") != work_item_id:
         return None
+    state = "archived_owned" if ARCHIVE_DIR in outcome_path.parents else "active_owned"
     return Ownership(
         path,
-        "active_owned",
+        state,
         [f"generated:{work_item_id}"],
         "exact generated Human Benefit Report pair validates against active Task Outcome",
     )
