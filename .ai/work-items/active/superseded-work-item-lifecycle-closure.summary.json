@@ -18,10 +18,53 @@
     {
       "path": "docs/superpowers/plans/2026-08-11-superseded-work-item-lifecycle-closure.md",
       "reason": "Recorded the red-first implementation, verification, delivery, and closure plan."
+    },
+    {
+      "path": "scripts/ai_lifecycle_truth.py",
+      "reason": "Added the canonical fail-closed superseded Summary-validation predicate."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Replaced the archive-local rule with a compatibility wrapper over lifecycle truth."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Applied the canonical predicate only to strict archived Summary issues while preserving all later cleanup gates."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Added red-first valid and invalid successor-receipt behavior coverage."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Added red-first closure acceptance and unrelated-error rejection regressions."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Documented red Outcome preservation, exact receipt binding, and unchanged cleanup preconditions."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerated source-bound repository governance and Human Benefit Report evidence after closure runtime and tests changed."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerated machine-readable documentation alignment for the changed lifecycle reference and Capability Truth evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Regenerated the reviewer-facing documentation alignment projection."
     }
   ],
   "sourcesUsed": [
-    ".ai/work-items/active/superseded-work-item-lifecycle-closure.contract.json"
+    ".ai/work-items/active/superseded-work-item-lifecycle-closure.contract.json",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_lifecycle_truth.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    ".ai/work-items/archive/2026/superseded-work-item-archive-closure.contract.json",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "AGENTS.md"
   ],
   "verification": [
     {
@@ -92,13 +135,13 @@
   "guidelinesCompliance": [
     {
       "guideline": "New public APIs must be documented.",
-      "compliant": false,
-      "evidence": "Not verified."
+      "compliant": true,
+      "evidence": "docs/reference/work-item-lifecycle-closure.md documents the shared exception, red Outcome preservation, and unchanged cleanup boundary."
     },
     {
       "guideline": "Do not import internal modules from other features.",
-      "compliant": false,
-      "evidence": "Not verified."
+      "compliant": true,
+      "evidence": "Archive and closure import a public lifecycle-truth predicate from the existing installed lifecycle runtime."
     }
   ],
   "unknownsRemaining": [],
@@ -108,34 +151,54 @@
   },
   "generatedFiles": [],
   "destructiveChanges": [],
-  "observedIssues": [],
+  "observedIssues": [
+    "The prior archive corrective did not extend its exact successor-receipt exception to ai-close-work-item, leaving the predecessor lifecycle impossible to close."
+  ],
   "residualRisks": [
     {
       "level": "medium",
       "area": "scope",
-      "detail": "Implementation and verification are pending; no behavior claim is made from the design alone.",
+      "detail": "Focused verification is green; full Contract-required quality and hosted verification remain pending.",
       "reviewRecommended": true,
       "followUpCandidate": false
     }
   ],
   "reviewReadiness": {
     "status": "not_ready",
-    "reason": "Initial skeleton; required checks have not run.",
+    "reason": "Implementation and focused regressions are complete; full required quality checks remain pending.",
     "expectedReviewFocus": [
       "Confirm archive and closure use one exact superseded receipt predicate.",
       "Confirm all provider and branch cleanup preconditions remain unchanged."
     ]
   },
   "boundaryChecks": {
-    "runtimeEntrypoints": "not_applicable",
+    "runtimeEntrypoints": "verified_existing_entrypoint",
     "userVisibleOutput": "not_applicable",
     "persistence": "not_applicable",
     "localization": "not_applicable",
-    "generatedArtifacts": "not_applicable",
-    "makeEntrypoints": "not_applicable"
+    "generatedArtifacts": "pending_finish",
+    "makeEntrypoints": "verified_unchanged"
   },
-  "userCorrectionsCaptured": [],
-  "userCorrectionSolidification": [],
+  "userCorrectionsCaptured": [
+    "Complete every remaining Work Item without stopping and include remote and local cleanup.",
+    "Record the user's authorization for required confirmations in the Contract."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Complete every remaining Work Item without stopping and include remote and local cleanup.",
+      "solidifiedBy": [
+        ".ai/work-items/active/superseded-work-item-lifecycle-closure.contract.json",
+        "scripts/ai_close_work_item.py",
+        "tests/test_work_item_lifecycle_closure.py"
+      ]
+    },
+    {
+      "correction": "Record the user's authorization for required confirmations in the Contract.",
+      "solidifiedBy": [
+        ".ai/work-items/active/superseded-work-item-lifecycle-closure.contract.json"
+      ]
+    }
+  ],
   "checkpointEvidence": [
     {
       "stage": "before_edit",
@@ -148,43 +211,94 @@
     }
   ],
   "knownGaps": [
-    "Implementation and red-first regression tests are not yet complete."
+    "Contract-required full quality and release-quality verification have not run yet.",
+    "The existing release-v0-5-54-metadata-binding predecessor remains active until this corrective Work Item is merged and closed."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "An archived blocked predecessor has only required-verification Summary failures and an exact transition=superseded receipt.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_superseded_archived_evidence_accepts_bound_failed_verification_summary"
+      ]
+    },
+    {
+      "scenario": "The receipt is missing, malformed, quarantined, mismatched, or bound to a non-blocked or different Outcome.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_archive_work_item.py::test_canonical_superseded_summary_exception_rejects_invalid_evidence"
+      ]
+    },
+    {
+      "scenario": "The Summary contains an error outside the exact missing/failed required-verification allowlist.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_superseded_archived_evidence_rejects_unrelated_summary_error"
+      ]
+    },
+    {
+      "scenario": "A normal completed archived Work Item closes through the existing strict validation path.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py",
+        "81 focused archive and closure tests passed"
+      ]
+    }
   ],
   "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
   "documentationAlignment": {
     "schemaVersion": 1,
-    "status": "not_checked",
-    "checkedAt": null,
+    "status": "aligned",
+    "checkedAt": "2026-08-11T01:55:00Z",
     "checks": [
       {
         "area": "plan",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/specs/2026-08-11-superseded-work-item-lifecycle-closure-design.md",
+          "docs/superpowers/plans/2026-08-11-superseded-work-item-lifecycle-closure.md"
+        ],
+        "reason": "The plan maps each Contract acceptance item to red-first implementation and verification steps."
       },
       {
         "area": "contractSummaryEvidence",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/active/superseded-work-item-lifecycle-closure.contract.json",
+          ".ai/work-items/active/superseded-work-item-lifecycle-closure.summary.json"
+        ],
+        "reason": "Changed files, scenarios, authorization, constraints, and remaining verification are represented in both records."
       },
       {
         "area": "documentationCommandsCapability",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/work-item-lifecycle-closure.md",
+          "docs/reference/capability-truth-matrix.json",
+          "docs/reference/pre-release-documentation-alignment.json",
+          "docs/reference/pre-release-documentation-alignment.md",
+          "scripts/ai_close_work_item.py"
+        ],
+        "reason": "The documented exception matches the implemented CLI evidence boundary and preserves all later gates."
       },
       {
         "area": "multilingualSemantics",
-        "status": "not_checked",
+        "status": "not_applicable",
         "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "reason": "No localized user-facing strings changed."
       },
       {
         "area": "limitationsUnknownsHistory",
-        "status": "not_checked",
-        "evidence": [],
-        "reason": "Complete this alignment check before finishing the Work Item."
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/superseded-work-item-archive-closure.contract.json",
+          ".ai/work-items/active/superseded-work-item-lifecycle-closure.contract.json"
+        ],
+        "reason": "The prior partial corrective and the remaining predecessor closure are explicitly recorded; no historical Outcome is rewritten."
       }
     ]
   }
