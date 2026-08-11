@@ -1,0 +1,232 @@
+{
+  "contractVersion": 2,
+  "workItemId": "superseded-summary-pr-validation",
+  "mode": "code",
+  "title": "Permit only valid superseded archive evidence in PR validation",
+  "baseCommit": "3550fabaf1731046f1b0bfc9534cc21e92a9e2f5",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation",
+    "capturedAt": "2026-08-11",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "declaredIntent": {
+    "summary": "Make PR aggregate validation honor the same narrow receipt-bound supersession rule used by archive creation.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "scope": [
+    ".ai/work-items/active/superseded-summary-pr-validation.contract.json",
+    ".ai/work-items/active/superseded-summary-pr-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/superseded-summary-pr-validation.outcome.json",
+    ".ai/work-items/active/superseded-summary-pr-validation.outcome.md",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not relax validation for ordinary archived or active Work Items.",
+    "Do not modify the preserved bytes of superseded predecessor Outcome artifacts.",
+    "Do not merge or delete PR #792 until its required checks pass."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR aggregate currently validates archived Summary evidence without the bounded supersession exception used by archive creation."
+    },
+    {
+      "path": "scripts/ai_lifecycle_truth.py",
+      "reason": "Defines the single source of truth for a valid superseded transition and its narrow Summary-validation exception."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Already applies the bounded exception before moving a superseded blocked predecessor."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Existing positive and negative evidence cases establish the intended lifecycle boundary."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Capability-truth dependency for PR aggregate and human-benefit-report ownership is reviewed when those paths change."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "Canonical generator for alignment projections affected by capability-truth evidence refresh."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["evidence_integrity", "lifecycle_closure"],
+    "reason": "A broadened exception could let incomplete failed Work Items evade required verification; the change must be restricted to receipt-bound valid supersession."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["A bounded governance-validation correction needs focused regression and full quality verification."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized corrective completion and lifecycle cleanup; the code path and required negative cases are fully specified."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "preReviewWarnings": ["Review the exception predicate and negative cases to ensure it cannot mask ordinary required-verification failures."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "PR validation accepts archived Summary required-verification errors only when ai_lifecycle_truth proves the exact receipt-bound superseded transition; all other Summary errors remain failures.",
+    "Regression tests prove the positive valid-supersession case and reject invalid receipt binding, unbound failed verification, and unrelated Summary errors.",
+    "The correction passes focused tests and all declared quality/governance gates without modifying the archived predecessor Outcome bytes."
+  ],
+  "guidelines": [
+    "Reuse ai_lifecycle_truth as the sole authority for supersession semantics; do not duplicate or broaden the predicate.",
+    "Fail closed for every non-superseded, malformed, stale, or unrelated Summary validation error.",
+    "Keep the evidence exception local to archived PR validation and preserve ordinary required-verification enforcement."
+  ],
+  "intent": {
+    "problem": "A valid archive transaction for a blocked predecessor preserves its red Outcome and receipt-bound evidence, but the downstream PR aggregate applies stricter generic Summary validation and rejects the same transaction. This leaves the historical archive branch unmergeable after all project-test shards complete.",
+    "constraints": [
+      "The exception must use the existing receipt-bound is_valid_superseded_transition authority.",
+      "The archived predecessor's red Outcome JSON and Markdown must remain byte-preserved.",
+      "Ordinary required verification, malformed evidence, and unrelated errors must continue to fail closed."
+    ],
+    "rationale": "Applying the same narrow lifecycle predicate at both archive creation and PR aggregation makes the lifecycle internally consistent without treating an unverified Work Item as successful."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Valid receipt-bound blocked predecessor is accepted at PR aggregation",
+      "riskDomain": "lifecycle_closure",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Only Summary required-verification errors covered by the existing supersession exception are ignored.",
+      "verificationPlan": "Add a focused aggregate-PR regression test using a valid transition fixture."
+    },
+    {
+      "scenario": "Malformed or unrelated archived Summary remains rejected",
+      "riskDomain": "evidence_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Invalid receipt binding, unbound failed verification, and unrelated Summary errors remain explicit PR failures.",
+      "verificationPlan": "Add focused negative aggregate-PR cases and run the relevant lifecycle tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 870
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/superseded-summary-pr-validation.json",
+    "baseCommit": "3550fabaf1731046f1b0bfc9534cc21e92a9e2f5",
+    "initialScopeDigest": "587360715abb76e51388e69ac026a24dda676eb2b68165add76d40d3fecd8a2c",
+    "contractSkeletonDigest": "6ec60b34a748c8464332a28d7f2dfb139655aead4371f1104449b5ccfca422ba"
+  }
+}

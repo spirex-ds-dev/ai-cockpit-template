@@ -288,6 +288,57 @@ def test_aggregate_pr_covers_earlier_and_later_work_items(tmp_path, monkeypatch)
     assert ai_check_pr.validate_pr_bundle("a" * 40, [first, second]) == []
 
 
+@pytest.mark.parametrize(
+    ("summary_issues", "superseded", "expected_issue"),
+    [
+        (
+            ["required verification is not passed: quality"],
+            True,
+            None,
+        ),
+        (
+            ["required verification is not passed: quality"],
+            False,
+            "required verification is not passed: quality",
+        ),
+        (
+            [
+                "required verification is not passed: quality",
+                "summary contractHash does not match Contract",
+            ],
+            False,
+            "summary contractHash does not match Contract",
+        ),
+    ],
+)
+def test_aggregate_pr_applies_only_bound_superseded_summary_exception(
+    tmp_path, monkeypatch, summary_issues, superseded, expected_issue
+):
+    pair = write_pair(tmp_path, "superseded", [], [])
+    contract_rel = pair.relative_to(tmp_path).as_posix()
+    summary_rel = contract_rel.replace(".contract", ".summary")
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    monkeypatch.setattr(ai_check_pr, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(ai_check_pr, "validate_summary", lambda *_args, **_kwargs: summary_issues)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "superseded_summary_validation_exception",
+        lambda **_kwargs: superseded,
+        raising=False,
+    )
+    patch_changes(monkeypatch, [contract_rel, summary_rel])
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
+
+    if expected_issue is None:
+        assert not any("required verification is not passed" in issue for issue in issues)
+    else:
+        assert any(expected_issue in issue for issue in issues)
+
+
 def test_pr_rejects_multiple_newly_maintained_work_items(tmp_path, monkeypatch):
     first = write_pair(tmp_path, "first", ["src/first.py"], ["src/first.py"])
     second = write_pair(tmp_path, "second", ["src/second.py"], ["src/second.py"])
