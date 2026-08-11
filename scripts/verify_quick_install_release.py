@@ -71,6 +71,23 @@ def load_release_metadata_url(url: str) -> dict[str, Any]:
     return value
 
 
+def canonical_github_repository(value: str) -> str | None:
+    """Return owner/repository only for a supported public GitHub repository form."""
+    candidate = value.strip()
+    if re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", candidate):
+        return candidate
+    parsed = urllib.parse.urlsplit(candidate)
+    if parsed.scheme not in {"http", "https"} or parsed.netloc.casefold() != "github.com":
+        return None
+    parts = [part for part in parsed.path.split("/") if part]
+    if len(parts) != 2:
+        return None
+    owner, repository = parts
+    repository = repository.removesuffix(".git")
+    normalized = f"{owner}/{repository}"
+    return normalized if re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", normalized) else None
+
+
 def declared_archive(metadata: dict[str, Any]) -> tuple[dict[str, Any], bool]:
     capabilities = metadata.get("capabilities")
     capability = (
@@ -104,10 +121,10 @@ def verify_release(
     metadata = load_release_metadata(root)
     if metadata.get("releaseTag") != ref:
         if not metadata_url:
-            repository = os.environ.get(
-                "AI_COCKPIT_TEMPLATE_REPO", "spirex-ds-dev/ai-cockpit-template"
+            repository = canonical_github_repository(
+                os.environ.get("AI_COCKPIT_TEMPLATE_REPO", "spirex-ds-dev/ai-cockpit-template")
             )
-            if re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository):
+            if repository:
                 metadata_url = (
                     f"https://github.com/{repository}/releases/download/{ref}/release.json"
                 )

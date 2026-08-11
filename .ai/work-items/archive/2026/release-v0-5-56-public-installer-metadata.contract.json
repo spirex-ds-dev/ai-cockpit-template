@@ -1,0 +1,275 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-56-public-installer-metadata",
+  "mode": "code",
+  "title": "Repair public installer metadata fallback for v0.5.56 candidate",
+  "baseCommit": "8ab826decdb77a09ec50eb438d4bea9bfc16fadf",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-56-public-installer-metadata.contract.json",
+    ".ai/work-items/active/release-v0-5-56-public-installer-metadata.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-56-public-installer-metadata.outcome.json",
+    ".ai/work-items/active/release-v0-5-56-public-installer-metadata.outcome.md",
+    "target/release-*/**",
+    "target/task-closure-receipts/**",
+    "install.sh",
+    "scripts/verify_quick_install_release.py",
+    "tests/test_quick_install_release.py",
+    "tests/test_installer.py",
+    "tests/test_release_workflow.py",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not alter, recreate, or delete v0.5.50 through v0.5.55 immutable tags, Releases, or assets.",
+    "Do not weaken test count, coverage, security, release, installer, or failure-evidence gates.",
+    "Do not hand-edit generated release evidence, tags, Releases, or installer state."
+  ],
+  "sources": [
+    {
+      "path": "install.sh",
+      "reason": "The public tagged installer invokes release verification before any adopter write."
+    },
+    {
+      "path": "scripts/verify_quick_install_release.py",
+      "reason": "Contains the tag metadata fallback that rejected a full public Git URL."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Installer regression tests provide the executable consumer boundary."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Defines same-SHA rehearsal, public release asset construction, and tagged Quick Install verification."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-55-adopter-delivery.summary.json",
+      "reason": "Records the prior release evidence and its explicit post-merge adopter-verification condition."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783",
+      "reason": "Tracks the stale release metadata publication regression family."
+    }
+  ],
+  "unknowns": [
+
+  ],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "production_release",
+      "adopter_installation",
+      "release_identity",
+      "evidence_integrity"
+    ],
+    "reason": "The v0.5.56 candidate source must repair the future-adopter path before a successor Work Item may create a new immutable release.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Public release and installer identity correction require strict release evidence and full quality verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly approved completing all corrective Work Items, public releases, verification, issue resolution, and cleanup; that approval is recorded below."
+  },
+  "preReviewWarnings": [
+    "Do not release or close #783 until a clean repository follows the documented public main discovery flow through v0.5.56 and proves the source/tag/archive/digest identities."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A regression test reproduces the v0.5.55 failure: a full https Git repository URL with a stale tag-tree release.json must resolve the immutable release asset metadata rather than fail before installer writes.",
+    "The public installer keeps fail-closed verification and accepts only a normalized canonical repository identity when deriving the immutable release asset URL; malformed or unsupported repositories still fail.",
+    "The v0.5.56 candidate remains the sole next patch after immutable v0.5.55 and its source version, state, and release evidence checks remain consistent.",
+    "The merged source Work Item preserves the public-main failure as a successor release requirement; no immutable tag or Issue #783 state changes occur here."
+  ],
+  "guidelines": [
+    "Do not replace a failed metadata verification with a bypass, caller-provided trust root, cache hit, or mutable main metadata.",
+    "Preserve exact tag/source/archive/installer/release-digests binding before any adopter writes.",
+    "Do not claim delivery until the published public entrypoint succeeds in a fresh repository and all release gates are green."
+  ],
+  "intent": {
+    "problem": "Post-merge public verification reproduced a real future-adopter failure: main/release.json correctly selected v0.5.55, but the v0.5.55 tagged installer received a full public Git URL and could not normalize it to the release asset metadata URL. It therefore read the stale v0.5.54 tag-tree release.json and failed closed before any installation writes.",
+    "constraints": [
+      "Repair the metadata asset fallback at the installer trust boundary, retain fail-closed behavior, and prepare only the next legal patch candidate v0.5.56.",
+      "Preserve v0.5.50 through v0.5.55 immutable history and all validation, coverage, security, release, and installer gates.",
+      "A successor release Work Item must use same-SHA rehearsal, public provider assets, fresh public-main discovery, and a clean adopter installation as release evidence.",
+      "Record the user approval below and complete this source PR merge; do not create a release from an unmerged branch."
+    ],
+    "rationale": "The installer repair must be merged before a successor can create the immutable release that delivers the performance benefit; this preserves the repository's PR-first release lifecycle."
+  },
+  "rawUserRequest": "目标是把收益交付给 adopter。不是现成已有的具体某个项目，是未来安装的对象工程。到发布最新版本为止，做好优化和自检。明天，我要看到修正完整的新版本（包括远程和本地的清理）。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization",
+    "capturedAt": "2026-08-11T11:59:00+00:00",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "declaredIntent": {
+    "summary": "Repair the public installer metadata fallback exposed by the v0.5.55 post-merge adopter proof and prepare the merged v0.5.56 candidate for a successor release Work Item.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization",
+    "scope": "The user authorized completing corrective Work Items, v0.5.56 publication, PR merge, Issue #783 resolution, public future-adopter verification, and local/remote cleanup; no gate bypass, immutable-history mutation, or unverified success claim is authorized."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "full public HTTPS Git URL reaches tag-specific immutable release metadata after tag-tree release.json is stale",
+      "riskDomain": "adopter_installation",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The fallback derives only the canonical repository identity and verifies the v0.5.56 release asset metadata before target writes.",
+      "verificationPlan": "Add a focused regression using the full Git URL form, then run installer and release tests."
+    },
+    {
+      "scenario": "candidate source identity is malformed, stale, or mismatched before publication",
+      "riskDomain": "release_identity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Every mismatch fails closed; v0.5.56 remains the single candidate and source identity checks pass without creating a tag or provider asset.",
+      "verificationPlan": "Run candidate release-state, evidence, distribution, and focused release tests; the successor performs same-SHA rehearsal and public asset inspection."
+    },
+    {
+      "scenario": "future public-main discovery is explicitly reserved for the successor release Work Item",
+      "riskDomain": "evidence_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "This source repair makes no false v0.5.56 publication or installation claim; the immediate successor must prove public-main discovery and a clean adopter installation against immutable release assets.",
+      "verificationPlan": "Record the successor boundary in the Summary and require the successor Contract to run the documented discovery and installer flow in a fresh Git repository after publication."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "If the fix fails before publication, revert this Work Item diff and preserve its regression test and Outcome evidence; never mutate an existing immutable release.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 875
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-56-public-installer-metadata.json",
+    "baseCommit": "8ab826decdb77a09ec50eb438d4bea9bfc16fadf",
+    "initialScopeDigest": "ce37754c79330a4b7ac4106be78769fe60267bec1428a9d430fb57bf101c582a",
+    "contractSkeletonDigest": "5d6a804bff0da505d311c88bcb7a5ec071f15857735b7decd90fdc4310dcc8a9"
+  }
+}
