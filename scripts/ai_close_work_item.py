@@ -24,6 +24,7 @@ from ai_common import (
     load_json,
     run_git,
 )
+from ai_lifecycle_truth import superseded_summary_validation_exception
 from ai_projection_lease import release as release_projection_lease
 from ai_projection_lease import requires_lease
 from ai_work_item_intelligence import record_fact_once
@@ -293,16 +294,21 @@ def _verify_archived_evidence(task: str) -> Path:
         raise RuntimeError(f"archived Summary is missing: {summary_path.relative_to(PROJECT_ROOT)}")
     contract = load_json(contract_path)
     summary = load_json(summary_path)
-    issues = validate_contract(contract)
-    issues.extend(
-        validate_summary(
-            summary,
-            contract,
-            contract_path=contract_path.relative_to(PROJECT_ROOT).as_posix(),
-            summary_path=summary_path.relative_to(PROJECT_ROOT).as_posix(),
-            legacy_archive=False,
-        )
+    contract_issues = validate_contract(contract)
+    summary_issues = validate_summary(
+        summary,
+        contract,
+        contract_path=contract_path.relative_to(PROJECT_ROOT).as_posix(),
+        summary_path=summary_path.relative_to(PROJECT_ROOT).as_posix(),
+        legacy_archive=False,
     )
+    issues = list(contract_issues)
+    if not superseded_summary_validation_exception(
+        contract_path=contract_path,
+        work_item_id=task,
+        summary_issues=summary_issues,
+    ):
+        issues.extend(summary_issues)
     if issues:
         raise RuntimeError("archived Work Item evidence is invalid: " + "; ".join(issues))
     if "- State: `no_active_work_item`" not in STATUS_PATH.read_text(encoding="utf-8"):
