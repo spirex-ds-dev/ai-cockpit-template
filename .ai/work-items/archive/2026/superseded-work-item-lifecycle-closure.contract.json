@@ -18,7 +18,9 @@
     "scripts/ai_lifecycle_truth.py",
     "scripts/ai_archive_work_item.py",
     "scripts/ai_close_work_item.py",
+    ".ai/guards/coverage_policy.yaml",
     "tests/test_ai_archive_work_item.py",
+    "tests/test_lifecycle_truth_core_677.py",
     "tests/test_work_item_lifecycle_closure.py",
     "docs/reference/work-item-lifecycle-closure.md",
     "docs/superpowers/specs/2026-08-11-superseded-work-item-lifecycle-closure-design.md",
@@ -49,6 +51,10 @@
     {
       "path": "scripts/ai_lifecycle_truth.py",
       "reason": "Canonical successor receipt and blocked Outcome binding validation."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Source of truth for production-to-test associations enforced by the coverage guard."
     },
     {
       "path": "tests/test_work_item_lifecycle_closure.py",
@@ -100,10 +106,12 @@
     "production": [
       "scripts/ai_lifecycle_truth.py",
       "scripts/ai_archive_work_item.py",
-      "scripts/ai_close_work_item.py"
+      "scripts/ai_close_work_item.py",
+      ".ai/guards/coverage_policy.yaml"
     ],
     "tests": [
       "tests/test_ai_archive_work_item.py",
+      "tests/test_lifecycle_truth_core_677.py",
       "tests/test_work_item_lifecycle_closure.py"
     ],
     "generated": [
