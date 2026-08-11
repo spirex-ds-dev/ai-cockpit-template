@@ -400,6 +400,39 @@ def test_superseded_archive_transaction_preserves_receipt_bound_outcome_bytes(
     )
 
 
+def test_archived_outcome_projection_rewrites_only_existing_transaction_artifacts(tmp_path):
+    task = "task"
+    active = tmp_path / ".ai/work-items/active"
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    contract = archive / f"{task}.contract.json"
+    outcome_path = archive / f"{task}.outcome.json"
+    contract.write_text("{}", encoding="utf-8")
+    outcome_path.write_text("{}", encoding="utf-8")
+    active_contract = (active / contract.name).relative_to(tmp_path).as_posix()
+    active_outcome = (active / outcome_path.name).relative_to(tmp_path).as_posix()
+    absent_summary = (active / f"{task}.summary.json").relative_to(tmp_path).as_posix()
+    outcome = {
+        "evidence": [active_contract, active_outcome, absent_summary],
+        "embedded": f"prefix:{active_outcome}",
+    }
+
+    projected = ai_lifecycle_truth.archived_outcome_projection(
+        outcome,
+        root=tmp_path,
+        contract_path=contract,
+        work_item_id=task,
+    )
+
+    assert projected["evidence"] == [
+        contract.relative_to(tmp_path).as_posix(),
+        outcome_path.relative_to(tmp_path).as_posix(),
+        absent_summary,
+    ]
+    assert projected["embedded"] == f"prefix:{active_outcome}"
+    assert outcome["evidence"][0] == active_contract
+
+
 def test_archive_manifest_binds_content_addressed_pre_archive_coverage(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
     contract = tmp_path / "task.contract.json"
