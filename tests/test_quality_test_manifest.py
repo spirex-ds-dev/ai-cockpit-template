@@ -188,6 +188,7 @@ def test_versioned_file_timing_baseline_balances_current_nodes_without_runner_ju
             {
                 "schemaVersion": 1,
                 "fileDurationsMs": {"tests/test_core.py": 100, "tests/test_slow.py": 300},
+                "nodeDurationsMs": {"tests/test_slow.py::test_only": 275},
             }
         ),
         encoding="utf-8",
@@ -208,7 +209,7 @@ def test_versioned_file_timing_baseline_balances_current_nodes_without_runner_ju
     weights = {entry["id"]: entry["durationMs"] for entry in manifest["entries"]}
     assert weights["tests/test_core.py::test_one"] == 50
     assert weights["tests/test_core.py::test_two"] == 50
-    assert weights["tests/test_slow.py::test_only"] == 300
+    assert weights["tests/test_slow.py::test_only"] == 275
     assert weights["tests/test_new.py::test_unseen"] == quality_test_manifest.DEFAULT_DURATION_MS
 
 
