@@ -1,0 +1,197 @@
+{
+  "contractVersion": 2,
+  "workItemId": "post-archive-junit-artifact-recovery",
+  "mode": "code",
+  "title": "Post-archive JUnit artifact recovery",
+  "baseCommit": "6e7ee6ff57089bd76bf81455400de75da8b672ff",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/post-archive-junit-artifact-recovery.contract.json",
+    ".ai/work-items/active/post-archive-junit-artifact-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/post-archive-junit-artifact-recovery.outcome.json",
+    ".ai/work-items/active/post-archive-junit-artifact-recovery.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "Makefile",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/ai_post_archive_recovery.py",
+    "tests/test_ai_post_archive_recovery.py",
+    "docs/reference/work-item-lifecycle-closure.md"
+  ],
+  "outOfScope": ["Release/version/tag changes, archive mutation, normal PR-policy changes, and recovery paths beyond the existing bounded same-Work-Item mechanism."],
+  "sources": [
+    {
+      "path": "scripts/ai_post_archive_recovery.py",
+      "reason": "The provider-bound recovery verifier currently reads only job logs."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31551051580/job/93973717175",
+      "reason": "The completed failed PR job has failure details in its uploaded JUnit artifact while its raw log lacks pytest failure lines."
+    },
+    {
+      "path": "tests/test_ai_post_archive_recovery.py",
+      "reason": "Regression coverage for receipt validation and provider evidence binding."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "The Makefile command surface is bound evidence for the generated assessment and must be refreshed with it."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Generated documentation-alignment reports must reflect refreshed bound evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "provider_identity"],
+    "reason": "Artifact evidence can grant an append-only post-archive recovery path, so its run/job/name/download/digest/XML facts must be validated fail closed.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewEvidence": "The failed provider job and downloaded JUnit artifact establish the missing evidence channel."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Provider-bound post-archive recovery requires strict evidence integrity."
+    ],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {"approvalEvidence":"conversation:2026-08-12-user-authorized-complete-cleanup-and-approved-recovery-design","reason":"Strict bounded correction without release operation.","risks":["evidence_integrity","provider_identity"],"notRunChecks":["Release checks are inapplicable."],"workItemOnly":true,"workItemId":"post-archive-junit-artifact-recovery"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized complete cleanup and the precise provider-artifact defect is evidenced."
+  },
+  "preReviewWarnings": ["Review that generic artifacts, malformed XML, mismatched run/job, and missing failures remain rejected."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A completed failed pull-request job can use a named uploaded JUnit artifact as functional failure evidence only when the artifact is bound to the exact provider run/job and its downloaded bytes digest is recorded.",
+    "JUnit XML must contain at least one failed testcase; malformed XML, no-failure XML, missing artifact, wrong run/job, wrong SHA, success/cancelled run, and arbitrary artifacts fail closed.",
+    "The receipt preserves every existing repository, PR, candidate SHA, run/job, workflow, archive-digest, authority, and recovery-path restriction.",
+    "Focused regressions and the full governed quality route prove both the positive JUnit path and negative mutations."
+  ],
+  "guidelines": [
+    "Keep recovery append-only and require source-bound provider evidence.",
+    "Do not publish releases or weaken quality, coverage, or ownership gates."
+  ],
+  "intent": {
+    "problem": "A real completed failed hosted PR job has canonical failure details only in its uploaded JUnit artifact. The existing log-only classifier therefore cannot prove that functional failure even though the artifact supplies precise failed pytest testcases.",
+    "constraints": ["Require exact GitHub repository, PR, candidate SHA, completed failed run/job, artifact identity, downloaded byte digest, and failed JUnit testcase.","Keep archives immutable and receipts append-only.","Do not release or relax quality/coverage/ownership gates."],
+    "rationale": "Binding the artifact through provider metadata and its content digest restores the intended recovery route without treating a cache hit or generic artifact as verification."
+  },
+  "rawUserRequest": "Continue the authorized complete cleanup and repair the real provider-bound post-archive recovery evidence gap without bypassing gates.",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-08-12-user-authorized-complete-cleanup-and-approved-recovery-design","capturedAt":"2026-08-12","digest":"sha256:0e57f4c1b77e46d5964f5fe365fb72d24e32df312c4686a55118386401140339"},
+  "declaredIntent": {"summary":"Bind a failed hosted JUnit artifact as narrow functional recovery evidence.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "scenarioCoverage": [{"scenario":"The exact failed PR job exposes a JUnit artifact containing failed testcases.","required":true,"riskDomain":"evidence_integrity","status":"verified","evidence":["tests/test_ai_post_archive_recovery.py::test_hosted_functional_recovery_accepts_provider_bound_junit_artifact_failure"],"expected":"A receipt records source-bound artifact evidence and may authorize only listed recovery paths.","verificationPlan":"Focused mocked provider artifact regression."},{"scenario":"Artifact identity, content, provider state, or JUnit failure semantics are missing or inconsistent.","required":true,"riskDomain":"evidence_integrity","status":"verified","evidence":["tests/test_ai_post_archive_recovery.py::test_hosted_functional_recovery_rejects_junit_artifact_without_failed_testcase"],"expected":"No receipt is created.","verificationPlan":"Negative mutations across provider and XML artifact facts."}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user approved this exact JUnit artifact recovery design; the Makefile change exposes only its named artifact input."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 884
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/post-archive-junit-artifact-recovery.json",
+    "baseCommit": "6e7ee6ff57089bd76bf81455400de75da8b672ff",
+    "initialScopeDigest": "f6e601a90b68bde966b549541f820ef61989a1145dbe791cbb41a98014a23964",
+    "contractSkeletonDigest": "8052afa52bddaf155405ac419d43b23ced40281acd8dc323f54be1e4073ca966"
+  }
+}

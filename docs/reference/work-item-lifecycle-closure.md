@@ -185,6 +185,14 @@ the exact provider and log-digest bindings. A generic command error, a
 coverage-only shortfall, or a log that has only one of those pytest elements is
 not functional-failure evidence and remains rejected.
 
+When the provider's raw job log is incomplete, `HOSTED_ARTIFACT_NAME` may name
+one non-expired artifact from that exact run. The recovery command downloads
+the named artifact, records its immutable bytes digest and ID, and accepts it
+only when its XML JUnit evidence contains at least one failed or errored
+testcase. An absent, ambiguous, expired, malformed, or failure-free artifact
+remains fail-closed; an artifact never substitutes for the exact repository,
+PR, failed Head, run, job, and completed-failure bindings.
+
 The repository's remote name and default branch are discovered from Git's remote HEAD. Adopter projects therefore do not need to use `origin/main`.
 
 ## Exceptional provider merge-state recovery
