@@ -1,4 +1,16 @@
+---
+author: Ray
+title: "Post-archive hosted functional recovery design"
+description: "Narrow provider-bound recovery for canonical hosted pytest failures."
+status: historical
+authority: implementation_record
+---
+
 # Post-archive hosted functional recovery design
+
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
 
 ## Purpose
 

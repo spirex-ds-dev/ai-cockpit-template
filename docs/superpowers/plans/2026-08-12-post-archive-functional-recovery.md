@@ -1,4 +1,16 @@
+---
+author: Ray
+title: "Post-archive hosted functional recovery implementation plan"
+description: "TDD plan for canonical hosted pytest failure recovery evidence."
+status: historical
+authority: implementation_record
+---
+
 # Post-archive hosted functional recovery plan
+
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
 
 1. Add a red regression using a completed failed pull-request pytest log with
    node IDs and a pytest failed-test summary.
