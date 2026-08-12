@@ -4,12 +4,17 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 import re
 import subprocess  # nosec B404 - all process calls below use fixed list-form commands
+import zipfile
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
+from xml.etree import (
+    ElementTree,  # nosec B405 - JUnit DTD/entity declarations are rejected before parsing.
+)
 
 from ai_common import PROJECT_ROOT, clean_git_environment
 
@@ -46,6 +51,56 @@ def functional_failure_marker(text: str) -> str | None:
     if PYTEST_FAILURE_NODE.search(text) and PYTEST_FAILURE_SUMMARY.search(text):
         return "pytest_failure"
     return None
+
+
+def junit_artifact_failure(
+    fetch_provider: Callable[[str], bytes], *, repository: str, run_id: int, artifact_name: str
+) -> dict:
+    """Bind one named, non-expired run artifact containing failed JUnit testcases."""
+    if not artifact_name or artifact_name.strip() != artifact_name:
+        raise ValueError("GitHub JUnit artifact name is invalid")
+    listing = _provider_json(fetch_provider, f"/repos/{repository}/actions/runs/{run_id}/artifacts")
+    values = listing.get("artifacts")
+    matches = (
+        [item for item in values if isinstance(item, dict) and item.get("name") == artifact_name]
+        if isinstance(values, list)
+        else []
+    )
+    if len(matches) != 1 or matches[0].get("expired") is not False:
+        raise ValueError("GitHub JUnit artifact is missing, ambiguous, or expired")
+    artifact_id = _positive_int(matches[0].get("id"), "GitHub JUnit artifact ID")
+    payload = fetch_provider(f"/repos/{repository}/actions/artifacts/{artifact_id}/zip")
+    if not isinstance(payload, bytes):
+        raise TypeError("GitHub JUnit artifact download is unavailable")
+    try:
+        with zipfile.ZipFile(io.BytesIO(payload)) as bundle:
+            xml_files = [name for name in bundle.namelist() if name.endswith(".xml")]
+            xml_payloads = [bundle.read(name) for name in xml_files]
+            if any(
+                b"<!DOCTYPE" in content.upper() or b"<!ENTITY" in content.upper()
+                for content in xml_payloads
+            ):
+                raise ValueError("DTD and entity declarations are not accepted in JUnit XML")
+            roots = [
+                ElementTree.fromstring(content)  # nosec B314 - declarations are rejected above.
+                for content in xml_payloads
+            ]
+    except (OSError, ValueError, zipfile.BadZipFile, ElementTree.ParseError) as exc:
+        raise ValueError(f"GitHub JUnit artifact is invalid: {exc}") from exc
+    failures = sum(
+        1
+        for root in roots
+        for testcase in root.iter("testcase")
+        if any(child.tag in {"failure", "error"} for child in testcase)
+    )
+    if not xml_files or failures <= 0:
+        raise ValueError("GitHub JUnit artifact has no failed testcase")
+    return {
+        "id": artifact_id,
+        "name": artifact_name,
+        "sha256": hashlib.sha256(payload).hexdigest(),
+        "failedTestcases": failures,
+    }
 
 
 def archive_files(root: Path, task: str) -> dict[str, Path]:
@@ -226,8 +281,27 @@ def validate_recorded_provider_binding(provider: object, *, gate: str) -> list[s
     elif gate == "hostedFunctionalFailure":
         if not isinstance(provider.get("jobName"), str) or not provider["jobName"].strip():
             return ["recorded functional provider job name is invalid"]
-        if provider.get("failureMarker") not in {"blocked_recovery", "pytest_failure"}:
+        marker = provider.get("failureMarker")
+        if marker not in {"blocked_recovery", "pytest_failure", "junit_artifact_failure"}:
             return ["recorded functional provider failure marker is invalid"]
+        if marker == "junit_artifact_failure":
+            junit = provider.get("junitArtifact")
+            if not isinstance(junit, dict) or not isinstance(junit.get("name"), str):
+                return ["recorded functional JUnit artifact evidence is invalid"]
+            try:
+                artifact_id = _positive_int(junit.get("id"), "recorded JUnit artifact ID")
+                failures = _positive_int(
+                    junit.get("failedTestcases"), "recorded JUnit failed testcase count"
+                )
+            except ValueError:
+                return ["recorded functional JUnit artifact evidence is invalid"]
+            if (
+                artifact_id <= 0
+                or failures <= 0
+                or not isinstance(junit.get("sha256"), str)
+                or SHA256.fullmatch(junit["sha256"]) is None
+            ):
+                return ["recorded functional JUnit artifact evidence is invalid"]
     else:
         return ["recorded provider gate is unsupported"]
     # Keep explicit local variables above: each receipt fact is independently
@@ -387,6 +461,7 @@ def verified_hosted_functional_failure(
     failed_candidate_head: object,
     run_id: object,
     job_id: object,
+    artifact_name: str | None = None,
     fetch_provider: Callable[[str], bytes] | None = None,
 ) -> dict:
     """Bind a completed fail-closed hosted functional failure to one PR candidate."""
@@ -424,6 +499,12 @@ def verified_hosted_functional_failure(
         raise TypeError("GitHub workflow job log is unavailable")
     text = log.decode("utf-8", errors="replace")
     failure_marker = functional_failure_marker(text)
+    junit_artifact = None
+    if failure_marker is None and artifact_name is not None:
+        junit_artifact = junit_artifact_failure(
+            fetch_provider, repository=repository, run_id=run_id, artifact_name=artifact_name
+        )
+        failure_marker = "junit_artifact_failure"
     if failure_marker is None:
         raise ValueError("GitHub workflow job log has no canonical fail-closed functional failure")
     run_url = run.get("html_url")
@@ -432,7 +513,7 @@ def verified_hosted_functional_failure(
         raise ValueError("GitHub workflow run URL is invalid")
     if not isinstance(workflow_path, str) or not workflow_path.startswith(".github/workflows/"):
         raise ValueError("GitHub workflow path is invalid")
-    return {
+    provider = {
         "kind": "github_actions",
         "repository": repository,
         "pullRequest": pull_request,
@@ -450,6 +531,9 @@ def verified_hosted_functional_failure(
         "logSha256": hashlib.sha256(log).hexdigest(),
         "failureMarker": failure_marker,
     }
+    if junit_artifact is not None:
+        provider["junitArtifact"] = junit_artifact
+    return provider
 
 
 def open_hosted_functional_failure_recovery(
@@ -465,6 +549,7 @@ def open_hosted_functional_failure_recovery(
     failed_candidate_head: str,
     run_id: int,
     job_id: int,
+    artifact_name: str | None = None,
     worktree_clean: Callable[[], bool],
     fetch_provider: Callable[[str], bytes] | None = None,
 ) -> dict:
@@ -487,6 +572,7 @@ def open_hosted_functional_failure_recovery(
         failed_candidate_head=failed_candidate_head,
         run_id=run_id,
         job_id=job_id,
+        artifact_name=artifact_name,
         fetch_provider=fetch_provider,
     )
     receipt = {
@@ -666,6 +752,7 @@ def main() -> int:
     parser.add_argument("--hosted-candidate-head")
     parser.add_argument("--hosted-run-id", type=int)
     parser.add_argument("--hosted-job-id", type=int)
+    parser.add_argument("--hosted-artifact-name")
     parser.add_argument(
         "--hosted-failure-kind", choices=("coverage", "functional"), default="coverage"
     )
@@ -683,25 +770,37 @@ def main() -> int:
                 raise ValueError(
                     "hosted repository, pull request, candidate Head, run ID, and job ID are required together"
                 )
-            open_recovery = (
-                open_hosted_functional_failure_recovery
-                if args.hosted_failure_kind == "functional"
-                else open_hosted_post_archive_recovery
-            )
-            receipt = open_recovery(
-                root=PROJECT_ROOT,
-                task=args.task,
-                base_commit=args.base,
-                issue=args.issue,
-                authority=args.authority,
-                recovery_paths=args.recovery_path,
-                repository=args.hosted_repository,
-                pull_request=args.hosted_pull_request,
-                failed_candidate_head=args.hosted_candidate_head,
-                run_id=args.hosted_run_id,
-                job_id=args.hosted_job_id,
-                worktree_clean=_clean_worktree,
-            )
+            if args.hosted_failure_kind == "functional":
+                receipt = open_hosted_functional_failure_recovery(
+                    root=PROJECT_ROOT,
+                    task=args.task,
+                    base_commit=args.base,
+                    issue=args.issue,
+                    authority=args.authority,
+                    recovery_paths=args.recovery_path,
+                    repository=args.hosted_repository,
+                    pull_request=args.hosted_pull_request,
+                    failed_candidate_head=args.hosted_candidate_head,
+                    run_id=args.hosted_run_id,
+                    job_id=args.hosted_job_id,
+                    artifact_name=args.hosted_artifact_name,
+                    worktree_clean=_clean_worktree,
+                )
+            else:
+                receipt = open_hosted_post_archive_recovery(
+                    root=PROJECT_ROOT,
+                    task=args.task,
+                    base_commit=args.base,
+                    issue=args.issue,
+                    authority=args.authority,
+                    recovery_paths=args.recovery_path,
+                    repository=args.hosted_repository,
+                    pull_request=args.hosted_pull_request,
+                    failed_candidate_head=args.hosted_candidate_head,
+                    run_id=args.hosted_run_id,
+                    job_id=args.hosted_job_id,
+                    worktree_clean=_clean_worktree,
+                )
         else:
             receipt = open_post_archive_recovery(
                 root=PROJECT_ROOT,
