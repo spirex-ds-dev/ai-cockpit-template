@@ -1,0 +1,95 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-59-delivery",
+  "mode": "code",
+  "title": "Publish v0.5.59 and prove future-adopter delivery",
+  "baseCommit": "a86d611e132821ef0f0aecec9a4a5a66958084bd",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-59-delivery.contract.json",
+    ".ai/work-items/active/release-v0-5-59-delivery.summary.json",
+    ".ai/work-items/active/release-v0-5-59-delivery.outcome.json",
+    ".ai/work-items/active/release-v0-5-59-delivery.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "target/release-v0-5-59-delivery/**",
+    "target/task-closure-receipts/**"
+  ],
+  "outOfScope": [
+    "Changing release workflow, release gates, tests, coverage requirements, installer implementation, or release metadata semantics.",
+    "Recreating, moving, deleting, or relabelling any existing immutable tag or GitHub Release.",
+    "Using SKIP_QUALITY, a cache hit, or an incomplete run as release evidence."
+  ],
+  "sources": [
+    {"path": "release-state.json", "reason": "Declares v0.5.59 as the eligible candidate."},
+    {"path": "next-release.json", "reason": "Binds the requested candidate tag to v0.5.58."},
+    {"path": ".github/workflows/release.yml", "reason": "Authoritative exact-source rehearsal, publication, asset, and post-publication verification sequence."},
+    {"path": "scripts/verify_quick_install_release.py", "reason": "Black-box future-adopter installation proof."},
+    {"path": "AGENTS.md", "reason": "Defines the governed Work Item, PR, closure, and cleanup lifecycle."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release", "release_distribution", "installer", "ci", "external_mutation"],
+    "reason": "The Work Item creates a public immutable release and must prove the resulting public assets serve a future adopter without weakening controls.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["Public release and future-adopter delivery require source-bound provider evidence."],
+    "override": {
+      "approvalEvidence": "conversation:2026-08-12-user-goal-publish-new-version-and-final-cleanup",
+      "reason": "User explicitly authorized publication of the next version and final remote/local cleanup, with no gate bypass.",
+      "risks": ["release", "release_distribution", "installer", "ci"],
+      "notRunChecks": ["none; all required release and distribution checks remain required"],
+      "workItemOnly": true,
+      "workItemId": "release-v0-5-59-delivery"
+    }
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "none"},
+  "executionDecision": {"status": "continue", "reason": "The user-authorized release remains conditional on exact-main rehearsal, formal workflow success, public installation proof, and governed closure."},
+  "preReviewWarnings": ["Review exact source/tag/tree bindings, provider assets, public HTTPS installer identity, and cleanup evidence."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record governance checkpoints before archival and closure."},
+  "acceptance": [
+    "A successful same-SHA v0.5.59 rehearsal receipt exists before formal publication.",
+    "The authoritative release workflow creates immutable v0.5.59 assets from the final origin/main SHA and verifies coherent source-bound metadata, SBOM, provenance, and digests.",
+    "A fresh isolated future-adopter project installs from the public HTTPS v0.5.59 release and passes the required black-box proof.",
+    "No release, quality, coverage, or installer guard is bypassed; failures retain red evidence and recovery conditions.",
+    "After merge and Work Item closure, no obsolete local or remote Work Item branch/worktree remains and local main is clean and synchronized with origin/main."
+  ],
+  "guidelines": [
+    "Preserve exact source identity and immutable historical evidence; fail closed on any mismatch.",
+    "Do not claim publication, future-adopter delivery, or cleanup without provider- and repository-bound receipts.",
+    "Use only the authoritative release workflow for provider mutations."
+  ],
+  "intent": {
+    "problem": "The current main commit contains the installer runtime dependency recovery after v0.5.58; future adopters cannot receive it until a new immutable public release is published and independently installed.",
+    "constraints": ["Use candidate v0.5.59 only.", "Formal workflow source must equal freshly resolved origin/main and match the rehearsal receipt.", "Do not reduce tests, coverage, security, outcome, or release evidence."],
+    "rationale": "Only exact-source provider assets and a clean public HTTPS install prove that the correction benefits future adopter projects."
+  },
+  "rawUserRequest": "发布新版本，并最后确认远端和本地都被清理干净。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-12-user-goal-publish-new-version-and-final-cleanup", "capturedAt": "2026-08-12T00:00:00+09:00", "digest": "sha256:user-authorized-v0.5.59-publication-and-final-cleanup"},
+  "declaredIntent": {"summary": "Publish v0.5.59 through exact-main rehearsal and formal release, prove future-adopter installation, then close the Work Item and clean remote and local lifecycle state.", "requestedCapabilities": ["ai_governance"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation:2026-08-12-user-goal-publish-new-version-and-final-cleanup", "scope": "v0.5.59 publication, exact-source verification, PR merge, Work Item closure, and remote/local cleanup; no gate bypass."},
+  "requiredEvidenceContext": {"externalSystem": "GitHub Releases and GitHub Actions", "destructiveLevel": "none", "availableEvidence": ["same_sha_rehearsal_receipt", "provider_release_receipt", "tag", "commit", "digest", "asset_availability", "sbom", "provenance", "immutable_tag", "public_assets", "release_digests", "public_installation", "closure_receipt"]},
+  "scenarioCoverage": [
+    {"scenario": "Rehearsal and formal publication bind the same final v0.5.59 origin/main SHA and tree.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "Mismatch fails closed.", "verificationPlan": "Dispatch rehearsal, then formal workflow using only its exact-source receipt."},
+    {"scenario": "Public assets contain current source-bound metadata and release digests.", "required": true, "riskDomain": "release_distribution", "status": "unverified", "evidence": [], "expected": "Release workflow and public checker validate every required asset.", "verificationPlan": "Inspect workflow and download public release assets after publication."},
+    {"scenario": "A future adopter installs the released template through full HTTPS.", "required": true, "riskDomain": "installer", "status": "unverified", "evidence": [], "expected": "Fresh installation reports v0.5.59 and passes black-box validation.", "verificationPlan": "Run verify_quick_install_release.py after publication."},
+    {"scenario": "Any release failure, cancellation, or timeout retains evidence and prevents success claims.", "required": true, "riskDomain": "ci", "status": "unverified", "evidence": [], "expected": "No green Outcome or cleanup claim is made.", "verificationPlan": "Inspect provider run status and record recovery evidence before any retry."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "conversation:2026-08-12-user-goal-publish-new-version-and-final-cleanup authorizes v0.5.59 publication and cleanup through governed lifecycle steps."},
+  "rollbackNote": "If pre-publication verification fails, retain failure evidence and do not create the tag or Release; revert only this Work Item's governance records through the normal review lifecycle.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 950}},
+  "startReceipt": {"path": ".ai/work-items/starts/release-v0-5-59-delivery.json", "baseCommit": "a86d611e132821ef0f0aecec9a4a5a66958084bd", "initialScopeDigest": "52f6874d96101843c0f9750810598fbd8480f2a1d49edd35120f53f3d413c762", "contractSkeletonDigest": "6470b77c3a532aa57bf8defad14ffa7662221a838c4becfc5edc6b758e1dbf0d"}
+}
