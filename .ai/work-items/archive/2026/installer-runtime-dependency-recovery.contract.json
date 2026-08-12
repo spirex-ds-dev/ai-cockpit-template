@@ -1,0 +1,188 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installer-runtime-dependency-recovery",
+  "mode": "code",
+  "title": "Installer runtime dependency recovery",
+  "baseCommit": "6e7ee6ff57089bd76bf81455400de75da8b672ff",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/installer-runtime-dependency-recovery.contract.json",
+    ".ai/work-items/active/installer-runtime-dependency-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/installer-runtime-dependency-recovery.outcome.json",
+    ".ai/work-items/active/installer-runtime-dependency-recovery.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "Makefile",
+    "scripts/ai_post_archive_recovery.py",
+    "tests/test_ai_post_archive_recovery.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Release/version changes, changes to archived #815 evidence, and relaxation of installer or security gates."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31558723173/job/93996407080",
+      "reason": "Hosted installer smoke proves ModuleNotFoundError for defusedxml in an adopter minimal project."
+    },
+    {
+      "path": "scripts/ai_post_archive_recovery.py",
+      "reason": "Introduced the unavailable runtime import in the prior corrective Work Item."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "installer",
+      "security"
+    ],
+    "reason": "The installed template must retain fail-closed XML parsing without adding a dependency absent from adopter installations.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewEvidence": "The exact hosted failure log identifies the unavailable import."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Installer runtime and security boundary regression requires strict verification."
+    ],
+    "override": {"approvalEvidence":"conversation:2026-08-12-user-authorized-complete-cleanup","reason":"Hosted installer regression crosses installer and security boundaries.","risks":["installer","security"],"notRunChecks":["Release publication checks are not applicable because no release/version artifact is changed."],"workItemOnly":true,"workItemId":"installer-runtime-dependency-recovery"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized complete cleanup and the hosted installer failure is concrete."
+  },
+  "preReviewWarnings": [
+    "Verify DTD/entity rejection and absence of unavailable adopter runtime dependencies."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Installer and compatibility workflows can import the recovery verifier without defusedxml installed.",
+    "JUnit XML containing DTD or entity declarations is rejected fail closed before parsing.",
+    "Existing valid failed JUnit artifact evidence remains accepted and failure-free XML remains rejected.",
+    "Focused and full strict quality verification pass without lowering coverage or gates."
+  ],
+  "guidelines": [
+    "Keep installer runtime dependencies explicit and compatible with the copied template.",
+    "Reject untrusted XML features fail closed without lowering evidence integrity."
+  ],
+  "intent": {
+    "problem": "PR #815 fails hosted installer and cross-stack workflows because defusedxml is imported by an installed script but is not packaged in the adopter runtime.",
+    "constraints": ["Do not add an undeclared adopter runtime dependency.", "Reject DTD and entity-bearing JUnit XML before stdlib parsing.", "Keep receipts source-bound and archive evidence immutable."],
+    "rationale": "A small dependency-free parser guard fixes the installer regression while preserving fail-closed XML safety."
+  },
+  "rawUserRequest": "Complete cleanup and repair the hosted installer runtime dependency regression without bypassing quality gates.",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-08-12-user-authorized-complete-cleanup","capturedAt":"2026-08-12","digest":"sha256:0e57f4c1b77e46d5964f5fe365fb72d24e32df312c4686a55118386401140339"},
+  "declaredIntent": {"summary":"Remove the unavailable runtime dependency while preserving fail-closed JUnit evidence parsing.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "scenarioCoverage": [{"scenario":"An installed adopter invokes recovery code without defusedxml installed.","required":true,"riskDomain":"installer","status":"verified","evidence":[".venv/bin/python -m pytest -q tests/test_ai_post_archive_recovery.py: 28 passed (imports recovery module without defusedxml)"],"expected":"The installer does not raise ModuleNotFoundError.","verificationPlan":"Focused import and hosted installation regression."},{"scenario":"A JUnit artifact contains DTD or entity declarations.","required":true,"riskDomain":"security","status":"verified","evidence":[".venv/bin/python -m pytest -q tests/test_ai_post_archive_recovery.py: 28 passed, including test_hosted_functional_recovery_rejects_junit_artifact_with_dtd"],"expected":"No receipt is created.","verificationPlan":"Focused malicious XML regression."}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user approved the recovery design and complete cleanup; the Makefile change is limited to exposing the exact named JUnit artifact input required by the verifier."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 884
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installer-runtime-dependency-recovery.json",
+    "baseCommit": "6e7ee6ff57089bd76bf81455400de75da8b672ff",
+    "initialScopeDigest": "f178037cc70132c315d4a1c399fe77d1a267afede75627251819af9c7e48a731",
+    "contractSkeletonDigest": "c8f8491e60d83cfd506db44dfc3eadd6f84a91ec77d9143583deda1a7074e745"
+  }
+}

@@ -1,5 +1,7 @@
 import hashlib
+import io
 import json
+import zipfile
 from types import SimpleNamespace
 
 import ai_post_archive_recovery as recovery
@@ -268,6 +270,28 @@ def pytest_functional_failure_provider(endpoint: str) -> bytes:
     return functional_failure_provider(endpoint)
 
 
+def junit_artifact_functional_failure_provider(endpoint: str) -> bytes:
+    if endpoint.endswith("/logs"):
+        return b"job log has no pytest details\n"
+    if endpoint.endswith("/artifacts"):
+        return json.dumps(
+            {
+                "artifacts": [
+                    {"id": 91, "name": "project-test-shard-lifecycle-43-1", "expired": False}
+                ]
+            }
+        ).encode()
+    if endpoint.endswith("/artifacts/91/zip"):
+        bundle = io.BytesIO()
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr(
+                "junit/project-test-lifecycle.xml",
+                '<testsuite><testcase name="fails"><failure message="proof" /></testcase></testsuite>',
+            )
+        return bundle.getvalue()
+    return functional_failure_provider(endpoint)
+
+
 def test_hosted_functional_recovery_accepts_canonical_pytest_failure():
     provider = recovery.verified_hosted_functional_failure(
         repository="spirex-ds-dev/ai-cockpit-template",
@@ -279,6 +303,95 @@ def test_hosted_functional_recovery_accepts_canonical_pytest_failure():
     )
 
     assert provider["failureMarker"] == "pytest_failure"
+
+
+def test_hosted_functional_recovery_accepts_provider_bound_junit_artifact_failure():
+    provider = recovery.verified_hosted_functional_failure(
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=765,
+        failed_candidate_head="c" * 40,
+        run_id=43,
+        job_id=85,
+        artifact_name="project-test-shard-lifecycle-43-1",
+        fetch_provider=junit_artifact_functional_failure_provider,
+    )
+
+    assert provider["failureMarker"] == "junit_artifact_failure"
+    assert provider["junitArtifact"]["failedTestcases"] == 1
+
+
+def test_hosted_functional_recovery_rejects_junit_artifact_without_failed_testcase():
+    def failure_free_provider(endpoint: str) -> bytes:
+        if endpoint.endswith("/logs"):
+            return b"job log has no pytest details\n"
+        if endpoint.endswith("/artifacts"):
+            return json.dumps(
+                {
+                    "artifacts": [
+                        {"id": 91, "name": "project-test-shard-lifecycle-43-1", "expired": False}
+                    ]
+                }
+            ).encode()
+        if endpoint.endswith("/artifacts/91/zip"):
+            bundle = io.BytesIO()
+            with zipfile.ZipFile(bundle, "w") as archive:
+                archive.writestr(
+                    "junit/project-test-lifecycle.xml",
+                    '<testsuite><testcase name="passes" /></testsuite>',
+                )
+            return bundle.getvalue()
+        return functional_failure_provider(endpoint)
+
+    with pytest.raises(ValueError, match="JUnit artifact has no failed testcase"):
+        recovery.verified_hosted_functional_failure(
+            repository="spirex-ds-dev/ai-cockpit-template",
+            pull_request=765,
+            failed_candidate_head="c" * 40,
+            run_id=43,
+            job_id=85,
+            artifact_name="project-test-shard-lifecycle-43-1",
+            fetch_provider=failure_free_provider,
+        )
+
+
+def test_hosted_functional_recovery_rejects_junit_artifact_with_dtd():
+    def dtd_provider(endpoint: str) -> bytes:
+        if endpoint.endswith("/logs"):
+            return b"job log has no pytest details\n"
+        if endpoint.endswith("/artifacts"):
+            return json.dumps(
+                {
+                    "artifacts": [
+                        {
+                            "id": 404,
+                            "name": "project-test-shard-lifecycle-43-1",
+                            "expired": False,
+                        }
+                    ]
+                }
+            ).encode()
+        if endpoint.endswith("/artifacts/404/zip"):
+            bundle = io.BytesIO()
+            with zipfile.ZipFile(bundle, "w") as archive:
+                archive.writestr(
+                    "junit/project-test-lifecycle.xml",
+                    "<!DOCTYPE suite [<!ENTITY proof 'unsafe'>]>"
+                    "<testsuite><testcase name='fails'><failure>&proof;</failure>"
+                    "</testcase></testsuite>",
+                )
+            return bundle.getvalue()
+        return functional_failure_provider(endpoint)
+
+    with pytest.raises(ValueError, match="DTD and entity declarations"):
+        recovery.verified_hosted_functional_failure(
+            repository="spirex-ds-dev/ai-cockpit-template",
+            pull_request=765,
+            failed_candidate_head="c" * 40,
+            run_id=43,
+            job_id=85,
+            artifact_name="project-test-shard-lifecycle-43-1",
+            fetch_provider=dtd_provider,
+        )
 
 
 def second_functional_failure_provider(endpoint: str) -> bytes:
