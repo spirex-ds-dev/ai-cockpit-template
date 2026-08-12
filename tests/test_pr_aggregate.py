@@ -85,6 +85,76 @@ def patch_changes(monkeypatch, paths, *, statuses=None):
     )
 
 
+def test_documented_historical_preservation_requires_green_successor_and_full_binding(
+    tmp_path, monkeypatch
+):
+    child = write_pair(tmp_path, "blocked-predecessor", [], [])
+    parent = write_pair(tmp_path, "reconciliation", [], [])
+    archive = child.parent
+    child_summary = child.with_name("blocked-predecessor.summary.json")
+    child_outcome = archive / "blocked-predecessor.outcome.json"
+    child_outcome_md = archive / "blocked-predecessor.outcome.md"
+    child_manifest = archive / "blocked-predecessor.archive-manifest.json"
+    parent_outcome = archive / "reconciliation.outcome.json"
+    child_outcome.write_text(
+        json.dumps({"status": "blocked", "humanStatusColor": "red"}), encoding="utf-8"
+    )
+    child_manifest.write_text("{}", encoding="utf-8")
+    child_outcome_md.write_text("# blocked\n", encoding="utf-8")
+    parent_outcome.write_text(
+        json.dumps({"status": "completed", "humanStatusColor": "green"}), encoding="utf-8"
+    )
+    parent_contract = json.loads(parent.read_text(encoding="utf-8"))
+    parent_contract["sources"] = [
+        {"path": "https://example.test/releases/tag/v1.2.3", "reason": "stable successor"}
+    ]
+    parent.write_text(json.dumps(parent_contract), encoding="utf-8")
+    parent_summary = parent.with_name("reconciliation.summary.json")
+    summary = json.loads(parent_summary.read_text(encoding="utf-8"))
+    summary["sourcesUsed"] = [child_outcome.relative_to(tmp_path).as_posix()]
+    summary["changedFiles"] = [
+        {"path": path.relative_to(tmp_path).as_posix(), "reason": "preserved history"}
+        for path in (child, child_summary, child_outcome, child_outcome_md, child_manifest)
+    ]
+    parent_summary.write_text(json.dumps(summary), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    entries = [
+        (
+            child,
+            json.loads(child.read_text()),
+            json.loads(child_summary.read_text()),
+            (870, "", ""),
+        ),
+        (
+            parent,
+            json.loads(parent.read_text()),
+            json.loads(parent_summary.read_text()),
+            (881, "", ""),
+        ),
+    ]
+
+    assert ai_check_pr.documented_historical_preservation_paths(entries) == {child, parent}
+
+    parent_outcome.write_text(
+        json.dumps({"status": "completed", "humanStatusColor": "yellow"}), encoding="utf-8"
+    )
+    assert ai_check_pr.documented_historical_preservation_paths(entries) == set()
+
+    parent_outcome.write_text(
+        json.dumps({"status": "completed", "humanStatusColor": "green"}), encoding="utf-8"
+    )
+    summary = json.loads(parent_summary.read_text(encoding="utf-8"))
+    summary["sourcesUsed"] = []
+    parent_summary.write_text(json.dumps(summary), encoding="utf-8")
+    entries[1] = (
+        parent,
+        json.loads(parent.read_text()),
+        json.loads(parent_summary.read_text()),
+        (881, "", ""),
+    )
+    assert ai_check_pr.documented_historical_preservation_paths(entries) == set()
+
+
 def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     tmp_path, monkeypatch
 ):

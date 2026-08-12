@@ -65,7 +65,17 @@ def test_quality_entrypoints_depend_on_locked_environment_provisioning():
         "ensure-locked-dev-environment:\n\tpython3 scripts/ensure_locked_dev_environment.py --root ."
         in makefile
     )
-    for target in ("quality-fast", "quality-standard", "quality-full", "quality-release"):
+    for target in (
+        "quality-fast",
+        "quality-standard",
+        "quality-full",
+        "quality-release",
+        "check-quality-toolchain",
+        "ai-start",
+        "ai-preflight",
+        "ai-finish",
+        "check-ai-pr",
+    ):
         assert f"{target}: ensure-locked-dev-environment" in makefile
 
 

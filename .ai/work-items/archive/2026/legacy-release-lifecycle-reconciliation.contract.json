@@ -1,0 +1,49 @@
+{
+  "contractVersion": 2,
+  "workItemId": "legacy-release-lifecycle-reconciliation",
+  "mode": "cleanup",
+  "title": "Reconcile legacy release lifecycle evidence",
+  "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+  "baselineDirtyPaths": [],
+  "scope": [".ai/work-items/active/legacy-release-lifecycle-reconciliation.contract.json", ".ai/work-items/active/legacy-release-lifecycle-reconciliation.summary.json", ".ai/cockpit/current_status.md", ".ai/work-items/starts/**", ".ai/work-items/archive/**", ".ai/work-items/active/legacy-release-lifecycle-reconciliation.outcome.json", ".ai/work-items/active/legacy-release-lifecycle-reconciliation.outcome.md"],
+  "outOfScope": ["Do not change product code, tests, workflows, release metadata, tags, provider Releases, or v0.5.58 public assets.", "Do not delete any Dependabot branch or PR.", "Do not delete a legacy identity until its evidence is preserved and v0.5.58 coverage is verified."],
+  "sources": [
+    {"path": ".ai/work-items/archive/2026/release-v0-5-58-execution.summary.json", "reason": "Records the completed public v0.5.58 delivery and future-adopter evidence."},
+    {"path": ".ai/work-items/archive/2026/release-v0-5-58-execution.outcome.json", "reason": "Provides the completed successor Outcome."},
+    {"path": ".ai/work-items/active/repository-stale-worktree-branch-cleanup.summary.json", "reason": "Historical cleanup evidence; the active source was archived by PR #812."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.58", "reason": "Provider evidence for the stable public Release and its assets."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783", "reason": "Tracks the original future-adopter installer failure family."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["branch_cleanup", "worktree_cleanup", "evidence_integrity"], "reason": "Legacy release identities contain blocked/yellow evidence and cannot be discarded until it is preserved and the later public delivery is bound.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["Outcome and human-benefit records are trust surfaces; legacy evidence reconciliation requires strict verification."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "none"},
+  "executionDecision": {"status": "continue", "reason": "The user authorized full lifecycle closure and cleanup; every deletion remains conditional on preservation and source-bound coverage evidence."},
+  "preReviewWarnings": ["Preserve the exact red/yellow historical artifacts before deleting either associated worktree or branch."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record bounded destructive lifecycle work before archive."},
+  "acceptance": [
+    "The v0.5.56 blocked predecessor and v0.5.57 yellow corrective evidence are preserved in the main archive with their historical status intact.",
+    "Evidence proves v0.5.58 is a stable public Release and that its source contains the v0.5.57 canonical release-URL correction and regression coverage.",
+    "Only after those proofs are recorded, the v0.5.56 branch is absent and its repository main worktree is restored to synchronized main; the local-plus-origin v0.5.57 worktree/branch are absent.",
+    "v0.5.58 tags/assets and the seven Dependabot PR branches remain untouched.",
+    "This reconciliation Work Item completes normal archive, PR, merge, and ai-close-work-item cleanup."
+  ],
+  "guidelines": ["Preserve historical Outcome status; do not reclassify red or yellow evidence as green.", "Fail closed on any missing archive artifact, branch ancestry ambiguity, or release-coverage mismatch."],
+  "intent": {"problem": "The current public v0.5.58 delivery supersedes the earlier v0.5.56/v0.5.57 release attempts, but their local worktrees and branches remain. Deleting them now would lose blocked and warning evidence.", "constraints": ["Preserve evidence before destructive actions.", "Do not publish another version for cleanup-only work.", "Do not change immutable releases or lower any verification gate."], "rationale": "Future adopters already receive v0.5.58; a source-bound historical disposition gives repository hygiene without hiding the failures that led to it."},
+  "rawUserRequest": "清理前确认是否真的不需要了。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-12-confirm-before-cleanup", "capturedAt": "2026-08-12T07:30:00+09:00", "digest": "sha256:7d491a5f5bd4b9bfa2ad7ea6bffdb00b8ef70ccf095348c6003aa33f304fe074"},
+  "declaredIntent": {"summary": "Preserve and reconcile superseded release evidence, then remove only the exact legacy identities no longer required for delivery.", "requestedCapabilities": ["ai_governance"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "verification": [{"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}],
+  "scenarioCoverage": [
+    {"scenario":"Legacy evidence is missing or status is changed during preservation.","required":true,"riskDomain":"evidence_integrity","status":"unverified","evidence":[],"expected":"Cleanup stops; historical red/yellow artifacts remain unchanged.","verificationPlan":"Compare source artifact digests and status fields before deletion."},
+    {"scenario":"v0.5.58 does not contain the corrective installer behavior or lacks stable public assets.","required":true,"riskDomain":"evidence_integrity","status":"unverified","evidence":[],"expected":"Legacy v0.5.57 remains retained and no cleanup claim is made.","verificationPlan":"Verify source blobs/history and provider Release/tag/assets."},
+    {"scenario":"Deletion postcondition leaves a local, remote, or worktree identity.","required":true,"riskDomain":"branch_cleanup","status":"unverified","evidence":[],"expected":"Closure fails until exact absence is proven.","verificationPlan":"Check worktree list, local refs, and origin refs after deletion."}
+  ],
+  "destructiveChangePolicy": {"allowed": true, "requiresHumanApproval": true, "allowPatterns": ["local branch codex/release-v0-5-56-adopter-delivery", "worktree ai-cockpit-template", "local branch codex/release-v0-5-57-full-url-adopter-repair", "remote branch origin/codex/release-v0-5-57-full-url-adopter-repair", "worktree ai-cockpit-template-v057"], "approvalEvidence": {"approved": true, "approvedBy": "user", "reason": "The user authorized complete local and remote cleanup after confirmation of no delivery need.", "identityEvidence": {"schemaVersion":1,"approvalType":"destructive_change","identityLevel":"direct_user_authorized","actor":"user","provider":null,"evidence":{"directUserInstructionRef":"conversation:2026-08-12-confirm-before-cleanup","directUserInstructionDigest":"sha256:7d491a5f5bd4b9bfa2ad7ea6bffdb00b8ef70ccf095348c6003aa33f304fe074","authorizedAt":"2026-08-12T07:30:00+09:00"},"scope":["local branch codex/release-v0-5-56-adopter-delivery","worktree ai-cockpit-template","local branch codex/release-v0-5-57-full-url-adopter-repair","remote branch origin/codex/release-v0-5-57-full-url-adopter-repair","worktree ai-cockpit-template-v057"]}}},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User authorized necessary governance evidence and exact cleanup confirmation."},
+  "rollbackNote": "Do not recreate or alter public releases. If proof fails, retain all legacy identities and report the red/yellow evidence.",
+  "budgetImpact": {"expectedMetrics":{"archiveGrowth":885}},
+  "startReceipt": {"path":".ai/work-items/starts/legacy-release-lifecycle-reconciliation.json","baseCommit":"241f9057733c323565aa5b9b8f5bec6583f0a5b9","initialScopeDigest":"ea32a675880479f78477736e99c2d10e66a42cadfbab0bb4917102f6461c2613","contractSkeletonDigest":"724d1d4be720b04b1ee59879cae65ac6ec93474ffcd634de7530a0bdf088b6a5"}
+}

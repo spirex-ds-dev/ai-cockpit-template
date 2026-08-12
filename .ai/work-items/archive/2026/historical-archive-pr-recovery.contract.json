@@ -1,0 +1,87 @@
+{
+  "contractVersion": 2,
+  "workItemId": "historical-archive-pr-recovery",
+  "mode": "code",
+  "title": "Recover PR validation for preserved legacy archives",
+  "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+    ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+    ".ai/work-items/active/historical-archive-pr-recovery.outcome.json",
+    ".ai/work-items/active/historical-archive-pr-recovery.outcome.md",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/starts/**",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "Do not change product behavior, test coverage policy, release metadata, tags, provider Releases, or v0.5.58 public assets.",
+    "Do not reclassify or rewrite any historical red or yellow Outcome.",
+    "Do not delete Dependabot branches or pull requests."
+  ],
+  "sources": [
+    {"path": "scripts/ai_check_pr.py", "reason": "The failing PR aggregate implementation."},
+    {"path": "tests/test_pr_aggregate.py", "reason": "Existing PR aggregate regression coverage and the new reproducer."},
+    {"path": ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.json", "reason": "Historical red Outcome that must remain immutable after preservation."},
+    {"path": ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.json", "reason": "Historical yellow Outcome that must remain immutable after preservation."},
+    {"path": ".ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.contract.json", "reason": "Current cleanup archive that declares why the historical evidence is preserved."}
+  ],
+  "rawUserRequest": "Continue until all cleanup is complete; approve the minimal tested PR-aggregate repair for preserved legacy archives.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-12-continue-approved-historical-archive-pr-repair", "capturedAt": "2026-08-12", "digest": "sha256:2f25b75804976964dc87d4e2bd3ad5477758235c3c32f849ca059ed20fe62fb3"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Repair fail-closed PR aggregation for explicitly preserved historical archives without changing release or runtime behavior.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "governance_regression"],
+    "reason": "The repair changes a PR gate, so it must accept only explicitly bound historical evidence and remain fail-closed for ordinary extra Work Items.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["PR aggregation and archived Outcome integrity are trust surfaces."],
+    "override": {"approvalEvidence": "The user approved continuing with the narrow tested repair until all cleanup is complete.", "reason": "Strict verification is required because the repair changes PR aggregation and archived Outcome evidence handling.", "risks": ["evidence_integrity", "governance_regression"], "notRunChecks": ["Release publication checks are inapplicable because no release-owned resource changes and no version is published."], "workItemOnly": true, "workItemId": "historical-archive-pr-recovery"}
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user approved the narrow repair and the acceptance criteria are executable."},
+  "preReviewWarnings": ["Review the negative cases carefully: a normal extra Work Item must still fail."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Preserve a verified pre-edit and pre-finish trail for this governance gate change."},
+  "acceptance": [
+    "The actual PR-bundle reproduction containing preserved v0.5.56 and v0.5.57 archive evidence plus the reconciliation archive is rejected before the repair and accepted after it.",
+    "The new exception is evidence-bound: it requires immutable archived status, an explicit successor binding, and a current reconciliation source; a missing or altered binding fails closed.",
+    "An ordinary second new Work Item remains rejected by the exactly-one-newly-maintained-Work-Item gate.",
+    "The archived v0.5.56 red and v0.5.57 yellow Outcomes retain their original status and v0.5.58 is not republished.",
+    "The replacement Work Item completes archive, PR, merge, ai-close-work-item, and the final local/remote cleanup audit."
+  ],
+  "guidelines": [
+    "Keep the exception narrow, deterministic, and fail-closed.",
+    "Preserve historical Outcome truth; never use a cache or a new receipt to impersonate completed verification."
+  ],
+  "intent": {
+    "problem": "The PR aggregate gate mistakes two preserved historical release archives for newly maintained Work Items, blocking the normal merge and lifecycle closure of otherwise completed cleanup.",
+    "constraints": ["No gate bypass or weakened exactly-one policy.", "No mutation of historical Outcome status.", "No new release or modification of v0.5.58."],
+    "rationale": "A source-bound archival provenance rule lets the repository keep failure evidence and finish cleanup while continuing to reject unrelated multi-Work-Item PRs."
+  },
+  "scenarioCoverage": [
+    {"scenario": "A documented historical red/yellow archive pair is preserved by the reconciliation archive.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "It is classified as historical preservation, not a new Work Item.", "verificationPlan": "Focused aggregate regression test and actual check-ai-pr reproduction."},
+    {"scenario": "A preservation binding or historical status is missing or altered.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "The PR aggregate check fails closed.", "verificationPlan": "Focused negative regression tests."},
+    {"scenario": "An unrelated second new Work Item is present.", "required": true, "riskDomain": "governance_regression", "status": "unverified", "evidence": [], "expected": "The exactly-one-newly-maintained-Work-Item failure remains.", "verificationPlan": "Existing aggregate regression plus focused assertion."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized continuing until all cleanup is complete after confirming the narrow preservation-rule design."},
+  "rollbackNote": "Revert this replacement Work Item as one unit; no historical archive is modified or deleted.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 886}},
+  "startReceipt": {"path": ".ai/work-items/starts/historical-archive-pr-recovery.json", "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9", "initialScopeDigest": "552003533efb9c54a83fe5efc8ce3f4d9032620e5db06c463077cf2d3362b105", "contractSkeletonDigest": "ab46f7d94b976540eee40bb189e347aa675ffa934fe92eb17840179196af11b8"}
+}

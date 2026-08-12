@@ -137,7 +137,7 @@ help:
 	@printf '%s\n' ''
 	@printf '%s\n' 'Customize project-format-check, project-test, and project-lint for your stack.'
 
-check-quality-toolchain:
+check-quality-toolchain: ensure-locked-dev-environment
 	$(AI_PYTHON) scripts/check_dev_tool_versions.py --manifest requirements-dev.in --tool ruff
 
 project-format-check: check-quality-toolchain
@@ -571,7 +571,7 @@ ai-cockpit-quality:
 		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
 		$(QUALITY_MAKE) --no-print-directory "$$target" QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"
 
-ai-start:
+ai-start: ensure-locked-dev-environment
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)" $(if $(AI_START_CONCURRENCY_BOUNDARY),--concurrency-boundary '$(AI_START_CONCURRENCY_BOUNDARY)',) $(if $(AI_START_CALIBRATION_CORRECTIVE),--calibration-corrective '$(AI_START_CALIBRATION_CORRECTIVE)',)
 
 ai-resume-work-item:
@@ -702,7 +702,7 @@ check-ai-test-weakening:
 check-ai-scenario-coverage:
 	$(AI_PYTHON) scripts/ai_check_scenario_coverage.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
 
-ai-preflight:
+ai-preflight: ensure-locked-dev-environment
 	$(AI_PYTHON) scripts/ai_preflight_review.py $(if $(CONTRACT),--contract $(CONTRACT))
 	$(AI_PYTHON) scripts/ai_preflight_review.py --check $(if $(CONTRACT),--contract $(CONTRACT))
 	@if [ "$(AI_PREFLIGHT_VALIDATE_CONTRACT)" = "true" ]; then $(AI_PYTHON) scripts/ai_check_work_item.py $(CONTRACT); fi
@@ -843,7 +843,7 @@ check-ai:
 check-ai-pr-core:
 	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
-check-ai-pr:
+check-ai-pr: ensure-locked-dev-environment
 	@set -e; \
 		$(AI_NESTED_MAKE) project-format-check; \
 		$(AI_NESTED_MAKE) project-lint; \
@@ -855,7 +855,7 @@ check-ai-pr:
 		fi; \
 		$(AI_NESTED_MAKE) check-ai-pr-core AI_BASE_COMMIT="$(AI_BASE_COMMIT)"
 
-ai-finish:
+ai-finish: ensure-locked-dev-environment
 	@# ARCHIVE is a one-shot lifecycle request. Do not let Make propagate it into
 	@# nested project/test invocations, where it could archive an unrelated Work Item.
 	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(SKIP_QUALITY)),--skip-quality) $(if $(filter true,$(ARCHIVE)),--archive) $(if $(REPORT_LANGUAGE),--language "$(REPORT_LANGUAGE)")

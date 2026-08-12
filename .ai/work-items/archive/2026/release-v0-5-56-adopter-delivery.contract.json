@@ -1,0 +1,285 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-56-adopter-delivery",
+  "mode": "code",
+  "title": "Publish v0.5.56 and prove future adopter delivery",
+  "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-56-adopter-delivery.contract.json",
+    ".ai/work-items/active/release-v0-5-56-adopter-delivery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-56-adopter-delivery.outcome.json",
+    ".ai/work-items/active/release-v0-5-56-adopter-delivery.outcome.md",
+    "target/release-*/**",
+    "target/task-closure-receipts/**",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "install.sh",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not alter, recreate, or delete v0.5.50 through v0.5.55 immutable tags, Releases, or assets.",
+    "Do not weaken test count, coverage, security, release, installer, smoke, or failure-evidence gates.",
+    "Do not hand-edit generated release evidence, immutable tags, provider Releases, or installer state."
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "The current public projection identifies immutable v0.5.55 while v0.5.56 is the next candidate."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Declares v0.5.56 as the candidate to publish."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Records v0.5.55 as the previous immutable release and v0.5.56 as the candidate."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The only permitted mechanism for same-SHA rehearsal, immutable tag creation, and provider asset publication."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-public-installer-metadata.summary.json",
+      "reason": "Proves the source repair that v0.5.56 must carry and records the remaining successor publication requirement."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783",
+      "reason": "Tracks the recurring release metadata regression family; it remains open until public proof succeeds."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "production_release",
+      "release_identity",
+      "evidence_integrity",
+      "adopter_installation"
+    ],
+    "reason": "Publishing immutable public assets is externally visible; rehearsal, tag, Release assets, and installer evidence must bind to one exact source.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Public provider publication and installer identity require strict full-quality verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized release publication, future-adopter proof, and local/remote cleanup after mandatory gates pass."
+  },
+  "preReviewWarnings": [
+    "Dispatch only v0.5.56 from synchronized origin/main after same-SHA rehearsal; inspect tag, stable Release, named assets, and a clean direct installer proof before reporting publication."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Release eligibility identifies v0.5.56 as the sole next patch after immutable v0.5.55 on synchronized origin/main.",
+    "A same-SHA v0.5.56 rehearsal succeeds without creating a tag, provider Release, or public asset and emits a source-bound receipt.",
+    "The actual release workflow consumes the rehearsal receipt and creates v0.5.56 with the exact tag target, stable provider Release, named assets, archive hash, SBOM, provenance, installer digest, and release-digests correlation verified.",
+    "A fresh Git repository invoking v0.5.56/install.sh with AI_COCKPIT_TEMPLATE_REPO=https://github.com/spirex-ds-dev/ai-cockpit-template.git records a v0.5.56 release identity before target writes.",
+    "After archive and PR merge, ai-close-work-item reports this exact Work Item's local and remote branch deleted; the archived Outcome states that public-main projection synchronization is an immediate successor requirement."
+  ],
+  "guidelines": [
+    "Do not bypass release.yml or manually mutate immutable release objects.",
+    "Keep candidate state, tag, provider assets, release-digests, and installer evidence distinguishable and source-bound.",
+    "Do not claim future-adopter default discovery until the post-publication main projection and a fresh discovery installation have passed."
+  ],
+  "intent": {
+    "problem": "The source repair for full public HTTPS Git installer URLs is merged, but future adopters cannot receive it until it is published as immutable v0.5.56 assets and verified from a clean target repository.",
+    "constraints": [
+      "Publish exactly v0.5.56 from synchronized origin/main only after same-SHA rehearsal, preserving v0.5.50 through v0.5.55 unchanged.",
+      "Retain all quality, coverage, security, release, installer, smoke, and failure-evidence gates; a failed or canceled operation must remain red with recovery evidence.",
+      "Prove the full HTTPS Git URL installer path against immutable v0.5.56 assets; do not treat an ordinary cache hit or tag existence as publication proof.",
+      "After this release, create an immediate successor to synchronize public main discovery to v0.5.56 and prove the documented default installation path before closing Issue #783."
+    ],
+    "rationale": "Only a source-bound immutable release can deliver the performance and installer correctness benefit to projects installed in the future; keeping the public projection step separate prevents repeating a stale release.json claim."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "candidate eligibility and identity",
+      "riskDomain": "release_identity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Only v0.5.56 is eligible on synchronized origin/main; v0.5.55 remains the immutable predecessor.",
+      "verificationPlan": "Run release readiness, state, evidence, and distribution checks before rehearsal."
+    },
+    {
+      "scenario": "same-source rehearsal",
+      "riskDomain": "evidence_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The rehearsal receipt binds v0.5.56 to one exact main SHA and performs no immutable or public publication mutation.",
+      "verificationPlan": "Dispatch the release workflow rehearsal and independently inspect receipt, tag absence, and Release absence."
+    },
+    {
+      "scenario": "published assets and direct future-adopter installer",
+      "riskDomain": "adopter_installation",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Public v0.5.56 assets and a clean direct installer execution with the full HTTPS Git URL agree on tag, source, archive, installer digest, and release-digests identity.",
+      "verificationPlan": "Inspect the provider Release and execute the installer in a fresh Git repository after publication."
+    }
+  ],
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "rawUserRequest": "目标是把收益交付给 adopter。不是现成已有的具体某个项目，是未来安装的对象工程。到发布最新版本为止，做好优化和自检。明天，我要看到修正完整的新版本（包括远程和本地的清理）。完成全部工单为止不要停。要确认的，我授权给你，并写入contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization",
+    "capturedAt": "2026-08-11T11:59:00+00:00",
+    "digest": "sha256:539ce510d0dcd7bf15cdaafc4174a6036a57c2f422a399fc1014826b6b2afe74"
+  },
+  "declaredIntent": {
+    "summary": "Deliver the merged installer repair and measured quality-path performance benefit to future adopter projects through one verified immutable v0.5.56 release.",
+    "requestedCapabilities": [
+      "ai_governance"
+    ]
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-11-complete-all-work-items-release-authorization",
+    "scope": "Publish only v0.5.56 after readiness, exact-source rehearsal, controlled release workflow, immutable tag, provider assets, direct future-adopter installer proof, and final Work Item cleanup pass. No gate bypass, historical-tag mutation, or blind retry is authorized."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized complete publication, provider-side verification, future-adopter installation proof, and cleanup."
+  },
+  "rollbackNote": "Do not alter an immutable tag or published Release. If rehearsal or publication validation fails, retain its evidence, leave the attempted release unpublished or quarantined as the workflow requires, repair through a successor Work Item, and advance to a new patch only when required.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 887
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-56-adopter-delivery.json",
+    "baseCommit": "1de3bd2fefa94feb0ac0adf41b66dfa1b2868d45",
+    "initialScopeDigest": "5b1b5e1b3fd09a4b7e8584c1d39c32ad4fbc362480c364a7dc46fbe11ee47ab1",
+    "contractSkeletonDigest": "e55027cdac74816be9de7a4c10442f2c5ebcc28a5e0f03d87551dcc69a8a3d3c"
+  },
+  "synchronizationHistory": [
+    {
+      "synchronizationVersion": 1,
+      "fromBaseCommit": "1de3bd2fefa94feb0ac0adf41b66dfa1b2868d45",
+      "toBaseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/release-v0-5-56-adopter-delivery",
+      "recordedAt": "2026-08-11T22:30:28.720611+00:00",
+      "priorContractDigest": "d1fb9fc9919ec26f426f6c5cf59e5708534cdad43ee0e59a97b256a8e91a0d78",
+      "priorSummaryDigest": "c5b075e7878dec289773fd11821efed8a5a095213672c47629b37c4a29d0e4a2",
+      "rebaseHeadBefore": "b15b87f41471f519027627906c2a5d17fa07f225",
+      "rebaseHeadAfter": "b15b87f41471f519027627906c2a5d17fa07f225"
+    }
+  ]
+}

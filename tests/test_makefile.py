@@ -572,7 +572,7 @@ def test_ai_finish_forwards_explicit_report_language_without_implicit_archive():
 def test_ai_finish_keeps_archive_one_shot_in_both_make_entrypoints():
     for path in (ROOT / "Makefile", ROOT / "templates" / "make" / "Makefile.ai"):
         text = path.read_text(encoding="utf-8")
-        finish_recipe = text.split("ai-finish:\n", 1)[1].split("\n\n", 1)[0]
+        finish_recipe = text.split("ai-finish:", 1)[1].split("\n\n", 1)[0]
         assert "env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES" in finish_recipe
         assert "$(if $(filter true,$(ARCHIVE)),--archive)" in finish_recipe
 

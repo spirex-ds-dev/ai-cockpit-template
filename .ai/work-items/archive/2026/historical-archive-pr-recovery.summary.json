@@ -1,0 +1,678 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "historical-archive-pr-recovery",
+  "contractPath": ".ai/work-items/archive/2026/historical-archive-pr-recovery.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Classifies explicitly documented preserved historical archives without weakening normal PR aggregation."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Covers the green-successor historical-preservation rule and its negative status case."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerated capability evidence hashes and freshness after the PR aggregate behavior changed."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerated derived alignment evidence after the capability matrix refresh."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Regenerated human-readable alignment evidence after the capability matrix refresh."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/historical-archive-pr-recovery.contract.json",
+      "reason": "Records the replacement Work Item authority and scope."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/historical-archive-pr-recovery.summary.json",
+      "reason": "Records implementation and verification evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/historical-archive-pr-recovery.outcome.json",
+      "reason": "Mandatory generated Task Outcome evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/historical-archive-pr-recovery.outcome.md",
+      "reason": "Mandatory human-readable Task Outcome evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status for the active and archived lifecycle states."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated Human Benefit Report bound to the Task Outcome."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated human-readable Human Benefit Report."
+    },
+    {
+      "path": ".ai/work-items/starts/historical-archive-pr-recovery.json",
+      "reason": "Binds this replacement Work Item to origin/main."
+    },
+    {
+      "path": ".ai/work-items/starts/legacy-release-lifecycle-reconciliation.json",
+      "reason": "Restores the archived reconciliation Start Receipt needed to verify its historical identity."
+    },
+    {
+      "path": ".ai/work-items/starts/release-v0-5-56-adopter-delivery.json",
+      "reason": "Restores the preserved v0.5.56 Start Receipt without changing its archive."
+    },
+    {
+      "path": ".ai/work-items/starts/release-v0-5-57-full-url-adopter-repair.json",
+      "reason": "Restores the preserved v0.5.57 Start Receipt without changing its archive."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.archive-manifest.json",
+      "reason": "Preserves the v0.5.56 archive root."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.contract.json",
+      "reason": "Preserves the v0.5.56 historical Contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.json",
+      "reason": "Preserves the v0.5.56 red Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.md",
+      "reason": "Preserves the v0.5.56 human-readable Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.successor-receipt.json",
+      "reason": "Preserves the v0.5.56 successor binding."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.summary.json",
+      "reason": "Preserves the v0.5.56 verification history."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.archive-manifest.json",
+      "reason": "Preserves the v0.5.57 archive root."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.contract.json",
+      "reason": "Preserves the v0.5.57 historical Contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.json",
+      "reason": "Preserves the v0.5.57 yellow Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.md",
+      "reason": "Preserves the v0.5.57 human-readable Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.summary.json",
+      "reason": "Preserves the v0.5.57 verification history."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.archive-manifest.json",
+      "reason": "Preserves the reconciliation archive root."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.contract.json",
+      "reason": "Preserves the completed reconciliation Contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.outcome.json",
+      "reason": "Preserves the completed reconciliation Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.outcome.md",
+      "reason": "Preserves the human-readable reconciliation Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.summary.json",
+      "reason": "Provides the explicit child-archive preservation evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Indexes the preserved historical and reconciliation archives."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/historical-archive-pr-recovery.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/historical-archive-pr-recovery.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated machine-readable Human Benefit Review Report."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated human-readable Human Benefit Review Report."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/historical-archive-pr-recovery.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.summary.json",
+    ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.json",
+    ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.json"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:20.163646+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "99fb0b0c204af1ed7f6c13f027777bc9a35f93434ccf3070321494e87d44a885",
+      "commandHash": "cd4011c934225403835580da1173bcf2d86eb0572b9713d1ea0a3f1c8fcecde8",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "2c895e6eb05249f8fb9e983bd131a3919ec701d17d45b043bffb475872bb017a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/historical-archive-pr-recovery.contract.json work item contract check passed: .ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/historical-archive-pr-recovery.contract.json work item contract check passed: .ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "outputBytes": 240
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:20.393012+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "7a47d34e5eabc7379685627297c0e1c5ccb9201a994060a12274bf33ce01cd61",
+      "commandHash": "04060a9a8c5dd4fffad101c426724f5ee9dd9f5c3b0941701b8c7aad2b40beb8",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "24a29e01a489be7bd989194a9cf6017786593dd1f3c505661c793caa75668ded",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/historical-archive-pr-recovery.contract.json scope guard passed: 33 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/historical-archive-pr-recovery.contract.json scope guard passed: 33 changed path(s) covered",
+      "outputBytes": 183
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:20.642616+00:00",
+      "exitCode": 0,
+      "durationMs": 158,
+      "outputDigest": "3a094a1bef4050aff52e7f62392bd68c80874b747fa50747347ed79a00859dc4",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "89b35e285ea44ad0c518d768eddc2c8f94c2f9819e326795107a89b316af5997",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 220
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:21.220794+00:00",
+      "exitCode": 0,
+      "durationMs": 436,
+      "outputDigest": "f5a96f9362d796959523739e46a592e6878eb9945d48e1fcb86f0fd318350580",
+      "commandHash": "2fb71ba8469405ab518b32e0a8db7b06135b3daa28430d838f778db8e6ce8b6c",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "88dc97002da288b3f1003a9f15b2191a7246518dd70bb613700ab9393db86354",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `historical-archive-pr-recovery` - Contract Hash: `b5c1adbd9573b637` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Requ",
+      "outputTail": "me.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.archive-manifest.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.successor-receipt.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.archive-manifest.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/historical-archive-pr-recovery.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/legacy-release-lifecycle-reconciliation.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/release-v0-5-56-adopter-delivery.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/release-v0-5-57-full-url-adopter-repair.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_pr.py` — covered by Contract scope - [active_owned] `tests/test_pr_aggregate.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 6556
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:21.459755+00:00",
+      "exitCode": 0,
+      "durationMs": 138,
+      "outputDigest": "dcd20ddcf02e4ad453fc2cce2cc4c76d510f309be3d1d5c9b3d3d4faa28cb592",
+      "commandHash": "37a3d51b03e75d1083305477cc81b6ae7d6650483f8f695ba5cfda340cdc43e7",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "bc516c0d8487f72b040d3ef124a1c84cf72e737478a5b5a9964407ce4a112c1b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json review policy matched 25 path(s) [review] .ai/work-items/active/historical-archive-pr-recovery.contract.json [review] .ai/work-items/active/historical-archive-pr-recovery.outcome.json [review] .ai/work-items/active/historical-archive-pr-recovery.outcome.md [review] .ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.archive-manif",
+      "outputTail": "recovery.summary.json review policy matched 25 path(s) [review] .ai/work-items/active/historical-archive-pr-recovery.contract.json [review] .ai/work-items/active/historical-archive-pr-recovery.outcome.json [review] .ai/work-items/active/historical-archive-pr-recovery.outcome.md [review] .ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.archive-manifest.json [review] .ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.contract.json [review] .ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.outcome.json [review] .ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.outcome.md [review] .ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.archive-manifest.json [review] .ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.contract.json [review] .ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.json [review] .ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.md [review] .ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.successor-receipt.json [review] .ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.archive-manifest.json [review] .ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.contract.json [review] .ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.json [review] .ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.md [review] .ai/work-items/starts/historical-archive-pr-recovery.json [review] .ai/work-items/starts/legacy-release-lifecycle-reconciliation.json [review] .ai/work-items/starts/release-v0-5-56-adopter-delivery.json [review] .ai/work-items/starts/release-v0-5-57-full-url-adopter-repair.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items/archive/index.json [review] scripts/ai_check_pr.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 2132
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:21.674919+00:00",
+      "exitCode": 0,
+      "durationMs": 125,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "93e72677080db87de7479455b424c75ef198e4b2ebec9b10bbac3f4584fb0a02",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:21.914500+00:00",
+      "exitCode": 0,
+      "durationMs": 146,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "58abfa441d16c6cc778e06f89a5f502d364cd59db249124e0dfa7c9d58a3fd7c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:22.198677+00:00",
+      "exitCode": 0,
+      "durationMs": 176,
+      "outputDigest": "9862f879b1aded2322844b190d089cdf878ae03857ec4372e5d957718df05908",
+      "commandHash": "16673fbeecc9b62d2a30cccf3e48f6ba0e24c900c792aba8aa312704a6c82f36",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "ad9917d8adc2d76667cd6b2fcc7ed5f46f827728ab8e512d8bd68c6942dbbe83",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 283
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:22.340360+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "f100750ec1bb6034221742e2896f1e221be0914b1a322c4ebeb6fe8d62c4a4a0",
+      "commandHash": "63d92d034d33dd5dcbbdf1011635c2aeeff0dd2ee62cc82084f2a2e91bac52eb",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "56908683c3509efdec96adb58f27a5ea03fbe1ca6591d7894ea77eaf0e74d106",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputBytes": 288
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:39:22.868403+00:00",
+      "exitCode": 0,
+      "durationMs": 435,
+      "outputDigest": "b6ffa6b53fcdb2c1d0b5f7f3f8cbe5edf7cc1107d909c9ac2d22b75266834643",
+      "commandHash": "875fff5ae9d5835d0b415bf7a794e881c78895d3924d11f9b36601317f46a350",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "fbc638bdf0ab96d72bc29dd66c821178bc61615c5cabd681da2e5187a9f9b10f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json ## Diff Ownership Preview - active_owned: `26`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outc",
+      "outputTail": "rk-items/archive/2026/legacy-release-lifecycle-reconciliation.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/legacy-release-lifecycle-reconciliation.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.archive-manifest.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.successor-receipt.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.archive-manifest.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/historical-archive-pr-recovery.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/legacy-release-lifecycle-reconciliation.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/release-v0-5-56-adopter-delivery.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/release-v0-5-57-full-url-adopter-repair.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_pr.py` — covered by Contract scope - [active_owned] `tests/test_pr_aggregate.py` — covered by Contract scope",
+      "outputBytes": 3298
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:48:45.829975+00:00",
+      "exitCode": 0,
+      "durationMs": 562744,
+      "outputDigest": "b8bd363e7f838bc12e5b141336a4de332e8a5b24925384aa16020ca6715b6264",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "e0e7ccea48c49ce4563c238a8acf10da286c247251fa36874141b0ac59fb7f25",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"241f9057733c323565aa5b9b8f5bec6583f0a5b9\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/historical-archive-pr-recovery.contract.json\", \".ai/work-items/active/h",
+      "outputTail": "nt_failure_emits_red_outcome_before_quality 3.54s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 3.44s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 3.39s call tests/test_adoption_ready.py::test_adopted_readiness_rejects_current_template_placeholders 3.38s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 3.22s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 2367 passed, 3 warnings in 547.02s (0:09:07) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1FPLjwUQXK/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1FPLjwUQXK/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1FPLjwUQXK/multi-workflow.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1FPLjwUQXK/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1FPLjwUQXK/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/241f9057733c-local-20260811T233923Z-44737-0/summary.json",
+      "outputBytes": 105227
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:48:46.779351+00:00",
+      "exitCode": 0,
+      "durationMs": 575,
+      "outputDigest": "2738f06da0b50deb9f78441c4f799ab4ab88dc56d951906098f378fc0751973c",
+      "commandHash": "5e49527c7689dbf276c2732cf9b975983a26486be0ccab06d8c61078f910a4f4",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "90beacd9c9b367e8245e3e3cd6039d9f9c67bac32b7a8104c9a22e9ef464a848",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 347
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:48:47.830797+00:00",
+      "exitCode": 0,
+      "durationMs": 474,
+      "outputDigest": "4fdc6261695a9728470bcc5570b3e8c104ca85131a78f5bc3d63e733e701a70d",
+      "commandHash": "22851a9c816c74674205fdcf03f064700a43179c7ac4cc4d33b29cbd359479cd",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "a3554a4b2fd9d0e31450c6f544fe5fa86096dc0e1616bf16a9449944b5213efe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 313
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:48:48.455480+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "c28815931e34fd48859ffde59086ba3bf15611c7afba12199fa3eb06c029590d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:48:48.618844+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "446ae490265bf56ea05a8f9c0291f916e6c1a74d1569322ee0f86e0e985bcb02",
+      "commandHash": "674dbaf02a6b9b6701cab2924220bc35ceab836c431c52b09218052bf42e0342",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "9196d5a8062e03d52b10004bee9ec17b0ec350fe7f6d21ceb5e5316857ba6600",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json --summary .ai/work-items/active/historical-archive-pr-recovery.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 293
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/historical-archive-pr-recovery.summary.json CONTRACT=.ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-11T23:48:50.254426+00:00",
+      "exitCode": 0,
+      "durationMs": 232,
+      "outputDigest": "a8eaf1e54941aa1c27bd19427b5b82aacbc69453307c0afa90eb53c8d2a9cbb3",
+      "commandHash": "e07c49f2d0c894b6cceed822416f18997640137b5f8446e107f1f708a6b3b931",
+      "contractHash": "b5c1adbd9573b6372fe0520c2ab9b5e17a6f97a244b4709989739015fa48b534",
+      "commitSha": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+      "executionContractPath": ".ai/work-items/active/historical-archive-pr-recovery.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "worktreeDigest": "a43c3fb8e0ecfae96ead81ebb8e32fa52067dc36ae8492785e1f6804d59c849c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/historical-archive-pr-recovery.summary.json --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json ai summary check passed: .ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/historical-archive-pr-recovery.summary.json --contract .ai/work-items/active/historical-archive-pr-recovery.contract.json ai summary check passed: .ai/work-items/active/historical-archive-pr-recovery.summary.json",
+      "outputBytes": 307,
+      "outcomeInputDigest": "31a04d5716b7076a0763180e0e5c47a8d381e94bf2544f84687d7a9fdfe2ac76"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the exception narrow, deterministic, and fail-closed.",
+      "compliant": true,
+      "evidence": "The classifier requires a complete immutable archive group, red/yellow child Outcome, green parent Outcome, stable release source, and child Outcome source binding."
+    },
+    {
+      "guideline": "Preserve historical Outcome truth; never use a cache or a new receipt to impersonate completed verification.",
+      "compliant": true,
+      "evidence": "The implementation reads archived Outcome files without mutating them; the regression rejects a non-green successor."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The PR gate exception is constrained by multiple archive and Outcome bindings and is covered by focused regression plus the actual PR-bundle check."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "severity": "medium",
+      "area": "pr_aggregation",
+      "detail": "Preserved legacy archives were counted as new Work Items because their historical sequence is not eligible for the existing recovery-receipt chain."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "archive_policy",
+      "detail": "The exception is intentionally limited to parent-documented red/yellow historical evidence and does not admit ordinary second Work Items.",
+      "reviewRecommended": false,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "historical-preservation predicate",
+      "negative PR aggregation behavior"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    "Confirm an identity is unnecessary before cleanup and preserve failure evidence rather than deleting it."
+  ],
+  "userCorrectionSolidification": [
+    "PR aggregation now recognizes only explicit green-successor preservation of unchanged red/yellow archives."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "1811df63738f9118",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "1811df63738f9118",
+      "previousContractHash": "1811df63738f9118",
+      "contractHash": "b5c1adbd9573b637",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Added the two generated pre-release documentation-alignment artifacts required after refreshing capability-truth evidence.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-11T23:37:53.559551+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "b5c1adbd9573b637",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not claim release publication or Dependabot cleanup; this Work Item only repairs gated archival preservation and completes its lifecycle.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-12T00:00:00Z",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/historical-archive-pr-recovery.contract.json"
+        ],
+        "reason": "The Contract states the bounded PR aggregation design."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_check_pr.py",
+          "tests/test_pr_aggregate.py"
+        ],
+        "reason": "Implementation and regression test match the declared evidence rule."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/task_report.md",
+          ".ai/work-items/archive/2026/historical-archive-pr-recovery.outcome.md",
+          "docs/reference/pre-release-documentation-alignment.md"
+        ],
+        "reason": "The generated Outcome documents the governance behavior; no product command changes."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "No user-facing localized text changes."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/release-v0-5-56-adopter-delivery.outcome.json",
+          ".ai/work-items/archive/2026/release-v0-5-57-full-url-adopter-repair.outcome.json"
+        ],
+        "reason": "Historical red and yellow limitations remain explicit and immutable."
+      }
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A documented historical red/yellow archive pair is preserved by the reconciliation archive.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py",
+        "make check-ai-pr AI_BASE_COMMIT=241f9057733c323565aa5b9b8f5bec6583f0a5b9"
+      ],
+      "notes": "The focused regression and real bundle exercise the predicate."
+    },
+    {
+      "scenario": "A preservation binding or historical status is missing or altered.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py"
+      ],
+      "notes": "The regression rejects a non-green successor."
+    },
+    {
+      "scenario": "An unrelated second new Work Item is present.",
+      "required": true,
+      "riskDomain": "governance_regression",
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py"
+      ],
+      "notes": "Existing exactly-one aggregate coverage remains green."
+    }
+  ],
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/historical-archive-pr-recovery.outcome.json",
+    "markdownPath": ".ai/work-items/active/historical-archive-pr-recovery.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2,
+    "humanStatusColor": "green",
+    "completionFact": "All declared finish checks passed.",
+    "recoveryCondition": ""
+  },
+  "archiveSequence": 882
+}

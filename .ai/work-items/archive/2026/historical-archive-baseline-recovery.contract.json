@@ -1,0 +1,209 @@
+{
+  "contractVersion": 2,
+  "workItemId": "historical-archive-baseline-recovery",
+  "mode": "code",
+  "title": "Recover historical archive PR aggregation from origin main",
+  "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/historical-archive-baseline-recovery.contract.json",
+    ".ai/work-items/active/historical-archive-baseline-recovery.summary.json",
+    "scripts/ai_check_pr.py",
+    "Makefile",
+    "tests/test_pr_aggregate.py",
+    "tests/test_ensure_locked_dev_environment.py",
+    "tests/test_makefile.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/historical-archive-baseline-recovery.outcome.json",
+    ".ai/work-items/active/historical-archive-baseline-recovery.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "Release publication, version/tag changes, and Dependabot PR branches.",
+    "Changing acceptance rules for ordinary unrelated Work Items."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The PR aggregate predicate omitted the green preservation parent."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Focused regression coverage proves eligible and ineligible chains."
+    },
+    {
+      "path": ".ai/work-items/active/historical-archive-chain-recovery.successor-receipt.json",
+      "reason": "Bound red predecessor evidence explains why delivery restarts from origin/main."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "governance_regression"
+    ],
+    "reason": "PR aggregation and archived Work Item evidence are trust surfaces; a permissive predicate could hide ordinary new work.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewEvidence": "The only material uncertainty is whether an ineligible green parent can be excluded; the negative regression specifically proves it remains counted."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "PR aggregation and archived evidence require strict verification."
+    ],
+    "override": {
+      "approvalEvidence": "User directed continuation until all cleanup is completed.",
+      "reason": "Strict verification for an evidence-preserving governance repair.",
+      "risks": ["evidence_integrity", "governance_regression"],
+      "notRunChecks": ["No release operation occurs."],
+      "workItemOnly": true,
+      "workItemId": "historical-archive-baseline-recovery"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The exact predecessor failure identifies the missing preservation-chain classification, and this Work Item starts from origin/main."
+  },
+  "preReviewWarnings": [
+    "Verify that an ordinary green archive without a fully bound red/yellow child remains counted as a new Work Item."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The aggregate function returns both exact archive paths only when a green parent binds the same historical red/yellow child through Outcome and Summary evidence, while an ordinary green archive remains outside that set.",
+    "Focused regression tests prove positive and negative preservation-chain behavior.",
+    "check-ai-pr against base 241f9057733c323565aa5b9b8f5bec6583f0a5b9 identifies exactly this successor as new work.",
+    "The archived successor Contract records baseCommit 241f9057733c323565aa5b9b8f5bec6583f0a5b9, and check-ai-pr accepts it against that same merge base without any release, version, or tag change.",
+    "Fresh worktree governance and PR entrypoints provision the hash-locked .venv before any command can use a globally installed Ruff version."
+  ],
+  "guidelines": [
+    "Do not weaken PR aggregation for ordinary Work Items.",
+    "Preserve red/yellow historical evidence and explicit failure conditions.",
+    "A bootstrap failure must fail closed and must not run governance checks with system Python.",
+    "Do not publish a release or alter version/tag artifacts."
+  ],
+  "intent": {
+    "problem": "Historical red/yellow archive evidence and its green preservation parent were counted as independent new Work Items, blocking the cleanup PR; the previous repair was itself started from a non-mergeable base.",
+    "constraints": ["Start and deliver from latest origin/main.", "Do not delete or rewrite historical failure evidence.", "Do not weaken ordinary PR aggregation or release any version.", "Fresh worktrees must never silently use globally installed developer tools."],
+    "rationale": "Classifying the bound green parent and historical child as one preservation chain restores the intended one-new-Work-Item rule while keeping all evidence inspectable. Making the locked environment a prerequisite of governance entrypoints removes the recurring false start caused by system Ruff drift."
+  },
+  "rawUserRequest": "Continue until all cleanup is complete.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-12-all-cleanup", "capturedAt": "2026-08-12", "digest": "sha256:continuation-authorized"},
+  "declaredIntent": {"summary": "Complete the fail-closed historical archive preservation-chain repair from origin/main without releasing or weakening PR aggregation.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "A green archive fully documents a red/yellow historical child.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "Both parent and child are excluded from new Work Item counting.", "verificationPlan": "Focused aggregate regression and check-ai-pr against origin/main."},
+    {"scenario": "A green archive lacks an eligible historical child.", "required": true, "riskDomain": "governance_regression", "status": "unverified", "evidence": [], "expected": "The green archive remains counted as new work.", "verificationPlan": "Focused negative regression."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository user",
+    "reason": "The user requested the recurring Ruff mismatch be root-caused and explicitly directed that the fix remain in this current Work Item rather than opening a new one."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 883
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/historical-archive-baseline-recovery.json",
+    "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+    "initialScopeDigest": "cbe4addfd1ed627aa90ff2e6a66d4173c6e12c1cd6160078bf1c0193b8a0ca39",
+    "contractSkeletonDigest": "7b9872a7213bf712beeebca272e85adb41a199a03bb08cb06ecb8fb15bd09ee4"
+  }
+}

@@ -449,6 +449,72 @@ def historical_recovery_receipts() -> list[tuple[str, Any]]:
     return receipts
 
 
+def documented_historical_preservation_paths(
+    entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
+) -> set[Path]:
+    """Return red/yellow archives explicitly preserved by one green successor archive.
+
+    This is intentionally narrower than ordinary recovery: each preserved archive
+    must be named as a complete immutable group by the successor Summary, its
+    Outcome must be consumed as source evidence, and the successor Contract must
+    cite a stable provider Release.  It prevents the exactly-one rule from
+    counting historical failure evidence as independently maintained work.
+    """
+    preserved: set[Path] = set()
+    for parent_path, parent_contract, parent_summary, _rank in entries:
+        sources = parent_contract.get("sources")
+        if not isinstance(sources, list) or not any(
+            isinstance(source, dict)
+            and isinstance(source.get("path"), str)
+            and "/releases/tag/v" in source["path"]
+            for source in sources
+        ):
+            continue
+        parent_outcome_path = Path(str(parent_path).replace(".contract.json", ".outcome.json"))
+        try:
+            parent_outcome = load_json(parent_outcome_path)
+        except (OSError, ValueError, json.JSONDecodeError):
+            continue
+        if not (
+            parent_outcome.get("status") == "completed"
+            and parent_outcome.get("humanStatusColor") == "green"
+        ):
+            continue
+        changed = {
+            item.get("path")
+            for item in parent_summary.get("changedFiles", [])
+            if isinstance(item, dict) and isinstance(item.get("path"), str)
+        }
+        sources_used = {
+            source for source in parent_summary.get("sourcesUsed", []) if isinstance(source, str)
+        }
+        for child_path, _child_contract, _child_summary, _child_rank in entries:
+            if child_path == parent_path:
+                continue
+            child_stem = archive_stem(child_path.relative_to(PROJECT_ROOT).as_posix())
+            child_outcome_rel = f"{child_stem}.outcome.json"
+            required_paths = {
+                f"{child_stem}.archive-manifest.json",
+                f"{child_stem}.contract.json",
+                f"{child_stem}.summary.json",
+                child_outcome_rel,
+                f"{child_stem}.outcome.md",
+            }
+            if not required_paths.issubset(changed) or child_outcome_rel not in sources_used:
+                continue
+            try:
+                child_outcome = load_json(PROJECT_ROOT / child_outcome_rel)
+            except (OSError, ValueError, json.JSONDecodeError):
+                continue
+            status_color = (child_outcome.get("status"), child_outcome.get("humanStatusColor"))
+            if status_color in {("blocked", "red"), ("completed_with_warnings", "yellow")}:
+                preserved.add(child_path)
+                # The green parent is the auditable preservation transaction,
+                # not a separate newly maintained Work Item.
+                preserved.add(parent_path)
+    return preserved
+
+
 def same_work_item_recovery_paths(
     base: str,
     entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
@@ -779,6 +845,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         if not archive_base_is_compatible(entry[1], base)
         and is_verified_merged_child_archive(entry, base)
     )
+    recovery_paths.update(documented_historical_preservation_paths(archive_entries))
     same_item_recovery_paths, same_item_receipts, recovery_blockers = same_work_item_recovery_paths(
         base, archive_entries
     )
