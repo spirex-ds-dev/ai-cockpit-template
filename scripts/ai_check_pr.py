@@ -455,21 +455,14 @@ def documented_historical_preservation_paths(
     """Return red/yellow archives explicitly preserved by one green successor archive.
 
     This is intentionally narrower than ordinary recovery: each preserved archive
-    must be named as a complete immutable group by the successor Summary, its
-    Outcome must be consumed as source evidence, and the successor Contract must
-    cite a stable provider Release.  It prevents the exactly-one rule from
-    counting historical failure evidence as independently maintained work.
+    must be named as a complete immutable group by the successor Summary and its
+    Outcome must be consumed as source evidence.  Preservation is an archive
+    integrity transaction, so it must not depend on an unrelated provider-release
+    URL being present in the parent Contract.  It prevents the exactly-one rule
+    from counting historical failure evidence as independently maintained work.
     """
     preserved: set[Path] = set()
     for parent_path, parent_contract, parent_summary, _rank in entries:
-        sources = parent_contract.get("sources")
-        if not isinstance(sources, list) or not any(
-            isinstance(source, dict)
-            and isinstance(source.get("path"), str)
-            and "/releases/tag/v" in source["path"]
-            for source in sources
-        ):
-            continue
         parent_outcome_path = Path(str(parent_path).replace(".contract.json", ".outcome.json"))
         try:
             parent_outcome = load_json(parent_outcome_path)

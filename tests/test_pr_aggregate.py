@@ -104,11 +104,6 @@ def test_documented_historical_preservation_requires_green_successor_and_full_bi
     parent_outcome.write_text(
         json.dumps({"status": "completed", "humanStatusColor": "green"}), encoding="utf-8"
     )
-    parent_contract = json.loads(parent.read_text(encoding="utf-8"))
-    parent_contract["sources"] = [
-        {"path": "https://example.test/releases/tag/v1.2.3", "reason": "stable successor"}
-    ]
-    parent.write_text(json.dumps(parent_contract), encoding="utf-8")
     parent_summary = parent.with_name("reconciliation.summary.json")
     summary = json.loads(parent_summary.read_text(encoding="utf-8"))
     summary["sourcesUsed"] = [child_outcome.relative_to(tmp_path).as_posix()]
