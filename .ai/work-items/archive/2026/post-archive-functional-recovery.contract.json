@@ -9,6 +9,8 @@
     ".ai/work-items/active/post-archive-functional-recovery.contract.json",
     ".ai/work-items/active/post-archive-functional-recovery.summary.json",
     ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
     ".ai/work-items/starts/**",
     ".ai/work-items/archive/**",
     ".ai/work-items/active/post-archive-functional-recovery.outcome.json",
@@ -139,8 +141,8 @@
       "scenario": "A completed provider-bound pull-request job reports a real pytest/JUnit failure.",
       "required": true,
       "riskDomain": "evidence_integrity",
-      "status": "unverified",
-      "evidence": [],
+      "status": "verified",
+      "evidence": ["tests/test_ai_post_archive_recovery.py::test_hosted_functional_recovery_accepts_canonical_pytest_failure"],
       "expected": "A functional-failure receipt binds the exact provider and archive facts and grants ownership only to listed recovery paths.",
       "verificationPlan": "Focused recovery unit tests use a canonical pytest failure log and validate the emitted receipt offline."
     },
@@ -148,8 +150,8 @@
       "scenario": "A provider job is successful, cancelled, wrong-SHA, or has arbitrary error text without a canonical test failure.",
       "required": true,
       "riskDomain": "governance_regression",
-      "status": "unverified",
-      "evidence": [],
+      "status": "verified",
+      "evidence": ["tests/test_ai_post_archive_recovery.py::test_hosted_functional_recovery_rejects_unbound_provider_facts"],
       "expected": "No functional recovery receipt is created.",
       "verificationPlan": "Focused negative tests mutate provider facts and logs, asserting fail-closed errors."
     }
