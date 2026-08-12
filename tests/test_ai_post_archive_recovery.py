@@ -257,6 +257,30 @@ def functional_failure_provider(endpoint: str) -> bytes:
     return json.dumps(responses[endpoint]).encode()
 
 
+def pytest_functional_failure_provider(endpoint: str) -> bytes:
+    if endpoint.endswith("/logs"):
+        return (
+            b"=========================== short test summary info ============================\n"
+            b"FAILED tests/test_capability_truth_matrix.py::test_machine_matrix_evidence_binding_is_valid\n"
+            b"FAILED tests/test_absurd_capability_truth.py::test_capability_matrix_has_bound_evidence\n"
+            b"=================== 2 failed, 591 passed, 2 warnings in 93.29s ===================\n"
+        )
+    return functional_failure_provider(endpoint)
+
+
+def test_hosted_functional_recovery_accepts_canonical_pytest_failure():
+    provider = recovery.verified_hosted_functional_failure(
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=765,
+        failed_candidate_head="c" * 40,
+        run_id=43,
+        job_id=85,
+        fetch_provider=pytest_functional_failure_provider,
+    )
+
+    assert provider["failureMarker"] == "pytest_failure"
+
+
 def second_functional_failure_provider(endpoint: str) -> bytes:
     responses = {
         "/repos/spirex-ds-dev/ai-cockpit-template/actions/runs/44": {

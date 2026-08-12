@@ -1,0 +1,247 @@
+{
+  "contractVersion": 2,
+  "workItemId": "post-archive-functional-recovery",
+  "mode": "code",
+  "title": "Post-archive hosted functional recovery",
+  "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/post-archive-functional-recovery.contract.json",
+    ".ai/work-items/active/post-archive-functional-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/post-archive-functional-recovery.outcome.json",
+    ".ai/work-items/active/post-archive-functional-recovery.outcome.md",
+    "scripts/ai_post_archive_recovery.py",
+    "tests/test_ai_post_archive_recovery.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/specs/2026-08-12-post-archive-functional-recovery-design.md",
+    "docs/superpowers/plans/2026-08-12-post-archive-functional-recovery.md",
+    ".ai/work-items/recovery-receipts/**"
+  ],
+  "outOfScope": [
+    "Release publication, version/tag changes, and modifying archived Contract, Summary, Outcome, or manifest evidence.",
+    "Changing normal PR aggregate ownership, coverage thresholds, test selection, or the existing historical-preservation predicate."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_post_archive_recovery.py",
+      "reason": "Hosted functional recovery currently requires a narrow marker that a normal failed pytest job does not emit."
+    },
+    {
+      "path": "tests/test_ai_post_archive_recovery.py",
+      "reason": "Existing provider-bound recovery tests establish the receipt and validation boundary."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31551051580/job/93973717175",
+      "reason": "Hosted project-test-lifecycle failure proves the marker mismatch and preserves red failure evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/783",
+      "reason": "User-approved cleanup issue and human authority reference."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "governance_regression"],
+    "reason": "Recovery receipts authorize post-archive changes; accepting an unbound or non-functional provider failure could let unrelated changes enter an already archived Work Item.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewEvidence": "The failed lifecycle shard, its uploaded JUnit/receipt artifacts, and the existing marker-only validator identify the required narrow condition."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Post-archive recovery changes require strict audit, source binding, and failure preservation."
+    ],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "conversation:2026-08-12-user-authorized-post-archive-functional-recovery-and-approved-design",
+      "reason": "Strict corrective review for append-only recovery evidence; release operations are excluded.",
+      "risks": ["evidence_integrity", "governance_regression", "provider_identity"],
+      "notRunChecks": ["Release checks are inapplicable because this Work Item does not change release-owned resources."],
+      "workItemOnly": true,
+      "workItemId": "post-archive-functional-recovery"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user approved this one corrective Work Item and the exact hosted failure provides the evidence-bound scope."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A completed provider-bound pull-request job with a failed pytest/JUnit functional result can create an append-only same-Work-Item recovery receipt without requiring an incidental marker string.",
+    "The receipt still binds repository, PR, candidate SHA, completed failed run/job, workflow path, log digest, archive digests, human authority, and explicitly listed recovery paths.",
+    "Coverage-shortfall recovery remains separately classified and arbitrary failed-log text or success/cancelled/wrong-SHA provider facts remain rejected.",
+    "Focused tests demonstrate the previously rejected standard pytest failure is accepted and negative provider bindings fail closed.",
+    "The recovery lifecycle documentation describes the supported provider-bound functional failure evidence and its limitations."
+  ],
+  "guidelines": [
+    "Keep post-archive recovery append-only and never mutate archived evidence.",
+    "Require provider-bound identity and a concrete failed functional test signal before authorizing any recovery path.",
+    "Do not publish releases or relax quality, coverage, or ownership gates."
+  ],
+  "intent": {
+    "problem": "A real hosted project-test-lifecycle pytest failure revealed a stale generated capability matrix, but the same-Work-Item recovery command rejects that evidence because it only recognizes a special marker absent from ordinary pytest/JUnit failures. That leaves a valid, narrow remediation path unable to be authorized.",
+    "constraints": [
+      "Start from latest origin/main and keep this corrective Work Item independent of the archived cleanup branch.",
+      "Preserve all archived evidence and failed hosted artifacts without rewriting them.",
+      "Accept only provider-bound completed failed pull-request jobs with a canonical functional-test failure signal.",
+      "Retain separate coverage recovery and reject unbound, successful, cancelled, or arbitrary-log failures.",
+      "Do not release, change versions/tags, weaken quality gates, or add unrelated cleanup."
+    ],
+    "rationale": "Extending the existing provider binding to recognize canonical pytest/JUnit failure evidence restores the intended same-Work-Item recovery route while keeping its eligibility rule as narrow and auditable as the existing coverage route."
+  },
+  "rawUserRequest": "User authorized one necessary corrective Work Item to repair the post-archive hosted functional recovery mechanism and continue cleanup to completion.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-12-user-authorized-post-archive-functional-recovery-and-approved-design",
+    "capturedAt": "2026-08-12",
+    "digest": "sha256:f142b81f75b7040e3384af6afdcf2fb017b97bbe5abd037405b6d98dcfe86cc2"
+  },
+  "declaredIntent": {
+    "summary": "Repair the narrow provider-bound functional-failure recovery classification without changing the normal quality or release paths.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A completed provider-bound pull-request job reports a real pytest/JUnit failure.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "verified",
+      "evidence": ["tests/test_ai_post_archive_recovery.py::test_hosted_functional_recovery_accepts_canonical_pytest_failure"],
+      "expected": "A functional-failure receipt binds the exact provider and archive facts and grants ownership only to listed recovery paths.",
+      "verificationPlan": "Focused recovery unit tests use a canonical pytest failure log and validate the emitted receipt offline."
+    },
+    {
+      "scenario": "A provider job is successful, cancelled, wrong-SHA, or has arbitrary error text without a canonical test failure.",
+      "required": true,
+      "riskDomain": "governance_regression",
+      "status": "verified",
+      "evidence": ["tests/test_ai_post_archive_recovery.py::test_hosted_functional_recovery_rejects_unbound_provider_facts"],
+      "expected": "No functional recovery receipt is created.",
+      "verificationPlan": "Focused negative tests mutate provider facts and logs, asserting fail-closed errors."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository user",
+    "reason": "The user explicitly authorized the single corrective Work Item after the hosted failure exposed the post-archive recovery mechanism gap."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 883
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/post-archive-functional-recovery.json",
+    "baseCommit": "241f9057733c323565aa5b9b8f5bec6583f0a5b9",
+    "initialScopeDigest": "cbf0ef9fd1ab499fa3d5236895682dc8ed0822c39f88d10c29648c0e7ca0e20c",
+    "contractSkeletonDigest": "5c58de6a5cea510dcd373a276dbd28223a197d4c88bc80115b3934b0ab98949c"
+  }
+}

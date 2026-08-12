@@ -30,11 +30,22 @@ COVERAGE_FAILURE = re.compile(
     re.IGNORECASE,
 )
 FUNCTIONAL_FAILURE = re.compile(r"\bBLOCKED:.*\bRecovery:", re.IGNORECASE | re.DOTALL)
+PYTEST_FAILURE_NODE = re.compile(r"(?m)^FAILED\s+\S+::\S+")
+PYTEST_FAILURE_SUMMARY = re.compile(r"(?mi)^[=\s]*\d+\s+failed(?:,|\s)")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def functional_failure_marker(text: str) -> str | None:
+    """Return the supported, concrete functional-failure signal in a job log."""
+    if FUNCTIONAL_FAILURE.search(text) is not None:
+        return "blocked_recovery"
+    if PYTEST_FAILURE_NODE.search(text) and PYTEST_FAILURE_SUMMARY.search(text):
+        return "pytest_failure"
+    return None
 
 
 def archive_files(root: Path, task: str) -> dict[str, Path]:
@@ -215,7 +226,7 @@ def validate_recorded_provider_binding(provider: object, *, gate: str) -> list[s
     elif gate == "hostedFunctionalFailure":
         if not isinstance(provider.get("jobName"), str) or not provider["jobName"].strip():
             return ["recorded functional provider job name is invalid"]
-        if provider.get("failureMarker") != "blocked_recovery":
+        if provider.get("failureMarker") not in {"blocked_recovery", "pytest_failure"}:
             return ["recorded functional provider failure marker is invalid"]
     else:
         return ["recorded provider gate is unsupported"]
@@ -412,7 +423,8 @@ def verified_hosted_functional_failure(
     if not isinstance(log, bytes):
         raise TypeError("GitHub workflow job log is unavailable")
     text = log.decode("utf-8", errors="replace")
-    if FUNCTIONAL_FAILURE.search(text) is None:
+    failure_marker = functional_failure_marker(text)
+    if failure_marker is None:
         raise ValueError("GitHub workflow job log has no canonical fail-closed functional failure")
     run_url = run.get("html_url")
     workflow_path = run.get("path")
@@ -436,7 +448,7 @@ def verified_hosted_functional_failure(
         "runConclusion": "failure",
         "jobConclusion": "failure",
         "logSha256": hashlib.sha256(log).hexdigest(),
-        "failureMarker": "blocked_recovery",
+        "failureMarker": failure_marker,
     }
 
 

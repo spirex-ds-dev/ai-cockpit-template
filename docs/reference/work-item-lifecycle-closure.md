@@ -176,6 +176,15 @@ state, mismatched Head or PR, a non-coverage failure, archive mutation, or a
 path outside `RECOVERY_PATHS` remains fail-closed. This route is neither a
 provider mutation nor authorization to merge, release, close, or delete.
 
+A completed failed pull-request job with a functional test failure can use
+the same append-only boundary with `HOSTED_FAILURE_KIND=functional`. Its log
+must contain either the established explicit blocked-with-recovery signal, or
+both one or more pytest `FAILED <nodeid>` entries and a pytest summary with a
+nonzero failed-test count. The receipt records the observed signal alongside
+the exact provider and log-digest bindings. A generic command error, a
+coverage-only shortfall, or a log that has only one of those pytest elements is
+not functional-failure evidence and remains rejected.
+
 The repository's remote name and default branch are discovered from Git's remote HEAD. Adopter projects therefore do not need to use `origin/main`.
 
 ## Exceptional provider merge-state recovery
