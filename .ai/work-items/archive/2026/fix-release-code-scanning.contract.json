@@ -1,0 +1,264 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-release-code-scanning",
+  "mode": "code",
+  "title": "修复 Release 工作流 Code Scanning 告警",
+  "rawUserRequest": "查看 Code Scanning 的三个问题；确认先修复再判断是否需要发布新版本，并同意采用保留现有发布语义、收紧信任边界的方案。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-13-release-code-scanning",
+    "capturedAt": "2026-08-13",
+    "digest": "fix-release-code-scanning"
+  },
+  "declaredIntent": {
+    "summary": "修复 Release workflow 中 CodeQL 标记的 artifact poisoning 与 environment variable injection 数据流。",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "5c3dd9f30fecdfb48474a2b4bcf7b36651b878c2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-release-code-scanning.contract.json",
+    ".ai/work-items/active/fix-release-code-scanning.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/fix-release-code-scanning.outcome.json",
+    ".ai/work-items/active/fix-release-code-scanning.outcome.md",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "docs/superpowers/specs/2026-08-13-release-code-scanning-remediation-design.md",
+    "docs/superpowers/plans/2026-08-13-release-code-scanning-remediation.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "GitHub release, tag, or asset publication",
+    "Changes to the smoke workflow or release metadata values",
+    "Dismissal or suppression of CodeQL alerts without a remediation"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Contains the alerted artifact-download and environment-export data flows."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Existing workflow regression test convention."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/security/code-scanning",
+      "reason": "User-provided source for alerts #2, #3, and #4."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Capability Truth evidence binds the release workflow to independent CI and artifact evidence requirements."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_integrity", "ci_security"],
+    "reason": "The workflow controls release evidence and has write permissions; changes are constrained to fail-closed validation and regression tests.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User approved the scoped remediation design; publication remains explicitly out of scope."
+  },
+  "preReviewWarnings": [
+    "Review the artifact provenance binding, fail-closed parsing, and whether the rewritten flow eliminates CodeQL findings without weakening release checks."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release workflow rejects untrusted or malformed rehearsal and strict-smoke identifiers before artifact retrieval or environment export.",
+    "Artifact evidence used by publication remains bound to the expected same-source rehearsal and strict-smoke runs, with fail-closed validation.",
+    "The CodeQL environment-variable injection flow is removed without alert suppression.",
+    "Focused workflow regression tests cover the new trust-boundary assertions and pass.",
+    "The design record documents the selected approach and excludes release publication."
+  ],
+  "guidelines": [
+    "Do not weaken release integrity checks or bypass CodeQL findings.",
+    "Keep changes limited to the declared release workflow, focused regression tests, and design record."
+  ],
+  "intent": {
+    "problem": "CodeQL reports two artifact-poisoning flows and one environment-variable injection flow in the release workflow, where workflow-dispatch input and downloaded receipt data cross the trust boundary.",
+    "constraints": [
+      "Preserve the existing rehearsal-before-publication model.",
+      "Fail closed on malformed or mismatched evidence.",
+      "Do not publish a release or mutate tags as part of this Work Item.",
+      "Do not dismiss or suppress alerts in place of a fix."
+    ],
+    "rationale": "Validation and data-flow hardening protect the existing release design while keeping the change narrowly reviewable."
+  },
+  "implementationSurface": {
+    "production": [".github/workflows/release.yml"],
+    "tests": ["tests/test_release_workflow.py"],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md"
+    ],
+    "documentation": [
+      "docs/superpowers/specs/2026-08-13-release-code-scanning-remediation-design.md",
+      "docs/superpowers/plans/2026-08-13-release-code-scanning-remediation.md",
+      "docs/reference/documentation-context-registry.json",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A publication run references a malformed rehearsal run identifier.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The workflow rejects it before downloading an artifact.",
+      "verificationPlan": "Focused workflow regression test checks numeric identifier validation precedes artifact download."
+    },
+    {
+      "scenario": "A receipt contains a malformed strict smoke run identifier or an unexpected artifact name.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The workflow rejects the receipt and never exports an unvalidated value to GITHUB_ENV.",
+      "verificationPlan": "Focused workflow regression test checks strict validation and safe propagation."
+    },
+    {
+      "scenario": "A valid exact-source rehearsal is reused for publication.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Existing source, workflow, event, artifact digest, and evidence checks remain fail-closed.",
+      "verificationPlan": "Focused workflow regression test and project quality suite."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized completion of this Work Item after approving the remediation design."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 901
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-release-code-scanning.json",
+    "baseCommit": "5c3dd9f30fecdfb48474a2b4bcf7b36651b878c2",
+    "initialScopeDigest": "c3cbc2f22cd383044f2c7ff527e73c87be185b9184a874f3866a61144c2e0fc0",
+    "contractSkeletonDigest": "6afe5500601621082341bb1d6524fa0254d1120734b3f23253b6613e64aeb635"
+  }
+}
