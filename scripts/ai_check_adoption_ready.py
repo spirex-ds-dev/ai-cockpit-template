@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 from pathlib import Path
@@ -22,6 +23,37 @@ TEMPLATE_EVIDENCE_FILES = (
     ".ai/work-items/_templates/work_item_contract.example.json",
     ".ai/work-items/_templates/work_item_summary.example.json",
 )
+RUNTIME_SCRIPT_PATTERN = re.compile(r"scripts/([A-Za-z0-9_]+\.py)")
+
+
+def runtime_entrypoint_failures(root: Path) -> list[str]:
+    """Return missing local runtime files referenced by installed Make entrypoints."""
+    catalog_path = root / "scripts" / "ai_installer_catalog.json"
+    try:
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        declared = {
+            f"scripts/{name}"
+            for name in catalog.get("scripts", [])
+            if isinstance(name, str) and name.endswith(".py")
+        }
+    except (OSError, json.JSONDecodeError, AttributeError):
+        declared = set()
+    references: set[str] = set()
+    for relative in ("Makefile", "Makefile.ai"):
+        path = root / relative
+        if not path.is_file():
+            continue
+        references.update(
+            f"scripts/{name}"
+            for name in RUNTIME_SCRIPT_PATTERN.findall(
+                path.read_text(encoding="utf-8", errors="replace")
+            )
+        )
+    return [
+        f"Make runtime entrypoint is missing: {relative}"
+        for relative in sorted(references & declared)
+        if not (root / relative).is_file()
+    ]
 
 
 def template_distribution_evidence(root: Path) -> list[str]:
@@ -81,7 +113,7 @@ def quality_commands(text: str) -> dict[str, str]:
 
 
 def readiness_failures(root: Path) -> list[str]:
-    failures: list[str] = []
+    failures: list[str] = runtime_entrypoint_failures(root)
     profile, profile_issues = load_profile(
         root / ".ai" / "project_profile.yaml", require_approval=True
     )
@@ -93,7 +125,7 @@ def readiness_failures(root: Path) -> list[str]:
     if not profile_issues and profile.get("repositoryRole") == "template":
         exempt, _evidence = template_exemption(profile, root)
         if exempt:
-            return []
+            return failures
         failures.append(
             "template role is not enough for readiness exemption; run with AI_COCKPIT_EXECUTION_MODE=template_maintenance "
             "and retain verified template distribution evidence, or migrate to repositoryRole: adopted and calibrate Profile, Guards, quality commands, Coverage, and CI"

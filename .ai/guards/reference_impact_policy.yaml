@@ -23,6 +23,12 @@ targetTypes:
   - workflow_job
   - make_target
   - script_entrypoint
+  - file
+  - directory
+  - package
+  - module
+  - build_module
+  - serialization_format
 analysis:
   supported:
     - generic_text
@@ -55,13 +61,16 @@ decisions:
     - live_static_reference
     - live_configuration_reference
     - live_documentation_reference
-    - bypass_request
+    - declared_or_observed_factual_conflict
   needs_human_confirmation:
+    - bypass_request
+    - weak_or_unbound_approval
+    - missing_impact_record
     - unknown_dynamic_reference
     - unknown_external_consumer
     - unknown_monitoring_reference
     - remove_public_api
     - remove_configuration
 recovery:
-  block: Remove or migrate live references and replace bypass or weak-approval requests.
+  block: Remove or migrate live references and correct the factual conflict.
   needsHumanConfirmation: Supply current migration, owner, monitoring, and governance evidence, then rerun.

@@ -162,7 +162,7 @@ def prepare_work_item(
     contract.update(
         {
             "scope": ["fixture.txt", ".ai/cockpit/current_status.md", ".ai/work-items/archive/**"],
-            "sources": ["test fixture"],
+            "sources": [{"path": "fixture.txt", "reason": "E2E lifecycle fixture."}],
             "intent": {
                 "problem": "Exercise the Work Item finish lifecycle with a bounded fixture.",
                 "constraints": ["Keep the fixture limited to the declared files."],
@@ -186,7 +186,7 @@ def prepare_work_item(
                 "blockedReason": "",
             },
             "executionDecision": {"status": "continue", "reason": "E2E fixture is complete."},
-            "acceptance": ["finish lifecycle behaves correctly"],
+            "acceptance": ["The E2E fixture completes the declared finish lifecycle."],
             "riskAssessment": {
                 "level": "low",
                 "riskTypes": ["verification"],

@@ -294,7 +294,9 @@ check-ai-reference-impact:
 				$(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --record "$$record" --output "$$output_dir/$${name%.json}.decision.json" --enforce; \
 			done; \
 		fi; \
-		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records.'; fi
+		contract="$${CONTRACT:-$$(find .ai/work-items/active -name '*.contract.json' -type f | head -n 1)}"; \
+		if test -n "$$contract"; then $(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --coverage-contract "$$contract" --records-dir "$$dir" --output "$$output_dir/coverage.decision.json" --enforce; fi; \
+		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records; coverage decision enforced.'; fi
 
 check-ai-test-weakening-fast:
 	$(AI_PYTHON) scripts/ai_check_test_weakening.py --root . $(if $(AI_BASE_COMMIT),--base-ref "$(AI_BASE_COMMIT)",) --mode fast --policy .ai/guards/test_weakening_policy.yaml

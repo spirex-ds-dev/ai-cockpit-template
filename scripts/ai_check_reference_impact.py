@@ -15,6 +15,9 @@ import re
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+from ai_classify_operation_impact import derive_operation_impact, impact_requires_reference_record
+from ai_common import changed_name_status, load_json
+
 OPERATIONS = {
     "delete",
     "rename",
@@ -44,6 +47,12 @@ TARGET_TYPES = {
     "workflow_job",
     "make_target",
     "script_entrypoint",
+    "file",
+    "directory",
+    "package",
+    "module",
+    "build_module",
+    "serialization_format",
 }
 CODE_SUFFIXES = {
     ".py",
@@ -188,6 +197,38 @@ def _analysis_capability(target_path: Path) -> str:
     return "generic_analysis_only"
 
 
+def _maven_module_references(root: Path, target_path: Path, name: str) -> list[str]:
+    """Find Maven POM references to a module path or artifact identifier.
+
+    This is deliberately conservative text analysis. XML parsing would not add
+    value here because Maven namespace and interpolation forms still need the
+    raw path/artifact search, and a match is evidence to stop rather than proof
+    of a semantic dependency graph.
+    """
+    relative = target_path.relative_to(root).as_posix()
+    candidates = {name, relative, f"{relative}/pom.xml"}
+    return sorted(
+        path.relative_to(root).as_posix()
+        for path in root.rglob("pom.xml")
+        if path.resolve() != (target_path / "pom.xml").resolve()
+        and not path.is_symlink()
+        and any(token in path.read_text(encoding="utf-8", errors="replace") for token in candidates)
+    )
+
+
+def _module_test_references(root: Path, target_path: Path, name: str) -> list[str]:
+    relative = target_path.relative_to(root).as_posix()
+    candidates = (name, relative, f"{relative}/pom.xml")
+    return sorted(
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file()
+        and not path.is_symlink()
+        and _is_test_path(path, root)
+        and any(token in path.read_text(encoding="utf-8", errors="replace") for token in candidates)
+    )
+
+
 def evaluate(
     record: dict[str, Any], *, root: Path, ignored_paths: set[Path] | None = None
 ) -> dict[str, Any]:
@@ -212,8 +253,9 @@ def evaluate(
         raise ValueError("unsupported reference-impact operation")
 
     target_path = _safe_relative(root, path)
-    if not target_path.is_file():
-        raise ValueError("target path does not exist or is not a regular file")
+    is_module = target_type in {"directory", "package", "module", "build_module"}
+    if not (target_path.is_dir() if is_module else target_path.is_file()):
+        raise ValueError("target path does not exist or has an unsupported target kind")
     analysis = record.get("referenceAnalysis")
     analysis = dict(analysis) if isinstance(analysis, dict) else {}
     static, tests = _code_references(root, target_path, name)
@@ -224,6 +266,12 @@ def evaluate(
         root, target_path, name, ignored_paths or set()
     )
     analysis["workflowReferences"] = _workflow_references(root, target_path, name)
+    analysis["buildReferences"] = []
+    if is_module:
+        analysis["buildReferences"] = _maven_module_references(root, target_path, name)
+        analysis["testReferences"] = sorted(
+            set(analysis["testReferences"]) | set(_module_test_references(root, target_path, name))
+        )
     for category in EVIDENCE_CATEGORIES:
         value = analysis.get(category)
         analysis[category] = (
@@ -246,6 +294,7 @@ def evaluate(
             "documentationReferences",
             "configurationReferences",
             "workflowReferences",
+            "buildReferences",
         )
     )
     stale_evidence = any(analysis[key].get("stale") is True for key in EVIDENCE_CATEGORIES)
@@ -258,20 +307,23 @@ def evaluate(
         and isinstance(governance.get("evidence"), list)
         and bool(governance["evidence"])
     )
-    if any(term in requested_text for term in BYPASS_TERMS):
+    # Observable live references are a factual contradiction and therefore
+    # outrank request wording or claimed authority.  The latter can require a
+    # human decision, but must not hide concrete repository evidence.
+    if live_references:
         decision, reason = (
             "block",
-            "Requested wording attempts to bypass reference-impact analysis.",
+            "Static, test, documentation, configuration, workflow, or build references remain for the target.",
+        )
+    elif any(term in requested_text for term in BYPASS_TERMS):
+        decision, reason = (
+            "needs_human_confirmation",
+            "Requested wording asks to bypass reference-impact analysis; human authorization must be bound to the target and evidence.",
         )
     elif self_declared_approval:
         decision, reason = (
-            "block",
-            "Self-declared or repository-recorded approval cannot authorize a destructive change.",
-        )
-    elif live_references:
-        decision, reason = (
-            "block",
-            "Static, test, documentation, configuration, or workflow references remain for the target.",
+            "needs_human_confirmation",
+            "Self-declared or repository-recorded approval needs human verification bound to the destructive target.",
         )
     elif operation in {"remove_public_api", "remove_configuration"}:
         decision, reason = (
@@ -314,17 +366,84 @@ def evaluate(
     }
 
 
+def coverage_decision(impact: dict[str, Any], records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Check that every impact-bearing observed target has a record boundary.
+
+    Record validity is still enforced by :func:`evaluate`; this helper only
+    prevents an absent or partial set of records from silently becoming a
+    successful quality check.
+    """
+    if not impact_requires_reference_record(impact):
+        return {"decision": "not_applicable", "missingTargets": []}
+    recorded_paths = sorted(
+        {
+            str(record.get("target", {}).get("path"))
+            for record in records
+            if isinstance(record, dict)
+            and isinstance(record.get("target"), dict)
+            and isinstance(record["target"].get("path"), str)
+        }
+    )
+    missing = [
+        target
+        for target in impact.get("targets", [])
+        if not any(
+            target == path or target.startswith(path.rstrip("/") + "/") for path in recorded_paths
+        )
+    ]
+    return {
+        "decision": "needs_human_confirmation" if missing else "continue",
+        "missingTargets": sorted(missing),
+        "recordedTargets": recorded_paths,
+        "humanDecisionRequest": (
+            {
+                "reason": "Impact-bearing targets lack a covering reference-impact record.",
+                "resumeCondition": "Supply a target-covering record with current usage, compatibility, test/CI, migration, rollback, and authority evidence.",
+            }
+            if missing
+            else None
+        ),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Evaluate reference impact evidence.")
     parser.add_argument("--root", type=Path, required=True)
-    parser.add_argument("--record", type=Path, required=True)
+    parser.add_argument("--record", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--coverage-contract", type=Path)
+    parser.add_argument("--records-dir", type=Path)
     parser.add_argument(
         "--enforce",
         action="store_true",
         help="Return exit 3 unless the evidence-backed decision is continue.",
     )
     args = parser.parse_args(argv)
+    if args.coverage_contract:
+        try:
+            contract = load_json(args.coverage_contract)
+            if not isinstance(contract, dict):
+                raise TypeError("Contract must be a JSON object")
+            records_dir = args.records_dir or (args.root / ".ai" / "evidence" / "reference-impact")
+            records = [
+                json.loads(path.read_text(encoding="utf-8"))
+                for path in sorted(records_dir.glob("*.json"))
+                if path.resolve() != args.output.resolve()
+            ]
+            result = coverage_decision(
+                derive_operation_impact(contract, changed_name_status(contract)), records
+            )
+        except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}")
+            return 2
+        if result["decision"] != "not_applicable":
+            args.output.write_text(
+                json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+            )
+        return 0 if not args.enforce or result["decision"] in {"continue", "not_applicable"} else 3
+    if args.record is None:
+        print("ERROR: --record is required unless --coverage-contract is provided")
+        return 2
     try:
         record = json.loads(args.record.read_text(encoding="utf-8"))
         if not isinstance(record, dict):

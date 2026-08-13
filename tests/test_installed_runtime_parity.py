@@ -7,6 +7,7 @@ import ai_disable_enable
 import ai_rollback
 import ai_uninstall_proposal
 import install_ai_cockpit
+from ai_check_adoption_ready import runtime_entrypoint_failures
 from install_ai_cockpit import RUNTIME_TARGETS, SCRIPT_NAMES, Installer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,6 +66,7 @@ def test_installed_adopter_contains_runtime_scripts_and_targets(tmp_path):
         update_makefile=True,
     )
     assert installer.install() == 0
+    assert runtime_entrypoint_failures(target) == []
     assert all((target / "scripts" / name).is_file() for name in RUNTIME_SCRIPTS)
     makefile = (target / "Makefile.ai").read_text(encoding="utf-8")
     assert all(f"{name}:" in makefile for name in EXPECTED_RUNTIME_TARGETS)
