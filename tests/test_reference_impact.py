@@ -62,6 +62,63 @@ def test_static_python_reference_blocks_a_delete(tmp_path):
     assert result["referenceAnalysis"]["staticReferences"] == ["consumer.py"]
 
 
+def test_maven_module_with_parent_consumer_and_quality_references_blocks_delete(tmp_path):
+    parent = tmp_path / "sej-api-parent"
+    common = tmp_path / "openapi" / "sej-api-common"
+    web = tmp_path / "sej-api-web"
+    parent.mkdir(parents=True)
+    common.mkdir(parents=True)
+    web.mkdir(parents=True)
+    (common / "pom.xml").write_text(
+        "<project><artifactId>sej-api-common</artifactId></project>", encoding="utf-8"
+    )
+    (parent / "pom.xml").write_text(
+        "<project><modules><module>../openapi/sej-api-common</module></modules></project>",
+        encoding="utf-8",
+    )
+    (web / "pom.xml").write_text(
+        "<project><dependencies><dependency><artifactId>sej-api-common</artifactId>"
+        "</dependency></dependencies></project>",
+        encoding="utf-8",
+    )
+    tests = tmp_path / "tests"
+    tests.mkdir()
+    (tests / "quality_test.py").write_text(
+        "assert Path('openapi/sej-api-common/pom.xml').is_file()", encoding="utf-8"
+    )
+
+    result = ai_check_reference_impact.evaluate(
+        {
+            "version": 1,
+            "target": {
+                "type": "build_module",
+                "name": "sej-api-common",
+                "path": "openapi/sej-api-common",
+                "operation": "delete",
+            },
+            "referenceAnalysis": {
+                "dynamicReferences": {"status": "proven_absent", "evidence": ["dynamic"]},
+                "externalConsumers": {"status": "proven_absent", "evidence": ["external"]},
+                "monitoringReferences": {"status": "proven_absent", "evidence": ["monitoring"]},
+            },
+            "governanceEvidence": {
+                "contractDeclared": True,
+                "acceptanceDeclared": True,
+                "destructiveChangeAllowed": True,
+                "evidence": ["contract"],
+            },
+        },
+        root=tmp_path,
+    )
+
+    assert result["decision"] == "block"
+    assert result["referenceAnalysis"]["buildReferences"] == [
+        "sej-api-parent/pom.xml",
+        "sej-api-web/pom.xml",
+    ]
+    assert result["referenceAnalysis"]["testReferences"] == ["tests/quality_test.py"]
+
+
 def test_public_api_removal_requires_human_confirmation_with_complete_evidence(tmp_path):
     (tmp_path / "order.py").write_text("def calculate_total():\n    return 1\n", encoding="utf-8")
 
@@ -115,8 +172,22 @@ def test_bypass_request_is_blocked_before_reference_evidence(tmp_path):
         root=tmp_path,
     )
 
-    assert result["decision"] == "block"
+    assert result["decision"] == "needs_human_confirmation"
     assert "bypass" in result["reason"].lower()
+
+
+def test_live_reference_blocks_even_when_request_uses_bypass_wording(tmp_path):
+    (tmp_path / "order.py").write_text("def calculate_total():\n    return 1\n", encoding="utf-8")
+    (tmp_path / "consumer.py").write_text(
+        "from order import calculate_total\ncalculate_total()\n", encoding="utf-8"
+    )
+    record = complete_record()
+    record["requestedText"] = "Delete it directly and bypass impact analysis."
+
+    result = ai_check_reference_impact.evaluate(record, root=tmp_path)
+
+    assert result["decision"] == "block"
+    assert "references remain" in result["reason"].lower()
 
 
 def test_typescript_reference_blocks_a_rename(tmp_path):
@@ -372,7 +443,7 @@ def test_self_declared_approval_is_not_accepted_as_destructive_authority(tmp_pat
 
     result = ai_check_reference_impact.evaluate(record, root=tmp_path)
 
-    assert result["decision"] == "block"
+    assert result["decision"] == "needs_human_confirmation"
     assert "approval" in result["reason"].lower()
 
 

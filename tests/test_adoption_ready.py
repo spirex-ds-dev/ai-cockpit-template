@@ -3,7 +3,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-from ai_check_adoption_ready import readiness_failures, template_exemption
+from ai_check_adoption_ready import (
+    readiness_failures,
+    runtime_entrypoint_failures,
+    template_exemption,
+)
 from ai_readiness_policy import readiness_state
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +18,21 @@ def test_readiness_separates_installation_from_production(tmp_path):
     (tmp_path / ".ai" / "cockpit" / "version.json").write_text("{}", encoding="utf-8")
     assert readiness_state(tmp_path)["state"] == "adoption_installed"
     assert readiness_state(tmp_path)["readinessEvidence"]["qualityCommands"]["status"] == "not_run"
+
+
+def test_runtime_entrypoint_check_rejects_makefile_script_missing_from_installation(tmp_path):
+    (tmp_path / "Makefile.ai").write_text(
+        "check-ai-reference-impact:\n\tpython3 scripts/ai_check_reference_impact.py\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "scripts" / "ai_installer_catalog.json").write_text(
+        '{"scripts": ["ai_check_reference_impact.py"]}', encoding="utf-8"
+    )
+
+    failures = runtime_entrypoint_failures(tmp_path)
+
+    assert failures == ["Make runtime entrypoint is missing: scripts/ai_check_reference_impact.py"]
 
 
 def test_template_codeowners_uses_authorized_personal_owner():

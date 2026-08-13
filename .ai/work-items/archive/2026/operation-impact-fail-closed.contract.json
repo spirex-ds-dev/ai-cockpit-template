@@ -1,0 +1,247 @@
+{
+  "contractVersion": 2,
+  "workItemId": "operation-impact-fail-closed",
+  "mode": "code",
+  "title": "Derive operation impact and fail closed",
+  "baseCommit": "835a7cd70adb3dd5ea2781db8bcdee8cebce279c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/operation-impact-fail-closed.contract.json",
+    ".ai/work-items/active/operation-impact-fail-closed.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/operation-impact-fail-closed.outcome.json",
+    ".ai/work-items/active/operation-impact-fail-closed.outcome.md",
+    ".ai/guards/operation_impact_policy.yaml",
+    ".ai/guards/reference_impact_policy.yaml",
+    ".ai/schemas/operation-impact.schema.json",
+    ".ai/schemas/reference_impact.schema.json",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_classify_operation_impact.py",
+    "scripts/ai_check_reference_impact.py",
+    "scripts/ai_preflight_review.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_required_evidence.py",
+    "scripts/ai_check_adoption_ready.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/install_ai_cockpit.py",
+    "scripts/end_to_end_adoption_validation.py",
+    "scripts/real_adopter_reference_validation.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_operation_impact.py",
+    "tests/test_reference_impact.py",
+    "tests/test_preflight_review.py",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_adoption_ready.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_end_to_end_adoption_validation.py",
+    "tests/test_real_adopter_reference_validation.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
+    "docs/reference/reference-impact-gate.md",
+    "docs/reference/reference-impact-gate.ja.md",
+    "docs/reference/reference-impact-gate.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Provider-side runtime interception of destructive tool calls.",
+    "Release publication."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_reference_impact.py",
+      "reason": "Existing compatibility-impact decision boundary and its current record-only trigger."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current quality gate prints success when no reference-impact record exists."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Existing implementation-readiness evidence projection."
+    },
+    {
+      "path": "scripts/ai_required_evidence.py",
+      "reason": "Existing operation-derived deletion evidence rule."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Template distribution boundary that must not install a Makefile which refers to absent runtime checks."
+    },
+    {
+      "path": "user-request: current-thread",
+      "reason": "Authoritative requirement: derive action risk from evidence rather than subjective maliciousness, execute Work Items through PR closure, and publish after all checks."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance", "compatibility", "test_evidence"],
+    "unknownsReviewComplete": true,
+    "reason": "This Work Item changes repository governance gates and installer integrity, and can block valid changes if classification or coverage is incorrect; all requested evidence and adoption regressions remain in one bounded delivery."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized end-to-end implementation, PR lifecycle, cleanup, and release publication; this Work Item records the bounded first delivery."
+  },
+  "preReviewWarnings": [
+    "Do not infer a requester's intent or label it malicious; derive decisions only from operation facts, repository evidence, authorization bindings, and actual diff evidence.",
+    "No reference-impact record may be treated as success when operation evidence shows an impact-bearing change.",
+    "Keep all interdependent operation classification, reference analysis, diff consistency, installer parity, and adopter regressions in this Work Item."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic operation-impact assessment derives create, modify, overwrite, delete, rename, move, replacement, public API/configuration, test/CI, permission, schema, and release-impact facts from raw request, Contract declarations, and changed paths without assigning subjective malicious intent.",
+    "A structured evidence-conflict report blocks claims contradicted by repository, authority-binding, Contract, or actual-diff evidence, and verbal confirmation cannot override an unresolved factual conflict.",
+    "Reference-impact analysis supports file, directory, package, module, build module, public API, configuration, database schema, serialization format, CLI interface, and workflow targets; Maven parent/module/dependency/plugin/generated-source/test/CI relationships are analyzed for Maven modules.",
+    "Preflight reports not_ready when a declared or derived impact-bearing operation lacks the required usage, reference, compatibility/public API, test/CI, migration, rollback, authorization, or reference-impact evidence applicable to that operation.",
+    "The quality gate stops with needs_human_confirmation and an actionable recovery condition when impact-bearing changed paths have no covering reference-impact record; factual conflicts block, while no-impact changes remain not applicable on a fast path.",
+    "Actual Git diff evidence that contradicts Contract operation declarations fails closed before Finish and PR review.",
+    "Authority binding, request trust, safety evidence, and scope consistency are reported independently; effective decision is the strictest result.",
+    "Installer, upgrade, doctor, and adoption readiness verify every Makefile-referenced runtime script, schema, and policy bundle even when no evidence record exists.",
+    "Regression tests include the referenced Maven multi-module scenario, modify-versus-delete disagreement, missing evidence records, incomplete target coverage, ordinary no-impact change, test/CI weakening, and installer-missing-runtime cases.",
+    "Reference-impact documentation names generic and Maven analysis boundaries, missing-record human confirmation, fast paths, and the fact-based decision fields."
+  ],
+  "guidelines": [
+    "New public APIs and operator-visible gate behavior must be documented.",
+    "Do not import internal modules from unrelated features.",
+    "Do not claim static analysis proves runtime or external-consumer absence.",
+    "Authority binding and safety evidence must remain separate decisions."
+  ],
+  "intent": {
+    "problem": "Reference-impact enforcement currently depends on an Agent proactively creating a record; a missing record prints a message and succeeds, so a Contract can omit destructive or compatibility-affecting classification without mechanically triggering evidence requirements.",
+    "constraints": ["Do not judge user intent or use suspicious wording as sole evidence.", "Keep decisions deterministic and repository-local except for explicitly supplied authority evidence.", "Block only factual conflicts; evidence gaps, bypass wording, and weak approvals must stop for a human decision with an actionable recovery condition.", "Preserve a not_applicable fast path for ordinary low-risk changes.", "Use test-first implementation and update both template-maintenance and installed Make entrypoints.", "Deliver all mutually dependent classification, analysis, gate, installer, and adopter evidence in this single Work Item."],
+    "rationale": "A common operation-impact fact model, evidence-conflict report, target-aware reference analysis, and installer completeness gate let Preflight and post-change gates compare declared actions with objective evidence. Contradictory facts block; absent evidence becomes a visible human-decision stop rather than an implicit pass, without making low-risk changes slow."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "rawUserRequest": "完成目标全部任务为止不要停，需要授权的，我授权给你，并写入Contract。WI跑完完整流程PR和清理（注意收敛方向，一旦发现无法收敛，就暂停整理完成以后再看）。最后自检，看看有没遗漏，如果有，循环修正到结束。全部没问题了，发布新版本。并要求 AI Cockpit 对删除、修改等操作依据操作、授权、仓库证据和实际变更判断，不凭感觉判断恶意。",
+  "rawRequestSource": {"type": "human", "reference": "current-thread user authorization and remediation instruction", "capturedAt": "2026-08-13T00:00:00+09:00", "digest": "sha256:operation-impact-fail-closed-current-thread"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Derive generic operation impact from evidence: block factual contradictions, request human confirmation for unresolved evidence, and keep low-risk no-impact changes fast.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requiredEvidenceContext": {"destructiveLevel": "none", "availableEvidence": [], "externalSystem": ""},
+  "implementationSurface": {"production": ["scripts/ai_classify_operation_impact.py", "scripts/ai_check_reference_impact.py", "scripts/ai_preflight_review.py", "scripts/ai_check_work_item.py", "scripts/ai_required_evidence.py", "scripts/ai_check_adoption_ready.py", "scripts/ai_installer_catalog.json", "scripts/install_ai_cockpit.py", "scripts/end_to_end_adoption_validation.py", "scripts/real_adopter_reference_validation.py", "Makefile", "templates/make/Makefile.ai"], "tests": ["tests/test_operation_impact.py", "tests/test_reference_impact.py", "tests/test_preflight_review.py", "tests/test_ai_check_work_item.py", "tests/test_quality_gate_architecture.py", "tests/test_adoption_ready.py", "tests/test_adoption_e2e.py", "tests/test_end_to_end_adoption_validation.py", "tests/test_real_adopter_reference_validation.py", "tests/test_installed_runtime_parity.py", "tests/test_finish_e2e.py", "tests/test_project_governance_journey.py"], "generated": ["docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"], "documentation": ["docs/reference/reference-impact-gate.md", "docs/reference/reference-impact-gate.ja.md", "docs/reference/reference-impact-gate.zh-CN.md"]},
+  "scenarioCoverage": [
+    {"id": "declared-modify-observed-delete", "riskDomain": "scope_consistency", "scenario": "Contract declares modification while changed-path facts show a deletion.", "expected": "Preflight or post-change gate reports an evidence conflict and blocks.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add an isolated operation-impact regression."},
+    {"id": "missing-record-blocks-impact", "riskDomain": "evidence_completeness", "scenario": "An impact-bearing changed path has no reference-impact record.", "expected": "The Make gate stops for human confirmation with a recovery condition instead of reporting no declared records as success.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add Make-facing and classifier regressions."},
+    {"id": "maven-module-live-consumers", "riskDomain": "build_graph_compatibility", "scenario": "A user claims a Maven module is unused while a parent module declaration, consumer dependency, and quality test still reference it.", "expected": "The evidence conflict and Maven reference-impact analysis block without deleting the module.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add an isolated Maven multi-module fixture regression."},
+    {"id": "installer-runtime-completeness", "riskDomain": "installation_integrity", "scenario": "An installed Makefile refers to a missing reference-impact runtime script, schema, or policy.", "expected": "Doctor and adoption readiness fail even when no evidence record exists.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add adopter installation and doctor regressions."},
+    {"id": "no-impact-not-applicable", "riskDomain": "false_positive_control", "scenario": "A documentation-only or no-impact change has no reference-impact target.", "expected": "The gate reports not applicable and does not require a reference-impact record.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add a classifier regression."}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "current-thread user",
+    "reason": "User explicitly authorized necessary actions and required the authorization be recorded in every Work Item Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 897
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/operation-impact-fail-closed.json",
+    "baseCommit": "835a7cd70adb3dd5ea2781db8bcdee8cebce279c",
+    "initialScopeDigest": "fcf06049ca058570f8b2ff28218eda40c6a79baabc5a47c3769be8c2cfc61061",
+    "contractSkeletonDigest": "00b123eda5101b55765aadbf1a00eedef3f205fcb8257282b3d253bf63f88800"
+  }
+}
