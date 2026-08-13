@@ -1,0 +1,590 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "sync-v0560-projection",
+  "contractPath": ".ai/work-items/archive/2026/sync-v0560-projection.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/sync-v0560-projection.contract.json",
+      "reason": "Records the bounded, user-authorized v0.5.60 projection synchronization."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/sync-v0560-projection.summary.json",
+      "reason": "Records provider digest, candidate-only, and verification evidence."
+    },
+    {
+      "path": "release.json",
+      "reason": "Canonical published projection advances to verified v0.5.60 public assets."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Prepares v0.5.61 as non-published successor candidate."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Reserves v0.5.60 and preserves provider evidence."
+    },
+    {
+      "path": ".ai/cockpit/version.json",
+      "reason": "Source candidate version advances to 0.5.61."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Projects verified provider v0.5.60 digest manifest."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Command-generated v0.5.61 candidate supply-chain baseline."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Command-generated v0.5.61 candidate provenance baseline."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Default candidate changes to v0.5.61 without claiming publication."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Generated capability truth projection refreshed after source evidence changes."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Generated release documentation alignment refreshed."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Human-readable generated release documentation alignment refreshed."
+    },
+    {
+      "path": "tests/test_release_state_consistency.py",
+      "reason": "Pins the next candidate and published baseline transition."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Pins source candidate version 0.5.61."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Pins v0.5.60 as the latest unavailable stable Release."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/sync-v0560-projection.outcome.json",
+      "reason": "Generated Task Outcome evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/sync-v0560-projection.outcome.md",
+      "reason": "Generated human-readable Task Outcome evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated governed status."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated machine-readable Human Benefit Report."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated human-readable Human Benefit Report."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/sync-v0560-projection.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "docs/reference/distribution.md",
+    ".github/workflows/release.yml",
+    "github:release:v0.5.60",
+    "conversation:2026-08-13-user-authorization",
+    "scripts/sync_published_release_projection.py",
+    "scripts/check_supply_chain.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:12.181974+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "62e7f0f3e2ad660ec75c439b1d3f2650e4f84d441d6645827c27a1b4e8b89b0d",
+      "commandHash": "caa290e58ce9eadaf8d5b09a5e901ce70f04bafa38aa79492dd3e4bc6765b699",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "0a605fde97b69596ed1779b6ec58d97765e5d399c68ff3c2316b1315739f7531",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/sync-v0560-projection.contract.json work item contract check passed: .ai/work-items/active/sync-v0560-projection.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/sync-v0560-projection.contract.json work item contract check passed: .ai/work-items/active/sync-v0560-projection.contract.json",
+      "outputBytes": 222
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:12.352084+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "31e1965cc4fb49d495b515c479bb3a29a2f2a13eff85f78d8152e9a3eada528c",
+      "commandHash": "4f228444e86c0a7004f899fd91a886229da09afe0cff8b0b9254bfcfffa559af",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "ebd09cb10b86f6c337a41e9acf2c1a53bdcc16fa2e1dec91c99e67a71139c888",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/sync-v0560-projection.contract.json scope guard passed: 22 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/sync-v0560-projection.contract.json scope guard passed: 22 changed path(s) covered",
+      "outputBytes": 174
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:12.563705+00:00",
+      "exitCode": 0,
+      "durationMs": 150,
+      "outputDigest": "4afe401d73c1246c66ae3830eaefd6874f40d06531edd0ec2923d7b4bfb1c75b",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "a6b5153beb1c4d1717f2ac1cf56216a249fed7c324980725006faf05f8f0209e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/sync-v0560-projection.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/version.json (.ai/**) - AI governa",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/sync-v0560-projection.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/version.json (.ai/**) - AI governance configuration. guard check completed: 4 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 591
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:12.838480+00:00",
+      "exitCode": 0,
+      "durationMs": 218,
+      "outputDigest": "e46c3c574c1a6551f940c9fcb0e9a05276236b9415af4eefc4f0981bd1e5dbf7",
+      "commandHash": "186d836bacc658edaeb3e4abd14c798532c9963646ad4204e5de8d6af2dffe8f",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "dfbb165b38ed058da257120207ed4c1c9f9979995295811dceeec0ebaecf7a58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `sync-v0560-projection` - Contract Hash: `cb1cbb7790611f6e` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required Checks: `16` - Require",
+      "outputTail": " - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/version.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/sync-v0560-projection.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `install.sh` — covered by Contract scope - [active_owned] `next-release.json` — covered by Contract scope - [active_owned] `release-state.json` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `tests/test_release_distribution.py` — covered by Contract scope - [active_owned] `tests/test_release_preflight.py` — covered by Contract scope - [active_owned] `tests/test_release_state_consistency.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 5514
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:12.995992+00:00",
+      "exitCode": 0,
+      "durationMs": 98,
+      "outputDigest": "adcc2906f8c6046c4f6845323dcf007bd293f261fb5c3287860e7c70817a6a6a",
+      "commandHash": "2232a3dddfa28054d21b2669bdc85d9dba5d889128d942d6eaeb559ca24db405",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "057987de79802fd569b61d5de3eacd160dbb1a2de8da8a383295ddb65021fb79",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/sync-v0560-projection.summary.json review policy matched 11 path(s) [review] .ai/work-items/active/sync-v0560-projection.contract.json [review] .ai/work-items/active/sync-v0560-projection.outcome.json [review] .ai/work-items/active/sync-v0560-projection.outcome.md [review] .ai/work-items/starts/sync-v0560-projection.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenan",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/sync-v0560-projection.summary.json review policy matched 11 path(s) [review] .ai/work-items/active/sync-v0560-projection.contract.json [review] .ai/work-items/active/sync-v0560-projection.outcome.json [review] .ai/work-items/active/sync-v0560-projection.outcome.md [review] .ai/work-items/starts/sync-v0560-projection.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/cockpit/version.json review focus recorded: 1 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 766
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:13.170176+00:00",
+      "exitCode": 0,
+      "durationMs": 119,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "f1ad3e4050743c1bbea0b93be75280e134fff0783889693c59e0de36e95a5385",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:13.418713+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "bfd2224dec4885719fbf840fc85df18884bb31511ba35cb7b4f452015536a6bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:13.673109+00:00",
+      "exitCode": 0,
+      "durationMs": 65,
+      "outputDigest": "369333e5d9020396b9509fb3f1cbc8f129c7c3485b0609dcb4a75978b7261bb5",
+      "commandHash": "39900d1500ea27e9e192a176fbb09bb6f8b7e6368192df745e6614305ed93974",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "725df2fc4fadc4bc01c33a18f60509f74562f8577708fbab9706612dbf4b0762",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 265
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:13.932645+00:00",
+      "exitCode": 0,
+      "durationMs": 66,
+      "outputDigest": "0cf7831d7195b45333e986b309aaf9a8c783b440e465cf84786c8e3bf7d92e65",
+      "commandHash": "6261738e4fd72b2c21ba9faedf08937aec3538af9c24c272ecb2eaebee824409",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "04cb3869ce25ab0659d54aaf5f7e37d1ab1c7e4612ad19ca24d343efb7fb7d91",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputBytes": 270
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T07:52:14.213760+00:00",
+      "exitCode": 0,
+      "durationMs": 228,
+      "outputDigest": "0cc9338c1cfcdc5d376904518029492b2eedb41a9ee03e99dca0e46ef9ac670f",
+      "commandHash": "e319016a2e846959b9443800b674ffa73c18f2f99762831d51cc948902e8701c",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "3c2739d74464c4b9e01a8ee31a3fa81d42f4d74641603df31f3d5f144a268a45",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/sync-v0560-projection.contract.json ## Diff Ownership Preview - active_owned: `22`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covere",
+      "outputTail": "equired: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/version.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/sync-v0560-projection.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/sync-v0560-projection.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `install.sh` — covered by Contract scope - [active_owned] `next-release.json` — covered by Contract scope - [active_owned] `release-state.json` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `tests/test_release_distribution.py` — covered by Contract scope - [active_owned] `tests/test_release_preflight.py` — covered by Contract scope - [active_owned] `tests/test_release_state_consistency.py` — covered by Contract scope",
+      "outputBytes": 2267
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T08:01:24.251924+00:00",
+      "exitCode": 0,
+      "durationMs": 549735,
+      "outputDigest": "25c1929b5a7716c383c0940ff65bf60b5e4053819cb9116901b1a084cf0591d7",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "be6316681e3fa292193d86af0bf78a03f18bc25479c9ec867432406cc82fadbf",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"installer\", \"release\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"5550e8fae1e211fc80fb39bb5c038787604af2f7\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/provenance.json\", \".ai/cockpit/release-digests.json\", \".ai/cockpit/sbom.json\", \".ai/cockpit/task_report.json\", \".ai/cockpit/",
+      "outputTail": "ade_rolls_back_when_post_copy_validation_fails 3.41s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 3.26s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 3.04s call tests/test_finish_e2e.py::test_documentation_alignment_failure_emits_red_outcome_before_quality 3.00s call tests/test_installer.py::test_generic_installed_pr_gate_skips_only_unconfigured_project_tools 2.98s call tests/test_adoption_ready.py::test_placeholder_codeowners_remains_fail_closed 2380 passed, 3 warnings in 537.29s (0:08:57) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.XWecIrjlZb/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.XWecIrjlZb/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.XWecIrjlZb/multi-workflow.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.XWecIrjlZb/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.XWecIrjlZb/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/5550e8fae1e2-local-20260813T075214Z-29761-0/summary.json",
+      "outputBytes": 100769
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T08:01:24.746446+00:00",
+      "exitCode": 0,
+      "durationMs": 319,
+      "outputDigest": "9c1cbb8f9753af372497dad8a9bb5281972825c3f0ad244e93c089a28b2798ba",
+      "commandHash": "fde7c19791b325f31cbe597c98c377fddeb55f4bb976b01d81a078dda097bac6",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "3288818f805030352ef6854d09e039f419abea41b9912a059f4f61aceb90b861",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 312
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T08:01:25.250750+00:00",
+      "exitCode": 0,
+      "durationMs": 224,
+      "outputDigest": "4b0c3b4fd82f8433bd25c1f876aa505d2a6d35a19f67df06d625c40d4409b1ab",
+      "commandHash": "11ffccd501ac4094e486b3fc02a9190cf79b0de2ef3bee1143860c20211b38e5",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "bcf45a56fb9e9ebdcf145085615b13422fd02d07debaa37622c18add37df5e9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 295
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T08:01:25.565069+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "67123174df5c01bb5d8859aa99f327946dcbbaf9414d5ca6dab1f35488a10518",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T08:01:25.672726+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "0fff51d25e24909454cb263a816f594301861eab824eb45014cd7d97d72669d4",
+      "commandHash": "c6d1c7c8ffb5d9db71c94df0e8c0c27592347991398cfd431722d406cd7fd9e8",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "7fc3a561ed0c92e7dba8df498ab1664cfb1a15165a6158c20834a12053574d91",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/sync-v0560-projection.contract.json --summary .ai/work-items/active/sync-v0560-projection.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 275
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/sync-v0560-projection.summary.json CONTRACT=.ai/work-items/active/sync-v0560-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-13T08:01:26.542229+00:00",
+      "exitCode": 0,
+      "durationMs": 138,
+      "outputDigest": "5b0924d9309f979aff878a7d40fa6c715f4ca67e9e2f32e6daf1d924ae29a2b3",
+      "commandHash": "94928776e8c1952c268d93814c426cb76a2d7946480a6102610ca5e11f3fa288",
+      "contractHash": "cb1cbb7790611f6ed30670476f24a13137ac1ffff5221f1cf03c7120a47d6f16",
+      "commitSha": "5550e8fae1e211fc80fb39bb5c038787604af2f7",
+      "executionContractPath": ".ai/work-items/active/sync-v0560-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/sync-v0560-projection.summary.json",
+      "worktreeDigest": "02ae897169b5ebebd81b12da041e1608fe19d47aaf98e26d165501ff2e338165",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/sync-v0560-projection.summary.json --contract .ai/work-items/active/sync-v0560-projection.contract.json ai summary check passed: .ai/work-items/active/sync-v0560-projection.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/sync-v0560-projection.summary.json --contract .ai/work-items/active/sync-v0560-projection.contract.json ai summary check passed: .ai/work-items/active/sync-v0560-projection.summary.json",
+      "outputBytes": 280,
+      "outcomeInputDigest": "53e3c762ca5f3ebc2a96fc0b75d64dc8ae53408f7639580ba56dc7c45f0eb766"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use the canonical synchronization command and provider asset SHA-256 evidence.",
+      "compliant": true,
+      "evidence": "Canonical command consumed provider assets only after exact SHA-256 assertions."
+    },
+    {
+      "guideline": "Preserve published → next-candidate ordering and immutable-tag reservations.",
+      "compliant": true,
+      "evidence": "v0.5.60 is reserved/unavailable; v0.5.61 is candidate with basedOnReleaseTag v0.5.60."
+    },
+    {
+      "guideline": "Do not claim an unpublished candidate is a public Release.",
+      "compliant": true,
+      "evidence": "release.json remains v0.5.60 public truth; next-release.json marks v0.5.61 published false."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Release projection and installer defaults are user-facing trust boundaries; all facts are provider-digest-bound and no provider mutation occurred."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "future_release",
+      "detail": "v0.5.61 is intentionally only a candidate; any future publication requires a separate exact-source, receipt-bound release Work Item.",
+      "reviewRecommended": false,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify v0.5.60 provider asset SHA-256 values and the no-provider-mutation boundary."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "checked",
+    "userVisibleOutput": "checked",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "checked",
+    "makeEntrypoints": "checked"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "cb1cbb7790611f6e",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "cb1cbb7790611f6e",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not claim v0.5.61 published, tagged, released, or installable from a public stable Release; only v0.5.60 has verified provider publication facts.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-13T07:53:00+00:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/distribution.md"
+        ],
+        "reason": "The post-publication projection path preserves separate Work Item and immutable evidence boundaries."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/sync-v0560-projection.contract.json",
+          ".ai/work-items/archive/2026/sync-v0560-projection.summary.json"
+        ],
+        "reason": "Authorization, provider evidence, and no-publish scope are recorded."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/sync_published_release_projection.py",
+          "scripts/check_supply_chain.py",
+          "docs/reference/pre-release-documentation-alignment.md",
+          ".ai/cockpit/task_report.md",
+          ".ai/work-items/archive/2026/sync-v0560-projection.outcome.md"
+        ],
+        "reason": "Only canonical command-owned projections were regenerated."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "No prose documentation was edited."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/sync-v0560-projection.summary.json"
+        ],
+        "reason": "The v0.5.61 candidate-only limitation remains explicit."
+      }
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The existing v0.5.60 tag and stable Release make it unavailable as a future candidate.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "git fetch --tags origin",
+        "gh release view v0.5.60",
+        "make check-release-state-consistency"
+      ]
+    },
+    {
+      "scenario": "Synchronization accepts only exact provider assets and source identity.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "release.json sha256:1e8ce44257efb4b8267bc30e6866a2ac085afad49bc621011599c1f2900615f8",
+        "release-digests.json sha256:5c984a5483378f96bc99f8f66b1f388b0431110254b0a0d57c7e97a4e78f3cff",
+        "scripts/sync_published_release_projection.py"
+      ]
+    },
+    {
+      "scenario": "Candidate installer projection never claims v0.5.61 is published.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "release.json",
+        "next-release.json",
+        "install.sh",
+        "focused release regression suite"
+      ]
+    }
+  ],
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/sync-v0560-projection.outcome.json",
+    "markdownPath": ".ai/work-items/active/sync-v0560-projection.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2,
+    "humanStatusColor": "green",
+    "completionFact": "All declared finish checks passed.",
+    "recoveryCondition": ""
+  },
+  "archiveSequence": 886
+}
