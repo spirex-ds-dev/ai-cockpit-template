@@ -1,0 +1,84 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-v0559",
+  "mode": "code",
+  "title": "Synchronize published v0.5.59 facts and prepare v0.5.60 candidate",
+  "baseCommit": "d6f34f67f06c98a84bebf1da768b45af77e076a7",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish-v0559.contract.json",
+    ".ai/work-items/active/publish-v0559.summary.json",
+    ".ai/work-items/active/publish-v0559.outcome.json",
+    ".ai/work-items/active/publish-v0559.outcome.md",
+    ".ai/work-items/starts/publish-v0559.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    "install.sh",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_distribution.py",
+    "tests/test_supply_chain.py",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json"
+  ],
+  "outOfScope": [
+    "Changing implementation source, workflows, or non-generated documentation.",
+    "Creating, moving, deleting, or publishing any tag or GitHub Release in this synchronization Work Item.",
+    "Bypassing asset digest, provider identity, or candidate consistency validation."
+  ],
+  "sources": [
+    {"path": "release-state.json", "reason": "Canonical candidate, previous release, and reserved-tag facts."},
+    {"path": "next-release.json", "reason": "Declares v0.5.59 as the next unpublished candidate based on v0.5.58."},
+    {"path": ".github/workflows/release.yml", "reason": "Sole authority for exact-source rehearsal, immutable tag, Release, assets, and provider-bound verification."},
+    {"path": "docs/reference/ai-cockpit-work-item-lifecycle.md", "reason": "Defines the required readiness, same-SHA rehearsal, release, and closure sequence."},
+    {"path": "conversation:2026-08-13-continuous-closure-and-release-authorization", "reason": "User authorized the complete governed lifecycle and requested the authority be recorded in the Contract."}
+  ],
+  "rawUserRequest": "完成目标全部任务为止不要停，需要授权的，我授权给你，并写入Contract。WI跑完完整流程PR和清理。最后自检，看看有没遗漏，如果有，循环修正到结束。全部没问题了，发布新版本。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-13-continuous-closure-and-release-authorization", "capturedAt": "2026-08-13", "digest": "sha256:operator-authorized-v0559-publication"},
+  "declaredIntent": {"summary": "Synchronize verified public v0.5.59 assets into repository projections and prepare only the next v0.5.60 candidate for a later exact-source publication Work Item.", "requestedCapabilities": ["ai_governance"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "RayIori", "reference": "conversation:2026-08-13-continuous-closure-and-release-authorization", "scope": "Synchronize only verified v0.5.59 public assets and prepare the following v0.5.60 candidate. No tag mutation, provider Release mutation, gate bypass, or blind retry is authorized."},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["release_identity", "supply_chain_evidence", "candidate_projection"], "reason": "Projection synchronization changes the source facts consumed by future installers and must bind only verified immutable public assets to the known v0.5.59 release.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "human_override", "reasons": ["Release identity and installer candidate projection"], "override": {"approvalEvidence": "conversation:2026-08-13-continuous-closure-and-release-authorization", "reason": "User authorized strict release-projection correction and subsequent publication only after all gates pass.", "risks": ["release_identity", "supply_chain_evidence", "adopter_install"], "notRunChecks": ["No tag, provider Release, rehearsal, or publication check runs in this synchronization Work Item; those remain mandatory in the successor publication Work Item."], "workItemOnly": true, "workItemId": "publish-v0559"}},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user explicitly authorized the full lifecycle, conditional on all fail-closed readiness, rehearsal, hosted verification, and closure checks passing."},
+  "preReviewWarnings": ["Download and hash the existing v0.5.59 public release assets before synchronization; do not create a tag or provider Release in this Work Item."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record release evidence custody before and after the provider operation."},
+  "acceptance": [
+    "Downloaded v0.5.59 release.json and release-digests.json match their provider asset SHA-256 values and the v0.5.59 tag target.",
+    "The authoritative synchronization command advances source projections to published v0.5.59 and next candidate v0.5.60 without a provider tag or Release mutation.",
+    "Release candidate consistency and distribution checks reject reuse of v0.5.59 and accept the v0.5.60 candidate.",
+    "The synchronization Work Item is fully verified, archived, merged, closed, and cleaned before a separate v0.5.60 publication Work Item begins."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Existing provider tag and Release make v0.5.59 unavailable as a future candidate.", "required": true, "status": "unverified", "evidence": [], "expected": "Provider evidence identifies v0.5.59 and preflight no longer accepts it as the next candidate.", "verificationPlan": "Query provider tag/Release and run candidate consistency checks after synchronization."},
+    {"scenario": "Synchronization accepts only provider assets with matching SHA-256 and source identity.", "required": true, "status": "unverified", "evidence": [], "expected": "Mismatched asset bytes or source commit cause the synchronization command to fail before writes.", "verificationPlan": "Run the authoritative command using downloaded verified assets and its regression suite."},
+    {"scenario": "Next candidate is v0.5.60 and installer default tracks it without publishing it.", "required": true, "status": "unverified", "evidence": [], "expected": "Projection and install-script checks agree on v0.5.60; no v0.5.60 tag or Release exists.", "verificationPlan": "Inspect candidate metadata, install script, and provider tag list."}
+  ],
+  "guidelines": [
+    "Use the authoritative projection synchronization command and verified provider assets; never create tags or Releases manually.",
+    "Preserve the future readiness → same-SHA rehearsal → actual release order and fail closed on any identity mismatch.",
+    "Report provider evidence and residual limitations truthfully; a successful local assertion is not publication proof."
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "RayIori", "reason": "User explicitly authorized completion, PR merge, cleanup, and new-version publication. Restricted writes are limited to source projection synchronization, this Work Item evidence, and its PR lifecycle."},
+  "rollbackNote": "Do not alter the immutable v0.5.59 provider artifacts. If synchronization fails, preserve evidence and correct source projections through a successor Work Item.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 905}},
+  "startReceipt": {"path": ".ai/work-items/starts/publish-v0559.json", "baseCommit": "d6f34f67f06c98a84bebf1da768b45af77e076a7", "initialScopeDigest": "00475220d6080605d4ee5371e1fe26fc567221227cf0d1461c26ef49aa4e2e48", "contractSkeletonDigest": "59f274f77bbb92a30a495edc0b2b0c14c9c59858a9248ac29afaef4d7df7b7ad"},
+  "intent": {"problem": "The evidence-based operation-impact enhancement merged as PR #818 after v0.5.59 had already been published. Repository projections were not synchronized after that publication and incorrectly present the occupied v0.5.59 tag as the next candidate.", "constraints": ["Synchronize only the verified existing v0.5.59 public assets.", "Prepare v0.5.60 but do not publish it in this Work Item.", "Do not bypass asset digests, source identity, or the later rehearsal/release procedure."], "rationale": "Synchronizing existing provider facts first makes the next release candidate unambiguous and prevents accidental tag reuse before the separate public-release lifecycle."},
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ]
+}
