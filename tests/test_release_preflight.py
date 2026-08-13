@@ -77,12 +77,12 @@ def test_release_preflight_rejects_source_version_that_disagrees_with_requested_
     assert preflight.validate_source_release_version({"releaseVersion": "0.5.50"}, "v0.5.50") == []
 
 
-def test_repository_source_version_matches_the_v060_candidate():
+def test_repository_source_version_matches_the_v061_candidate():
     root = Path(__file__).resolve().parents[1]
     version = json.loads((root / ".ai" / "cockpit" / "version.json").read_text(encoding="utf-8"))
 
-    assert version["releaseVersion"] == "0.5.60"
-    assert preflight.validate_source_release_version(version, "v0.5.60") == []
+    assert version["releaseVersion"] == "0.5.61"
+    assert preflight.validate_source_release_version(version, "v0.5.61") == []
 
 
 def test_release_preflight_source_readers_bind_and_reject_exact_source_bytes(monkeypatch, tmp_path):
