@@ -33,9 +33,9 @@ team が「安全になるから」と新しい approval form を提案しまし
 
 ## Explanation
 
-### Discover, do not invent
+### 先に必要性を確かめ、手続きを増やさない
 
-各 component は現実の協働上の必要性に答えなければなりません。checklist が大きいこと自体を理由に process を増やさず、control を risk と evidence に追跡します。
+各 component（構成要素）は、現実の協働上の必要性に答えなければなりません。checklist が大きいこと自体を理由に手続きを増やさず、control を risk と evidence に結び付けます。
 
 ### North Star に従う
 

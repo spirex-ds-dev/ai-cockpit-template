@@ -55,9 +55,9 @@ Repository Governance Layer | 外部の runtime、identity、sandbox、provider�
 
 左側は repository change を review 可能にします。右側は adopter、provider、auditor、その他の domain system の責任です。
 
-## Action or decision
+## Action or decision（次に取る行動と判断）
 
-新しい fact の置き場所を flow で決めます。request、scope、verification、人の判断は governed Work Item に置きます。domain 固有の proof は生成できる tool に置き、ownership を重複させず link します。
+新しい事実（fact）をどこに置くかを、この流れで決めます。request、scope、verification、人の判断は管理対象の Work Item に置きます。分野固有の証明（proof）は、それを生成できる tool に置き、所有者（ownership）を重複させずリンクします。
 
 ## Stop conditions
 

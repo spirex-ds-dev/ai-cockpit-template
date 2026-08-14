@@ -55,9 +55,9 @@ local の governance evidence → 範囲付き repository 判断
 external/domain evidence → 外部の責任と claim
 ```
 
-## Action or decision
+## Action or decision（次に取る行動と判断）
 
-重要な claim ごとに、誰が evidence を作り、どの範囲を支え、欠落時の安全な次の action は何かを確認します。この repository が検証できる claim は local に保ち、できないものは外部 owner に link します。
+重要な主張（claim）ごとに、誰が evidence を作り、どの範囲を支え、欠落時に安全に取れる次の行動（action）は何かを確認します。この repository が検証できる主張はここで管理し、できないものは外部 owner にリンクします。
 
 ## Stop conditions
 

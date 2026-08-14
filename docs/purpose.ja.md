@@ -17,11 +17,11 @@ keywords: [ai-cockpit, purpose, north-star, human-agent-trust]
 
 ## Purpose
 
-このページは、**AI agent が repository を変更する前に、なぜ AI Cockpit を使うのか**に答えます。
+このページは、**AI agent が repository を変更する前に、なぜ AI Cockpit を使うのか**を説明します。
 
 ## Audience
 
-導入するか判断する人、または code を書かない人へ project を説明する人向けです。
+導入するか判断する人、またはコードを書かない人にプロジェクトを説明する人向けです。
 
 ## Outcome
 
@@ -35,11 +35,11 @@ Agent が小さな文書変更を提案しました。説明はもっともら�
 
 AI 支援開発は速い反面、不確実性を隠すことがあります。Agent は request を誤解し、scope を広げ、check を省略し、reviewer が必要とする証拠なしに自信のある説明をするかもしれません。
 
-AI Cockpit は **Repository Governance Layer** です。人の request を範囲付きの Work Item に変換し、意図した scope を review 可能な証拠に結び付け、証拠が欠落・古い・矛盾・高 risk のときは人へ control を戻します。
+AI Cockpit は **Repository Governance Layer** です。人の依頼（request）を範囲付きの Work Item に変換し、意図した scope を確認可能な証拠に結び付けます。証拠が欠落・古い・矛盾している、またはリスクが高いときは、人へ制御（control）を戻します。
 
 North Star は **Calibrated Human-Agent Trust** です。Agent を最大限信頼することではありません。証拠が支えるときは依存し、支えないときは調査・介入・停止を選べる状態にすることです。
 
-仕組みは **Evidence Governance** です。AI Cockpit は証拠を統治しますが、test、coverage、SBOM、脆弱性 scan、provenance、signature、provider attestation を生成する tool の代わりにはなりません。
+仕組みは **Evidence Governance**（証拠の統治）です。AI Cockpit は証拠を管理しますが、test、coverage、SBOM、脆弱性 scan、provenance、signature、provider attestation を生成する専門 tool の代わりにはなりません。
 
 ```text
 人の意図 → 範囲付き Contract → 変更 → 証拠 → 人の判断

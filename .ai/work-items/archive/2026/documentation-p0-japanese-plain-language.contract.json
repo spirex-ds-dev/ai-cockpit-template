@@ -1,0 +1,266 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-p0-japanese-plain-language",
+  "mode": "code",
+  "title": "Improve Japanese P0 plain-language path",
+  "baseCommit": "a4fd04cc33864963cb47ca6976bfc2f6f3e67a18",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "再开：继续整改文档，让非技术人员能看懂；每个 WI 完成完整闭环后再进入下一个。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-resumed-documentation-acceptance-remediation",
+    "capturedAt": "2026-08-15T01:40:00+09:00",
+    "digest": "user-resumed-japanese-plain-language"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "capabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ],
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ],
+    "requestedOutcome": "Rewrite the Japanese P0 reader route so non-technical readers can understand the project, its North Star, architecture, boundaries, decisions, and first-use path without unexplained English sentences or broken navigation prose."
+  },
+  "scope": [
+    ".ai/work-items/active/documentation-p0-japanese-plain-language.contract.json",
+    ".ai/work-items/active/documentation-p0-japanese-plain-language.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-p0-japanese-plain-language.outcome.json",
+    ".ai/work-items/active/documentation-p0-japanese-plain-language.outcome.md",
+    "README.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/README.ja.md",
+    "docs/purpose.ja.md",
+    "docs/philosophy/design-philosophy.ja.md",
+    "docs/architecture.ja.md",
+    "docs/capabilities.ja.md",
+    "docs/concepts/decision-states.ja.md",
+    "docs/reference/how-to-read-cockpit-status.ja.md",
+    "docs/operations/work-item-lifecycle.ja.md",
+    "docs/operations/recovery.ja.md",
+    "docs/getting-started/first-calibration.ja.md",
+    "docs/getting-started/first-work-item.ja.md",
+    "docs/security/injection-boundary.ja.md",
+    "tests/test_documentation_p0_japanese_plain_language.py",
+    "docs/superpowers/plans/2026-08-15-documentation-p0-japanese-plain-language.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Runtime behavior, release metadata, publication.",
+    "Simplified Chinese or English rewriting; reserved for later WIs.",
+    "Independent comprehension participant study; reserved for the final comprehension WI.",
+    "P1/P2 translation expansion."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md",
+      "reason": "Nontechnical first explanatory layer and language quality acceptance rules."
+    },
+    {
+      "path": "docs/README.ja.md",
+      "reason": "Japanese canonical reader route."
+    },
+    {
+      "path": "docs/purpose.ja.md",
+      "reason": "Japanese North Star and purpose explanation."
+    },
+    {
+      "path": "docs/architecture.ja.md",
+      "reason": "Japanese architecture and responsibility boundaries."
+    },
+    {
+      "path": "docs/getting-started/first-calibration.ja.md",
+      "reason": "Japanese first-use adoption route."
+    },
+    {
+      "path": "docs/getting-started/first-work-item.ja.md",
+      "reason": "Japanese first governed task route."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Bound Japanese evidence regenerated after Japanese content changes."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "localization_semantic_mismatch",
+      "comprehension_misinterpretation"
+    ],
+    "reason": "Mixed-language and broken Japanese route prose can cause nontechnical readers to miss the project's purpose or follow the wrong responsibility boundary.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P0 Japanese reader route and safety boundaries require strict evidence."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User resumed documentation remediation and requires sequential full WI closure."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record immutable checkpoints before editing and finishing."
+  },
+  "acceptance": [
+    "The Japanese root README and P0 reader home present a coherent, grammatically complete route through North Star, purpose, philosophy, architecture, boundaries, decisions, adoption, and recovery.",
+    "The Japanese P0 pages replace standalone English explanatory sentences and first-use unexplained mixed-language prose with natural Japanese; technical command and product names remain exact where execution requires them.",
+    "Focused regression tests detect the known English sentence leaks and broken home sentence, and verify same-language P0 links remain intact.",
+    "Regenerate Japanese capability and pre-release alignment evidence, then pass all declared documentation, AI governance, and strict quality checks."
+  ],
+  "guidelines": [
+    "Write for a nontechnical Japanese reader first; explain unavoidable product terms in Japanese at first use.",
+    "Keep exact command names, paths, and product identifiers unchanged when they are executable facts.",
+    "Do not claim native-human editorial quality or comprehension from deterministic checks alone.",
+    "Keep the change limited to the Japanese P0 reader route and its bound evidence."
+  ],
+  "intent": {
+    "problem": "Acceptance found that the Japanese P0 route contains complete English sentences, dense unexplained code-switching, and broken home navigation prose, so file parity does not equal reader understanding.",
+    "constraints": [
+      "Preserve safety semantics and executable command names.",
+      "Rewrite explanatory prose into natural Japanese and fix navigation sentences.",
+      "Do not modify Chinese/English content or claim independent native review."
+    ],
+    "rationale": "The project's purpose is comprehension; the Japanese route must be readable as a coherent journey before an independent reader study can produce meaningful evidence."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Japanese nontechnical reader follows the localized home through purpose, architecture, decisions, adoption, and recovery.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Every route step is grammatically complete and explanatory paragraphs are Japanese-first without standalone English leaks.",
+      "verificationPlan": "Focused tests inspect known leak patterns and same-language route links; manual review records representative corrections."
+    },
+    {
+      "scenario": "A Japanese reader encounters the governance boundary and first Work Item path.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The reader can distinguish human responsibility, external controls, and executable commands without guessing from English prose.",
+      "verificationPlan": "Review capabilities, architecture, first-calibration, and first-work-item pages against the English semantic owner."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted governance paths are changed."
+  },
+  "rollbackNote": "Revert this Japanese documentation/test-only Work Item diff.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 900
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-p0-japanese-plain-language.json",
+    "baseCommit": "a4fd04cc33864963cb47ca6976bfc2f6f3e67a18",
+    "initialScopeDigest": "52c7937d5a5854516cb14e8dcebcaa6fdc4c1ba3b2becf0672b8a05ed269aace",
+    "contractSkeletonDigest": "28b828343f7cfc52bbd151f8f783e0cde27002ea59ef173696bea781e6d06bf3"
+  }
+}
