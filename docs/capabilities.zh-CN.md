@@ -55,9 +55,9 @@ AI Cockpit 的产品边界是 **Repository Governance Layer（仓库治理层）
 外部/领域证据 → 外部责任与声明
 ```
 
-## Action or decision
+## Action or decision（下一步行动与决定）
 
-对每个重要声明，询问：谁产生证据、覆盖什么范围、证据缺失时安全的下一步是什么？本仓库能验证的声明保留在本地；不能验证的声明链接到外部责任方。
+对每个重要主张，询问：谁产生证据、覆盖什么范围、证据缺失时安全的下一步是什么？本仓库能验证的主张保留在本地；不能验证的主张链接到外部责任方。
 
 ## Stop conditions
 
@@ -66,8 +66,8 @@ AI Cockpit 的产品边界是 **Repository Governance Layer（仓库治理层）
 ## Next steps
 
 1. [架构](architecture.zh-CN.md) — 证据如何流动、由谁负责。
-2. [Decision States（英文 fallback）](concepts/decision-states.md) — 如何处理 green、yellow、red。
-3. [Capability Truth Matrix（英文 fallback）](reference/capability-truth-matrix.md) — 逐行证据与限制。
+2. [决定状态](concepts/decision-states.zh-CN.md) — 如何处理 Green、Yellow、Red。
+3. [Capability Truth Matrix（英文参考）](reference/capability-truth-matrix.md) — 逐行证据与限制。
 
 ## Technical depth
 

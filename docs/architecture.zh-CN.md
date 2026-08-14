@@ -55,9 +55,9 @@ Repository Governance Layer | 外部 runtime、身份、sandbox、provider 和�
 
 左侧使仓库变更可评审；右侧仍由采用者、provider、审计方或其他领域系统负责。
 
-## Action or decision
+## Action or decision（下一步行动与决定）
 
-用这条流程判断新事实应该放在哪里。请求、范围、验证和人的决定放在受治理 Work Item 中；领域专属证明放在能够产生它的工具中；两者链接但不重复所有权。
+用这条流程判断新事实应该放在哪里。请求、范围、验证和人的决定放在受治理 Work Item 中；领域专属证明放在能够产生它的工具中；两者相互链接，但不重复所有权。
 
 ## Stop conditions
 

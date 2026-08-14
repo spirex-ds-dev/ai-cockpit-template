@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task documentation-p0-japanese-plain-language generated an evidence-derived outcome with status completed_with_warnings.
+Task documentation-p0-chinese-plain-language generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1

@@ -45,7 +45,7 @@ AI Cockpit 是 **Repository Governance Layer（仓库治理层）**。它把人�
 人的意图 → 有边界的 Contract → 变更 → 证据 → 人的决定
 ```
 
-## Action or decision
+## Action or decision（下一步行动与决定）
 
 当变更需要清晰范围、可复现检查和负责人的决定时，使用 AI Cockpit。如果需求是 Agent Runtime、Workflow Engine、Security Sandbox、身份提供方或企业合规系统，应选择负责该能力的独立工具。
 

@@ -20,8 +20,7 @@ capabilityClaims:
 <!-- readme-section: identity -->
 ## 它是什么
 
-AI Cockpit 是用于 AI 辅助软件开发的 **Repository Governance Layer**。它把
-仓库证据转化为人可以复核的、有边界的治理决策。
+AI Cockpit 是用于 AI 辅助软件开发的仓库治理层（Repository Governance Layer）。它把仓库证据转化为人可以复核的、有边界的治理决定。
 
 扩展说明见 [Human-Agent Trust Layer](docs/trust-layer.zh-CN.md)。
 
@@ -38,8 +37,7 @@ Agent 可能超出范围、削弱测试、跳过验证，或让评审者得不�
 Evidence → Governance Decision → Human Control
 ```
 
-每项变更使用一个 Contract、一个分支、一个 Summary/Outcome、一个 PR，以及
-经过验证的关闭流程。Agent 的文字说明本身不是证据。
+每项变更使用一个 Contract（作业契约）、一个专用分支、一个 Summary/Outcome（结果记录）、一个 PR，以及经过验证的关闭流程。Agent 的文字说明本身不是证据。
 
 <!-- readme-section: decision-states -->
 ## 三色决策状态
