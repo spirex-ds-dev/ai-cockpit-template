@@ -15,6 +15,8 @@ capabilityClaims:
 
 [English](README.md) | [日本語](README.ja.md)
 
+请先打开[中文文档入口](docs/README.zh-CN.md)，按读者目标理解项目。
+
 <!-- readme-section: identity -->
 ## 它是什么
 
@@ -46,7 +48,7 @@ Evidence → Governance Decision → Human Control
 - **Yellow：**调查缺失、过期、矛盾或带风险的证据。
 - **Red：**停止；必需控制失败或缺少权限。
 
-参见 [Decision States](docs/concepts/decision-states.md)。
+决策和恢复路径集中在[中文文档入口](docs/README.zh-CN.md)。
 
 <!-- readme-section: quick-start -->
 ## 30 秒开始
@@ -63,15 +65,12 @@ AI Cockpit 不是 Agent Runtime、Workflow Engine、Security Sandbox、通用 Pr
 Injection 检测器、身份提供方、合规认证或人工评审替代品。外部身份、分支保护、
 生产隔离和发布证明仍属于外部证据。
 
-当前能力声明受 [Capability Truth Matrix](docs/reference/capability-truth-matrix.md)
+当前能力声明受 [Capability Truth Matrix（英文 fallback，同语言页面 planned）](docs/reference/capability-truth-matrix.md)
 约束。
 
 <!-- readme-section: documentation -->
 ## 文档入口
 
-- 开始：[安装](docs/getting-started/installation.zh-CN.md)、[First Calibration](docs/getting-started/first-calibration.md)、[First Work Item](docs/getting-started/first-work-item.md)
-- 概念：[Trust Layer](docs/concepts/trust-layer.md)、[Evidence Governance](docs/concepts/evidence-governance.md)、[Decision States](docs/concepts/decision-states.md)
-- 运维：[Quality Gates](docs/operations/quality-gates.zh-CN.md)、[Work Item Lifecycle](docs/operations/work-item-lifecycle.md)、[Recovery](docs/operations/recovery.md)
-- 安全：[Threat Model](docs/security/threat-model.md)、[Injection Boundary](docs/security/injection-boundary.md)、[Supply Chain](docs/security/supply-chain.md)
-- 参考：[Schemas](docs/reference/schemas.md)、[Commands](docs/reference/commands.md)、[Documentation Architecture](docs/reference/documentation-architecture.md)
-- 历史：[Plans](docs/archive/plans/README.md)、[Reviews](docs/archive/reviews/README.md)、[Designs](docs/archive/historical-designs/README.md)
+从[中文文档入口](docs/README.zh-CN.md)选择目标：理解项目、判断是否采用、开始第一个
+受治理任务、评审结果、从停止中恢复，或维护与审计。入口会优先使用同语言 canonical
+页面；尚未翻译的 P0 会明确标为 planned，而不是静默切换语言。

@@ -15,6 +15,8 @@ capabilityClaims:
 
 [English](README.md) | [中文](README.zh-CN.md)
 
+まずは[日本語ドキュメント入口](docs/README.ja.md)から読者向けの道筋を確認してください。
+
 <!-- readme-section: identity -->
 ## AI Cockpit とは
 
@@ -47,7 +49,7 @@ Evidence → Governance Decision → Human Control
 - **Yellow:** 欠落、古い、矛盾、またはリスクのある証拠を調査します。
 - **Red:** 停止します。必須 control の失敗または権限不足があります。
 
-詳細は [Decision States](docs/concepts/decision-states.md) を参照してください。
+判断と回復の道筋は[日本語ドキュメント入口](docs/README.ja.md)にまとめています。
 
 <!-- readme-section: quick-start -->
 ## 30 秒で開始
@@ -65,15 +67,12 @@ injection detector、identity provider、compliance 証明、人の review の�
 ありません。外部 identity、branch protection、production isolation、release
 attestation は外部証拠です。
 
-現在の主張は [Capability Truth Matrix](docs/reference/capability-truth-matrix.md)
+現在の主張は [Capability Truth Matrix（英語 fallback、同言語ページ planned）](docs/reference/capability-truth-matrix.md)
 に制約されます。
 
 <!-- readme-section: documentation -->
 ## ドキュメント
 
-- 導入: [Installation](docs/getting-started/installation.ja.md)、[First Calibration](docs/getting-started/first-calibration.md)、[First Work Item](docs/getting-started/first-work-item.ja.md)
-- 概念: [Trust Layer](docs/concepts/trust-layer.md)、[Evidence Governance](docs/concepts/evidence-governance.md)、[Decision States](docs/concepts/decision-states.md)
-- 運用: [Quality Gates](docs/operations/quality-gates.ja.md)、[Work Item Lifecycle](docs/operations/work-item-lifecycle.md)、[Recovery](docs/operations/recovery.md)
-- Security: [Threat Model](docs/security/threat-model.md)、[Injection Boundary](docs/security/injection-boundary.md)、[Supply Chain](docs/security/supply-chain.md)
-- Reference: [Schemas](docs/reference/schemas.md)、[Commands](docs/reference/commands.md)、[Documentation Architecture](docs/reference/documentation-architecture.ja.md)
-- 履歴: [Plans](docs/archive/plans/README.md)、[Reviews](docs/archive/reviews/README.md)、[Designs](docs/archive/historical-designs/README.md)
+[日本語ドキュメント入口](docs/README.ja.md)から、理解、導入、最初の Work Item、
+結果の review、stop からの回復、保守・監査の目的を選べます。各ページでは、
+同言語の canonical route を優先し、未翻訳の P0 は planned と明示します。
