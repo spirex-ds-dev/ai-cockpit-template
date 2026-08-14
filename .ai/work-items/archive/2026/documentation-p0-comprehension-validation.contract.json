@@ -1,0 +1,71 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-p0-comprehension-validation",
+  "mode": "code",
+  "title": "P0 multilingual comprehension validation",
+  "baseCommit": "acade55aa55746f39d77132d1197a760ec6779aa",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "查收，执行计划。我授权给你，并写入Contract。",
+  "rawRequestSource": {"type": "human", "reference": "user-authorized-execute-all-work-items-2026-08-14", "capturedAt": "2026-08-14T14:40:00+09:00", "digest": "user-authorized-wi6-comprehension-validation"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "document", "authorityRequired": false},
+  "declaredIntent": {"capabilities": ["ai_governance", "documentation", "test_automation"], "requestedCapabilities": ["ai_governance", "documentation", "test_automation"], "requestedOutcome": "Run and record bounded English, Japanese, and Simplified Chinese P0 comprehension protocol evidence without overclaiming native editorial quality."},
+  "scope": [
+    ".ai/work-items/active/documentation-p0-comprehension-validation.contract.json",
+    ".ai/work-items/active/documentation-p0-comprehension-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-p0-comprehension-validation.outcome.json",
+    ".ai/work-items/active/documentation-p0-comprehension-validation.outcome.md",
+    "docs/reference/comprehension-review-2026-08-14.md",
+    "docs/reference/comprehension-review-2026-08-14.ja.md",
+    "docs/reference/comprehension-review-2026-08-14.zh-CN.md",
+    "tests/test_documentation_p0_comprehension_validation.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+    ,"docs/superpowers/plans/2026-08-14-documentation-p0-comprehension-validation.md",
+    "docs/reference/documentation-context-registry.json"
+  ],
+  "outOfScope": ["Runtime behavior, release metadata, and publication.", "Claiming native-language editorial quality without an independent native-language reviewer.", "Adding new P1/P2 translation work."],
+  "sources": [
+    {"path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md", "reason": "WI-6 protocol, threshold, and failure rules."},
+    {"path": "docs/README.md", "reason": "Canonical core narrative and reader route."},
+    {"path": "docs/README.ja.md", "reason": "Japanese reader route."},
+    {"path": "docs/README.zh-CN.md", "reason": "Simplified Chinese reader route."},
+    {"path": "docs/reference/documentation-authority-registry.json", "reason": "P0 topic ownership and locale paths."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["comprehension_misinterpretation", "localization_semantic_mismatch"], "reason": "A comprehension claim can hide authority or safety misconceptions; evidence must record answers and limitations.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["P0 comprehension and safety-boundary claims require strict evidence."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "User authorized sequential completion of all Work Items; this WI records bounded evidence and preserves explicit limits."},
+  "preReviewWarnings": [],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints before implementation and finish."},
+  "acceptance": [
+    "Record the six-question comprehension protocol for English, Japanese, and Simplified Chinese with per-language answers, score, and misconception review.",
+    "Verify each P0 language route reaches the North Star, purpose, architecture, boundaries, decisions, adoption, and recovery pages without silent fallback.",
+    "Run focused structural tests plus all declared documentation, multilingual, AI, and strict quality checks; record any editorial-quality limitation explicitly.",
+    "Update capability and multilingual evidence only to the bounded level supported by the recorded review; do not claim native editorial quality without independent native review."
+  ],
+  "guidelines": [
+    "Use the six-question protocol and record evidence rather than asserting that documentation is easy to understand.",
+    "Treat five correct answers and zero critical misconceptions as the protocol threshold; preserve any language-specific limitation.",
+    "Keep authority, security, verification, and human-control boundaries explicit in every language.",
+    "Do not modify runtime behavior, release metadata, or P1/P2 translation ownership."
+  ],
+  "intent": {"problem": "WI-5 closes the trilingual P0 route, but file presence and automated parity do not prove that a non-technical reader understands the project or avoids unsafe authority and security assumptions.", "constraints": ["Run a bounded desk-review protocol in all three languages and record answers as evidence.", "Do not invent independent native-language human review or upgrade claims beyond evidence.", "Keep the change documentation/evidence/tests only."], "rationale": "The documentation initiative succeeds only when comprehension is tested as a scenario with explicit limits, not inferred from translation count or readability."},
+  "scenarioCoverage": [
+    {"scenario": "A non-technical reader follows each localized home and answers the six core project-understanding questions.", "required": true, "status": "unverified", "evidence": [], "expected": "At least five answers are correct in each language and no authority, security, verification, or human-control misconception appears.", "verificationPlan": "Record per-language answers and score in the three comprehension review evidence pages; enforce route and threshold tests."},
+    {"scenario": "A reader encounters a stop or security boundary and identifies the safe human decision and external control owner.", "required": true, "status": "unverified", "evidence": [], "expected": "The reader does not treat Unknown as permission, governance as a sandbox, or an agent explanation as proof.", "verificationPlan": "Check evidence pages for stop/security answers and run structural semantic-boundary tests."}
+  ],
+  "verification": [{"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted governance paths are changed."},
+  "rollbackNote": "Revert this evidence and test-only Work Item diff.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 904}},
+  "startReceipt": {"path": ".ai/work-items/starts/documentation-p0-comprehension-validation.json", "baseCommit": "acade55aa55746f39d77132d1197a760ec6779aa", "initialScopeDigest": "bbe173078a6762b2df6c150ef02120e4e6facd578c24b80d3bc5cb4cf442e88d", "contractSkeletonDigest": "9f17be707f5b03991423502e84a2f7ab949ecf59812fc39964e3e8372eed765a"}
+}
