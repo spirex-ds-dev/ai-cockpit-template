@@ -10,6 +10,7 @@ from pathlib import Path, PurePosixPath
 from typing import cast
 
 from ai_documentation_authority import validate_registry
+from ai_documentation_journey import validate_journeys, validate_topics
 from install_ai_cockpit import STACKS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1512,6 +1513,10 @@ def documentation_authority_errors(root: Path) -> list[str]:
     except json.JSONDecodeError:
         return [f"{relative}: invalid JSON"]
     errors = [f"{relative}: {error}" for error in validate_registry(registry)]
+    errors.extend(
+        f"{relative}: {error}"
+        for error in [*validate_topics(registry, root), *validate_journeys(registry, root)]
+    )
     documents = registry.get("documents") if isinstance(registry, dict) else None
     if not isinstance(documents, list):
         return errors

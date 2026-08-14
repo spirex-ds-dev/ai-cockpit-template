@@ -1,0 +1,270 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-criticality-registry-v2",
+  "mode": "code",
+  "title": "Implement documentation criticality registry and journey gates",
+  "baseCommit": "ef58e74e271ef6512f95f5f8f4743ec36b14404c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-criticality-registry-v2.contract.json",
+    ".ai/work-items/active/documentation-criticality-registry-v2.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-criticality-registry-v2.outcome.json",
+    ".ai/work-items/active/documentation-criticality-registry-v2.outcome.md",
+    "docs/reference/documentation-authority-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "scripts/ai_documentation_authority.py",
+    "scripts/ai_documentation_journey.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_documentation_authority.py",
+    "tests/test_documentation_journey.py",
+    "tests/test_docs_metadata.py",
+    "Makefile",
+    "docs/reference/documentation-authority-boundary.md",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting or translating P0 product content, localized documentation homes, or README journeys.",
+    "Requiring complete Japanese or Simplified Chinese parity for P1 or P2 documents.",
+    "Changing runtime behavior, release logic, or unrelated governance checks.",
+    "Publishing, pushing, opening, or merging the Work Item branch."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md",
+      "reason": "Approved reader-first documentation governance design, P0/P1/P2 policy, and migration semantics."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-14-documentation-criticality-registry.md",
+      "reason": "Test-first WI-1 implementation plan and exact file/task boundaries."
+    },
+    {
+      "path": "docs/reference/documentation-authority-registry.json",
+      "reason": "Existing authority registry to extend without creating a competing source of truth."
+    },
+    {
+      "path": "scripts/ai_documentation_authority.py",
+      "reason": "Existing v1 agent documentation authority validator and read-set query."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Existing public documentation metadata gate for integration."
+    },
+    {
+      "path": "tests/test_documentation_authority.py",
+      "reason": "Existing authority behavior tests that must remain compatible."
+    },
+    {
+      "path": "docs/reference/documentation-architecture.md",
+      "reason": "Current page roles and multilingual architecture documentation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "unknownsReviewComplete": true,
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "The change adds policy validation and tests across documentation governance surfaces; missing-locale or link-graph false positives could block future documentation work."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Medium-risk governance policy change with deterministic tests and no runtime product behavior change."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized execution of the accepted documentation plan and requested that the authorization be recorded in the Contract."
+  },
+  "rawUserRequest": "查收，执行计划。我授权给你，并写入Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message-2026-08-14-execute-plan",
+    "capturedAt": "2026-08-14T06:30:00Z",
+    "digest": "user-authorized-execution-of-accepted-documentation-plan"
+  },
+  "declaredIntent": {
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "preReviewWarnings": [
+    "Check that planned P0 gaps are visible but do not masquerade as passing multilingual coverage.",
+    "Check that v1 agent read-set behavior remains unchanged while v2 reader-topic policy is added."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Authority registry v2 accepts v1 compatibility records and declares reader topics without changing the default agent read set.",
+    "P0/P1/P2 topic validation enforces criticality, locale, ownership, active/planned migration status, and visible planned gaps.",
+    "Localized journey validation checks P0 reachability, same-language routes, explicit P1 English fallback labels, and historical-route exclusion.",
+    "The public documentation metadata gate and a focused Make target run the new validation.",
+    "Focused positive and negative tests cover schema compatibility, migration safety, link graphs, and aggregate gate integration.",
+    "Maintainer documentation explains the authority-versus-criticality boundary without claiming P0 migration is complete."
+  ],
+  "guidelines": [
+    "Keep the existing v1 agent documentation read-set output backward compatible.",
+    "Use pure standard-library validation functions with deterministic, path-qualified errors.",
+    "Do not weaken active P0 topics back to planned.",
+    "Document new public Make and Python entrypoints.",
+    "Do not import internal modules from unrelated features."
+  ],
+  "intent": {
+    "problem": "Important documentation is currently governed mainly by file metadata and bounded translation checks, not by reader-criticality or complete same-language journeys. The initiative needs an executable registry and navigation policy before content migration can be safely staged.",
+    "constraints": [
+      "Extend the existing authority registry; do not create a competing registry.",
+      "Keep v1 agent read-set behavior compatible.",
+      "Planned P0 gaps are visible but non-blocking until a topic becomes active; active topics cannot be downgraded.",
+      "This Work Item does not rewrite or translate product content.",
+      "Use standard-library code and existing Make/pytest conventions."
+    ],
+    "rationale": "A machine-readable criticality and journey policy gives later content Work Items a deterministic contract for what must be translated, linked, and reviewed."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A v1 authority registry is queried by an agent after the v2 validator is installed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The default canonical read set and opt-in reference read set remain unchanged.",
+      "verificationPlan": "Authority compatibility unit tests and ai-documentation-read-set command."
+    },
+    {
+      "scenario": "A planned P0 topic lacks Japanese and Simplified Chinese pages during migration.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The gap is reported visibly as incomplete migration without blocking unrelated documentation work or claiming parity.",
+      "verificationPlan": "Topic validation unit test with planned gaps and CLI JSON output."
+    },
+    {
+      "scenario": "An active P0 Japanese route links to an English page or a historical archive.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The localized journey gate fails with a path-qualified error.",
+      "verificationPlan": "Localized link-graph negative fixtures."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-message-2026-08-14-execute-plan",
+    "reason": "User authorized execution of the documentation governance plan; Makefile and governance scripts are required implementation surfaces."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 893
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-criticality-registry-v2.json",
+    "baseCommit": "ef58e74e271ef6512f95f5f8f4743ec36b14404c",
+    "initialScopeDigest": "592589ecfd238366ba4c0972248e2c3a095b6c31f9ffc10f8628138d6772b1af",
+    "contractSkeletonDigest": "6230963f0eb1bec2883df76d8162d95d14b7d2c6a6c59c2637de31247966b16e"
+  }
+}

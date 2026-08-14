@@ -1,0 +1,232 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-understanding-journey-design",
+  "mode": "author_todo",
+  "title": "Design the multilingual documentation understanding journey",
+  "baseCommit": "46260c4a9de01133cc169adbe776d6379c6bd3a6",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-understanding-journey-design.contract.json",
+    ".ai/work-items/active/documentation-understanding-journey-design.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-understanding-journey-design.outcome.json",
+    ".ai/work-items/active/documentation-understanding-journey-design.outcome.md",
+    "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md",
+    "docs/superpowers/plans/2026-08-14-documentation-criticality-registry.md",
+    "docs/reference/documentation-context-registry.json"
+  ],
+  "outOfScope": [
+    "Rewriting or translating existing product documentation in this design Work Item.",
+    "Changing runtime behavior, governance scripts, checks, schemas, or release evidence.",
+    "Requiring full Japanese or Chinese parity for every reference, audit, historical, or release document.",
+    "Implementing the future documentation registry, navigation pages, or automated gates before the design is reviewed."
+  ],
+  "sources": [
+    {
+      "path": "README.md",
+      "reason": "Current English product entry and documentation navigation."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Current Japanese entry, including same-language and English fallback routes."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Current Simplified Chinese entry and multilingual comparison surface."
+    },
+    {
+      "path": "docs/reference/documentation-architecture.md",
+      "reason": "Current canonical information architecture, page roles, and multilingual map."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Current bounded Japanese coverage claim and its documented limitations."
+    },
+    {
+      "path": "docs/current/README.md",
+      "reason": "Current agent-facing documentation authority route."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Required classification registry for new design records."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical project and governance terminology."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_design"
+    ],
+    "reason": "This Work Item writes a design document only; the main risk is creating future guidance that duplicates canonical truth or over-expands multilingual scope."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "A cross-cutting documentation design affects future navigation, localization, and governance checks, while this Work Item itself changes no runtime behavior."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized execution of the accepted plan and requested that the authorization be recorded in the Contract. The current author_todo Work Item remains limited to design and plan evidence; implementation starts in a successor MODE=code Work Item after lifecycle separation."
+  },
+  "rawUserRequest": "查收，执行计划。我授权给你，并写入Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message-2026-08-14-execute-plan",
+    "capturedAt": "2026-08-14T06:30:00Z",
+    "digest": "user-authorized-execution-of-accepted-documentation-plan"
+  },
+  "requestedOperation": {
+    "target": "documentation",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "preReviewWarnings": [
+    "Review whether the P0 definition is narrow enough to remain maintainable while covering every concept required for non-technical understanding.",
+    "Review whether one canonical semantic owner plus multilingual projections avoids competing simplified and technical truths."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A design document defines the reader-first narrative from North Star through philosophy, architecture, product boundary, decision model, and adoption.",
+    "The design classifies documentation into P0, P1, and P2 and requires complete English, Japanese, and Simplified Chinese journeys only where importance justifies it.",
+    "The design defines a non-technical writing contract, progressive disclosure model, same-language navigation rules, and one canonical semantic owner per topic.",
+    "The design defines an implementable registry model, automated gates, human comprehension validation, migration phases, acceptance criteria, and explicit non-goals.",
+    "An implementation plan defines exact test-first steps for the first delivery Work Item: documentation criticality registry and executable policy.",
+    "The design separates this authoring Work Item from later implementation Work Items and does not claim that the proposed documentation governance already exists."
+  ],
+  "guidelines": [
+    "Write for a non-technical first-time reader before exposing implementation terminology.",
+    "Preserve North Star, design philosophy, architecture, product boundaries, and human decision points as project-core P0 topics.",
+    "Do not require full multilingual parity for low-frequency reference, audit, historical, plan, or release documentation.",
+    "Avoid duplicate sources of truth: accessible explanations and technical depth must resolve to one canonical semantic owner.",
+    "Do not modify existing product documentation, scripts, tests, or generated status by hand outside this Work Item's declared generated artifacts."
+  ],
+  "intent": {
+    "problem": "The repository contains substantial documentation, but important paths are difficult to discover, Japanese and Simplified Chinese coverage does not reliably follow reader importance, and the current journey exposes terminology and operations before a non-technical reader has a coherent model of the project. Documentation therefore remains a bottleneck to understanding instead of removing it.",
+    "constraints": [
+      "Do not require every document to reach complete Japanese or Simplified Chinese parity.",
+      "Important documents must provide complete English, Japanese, and Simplified Chinese journeys.",
+      "North Star, philosophy, architecture, product boundaries, and the adoption path are core, not optional deep reference.",
+      "The primary comprehension level is a non-technical reader, with technical detail available through progressive disclosure.",
+      "This Work Item authors design instructions only; implementation requires a separately reviewed Work Item."
+    ],
+    "rationale": "A reader-journey model, criticality tiers, and executable multilingual navigation rules focus maintenance effort on comprehension and high-impact decisions rather than raw translation counts."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 903
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-understanding-journey-design.json",
+    "baseCommit": "46260c4a9de01133cc169adbe776d6379c6bd3a6",
+    "initialScopeDigest": "3c25c05029176ae6c4e6b3de97a0f96fd591fe70dba64298b466b227b5820048",
+    "contractSkeletonDigest": "48fe981052458d9699d286790a6d572ba2f1cdb3207c7c4cd78eee79002685fc"
+  }
+}
