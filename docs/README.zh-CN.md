@@ -26,13 +26,13 @@ capabilityClaims:
 1. **North Star / 身份** — AI Cockpit 是 Repository Governance Layer，把仓库证据
    转化为有边界的决策，支持校准后的人机信任。参见[Human-Agent Trust Layer](trust-layer.zh-CN.md)。
 2. **目的** — 它让 Intent、范围、证据、Unknown 和人的决定可见，避免 Agent 默默改写
-   变更目标。完整目的页面属于 P0 迁移计划（planned）。
+   变更目标。参见[为什么需要 AI Cockpit](purpose.zh-CN.md)。
 3. **设计思想** — 证据优先于自我声明，控制强度与风险相称，并在证据不足时 fail closed。
-   参见[Design Philosophy（英文 fallback，同语言页面 planned）](philosophy/design-philosophy.md)。
+   参见[设计思想](philosophy/design-philosophy.zh-CN.md)。
 4. **架构** — 通过 Intent → Contract → Implementation → Verification → Summary →
-   Cockpit → Human Decision 的一条治理路径工作。参见[Architecture（英文 fallback，同语言页面 planned）](architecture.md)。
+   Cockpit → Human Decision 的一条治理路径工作。参见[架构](architecture.zh-CN.md)。
 5. **能力与边界** — Cockpit 治理证据，但不是 Agent Runtime、Workflow Engine、Security
-   Sandbox、身份提供方，也不是人工评审的替代品。参见[Capability Truth Matrix（英文 fallback，同语言页面 planned）](reference/capability-truth-matrix.md)。
+   Sandbox、身份提供方，也不是人工评审的替代品。参见[能力与边界](capabilities.zh-CN.md)。
 6. **人的决定** — [Decision States（英文 fallback，同语言页面 planned）](concepts/decision-states.md)
    说明何时继续、调查或停止。
 
