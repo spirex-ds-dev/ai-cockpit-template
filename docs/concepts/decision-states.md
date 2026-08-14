@@ -1,27 +1,43 @@
 ---
-author: Ray
 title: "Decision States"
-description: "The three human-facing states derived from governance evidence."
+description: "A plain-language route from evidence to a human decision."
+author: Ray
 audience:
   - adopter
-  - contributor
+  - maintainer
+capabilityClaims: [repository_governance_layer]
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
-capabilityClaims:
-  - repository_governance_layer
 ---
 
 # Decision States
 
-AI Cockpit compresses repository evidence into three human-facing states:
+## Purpose
+Help a non-technical reader decide whether to review, investigate, or stop.
 
-| State | Meaning | Human action |
-| --- | --- | --- |
-| Green | Required evidence is current and the bounded next action is supported. | Review and continue. |
-| Yellow | Evidence is incomplete, stale, contradictory, or carries explicit residual risk. | Investigate or decide; do not infer success. |
-| Red | A required control failed, scope was exceeded, or the requested action is not authorized. | Stop and satisfy the stated recovery condition. |
+## Audience
+Adopters, contributors, maintainers, and reviewers.
 
-These states are decision aids, not guarantees of semantic safety. See
-[How to Read Cockpit Status](../reference/how-to-read-cockpit-status.md) for the
-generated signal model.
+## Outcome
+You can name the state, the human decision it requires, and the safe next action.
+
+## Scenario
+Open `.ai/cockpit/current_status.md` after a check, preflight, or finish step.
+
+## Decision
+
+| State | What it means | Human decision | Safe next action |
+| --- | --- | --- | --- |
+| Green | Required evidence is current and the bounded action is supported. | Review the evidence and decide whether to proceed. | Follow the declared next step; green never authorizes merge or release by itself. |
+| Yellow | Evidence is incomplete, stale, contradictory, or has residual risk. | Decide whether to investigate, record the risk, or stop. | Read the named drivers and repair or document the gap. |
+| Red | A required control failed, scope was exceeded, or authority is missing. | Stop. Decide only how to satisfy the recovery condition. | Preserve the Work Item and resolve the stated blocker. |
+| Unknown | The evidence cannot be interpreted reliably. | Do not make a progress decision. | Ask for the missing source or human clarification. |
+
+## Stop conditions
+Never guess from a color, copy another task's status, or treat agent prose as proof. A stop is successful when its missing evidence and recovery condition are explicit.
+
+## Next steps
+1. Read [How to Read Cockpit Status](../reference/how-to-read-cockpit-status.md).
+2. Follow the [Work Item Lifecycle](../operations/work-item-lifecycle.md).
+3. If stopped, use [Recovery](../operations/recovery.md).

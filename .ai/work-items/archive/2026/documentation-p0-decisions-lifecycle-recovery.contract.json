@@ -1,0 +1,272 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-p0-decisions-lifecycle-recovery",
+  "mode": "code",
+  "title": "P0 decisions, lifecycle, status, and recovery journey",
+  "baseCommit": "837bf320652b000f3d7ed2796ed9ed51a93dc2c0",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "确认，再开",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message-2026-08-14-resume-documentation-plan",
+    "capturedAt": "2026-08-14T09:50:00Z",
+    "digest": "user-confirmed-resume-after-wi3"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"],
+    "requestedOutcome": "Make P0 decisions, status, lifecycle, stop-condition, and recovery guidance understandable and safe for English, Japanese, and Simplified Chinese readers."
+  },
+  "scope": [
+    ".ai/work-items/active/documentation-p0-decisions-lifecycle-recovery.contract.json",
+    ".ai/work-items/active/documentation-p0-decisions-lifecycle-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-p0-decisions-lifecycle-recovery.outcome.json",
+    ".ai/work-items/active/documentation-p0-decisions-lifecycle-recovery.outcome.md",
+    "docs/superpowers/plans/2026-08-14-documentation-p0-decisions-lifecycle-recovery.md",
+    "docs/concepts/decision-states.md",
+    "docs/concepts/decision-states.ja.md",
+    "docs/concepts/decision-states.zh-CN.md",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "docs/reference/how-to-read-cockpit-status.ja.md",
+    "docs/reference/how-to-read-cockpit-status.zh-CN.md",
+    "docs/operations/work-item-lifecycle.md",
+    "docs/operations/work-item-lifecycle.ja.md",
+    "docs/operations/work-item-lifecycle.zh-CN.md",
+    "docs/operations/recovery.md",
+    "docs/operations/recovery.ja.md",
+    "docs/operations/recovery.zh-CN.md",
+    "docs/README.md",
+    "docs/README.ja.md",
+    "docs/README.zh-CN.md",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-authority-registry.json",
+    "tests/test_documentation_p0_decisions_lifecycle_recovery.py",
+    "tests/test_documentation_p0_core.py",
+    "docs/reference/documentation-context-registry.json"
+    ,"docs/reference/japanese-capability-assessment.json"
+    ,"docs/reference/japanese-capability-assessment.md"
+    ,"docs/reference/pre-release-documentation-alignment.json"
+    ,"docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Installation, first calibration, first Work Item, adoption overview, and security or trust-boundary overview content; these remain successor P0 Work Items.",
+    "Full translation of P1/P2 technical references, archived evidence, release notes, plans, or audit documents.",
+    "Runtime behavior, Work Item lifecycle implementation, release metadata, version tags, publication, and generated status semantics.",
+    "Historical documents under docs/archive/ except generated Work Item archive evidence."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md",
+      "reason": "Approved P0 writing contract, navigation rules, decision/lifecycle/recovery sequence, and WI-4 boundary."
+    },
+    {
+      "path": "docs/reference/documentation-authority-registry.json",
+      "reason": "Current topic ownership, localized paths, criticality, and migration status."
+    },
+    {
+      "path": "docs/README.md",
+      "reason": "Merged reader journey and current successor destinations."
+    },
+    {
+      "path": "docs/concepts/decision-states.md",
+      "reason": "Existing canonical decision-state semantics to rewrite and localize."
+    },
+    {
+      "path": "docs/operations/work-item-lifecycle.md",
+      "reason": "Existing canonical lifecycle and stop-condition semantics to rewrite and localize."
+    },
+    {
+      "path": "docs/operations/recovery.md",
+      "reason": "Existing recovery guidance and ownership boundaries."
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.md",
+      "reason": "Existing status interpretation and human-action guidance."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical project terminology and human decision boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation_semantic_drift",
+      "localization_semantic_mismatch",
+      "safety_guidance_misinterpretation"
+    ],
+    "reason": "This Work Item rewrites safety-relevant decision, stop, lifecycle, and recovery explanations in three languages; a semantic mismatch could encourage unsafe continuation or conceal the human decision boundary.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P0 decision and stop-condition content is safety-relevant and must pass full repository verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly reopened the documentation plan after WI-3 closure; the approved design defines WI-4 scope, sources, acceptance, and verification."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Create complete same-topic English, Japanese, and Simplified Chinese P0 pages for decision states, Cockpit status interpretation, Work Item lifecycle and stop conditions, and recovery overview; each begins with the P0 writing contract and progressive disclosure.",
+    "Ensure every status and stop condition explains what it means, what the human must decide, what is safe to do next, and when not to continue or guess.",
+    "Ensure each localized page has one to three same-language next steps, is reachable from its matching documentation home within two links, and contains no silent English fallback on the WI-4 P0 route.",
+    "Update the authority registry so decision-states, lifecycle, and recovery become active only when all three localized siblings and tests are present; preserve planned successor topics and existing active topics.",
+    "Add positive and negative structural tests for decision semantics, status/action mapping, stop conditions, locale parity, same-language navigation, registry ownership, and safety invariants; focused documentation checks pass."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A non-technical reader sees a Green, Yellow, Red, or Unknown status and can explain the decision boundary and safe next action in English, Japanese, or Simplified Chinese.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The reader distinguishes proceed, review, investigate, and stop states without guessing from color alone.",
+      "verificationPlan": "Run localized P0 structure, semantic invariant, and status-action mapping tests; inspect each locale's stop-condition layer during review."
+    },
+    {
+      "scenario": "A Work Item stops during preflight, verification, merge, or closure and the reader follows the correct recovery owner without bypassing governance.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The reader identifies why execution stopped, what evidence is missing or contradictory, and which human decision or recovery route is required.",
+      "verificationPlan": "Run lifecycle/recovery route tests and review same-language next steps for no-guessing and external-responsibility invariants."
+    }
+  ],
+  "guidelines": [
+    "Use the P0 writing contract: purpose, audience, outcome, scenario, explanation, action/decision, stop conditions, next steps, then technical depth.",
+    "Keep Green, Yellow, Red, and Unknown semantics equivalent across locales; never translate away stop, investigation, or human-decision requirements.",
+    "Do not claim full multilingual coverage for P0 topics that remain planned outside this Work Item.",
+    "Use one canonical owner per topic and keep reference pages as explicit specialist routes.",
+    "Do not modify runtime behavior, release metadata, or historical documentation."
+  ],
+  "intent": {
+    "problem": "The core journey now explains purpose, philosophy, architecture, and boundaries, but readers still cannot reliably interpret a stop, status color, human decision, lifecycle stage, or recovery route in their language. This leaves the most safety-relevant part of understanding as a fragmented technical reference.",
+    "constraints": [
+      "Complete only the decisions, status, lifecycle, and recovery P0 topics assigned to WI-4; installation, calibration, first Work Item, adoption, and security remain successor Work Items.",
+      "Preserve native governance semantics and external responsibility boundaries; do not invent runtime behavior or claim provider evidence.",
+      "Japanese and Simplified Chinese must be semantically equivalent to English for stop conditions, human decisions, and safe next actions.",
+      "Do not change runtime behavior, release metadata, version tags, or historical documentation."
+    ],
+    "rationale": "A reader who understands the project but cannot interpret a stop or recovery state still faces the exact unsafe improvisation the documentation should prevent. A single trilingual journey makes human control and recovery actionable."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 896
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-p0-decisions-lifecycle-recovery.json",
+    "baseCommit": "837bf320652b000f3d7ed2796ed9ed51a93dc2c0",
+    "initialScopeDigest": "2cbe66c7bb9be561d94bfa46be2467f184c85b28b27e50af675e868fc8d69b6d",
+    "contractSkeletonDigest": "81bd5cded1ea4b07e2f5deb29f5fbf54aee69d491552adadf2190e6c1f12fae3"
+  }
+}

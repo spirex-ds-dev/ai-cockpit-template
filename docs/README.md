@@ -45,7 +45,7 @@ Follow the same order as the project’s North Star:
 | --- | --- | --- |
 | Decide whether to adopt | [Installation](getting-started/installation.md) | Understand the prerequisites, confirmation points, and evidence produced. |
 | Start using it | [First Calibration](getting-started/first-calibration.md) → [First Work Item](getting-started/first-work-item.md) | Create the first bounded task from a trusted base. |
-| Review a result | [Quality Gates](operations/quality-gates.md) | Read checks and evidence without treating agent prose as proof. |
+| Review a result | [Quality Gates](operations/quality-gates.md) → [Cockpit Status](reference/how-to-read-cockpit-status.md) | Read checks and evidence without treating agent prose as proof. |
 | Recover from a stop | [Recovery](operations/recovery.md) | Preserve the Work Item and retry only after the missing evidence is repaired. |
 | Maintain or audit the system | [Documentation Architecture](reference/documentation-architecture.md) | Find canonical owners, language policy, and reference depth. |
 

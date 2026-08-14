@@ -38,7 +38,7 @@ capabilityClaims:
 5. **能力と境界** — Cockpit は証拠を統治しますが、Agent Runtime、Workflow Engine、
    Security Sandbox、identity provider、または人の review の代替ではありません。
    [能力と境界](capabilities.ja.md)で現在の主張と責任を確認してください。
-6. **人の判断** — [Decision States（英語 fallback、同言語ページ planned）](concepts/decision-states.md)
+6. **人の判断** — [判断状態](concepts/decision-states.ja.md)。[Status の読み方](reference/how-to-read-cockpit-status.ja.md) と [ライフサイクル](operations/work-item-lifecycle.ja.md) へ進みます。
    で、進行・調査・停止の判断を確認します。
 
 ## 読者の目的から選ぶ
@@ -48,7 +48,7 @@ capabilityClaims:
 | 導入するか決める | [Installation](getting-started/installation.ja.md) | 前提、確認点、作成される証拠を理解する。 |
 | 使い始める | [First Calibration（英語 fallback、同言語ページ planned）](getting-started/first-calibration.md) → [First Work Item](getting-started/first-work-item.ja.md) | 信頼できる base から最初の範囲付きタスクを始める。 |
 | 結果を review する | [Quality Gates](operations/quality-gates.ja.md) | Agent の説明を proof とせず、check と証拠を読む。 |
-| stop から回復する | [Recovery（英語 fallback、同言語ページ planned）](operations/recovery.md) | 不足証拠を直すまで Work Item を保持し、安全に再試行する。 |
+| stop から回復する | [回復](operations/recovery.ja.md) | 不足証拠を直すまで Work Item を保持し、安全に再試行する。 |
 | 保守・監査する | [Documentation Architecture](reference/documentation-architecture.ja.md) | canonical owner、言語方針、reference の深さを見つける。 |
 
 この入口では、技術詳細より先に理解の道筋を示します。P0 topic が `planned` の場合は
