@@ -1,0 +1,256 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-localized-homes",
+  "mode": "code",
+  "title": "Implement localized documentation homes and reader-first entry navigation",
+  "baseCommit": "3ddbc67113fe168179517811c02e33914fd8ed36",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-localized-homes.contract.json",
+    ".ai/work-items/active/documentation-localized-homes.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-localized-homes.outcome.json",
+    ".ai/work-items/active/documentation-localized-homes.outcome.md",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/README.md",
+    "docs/README.ja.md",
+    "docs/README.zh-CN.md",
+    "tests/test_documentation_homes.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Complete Japanese or Simplified Chinese translation of all P0 topic destinations; those are subsequent content Work Items.",
+    "Full Japanese or Simplified Chinese parity for P1 and P2 reference material.",
+    "Runtime behavior, product capability claims, registry schema changes, and changes under docs/archive/.",
+    "Push, PR creation, merge, and Work Item closure until verification is complete."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md",
+      "reason": "Approved core narrative, localized home paths, reader goals, and two-link P0 discoverability requirement."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-14-documentation-criticality-registry.md",
+      "reason": "Successor Work Item boundary separating localized homes from later P0 content migration."
+    },
+    {
+      "path": "docs/reference/documentation-authority-registry.json",
+      "reason": "Current P0 topic inventory and planned versus active migration state."
+    },
+    {
+      "path": "README.md",
+      "reason": "Existing English entry page and current link graph to preserve while adding the documentation home."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Existing Japanese entry page whose silent English fallbacks must be replaced by explicit same-language routes."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Existing Simplified Chinese entry page whose silent English fallbacks must be replaced by explicit same-language routes."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "unknownsReviewComplete": true,
+    "riskTypes": [
+      "documentation_navigation",
+      "multilingual_semantic_drift"
+    ],
+    "reason": "Entry pages are reader-facing governance surfaces; broken routes or language drift can block non-technical understanding without changing runtime behavior."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized execution of the accepted documentation plan and requested that the authorization be recorded in the Contract."
+  },
+  "preReviewWarnings": [
+    "Do not present planned P0 destinations as complete multilingual content.",
+    "Every home must expose the same narrative order and same-language next steps.",
+    "A missing localized destination must be labelled as planned rather than silently falling back to English."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "docs/README.md, docs/README.ja.md, and docs/README.zh-CN.md exist and present the same ordered core narrative: North Star/identity, purpose, philosophy, architecture, boundaries, decisions, adoption, and recovery.",
+    "README.md, README.ja.md, and README.zh-CN.md link to their matching documentation home and no longer require a reader to silently switch language for the entry journey.",
+    "Each localized home exposes reader-goal navigation for understanding, adoption, first use, review, recovery, and maintenance; P0 destinations are reachable from the home in at most two links.",
+    "Planned untranslated P0 destinations are visible with an explicit planned/migration label, while currently available same-language pages remain the default route.",
+    "Automated tests verify home existence, narrative ordering, language-switch links, same-language entry links, and absence of archive links; focused documentation checks pass."
+  ],
+  "guidelines": [
+    "Write for a non-technical reader first; place specialist references after the guided path.",
+    "Keep English, Japanese, and Simplified Chinese section order and decision boundaries semantically aligned.",
+    "Do not claim P0 multilingual completion while registry topics remain planned.",
+    "Do not link the entry journey to docs/archive/ or use historical material as current instruction.",
+    "Keep links language-local unless an explicit planned English fallback is labelled."
+  ],
+  "intent": {
+    "problem": "Important project understanding is hidden behind directory-based links and the existing localized READMEs silently fall back to English for key destinations. Non-technical readers need a clear, language-local route from project identity to purpose, architecture, boundaries, first use, and recovery.",
+    "constraints": [
+      "This Work Item creates entry homes and navigation only; complete P0 content migration is subsequent work.",
+      "Japanese and Simplified Chinese pages must be useful without claiming every deep document is fully translated.",
+      "North Star, philosophy, architecture, and responsibility boundaries must remain visible as project core concepts.",
+      "Preserve the existing documentation authority boundary and exclude historical archives from current routes."
+    ],
+    "rationale": "A reader-goal home makes the project understandable before technical reference is required and gives later P0 content Work Items an explicit, testable destination map."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A non-technical reader opens the English, Japanese, or Simplified Chinese root README.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The reader reaches a matching-language documentation home and can follow the same ordered understanding journey without a silent language switch.",
+      "verificationPlan": "Home structure tests inspect root README links and localized section order."
+    },
+    {
+      "scenario": "A reader needs architecture, boundaries, first use, or recovery from a localized home.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The destination is visible in the reader-goal navigation within two links, and planned gaps are explicitly labelled.",
+      "verificationPlan": "Link graph tests resolve current paths, reject archive links, and assert planned-gap labels."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted governance paths are in scope."
+  },
+  "rawUserRequest": "查收，执行计划。我授权给你，并写入Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message-2026-08-14-execute-plan",
+    "capturedAt": "2026-08-14T06:30:00Z",
+    "digest": "user-authorized-execution-of-accepted-documentation-plan"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "rollbackNote": "Revert this Work Item diff and restore the previous root README navigation.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 894
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-localized-homes.json",
+    "baseCommit": "3ddbc67113fe168179517811c02e33914fd8ed36",
+    "initialScopeDigest": "a09c2f1f31c7a1c5bf57ce271fbfd99937d8d1f926f389d882965dd8dc7d28a1",
+    "contractSkeletonDigest": "bc52d451fea99c99f2af56e4086f605f56be7340a89aa849d9131e3fd889982e"
+  }
+}

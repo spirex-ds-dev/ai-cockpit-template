@@ -7,14 +7,14 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task documentation-criticality-registry-v2 generated an evidence-derived outcome with status completed_with_warnings.
+Task documentation-localized-homes generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 2
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 2
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 2
+- Unresolved: 1
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,8 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: P0 localized content migration is intentionally planned and not implemented in WI-1.
-- Unresolved evidence is explicitly limited: The aggregate check-docs-metadata target is blocked by pre-existing capability-matrix evidence drift.
+- Unresolved evidence is explicitly limited: P0 destination content migration remains in successor Work Items; this Work Item does not claim full multilingual parity.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
