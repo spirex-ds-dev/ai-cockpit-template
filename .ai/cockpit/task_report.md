@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task documentation-understanding-journey-design generated an evidence-derived outcome with status completed_with_warnings.
+Task documentation-criticality-registry-v2 generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 2
@@ -32,8 +32,8 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: The user has not yet reviewed the written specification.
-- Unresolved evidence is explicitly limited: No implementation, translation, native-language review, or comprehension study has been performed in this design Work Item.
+- Unresolved evidence is explicitly limited: P0 localized content migration is intentionally planned and not implemented in WI-1.
+- Unresolved evidence is explicitly limited: The aggregate check-docs-metadata target is blocked by pre-existing capability-matrix evidence drift.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.

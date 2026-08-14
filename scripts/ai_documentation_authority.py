@@ -26,11 +26,17 @@ def validate_registry(registry: object) -> list[str]:
     errors: list[str] = []
     if registry.get("schema") != "ai-cockpit-documentation-authority":
         errors.append("registry schema must be ai-cockpit-documentation-authority")
-    if registry.get("schemaVersion") != 1:
-        errors.append("registry schemaVersion must be 1")
+    schema_version = registry.get("schemaVersion")
+    if schema_version not in {1, 2}:
+        errors.append("registry schemaVersion must be 1 or 2")
     documents = registry.get("documents")
     if not isinstance(documents, list):
         return [*errors, "registry documents must be a list"]
+    topics = registry.get("topics")
+    if schema_version == 2 and not isinstance(topics, list):
+        errors.append("registry topics must be a list for schemaVersion 2")
+    if schema_version == 1 and "topics" in registry:
+        errors.append("registry topics is only valid for schemaVersion 2")
 
     canonical_topics: dict[str, int] = {}
     paths: set[str] = set()

@@ -39,7 +39,7 @@ QUALITY_SESSION_LOCK_HELD ?= false
 .PHONY: help \
 	test ensure-locked-dev-environment check-quality-toolchain project-format-check project-test project-test-manifest project-test-shard project-test-aggregate project-test-receipt project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
-check-docs-metadata check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
+	check-docs-metadata documentation-journey-check check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-evidence check-bandit-baseline refresh-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-japanese-capability check-release-readiness check-release-preflight check-ci-release-evidence \
@@ -210,6 +210,9 @@ diff-check:
 check-docs-metadata:
 	$(AI_PYTHON) scripts/check_docs_metadata.py
 	$(AI_PYTHON) scripts/ai_check_capability_claims.py
+
+documentation-journey-check:
+	$(AI_PYTHON) scripts/ai_documentation_journey.py --registry docs/reference/documentation-authority-registry.json --root . --check
 
 ai-documentation-read-set:
 	$(AI_PYTHON) scripts/ai_documentation_authority.py $(if $(INCLUDE_REFERENCE),--include-reference,)

@@ -7,6 +7,7 @@ from check_docs_metadata import (
     check_repository,
     command_evidence_errors,
     documentation_architecture_errors,
+    documentation_authority_errors,
     documentation_fact_errors,
     formal_document_metadata_errors,
     front_matter_errors,
@@ -23,6 +24,18 @@ def test_ordinary_docs_metadata_does_not_import_release_alignment_gate():
     source = (ROOT / "scripts" / "check_docs_metadata.py").read_text(encoding="utf-8")
 
     assert "check_pre_release_documentation_alignment" not in source
+
+
+def test_authority_gate_includes_reader_journey_validation(tmp_path: Path):
+    copy_documentation(tmp_path)
+    registry_path = tmp_path / "docs/reference/documentation-authority-registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    registry["topics"][0]["nextTopics"] = ["does-not-exist"]
+    registry_path.write_text(json.dumps(registry), encoding="utf-8")
+
+    errors = documentation_authority_errors(tmp_path)
+
+    assert any("next topic does not exist: does-not-exist" in error for error in errors)
 
 
 def copy_documentation(target: Path) -> None:

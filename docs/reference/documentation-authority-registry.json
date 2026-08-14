@@ -1,6 +1,6 @@
 {
   "schema": "ai-cockpit-documentation-authority",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "documents": [
     {
       "topic": "agent-documentation-routing",
@@ -25,6 +25,176 @@
       "instructional": false,
       "status": "archived",
       "supersededBy": "docs/current/README.md"
+    }
+  ],
+  "topics": [
+    {
+      "topic": "project-identity",
+      "criticality": "P0",
+      "canonicalPath": "README.md",
+      "localizedPaths": {"en": "README.md", "ja": "README.ja.md", "zh-CN": "README.zh-CN.md"},
+      "audiences": ["adopter", "maintainer"],
+      "journeys": ["understand", "adopt"],
+      "nextTopics": ["project-purpose"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["north-star-remains-human-readable"]
+    },
+    {
+      "topic": "project-purpose",
+      "criticality": "P0",
+      "canonicalPath": "docs/purpose.md",
+      "localizedPaths": {"en": "docs/purpose.md", "ja": "docs/purpose.ja.md", "zh-CN": "docs/purpose.zh-CN.md"},
+      "audiences": ["adopter", "maintainer"],
+      "journeys": ["understand"],
+      "nextTopics": ["design-philosophy"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["problem-and-purpose-are-explicit"]
+    },
+    {
+      "topic": "design-philosophy",
+      "criticality": "P0",
+      "canonicalPath": "docs/philosophy/design-philosophy.md",
+      "localizedPaths": {"en": "docs/philosophy/design-philosophy.md", "ja": "docs/philosophy/design-philosophy.ja.md", "zh-CN": "docs/philosophy/design-philosophy.zh-CN.md"},
+      "audiences": ["adopter", "maintainer"],
+      "journeys": ["understand"],
+      "nextTopics": ["project-architecture"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["evidence-before-confidence"]
+    },
+    {
+      "topic": "project-architecture",
+      "criticality": "P0",
+      "canonicalPath": "docs/architecture.md",
+      "localizedPaths": {"en": "docs/architecture.md", "ja": "docs/architecture.ja.md", "zh-CN": "docs/architecture.zh-CN.md"},
+      "audiences": ["adopter", "maintainer"],
+      "journeys": ["understand", "operate"],
+      "nextTopics": ["human-agent-trust-layer"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["external-controls-remain-external"]
+    },
+    {
+      "topic": "human-agent-trust-layer",
+      "criticality": "P0",
+      "canonicalPath": "docs/trust-layer.md",
+      "localizedPaths": {"en": "docs/trust-layer.md", "ja": "docs/trust-layer.ja.md", "zh-CN": "docs/trust-layer.zh-CN.md"},
+      "audiences": ["adopter", "maintainer", "security_reviewer"],
+      "journeys": ["understand", "operate"],
+      "nextTopics": ["installation"],
+      "enforcementStatus": "active",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["human-decision-boundary", "fail-closed"]
+    },
+    {
+      "topic": "capability-boundaries",
+      "criticality": "P0",
+      "canonicalPath": "docs/reference/capability-truth-matrix.md",
+      "localizedPaths": {"en": "docs/reference/capability-truth-matrix.md", "ja": "docs/reference/capability-truth-matrix.ja.md", "zh-CN": "docs/reference/capability-truth-matrix.zh-CN.md"},
+      "audiences": ["adopter", "maintainer"],
+      "journeys": ["understand", "verify"],
+      "nextTopics": ["decision-states"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["claims-have-evidence"]
+    },
+    {
+      "topic": "decision-states",
+      "criticality": "P0",
+      "canonicalPath": "docs/concepts/decision-states.md",
+      "localizedPaths": {"en": "docs/concepts/decision-states.md", "ja": "docs/concepts/decision-states.ja.md", "zh-CN": "docs/concepts/decision-states.zh-CN.md"},
+      "audiences": ["adopter", "maintainer"],
+      "journeys": ["operate"],
+      "nextTopics": ["installation"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["human-approval-is-explicit"]
+    },
+    {
+      "topic": "installation",
+      "criticality": "P0",
+      "canonicalPath": "docs/getting-started/installation.md",
+      "localizedPaths": {"en": "docs/getting-started/installation.md", "ja": "docs/getting-started/installation.ja.md", "zh-CN": "docs/getting-started/installation.zh-CN.md"},
+      "audiences": ["adopter"],
+      "journeys": ["adopt"],
+      "nextTopics": ["first-calibration"],
+      "enforcementStatus": "active",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["installation-is-reversible"]
+    },
+    {
+      "topic": "first-calibration",
+      "criticality": "P0",
+      "canonicalPath": "docs/getting-started/first-calibration.md",
+      "localizedPaths": {"en": "docs/getting-started/first-calibration.md", "ja": "docs/getting-started/first-calibration.ja.md", "zh-CN": "docs/getting-started/first-calibration.zh-CN.md"},
+      "audiences": ["adopter"],
+      "journeys": ["adopt"],
+      "nextTopics": ["first-work-item"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["calibration-requires-human-confirmation"]
+    },
+    {
+      "topic": "first-work-item",
+      "criticality": "P0",
+      "canonicalPath": "docs/getting-started/first-work-item.md",
+      "localizedPaths": {"en": "docs/getting-started/first-work-item.md", "ja": "docs/getting-started/first-work-item.ja.md", "zh-CN": "docs/getting-started/first-work-item.zh-CN.md"},
+      "audiences": ["adopter", "contributor"],
+      "journeys": ["adopt", "operate"],
+      "nextTopics": ["quality-gates"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["work-item-has-bounded-scope"]
+    },
+    {
+      "topic": "quality-gates",
+      "criticality": "P0",
+      "canonicalPath": "docs/operations/quality-gates.md",
+      "localizedPaths": {"en": "docs/operations/quality-gates.md", "ja": "docs/operations/quality-gates.ja.md", "zh-CN": "docs/operations/quality-gates.zh-CN.md"},
+      "audiences": ["maintainer", "contributor"],
+      "journeys": ["operate", "verify"],
+      "nextTopics": ["recovery"],
+      "enforcementStatus": "active",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["failed-gates-stop-progression"]
+    },
+    {
+      "topic": "lifecycle",
+      "criticality": "P0",
+      "canonicalPath": "docs/operations/work-item-lifecycle.md",
+      "localizedPaths": {"en": "docs/operations/work-item-lifecycle.md", "ja": "docs/operations/work-item-lifecycle.ja.md", "zh-CN": "docs/operations/work-item-lifecycle.zh-CN.md"},
+      "audiences": ["maintainer", "contributor"],
+      "journeys": ["operate"],
+      "nextTopics": ["recovery"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["closure-is-evidence-backed"]
+    },
+    {
+      "topic": "recovery",
+      "criticality": "P0",
+      "canonicalPath": "docs/operations/recovery.md",
+      "localizedPaths": {"en": "docs/operations/recovery.md", "ja": "docs/operations/recovery.ja.md", "zh-CN": "docs/operations/recovery.zh-CN.md"},
+      "audiences": ["maintainer", "contributor"],
+      "journeys": ["recover"],
+      "nextTopics": ["security-boundaries"],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["recovery-does-not-bypass-governance"]
+    },
+    {
+      "topic": "security-boundaries",
+      "criticality": "P0",
+      "canonicalPath": "docs/security/injection-boundary.md",
+      "localizedPaths": {"en": "docs/security/injection-boundary.md", "ja": "docs/security/injection-boundary.ja.md", "zh-CN": "docs/security/injection-boundary.zh-CN.md"},
+      "audiences": ["adopter", "security_reviewer"],
+      "journeys": ["verify"],
+      "nextTopics": [],
+      "enforcementStatus": "planned",
+      "plainLanguageRequired": true,
+      "semanticInvariants": ["untrusted-input-is-not-instruction"]
     }
   ]
 }
