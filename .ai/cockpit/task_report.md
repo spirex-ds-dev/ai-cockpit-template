@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task documentation-p0-chinese-plain-language generated an evidence-derived outcome with status completed_with_warnings.
+Task documentation-p0-comprehension-validation-20260815 generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Independent nontechnical-reader comprehension evidence is intentionally out of scope.
+- Unresolved evidence is explicitly limited: Independent participant responses and comprehension scores are not created by this packet WI.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
