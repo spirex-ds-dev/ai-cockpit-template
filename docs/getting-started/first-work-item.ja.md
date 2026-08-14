@@ -19,8 +19,15 @@ capabilityClaims:
 1. `make ai-start TASK=example_change TITLE="Example change" MODE=code` を実行する。
 2. Contract の scope、outOfScope、sources、acceptance、verification を埋め、Unknown を解消する。
 3. Preflight が `needs_human_confirmation` または `not_ready` なら停止し、人へ報告する。
-4. 実装前に `make ai-checkpoint ... STAGE=before_edit`、完了前に Summary と checkpoint を記録する。
-5. `make ai-finish`、push、PR、merge の順に進める。
-6. merge 後に `make ai-close-work-item TASK=example_change` を実行し、base 同期と branch 清理を確認する。
+4. 実装前に、Contract と Summary を指定した正式な checkpoint を実行する。
+
+   ```sh
+   make ai-prepare-implementation \
+     CONTRACT=.ai/work-items/active/<task>.contract.json \
+     SUMMARY=.ai/work-items/active/<task>.summary.json
+   ```
+
+5. `make ai-finish TASK=example_change ARCHIVE=true` を実行して証拠を archive し、commit、push、PR、merge の順に進める。
+6. merge 後に `make ai-close-work-item TASK=example_change` を実行し、base 同期と branch cleanup を確認する。
 
 Agent の説明は証拠ではありません。次は[Quality Gates](../operations/quality-gates.ja.md)を参照してください。
