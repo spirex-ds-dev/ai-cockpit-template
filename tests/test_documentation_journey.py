@@ -5,7 +5,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-from scripts.ai_documentation_journey import planned_gaps, validate_journeys, validate_topics
+from scripts.ai_documentation_journey import (
+    planned_gaps,
+    topic_index,
+    validate_journeys,
+    validate_topics,
+)
 
 
 def topic_registry(*, status: str = "active", root: Path | None = None) -> dict[str, object]:
@@ -111,3 +116,44 @@ def test_journey_cli_accepts_valid_registry(tmp_path: Path) -> None:
     )
     assert result.returncode == 0
     assert "documentation journey check passed" in result.stdout
+
+
+def test_topic_index_ignores_malformed_entries() -> None:
+    assert topic_index({"topics": [None, {"topic": "valid"}, {"topic": 3}]}) == {
+        "valid": {"topic": "valid"}
+    }
+
+
+def test_planned_non_p0_topic_reports_only_declared_locale_gap(tmp_path: Path) -> None:
+    registry = {
+        "topics": [
+            {
+                "topic": "reference",
+                "criticality": "P1",
+                "enforcementStatus": "planned",
+                "localizedPaths": {"en": "docs/reference.md"},
+            }
+        ]
+    }
+    assert planned_gaps(registry, tmp_path) == [
+        {
+            "topic": "reference",
+            "locale": "en",
+            "path": "docs/reference.md",
+            "reason": "path does not exist",
+        }
+    ]
+
+
+def test_topic_validator_reports_duplicate_and_missing_p0_locale(tmp_path: Path) -> None:
+    registry = topic_registry(status="planned")
+    duplicate = dict(registry["topics"][0])
+    duplicate["topic"] = "second"
+    duplicate["canonicalPath"] = registry["topics"][0]["canonicalPath"]
+    duplicate["localizedPaths"] = {"en": "docs/architecture.md"}
+    registry["topics"].extend([duplicate, "malformed"])
+    errors = validate_topics(registry, tmp_path)
+    assert "second: canonicalPath already owned by product-architecture" in errors
+    assert "second: missing P0 locale: ja" in errors
+    assert "second: missing P0 locale: zh-CN" in errors
+    assert "topic 2 must be an object" in errors
