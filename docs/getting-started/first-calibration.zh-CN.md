@@ -16,7 +16,7 @@ lastVerifiedBy: capability-truth-matrix
 校准是安装后的独立治理 Work Item。模板提供校准 proposal 能力，但这不证明采用项目已经安装或完成校准。它记录项目真实的 source、test、generated、protected、
 quality、ownership、branch 和 Unknown 边界，不根据 stack 标签猜测这些边界。
 
-The template provides this capability; it does not prove adopter installation.
+这是模板提供的校准方案；它不证明采用方已安装。
 
 1. 完成并关闭安装／采用 Work Item。
 2. 从同步后的远程默认分支启动 `configure_ai_cockpit`。
