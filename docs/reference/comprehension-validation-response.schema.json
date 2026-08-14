@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Anonymized P0 comprehension validation response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["participantPseudonym", "language", "documentRevision", "answeredAt", "answers", "consentConfirmed"],
+  "properties": {
+    "participantPseudonym": {"type": "string", "pattern": "^[A-Za-z0-9_-]{3,40}$"},
+    "language": {"enum": ["en", "zh-CN", "ja"]},
+    "documentRevision": {"type": "string", "minLength": 7},
+    "answeredAt": {"type": "string", "format": "date-time"},
+    "consentConfirmed": {"const": true},
+    "answers": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"type": "object", "additionalProperties": false, "required": ["questionId", "rawAnswer", "confidence"], "properties": {"questionId": {"pattern": "^Q[1-6]$"}, "rawAnswer": {"type": "string", "minLength": 1}, "confidence": {"enum": ["low", "medium", "high"]}, "score": {"enum": ["correct", "partially_correct", "incorrect", "no_answer"]}, "reviewerNote": {"type": "string"}}}},
+    "identifyingData": {"const": null}
+  }
+}
