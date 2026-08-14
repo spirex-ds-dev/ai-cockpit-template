@@ -68,7 +68,8 @@ prompt-injection detector, identity provider, compliance certificate, or
 replacement for human review. External identities, branch protection,
 production isolation, and release attestations remain external evidence.
 
-Current claims are bounded by the
+Current claims and responsibility boundaries are summarized in
+[Capabilities and boundaries](docs/capabilities.md), with row-level evidence in the
 [Capability Truth Matrix](docs/reference/capability-truth-matrix.md).
 
 <!-- readme-section: documentation -->

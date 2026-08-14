@@ -28,15 +28,14 @@ Follow the same order as the project’s North Star:
    turns repository evidence into bounded decisions for calibrated human-agent
    trust. See the [Human-Agent Trust Layer](trust-layer.md).
 2. **Purpose** — it makes intent, scope, evidence, unknowns, and human decisions
-   visible so an agent cannot silently redefine a change. The full purpose page
-   is planned as a P0 content migration.
+   visible so an agent cannot silently redefine a change. Read [Why AI Cockpit exists](purpose.md).
 3. **Design philosophy** — evidence over self-declaration, proportional controls,
    and fail-closed recovery. Read [Design Philosophy](philosophy/design-philosophy.md).
 4. **Architecture** — one governed path from Intent to Contract, implementation,
    verification, Summary, Cockpit, and Human Decision. Read [Architecture](architecture.md).
 5. **Capabilities and boundaries** — Cockpit governs evidence; it is not an Agent
    Runtime, Workflow Engine, Security Sandbox, identity provider, or substitute
-   for human review. Check the [Capability Truth Matrix](reference/capability-truth-matrix.md).
+   for human review. Read [Capabilities and boundaries](capabilities.md).
 6. **Human decisions** — [Decision States](concepts/decision-states.md) explains
    when to proceed, investigate, or stop.
 

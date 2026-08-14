@@ -65,8 +65,7 @@ AI Cockpit 不是 Agent Runtime、Workflow Engine、Security Sandbox、通用 Pr
 Injection 检测器、身份提供方、合规认证或人工评审替代品。外部身份、分支保护、
 生产隔离和发布证明仍属于外部证据。
 
-当前能力声明受 [Capability Truth Matrix（英文 fallback，同语言页面 planned）](docs/reference/capability-truth-matrix.md)
-约束。
+当前能力声明和责任边界见[能力与边界](docs/capabilities.zh-CN.md)。
 
 <!-- readme-section: documentation -->
 ## 文档入口

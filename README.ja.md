@@ -67,8 +67,7 @@ injection detector、identity provider、compliance 証明、人の review の�
 ありません。外部 identity、branch protection、production isolation、release
 attestation は外部証拠です。
 
-現在の主張は [Capability Truth Matrix（英語 fallback、同言語ページ planned）](docs/reference/capability-truth-matrix.md)
-に制約されます。
+現在の主張と責任の境界は [能力と境界](docs/capabilities.ja.md) にまとめています。
 
 <!-- readme-section: documentation -->
 ## ドキュメント

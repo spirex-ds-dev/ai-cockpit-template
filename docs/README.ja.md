@@ -28,18 +28,16 @@ capabilityClaims:
    判断に変換し、校正された Human-Agent Trust を支える Repository Governance
    Layer です。[Human-Agent Trust Layer](trust-layer.ja.md) を参照してください。
 2. **目的** — Intent、scope、証拠、Unknown、人の判断を見える状態にし、Agent が
-   変更内容を勝手に再定義できないようにします。完全な目的ページは P0 移行で
-   追加予定です（planned）。
-3. **設計思想** — 自己申告より証拠、比例的な control、fail-closed の回復を重視します。
-   [Design Philosophy（英語 fallback、同言語ページ planned）](philosophy/design-philosophy.md)
+   変更内容を勝手に再定義できないようにします。[AI Cockpit が必要な理由](purpose.ja.md)
    を参照してください。
+3. **設計思想** — 自己申告より証拠、比例的な control、fail-closed の回復を重視します。
+   [設計思想](philosophy/design-philosophy.ja.md)を参照してください。
 4. **アーキテクチャ** — Intent → Contract → Implementation → Verification →
    Summary → Cockpit → Human Decision の一つの流れで構成されます。
    [Architecture](architecture.ja.md) を参照してください。
 5. **能力と境界** — Cockpit は証拠を統治しますが、Agent Runtime、Workflow Engine、
    Security Sandbox、identity provider、または人の review の代替ではありません。
-   [Capability Truth Matrix（英語 fallback、同言語ページ planned）](reference/capability-truth-matrix.md)
-   で現在の主張を確認してください。
+   [能力と境界](capabilities.ja.md)で現在の主張と責任を確認してください。
 6. **人の判断** — [Decision States（英語 fallback、同言語ページ planned）](concepts/decision-states.md)
    で、進行・調査・停止の判断を確認します。
 
