@@ -17,7 +17,7 @@ Calibration はインストール後に行う、独立した管理対象 Work It
 source、test、generated、protected、quality、ownership、branch、Unknown の境界を、stack
 名から推測せずに記録します。
 
-この template provides the proposal capability; it does not prove adopter installation.
+この確認案はテンプレートで提供されます。導入先プロジェクトへのインストール済みであることを証明しません。
 
 1. インストール／導入 Work Item を完了し、close する。
 2. 同期した remote default branch から `configure_ai_cockpit` を開始する。

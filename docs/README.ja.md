@@ -24,22 +24,12 @@ capabilityClaims:
 
 プロジェクトの North Star から、次の順に読みます。
 
-1. **North Star / identity** — AI Cockpit は、リポジトリの証拠を範囲付きの
-   判断に変換し、校正された Human-Agent Trust を支える Repository Governance
-   Layer です。[Human-Agent Trust Layer](trust-layer.ja.md) を参照してください。
-2. **目的** — Intent、scope、証拠、Unknown、人の判断を見える状態にし、Agent が
-   変更内容を勝手に再定義できないようにします。[AI Cockpit が必要な理由](purpose.ja.md)
-   を参照してください。
-3. **設計思想** — 自己申告より証拠、比例的な control、fail-closed の回復を重視します。
-   [設計思想](philosophy/design-philosophy.ja.md)を参照してください。
-4. **アーキテクチャ** — Intent → Contract → Implementation → Verification →
-   Summary → Cockpit → Human Decision の一つの流れで構成されます。
-   [Architecture](architecture.ja.md) を参照してください。
-5. **能力と境界** — Cockpit は証拠を統治しますが、Agent Runtime、Workflow Engine、
-   Security Sandbox、identity provider、または人の review の代替ではありません。
-   [能力と境界](capabilities.ja.md)で現在の主張と責任を確認してください。
-6. **人の判断** — [判断状態](concepts/decision-states.ja.md)。[Status の読み方](reference/how-to-read-cockpit-status.ja.md) と [ライフサイクル](operations/work-item-lifecycle.ja.md) へ進みます。
-   で、進行・調査・停止の判断を確認します。
+1. **North Star / identity（目指す状態）** — AI Cockpit は、リポジトリに残る証拠を人が確認できる判断へ変え、AI と人の信頼を調整できるようにする仕組みです。[Human-Agent Trust Layer](trust-layer.ja.md) を参照してください。
+2. **目的** — 変更の意図、対象範囲、証拠、不明点、人が判断する場所を見えるようにし、Agent が変更内容を勝手に広げないようにします。[AI Cockpit が必要な理由](purpose.ja.md)を参照してください。
+3. **設計思想** — 自己申告ではなく証拠を優先し、リスクに応じた確認を行い、証拠が足りなければ安全側で止めます。[設計思想](philosophy/design-philosophy.ja.md)を参照してください。
+4. **アーキテクチャ（構造）** — 意図から始まり、Contract（作業契約）、実装、検証、Summary（結果の要約）、Cockpit、そして人の判断へ進む一つの流れです。[アーキテクチャ](architecture.ja.md)を参照してください。
+5. **能力と境界** — Cockpit が管理するのはリポジトリの変更証拠です。Agent 実行環境、Workflow Engine、Security Sandbox、認証基盤、人のレビューそのものの代わりにはなりません。[能力と境界](capabilities.ja.md)で責任分担を確認してください。
+6. **人の判断** — [判断状態](concepts/decision-states.ja.md)で色の意味を確認し、[Status の読み方](reference/how-to-read-cockpit-status.ja.md)と[ライフサイクル](operations/work-item-lifecycle.ja.md)で、進行・調査・停止の判断を確認します。
 
 ## 読者の目的から選ぶ
 
