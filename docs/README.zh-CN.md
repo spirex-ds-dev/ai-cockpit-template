@@ -33,7 +33,7 @@ capabilityClaims:
    Cockpit → Human Decision 的一条治理路径工作。参见[架构](architecture.zh-CN.md)。
 5. **能力与边界** — Cockpit 治理证据，但不是 Agent Runtime、Workflow Engine、Security
    Sandbox、身份提供方，也不是人工评审的替代品。参见[能力与边界](capabilities.zh-CN.md)。
-6. **人的决定** — [Decision States（英文 fallback，同语言页面 planned）](concepts/decision-states.md)
+6. **人的决定** — [决定状态](concepts/decision-states.zh-CN.md)，然后阅读[Cockpit 状态](reference/how-to-read-cockpit-status.zh-CN.md)和 [Work Item 生命周期](operations/work-item-lifecycle.zh-CN.md)。
    说明何时继续、调查或停止。
 
 ## 按读者目标选择
@@ -43,7 +43,7 @@ capabilityClaims:
 | 判断是否采用 | [安装](getting-started/installation.zh-CN.md) | 理解前置条件、确认点和会产生的证据。 |
 | 开始使用 | [First Calibration（英文 fallback，同语言页面 planned）](getting-started/first-calibration.md) → [First Work Item（英文 fallback，同语言页面 planned）](getting-started/first-work-item.md) | 从可信 base 创建第一个有边界的任务。 |
 | 评审结果 | [质量门](operations/quality-gates.zh-CN.md) | 不把 Agent 的说明当作 proof，正确阅读检查与证据。 |
-| 从停止中恢复 | [Recovery（英文 fallback，同语言页面 planned）](operations/recovery.md) | 保留 Work Item，修复缺失证据后再重试。 |
+| 从停止中恢复 | [恢复](operations/recovery.zh-CN.md) | 保留 Work Item，修复缺失证据后再重试。 |
 | 维护或审计 | [Documentation Architecture（英文 fallback，同语言页面 planned）](reference/documentation-architecture.md) | 找到 canonical owner、语言政策和参考资料深度。 |
 
 入口页面先解决项目理解，再引导到技术参考。P0 topic 仍为 `planned` 时，表示迁移工作尚未

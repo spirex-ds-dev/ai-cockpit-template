@@ -81,8 +81,10 @@ def test_registry_promotes_only_the_four_migrated_core_topics() -> None:
         assert set(record["localizedPaths"]) == set(LOCALES)
         assert all((ROOT / path).exists() for path in record["localizedPaths"].values())
 
-    for topic in ("decision-states", "first-calibration", "lifecycle", "recovery"):
-        assert topics[topic]["enforcementStatus"] == "planned"
+    assert topics["decision-states"]["enforcementStatus"] == "active"
+    assert topics["lifecycle"]["enforcementStatus"] == "active"
+    assert topics["recovery"]["enforcementStatus"] == "active"
+    assert topics["first-calibration"]["enforcementStatus"] == "planned"
 
 
 def test_boundary_page_keeps_local_and_external_responsibilities_distinct() -> None:
