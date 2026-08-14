@@ -20,8 +20,15 @@ capabilityClaims:
 1. 运行 `make ai-start TASK=example_change TITLE="Example change" MODE=code`。
 2. 编辑 Contract，填写 scope、outOfScope、sources、acceptance、verification，并解决 Unknown。
 3. 若 Preflight 为 `needs_human_confirmation` 或 `not_ready`，停止并把结果交给人处理。
-4. 在实现前运行 `make ai-checkpoint ... STAGE=before_edit`；完成后记录 Summary 和 before_finish checkpoint。
-5. 运行 `make ai-finish TASK=example_change`，推送分支，创建并合并 PR。
+4. 实现前，指定 Contract 和 Summary，运行正式的实现前检查点：
+
+   ```sh
+   make ai-prepare-implementation \
+     CONTRACT=.ai/work-items/active/<task>.contract.json \
+     SUMMARY=.ai/work-items/active/<task>.summary.json
+   ```
+
+5. 运行 `make ai-finish TASK=example_change ARCHIVE=true` 归档证据，然后按提交、推送分支、创建 PR、合并 PR 的顺序执行。
 6. 合并后运行 `make ai-close-work-item TASK=example_change`，确认基线同步且分支清理成功。
 
 不要在 PR 前把分支合入本地 main，也不要把 Agent 的说明当作证据。接下来阅读[质量门](../operations/quality-gates.zh-CN.md)。
