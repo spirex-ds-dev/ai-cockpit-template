@@ -60,7 +60,7 @@ def test_registry_activates_only_the_four_complete_topics() -> None:
     for topic in ("decision-states", "lifecycle", "recovery"):
         assert topics[topic]["enforcementStatus"] == "active"
         assert all((ROOT / path).exists() for path in topics[topic]["localizedPaths"].values())
-    assert topics["security-boundaries"]["enforcementStatus"] == "planned"
+    assert topics["security-boundaries"]["enforcementStatus"] == "active"
 
 
 def test_journey_validator_handles_malformed_registry_and_missing_planned_path(

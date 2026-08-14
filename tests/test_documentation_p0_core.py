@@ -84,7 +84,7 @@ def test_registry_promotes_only_the_four_migrated_core_topics() -> None:
     assert topics["decision-states"]["enforcementStatus"] == "active"
     assert topics["lifecycle"]["enforcementStatus"] == "active"
     assert topics["recovery"]["enforcementStatus"] == "active"
-    assert topics["first-calibration"]["enforcementStatus"] == "planned"
+    assert topics["first-calibration"]["enforcementStatus"] == "active"
 
 
 def test_boundary_page_keeps_local_and_external_responsibilities_distinct() -> None:

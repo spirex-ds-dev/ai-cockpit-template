@@ -85,8 +85,8 @@ def test_root_readmes_use_matching_language_documentation_homes() -> None:
         assert target in (ROOT / filename).read_text(encoding="utf-8")
 
 
-def test_non_english_homes_label_planned_fallbacks_instead_of_silent_switches() -> None:
+def test_non_english_homes_expose_same_language_adoption_routes() -> None:
     for locale in ("ja", "zh-CN"):
         text = HOMES[locale].read_text(encoding="utf-8").lower()
-        assert "planned" in text
-        assert "fallback" in text
+        assert "first-calibration" in text or "首次校准" in text or "最初の calibration" in text
+        assert "fallback" not in text.split("##", 1)[-1]

@@ -46,7 +46,8 @@ capabilityClaims:
 | 目的 | 入口 | 読了後にできること |
 | --- | --- | --- |
 | 導入するか決める | [Installation](getting-started/installation.ja.md) | 前提、確認点、作成される証拠を理解する。 |
-| 使い始める | [First Calibration（英語 fallback、同言語ページ planned）](getting-started/first-calibration.md) → [First Work Item](getting-started/first-work-item.ja.md) | 信頼できる base から最初の範囲付きタスクを始める。 |
+| 使い始める | [最初の Calibration](getting-started/first-calibration.ja.md) → [最初の Work Item](getting-started/first-work-item.ja.md) | 信頼できる base から最初の範囲付きタスクを始める。 |
+| Security 境界を確認する | [Injection Boundary](security/injection-boundary.ja.md) | AI Cockpit の責任と外部 security control の責任を区別する。 |
 | 結果を review する | [Quality Gates](operations/quality-gates.ja.md) | Agent の説明を proof とせず、check と証拠を読む。 |
 | stop から回復する | [回復](operations/recovery.ja.md) | 不足証拠を直すまで Work Item を保持し、安全に再試行する。 |
 | 保守・監査する | [Documentation Architecture](reference/documentation-architecture.ja.md) | canonical owner、言語方針、reference の深さを見つける。 |

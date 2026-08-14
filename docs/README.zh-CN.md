@@ -41,10 +41,11 @@ capabilityClaims:
 | 目标 | 从这里开始 | 读完后应该能够 |
 | --- | --- | --- |
 | 判断是否采用 | [安装](getting-started/installation.zh-CN.md) | 理解前置条件、确认点和会产生的证据。 |
-| 开始使用 | [First Calibration（英文 fallback，同语言页面 planned）](getting-started/first-calibration.md) → [First Work Item（英文 fallback，同语言页面 planned）](getting-started/first-work-item.md) | 从可信 base 创建第一个有边界的任务。 |
+| 开始使用 | [首次校准](getting-started/first-calibration.zh-CN.md) → [首个 Work Item](getting-started/first-work-item.zh-CN.md) | 从可信 base 创建第一个有边界的任务。 |
+| 查看安全边界 | [注入边界](security/injection-boundary.zh-CN.md) | 区分 AI Cockpit 的责任和外部安全控制的责任。 |
 | 评审结果 | [质量门](operations/quality-gates.zh-CN.md) | 不把 Agent 的说明当作 proof，正确阅读检查与证据。 |
 | 从停止中恢复 | [恢复](operations/recovery.zh-CN.md) | 保留 Work Item，修复缺失证据后再重试。 |
-| 维护或审计 | [Documentation Architecture（英文 fallback，同语言页面 planned）](reference/documentation-architecture.md) | 找到 canonical owner、语言政策和参考资料深度。 |
+| 维护或审计 | [Documentation Architecture](reference/documentation-architecture.md) | 找到 canonical owner、语言政策和参考资料深度。 |
 
 入口页面先解决项目理解，再引导到技术参考。P0 topic 仍为 `planned` 时，表示迁移工作尚未
 完成，不能宣称完整的多语言覆盖。

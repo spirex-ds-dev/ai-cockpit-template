@@ -69,6 +69,8 @@ Makefile、agent marker を rollback します。再試行前に、報告され�
 lifecycle で行います。Calibration は別 Work Item として開始し、installation だけを
 production readiness evidence として扱いません。
 
+[最初の Calibration](first-calibration.ja.md)、続いて[最初の Work Item](first-work-item.ja.md)へ進みます。
+
 ## 詳細
 
 - [厳格な installation と supply-chain verification](installation-security.ja.md)
