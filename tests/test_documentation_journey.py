@@ -145,6 +145,77 @@ def test_planned_non_p0_topic_reports_only_declared_locale_gap(tmp_path: Path) -
     ]
 
 
+def test_active_p1_english_fallback_requires_explicit_label(tmp_path: Path) -> None:
+    registry = {
+        "topics": [
+            {
+                "topic": "commands",
+                "criticality": "P1",
+                "canonicalPath": "docs/reference/commands.md",
+                "localizedPaths": {"en": "docs/reference/commands.md"},
+                "enforcementStatus": "active",
+                "localizationPolicy": "english-fallback-labelled",
+            }
+        ]
+    }
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / "docs/reference/commands.md").write_text("# Commands\n", encoding="utf-8")
+    assert validate_topics(registry, tmp_path) == [
+        "commands: P1 English fallback requires fallbackLabel"
+    ]
+
+
+def test_active_p1_fallback_label_and_p2_default_policy_pass(tmp_path: Path) -> None:
+    registry = {
+        "topics": [
+            {
+                "topic": "commands",
+                "criticality": "P1",
+                "canonicalPath": "docs/reference/commands.md",
+                "localizedPaths": {"en": "docs/reference/commands.md"},
+                "enforcementStatus": "active",
+                "localizationPolicy": "english-fallback-labelled",
+                "fallbackLabel": "Detailed technical reference — English",
+            },
+            {
+                "topic": "audit-reference",
+                "criticality": "P2",
+                "canonicalPath": "docs/reference/audit.md",
+                "localizedPaths": {"en": "docs/reference/audit.md"},
+                "enforcementStatus": "active",
+                "localizationPolicy": "not-required-by-default",
+            },
+        ]
+    }
+    for path in ("docs/reference/commands.md", "docs/reference/audit.md"):
+        target = tmp_path / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("# Reference\n", encoding="utf-8")
+    assert validate_topics(registry, tmp_path) == []
+
+
+def test_p2_cannot_claim_p1_fallback_policy(tmp_path: Path) -> None:
+    registry = {
+        "topics": [
+            {
+                "topic": "audit-reference",
+                "criticality": "P2",
+                "canonicalPath": "docs/reference/audit.md",
+                "localizedPaths": {"en": "docs/reference/audit.md"},
+                "enforcementStatus": "active",
+                "localizationPolicy": "english-fallback-labelled",
+                "fallbackLabel": "Detailed technical reference — English",
+            }
+        ]
+    }
+    target = tmp_path / "docs/reference/audit.md"
+    target.parent.mkdir(parents=True)
+    target.write_text("# Audit\n", encoding="utf-8")
+    assert validate_topics(registry, tmp_path) == [
+        "audit-reference: P2 cannot use the P1 English fallback policy"
+    ]
+
+
 def test_topic_validator_reports_duplicate_and_missing_p0_locale(tmp_path: Path) -> None:
     registry = topic_registry(status="planned")
     duplicate = dict(registry["topics"][0])
