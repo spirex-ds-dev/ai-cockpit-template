@@ -21,6 +21,8 @@ Governed Work Item: documentation-reader-evidence-and-reference-links
 - tests/test_documentation_journey.py
 - .ai/work-items/active/documentation-reader-evidence-and-reference-links.outcome.json
 - .ai/work-items/active/documentation-reader-evidence-and-reference-links.outcome.md
+- .ai/cockpit/task_report.json
+- .ai/cockpit/task_report.md
 
 ## Findings
 None
