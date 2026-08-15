@@ -49,3 +49,11 @@ commands と schemas の技術リファレンスが英語だけの canonical rou
 ドキュメント権威境界リファレンスは既定では翻訳対象外だということです。これは明示された
 言語方針であり、すべてのドキュメントの多言語対応が完了したことを意味しません。P0/P1/P2 の正確な方針は
 [ドキュメント・アーキテクチャ](reference/documentation-architecture.ja.md)を参照してください。
+
+### 技術リファレンス
+
+次は、保守担当者とコントリビューター向けに言語状態を明示した技術入口です。
+
+- [Commands — 英語の技術リファレンス（P1）](reference/commands.md)
+- [Schemas — 英語の技術リファレンス（P1）](reference/schemas.md)
+- [ドキュメント権威境界 — 英語のリファレンス（P2、既定では翻訳対象外）](reference/documentation-authority-boundary.md)

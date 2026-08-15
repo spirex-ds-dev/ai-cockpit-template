@@ -46,3 +46,11 @@ capabilityClaims:
 完成多语言覆盖。当前边界是：P1 的 commands 和 schemas 技术参考目前只有英文
 canonical 路径，P2 的文档权威边界参考默认不要求翻译。这些是明确的语言覆盖政策，
 不能据此宣称全部文档已经完成多语言覆盖。具体的 P0/P1/P2 规则见[文档架构（英文参考）](reference/documentation-architecture.md)。
+
+### 技术参考
+
+以下是为维护者和贡献者准备、并明确标注语言状态的技术入口：
+
+- [Commands — 英文技术参考（P1）](reference/commands.md)
+- [Schemas — 英文技术参考（P1）](reference/schemas.md)
+- [文档权威边界 — 英文参考（P2，默认不要求翻译）](reference/documentation-authority-boundary.md)

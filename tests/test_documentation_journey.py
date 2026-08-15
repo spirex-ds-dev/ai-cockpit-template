@@ -135,6 +135,22 @@ def test_entry_pages_state_current_p1_p2_fallback_boundary() -> None:
     assert "すべてのドキュメントの多言語対応が完了したことを意味しません" in japanese
 
 
+def test_entry_pages_expose_labelled_p1_p2_reference_routes() -> None:
+    root = Path(__file__).resolve().parents[1]
+    pages = [
+        (root / "docs/README.md").read_text(encoding="utf-8"),
+        (root / "docs/README.zh-CN.md").read_text(encoding="utf-8"),
+        (root / "docs/README.ja.md").read_text(encoding="utf-8"),
+    ]
+
+    for page in pages:
+        assert "reference/commands.md" in page
+        assert "reference/schemas.md" in page
+        assert "reference/documentation-authority-boundary.md" in page
+        assert "P1" in page
+        assert "P2" in page
+
+
 def test_topic_index_ignores_malformed_entries() -> None:
     assert topic_index({"topics": [None, {"topic": "valid"}, {"topic": 3}]}) == {
         "valid": {"topic": "valid"}

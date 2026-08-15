@@ -8,8 +8,8 @@ import pytest
 ROOT = Path(__file__).parents[1]
 RESULTS_PATH = ROOT / "docs/reference/comprehension-validation-results.json"
 RESPONSE_SCHEMA_PATH = ROOT / "docs/reference/comprehension-validation-response.schema.json"
-CURRENT_MAIN_REVISION = "fde3380f81fea5fd2e288f7a8849f737dc074060"
-CURRENT_MAIN_TREE = "d752493863afc8c5f7749d067cd80d60ee72a495"
+BOUND_REVISION = "fde3380f81fea5fd2e288f7a8849f737dc074060"
+BOUND_TREE = "d752493863afc8c5f7749d067cd80d60ee72a495"
 
 
 def validate_response_schema(value, schema, path="$"):
@@ -52,10 +52,13 @@ def test_bounded_results_have_one_schema_valid_receipt_per_required_locale():
     schema = json.loads(RESPONSE_SCHEMA_PATH.read_text(encoding="utf-8"))
 
     assert results["status"] == "comprehension_verified_bounded"
-    assert results["documentRevision"] == CURRENT_MAIN_REVISION
-    assert results["documentTree"] == CURRENT_MAIN_TREE
+    assert results["documentRevision"] == BOUND_REVISION
+    assert results["documentTree"] == BOUND_TREE
     assert results["requiredLanguages"] == ["en", "zh-CN", "ja"]
     assert results["claimAuthorized"] is True
+    assert BOUND_REVISION in results["authorizedClaim"]
+    assert "a3cf1deda0d9577817b2ffeb8078068f77f48340" not in results["authorizedClaim"]
+    assert "later revisions" in results["authorizedClaim"]
     assert results["missingEvidence"] == []
     assert [item["language"] for item in results["responses"]] == ["en", "zh-CN", "ja"]
 
@@ -101,3 +104,14 @@ def test_bounded_results_keep_the_non_population_limitations():
         "This one-reader-per-locale sample is revision-bound and cannot establish general-population comprehension.",
         "The result does not authorize merge, release, safety, security, or enterprise-compliance claims.",
     ]
+
+
+def test_bounded_results_are_explicitly_historical_not_current_main_claims():
+    results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
+    report = (ROOT / "docs/reference/comprehension-validation-results.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "historical document revision" in results["authorizedClaim"]
+    assert "current-main revision" not in results["authorizedClaim"]
+    assert "current `main` revision is later" in report
