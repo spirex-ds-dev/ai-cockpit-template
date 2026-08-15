@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "status": "comprehension_unverified",
-  "reviewState": "agent_complete_post_delivery_feedback_open",
-  "documentRevision": "a478f1a81608c5b70baed6818c68c0ac8890a336",
-  "documentTree": "833c38c4ab00716e1cded758203deb1edc6d05cd",
+  "status": "comprehension_verified_bounded",
+  "reviewState": "three_locale_receipts_ingested",
+  "documentRevision": "a3cf1deda0d9577817b2ffeb8078068f77f48340",
+  "documentTree": "245978e741b6da5edb32192bb32667b995547e88",
   "protocol": "docs/reference/comprehension-validation-protocol.md",
   "responseSchema": "docs/reference/comprehension-validation-response.schema.json",
   "requiredLanguages": [
@@ -16,16 +16,35 @@
     "zh-CN": 1,
     "ja": 1
   },
-  "responses": [],
-  "claimAuthorized": false,
-  "missingEvidence": [
-    "independent nontechnical reader response for en",
-    "independent nontechnical reader response for zh-CN",
-    "independent nontechnical reader response for ja"
+  "responses": [
+    {
+      "path": "docs/reference/comprehension-validation-responses/peter_01.en.json",
+      "language": "en",
+      "participantPseudonym": "peter_01",
+      "answerCount": 6,
+      "scores": {"correct": 6, "partially_correct": 0, "incorrect": 0, "no_answer": 0}
+    },
+    {
+      "path": "docs/reference/comprehension-validation-responses/xiaoli_01.zh-CN.json",
+      "language": "zh-CN",
+      "participantPseudonym": "xiaoli_01",
+      "answerCount": 6,
+      "scores": {"correct": 6, "partially_correct": 0, "incorrect": 0, "no_answer": 0}
+    },
+    {
+      "path": "docs/reference/comprehension-validation-responses/tanaka_01.ja.json",
+      "language": "ja",
+      "participantPseudonym": "tanaka_01",
+      "answerCount": 6,
+      "scores": {"correct": 6, "partially_correct": 0, "incorrect": 0, "no_answer": 0}
+    }
   ],
+  "claimAuthorized": true,
+  "authorizedClaim": "For document revision a3cf1deda0d9577817b2ffeb8078068f77f48340 only, one consented independent nontechnical reader per required locale answered all six P0 questions correctly under the recorded protocol.",
+  "missingEvidence": [],
   "limitations": [
-    "No independent reader responses have been ingested.",
     "Agent or author answers are not participant evidence.",
-    "A three-reader bounded sample cannot establish general-population comprehension."
+    "This one-reader-per-locale sample is revision-bound and cannot establish general-population comprehension.",
+    "The result does not authorize merge, release, safety, security, or enterprise-compliance claims."
   ]
 }
