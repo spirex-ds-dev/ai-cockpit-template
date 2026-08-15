@@ -10,6 +10,8 @@ RESULTS_PATH = ROOT / "docs/reference/comprehension-validation-results.json"
 RESPONSE_SCHEMA_PATH = ROOT / "docs/reference/comprehension-validation-response.schema.json"
 BOUND_REVISION = "fde3380f81fea5fd2e288f7a8849f737dc074060"
 BOUND_TREE = "d752493863afc8c5f7749d067cd80d60ee72a495"
+CURRENT_REVISION = "1c12d3065312f11d4416cb8bd890630e06ca32c3"
+CURRENT_TREE = "cd165896e8d2622e97edce5a62ff47440c0cc4a1"
 
 
 def validate_response_schema(value, schema, path="$"):
@@ -52,6 +54,10 @@ def test_bounded_results_have_one_schema_valid_receipt_per_required_locale():
     schema = json.loads(RESPONSE_SCHEMA_PATH.read_text(encoding="utf-8"))
 
     assert results["status"] == "comprehension_verified_bounded"
+    assert results["reviewState"] == "three_locale_current_revision_receipts_ingested"
+    assert results["currentRevisionStatus"] == "comprehension_verified_bounded"
+    assert results["currentDocumentRevision"] == CURRENT_REVISION
+    assert results["currentDocumentTree"] == CURRENT_TREE
     assert results["documentRevision"] == BOUND_REVISION
     assert results["documentTree"] == BOUND_TREE
     assert results["requiredLanguages"] == ["en", "zh-CN", "ja"]
@@ -102,8 +108,38 @@ def test_bounded_results_keep_the_non_population_limitations():
     assert results["limitations"] == [
         "Agent or author answers are not participant evidence.",
         "This one-reader-per-locale sample is revision-bound and cannot establish general-population comprehension.",
+        "The current-main result is bounded to one independent reader per required locale and cannot establish general-population comprehension.",
         "The result does not authorize merge, release, safety, security, or enterprise-compliance claims.",
     ]
+
+
+def test_current_revision_boundary_requires_three_fresh_routes():
+    results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
+    boundary = results["currentRevisionBoundary"]
+
+    assert boundary["claimAuthorized"] is True
+    assert boundary["requiredLanguages"] == ["en", "zh-CN", "ja"]
+    assert boundary["minimumSample"] == {"en": 1, "zh-CN": 1, "ja": 1}
+    assert boundary["missingEvidence"] == []
+    assert [item["language"] for item in boundary["responses"]] == ["en", "zh-CN", "ja"]
+    assert CURRENT_REVISION in boundary["authorizedClaim"]
+
+    for item in boundary["responses"]:
+        response = json.loads((ROOT / item["path"]).read_text(encoding="utf-8"))
+        validate_response_schema(
+            response, json.loads(RESPONSE_SCHEMA_PATH.read_text(encoding="utf-8"))
+        )
+        assert response["documentRevision"] == CURRENT_REVISION
+        assert response["answeredAt"] == "2026-08-16T07:44:00+09:00"
+        assert [answer["questionId"] for answer in response["answers"]] == [
+            "Q1",
+            "Q2",
+            "Q3",
+            "Q4",
+            "Q5",
+            "Q6",
+        ]
+        assert {answer["score"] for answer in response["answers"]} == {"correct"}
 
 
 def test_bounded_results_are_explicitly_historical_not_current_main_claims():
@@ -115,3 +151,5 @@ def test_bounded_results_are_explicitly_historical_not_current_main_claims():
     assert "historical document revision" in results["authorizedClaim"]
     assert "current-main revision" not in results["authorizedClaim"]
     assert "current `main` revision is later" in report
+    assert "fresh independent nontechnical reader" in report
+    assert "Current revision evidence" in report

@@ -11,6 +11,14 @@ authority: implementation_record
 
 # P0 Comprehension Validation Results
 
+## Current revision status
+
+`comprehension_verified_bounded`
+
+The current `main` revision is `1c12d3065312f11d4416cb8bd890630e06ca32c3` with tree `cd165896e8d2622e97edce5a62ff47440c0cc4a1`. A fresh independent nontechnical reader in English, Simplified Chinese, and Japanese reread the current documentation from scratch at `2026-08-16T07:44:00+09:00`; each answered all six questions correctly.
+
+This is a bounded comprehension result: it does not establish general-population comprehension or release readiness.
+
 ## Historical bounded result
 
 `comprehension_verified_bounded`
@@ -40,10 +48,19 @@ Reader feedback does not block this documentation delivery. People can read the 
 
 The authorized claim is intentionally narrow: for the historical revision above, the minimum sample contains one eligible independent reader per language route, and each recorded answer is correct against the protocol answer key. The current `main` revision is later than this bound and is not covered by this result. Future revisions require new revision-bound responses before repeating this claim.
 
+The previous fresh-reader handoff is satisfied by the receipts below. The historical receipts remain preserved separately and are not retagged.
+
+## Current revision evidence
+
+- English: [`peter_02.en.json`](comprehension-validation-responses/peter_02.en.json) — 6/6 correct
+- Simplified Chinese: [`xiaoli_02.zh-CN.json`](comprehension-validation-responses/xiaoli_02.zh-CN.json) — 6/6 correct
+- Japanese: [`tanaka_02.ja.json`](comprehension-validation-responses/tanaka_02.ja.json) — 6/6 correct
+
 Any missing route, missing answer, identifying information, revision drift, or score below correct makes this result `comprehension_unverified`.
 
 ## Limitations
 
 - This report does not prove that all nontechnical readers understand the documentation.
 - One reader per language route is a bounded sample, not a population claim.
+- The current-main result is bounded to one reader per required locale and does not authorize a population-wide comprehension claim.
 - This result does not authorize merge, release, safety, security, or enterprise-compliance claims.
