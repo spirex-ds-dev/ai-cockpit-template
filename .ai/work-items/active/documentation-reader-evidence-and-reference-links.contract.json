@@ -1,0 +1,204 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-reader-evidence-and-reference-links",
+  "mode": "code",
+  "title": "Repair reader evidence binding and expose technical reference routes",
+  "baseCommit": "77acc3a7276261f4369744aef3ab0408a0b1edfb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-reader-evidence-and-reference-links.contract.json",
+    ".ai/work-items/active/documentation-reader-evidence-and-reference-links.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-reader-evidence-and-reference-links.outcome.json",
+    ".ai/work-items/active/documentation-reader-evidence-and-reference-links.outcome.md",
+    "docs/README.md",
+    "docs/README.zh-CN.md",
+    "docs/README.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/comprehension-validation-results.json",
+    "docs/reference/comprehension-validation-results.md",
+    "tests/test_documentation_comprehension_results.py",
+    "tests/test_documentation_journey.py"
+  ],
+  "outOfScope": [
+    "docs/reference/comprehension-validation-responses/**",
+    "docs/reference/documentation-authority-registry.json",
+    "docs/reference/commands.md",
+    "docs/reference/schemas.md",
+    "docs/reference/documentation-authority-boundary.md",
+    "docs/archive/**",
+    "runtime/**",
+    "release/**"
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/comprehension-validation-results.json",
+      "reason": "Aggregate historical reader-evidence claim and revision binding."
+    },
+    {"path": "docs/reference/comprehension-validation-results.md", "reason": "Human-readable evidence boundary and limitations."},
+    {"path": "docs/reference/comprehension-validation-responses/peter_01.en.json", "reason": "Read-only English receipt."},
+    {"path": "docs/reference/comprehension-validation-responses/xiaoli_01.zh-CN.json", "reason": "Read-only Chinese receipt."},
+    {"path": "docs/reference/comprehension-validation-responses/tanaka_01.ja.json", "reason": "Read-only Japanese receipt."},
+    {"path": "docs/reference/documentation-authority-registry.json", "reason": "Read-only canonical P1/P2 route inventory."},
+    {"path": "docs/README.md", "reason": "English reader entry routes."},
+    {"path": "docs/README.zh-CN.md", "reason": "Chinese reader entry routes."},
+    {"path": "docs/README.ja.md", "reason": "Japanese reader entry routes."},
+    {"path": "tests/test_documentation_comprehension_results.py", "reason": "Evidence consistency regression coverage."},
+    {"path": "tests/test_documentation_journey.py", "reason": "Entry route regression coverage."}
+  ],
+  "unknowns": [],
+  "rawUserRequest": "Re-open the documentation work after acceptance identified stale/inconsistent reader-evidence binding and missing direct P1/P2 reference links. Preserve the original reader answers and Tokyo timestamps; make the evidence claim internally consistent and make the named technical references reachable from all three language entry pages.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:documentation-acceptance-reopen", "capturedAt": "2026-08-16T00:00:00+09:00", "digest": "sha256:documentation-acceptance-reopen"},
+  "declaredIntent": {"summary": "Restore truthful revision-bound reader evidence and complete the reader path from each language home page to the named P1/P2 references.", "requestedCapabilities": ["documentation", "test_automation", "ai_governance"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "document", "authorityRequired": false},
+  "notCodable": false,
+  "riskAssessment": {
+      "level": "low",
+      "riskTypes": ["documentation_truth", "localization", "evidence_binding"],
+      "reason": "Repair revision metadata and reader navigation without fabricating new participant evidence or changing raw answers."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The repair scope is explicit; the absence of new reader receipts is a recorded limitation, not a reason to fabricate current-main evidence."
+  },
+  "preReviewWarnings": [
+    "Do not claim current-main comprehension without receipts bound to the current entry-page revision."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The aggregate result, readable report, and read-only response receipts use one identical historical documentRevision; authorizedClaim names that same revision and no longer claims it is current main.",
+    "The original raw answers and 2026-08-15T19:02:00+09:00 timestamps are unchanged.",
+    "All three entry pages directly link Commands, Schemas, and the P2 documentation-authority boundary with explicit language-policy labels.",
+    "The entry pages continue to state that incomplete translation is not evidence of complete multilingual coverage.",
+    "Regression tests fail closed on revision/claim drift and verify the three direct routes.",
+    "No current-main comprehension claim is made without fresh current-main receipts; the remaining validation need is explicit."
+  ],
+  "guidelines": [
+    "Treat participant evidence as revision-bound; never infer a new reading session from unchanged answers.",
+    "Preserve raw answers, consent fields, pseudonyms, and timestamps exactly.",
+    "Use plain language at entry pages and label English-only technical references clearly.",
+    "Keep the P0/P1/P2 registry authoritative and unchanged in this Work Item.",
+    "Keep all three language routes semantically equivalent while allowing natural phrasing differences."
+  ],
+  "intent": {
+    "problem": "The evidence report's authorized claim names a different revision from its documentRevision, and the current-main wording is no longer true after later entry-page changes. The entry pages name P1/P2 references without directly linking them.",
+    "constraints": ["No new reader evidence is available in this Work Item.", "Do not alter raw response content or timestamps.", "Do not translate or rewrite technical reference pages."],
+    "rationale": "A truthful historical claim plus an explicit current-main limitation prevents overclaiming, while direct links remove the remaining reader-journey search step."
+  },
+  "scenarioCoverage": [
+    {"scenario": "A reviewer can identify exactly which revision the historical reader evidence supports.", "required": true, "status": "unverified", "evidence": [], "expected": "all evidence and claim revision fields agree", "verificationPlan": "JSON and regression tests."},
+    {"scenario": "A nontechnical reader can reach Commands, Schemas, and the P2 authority reference from each language home page.", "required": true, "status": "unverified", "evidence": [], "expected": "direct labelled links exist in all three homes", "verificationPlan": "Focused route assertions and link checks."},
+    {"scenario": "The repository does not claim current-main reader validation without current-main receipts.", "required": true, "status": "unverified", "evidence": [], "expected": "report wording is historical and limitation is explicit", "verificationPlan": "Focused result/report assertions and manual review."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 910
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-reader-evidence-and-reference-links.json",
+    "baseCommit": "77acc3a7276261f4369744aef3ab0408a0b1edfb",
+    "initialScopeDigest": "e859d0d5a0e6c1d27547daabaa4b0f5cbde380e7d61a1e20c5fe5bee049d1886",
+    "contractSkeletonDigest": "a58ee380cc00dc5e80aa96a58298650cde3ab773b5a060a4d8ccd58b1b53542e"
+  }
+}

@@ -11,11 +11,11 @@ authority: implementation_record
 
 # P0 Comprehension Validation Results
 
-## Current result
+## Historical bounded result
 
 `comprehension_verified_bounded`
 
-For the current `main` revision bound below, one consented independent nontechnical reader in each required language route answered all six P0 questions correctly. This authorizes the narrow claim below; it does not establish general-population comprehension or any release-readiness claim.
+For the historical revision bound below, one consented independent nontechnical reader in each required language route answered all six P0 questions correctly. This authorizes only the narrow historical claim below; it does not establish comprehension for later revisions, general-population comprehension, or any release-readiness claim.
 
 ## Bound revision
 
@@ -38,7 +38,7 @@ Agent-generated answers, author self-review, link checks, and deterministic test
 
 Reader feedback does not block this documentation delivery. People can read the completed documentation naturally after it is merged; any confusion or missing explanation becomes input to a later Work Item.
 
-The authorized claim is intentionally narrow: for the current-main revision above, the minimum sample contains one eligible independent reader per language route, and each recorded answer is correct against the protocol answer key. Future revisions require new revision-bound responses before repeating this claim.
+The authorized claim is intentionally narrow: for the historical revision above, the minimum sample contains one eligible independent reader per language route, and each recorded answer is correct against the protocol answer key. The current `main` revision is later than this bound and is not covered by this result. Future revisions require new revision-bound responses before repeating this claim.
 
 Any missing route, missing answer, identifying information, revision drift, or score below correct makes this result `comprehension_unverified`.
 

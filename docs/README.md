@@ -61,3 +61,11 @@ language-policy boundaries, not evidence that all documentation has complete mul
 coverage. See the [documentation architecture](reference/documentation-architecture.md)
 for the exact P0/P1/P2 policy and the [capability matrix](reference/capability-truth-matrix.md)
 for current claims.
+
+### Technical references
+
+These are intentionally labelled technical routes for maintainers and contributors:
+
+- [Commands — English technical reference (P1)](reference/commands.md)
+- [Schemas — English technical reference (P1)](reference/schemas.md)
+- [Documentation authority boundary — English reference (P2; translation not required by default)](reference/documentation-authority-boundary.md)
