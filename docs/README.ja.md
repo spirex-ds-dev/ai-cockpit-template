@@ -18,7 +18,7 @@ capabilityClaims:
 
 ここは AI Cockpit を 5 分で理解するための入口です。実装の詳細を先に読む
 必要はありません。まず「何をするプロジェクトか」「なぜ必要か」「何を制御し、
-どこで人が判断するか」を確認します。
+どこで人が判断するか」という4 つの問いを確認します。
 
 ## プロジェクトを理解する
 
@@ -38,9 +38,11 @@ capabilityClaims:
 | 導入するか決める | [Installation](getting-started/installation.ja.md) | 前提、確認点、作成される証拠を理解する。 |
 | 使い始める | [最初の Calibration](getting-started/first-calibration.ja.md) → [最初の Work Item](getting-started/first-work-item.ja.md) | 信頼できる base から最初の範囲付きタスクを始める。 |
 | Security 境界を確認する | [Injection Boundary](security/injection-boundary.ja.md) | AI Cockpit の責任と外部 security control の責任を区別する。 |
-| 結果を review する | [Quality Gates](operations/quality-gates.ja.md) | Agent の説明を proof とせず、check と証拠を読む。 |
+| 結果を review する | [Quality Gates](operations/quality-gates.ja.md) → [Status の読み方](reference/how-to-read-cockpit-status.ja.md) | Agent の説明を proof とせず、check と証拠を読む。 |
 | stop から回復する | [回復](operations/recovery.ja.md) | 不足証拠を直すまで Work Item を保持し、安全に再試行する。 |
-| 保守・監査する | [Documentation Architecture](reference/documentation-architecture.ja.md) | canonical owner、言語方針、reference の深さを見つける。 |
+| 保守・監査する | [ドキュメント・アーキテクチャ](reference/documentation-architecture.ja.md) | canonical owner、言語方針、reference の深さを見つける。 |
 
-この入口では、技術詳細より先に理解の道筋を示します。P0 topic が `planned` の場合は
-多言語対応完了を意味せず、後続の文書移行作業を示します。
+この入口では、技術詳細より先にプロジェクトを理解する道筋を示します。重要なテーマは
+英語・中国語・日本語の入口を優先して整備します。翻訳が未完了、または移行中のページは
+その状態を明示し、多言語対応がすべて完了したとは案内しません。P0/P1/P2 の正確な方針は
+[ドキュメント・アーキテクチャ](reference/documentation-architecture.ja.md)を参照してください。

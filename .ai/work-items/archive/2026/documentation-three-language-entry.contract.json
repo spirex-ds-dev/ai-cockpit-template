@@ -1,0 +1,239 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-three-language-entry",
+  "mode": "code",
+  "title": "Clarify three-language reader-first documentation entry",
+  "baseCommit": "aae54714b286ab3668ed75a9b8026ee0f198056a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "docs/README.md",
+    "docs/README.zh-CN.md",
+    "docs/README.ja.md",
+    ".ai/work-items/active/documentation-three-language-entry.contract.json",
+    ".ai/work-items/active/documentation-three-language-entry.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-three-language-entry.outcome.json",
+    ".ai/work-items/active/documentation-three-language-entry.outcome.md"
+  ],
+  "outOfScope": [
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "scripts/**",
+    "tests/**",
+    ".github/**",
+    "Makefile"
+  ],
+  "sources": [
+    {
+      "path": "docs/README.md",
+      "reason": "English reader-first entry and current navigation structure."
+    },
+    {
+      "path": "docs/README.zh-CN.md",
+      "reason": "Chinese reader-first entry and the sentence under review."
+    },
+    {
+      "path": "docs/README.ja.md",
+      "reason": "Japanese reader-first entry and semantic sibling alignment."
+    },
+    {
+      "path": "docs/reference/documentation-architecture.md",
+      "reason": "Canonical reader journey, language coverage policy, and P0/P1/P2 rules."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Current documentation ownership and topic status registry."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Current capability status boundary used to prevent overclaiming."
+    }
+  ],
+  "rawUserRequest": "修正三个语言版本，WI全部流程完成为止。入口页面先解决项目理解，再引导到技术参考。P0 topic 仍为 planned 时，不能宣称完整的多语言覆盖。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:three-language-reader-first-documentation-entry",
+    "capturedAt": "2026-08-15T00:00:00+09:00",
+    "digest": "sha256:three-language-reader-first-documentation-entry-request"
+  },
+  "declaredIntent": {
+    "summary": "Align the English, Chinese, and Japanese documentation entry pages around a reader-first understanding journey and an honest multilingual coverage caveat.",
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A non-technical reader can identify what AI Cockpit is, why it exists, and what remains human responsibility from each language entry page.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Each sibling page presents the same reader journey and links to the corresponding explanation pages.",
+      "verificationPlan": "Review all three pages and run the documentation metadata, link, and capability claim checks."
+    },
+    {
+      "scenario": "A reader is not led to believe that planned or missing P0 language routes mean complete multilingual coverage.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The coverage caveat is understandable in all three languages and exact policy remains in the maintainer reference.",
+      "verificationPlan": "Cross-language semantic review against documentation-architecture.md and capability truth data."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_drift"
+    ],
+    "reason": "Reader-facing navigation and wording changes only; no runtime or capability status changes."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The requested change is bounded to three documentation entry pages and their reader journey."
+  },
+  "preReviewWarnings": [
+    "Review that all three languages preserve the same North Star → purpose → design → architecture → capability boundary → human decision journey, while planned coverage is not overstated."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "All three docs/README language siblings lead with project understanding before technical reference navigation.",
+    "The three language siblings explain the same North Star, purpose, design philosophy, architecture/boundary, capability status, and human decision path without introducing unsupported claims.",
+    "The reader-facing coverage note explains that missing or planned P0 routes are migration work and does not use maintainer-only jargon as the primary explanation.",
+    "All links in the three entry pages resolve to existing repository paths, and the documentation metadata/capability checks pass."
+  ],
+  "guidelines": [
+    "Keep the three language siblings semantically aligned; do not translate machine identifiers.",
+    "Do not elevate planned, template-only, adopter-installed, or externally-required capabilities to implemented status."
+  ],
+  "intent": {
+    "problem": "The three language documentation entry pages must help a non-technical reader understand the project before sending them into technical references. The current Chinese page contains a correct governance rule about planned P0 coverage, but it is written as maintainer metadata and the three language journeys are not clearly aligned around the project's North Star and boundaries.",
+    "constraints": [
+      "Change only the three docs/README language siblings plus governed Work Item evidence.",
+      "Preserve the capability truth boundary: planned, template-only, adopter-installed, and externally-required status must not be presented as implemented.",
+      "Do not claim complete multilingual coverage while any required P0 route remains planned or missing.",
+      "Use language-appropriate reader wording; keep exact P0/P1/P2 policy in the maintainer reference."
+    ],
+    "rationale": "A reader-first entry should remove project-understanding friction before exposing technical references, while an explicit but understandable coverage caveat prevents the improved navigation from becoming an overclaim."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 906
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-three-language-entry.json",
+    "baseCommit": "aae54714b286ab3668ed75a9b8026ee0f198056a",
+    "initialScopeDigest": "6bf1ffda3b7f92b426630987bfbcd1a48622f0bd14eae82481162902d21c4b5f",
+    "contractSkeletonDigest": "cec91c459e874b60890d7c013f05cf8f38560aef81c65d83e0f81c7c6088e1bf"
+  }
+}
