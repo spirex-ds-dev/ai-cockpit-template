@@ -7,14 +7,14 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task documentation-p0-comprehension-validation-20260815 generated an evidence-derived outcome with status completed_with_warnings.
+Task documentation-p0-comprehension-study-execution generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 1
+- Detected issues: 2
 - Hard stops: 0
-- Warnings: 1
+- Warnings: 2
 - Resolved: 0
-- Unresolved: 1
+- Unresolved: 2
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,7 +32,8 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Independent participant responses and comprehension scores are not created by this packet WI.
+- Unresolved evidence is explicitly limited: No independent reader receipt has been ingested; comprehension remains unverified by design.
+- Unresolved evidence is explicitly limited: Reader feedback may create a future documentation Work Item after delivery.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
