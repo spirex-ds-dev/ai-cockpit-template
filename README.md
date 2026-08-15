@@ -15,6 +15,8 @@ capabilityClaims:
 
 [中文](README.zh-CN.md) | [日本語](README.ja.md)
 
+Start with the [documentation home](docs/README.md) for the reader-first path.
+
 <!-- readme-section: identity -->
 ## What it is
 
@@ -48,7 +50,7 @@ verified closure. Agent prose alone is not proof.
 - **Yellow:** investigate missing, stale, contradictory, or risky evidence.
 - **Red:** stop; a required control failed or authority is absent.
 
-See [Decision States](docs/concepts/decision-states.md).
+See the [documentation home](docs/README.md) for the decision and recovery path.
 
 <!-- readme-section: quick-start -->
 ## Start in 30 seconds
@@ -66,15 +68,14 @@ prompt-injection detector, identity provider, compliance certificate, or
 replacement for human review. External identities, branch protection,
 production isolation, and release attestations remain external evidence.
 
-Current claims are bounded by the
+Current claims and responsibility boundaries are summarized in
+[Capabilities and boundaries](docs/capabilities.md), with row-level evidence in the
 [Capability Truth Matrix](docs/reference/capability-truth-matrix.md).
 
 <!-- readme-section: documentation -->
 ## Documentation
 
-- Start: [Installation](docs/getting-started/installation.md), [First Calibration](docs/getting-started/first-calibration.md), [First Work Item](docs/getting-started/first-work-item.md)
-- Concepts: [Trust Layer](docs/concepts/trust-layer.md), [Evidence Governance](docs/concepts/evidence-governance.md), [Decision States](docs/concepts/decision-states.md)
-- Operations: [Quality Gates](docs/operations/quality-gates.md), [Work Item Lifecycle](docs/operations/work-item-lifecycle.md), [Recovery](docs/operations/recovery.md)
-- Security: [Threat Model](docs/security/threat-model.md), [Injection Boundary](docs/security/injection-boundary.md), [Supply Chain](docs/security/supply-chain.md)
-- Reference: [Schemas](docs/reference/schemas.md), [Commands](docs/reference/commands.md), [Documentation Architecture](docs/reference/documentation-architecture.md)
-- History: [Plans](docs/archive/plans/README.md), [Reviews](docs/archive/reviews/README.md), [Designs](docs/archive/historical-designs/README.md)
+Use the [documentation home](docs/README.md) to choose a goal: understand the
+project, decide whether to adopt it, start the first governed task, review a
+result, recover from a stop, or maintain the system. It then links to the
+canonical English, Japanese, or Chinese route where that route is available.

@@ -83,6 +83,8 @@ Git publication to the normal human-reviewed lifecycle. Start calibration only
 as a separate Work Item; installation alone is not production-readiness
 evidence.
 
+Continue with [First Calibration](first-calibration.md), then [First Work Item](first-work-item.md).
+
 ## More detail
 
 - [Strict installation and supply-chain verification](installation-security.md)

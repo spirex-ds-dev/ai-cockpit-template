@@ -51,6 +51,21 @@ This page is for documentation maintainers. It defines authoritative ownership,
 language mapping, and current-versus-historical context; adopters normally enter
 through their language README and installation guide.
 
+## Reader-criticality policy
+
+The registry records the project’s core understanding journey as
+North Star/identity → purpose → design philosophy → architecture and trust
+boundaries → decisions and capabilities → installation and first use → quality,
+lifecycle, and recovery. P0 topics are required to have English, Japanese, and
+Simplified Chinese routes once marked active. P1 routes may use an explicitly
+labelled English technical fallback, while P2 reference material is not required
+to be translated by default. Missing routes in a planned topic are migration
+work, not a claim of completion.
+
+Run `make documentation-journey-check` to inspect topic and route policy. This
+gate validates navigation and migration state; it does not rewrite content or
+change the authority boundary.
+
 主要入口は各言語内で完結します。英語は [Installation](../getting-started/installation.md)、中文は[完整中文安装手顺](../getting-started/installation.zh-CN.md)、日本語は[日本語インストール手順](../getting-started/installation.ja.md)です。英語版だけを完全版として扱わず、3 言語の章順序・安全境界・platform 例を一致させます。
 
 ## Authoritative entry points

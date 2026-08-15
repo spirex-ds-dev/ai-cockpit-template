@@ -1,0 +1,161 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-p0-core",
+  "mode": "code",
+  "title": "P0 core understanding: purpose, philosophy, architecture, and boundaries",
+  "baseCommit": "4a6611be34190901089f42d857e4ee9891c480f2",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "查收，执行计划。我授权给你，并写入Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message-2026-08-14-execute-plan",
+    "capturedAt": "2026-08-14T06:30:00Z",
+    "digest": "user-authorized-execution-of-accepted-documentation-plan"
+  },
+  "declaredIntent": {
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"],
+    "requestedOutcome": "Make the project's North Star, purpose, design philosophy, architecture, and capability boundaries understandable to non-technical readers in English, Japanese, and Simplified Chinese."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/documentation-p0-core.contract.json",
+    ".ai/work-items/active/documentation-p0-core.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-p0-core.outcome.json",
+    ".ai/work-items/active/documentation-p0-core.outcome.md",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/README.md",
+    "docs/README.ja.md",
+    "docs/README.zh-CN.md",
+    "docs/purpose.md",
+    "docs/purpose.ja.md",
+    "docs/purpose.zh-CN.md",
+    "docs/philosophy/design-philosophy.md",
+    "docs/philosophy/design-philosophy.ja.md",
+    "docs/philosophy/design-philosophy.zh-CN.md",
+    "docs/architecture.md",
+    "docs/architecture.ja.md",
+    "docs/architecture.zh-CN.md",
+    "docs/capabilities.md",
+    "docs/capabilities.ja.md",
+    "docs/capabilities.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/documentation-authority-registry.json",
+    "tests/test_documentation_p0_core.py"
+  ],
+  "outOfScope": [
+    "Decision states, lifecycle, recovery, installation, calibration, first Work Item, and security overview content; these remain successor P0 Work Items.",
+    "Full translation of P1/P2 technical references or the complete capability matrix reference tables.",
+    "Runtime behavior, product capability implementation, release metadata, version tags, and publication.",
+    "Historical documents under docs/archive/ except generated Work Item archive evidence."
+  ],
+  "sources": [
+    {"path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md", "reason": "Approved P0 writing contract, navigation rules, semantic invariants, and WI-3 boundaries."},
+    {"path": "docs/reference/documentation-authority-registry.json", "reason": "Current topic ownership, localized paths, criticality, and migration status."},
+    {"path": "docs/README.md", "reason": "Merged WI-2 reader journey and planned destinations."},
+    {"path": "docs/trust-layer.md", "reason": "Existing active P0 trust-layer authority and product boundary facts."},
+    {"path": ".ai/glossary.md", "reason": "Repository terminology and architecture boundaries."},
+    {"path": "README.md", "reason": "Current public identity, boundary, and entry-layer wording."}
+  ],
+  "unknowns": [],
+  "intent": {
+    "problem": "The project's most important understanding—North Star, purpose, philosophy, architecture, and boundaries—is either missing, mislabeled, or silently routed through mixed-language pages. Non-technical readers need a trustworthy three-language explanation before technical reference.",
+    "constraints": [
+      "Complete only the core understanding P0 topics assigned to WI-3; decisions, lifecycle, adoption, recovery, and security closure remain successor Work Items.",
+      "Preserve existing Trust Layer, installation, quality-gate, capability evidence, and authority-boundary facts; do not upgrade claims without evidence.",
+      "Japanese and Simplified Chinese must be semantically equivalent and understandable without requiring full translation of P1/P2 depth.",
+      "Do not change runtime behavior, release metadata, version tags, or historical documentation."
+    ],
+    "rationale": "The localized homes now expose the journey; completing its core conceptual pages removes the project-understanding bottleneck before readers encounter adoption and operational detail."
+  },
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["documentation_semantic_drift", "localization_semantic_mismatch"],
+    "reason": "The Work Item changes authoritative public explanations in three languages; incorrect boundary or North Star wording could mislead adoption decisions.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["P0 canonical documentation, localized siblings, registry migration state, and structural tests require full repository verification."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorization and the approved WI-3 design provide sufficient scope, sources, acceptance, and verification evidence."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Record checkpoints before implementation and finish to detect documentation-scope or evidence drift."
+  },
+  "acceptance": [
+    "Create complete same-topic English, Japanese, and Simplified Chinese P0 pages for project purpose, design philosophy, project architecture, and capability boundaries; each begins with the P0 writing contract and progressive disclosure.",
+    "Make the North Star and project identity explicit in all three root/localized journeys, with one canonical owner and no contradictory mission or product-boundary wording.",
+    "Ensure each localized core page has one to three same-language next steps, is reachable from its matching documentation home within two links, and contains no silent English fallback on the core P0 route.",
+    "Update the authority registry so migrated topics have canonical localized paths and active status only when all three siblings and their tests are present; preserve existing active topics and planned successor topics.",
+    "Add positive and negative structural tests for P0 writing-contract sections, locale parity, same-language navigation, registry ownership, and boundary invariants; focused documentation checks pass."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A non-technical reader follows the English, Japanese, or Simplified Chinese understanding route from identity to architecture.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The reader can explain the problem, North Star, evidence flow, product boundary, and safe next step without relying on implementation knowledge.",
+      "verificationPlan": "Run localized P0 structure and link-graph tests, then record a bounded comprehension review checklist in the Summary."
+    },
+    {
+      "scenario": "A reader decides whether AI Cockpit controls a capability or whether responsibility remains external.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The reader distinguishes Repository Governance Layer responsibilities from Agent Runtime, Security Sandbox, identity, enterprise, and delegated evidence responsibilities.",
+      "verificationPlan": "Run boundary-invariant tests across all localized siblings and inspect the explicit non-capability sections during review."
+    }
+  ],
+  "guidelines": [
+    "Use the P0 writing contract: purpose, audience, outcome, scenario, explanation, action/decision, stop conditions, next steps, then technical depth.",
+    "Keep North Star, evidence-over-self-declaration, human decision authority, and Repository Governance Layer boundaries semantically equivalent across locales.",
+    "Do not claim full multilingual coverage for P0 topics that remain planned outside this Work Item.",
+    "Use one canonical owner per topic and keep directory/reference pages as explicit compatibility or specialist routes.",
+    "Do not modify runtime behavior, release metadata, or historical documentation."
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted governance paths are required."},
+  "rollbackNote": "Revert this Work Item diff and restore the previous canonical documentation paths and registry status.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 895}},
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-p0-core.json",
+    "baseCommit": "4a6611be34190901089f42d857e4ee9891c480f2",
+    "initialScopeDigest": "e1505b541a4a22cc6cc38eed7b5acefa56135d14732ba5b3c2dd63367b1e7a1b",
+    "contractSkeletonDigest": "d367bcd2c95d2661d85d03c84bf5974e30118deaff396f45728d0470bc85fe6a"
+  }
+}

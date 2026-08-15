@@ -68,6 +68,8 @@ Profile 选择只记录安装意图。安装器不会激活 Lite、Standard 或 
 审查生成的 Work Item 和安装分支。Git 发布仍走正常的人类审查生命周期。校准必须作为
 独立 Work Item 开始；安装本身不是生产就绪证据。
 
+继续阅读[首次校准](first-calibration.zh-CN.md)，然后进入[首个 Work Item](first-work-item.zh-CN.md)。
+
 ## 更多信息
 
 - [严格安装与供应链验证](installation-security.zh-CN.md)

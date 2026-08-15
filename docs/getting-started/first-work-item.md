@@ -46,7 +46,13 @@ Before changing project files, replace the starter placeholders and confirm this
 - `sources`, `acceptance`, and `verification` describe the evidence, done conditions, and registered checks.
 - `unknowns` is empty, `notCodable` is `false`, and `executionDecision.status` is `continue`.
 - `agentCapability.canImplement` and `agentCapability.canVerify` are `true`; human decisions remain explicit.
-- Run `make ai-checkpoint STAGE=before_edit` before implementation.
+- Run the canonical pre-implementation checkpoint with the Contract and Summary paths:
+
+  ```sh
+  make ai-prepare-implementation \
+    CONTRACT=.ai/work-items/active/<task>.contract.json \
+    SUMMARY=.ai/work-items/active/<task>.summary.json
+  ```
 
 When the task is long-running, record a `before_finish` checkpoint in the Summary before running the finish flow.
 
@@ -59,12 +65,12 @@ Update the Summary before finishing:
 Run the finish flow:
 
 ```sh
-make ai-finish TASK=example_change
+make ai-finish TASK=example_change ARCHIVE=true
 ```
 
-`ai-finish` runs the registered checks, updates the Summary with execution evidence, regenerates status, and archives the Contract/Summary pair. This is not lifecycle closure: after a successful finish, push the Work Item branch, open and merge its PR, then run `make ai-close-work-item TASK=<task>`. A successful walkthrough ends only after closure verifies archived evidence and merged PR identity, synchronizes the base, deletes the owned local and remote branches, and confirms a clean repository. Do not delete the corresponding remote or local work branch directly. Installation and upgrade tasks follow the same rule, but their source is a published template release tag recorded in the adopter project's Work Item.
+`ARCHIVE=true` is required for this command to archive the Contract/Summary pair. After a successful finish, commit the archive bundle, push the Work Item branch, open and merge its PR, then run `make ai-close-work-item TASK=<task>`. A successful walkthrough ends only after closure verifies archived evidence and merged PR identity, synchronizes the base, deletes the owned local and remote branches, and confirms a clean repository. Do not delete the corresponding remote or local work branch directly. Installation and upgrade tasks follow the same rule, but their source is a published template release tag recorded in the adopter project's Work Item.
 
-The required order matters: push the Work Item branch and merge the PR first, then run closure while that branch is still identifiable. Do not merge the branch into local `main` before the PR, and do not enable an automatic branch-delete option that removes it before closure. `ai-close-work-item` performs the base synchronization and branch cleanup as one verified lifecycle step.
+The required order is: finish and archive, commit, push, open and merge the PR, then close the Work Item. Do not merge the branch into local `main` before the PR, and do not enable an automatic branch-delete option that removes it before closure. `ai-close-work-item` performs the base synchronization and branch cleanup as one verified lifecycle step.
 
 Complete the lifecycle with the merged PR still identifiable from the Work Item branch:
 

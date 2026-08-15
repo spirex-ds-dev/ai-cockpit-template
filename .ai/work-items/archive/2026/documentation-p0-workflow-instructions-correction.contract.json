@@ -1,0 +1,269 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-p0-workflow-instructions-correction",
+  "mode": "code",
+  "title": "Correct P0 workflow instructions",
+  "baseCommit": "729bc627ca2264709c8110f8d7d85628d0b0d606",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "再开：按验收发现的问题重新启动整改，并继续遵守每个 WI 完整闭环流程。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-resumed-documentation-acceptance-remediation",
+    "capturedAt": "2026-08-15T00:00:00+09:00",
+    "digest": "user-resumed-remediation-workflow-instructions"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "capabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ],
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ],
+    "requestedOutcome": "Correct the English, Japanese, and Simplified Chinese first-Work-Item instructions so readers use the canonical before-edit and archive lifecycle commands."
+  },
+  "scope": [
+    ".ai/work-items/active/documentation-p0-workflow-instructions-correction.contract.json",
+    ".ai/work-items/active/documentation-p0-workflow-instructions-correction.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-p0-workflow-instructions-correction.outcome.json",
+    ".ai/work-items/active/documentation-p0-workflow-instructions-correction.outcome.md",
+    "docs/getting-started/first-work-item.md",
+    "docs/getting-started/first-work-item.ja.md",
+    "docs/getting-started/first-work-item.zh-CN.md",
+    "tests/test_documentation_p0_workflow_instructions.py",
+    "docs/superpowers/plans/2026-08-15-documentation-p0-workflow-instructions-correction.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Runtime behavior, release metadata, and publication.",
+    "Japanese/Chinese prose modernization outside the first Work Item workflow instructions.",
+    "Independent human comprehension study; reserved for a subsequent WI."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Canonical before-edit and lifecycle workflow rules."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Actual ai-prepare-implementation and ai-finish command behavior."
+    },
+    {
+      "path": "docs/getting-started/first-work-item.md",
+      "reason": "Current English first Work Item instructions under correction."
+    },
+    {
+      "path": "docs/getting-started/first-work-item.ja.md",
+      "reason": "Current Japanese first Work Item instructions under correction."
+    },
+    {
+      "path": "docs/getting-started/first-work-item.zh-CN.md",
+      "reason": "Current Simplified Chinese first Work Item instructions under correction."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md",
+      "reason": "Acceptance requirement for a complete safe journey."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Required registry for the implementation plan context."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerated bound Japanese evidence after changing the Japanese P0 guide."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Rendered Japanese capability evidence after changing the Japanese P0 guide."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerated pre-release documentation alignment evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Rendered pre-release documentation alignment evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_misexecution"
+    ],
+    "reason": "Incorrect commands can cause a reader to skip the immutable before-edit checkpoint or leave evidence unarchived before PR creation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P0 lifecycle instructions control evidence and human review boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User resumed remediation and authorized continuing the documented WI lifecycle."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record immutable implementation and finish checkpoints."
+  },
+  "acceptance": [
+    "All three first Work Item pages instruct readers to run make ai-prepare-implementation with explicit CONTRACT and SUMMARY before changing files.",
+    "All three first Work Item pages show the canonical finish/archive/push/PR/merge/close order and explicitly include ARCHIVE=true where required by Makefile behavior.",
+    "Focused regression tests fail on the old instructions and pass on the corrected instructions, including command flags and ordering.",
+    "Run all declared documentation, AI governance, and strict quality checks; record verification and residual risks in the Summary."
+  ],
+  "guidelines": [
+    "Use the repository Makefile and AGENTS.md as the authority for command names, required arguments, and lifecycle order.",
+    "Keep the change limited to the three first Work Item pages, focused regression tests, and governed evidence.",
+    "Do not claim comprehension or language editorial quality from this WI.",
+    "Preserve human confirmation and archive-before-PR boundaries."
+  ],
+  "intent": {
+    "problem": "The prior acceptance found that all three first Work Item pages tell readers to use a generic before_edit checkpoint, while the repository requires ai-prepare-implementation, and the English page omits ARCHIVE=true while claiming ai-finish archives evidence.",
+    "constraints": [
+      "Correct only the actionable workflow instructions in the three localized pages.",
+      "Bind regression tests to actual Makefile and AGENTS.md behavior.",
+      "Do not broaden this WI into general Japanese/Chinese rewriting or human comprehension validation."
+    ],
+    "rationale": "A reader must be able to execute the documented first task without silently skipping governance evidence or misordering archive, PR, merge, and closure."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A new adopter follows the first Work Item page from ai-start through closure.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The reader sees the exact before-edit command, archive command, PR order, and close command without inferring missing flags.",
+      "verificationPlan": "Focused test asserts all three localized pages contain canonical commands and order markers."
+    },
+    {
+      "scenario": "A reader checks whether ai-finish archives evidence before creating a PR.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The page explicitly shows ARCHIVE=true and distinguishes finish/archive from lifecycle closure.",
+      "verificationPlan": "Focused test binds archive flag and explanatory text to Makefile behavior."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted governance paths are changed."
+  },
+  "rollbackNote": "Revert this documentation/test-only Work Item diff.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 899
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-p0-workflow-instructions-correction.json",
+    "baseCommit": "729bc627ca2264709c8110f8d7d85628d0b0d606",
+    "initialScopeDigest": "9242145e8b738ab3bcb4887f1673f027363a1eac61847fc245d3ff5faa4bd898",
+    "contractSkeletonDigest": "00028dbfe5389fc424ad48456df7391364d505bbea1165058ee5a1225e03f57e"
+  }
+}

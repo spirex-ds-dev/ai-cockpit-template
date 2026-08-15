@@ -11,9 +11,13 @@ lastVerifiedBy: capability-truth-matrix
 
 # First Calibration
 
+<!-- capability-claim: project_calibration_profile_proposal -->
+
 Calibration is a separate governed Work Item after installation. It records the
 project's real source, test, generated, protected, quality, ownership, branch,
 and unknown boundaries; it does not infer them from a stack label.
+
+The template provides this proposal capability; it does not prove adopter installation.
 
 1. Complete and close the installation/adoption Work Item.
 2. Start `configure_ai_cockpit` from the synchronized remote default branch.
@@ -25,3 +29,4 @@ and unknown boundaries; it does not infer them from a stack label.
 Use the detailed [Calibration Guide](calibration.md) for evidence fields,
 recovery, and the resumable session model. A generated proposal is not approval.
 
+Continue with [First Work Item](first-work-item.md) after the Project Profile is reviewed.

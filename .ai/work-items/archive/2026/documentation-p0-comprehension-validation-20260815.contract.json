@@ -1,0 +1,67 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-p0-comprehension-validation-20260815",
+  "mode": "code",
+  "title": "Prepare independent P0 comprehension validation",
+  "baseCommit": "73a8199c9dc304d401249b0af96ef1965d8dd726",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "再开：继续整改文档，让非技术人员能看懂；每个 WI 完成完整闭环后再进入下一个。",
+  "rawRequestSource": {"type": "human", "reference": "user-resumed-documentation-comprehension-validation", "capturedAt": "2026-08-15T03:00:00+09:00", "digest": "user-resumed-comprehension-validation"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "document", "authorityRequired": false},
+  "declaredIntent": {"capabilities": ["ai_governance", "documentation", "test_automation"], "requestedCapabilities": ["ai_governance", "documentation", "test_automation"], "requestedOutcome": "Create a language-neutral, evidence-bound reader study packet for the English, Simplified Chinese, and Japanese P0 documentation paths without fabricating participant evidence."},
+  "scope": [
+    ".ai/work-items/active/documentation-p0-comprehension-validation-20260815.contract.json",
+    ".ai/work-items/active/documentation-p0-comprehension-validation-20260815.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-p0-comprehension-validation-20260815.outcome.json",
+    ".ai/work-items/active/documentation-p0-comprehension-validation-20260815.outcome.md",
+    "docs/reference/comprehension-validation-protocol.md",
+    "docs/reference/comprehension-validation-protocol.zh-CN.md",
+    "docs/reference/comprehension-validation-protocol.ja.md",
+    "docs/reference/comprehension-validation-response.schema.json",
+    "tests/test_documentation_comprehension_validation.py",
+    "docs/superpowers/plans/2026-08-15-documentation-p0-comprehension-validation.md",
+    "docs/reference/documentation-context-registry.json"
+  ],
+  "outOfScope": ["Claiming participant comprehension without raw answers and consented provenance.", "Recruiting, contacting, or identifying human participants from this repository.", "Changing product behavior or rewriting P0 documentation.", "Treating deterministic tests or Agent self-review as independent reader evidence."],
+  "sources": [
+    {"path": "docs/superpowers/specs/2026-08-14-multilingual-documentation-understanding-journey-design.md", "reason": "Defines reader-first documentation intent and evidence limitations."},
+    {"path": "docs/README.md", "reason": "English canonical P0 reader route under test."},
+    {"path": "docs/README.zh-CN.md", "reason": "Simplified Chinese canonical P0 reader route under test."},
+    {"path": "docs/README.ja.md", "reason": "Japanese canonical P0 reader route under test."},
+    {"path": "docs/reference/pre-release-documentation-alignment.md", "reason": "Current route and language ownership evidence."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["comprehension_misinterpretation", "evidence_integrity"], "reason": "A study packet can overclaim understanding if it does not require independent readers, raw answers, provenance, and explicit scoring limits.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["Reader comprehension evidence is a high-sensitivity documentation claim."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "Prepare the packet and evidence boundary; external participant execution remains a separately recorded action."},
+  "preReviewWarnings": [],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record immutable checkpoints before editing and finishing."},
+  "acceptance": [
+    "The protocol defines the same six comprehension questions, tasks, language routes, participant eligibility, consent/anonymization rules, and scoring rubric for English, Chinese, and Japanese readers.",
+    "The response schema requires raw answers, route/language, participant pseudonym, document revision, timestamp, confidence, and reviewer notes while forbidding identifying data and fabricated answers.",
+    "Focused tests verify question parity, route parity, schema safeguards, and explicit non-overclaim language; no participant result is created by this WI.",
+    "The packet and plan are registered as governed documentation context, and all AI/documentation checks pass without claiming independent comprehension."
+  ],
+  "guidelines": [
+    "Require independent nontechnical readers; Agent self-review is not participant evidence.",
+    "Preserve raw answers and provenance while removing personal identifying information.",
+    "Do not report comprehension success without the required participant sample and complete answer set.",
+    "Keep the packet language-neutral and bound to the current P0 route revision."
+  ],
+  "intent": {"problem": "The prior acceptance used a bounded desk review, which cannot prove that nontechnical readers understand the project's North Star, boundaries, and first-use path.", "constraints": ["Do not fabricate participants, answers, or comprehension rates.", "Keep English, Chinese, and Japanese questions semantically identical.", "Separate protocol readiness from later participant execution and outcome evidence."], "rationale": "The project's stated purpose is to remove the project-understanding bottleneck; a reproducible reader study is the only stronger evidence than deterministic document checks."},
+  "scenarioCoverage": [
+    {"scenario": "A study coordinator uses the packet for all three P0 language routes.", "required": true, "status": "unverified", "evidence": [], "expected": "The six questions, tasks, eligibility, and scoring rules are equivalent across languages.", "verificationPlan": "Focused parity tests compare protocol sections and required fields."},
+    {"scenario": "A reviewer receives a response record.", "required": true, "status": "unverified", "evidence": [], "expected": "The record is anonymized, revision-bound, raw-answer preserving, and cannot be mistaken for a fabricated success claim.", "verificationPlan": "JSON schema and negative tests reject identifying fields, missing provenance, and success without answers."}
+  ],
+  "verification": [{"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted governance paths are changed."},
+  "rollbackNote": "Revert this documentation protocol and test-only Work Item diff.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 902}},
+  "startReceipt": {"path": ".ai/work-items/starts/documentation-p0-comprehension-validation-20260815.json", "baseCommit": "73a8199c9dc304d401249b0af96ef1965d8dd726", "initialScopeDigest": "289c213fbbd76cb7db42f9a1207d2d43b457e78a47ac9edbb252bca2143f1178", "contractSkeletonDigest": "0474888f58c0dbb5828dcf34ddc66e3e0c0db01a47f150311facb3ccc0b66a07"}
+}

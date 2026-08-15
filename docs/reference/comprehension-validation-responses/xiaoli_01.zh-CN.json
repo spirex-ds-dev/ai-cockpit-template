@@ -1,0 +1,16 @@
+{
+  "participantPseudonym": "xiaoli_01",
+  "language": "zh-CN",
+  "documentRevision": "a3cf1deda0d9577817b2ffeb8078068f77f48340",
+  "answeredAt": "2026-08-15T19:02:00+09:00",
+  "consentConfirmed": true,
+  "identifyingData": null,
+  "answers": [
+    {"questionId": "Q1", "rawAnswer": "它解决的不是‘AI 不会写代码’，而是怎么知道 AI 做的事情真的值得相信。AI Agent 可能改超范围、漏掉测试、跳过检查，或说已经完成却没有足够证据。AI Cockpit 把原本要做什么、实际改了什么、检查过什么、还有什么不知道、哪些地方需要人决定留下来。简单说，它解决‘AI 说自己做对了，但人无法确认’的问题，要求看证据而不是相信 AI 的解释。", "confidence": "high", "score": "correct", "reviewerNote": "覆盖了问题定义和证据优先原则。"},
+    {"questionId": "Q2", "rawAnswer": "North Star 是建立经过校准的人与 AI 之间的信任，而不是盲目信任 AI。目标是让人清楚哪些已被证明、哪些还不知道、AI 可以继续到哪里、哪里必须问人、什么情况必须停止。实际工作中，以检查结果、证据和缺口说明可以继续、需要调查还是必须停止；不是追求最高自动化率，而是在需要人介入时一定能介入。", "confidence": "high", "score": "correct", "reviewerNote": "正确解释了 calibrated trust 的实际含义。"},
+    {"questionId": "Q3", "rawAnswer": "AI Cockpit 管代码仓库内部的工作规则和证据：Work Item 的范围、完成条件、检查、实际改动、未知事项、当前状态、人的决定和保存的证据。但它不能证明 Agent 本身安全、真实身份、隔离环境、GitHub Branch Protection、外部 CI、系统无漏洞、企业合规或产品安全上线。这些仍由 GitHub、CI、安全工具、签名和身份系统、制度与最终的人负责。", "confidence": "high", "score": "correct", "reviewerNote": "正确说明了控制范围和外部责任。"},
+    {"questionId": "Q4", "rawAnswer": "Green：需要的证据存在且当前有效，支持下一步，但不自动批准 Merge 或 Release。Yellow：证据缺失、过期、矛盾、有未知问题或残余风险，应先调查。Red：必需检查失败、超出范围、没有权限、关键证据不存在或出现治理绕过，应停止并解决阻塞条件。Unknown：无法可靠判断现有证据时不能猜，需要补充来源或由人说明。", "confidence": "high", "score": "correct", "reviewerNote": "完整区分了四种决定状态。"},
+    {"questionId": "Q5", "rawAnswer": "不会一安装就让 AI 改代码。先完成安装和项目校准，从真实的远程默认分支建立可信起点。第一次正式任务先同步最新默认分支、记录起始 Commit，再创建独立 Work Item 和 Branch；执行 ai-start 和 Preflight，Preflight 没允许前不改项目文件。Contract 记录范围、非范围、完成条件、检查方法和未知事项。第一步不是写代码，而是确定从哪里出发、这次允许做什么。", "confidence": "high", "score": "correct", "reviewerNote": "描述了校准、可信基线、Contract 和 Preflight。"},
+    {"questionId": "Q6", "rawAnswer": "必需检查失败或证据不存在时，停下来并说清楚缺什么；保留 Work Item、Contract、Summary、Branch 和失败结果，只修复明确问题、补真正缺少的证据、重新运行检查，必要时让人重新判断。不会因为 AI 说应该没问题就继续，不会绕过 Gate，不会用别的 Work Item 的结果冒充当前结果，不会把本地检查冒充 Hosted CI，也不会编造证据。人的 Decision 不能把未验证的 Check 变成 Pass。", "confidence": "high", "score": "correct", "reviewerNote": "正确说明恢复边界和不可做事项。"}
+  ]
+}

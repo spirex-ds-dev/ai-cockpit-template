@@ -2,39 +2,32 @@
 author: Ray
 title: "最初の Work Item"
 description: AI Cockpit 導入後に最初の管理対象タスクを実行する日本語ガイド。
+audience:
+  - adopter
+  - contributor
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 capabilityClaims:
   - repository_governance_layer
-keywords:
-  - ai-cockpit
-  - work-item
-  - verification
 ---
 
 # 最初の Work Item
 
-導入と設定の検証が成功したら、最初の管理対象タスクを開始します。完全な英語手順は [First Work Item](first-work-item.md) を参照してください。
+導入と Calibration が検証済みになったら、最初の管理対象タスクを開始します。各タスクは一つの Work Item、専用 branch、PR で構成し、対象プロジェクトで発見した remote default branch と base commit を Contract に記録します。
 
-## 開始
+1. `make ai-start TASK=example_change TITLE="Example change" MODE=code` を実行する。
+2. Contract の scope、outOfScope、sources、acceptance、verification を埋め、Unknown を解消する。
+3. Preflight が `needs_human_confirmation` または `not_ready` なら停止し、人へ報告する。
+4. 実装前に、Contract と Summary を指定した正式な checkpoint を実行する。
 
-```sh
-make ai-start TASK=example_change TITLE="Example change" MODE=code
-```
+   ```sh
+   make ai-prepare-implementation \
+     CONTRACT=.ai/work-items/active/<task>.contract.json \
+     SUMMARY=.ai/work-items/active/<task>.summary.json
+   ```
 
-生成された Contract を編集し、`scope`、`outOfScope`、`sources`、`acceptance`、`verification` を実際のタスクに合わせます。`unknowns` を解消し、`agentCapability` と `executionDecision.status` を確認してから、次を実行します。
+5. `make ai-finish TASK=example_change ARCHIVE=true` を実行して証拠を archive し、commit、push、PR、merge の順に進める。
+6. merge 後に `make ai-close-work-item TASK=example_change` を実行し、base 同期と branch cleanup を確認する。
 
-```sh
-make ai-checkpoint CONTRACT=.ai/work-items/active/example_change.contract.json STAGE=before_edit
-```
-
-Preflight が `needs_human_confirmation` または `not_ready` を返した場合は、実装を止めてレビュー結果を人へ報告します。
-
-## 完了
-
-変更後は Summary に変更ファイル、検証結果、残存リスク、レビュー注視点を記録します。
-
-```sh
-make ai-checkpoint CONTRACT=.ai/work-items/active/example_change.contract.json SUMMARY=.ai/work-items/active/example_change.summary.json STAGE=before_finish
-make ai-finish TASK=example_change
-```
-
-`ai-finish` は Contract の検証、Summary 更新、Cockpit Status 生成、アーカイブを行います。PR が merge されるまで作業ブランチを削除せず、merge 後に承認を得て `make ai-close-work-item TASK=example_change` を実行してください。
+Agent の説明は証拠ではありません。次は[Quality Gates](../operations/quality-gates.ja.md)を参照してください。
