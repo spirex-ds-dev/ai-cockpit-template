@@ -118,6 +118,23 @@ def test_journey_cli_accepts_valid_registry(tmp_path: Path) -> None:
     assert "documentation journey check passed" in result.stdout
 
 
+def test_entry_pages_state_current_p1_p2_fallback_boundary() -> None:
+    root = Path(__file__).resolve().parents[1]
+    english = (root / "docs/README.md").read_text(encoding="utf-8")
+    chinese = (root / "docs/README.zh-CN.md").read_text(encoding="utf-8")
+    japanese = (root / "docs/README.ja.md").read_text(encoding="utf-8")
+
+    assert "active P1 technical references for commands" in english
+    assert "active P2 documentation" in english
+    assert "not evidence that all documentation has complete multilingual" in english
+    assert "P1 的 commands 和 schemas 技术参考目前只有英文" in chinese
+    assert "P2 的文档权威边界参考默认不要求翻译" in chinese
+    assert "不能据此宣称全部文档已经完成多语言覆盖" in chinese
+    assert "P1 の" in japanese and "schemas" in japanese
+    assert "P2 の" in japanese and "既定では翻訳対象外" in japanese
+    assert "すべてのドキュメントの多言語対応が完了したことを意味しません" in japanese
+
+
 def test_topic_index_ignores_malformed_entries() -> None:
     assert topic_index({"topics": [None, {"topic": "valid"}, {"topic": 3}]}) == {
         "valid": {"topic": "valid"}
