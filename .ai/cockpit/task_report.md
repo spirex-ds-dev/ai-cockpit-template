@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task documentation-three-language-entry generated an evidence-derived outcome with status completed_with_warnings.
+Task documentation-p1-p2-fallback-policy generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Some P1/P2 technical reference pages remain English-only; the entry pages label the fallback and defer exact priority policy to documentation architecture.
+- Unresolved evidence is explicitly limited: P1 technical content remains English-only by policy; P2 translation is not required by default.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.

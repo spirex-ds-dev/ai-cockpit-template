@@ -11,6 +11,7 @@ from typing import Any
 CRITICALITIES = {"P0", "P1", "P2"}
 LOCALES = {"en", "ja", "zh-CN"}
 STATUSES = {"planned", "active"}
+LOCALIZATION_POLICIES = {"english-fallback-labelled", "not-required-by-default"}
 
 
 def topic_index(registry: Mapping[str, Any]) -> dict[str, Mapping[str, Any]]:
@@ -99,6 +100,18 @@ def validate_topics(registry: Mapping[str, Any], root: Path) -> list[str]:
         status = raw.get("enforcementStatus")
         if status not in STATUSES:
             errors.append(f"{prefix}: invalid enforcementStatus")
+        policy = raw.get("localizationPolicy")
+        if criticality in {"P1", "P2"} and policy not in LOCALIZATION_POLICIES:
+            errors.append(f"{prefix}: localizationPolicy is required for {criticality}")
+        if criticality == "P1" and policy == "english-fallback-labelled":
+            fallback_label = raw.get("fallbackLabel")
+            missing_locales = any(locale not in paths for locale in ("ja", "zh-CN"))
+            if missing_locales and (
+                not isinstance(fallback_label, str) or not fallback_label.strip()
+            ):
+                errors.append(f"{prefix}: P1 English fallback requires fallbackLabel")
+        if criticality == "P2" and policy == "english-fallback-labelled":
+            errors.append(f"{prefix}: P2 cannot use the P1 English fallback policy")
         if raw.get("previousEnforcementStatus") == "active" and status == "planned":
             errors.append(f"{prefix}: active topics cannot be downgraded to planned")
         if status == "active":
