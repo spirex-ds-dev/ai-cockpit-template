@@ -1,0 +1,227 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-current-revision-reader-validation",
+  "mode": "code",
+  "title": "Validate current-revision nontechnical reader comprehension evidence",
+  "baseCommit": "1c12d3065312f11d4416cb8bd890630e06ca32c3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-current-revision-reader-validation.contract.json",
+    ".ai/work-items/active/documentation-current-revision-reader-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-current-revision-reader-validation.outcome.json",
+    ".ai/work-items/active/documentation-current-revision-reader-validation.outcome.md"
+    ,"docs/reference/comprehension-validation-results.json"
+    ,"docs/reference/comprehension-validation-results.md"
+    ,"docs/reference/comprehension-validation-responses/**"
+    ,"tests/test_documentation_comprehension_results.py"
+    ,".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json"
+    ,".ai/work-items/active/documentation-current-revision-reader-validation.events.jsonl"
+    ,".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json"
+  ],
+  "outOfScope": [
+    "docs/README.md",
+    "docs/README.zh-CN.md",
+    "docs/README.ja.md",
+    "docs/trust-layer*",
+    "docs/architecture*",
+    "docs/philosophy/**",
+    "runtime/**",
+    "release/**"
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/comprehension-validation-results.json",
+      "reason": "Current aggregate result and historical revision boundary."
+    },
+    {
+      "path": "docs/reference/comprehension-validation-results.md",
+      "reason": "Human-readable claim and limitation wording."
+    },
+    {
+      "path": "docs/reference/comprehension-validation-responses/**",
+      "reason": "Read-only participant receipts supplied by the user; raw answers and timestamps must remain unchanged."
+    },
+    {
+      "path": "docs/reference/comprehension-validation-protocol.md",
+      "reason": "Required six-question protocol and evidence rules."
+    },
+    {
+      "path": "tests/test_documentation_comprehension_results.py",
+      "reason": "Fail-closed regression coverage for revision-bound evidence."
+    },
+    {
+      "path": "docs/README.md",
+      "reason": "Read-only current English entry page used to calculate the current tree binding."
+    },
+    {
+      "path": "docs/README.zh-CN.md",
+      "reason": "Read-only current Chinese entry page used to calculate the current tree binding."
+    },
+    {
+      "path": "docs/README.ja.md",
+      "reason": "Read-only current Japanese entry page used to calculate the current tree binding."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_truth",
+      "evidence_binding"
+    ],
+    "reason": "This Work Item only reconciles the current result boundary and prepares a fresh-reader handoff; it must not fabricate or retag participant evidence."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The current evidence boundary can be made explicit locally; fresh current-revision reader receipts remain a separate external handoff and are not inferred."
+  },
+  "preReviewWarnings": [
+    "Never retag a historical receipt to current main or claim current comprehension without a fresh receipt bound to the current revision."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The aggregate JSON and readable report identify the exact current document revision/tree separately from the historical reader-evidence revision.",
+    "The historical claim remains revision-bound; no current-main comprehension claim is made without fresh receipts.",
+    "All three raw participant receipts retain their exact answers, pseudonyms, consent fields, and 2026-08-15T19:02:00+09:00 timestamps.",
+    "Focused tests fail closed on revision drift, stale authorizedClaim values, missing routes, and accidental current-main overclaiming.",
+    "A versioned external handoff records the exact current revision/tree and asks an authorized independent reader to reread all six P0 questions in each required locale."
+  ],
+  "guidelines": [
+    "Treat participant evidence as revision-bound; unchanged answers do not prove a new reading session.",
+    "Preserve raw answers, consent fields, pseudonyms, and timestamps exactly.",
+    "Do not use Agent-generated or author-generated answers as participant evidence.",
+    "Keep historical limitations explicit and do not upgrade evidence to release, safety, security, or enterprise claims."
+  ],
+  "intent": {
+    "problem": "The repository now contains reader feedback, but the receipts are bound to an earlier document revision. The current main revision has changed since that reading, so treating the old answers as current-main validation would be an evidence-binding error.",
+    "constraints": [
+      "Do not alter raw participant answer content or timestamps.",
+      "Do not impersonate an independent reader or synthesize a fresh receipt.",
+      "Do not modify the three-language P0 entry pages in this Work Item.",
+      "Do not claim publication or release readiness."
+    ],
+    "rationale": "Separate the historical verified claim from the current revision, make the gap visible, and create a precise external handoff so the next reader session can be ingested without ambiguity."
+  },
+  "rawUserRequest": "再开：继续文档验收工作，使用已提供的英、中、日第三方读者反馈，但按严格 revision-bound 规则处理；完成当前 WI 后再进入下一步，不把历史反馈冒充为当前 main 的新验证。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:documentation-reopen-after-pr-842", "capturedAt": "2026-08-16T08:00:00+09:00", "digest": "sha256:documentation-reopen-after-pr-842"},
+  "declaredIntent": {"summary": "Make the current reader-evidence boundary explicit and prepare a fresh, identity-bound reread handoff.", "requestedCapabilities": ["documentation", "ai_governance", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "document", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "A reviewer can distinguish the historical reader revision from the current main revision/tree.", "required": true, "status": "unverified", "evidence": [], "expected": "result and tests expose both identities without conflation", "verificationPlan": "Focused JSON/report tests and git tree evidence."},
+    {"scenario": "A historical claim cannot be silently upgraded to current-main comprehension.", "required": true, "status": "unverified", "evidence": [], "expected": "claim remains historical and current status is unverified", "verificationPlan": "Negative regression assertions."},
+    {"scenario": "A future independent reread can be ingested against the exact current revision.", "required": true, "status": "unverified", "evidence": [], "expected": "handoff binds task, branch, head, tree, contract/summary digests and receipt kind", "verificationPlan": "External handoff validator and receipt schema."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 911
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-current-revision-reader-validation.json",
+    "baseCommit": "1c12d3065312f11d4416cb8bd890630e06ca32c3",
+    "initialScopeDigest": "91e85a10f25fd97383f990c721155f489a1c3003f6c25d80c6d6248ee6338dae",
+    "contractSkeletonDigest": "2ea722df464fff77b9153c98be22ff68238ff48859a092131fe19e7f0d4d6b57"
+  }
+}
