@@ -43,4 +43,6 @@ capabilityClaims:
 
 这个入口先帮助你理解项目，再引导到安装、使用和技术参考。重要主题会优先提供中文、
 日文和英文入口；尚未完成翻译或仍在迁移的页面会明确标注，不能据此认为全部文档已经
-完成多语言覆盖。具体的 P0/P1/P2 规则见[文档架构（英文参考）](reference/documentation-architecture.md)。
+完成多语言覆盖。当前边界是：P1 的 commands 和 schemas 技术参考目前只有英文
+canonical 路径，P2 的文档权威边界参考默认不要求翻译。这些是明确的语言覆盖政策，
+不能据此宣称全部文档已经完成多语言覆盖。具体的 P0/P1/P2 规则见[文档架构（英文参考）](reference/documentation-architecture.md)。

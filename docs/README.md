@@ -54,6 +54,10 @@ The home keeps the guided path short: understand the project first, then move to
 technical reference. Important topics are intended to have Chinese and Japanese
 routes as well as English. A route that is missing or still being migrated is
 labelled as such; it must not be read as evidence that multilingual coverage is
-complete. See the [documentation architecture](reference/documentation-architecture.md)
+complete. Current boundary: the active P1 technical references for commands and
+schemas are English-only canonical routes, and the active P2 documentation
+authority reference is not translated by default. These are explicit
+language-policy boundaries, not evidence that all documentation has complete multilingual
+coverage. See the [documentation architecture](reference/documentation-architecture.md)
 for the exact P0/P1/P2 policy and the [capability matrix](reference/capability-truth-matrix.md)
 for current claims.
