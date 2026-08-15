@@ -10,6 +10,9 @@ Task documentation-p0-comprehension-study-execution generated an evidence-derive
 Governed Work Item: documentation-p0-comprehension-study-execution
 
 ## Delivered Changes
+- .ai/cockpit/current_status.md
+- .ai/cockpit/task_report.json
+- .ai/cockpit/task_report.md
 - .ai/work-items/active/documentation-p0-comprehension-study-execution.contract.json
 - .ai/work-items/active/documentation-p0-comprehension-study-execution.summary.json
 - docs/superpowers/plans/2026-08-15-documentation-p0-comprehension-study-execution.md
