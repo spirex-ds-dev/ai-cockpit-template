@@ -1,33 +1,81 @@
 import json
+import re
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 RESULTS_PATH = ROOT / "docs/reference/comprehension-validation-results.json"
+RESPONSE_SCHEMA_PATH = ROOT / "docs/reference/comprehension-validation-response.schema.json"
 
 
-def test_pending_results_fail_closed_without_reader_evidence():
-    assert RESULTS_PATH.exists(), "the study must publish an explicit pending result"
+def validate_response_schema(value, schema, path="$"):
+    if "const" in schema:
+        assert value == schema["const"], f"{path}: const mismatch"
+    if "enum" in schema:
+        assert value in schema["enum"], f"{path}: invalid enum"
+    if schema.get("type") == "object":
+        assert isinstance(value, dict), f"{path}: expected object"
+        for key in schema.get("required", []):
+            assert key in value, f"{path}: missing {key}"
+        if schema.get("additionalProperties") is False:
+            assert set(value) <= set(schema["properties"]), f"{path}: unsupported key"
+        for key, child in schema.get("properties", {}).items():
+            if key in value:
+                validate_response_schema(value[key], child, f"{path}.{key}")
+    elif schema.get("type") == "array":
+        assert isinstance(value, list), f"{path}: expected array"
+        assert len(value) >= schema.get("minItems", 0), f"{path}: too few items"
+        assert len(value) <= schema.get("maxItems", len(value)), f"{path}: too many items"
+        for index, child in enumerate(value):
+            validate_response_schema(child, schema["items"], f"{path}[{index}]")
+    elif schema.get("type") == "string":
+        assert isinstance(value, str), f"{path}: expected string"
+        assert len(value) >= schema.get("minLength", 0), f"{path}: too short"
+        if "pattern" in schema:
+            assert re.fullmatch(schema["pattern"], value), f"{path}: invalid pattern"
+        if schema.get("format") == "date-time":
+            assert datetime.fromisoformat(value).tzinfo is not None, f"{path}: timezone required"
+
+
+def test_bounded_results_have_one_schema_valid_receipt_per_required_locale():
+    assert RESULTS_PATH.exists(), "the study must publish an explicit result"
 
     results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
+    schema = json.loads(RESPONSE_SCHEMA_PATH.read_text(encoding="utf-8"))
 
-    assert results["status"] == "comprehension_unverified"
-    assert results["documentRevision"] == "a478f1a81608c5b70baed6818c68c0ac8890a336"
+    assert results["status"] == "comprehension_verified_bounded"
+    assert results["documentRevision"] == "a3cf1deda0d9577817b2ffeb8078068f77f48340"
     assert results["requiredLanguages"] == ["en", "zh-CN", "ja"]
-    assert results["responses"] == []
-    assert results["claimAuthorized"] is False
-    assert results["missingEvidence"] == [
-        "independent nontechnical reader response for en",
-        "independent nontechnical reader response for zh-CN",
-        "independent nontechnical reader response for ja",
-    ]
+    assert results["claimAuthorized"] is True
+    assert results["missingEvidence"] == []
+    assert [item["language"] for item in results["responses"]] == ["en", "zh-CN", "ja"]
+
+    for item in results["responses"]:
+        response = json.loads((ROOT / item["path"]).read_text(encoding="utf-8"))
+        validate_response_schema(response, schema)
+        assert response["participantPseudonym"] == item["participantPseudonym"]
+        assert response["language"] == item["language"]
+        assert response["documentRevision"] == results["documentRevision"]
+        assert response["answeredAt"] == "2026-08-15T19:02:00+09:00"
+        assert response["consentConfirmed"] is True
+        assert response["identifyingData"] is None
+        assert [answer["questionId"] for answer in response["answers"]] == [
+            "Q1",
+            "Q2",
+            "Q3",
+            "Q4",
+            "Q5",
+            "Q6",
+        ]
+        assert {answer["score"] for answer in response["answers"]} == {"correct"}
 
 
-def test_pending_results_publish_the_sample_boundary():
+def test_bounded_results_keep_the_non_population_limitations():
     results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
 
     assert results["minimumSample"] == {"en": 1, "zh-CN": 1, "ja": 1}
     assert results["limitations"] == [
-        "No independent reader responses have been ingested.",
         "Agent or author answers are not participant evidence.",
-        "A three-reader bounded sample cannot establish general-population comprehension.",
+        "This one-reader-per-locale sample is revision-bound and cannot establish general-population comprehension.",
+        "The result does not authorize merge, release, safety, security, or enterprise-compliance claims.",
     ]

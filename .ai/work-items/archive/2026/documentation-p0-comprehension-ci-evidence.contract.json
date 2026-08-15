@@ -1,0 +1,215 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-p0-comprehension-ci-evidence",
+  "mode": "code",
+  "title": "documentation-p0-comprehension-ci-evidence",
+  "baseCommit": "ccaef282e392847448a5028ca14a942816295b3a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-p0-comprehension-ci-evidence.contract.json",
+    ".ai/work-items/active/documentation-p0-comprehension-ci-evidence.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/evidence/test-weakening/documentation-p0-comprehension-ci-evidence.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-p0-comprehension-ci-evidence.outcome.json",
+    ".ai/work-items/active/documentation-p0-comprehension-ci-evidence.outcome.md"
+  ],
+  "outOfScope": [
+    "Documentation prose or localization changes",
+    "Test source or test policy changes",
+    "Release publication or version changes"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/documentation-p0-comprehension-ci-evidence.contract.json",
+      "reason": "This Contract records the CI evidence correction and its lifecycle boundary."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/835",
+      "reason": "Hosted template-smoke failure identifies the effective base-ref mismatch."
+    },
+    {
+      "path": ".ai/guards/test_weakening_policy.yaml",
+      "reason": "Defines the accepted requirement-evidence schema and signal names."
+    }
+  ],
+  "rawUserRequest": "修正已批准的文档 comprehension PR CI 基准证据问题：为 PR #835 的 effective base 绑定 test-weakening requirement evidence，完成独立 WI、PR、合并和清理流程。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-15-comprehension-ci-correction-approval",
+    "capturedAt": "2026-08-15T19:02:00+09:00",
+    "digest": "sha256:user-approved-ci-base-bound-requirement-evidence"
+  },
+  "declaredIntent": {
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design"]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "governance_evidence_binding"
+    ],
+    "reason": "Evidence-only governance correction; no product or documentation content changes."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Evidence-only governance correction; no product or documentation content changes."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User approved the corrective WI after CI identified a base-bound evidence mismatch."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Add one requirement-evidence record bound exactly to origin/main a3cf1deda0d9577817b2ffeb8078068f77f48340, retiring only the two observed test-weakening signals for tests/test_documentation_comprehension_results.py.",
+    "Record explicit user authorization and the CI failure source; do not change documentation content, tests, policy logic, or release metadata.",
+    "Complete the corrective PR against codex/documentation-p0-comprehension-evidence, merge it before PR #835, rerun PR #835 hosted checks, and close/clean both Work Items in canonical order."
+  ],
+  "guidelines": [
+    "Evidence must be bound to the exact effective base and observed paths/signals.",
+    "Prefer the smallest reversible governance-only change; preserve the original PR and its audit trail."
+  ],
+  "intent": {
+    "problem": "PR #835 changed the comprehension result test names, so hosted template-smoke reports test_case_removed and negative_test_removed relative to effective base a3cf1deda0d9577817b2ffeb8078068f77f48340. Existing evidence is bound to Work Item base 3305e2ba and is rejected by CI.",
+    "constraints": [
+      "Only add the base-bound evidence record and lifecycle records required to govern this correction.",
+      "Do not weaken or modify the checker, tests, documentation content, or release version.",
+      "The corrective PR targets the existing feature branch so PR #835 keeps the same effective base while CI is repaired."
+    ],
+    "rationale": "A narrowly bound evidence receipt preserves fail-closed governance while acknowledging the explicitly authorized test rename in the already-reviewed documentation PR."
+  },
+  "rawRequestExemption": null,
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "CI effective base matches evidence base",
+      "expected": "test-weakening accepts the exact retired signals and PR #835 can proceed.",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "Hosted CI is the authoritative evidence producer for this corrective record."
+    },
+    {
+      "scenario": "Evidence base or signal scope does not match",
+      "expected": "the guard remains fail-closed and the Work Item does not claim completion.",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "Negative behavior is preserved by the existing checker and is not reimplemented here."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": "User explicitly approved the corrective WI after the CI failure diagnosis."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 904
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-p0-comprehension-ci-evidence.json",
+    "baseCommit": "ccaef282e392847448a5028ca14a942816295b3a",
+    "initialScopeDigest": "e2b6cd071cddef69fdd6898f9722ac43445ceb55a126437d41f1830521f2bac6",
+    "contractSkeletonDigest": "3fea7977a140ff4d33a6c82baf247acdd173a0ada9969fdf4af87a4b4bb90ce9"
+  }
+}

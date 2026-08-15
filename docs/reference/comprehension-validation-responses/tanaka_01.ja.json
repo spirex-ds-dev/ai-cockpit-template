@@ -1,0 +1,16 @@
+{
+  "participantPseudonym": "tanaka_01",
+  "language": "ja",
+  "documentRevision": "a3cf1deda0d9577817b2ffeb8078068f77f48340",
+  "answeredAt": "2026-08-15T19:02:00+09:00",
+  "consentConfirmed": true,
+  "identifyingData": null,
+  "answers": [
+    {"questionId": "Q1", "rawAnswer": "AIに開発を任せたときに、『本当に依頼した範囲だけを変更したのか』『必要なテストや確認をしたのか』『その説明を信用してよいのか』が人間から分かりにくくなる問題を解決するものです。AIの説明をそのまま信用せず、変更内容やチェック結果、まだ分かっていないことを証拠として残し、人が確認できるようにします。", "confidence": "high", "score": "correct", "reviewerNote": "問題と Evidence over Self-Declaration を平易に説明している。"},
+    {"questionId": "Q2", "rawAnswer": "North Starは、人間とAIの間に状況に応じた適切な信頼関係を作ることです。AIを全面的に信用または禁止するのではなく、証拠が十分なら進み、足りなければ調べ、危険なら止めます。実際には『進めてよい』『確認が必要』『止めるべき』という状態と理由を人が確認して判断できるようにします。", "confidence": "high", "score": "correct", "reviewerNote": "calibrated trust とその実務上の意味を正確に捉えている。"},
+    {"questionId": "Q3", "rawAnswer": "AI Cockpitがコントロールするのは、主にリポジトリ内で作業を進めてよいか判断するルールと証拠です。依頼、変更範囲、必要な確認、チェック結果、未解決事項を結び付けます。一方でAIそのものの実行、本人確認、隔離、本番環境、企業セキュリティ全体は担いません。Branch Protection、CI、電子署名、監査、セキュリティ製品と最終判断は外部の仕組みと人間に残ります。", "confidence": "high", "score": "correct", "reviewerNote": "リポジトリ境界と外部責任を区別している。"},
+    {"questionId": "Q4", "rawAnswer": "必要な証拠がそろい予定範囲だと確認できれば進みます。証拠が不足、古い、矛盾、残る危険があれば調査します。必須チェック失敗、範囲超過、必要な権限が確認できない場合は停止します。Greenは進行候補、Yellowは調査、Redは停止です。ただしGreenでも自動的な承認ではなく、最後は人が判断します。", "confidence": "high", "score": "correct", "reviewerNote": "進行・調査・停止と Green の限定性を正確に説明している。"},
+    {"questionId": "Q5", "rawAnswer": "いきなりAIにコードを書かせず、まず信頼できる開始地点を決め、作業内容をWork Itemとして明確にします。導入後はCalibrationを済ませ、最新の正式なベースから専用ブランチを作ります。Contractに変更範囲、対象外、完了条件、確認方法、分からないことを書き、実装前のPreflightを確認してから始めます。", "confidence": "high", "score": "correct", "reviewerNote": "導入後の初回 Work Item の順序を正しく説明している。"},
+    {"questionId": "Q6", "rawAnswer": "そのまま続けず、不足を明確にして一度止まります。必要な証拠を追加・修正し、人の判断が必要なら人に戻し、該当チェックをもう一度実行します。AIが『大丈夫』と言っただけで通すこと、推測で証拠を埋めること、AIが人の承認を代行することはしません。人が進めてよいと言っても、失敗したテストや未確認のチェックまで成功扱いにはしません。", "confidence": "high", "score": "correct", "reviewerNote": "fail-closed recovery と人の承認の限界を正しく説明している。"}
+  ]
+}

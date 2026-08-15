@@ -7,14 +7,14 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task documentation-p0-comprehension-study-execution generated an evidence-derived outcome with status completed_with_warnings.
+Task documentation-p0-comprehension-ci-evidence generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 2
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 2
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 2
+- Unresolved: 1
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,8 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: No independent reader receipt has been ingested; comprehension remains unverified by design.
-- Unresolved evidence is explicitly limited: Reader feedback may create a future documentation Work Item after delivery.
+- Unresolved evidence is explicitly limited: Hosted CI must rerun PR #835 after the corrective PR merges.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
