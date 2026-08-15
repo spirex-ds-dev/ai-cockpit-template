@@ -3,9 +3,13 @@ import re
 from datetime import datetime
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).parents[1]
 RESULTS_PATH = ROOT / "docs/reference/comprehension-validation-results.json"
 RESPONSE_SCHEMA_PATH = ROOT / "docs/reference/comprehension-validation-response.schema.json"
+CURRENT_MAIN_REVISION = "fde3380f81fea5fd2e288f7a8849f737dc074060"
+CURRENT_MAIN_TREE = "d752493863afc8c5f7749d067cd80d60ee72a495"
 
 
 def validate_response_schema(value, schema, path="$"):
@@ -37,6 +41,10 @@ def validate_response_schema(value, schema, path="$"):
             assert datetime.fromisoformat(value).tzinfo is not None, f"{path}: timezone required"
 
 
+def assert_response_revision_matches(results, response):
+    assert response["documentRevision"] == results["documentRevision"]
+
+
 def test_bounded_results_have_one_schema_valid_receipt_per_required_locale():
     assert RESULTS_PATH.exists(), "the study must publish an explicit result"
 
@@ -44,7 +52,8 @@ def test_bounded_results_have_one_schema_valid_receipt_per_required_locale():
     schema = json.loads(RESPONSE_SCHEMA_PATH.read_text(encoding="utf-8"))
 
     assert results["status"] == "comprehension_verified_bounded"
-    assert results["documentRevision"] == "a3cf1deda0d9577817b2ffeb8078068f77f48340"
+    assert results["documentRevision"] == CURRENT_MAIN_REVISION
+    assert results["documentTree"] == CURRENT_MAIN_TREE
     assert results["requiredLanguages"] == ["en", "zh-CN", "ja"]
     assert results["claimAuthorized"] is True
     assert results["missingEvidence"] == []
@@ -55,7 +64,7 @@ def test_bounded_results_have_one_schema_valid_receipt_per_required_locale():
         validate_response_schema(response, schema)
         assert response["participantPseudonym"] == item["participantPseudonym"]
         assert response["language"] == item["language"]
-        assert response["documentRevision"] == results["documentRevision"]
+        assert_response_revision_matches(results, response)
         assert response["answeredAt"] == "2026-08-15T19:02:00+09:00"
         assert response["consentConfirmed"] is True
         assert response["identifyingData"] is None
@@ -68,6 +77,19 @@ def test_bounded_results_have_one_schema_valid_receipt_per_required_locale():
             "Q6",
         ]
         assert {answer["score"] for answer in response["answers"]} == {"correct"}
+
+
+def test_bounded_results_fail_closed_when_a_response_revision_drifts():
+    results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
+    response = json.loads(
+        (ROOT / "docs/reference/comprehension-validation-responses/peter_01.en.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    response["documentRevision"] = "a3cf1deda0d9577817b2ffeb8078068f77f48340"
+
+    with pytest.raises(AssertionError):
+        assert_response_revision_matches(results, response)
 
 
 def test_bounded_results_keep_the_non_population_limitations():
