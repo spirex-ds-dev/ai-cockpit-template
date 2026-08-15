@@ -17,8 +17,8 @@ capabilityClaims:
 [中文](README.zh-CN.md) | [日本語](README.ja.md)
 
 This is the five-minute route through AI Cockpit. You do not need to understand
-the implementation before answering the basic questions: what this project is,
-why it exists, what it controls, and where a human must decide.
+the implementation first. Start by answering four reader questions: what this
+project is, why it exists, what it controls, and where a human must decide.
 
 ## Understand the project
 
@@ -50,7 +50,10 @@ Follow the same order as the project’s North Star:
 | Recover from a stop | [Recovery](operations/recovery.md) | Preserve the Work Item and retry only after the missing evidence is repaired. |
 | Maintain or audit the system | [Documentation Architecture](reference/documentation-architecture.md) | Find canonical owners, language policy, and reference depth. |
 
-The home keeps the guided path short. Use the [documentation architecture](reference/documentation-architecture.md)
-for directory-based reference navigation, and the [capability matrix](reference/capability-truth-matrix.md)
-for current claims. P0 topics that are still marked `planned` are migration work,
-not evidence of complete multilingual coverage.
+The home keeps the guided path short: understand the project first, then move to
+technical reference. Important topics are intended to have Chinese and Japanese
+routes as well as English. A route that is missing or still being migrated is
+labelled as such; it must not be read as evidence that multilingual coverage is
+complete. See the [documentation architecture](reference/documentation-architecture.md)
+for the exact P0/P1/P2 policy and the [capability matrix](reference/capability-truth-matrix.md)
+for current claims.
