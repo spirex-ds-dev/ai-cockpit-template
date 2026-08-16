@@ -51,6 +51,16 @@ it does not create a second fact source. CLI output cannot authenticate that a
 human read or approved the report. The handoff also keeps archive explicit:
 `--archive` is a separate lifecycle request and must follow the direct report.
 
+Verification retries are represented as two bounded views. `verification` keeps
+the latest result for each check, while failed attempts replaced by a later
+attempt are retained in the optional Summary `verificationHistory`. Before
+archive, `ai-finish` rebuilds the Outcome and Human Benefit Report after final
+stabilization. A failed attempt followed by a passing attempt therefore appears
+as an evidence-bound resolved stop and resolution, not as a current blocker;
+the latest failed attempt remains a red stop with its recovery condition. This
+projection is deterministic, and the history is evidence rather than a claim
+that a person read a UI receipt.
+
 After the PR has merged, `make ai-close-work-item TASK=<task>` verifies provider ownership, base synchronization, and cleanup facts, then generates and validates a separate Closure Receipt before either Work Item branch is deleted. The receipt names the archived Outcome, merged PR, merge commit, final base commit, cleanup intent, and the worktree from which the next Work Item may continue. It also checks local branches, local worktrees, and remote branch absence; any residue is a blocking red condition with its exact location and recovery action. A missing or invalid Outcome/Receipt fails closed. The assistant must surface that receipt in its Work Item completion report; it is not a replacement for provider evidence.
 
 This rule applies prospectively. Historical archive bundles are not rewritten merely to add a newer report format.

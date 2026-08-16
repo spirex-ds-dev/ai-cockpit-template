@@ -385,6 +385,7 @@ def outcome_input_digest(summary: dict[str, Any]) -> str:
             ]
             if isinstance(verification, list)
             else verification,
+            "verificationHistory": summary.get("verificationHistory", []),
         }
     )
 
@@ -431,11 +432,30 @@ def record_result(summary_path: Path, item: dict[str, Any]) -> None:
     values = summary.get("verification", [])
     if not isinstance(values, list):
         values = []
+    key = verification_key(item)
+    history = summary.get("verificationHistory", [])
+    if not isinstance(history, list):
+        history = []
+    for entry in values:
+        if not isinstance(entry, dict) or verification_key(entry) != key:
+            continue
+        if entry != item and entry.get("result") == "failed":
+            digest = _sha256_json(entry)
+            if not any(
+                _sha256_json(previous) == digest
+                for previous in history
+                if isinstance(previous, dict)
+            ):
+                history.append(entry)
+        # Same-check records are projections of the latest attempt; they are
+        # intentionally removed from the current verification view.
     summary["verification"] = [
         entry
         for entry in values
-        if not (isinstance(entry, dict) and verification_key(entry) == verification_key(item))
+        if not (isinstance(entry, dict) and verification_key(entry) == key)
     ] + [item]
+    if history:
+        summary["verificationHistory"] = history
     save_json(summary_path, summary)
 
 
@@ -1017,6 +1037,131 @@ def _observed_issue_handoff(
     return resolved, approach, remaining
 
 
+def _verification_evidence_ref(
+    summary_path: Path, subject: str, item: dict[str, Any]
+) -> dict[str, str]:
+    ref: dict[str, str] = {
+        "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+        "subject": subject,
+    }
+    digest = item.get("outputDigest")
+    if isinstance(digest, str) and re.fullmatch(r"[a-f0-9]{64}", digest):
+        ref["digest"] = digest
+    return ref
+
+
+def _verification_retry_projection(
+    summary_path: Path, verification: Any, history: Any
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[str]]:
+    """Build stop/resolution events from append-only failed verification attempts."""
+    current = (
+        [item for item in verification if isinstance(item, dict)]
+        if isinstance(verification, list)
+        else []
+    )
+    prior = (
+        [item for item in history if isinstance(item, dict)] if isinstance(history, list) else []
+    )
+    current_by_check = {
+        item.get("check"): item
+        for item in current
+        if isinstance(item.get("check"), str) and item.get("check")
+    }
+    events: list[dict[str, Any]] = []
+    resolved_claims: list[dict[str, Any]] = []
+    resolution_claims: list[dict[str, Any]] = []
+    historical_failed_checks: list[str] = []
+    seen_prior: set[str] = set()
+
+    for index, failed in enumerate(prior):
+        check = failed.get("check")
+        if not isinstance(check, str) or failed.get("result") != "failed":
+            continue
+        latest = current_by_check.get(check)
+        if not isinstance(latest, dict) or latest.get("result") != "passed":
+            continue
+        failure_digest = _sha256_json(failed)
+        if failure_digest in seen_prior:
+            continue
+        seen_prior.add(failure_digest)
+        historical_failed_checks.append(check)
+        refs = [
+            _verification_evidence_ref(
+                summary_path, f"verificationHistory[{index}] {check} failed", failed
+            ),
+            _verification_evidence_ref(summary_path, f"verification[{check}] retry passed", latest),
+        ]
+        stop_reason = f"{check} failed before the retry."
+        recovery = f"Retry {check} after correcting the recorded failure."
+        events.append(
+            {
+                "eventId": f"retry-stop-{check}-{index}",
+                "eventType": "stop",
+                "occurredAt": failed.get("executedAt", ""),
+                "stage": "verification",
+                "reason": stop_reason,
+                "policyOrGuard": f"required verification: {check}",
+                "attemptedAction": "complete the Work Item",
+                "avoidedImpact": "a stale completion claim",
+                "recovery": recovery,
+                "state": "resolved",
+                "evidence": refs,
+            }
+        )
+        events.append(
+            {
+                "eventId": f"retry-resolution-{check}-{index}",
+                "eventType": "resolution",
+                "occurredAt": latest.get("executedAt", ""),
+                "problem": stop_reason,
+                "action": f"Re-ran {check} after the correction; the latest attempt passed.",
+                "verification": f"{check} latest verification result is passed.",
+                "state": "resolved",
+                "evidence": refs,
+            }
+        )
+        resolved_claims.append(
+            {
+                "claim": stop_reason,
+                "title": check,
+                "detail": "The earlier stop was resolved by a later passing attempt.",
+                "evidenceRefs": refs,
+                "inference": False,
+            }
+        )
+        resolution_claims.append(
+            {
+                "claim": f"Re-ran {check} after the correction; the latest attempt passed.",
+                "title": f"Resolution for {check}",
+                "evidenceRefs": refs,
+                "inference": False,
+            }
+        )
+
+    for index, failed in enumerate(current):
+        check = failed.get("check")
+        if not isinstance(check, str) or failed.get("result") != "failed":
+            continue
+        refs = [_verification_evidence_ref(summary_path, f"verification[{check}] failed", failed)]
+        events.append(
+            {
+                "eventId": f"current-stop-{check}-{index}",
+                "eventType": "stop",
+                "occurredAt": failed.get("executedAt", ""),
+                "stage": "verification",
+                "reason": f"{check} failed on the latest attempt.",
+                "policyOrGuard": f"required verification: {check}",
+                "attemptedAction": "complete the Work Item",
+                "avoidedImpact": "an unsupported completion claim",
+                "recovery": f"Run a passing {check} retry.",
+                "state": "unresolved",
+                "evidence": refs,
+            }
+        )
+
+    return events, resolved_claims, resolution_claims, historical_failed_checks
+
+
 def _pre_merge_outcome_input(
     task: str, contract_path: Path, summary_path: Path, language: str | None = "en"
 ) -> dict[str, Any]:
@@ -1137,9 +1282,32 @@ def _pre_merge_outcome_input(
         for item in verification
         if isinstance(item, dict) and item.get("result") == "failed" and item.get("check")
     ]
+    retry_events, retry_resolved, retry_approach, historical_failed_checks = (
+        _verification_retry_projection(
+            summary_path, verification, summary.get("verificationHistory", [])
+        )
+    )
+    failed_check_claims = []
+    for item in verification if isinstance(verification, list) else []:
+        if not isinstance(item, dict) or item.get("result") != "failed":
+            continue
+        check = item.get("check")
+        if not isinstance(check, str) or not check:
+            continue
+        failed_check_claims.append(
+            {
+                "claim": f"{check} failed on the latest attempt.",
+                "evidenceRefs": [
+                    _verification_evidence_ref(summary_path, f"verification[{check}] failed", item)
+                ],
+                "inference": False,
+            }
+        )
     observed_resolved, observed_approach, observed_remaining = _observed_issue_handoff(
         summary.get("observedIssues"), summary_path=summary_path
     )
+    observed_resolved.extend(retry_resolved)
+    observed_approach.extend(retry_approach)
     observed_resolutions: list[dict[str, Any]] = []
     observed_issues = summary.get("observedIssues")
     if isinstance(observed_issues, list):
@@ -1208,11 +1376,11 @@ def _pre_merge_outcome_input(
                 "subject": "knownGaps",
             }
         )
-    if failed_checks:
+    if failed_checks or historical_failed_checks:
         problem_count_refs.append(
             {
                 "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
-                "subject": "verification",
+                "subject": "verification and verificationHistory",
             }
         )
     user_decisions: list[str] = []
@@ -1221,7 +1389,12 @@ def _pre_merge_outcome_input(
             user_decisions.append(item.strip())
         elif isinstance(item, dict) and isinstance(item.get("instruction"), str):
             user_decisions.append(item["instruction"])
-    problem_count = len(summary.get("observedIssues", [])) + len(warnings) + len(failed_checks)
+    problem_count = (
+        len(summary.get("observedIssues", []))
+        + len(warnings)
+        + len(failed_checks)
+        + len(historical_failed_checks)
+    )
     return {
         "taskId": task,
         "bindings": {
@@ -1245,10 +1418,11 @@ def _pre_merge_outcome_input(
             "retained": retained,
             "handoffRisks": residual_risks,
             "resolutions": observed_resolutions,
+            "events": retry_events,
             "handoffQuestions": {
                 "problemCount": problem_count,
                 "problemCountEvidenceRefs": problem_count_refs,
-                "blockedProblems": failed_checks,
+                "blockedProblems": failed_check_claims,
                 "resolvedProblems": observed_resolved,
                 "resolutionApproach": observed_approach,
                 "avoidedRisks": _summary_text_list(summary.get("avoidedRisks")),
@@ -1300,7 +1474,12 @@ def _write_and_validate_pre_merge_outcome(
 
     try:
         payload = _pre_merge_outcome_input(task, contract_path, summary_path, language)
-        outcome = generate_outcome(task, payload["bindings"], evidence=payload["evidence"])
+        outcome = generate_outcome(
+            task,
+            payload["bindings"],
+            events=payload["evidence"].get("events", []),
+            evidence=payload["evidence"],
+        )
         markdown = render_task_outcome(outcome)
         report = validate_outcome(outcome, markdown, expected_task_id=task)
         if not report.valid:
@@ -1379,7 +1558,12 @@ def write_blocked_outcome(
             *list(evidence.get("forbiddenClaims", [])),
             "Do not claim a blocked Work Item has completed verification or may be archived.",
         ]
-        outcome = generate_outcome(task, payload["bindings"], evidence=evidence)
+        outcome = generate_outcome(
+            task,
+            payload["bindings"],
+            events=payload["evidence"].get("events", []),
+            evidence=evidence,
+        )
         markdown = render_task_outcome(outcome)
         report = validate_outcome(outcome, markdown, expected_task_id=task)
         if not report.valid:
@@ -1599,6 +1783,32 @@ def run_task_outcome_pipeline(
         },
     )
     return True, "Outcome pipeline passed"
+
+
+def refresh_final_outcome_after_stabilization(
+    task: str, contract_path: Path, summary_path: Path, language: str
+) -> tuple[bool, str]:
+    """Rebuild human projections from the final verification state before archive."""
+    outcome_ok, outcome_message = run_task_outcome_pipeline(
+        task, summary_path, contract_path, language
+    )
+    if not outcome_ok:
+        return False, f"final Outcome regeneration failed: {outcome_message}"
+    report_ok, report_message = run_human_report_pipeline(task, summary_path)
+    if not report_ok:
+        return False, f"final Human Benefit Report regeneration failed: {report_message}"
+    contract = contract_path.relative_to(PROJECT_ROOT).as_posix()
+    summary = summary_path.relative_to(PROJECT_ROOT).as_posix()
+    for command in (
+        ["make", "check-ai-change-summary", f"SUMMARY={summary}", f"CONTRACT={contract}"],
+        ["make", "generate-cockpit-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
+        ["make", "check-ai-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
+        ["make", "check-ai-status-consistency"],
+    ):
+        code, _duration, output = run(command)
+        if code != 0:
+            return False, output or f"final projection validation failed: {' '.join(command)}"
+    return True, "final Outcome and Human Benefit Report regenerated from stabilized verification"
 
 
 def parse_args() -> argparse.Namespace:
@@ -2269,6 +2479,21 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
     )
     final_summary_evidence["outcomeInputDigest"] = outcome_input_digest(load_json(summary_path))
     record_result(summary_path, final_summary_evidence)
+
+    final_outcome_ok, final_outcome_message = refresh_final_outcome_after_stabilization(
+        contract_data["workItemId"], contract_path, summary_path, args.language
+    )
+    if not final_outcome_ok:
+        print(f"ERROR: {final_outcome_message}", file=sys.stderr)
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="taskOutcomeProjection",
+            failure_message=final_outcome_message,
+            code=1,
+        )
 
     print("Work Item finish checks passed")
     record_fact_once(

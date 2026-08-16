@@ -150,6 +150,137 @@ def test_pre_merge_handoff_consumes_summary_evidence_refs_for_resolutions(tmp_pa
     assert payload["evidence"]["handoffQuestions"]["resolutionApproach"][0]["evidenceRefs"] == refs
 
 
+def test_record_result_preserves_failed_attempt_when_retry_passes(tmp_path):
+    summary_path = tmp_path / "summary.json"
+    failed = {"check": "aiSummary", "result": "failed", "outputDigest": "a" * 64}
+    passed = {"check": "aiSummary", "result": "passed", "outputDigest": "b" * 64}
+    summary_path.write_text(json.dumps({"verification": [failed]}), encoding="utf-8")
+
+    ai_finish.record_result(summary_path, passed)
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert summary["verification"] == [passed]
+    assert summary["verificationHistory"] == [failed]
+
+
+def test_pre_merge_handoff_projects_retry_stop_and_resolution(tmp_path, monkeypatch):
+    task = "retry-projection"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    failed = {
+        "check": "aiSummary",
+        "result": "failed",
+        "executedAt": "2026-08-16T20:00:00Z",
+        "outputDigest": "a" * 64,
+    }
+    passed = {
+        "check": "aiSummary",
+        "result": "passed",
+        "executedAt": "2026-08-16T20:05:00Z",
+        "outputDigest": "b" * 64,
+    }
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "knownGaps": [],
+                "verification": [passed],
+                "verificationHistory": [failed],
+                "observedIssues": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+
+    payload = ai_finish._pre_merge_outcome_input(task, contract_path, summary_path, "en")
+    questions = payload["evidence"]["handoffQuestions"]
+
+    assert questions["blockedProblems"] == []
+    assert questions["problemCount"] == 1
+    assert questions["resolvedProblems"][0]["inference"] is False
+    assert questions["resolvedProblems"][0]["evidenceRefs"]
+    assert [event["eventType"] for event in payload["evidence"]["events"]] == [
+        "stop",
+        "resolution",
+    ]
+    assert all(event["evidence"] for event in payload["evidence"]["events"])
+
+
+def test_pre_merge_handoff_binds_current_failed_check_to_stop_evidence(tmp_path, monkeypatch):
+    task = "current-failure"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    failed = {
+        "check": "quality",
+        "result": "failed",
+        "executedAt": "2026-08-16T20:00:00Z",
+        "outputDigest": "a" * 64,
+    }
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "knownGaps": [],
+                "verification": [failed],
+                "observedIssues": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+
+    payload = ai_finish._pre_merge_outcome_input(task, contract_path, summary_path, "en")
+    questions = payload["evidence"]["handoffQuestions"]
+
+    assert questions["blockedProblems"][0]["claim"] == "quality failed on the latest attempt."
+    assert questions["blockedProblems"][0]["inference"] is False
+    assert payload["evidence"]["events"][0]["state"] == "unresolved"
+    assert payload["evidence"]["events"][0]["evidence"]
+
+
+def test_pre_merge_outcome_renders_retry_stop_as_resolved(tmp_path, monkeypatch):
+    task = "retry-outcome"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    outcome_path = tmp_path / "outcome.json"
+    markdown_path = tmp_path / "outcome.md"
+    contract_path.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "knownGaps": [],
+                "verification": [
+                    {"check": "quality", "result": "passed", "outputDigest": "b" * 64}
+                ],
+                "verificationHistory": [
+                    {"check": "quality", "result": "failed", "outputDigest": "a" * 64}
+                ],
+                "observedIssues": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
+
+    ok, message = ai_finish._write_and_validate_pre_merge_outcome(
+        task, contract_path, summary_path, outcome_path, markdown_path, "en"
+    )
+
+    assert ok, message
+    outcome = json.loads(outcome_path.read_text(encoding="utf-8"))
+    assert outcome["humanHandoff"]["questions"]["blockedProblems"] == []
+    assert outcome["sections"]["forcedStops"][0]["result"] == "resolved"
+    assert outcome["sections"]["resolutions"][0]["evidence"]
+
+
 def _outcome(task: str) -> dict:
     sections = {
         "outcomeSummary": "Completed from structured evidence.",
