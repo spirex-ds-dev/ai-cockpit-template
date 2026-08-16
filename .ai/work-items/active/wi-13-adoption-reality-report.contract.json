@@ -1,0 +1,215 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-13-adoption-reality-report",
+  "mode": "code",
+  "title": "Adoption reality report and capability truth boundary",
+  "rawUserRequest": "Deliver WI-13 as an adoption reality report that separates template capability truth from adopter-repository verified state across installation, calibration, hosted CI, branch protection and external identity, CodeQL, SBOM, provenance, signing, and production sandbox. Unknown, not-configured, and external-responsibility states must remain explicit. Keep Outcome/task_report machine-readable and human-readable without overclaiming.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:wi13-adoption-reality-report", "capturedAt": "2026-08-16", "digest": "sha256:wi13-adoption-reality-report-authorized"},
+  "declaredIntent": {"summary": "Expose a deterministic adoption report that makes template capability and adopter evidence visibly separate.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "e187b6254e0f8db289cd57b4207a8e9d53c44fc1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-13-adoption-reality-report.contract.json",
+    ".ai/work-items/active/wi-13-adoption-reality-report.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-13-adoption-reality-report.outcome.json",
+    ".ai/work-items/active/wi-13-adoption-reality-report.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_adoption_reality_report.py",
+    "tests/test_ai_adoption_reality_report.py",
+    "docs/reference/adoption-reality-report.md"
+  ],
+  "outOfScope": [
+    "Changing WI-11 governance configuration depth or WI-12 performance diagnosis.",
+    "Authenticating provider accounts, inspecting hosted provider state, or proving adopter execution from this template checkout.",
+    "Implementing CodeQL, SBOM, provenance, signing, sandbox, branch protection, or identity providers.",
+    "Changing Capability Truth Matrix statuses or immutable archived Work Item evidence.",
+    "Changing Outcome derivation or task_report projection rules; this Work Item only documents and tests their delivery boundary."
+  ],
+  "sources": [
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines Repository Truth, Delegated Domain Evidence, Capability Truth, and external boundaries."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "Canonical distinction between implemented, template_only, adopter_installed, and planned."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Machine-readable template capability rows and limitations."
+    },
+    {
+      "path": "docs/reference/enterprise-control-matrix.json",
+      "reason": "Adopter-owned control inventory and not_verified boundary."
+    },
+    {
+      "path": "scripts/ai_adoption_evidence.py",
+      "reason": "Existing fail-closed adopter evidence conventions and template-owned evidence exclusion."
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "Canonical Outcome/task_report projection and status delivery path."
+    },
+    {
+      "path": "tests/test_adoption_evidence.py",
+      "reason": "Existing adoption evidence regression boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["capability_overclaim", "external_evidence_boundary", "report_delivery"],
+    "reason": "A report that conflates template files with adopter or provider evidence could create unsafe readiness claims; missing external facts must remain explicit.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The report is a bounded repository-local evidence presentation and does not perform external operations."
+  },
+  "preReviewWarnings": [
+    "Repository-local files must never be presented as adopter or provider verification.",
+    "Unknown, not_configured, not_verified, and external_responsibility states must remain machine-visible and human-readable.",
+    "Outcome/task_report remain derived projections; do not create a second authoritative result."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic machine-readable adoption reality report separates template capability rows from adopter state and never promotes template_only evidence to adopter_installed.",
+    "The report covers installation, calibration, hosted CI, branch protection, external identity, CodeQL, SBOM, provenance, signing, and production sandbox with explicit verified, not_configured, unknown, and external_responsibility semantics.",
+    "The report fails closed for malformed state, unsupported status, template-owned release evidence presented as adopter evidence, and claims that lack an evidence reference.",
+    "Human-readable documentation explains the same states and boundaries, including that production sandbox and provider controls remain adopter responsibility.",
+    "Focused TDD tests prove complete, empty, malformed, deterministic, and anti-overclaim cases; Outcome/task_report remain machine-readable and human-readable through existing projections."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Template capability exists but no adopter evidence is supplied.", "expected": "Template state is reported separately and adopter state is not_configured or external_responsibility; no readiness claim is emitted.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused report tests and documentation review."},
+    {"scenario": "Adopter supplies an exact evidence reference for a configured control.", "expected": "The corresponding control is verified only when its evidence reference is valid and non-template-owned.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused positive and malformed-evidence tests."},
+    {"scenario": "Unknown, unsupported, expired, or provider-owned state is supplied.", "expected": "The report preserves unknown or external_responsibility and never infers completion.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused fail-closed status tests."},
+    {"scenario": "Outcome/task_report projections are inspected after a governed run.", "expected": "JSON remains machine-readable and Markdown remains human-readable with the same conservative status semantics.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Existing projection tests plus report documentation cross-check."}
+  ],
+  "guidelines": [
+    "Capability Truth Matrix is authoritative for template capability claims; this report cannot upgrade a matrix status.",
+    "Adopter and provider evidence must be referenced explicitly and template-owned release artifacts cannot satisfy adopter verification.",
+    "Unknown, not_configured, not_verified, and external_responsibility are distinct states and must not be collapsed.",
+    "Outcome/task_report are derived projections; preserve the existing machine-readable JSON and human-readable Markdown pair.",
+    "Do not perform network, provider, production, sandbox, identity, signing, or secret operations."
+  ],
+  "intent": {
+    "problem": "Adoption discussions can mistake template capability files and local checks for evidence that an adopter configured controls or that a provider enforced them. The resulting status is difficult to read and can overstate readiness.",
+    "constraints": ["Keep template truth, adopter evidence, and provider responsibility separate.", "Keep the report deterministic and evidence-referenced.", "Do not change runtime control implementations or external systems.", "Keep Outcome/task_report as the existing derived delivery pair."],
+    "rationale": "A conservative adoption report gives humans one place to see what the template provides, what the adopter has actually verified, and which controls remain external without turning absence into a false pass."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 923
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-13-adoption-reality-report.json",
+    "baseCommit": "e187b6254e0f8db289cd57b4207a8e9d53c44fc1",
+    "initialScopeDigest": "74856dbe0ca9abb0fa71686b51a9c7b0a774bdc42ca0ee13a2e6701e04915cb9",
+    "contractSkeletonDigest": "75c1f8db24174940322835714ddbfa65343c5ed5dcf30ec0c9515c00aa053c8d"
+  }
+}
