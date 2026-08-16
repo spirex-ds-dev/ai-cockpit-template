@@ -149,6 +149,48 @@ def test_handoff_preserves_evidence_bound_resolution_claims() -> None:
     assert validate_outcome(outcome, render_markdown(outcome)).valid
 
 
+def test_structured_resolution_and_risk_records_populate_top_level_sections() -> None:
+    refs = [{"source": "summary.json", "subject": "observedIssues[0]"}]
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "locale": "en",
+            "resolutions": [
+                {
+                    "problem": "The projection was stale.",
+                    "action": "Synchronized the projection.",
+                    "verification": "Projection digest matched.",
+                    "result": "resolved",
+                    "evidence": refs,
+                }
+            ],
+            "handoffRisks": [
+                {
+                    "severity": "medium",
+                    "title": "Historical archive",
+                    "detail": "Prior Outcomes remain immutable.",
+                    "state": "unresolved",
+                    "evidence": [{"source": "archive", "subject": "manifest"}],
+                }
+            ],
+            "humanDecisions": [
+                "Continue with the bounded correction",
+                "Continue with the bounded correction",
+            ],
+        },
+    )
+    sections = outcome["sections"]
+    assert sections["resolutions"][0]["problem"] == "The projection was stale."
+    assert sections["resolutions"][0]["evidence"] == refs
+    assert sections["residualRisks"][0]["detail"] == "Prior Outcomes remain immutable."
+    assert sections["humanDecisions"] == ["Continue with the bounded correction"]
+    markdown = render_markdown(outcome)
+    assert "## Resolutions\n- The projection was stale.: Synchronized the projection." in markdown
+    assert "## Residual Risks\n- Historical archive: Prior Outcomes remain immutable." in markdown
+    assert validate_outcome(outcome, markdown).valid
+
+
 def test_red_handoff_contains_gate_cause_location_and_recovery() -> None:
     outcome = generate_outcome(
         "task-outcome-generator",

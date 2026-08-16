@@ -18,6 +18,8 @@ New generator versions also include `humanHandoff`. This is the mandatory conver
 
 When a Summary records `observedIssues`, `ai-finish` projects an issue marked with a resolved/fixed/mitigated/accepted status into `resolvedProblems` and `resolutionApproach`, preserving that issue's evidence references. An issue without evidence is never presented as verified resolution; it remains visible as an inference/remaining risk. This projection is prospective and does not rewrite immutable historical archives.
 
+The same structured records are also projected into the top-level sections: evidence-bound `resolutions` populate `Resolutions` with Problem, Action, Verification, Result, and evidence references; `handoffRisks` populate `Residual Risks` when their state is unresolved or accepted. Markdown renders the problem/risk detail instead of replacing it with a file path. Duplicate human-decision strings are reduced in first-seen order. Evidence-free records remain explicit `inference` and cannot become verified facts.
+
 ## Warning color semantics
 
 `knownGaps` means an intentionally unaddressed requirement. Each genuine known gap becomes a Warning with a limitation binding and makes an otherwise completed Outcome `completed_with_warnings` (yellow). It must not be used as free-form completion commentary.

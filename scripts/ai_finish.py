@@ -1140,6 +1140,39 @@ def _pre_merge_outcome_input(
     observed_resolved, observed_approach, observed_remaining = _observed_issue_handoff(
         summary.get("observedIssues"), summary_path=summary_path
     )
+    observed_resolutions: list[dict[str, Any]] = []
+    observed_issues = summary.get("observedIssues")
+    if isinstance(observed_issues, list):
+        for index, issue in enumerate(observed_issues):
+            if not isinstance(issue, dict):
+                continue
+            status_text = issue.get("status")
+            if not isinstance(status_text, str) or not status_text.lower().startswith(
+                ("resolved", "fixed", "mitigated", "accepted")
+            ):
+                continue
+            refs = _observed_issue_evidence_refs(issue, summary_path=summary_path, index=index)
+            if not refs:
+                continue
+            area = issue.get("area") if isinstance(issue.get("area"), str) else "observed issue"
+            detail = issue.get("detail") if isinstance(issue.get("detail"), str) else area
+            detail_text = detail.strip() if isinstance(detail, str) else area
+            action = f"Resolution status: {status_text}"
+            for key in ("action", "resolution", "solution"):
+                candidate = issue.get(key)
+                if isinstance(candidate, str) and candidate.strip():
+                    action = candidate.strip()
+                    break
+            observed_resolutions.append(
+                {
+                    "problem": detail_text or area,
+                    "action": action,
+                    "verification": "Evidence review",
+                    "result": "resolved",
+                    "evidenceRefs": refs,
+                    "evidence": refs,
+                }
+            )
     remaining_issue_claims = [
         *observed_remaining,
         *[
@@ -1211,6 +1244,7 @@ def _pre_merge_outcome_input(
             "passedChecks": passed_checks,
             "retained": retained,
             "handoffRisks": residual_risks,
+            "resolutions": observed_resolutions,
             "handoffQuestions": {
                 "problemCount": problem_count,
                 "problemCountEvidenceRefs": problem_count_refs,
