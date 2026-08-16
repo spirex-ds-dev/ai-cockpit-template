@@ -514,7 +514,7 @@ jobs:
               echo 'generic quality must fail until project checks are configured' >&2
               exit 1
             fi
-            make ai-finish TASK=adopt_ai_cockpit
+            make ai-finish TASK=adopt_ai_cockpit REPORT_LANGUAGE=en
             if test -f .ai/work-items/active/adopt_ai_cockpit.contract.json; then
               make archive-work-item CONTRACT=.ai/work-items/active/adopt_ai_cockpit.contract.json
             fi
