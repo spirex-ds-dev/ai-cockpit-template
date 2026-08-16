@@ -8,6 +8,8 @@ audience:
 status: reference
 authority: canonical
 lastVerifiedBy: tests/test_ai_adoption_reality_report.py
+capabilityClaims:
+  - repository_governance_layer
 keywords:
   - adoption
   - capability-truth

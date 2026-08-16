@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import copy
 import json
+import sys
 from pathlib import Path
 
 import pytest
 from ai_adoption_reality_report import (
     CONTROL_IDS,
     build_report,
+    main,
     render_markdown,
+    repository_template_rows,
     validate_report,
 )
 
@@ -105,3 +108,120 @@ def test_cli_repository_report_can_be_written(tmp_path: Path) -> None:
     assert output.is_file() and markdown.is_file()
     assert json.loads(output.read_text(encoding="utf-8")) == report
     assert "external_responsibility" in markdown.read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize(
+    ("evidence", "error"),
+    [
+        (None, "list of paths"),
+        ([""], "non-empty strings"),
+        ([1], "non-empty strings"),
+        (["templates/release.json"], "template-owned"),
+    ],
+)
+def test_build_rejects_malformed_evidence(evidence: object, error: str) -> None:
+    with pytest.raises((TypeError, ValueError), match=error):
+        build_report(template_rows(), {"installation": {"state": "verified", "evidence": evidence}})
+
+
+@pytest.mark.parametrize(
+    "rows",
+    [
+        None,
+        [1],
+        [{"id": "", "status": "implemented"}],
+        [{"id": "same", "status": "implemented"}, {"id": "same", "status": "planned"}],
+        [{"id": "bad", "status": "unsupported"}],
+    ],
+)
+def test_build_rejects_malformed_template_rows(rows: object) -> None:
+    with pytest.raises((TypeError, ValueError)):
+        build_report(rows, {})  # type: ignore[arg-type]
+
+
+def test_build_covers_optional_metadata_and_invalid_control_shapes() -> None:
+    report = build_report(
+        template_rows(),
+        {
+            "installation": {
+                "state": "verified",
+                "evidence": ["adopter/install.json"],
+                "owner": "adopter",
+                "reason": "receipt checked",
+                "verifiedAt": "2026-08-16T00:00:00Z",
+            }
+        },
+    )
+    item = report["adopterVerification"]["controls"][0]
+    assert item["owner"] == "adopter"
+    assert item["reason"] == "receipt checked"
+    assert item["verifiedAt"] == "2026-08-16T00:00:00Z"
+
+    with pytest.raises(TypeError, match="adopter controls must be an object"):
+        build_report(template_rows(), None)  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="unknown adopter control"):
+        build_report(template_rows(), {"other": {}})
+    with pytest.raises(TypeError, match="adopter control must be an object"):
+        build_report(template_rows(), {"installation": None})  # type: ignore[dict-item]
+    with pytest.raises(ValueError, match="verified adopter control"):
+        build_report(template_rows(), {"installation": {"state": "verified"}})
+    with pytest.raises(ValueError, match="non-empty string"):
+        build_report(template_rows(), {"installation": {"owner": ""}})
+
+
+def test_validate_and_render_reject_structural_corruption() -> None:
+    malformed = {
+        "schemaVersion": 2,
+        "reportKind": "wrong",
+        "templateCapabilityTruth": {"rows": None},
+        "adopterVerification": {
+            "controls": [{"id": "installation", "state": "bad", "evidence": "x"}, 1]
+        },
+        "readinessClaim": "ready",
+    }
+    issues = validate_report(malformed)
+    assert any("schemaVersion" in issue for issue in issues)
+    assert any("reportKind" in issue for issue in issues)
+    assert any("template capability rows" in issue for issue in issues)
+    assert any("unsupported adopter state" in issue for issue in issues)
+    assert any("evidence must be a list" in issue for issue in issues)
+    with pytest.raises(ValueError, match="cannot render invalid"):
+        render_markdown(malformed)
+
+    no_section = {
+        "schemaVersion": 1,
+        "reportKind": "adoption_reality",
+        "templateCapabilityTruth": {"rows": []},
+    }
+    assert any("adopterVerification.controls" in issue for issue in validate_report(no_section))
+
+
+def test_validate_rejects_malformed_evidence_paths_and_duplicate_controls() -> None:
+    report = build_report(template_rows(), {})
+    controls = report["adopterVerification"]["controls"]
+    controls[0]["state"] = "verified"
+    controls[0]["evidence"] = ["", ".ai/cockpit/provenance.json"]
+    controls.append({"id": "installation", "state": "unknown", "evidence": []})
+    issues = validate_report(report)
+    assert any("malformed" in issue for issue in issues)
+    assert any("template-owned" in issue for issue in issues)
+    assert any("unknown control" in issue for issue in issues)
+
+
+def test_repository_rows_and_cli_error_paths(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    matrix = tmp_path / "docs" / "reference" / "capability-truth-matrix.json"
+    matrix.parent.mkdir(parents=True)
+    matrix.write_text(json.dumps({"capabilities": "wrong"}), encoding="utf-8")
+    with pytest.raises(TypeError, match="capabilities list"):
+        repository_template_rows(tmp_path)
+
+    monkeypatch.setattr(
+        sys, "argv", ["ai_adoption_reality_report", "--output", str(tmp_path / "out.json")]
+    )
+    monkeypatch.setattr(
+        "ai_adoption_reality_report.write_repository_report",
+        lambda *_args: (_ for _ in ()).throw(ValueError("synthetic failure")),
+    )
+    assert main() == 1

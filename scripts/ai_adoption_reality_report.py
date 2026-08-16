@@ -144,7 +144,7 @@ def validate_report(report: Mapping[str, Any]) -> list[str]:
     else:
         try:
             _template_rows(template.get("rows"))
-        except ValueError as exc:
+        except (TypeError, ValueError) as exc:
             issues.append(str(exc))
     section = report.get("adopterVerification")
     controls = section.get("controls") if isinstance(section, Mapping) else None
