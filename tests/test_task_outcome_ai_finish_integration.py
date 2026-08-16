@@ -313,6 +313,39 @@ def test_blocked_finish_failure_preserves_gate_exit_status(monkeypatch, tmp_path
     )
 
 
+def test_blocked_finish_failure_delivers_persisted_outcome_to_conversation(
+    monkeypatch, tmp_path, capsys
+):
+    task = "example-task"
+    outcome_path = tmp_path / "outcome.json"
+    outcome_path.write_text(json.dumps(_outcome(task)), encoding="utf-8")
+    monkeypatch.setattr(
+        ai_finish,
+        "_outcome_paths",
+        lambda _task: (outcome_path, tmp_path / "outcome.md"),
+    )
+    monkeypatch.setattr(
+        ai_finish, "write_blocked_outcome", lambda *_args, **_kwargs: (True, "persisted")
+    )
+
+    exit_code = ai_finish.return_blocked_finish_failure(
+        task=task,
+        contract_path=tmp_path / "contract.json",
+        summary_path=tmp_path / "summary.json",
+        failed_check="quality",
+        failure_message="gate failed",
+        code=2,
+        language="zh-CN",
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 2
+    assert "工单结果报告" in captured.out
+    assert "归档必须显式执行" in captured.out
+    assert "CLI output cannot authenticate human receipt or approval" in captured.out
+    assert "Blocked Task Outcome persisted" in captured.err
+
+
 def test_documentation_alignment_failure_is_reported_without_raising(tmp_path):
     summary_path = tmp_path / "summary.json"
     summary_path.write_text("not-json", encoding="utf-8")
