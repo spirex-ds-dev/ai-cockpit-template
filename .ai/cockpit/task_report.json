@@ -1,34 +1,36 @@
 {
   "reportVersion": 1,
-  "workItemId": "wi-08-content-bound-reuse-successor",
+  "workItemId": "wi-10-environment-bound-reuse-successor",
   "phase": "review",
-  "result": "completed_with_warnings",
+  "result": "blocked",
   "sourceOutcome": {
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1,
-    "digest": "ae020f3c40080c143374afddd8346937bf4f730b52cff405942d92afb967af8a"
+    "digest": "968d57ef6388f8353710e732edbee18a6eb3710b96d4e7fd6299f585af5beb06"
   },
   "task": {
-    "summary": "Task wi-08-content-bound-reuse-successor generated an evidence-derived outcome with status completed_with_warnings.",
+    "summary": "Task wi-10-environment-bound-reuse-successor generated an evidence-derived outcome with status blocked.",
     "deliveredChanges": [
-      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.contract.json",
-      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.summary.json",
-      ".ai/work-items/conflict-successor-receipts/wi-08-content-bound-reuse-collision-source.json",
-      "scripts/ai_evidence_binding.py",
-      "tests/test_ai_evidence_binding.py",
-      "docs/reference/content-bound-evidence-reuse.md",
-      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.outcome.json",
-      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.outcome.md",
+      ".ai/cockpit/current_status.md",
+      ".ai/work-items/starts/wi-10-environment-bound-reuse-successor.json",
+      ".ai/work-items/active/wi-10-environment-bound-reuse-successor.contract.json",
+      ".ai/work-items/active/wi-10-environment-bound-reuse-successor.summary.json",
+      ".ai/work-items/conflict-successor-receipts/wi-10-environment-bound-collision-source.json",
+      "scripts/ai_environment_reuse.py",
+      "tests/test_ai_environment_reuse.py",
+      "docs/reference/environment-bound-reuse.md",
+      ".ai/work-items/active/wi-10-environment-bound-reuse-successor.outcome.json",
+      ".ai/work-items/active/wi-10-environment-bound-reuse-successor.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
     ]
   },
   "issues": {
-    "detected": 2,
+    "detected": 3,
     "hardStops": 0,
-    "warnings": 2,
+    "warnings": 3,
     "resolved": 0,
-    "unresolved": 2
+    "unresolved": 3
   },
   "preventedRisks": [],
   "interventions": [],
@@ -60,9 +62,24 @@
       "forbiddenClaims": [
         "Do not claim this warning was verified or resolved."
       ]
+    },
+    {
+      "sourceWarning": "Finish blocked at aiPreflight: the Work Item preflight review is not ready",
+      "title": "Finish verification is blocked",
+      "affectedClaims": [
+        "completion_claim",
+        "archive_readiness"
+      ],
+      "requiredEvidence": [
+        "a passing aiPreflight retry"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this Work Item is complete or archive-ready."
+      ]
     }
   ],
   "forbiddenClaims": [
+    "Do not claim a blocked Work Item has completed verification or may be archived.",
     "Do not claim an unresolved warning was verified or resolved."
   ],
   "remainingRisks": [],
