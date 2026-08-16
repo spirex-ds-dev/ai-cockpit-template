@@ -1,0 +1,248 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-12-performance-diagnosis",
+  "mode": "code",
+  "title": "Evidence-based performance diagnosis",
+  "rawUserRequest": "Execute WI-12 of the authorized performance-first improvement plan. Diagnose governance execution bottlenecks from repository-local evidence, including duplicated verification, explicit CI/resource contention waits, and comparable before/after baselines where available. Produce reproducible machine-readable and human-readable output without changing gates, trust decisions, scheduling, or runtime behavior.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-14-wi-performance-first-plan",
+    "capturedAt": "2026-08-16T00:00:00Z",
+    "digest": "sha256:user-authorized-wi12-performance-diagnosis"
+  },
+  "declaredIntent": {
+    "summary": "Explain where governed execution time is spent and whether repeated verification or resource waiting is observable, while preserving evidence boundaries.",
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e187b6254e0f8db289cd57b4207a8e9d53c44fc1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-12-performance-diagnosis.contract.json",
+    ".ai/work-items/active/wi-12-performance-diagnosis.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-12-performance-diagnosis.outcome.json",
+    ".ai/work-items/active/wi-12-performance-diagnosis.outcome.md",
+    ".ai/schemas/performance-diagnosis-report.schema.json",
+    "scripts/ai_performance_diagnosis.py",
+    "tests/test_ai_performance_diagnosis.py",
+    "docs/reference/performance-diagnosis.md"
+  ],
+  "outOfScope": [
+    "Changing gate results, trust decisions, required verification, or fail-closed behavior",
+    "Changing scheduler, parallel execution, cache, provider, runtime, or CI orchestration behavior",
+    "Estimating token/provider cost, human time, or unrecorded resource contention",
+    "Modifying governance-cost collection semantics, WI-11 control policy, or WI-13 adoption reporting",
+    "Treating a single run or inferred correlation as proof of causal improvement"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_performance_diagnosis.py",
+      "reason": "Existing evidence-only Work Item diagnosis and event loader to extend compatibly."
+    },
+    {
+      "path": "scripts/ai_governance_cost.py",
+      "reason": "Canonical lifecycle, gate, explicit wait, and retry accounting semantics."
+    },
+    {
+      "path": "scripts/ai_observability.py",
+      "reason": "Canonical local event envelope and duration fields."
+    },
+    {
+      "path": "tests/test_ai_performance_diagnosis.py",
+      "reason": "Existing focused behavior and CLI coverage."
+    },
+    {
+      "path": "docs/reference/performance-diagnosis.md",
+      "reason": "Current evidence-only documentation and unknown boundary."
+    },
+    {
+      "path": ".ai/schemas/governance-cost-report.schema.json",
+      "reason": "Related schema vocabulary and advisory output constraints."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "performance_observability",
+      "evidence_integrity"
+    ],
+    "reason": "Diagnosis must distinguish measured timing, explicit waiting, repetition, and unavailable causal evidence without affecting trust decisions.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Evidence schema and report semantics require strict verification; output remains advisory-only."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The Contract bounds a local evidence-only diagnosis and explicitly excludes policy or execution changes."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The report identifies measured bottlenecks with source category, observed duration, and deterministic ranking; unavailable timing remains unknown.",
+    "Repeated verification is reported only when the same check identity is explicitly observed more than once, with run/count evidence and no causal overclaim.",
+    "Explicit CI or resource contention waits are attributed separately from local compute and gate duration; absent or ambiguous contention remains unknown.",
+    "A comparable baseline report can be supplied to produce before/after deltas only for matching measured fields, while mismatched or missing baselines produce an explicit limitation.",
+    "The CLI emits reproducible JSON plus human-readable Markdown with source digest, evidence limitations, advisory decisionImpact=none, and schema validation; focused tests cover complete, partial, malformed, repeated, contention, and baseline scenarios.",
+    "Documentation states the command, event vocabulary, evidence boundary, reproducibility method, and why diagnosis does not change governance execution."
+  ],
+  "guidelines": [
+    "Use only explicit repository-local event evidence; never infer unavailable duration or causality.",
+    "Keep diagnosis advisory-only with decisionImpact=none; do not bypass or rewrite gates, scheduling, or trust decisions.",
+    "Treat repeated checks and contention as observations, not defects, unless the evidence explicitly states a reason.",
+    "Bind output to source digests and stable sorted serialization so another agent can reproduce it from the same input.",
+    "Document every new public function and preserve unknown semantics in both JSON and Markdown."
+  ],
+  "intent": {
+    "problem": "The current report ranks basic measured durations but does not explain repeated verification, explicit resource contention, or comparable before-and-after movement, making real execution delays difficult to diagnose without speculation.",
+    "constraints": [
+      "Use repository-local observability and supplied baseline reports only.",
+      "Keep malformed, cross-item, missing, and ambiguous evidence fail-closed or explicitly unknown.",
+      "Do not alter runtime, scheduler, gate, policy, or lifecycle decisions."
+    ],
+    "rationale": "A reproducible diagnostic projection lets later optimization work target measured bottlenecks while retaining calibrated trust and preventing performance claims from outrunning evidence."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A complete event fixture contains phases, gates, repeated checks, and explicit CI/resource waits.",
+      "expected": "The report separates local/gate/wait durations, records repeated verification evidence, and deterministically ranks measured bottlenecks.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused deterministic fixture assertions and CLI output validation."
+    },
+    {
+      "scenario": "A comparable prior report is supplied with matching measured fields.",
+      "expected": "Before/after delta and percentage are emitted only for numeric matching values; the source identity is preserved.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused baseline comparison tests including missing and mismatched evidence."
+    },
+    {
+      "scenario": "Evidence is partial, malformed, cross-Work-Item, or ambiguous about contention.",
+      "expected": "Malformed input fails closed; cross-item data is excluded; unavailable or ambiguous values remain unknown and no bottleneck claim is fabricated.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused loader/error/unknown-boundary tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user conversation",
+    "reason": "User explicitly authorized the complete 14-WI implementation plan, including WI-12 performance diagnosis."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 923
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-12-performance-diagnosis.json",
+    "baseCommit": "e187b6254e0f8db289cd57b4207a8e9d53c44fc1",
+    "initialScopeDigest": "85aa5cfae40b4c1ffecbd2b73589fbc8f0598ea92fad3bd96470c3369f225fc1",
+    "contractSkeletonDigest": "9ac2a69afa53943466e293c9d3a79e1e29a19110580abab51277081eb389c7bb"
+  }
+}

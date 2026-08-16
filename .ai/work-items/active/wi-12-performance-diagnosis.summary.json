@@ -1,0 +1,248 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-12-performance-diagnosis",
+  "contractPath": ".ai/work-items/active/wi-12-performance-diagnosis.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/active/wi-12-performance-diagnosis.contract.json",
+      "reason": "Defines the bounded evidence-only performance diagnosis, explicit unknowns, scenarios, and verification."
+    },
+    {
+      "path": ".ai/work-items/active/wi-12-performance-diagnosis.summary.json",
+      "reason": "Tracks implementation evidence, focused verification, limitations, and handoff for WI-12."
+    },
+    {
+      "path": ".ai/schemas/performance-diagnosis-report.schema.json",
+      "reason": "Defines the machine-readable diagnosis, repeated verification, contention, and baseline comparison contract."
+    },
+    {
+      "path": "scripts/ai_performance_diagnosis.py",
+      "reason": "Adds evidence-only repeated-check, explicit wait, baseline comparison, limitation, and reproducibility projections."
+    },
+    {
+      "path": "tests/test_ai_performance_diagnosis.py",
+      "reason": "Covers complete, partial, malformed, repeated verification, resource contention, and baseline scenarios."
+    },
+    {
+      "path": "docs/reference/performance-diagnosis.md",
+      "reason": "Documents the reproducible CLI, event vocabulary, baseline boundary, and advisory-only semantics."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/wi-12-performance-diagnosis.contract.json",
+    "scripts/ai_performance_diagnosis.py",
+    "scripts/ai_governance_cost.py",
+    "scripts/ai_observability.py",
+    "tests/test_ai_performance_diagnosis.py",
+    "docs/reference/performance-diagnosis.md",
+    ".ai/schemas/governance-cost-report.schema.json"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "result": "not_run"
+    },
+    {
+      "check": "aiScope",
+      "result": "not_run"
+    },
+    {
+      "check": "aiGuards",
+      "result": "not_run"
+    },
+    {
+      "check": "aiCheckpoint",
+      "result": "not_run"
+    },
+    {
+      "check": "aiAgentRisk",
+      "result": "not_run"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "result": "not_run"
+    },
+    {
+      "check": "aiBacktrack",
+      "result": "not_run"
+    },
+    {
+      "check": "aiCoverage",
+      "result": "not_run"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "result": "not_run"
+    },
+    {
+      "check": "aiGuidelines",
+      "result": "not_run"
+    },
+    {
+      "check": "aiSummary",
+      "result": "not_run"
+    },
+    {
+      "check": "aiStatus",
+      "result": "not_run"
+    },
+    {
+      "check": "aiStatusCheck",
+      "result": "not_run"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "result": "not_run"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "result": "not_run"
+    },
+    {
+      "check": "quality",
+      "result": "not_run"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use only explicit repository-local event evidence; never infer unavailable duration or causality.",
+      "compliant": true,
+      "evidence": "The loader fails closed on malformed events, explicit wait categories are required, and diagnosis.causalClaims is always empty; focused tests cover unknown boundaries."
+    },
+    {
+      "guideline": "Keep diagnosis advisory-only with decisionImpact=none; do not bypass or rewrite gates, scheduling, or trust decisions.",
+      "compliant": true,
+      "evidence": "Report output preserves advisory=true and decisionImpact=none; implementation changes only report projection code and tests."
+    },
+    {
+      "guideline": "Treat repeated checks and contention as observations, not defects, unless the evidence explicitly states a reason.",
+      "compliant": true,
+      "evidence": "Repeated verification and resource waits are emitted as measured fields with no causal claim."
+    },
+    {
+      "guideline": "Bind output to source digests and stable sorted serialization so another agent can reproduce it from the same input.",
+      "compliant": true,
+      "evidence": "Source SHA-256 and digest serialization exclude generatedAt; baseline comparison is limited to matching numeric fields."
+    },
+    {
+      "guideline": "Document every new public function and preserve unknown semantics in both JSON and Markdown.",
+      "compliant": true,
+      "evidence": "Public helpers have docstrings, and docs/reference/performance-diagnosis.md documents unknown and limitation behavior."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Diagnosis cannot establish causal improvement or unrecorded provider/human/resource time; those limitations remain explicit."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Diagnosis cannot establish causal improvement or unrecorded provider, human, or ambiguous contention time; later optimization requires comparable evidence.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Initial skeleton; required checks have not run.",
+    "expectedReviewFocus": []
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "bc0dd6139c9b6c57",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A complete event fixture contains phases, gates, repeated checks, and explicit CI/resource waits.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_performance_diagnosis.py::test_report_attributes_repeated_verification_and_resource_contention"
+      ],
+      "result": "Measured timing categories, repeated verification, and explicit resource wait are separated and ranked deterministically."
+    },
+    {
+      "scenario": "A comparable prior report is supplied with matching measured fields.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_performance_diagnosis.py::test_report_compares_only_matching_numeric_baseline_fields"
+      ],
+      "result": "Numeric before/after delta and percentage are emitted for matching timing fields only."
+    },
+    {
+      "scenario": "Evidence is partial, malformed, cross-Work-Item, or ambiguous about contention.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_performance_diagnosis.py::test_load_events_excludes_other_work_items_and_rejects_malformed",
+        "tests/test_ai_performance_diagnosis.py::test_report_marks_missing_baseline_and_ambiguous_contention_unknown"
+      ],
+      "result": "Malformed input fails closed, cross-item input is excluded, and ambiguous or unavailable values remain unknown with limitations."
+    }
+  ],
+  "knownGaps": [
+    "No causal performance claim is made from a single Work Item or unmatched baseline.",
+    "Provider, human, token, and ambiguous contention durations remain unknown unless explicitly recorded."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-16T06:50:00+00:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": ["docs/reference/performance-diagnosis.md"],
+        "reason": "WI-12 diagnosis boundary and evidence-only intent are documented."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [".ai/work-items/active/wi-12-performance-diagnosis.contract.json", "tests/test_ai_performance_diagnosis.py"],
+        "reason": "Contract acceptance and focused tests cover the implementation evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": ["docs/reference/performance-diagnosis.md", "scripts/ai_performance_diagnosis.py"],
+        "reason": "The reproducible CLI and output boundaries are documented."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "This Work Item changes English reference semantics only; no localized surface is in scope."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": ["docs/reference/performance-diagnosis.md", ".ai/schemas/performance-diagnosis-report.schema.json"],
+        "reason": "Unknown, malformed, baseline, and causal-claim limitations are preserved in docs and schema."
+      }
+    ]
+  }
+}

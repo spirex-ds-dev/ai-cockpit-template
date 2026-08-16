@@ -130,3 +130,59 @@ def test_cli_writes_json_and_markdown(tmp_path: Path, monkeypatch: pytest.Monkey
     assert main() == 0
     assert json.loads(output_json.read_text(encoding="utf-8"))["time"]["totalElapsedMs"] == 12
     assert "# Governance Cost: item" in output_md.read_text(encoding="utf-8")
+
+
+def test_report_attributes_repeated_verification_and_resource_contention() -> None:
+    report = build_report(
+        [
+            event("item", "check_started", checkId="quality", runId="run-1"),
+            event("item", "check_passed", checkId="quality", durationMs=100, runId="run-1"),
+            event("item", "check_started", checkId="quality", runId="run-1"),
+            event("item", "check_passed", checkId="quality", durationMs=80, runId="run-1"),
+            event(
+                "item", "contention_wait_finished", fields={"durationMs": 40, "resource": "pytest"}
+            ),
+        ],
+        work_item_id="item",
+    )
+
+    assert report["repeatedVerification"] == [{"checkId": "quality", "runId": "run-1", "count": 2}]
+    assert report["contention"] == {"ciWaitMs": "unknown", "resourceWaitMs": 40}
+    assert report["diagnosis"]["status"] == "measured"
+    assert {
+        "name": "wait:resource",
+        "durationMs": 40,
+        "source": "explicit_wait",
+    } in report["topBottlenecks"]
+
+
+def test_report_compares_only_matching_numeric_baseline_fields() -> None:
+    baseline = build_report(
+        [event("before", "work_item_finished", durationMs=200)],
+        work_item_id="before",
+    )
+    report = build_report(
+        [event("after", "work_item_finished", durationMs=150)],
+        work_item_id="after",
+        baseline=baseline,
+    )
+
+    assert report["baselineComparison"]["status"] == "compared"
+    assert report["baselineComparison"]["fields"]["time.totalElapsedMs"] == {
+        "beforeMs": 200,
+        "afterMs": 150,
+        "deltaMs": -50,
+        "deltaPercent": -25.0,
+    }
+    assert report["diagnosis"]["limitations"] == []
+
+
+def test_report_marks_missing_baseline_and_ambiguous_contention_unknown() -> None:
+    report = build_report(
+        [event("item", "wait_finished", fields={"category": "mystery", "durationMs": 99})],
+        work_item_id="item",
+    )
+
+    assert report["baselineComparison"]["status"] == "not_provided"
+    assert report["contention"] == {"ciWaitMs": "unknown", "resourceWaitMs": "unknown"}
+    assert any("ambiguous contention" in item for item in report["diagnosis"]["limitations"])
