@@ -12,7 +12,11 @@
     "workItemId": {"$ref": "#/$defs/taskId"},
     "status": {"$ref": "#/$defs/reportStatus"},
     "bindings": {"$ref": "#/$defs/bindings"},
-    "sections": {"$ref": "#/$defs/sections"}
+    "sections": {"$ref": "#/$defs/sections"},
+    "humanStatusColor": {"type": "string", "enum": ["green", "yellow", "red", "unknown"]},
+    "failedGate": {"type": "string"},
+    "recoveryCondition": {"type": "string"},
+    "humanHandoff": {"$ref": "#/$defs/humanHandoff"}
   },
   "$defs": {
     "taskId": {
@@ -68,6 +72,79 @@
         "subject": {"type": "string", "minLength": 1, "maxLength": 512},
         "source": {"type": "string", "minLength": 1, "maxLength": 1024},
         "digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "handoffClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim", "evidenceRefs", "inference"],
+      "properties": {
+        "claim": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "title": {"type": "string", "maxLength": 1024},
+        "detail": {"type": "string", "maxLength": 4096},
+        "evidenceRefs": {"type": "array", "items": {"$ref": "#/$defs/evidenceRef"}},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidenceRef"}},
+        "inference": {"type": "boolean"}
+      }
+    },
+    "handoffRisk": {
+      "allOf": [
+        {"$ref": "#/$defs/handoffClaim"},
+        {
+          "type": "object",
+          "required": ["severity", "state"],
+          "properties": {
+            "severity": {"$ref": "#/$defs/severity"},
+            "state": {"$ref": "#/$defs/finalState"}
+          }
+        }
+      ]
+    },
+    "redReason": {
+      "allOf": [
+        {"$ref": "#/$defs/handoffClaim"},
+        {
+          "type": "object",
+          "required": ["gate", "cause", "location", "recovery"],
+          "properties": {
+            "gate": {"type": "string", "minLength": 1},
+            "cause": {"type": "string", "minLength": 1},
+            "location": {"type": "string", "minLength": 1},
+            "recovery": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "handoffQuestions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["problemCount", "problemCountEvidenceRefs", "blockedProblems", "resolvedProblems", "resolutionApproach", "avoidedRisks", "remainingRisks", "agentUnknowns", "humanConfirmations", "recurrenceLikelihood", "nextTime"],
+      "properties": {
+        "problemCount": {"type": "integer", "minimum": 0},
+        "problemCountEvidenceRefs": {"type": "array", "items": {"$ref": "#/$defs/evidenceRef"}},
+        "blockedProblems": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "resolvedProblems": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "resolutionApproach": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "avoidedRisks": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "remainingRisks": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "agentUnknowns": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "humanConfirmations": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "recurrenceLikelihood": {"$ref": "#/$defs/handoffClaim"},
+        "nextTime": {"$ref": "#/$defs/handoffClaim"}
+      }
+    },
+    "humanHandoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["locale", "completed", "passed", "retained", "risks", "redReasons", "questions"],
+      "properties": {
+        "locale": {"type": "string", "enum": ["en", "ja", "zh-CN"]},
+        "completed": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "passed": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "retained": {"type": "array", "items": {"$ref": "#/$defs/handoffClaim"}},
+        "risks": {"type": "array", "items": {"$ref": "#/$defs/handoffRisk"}},
+        "redReasons": {"type": "array", "items": {"$ref": "#/$defs/redReason"}},
+        "questions": {"$ref": "#/$defs/handoffQuestions"}
       }
     },
     "bindings": {

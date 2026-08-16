@@ -33,7 +33,7 @@ def _item_text(item: Any) -> str:
     if isinstance(item, str):
         return item
     if isinstance(item, Mapping):
-        for key in ("title", "subject", "problem", "kind", "stage", "source"):
+        for key in ("claim", "title", "subject", "problem", "kind", "stage", "source"):
             value = item.get(key)
             if isinstance(value, str) and value.strip():
                 return value
@@ -68,6 +68,46 @@ def render_task_outcome(outcome: Mapping[str, Any]) -> str:
             lines.append(value if isinstance(value, str) and value else "None")
         elif isinstance(value, list) and value:
             lines.extend(f"- {_item_text(item)}" for item in value)
+        else:
+            lines.append("None")
+        lines.append("")
+    handoff = outcome.get("humanHandoff")
+    if isinstance(handoff, Mapping):
+        lines.extend(["## Human Handoff", f"Locale: `{handoff.get('locale', 'unknown')}`", ""])
+        for key, title in (
+            ("completed", "What was completed"),
+            ("passed", "What passed"),
+            ("retained", "What was retained"),
+            ("risks", "Risks"),
+            ("redReasons", "Red reasons"),
+        ):
+            lines.append(f"### {title}")
+            values = handoff.get(key, [])
+            if isinstance(values, list) and values:
+                for item in values:
+                    detail = item.get("detail") if isinstance(item, Mapping) else None
+                    text = _item_text(item)
+                    if isinstance(detail, str) and detail.strip() and detail.strip() != text:
+                        text = f"{text}: {detail.strip()}"
+                    if isinstance(item, Mapping) and item.get("inference") is True:
+                        text += " (inference)"
+                    lines.append(f"- {text}")
+            else:
+                lines.append("None")
+            lines.append("")
+        lines.append("### Human questions")
+        questions = handoff.get("questions")
+        if isinstance(questions, Mapping):
+            for key, value in questions.items():
+                if key == "problemCountEvidenceRefs":
+                    continue
+                if isinstance(value, list):
+                    text = "; ".join(_item_text(item) for item in value) or "None"
+                elif isinstance(value, Mapping):
+                    text = _item_text(value)
+                else:
+                    text = str(value)
+                lines.append(f"- {key}: {text}")
         else:
             lines.append("None")
         lines.append("")

@@ -10,7 +10,10 @@ TITLE ?=
 MODE ?= investigate
 SKIP_QUALITY ?= false
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
-AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
+# Resolve the interpreter before recipes change directory (for example into a
+# project-test shard worktree), so nested commands do not lose the local venv.
+PYTHON_EXECUTABLE = $(if $(findstring /,$(PYTHON)),$(abspath $(PYTHON)),$(shell command -v "$(PYTHON)" 2>/dev/null))
+AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON_EXECUTABLE)
 override AI_COCKPIT_MAKE_ENTRYPOINT := $(firstword $(MAKEFILE_LIST))
 export AI_COCKPIT_MAKE_ENTRYPOINT
 export RELEASE_PREFLIGHT_SOURCE_COMMIT
@@ -895,4 +898,4 @@ check-ai-pr:
 ai-finish:
 	@# ARCHIVE is a one-shot lifecycle request. Do not let Make propagate it into
 	@# nested project/test invocations, where it could archive an unrelated Work Item.
-	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(SKIP_QUALITY)),--skip-quality) $(if $(filter true,$(ARCHIVE)),--archive) $(if $(REPORT_LANGUAGE),--language "$(REPORT_LANGUAGE)")
+	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(SKIP_QUALITY)),--skip-quality) $(if $(filter true,$(ARCHIVE)),--archive) --language "$(REPORT_LANGUAGE)"

@@ -6,6 +6,8 @@ description: 1 つの governed task の価値と残る判断を、証拠から�
 
 # Human Benefit Report
 
+新しい人間向け要約は、Task Result、What was completed、Problems found、Stops triggered、Problems resolved、Risks avoided、Remaining risks、Unknowns、Human decisions、Verification、Impact、Next action の順で出力します。要約は検証済み Outcome から決定的に生成し、すべての事実に `evidenceRefs` を結び付けます。根拠のない便益は `inference` と明示し、事実として表現しません。アーカイブ前にすべての agent がローカライズされた Outcome と要約を会話へ直接渡し、ファイルパスだけを提示してはなりません。
+
 Human Benefit Report は、変更内容、検出された証拠付き問題、停止、解決、回避したリスク、人間の判断、残存リスク、次の安全な操作を短く示します。
 
 Task Outcome が唯一の machine truth です。`ai-finish` は `.ai/cockpit/task_report.json` と `.ai/cockpit/task_report.md` に Review Report を生成し、`check-ai-pr` は archive 済み Outcome との一致を fail closed で検証します。

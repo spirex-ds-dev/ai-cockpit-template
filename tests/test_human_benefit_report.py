@@ -138,6 +138,35 @@ def test_review_report_derives_counts_risks_decisions_and_next_action():
     assert "Do not claim provider verification." in markdown
 
 
+def test_report_exposes_the_full_human_handoff_question_set():
+    source = outcome()
+    source["humanHandoff"] = {
+        "locale": "zh-CN",
+        "completed": [{"title": "完成", "detail": "已完成", "evidence": []}],
+        "passed": [{"title": "通过", "detail": "已通过", "evidence": []}],
+        "retained": [],
+        "risks": [],
+        "redReasons": [],
+        "questions": {
+            "problemCount": 2,
+            "blockedProblems": ["quality"],
+            "resolvedProblems": ["handoff"],
+            "resolutionApproach": ["structured projection"],
+            "avoidedRisks": ["false green"],
+            "remainingRisks": ["explicit locale required"],
+            "agentUnknowns": ["provider transport"],
+            "humanConfirmations": ["review scope"],
+            "recurrenceLikelihood": "low",
+            "nextTime": "bind locale at start",
+        },
+    }
+    report = human.generate_human_report(source)
+    assert report["humanHandoff"]["questions"]["problemCount"] == 2
+    rendered = human.render_human_report(report)
+    assert "Human decisions" in rendered
+    assert "Repeat correction prevented" in rendered
+
+
 def test_final_report_requires_and_binds_provider_closure_facts():
     source = outcome()
     facts = {

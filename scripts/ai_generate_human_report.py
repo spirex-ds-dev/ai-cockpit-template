@@ -52,6 +52,35 @@ def _description(item: Mapping[str, Any]) -> str:
     return "Evidence-backed risk requires review."
 
 
+def _claim_text(item: Any) -> str:
+    if isinstance(item, Mapping):
+        value = item.get("claim") or item.get("detail") or item.get("title")
+        if isinstance(value, str) and value.strip():
+            text = value.strip()
+            if item.get("inference") is True:
+                text += " (inference)"
+            return text
+    return str(item).strip() if isinstance(item, str) and item.strip() else "None recorded."
+
+
+def _claim_lines(items: Any) -> list[str]:
+    return [_claim_text(item) for item in items] if isinstance(items, list) else []
+
+
+def _evidence_suffix(item: Any) -> str:
+    if not isinstance(item, Mapping):
+        return ""
+    refs = item.get("evidenceRefs") or item.get("evidence")
+    if not isinstance(refs, list) or not refs:
+        return ""
+    subjects = [
+        str(ref.get("subject"))
+        for ref in refs
+        if isinstance(ref, Mapping) and isinstance(ref.get("subject"), str)
+    ]
+    return f" [evidence: {', '.join(subjects)}]" if subjects else ""
+
+
 def _remaining_risks(sections: Mapping[str, Any]) -> list[dict[str, Any]]:
     candidates = _mapping_list(sections.get("residualRisks"))
     candidates.extend(
@@ -188,6 +217,7 @@ def generate_human_report(
         raise ValueError(f"unsupported Human Benefit Report phase: {phase}")
     _validate_source(outcome)
     sections = outcome["sections"]
+    handoff = outcome.get("humanHandoff")
     findings = _mapping_list(sections.get("findings"))
     risks = _mapping_list(sections.get("risks"))
     warnings = _string_list(sections.get("warnings"))
@@ -226,6 +256,8 @@ def generate_human_report(
         "forbiddenClaims": _string_list(sections.get("forbiddenClaims")),
         "remainingRisks": remaining,
     }
+    if isinstance(handoff, Mapping):
+        report["humanHandoff"] = dict(handoff)
     normalized_facts = _validate_closure_facts(closure_facts) if phase == "final" else None
     if normalized_facts is not None:
         report["closure"] = normalized_facts
@@ -236,6 +268,110 @@ def generate_human_report(
 
 def render_human_report(report: Mapping[str, Any]) -> str:
     """Render a concise English view without changing machine facts."""
+
+    handoff = report.get("humanHandoff")
+    if isinstance(handoff, Mapping):
+        questions = handoff.get("questions", {})
+        questions = questions if isinstance(questions, Mapping) else {}
+        status_labels = {
+            "completed": "Success",
+            "completed_with_warnings": "Partial",
+            "blocked": "Blocked",
+            "needs_human_confirmation": "Blocked",
+            "cancelled": "Failed",
+        }
+        result = report.get("result")
+        lines = [
+            "# AI Cockpit Task Report",
+            "",
+            "Task Result",
+            f"Status: {status_labels.get(str(result), str(result))}",
+            "",
+            "What was completed",
+        ]
+        completed = handoff.get("completed", [])
+        lines.extend(
+            f"- {_claim_text(item)}{_evidence_suffix(item)}" for item in completed
+        ) if isinstance(completed, list) and completed else lines.append("- None recorded.")
+        blocked = questions.get("blockedProblems", [])
+        retained = handoff.get("retained", [])
+        lines.extend(
+            [
+                "",
+                "Problems found",
+                f"- Total: {questions.get('problemCount', 0)}",
+                f"- Blocking: {len(blocked) if isinstance(blocked, list) else 0}",
+                f"- Warning: {len(retained) if isinstance(retained, list) else 0}",
+                "",
+                "Stops triggered",
+            ]
+        )
+        stops = report.get("forcedStops", [])
+        if isinstance(stops, list) and stops:
+            for stop in stops:
+                if isinstance(stop, Mapping):
+                    lines.append(
+                        f"- Reason: {stop.get('reason', 'None recorded.')} | Stage: {stop.get('stage', 'unknown')} | Resolution: {stop.get('recovery') or stop.get('result', 'None recorded.')}{_evidence_suffix(stop)}"
+                    )
+        else:
+            lines.append("- None recorded.")
+        lines.extend(["", "Problems resolved"])
+        resolved = questions.get("resolvedProblems", [])
+        approach = questions.get("resolutionApproach", [])
+        if isinstance(resolved, list) and resolved:
+            for index, item in enumerate(resolved):
+                solution = (
+                    approach[index]
+                    if isinstance(approach, list) and index < len(approach)
+                    else "See recorded resolution evidence."
+                )
+                lines.append(f"- Problem: {_claim_text(item)}")
+                lines.append(f"  Solution: {_claim_text(solution)}")
+                lines.append(
+                    f"  Evidence: {_evidence_suffix(item).strip() or 'inference (no evidence reference)'}"
+                )
+        else:
+            lines.append("- None recorded.")
+        avoided = questions.get("avoidedRisks", [])
+        remaining = questions.get("remainingRisks", [])
+        unknowns = questions.get("agentUnknowns", [])
+        decisions = questions.get("humanConfirmations", [])
+        recurrence = questions.get("recurrenceLikelihood", {})
+        next_time = questions.get("nextTime", {})
+        lines.extend(["", "Risks avoided"])
+        lines.extend(
+            f"- {_claim_text(item)}{_evidence_suffix(item)}" for item in avoided
+        ) if isinstance(avoided, list) and avoided else lines.append("- None recorded.")
+        lines.extend(["", "Remaining risks"])
+        lines.extend(
+            f"- {_claim_text(item)}{_evidence_suffix(item)}" for item in remaining
+        ) if isinstance(remaining, list) and remaining else lines.append("- None recorded.")
+        lines.extend(["", "Unknowns"])
+        lines.extend(
+            f"- {_claim_text(item)}{_evidence_suffix(item)}" for item in unknowns
+        ) if isinstance(unknowns, list) and unknowns else lines.append("- None recorded.")
+        lines.extend(["", "Human decisions"])
+        lines.extend(
+            f"- {_claim_text(item)}{_evidence_suffix(item)}" for item in decisions
+        ) if isinstance(decisions, list) and decisions else lines.append("- None recorded.")
+        lines.extend(["", "Verification"])
+        passed = handoff.get("passed", [])
+        lines.extend(
+            f"- {_claim_text(item)}{_evidence_suffix(item)}" for item in passed
+        ) if isinstance(passed, list) and passed else lines.append("- None recorded.")
+        lines.extend(
+            [
+                "",
+                "Impact",
+                f"- Rework avoided: {_claim_text(avoided[0]) if isinstance(avoided, list) and avoided else 'None recorded.'}",
+                f"- Repeat correction prevented: {_claim_text(recurrence)}",
+                f"- Major risk prevented: {_claim_text(avoided[0]) if isinstance(avoided, list) and avoided else 'None recorded.'}",
+                "",
+                "Next action",
+                f"- {_claim_text(next_time)}",
+            ]
+        )
+        return "\n".join(lines) + "\n"
 
     issues = report["issues"]
     lines = [

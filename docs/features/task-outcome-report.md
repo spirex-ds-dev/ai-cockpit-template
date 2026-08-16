@@ -14,6 +14,8 @@ Machine truth is `.ai/work-items/active/<task>.outcome.json`. Its Markdown view 
 
 The report contains these sections: Outcome Summary, Task Overview, Delivered Changes, Findings, Risks, Warnings, Interventions, Forced Stops, Resolutions, Recurrence Prevention, Avoided Impact, Residual Risks, Human Decisions, and Evidence. Empty sections say `None`. Findings are evidence-backed and categorized; risks distinguish observed problems, potential risks, and prevented events. A Resolution links Problem → Action → Verification → Result.
 
+New generator versions also include `humanHandoff`. This is the mandatory conversational projection for every agent (Codex, Gemini, subagents, or another client), and it is emitted before archive. It contains `completed`, `passed`, `retained`, `risks`, `redReasons`, and the fixed human-question set: problem count, blocking problems, resolved problems, resolution approach, avoided risks, remaining risks, agent unknowns, human confirmations, recurrence likelihood, and next-time prevention. Every claim carries `evidenceRefs`; a claim with no references is explicitly marked `inference` and is not a fact. Red reasons include gate, cause, exact location, evidence, and recovery.
+
 ## Warning color semantics
 
 `knownGaps` means an intentionally unaddressed requirement. Each genuine known gap becomes a Warning with a limitation binding and makes an otherwise completed Outcome `completed_with_warnings` (yellow). It must not be used as free-form completion commentary.
@@ -22,7 +24,7 @@ For an evidence-backed fact that is not an unresolved requirement—for example,
 
 ## Safety and privacy
 
-Task Outcome does not manufacture scores, productivity, time, money, percentages, or trust claims. Avoided Impact is conditional and requires Finding/Risk/Intervention/Stop/Resolution/Test evidence. Residual and accepted risks remain visible. Secrets, credentials, private keys, and unnecessary evidence details do not belong in the PR presentation.
+Task Outcome does not manufacture scores, productivity, time, money, percentages, or trust claims. Avoided Impact is conditional and requires Finding/Risk/Intervention/Stop/Resolution/Test evidence. Residual and accepted risks remain visible. Secrets, credentials, private keys, and unnecessary evidence details do not belong in the PR presentation. Self-congratulatory claims such as “dramatically improved project quality” or “saved a lot of time” are rejected unless backed by permitted quantitative evidence; the generator does not produce them.
 
 The full report is not copied into Cockpit Status or a pull request. The PR fragment is opt-in through Project Profile reporting policy and uses an allowlist. Provider PR state and release evidence remain platform or release evidence; Markdown presentation is not proof of merge, publication, or security assurance.
 
@@ -43,7 +45,7 @@ it does not create a second fact source. CLI output cannot authenticate that a
 human read or approved the report. The handoff also keeps archive explicit:
 `--archive` is a separate lifecycle request and must follow the direct report.
 
-After the PR has merged, `make ai-close-work-item TASK=<task>` verifies provider ownership, base synchronization, and cleanup facts, then generates and validates a separate Closure Receipt before either Work Item branch is deleted. The receipt names the archived Outcome, merged PR, merge commit, final base commit, cleanup intent, and the worktree from which the next Work Item may continue. A missing or invalid Outcome/Receipt fails closed. The assistant must surface that receipt in its Work Item completion report; it is not a replacement for provider evidence.
+After the PR has merged, `make ai-close-work-item TASK=<task>` verifies provider ownership, base synchronization, and cleanup facts, then generates and validates a separate Closure Receipt before either Work Item branch is deleted. The receipt names the archived Outcome, merged PR, merge commit, final base commit, cleanup intent, and the worktree from which the next Work Item may continue. It also checks local branches, local worktrees, and remote branch absence; any residue is a blocking red condition with its exact location and recovery action. A missing or invalid Outcome/Receipt fails closed. The assistant must surface that receipt in its Work Item completion report; it is not a replacement for provider evidence.
 
 This rule applies prospectively. Historical archive bundles are not rewritten merely to add a newer report format.
 

@@ -271,7 +271,14 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
         env=env,
     )
     assert install.returncode == 0, install.stdout + install.stderr
-    finish = run(project, "make", "ai-finish", "TASK=adopt_ai_cockpit", f"PYTHON={sys.executable}")
+    finish = run(
+        project,
+        "make",
+        "ai-finish",
+        "TASK=adopt_ai_cockpit",
+        "REPORT_LANGUAGE=en",
+        f"PYTHON={sys.executable}",
+    )
     assert finish.returncode == 0, finish.stdout + finish.stderr
     assert (
         run(
@@ -335,7 +342,12 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
         run(project, "make", "check-ai-adoption-ready", f"PYTHON={sys.executable}").returncode == 0
     )
     finish = run(
-        project, "make", "ai-finish", "TASK=configure_ai_cockpit", f"PYTHON={sys.executable}"
+        project,
+        "make",
+        "ai-finish",
+        "TASK=configure_ai_cockpit",
+        "REPORT_LANGUAGE=en",
+        f"PYTHON={sys.executable}",
     )
     assert finish.returncode == 0, finish.stdout + finish.stderr
     assert (
@@ -366,7 +378,14 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
         encoding="utf-8",
     )
     prepare_work_item(project, "normal_change", ["src/app.py", "tests/test_app.py"])
-    finish = run(project, "make", "ai-finish", "TASK=normal_change", f"PYTHON={sys.executable}")
+    finish = run(
+        project,
+        "make",
+        "ai-finish",
+        "TASK=normal_change",
+        "REPORT_LANGUAGE=en",
+        f"PYTHON={sys.executable}",
+    )
     assert finish.returncode == 0, finish.stdout + finish.stderr
     assert (
         run(

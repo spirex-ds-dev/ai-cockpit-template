@@ -1,0 +1,876 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-16-outcome-human-handoff",
+  "contractPath": ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md",
+      "reason": "Records the approved structured handoff, locale binding, direct delivery, and fail-closed design."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Declares the versioned humanHandoff projection and evidence-bound claim shapes."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Derives localized completed/passed/retained/risk/red/question claims from structured evidence."
+    },
+    {
+      "path": "scripts/ai_check_task_outcome.py",
+      "reason": "Fails closed on missing handoff, unsupported locale, unbound claims, and self-praise."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Binds conversation locale, emits direct Outcome plus human summary, and supplies red recovery evidence."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome.py",
+      "reason": "Renders the structured handoff into archive Markdown."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome_multilingual.py",
+      "reason": "Renders handoff sections in the explicit conversation locale."
+    },
+    {
+      "path": "scripts/ai_generate_human_report.py",
+      "reason": "Projects the fixed human summary format with evidence and inference markers."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Verifies remote-tracking and local Work Item branch absence after cleanup."
+    },
+    {
+      "path": "scripts/end_to_end_adoption_validation.py",
+      "reason": "Binds the end-to-end fixture's ai-finish invocation to an explicit conversation locale."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Requires REPORT_LANGUAGE to be passed to ai-finish."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Propagates the explicit locale requirement to installed adopters."
+    },
+    {
+      "path": "GEMINI.md",
+      "reason": "Requires all agents to relay the human handoff and verify local/remote cleanup."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Makes direct localized handoff, evidence binding, and cleanup a language-neutral agent rule."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Documents humanHandoff, evidenceRefs, inference, anti-self-praise, and lifecycle rules."
+    },
+    {
+      "path": "docs/features/human-benefit-report.md",
+      "reason": "Documents the fixed human summary structure."
+    },
+    {
+      "path": "docs/features/human-benefit-report.zh-CN.md",
+      "reason": "Documents Chinese-language handoff and evidence requirements."
+    },
+    {
+      "path": "docs/features/human-benefit-report.ja.md",
+      "reason": "Documents Japanese-language handoff and evidence requirements."
+    },
+    {
+      "path": "docs/maintainers/task-outcome-events.md",
+      "reason": "Documents generator 1.2 event/evidence and cleanup boundaries."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Refreshes capability evidence for the evidence-bound human handoff and cleanup claims."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers the current WI-16 design record so documentation metadata and system invariants can verify it."
+    },
+    {
+      "path": "tests/test_task_outcome_generator.py",
+      "reason": "Covers green/red handoff, inference marking, and self-praise rejection."
+    },
+    {
+      "path": "tests/test_task_outcome_validator.py",
+      "reason": "Covers fail-closed validation of evidence-bound human handoff claims."
+    },
+    {
+      "path": "tests/test_task_outcome_schema.py",
+      "reason": "Preserves schema compatibility coverage."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Covers direct conversational delivery and explicit locale lifecycle behavior."
+    },
+    {
+      "path": "tests/test_task_outcome_markdown_renderer.py",
+      "reason": "Covers archive Markdown handoff rendering."
+    },
+    {
+      "path": "tests/test_human_benefit_report.py",
+      "reason": "Covers fixed human summary fields and inference-safe rendering."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Covers Makefile locale forwarding."
+    },
+    {
+      "path": "tests/test_task_outcome_multilingual.py",
+      "reason": "Covers localized handoff headings and shared evidence facts."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Covers stale remote-tracking and local branch cleanup failure paths."
+    },
+    {
+      "path": "tests/test_end_to_end_adoption_validation.py",
+      "reason": "Asserts the adoption fixture records explicit locale binding at finish."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Cockpit status for the active Work Item."
+    },
+    {
+      "path": ".ai/work-items/starts/wi-16-outcome-human-handoff.json",
+      "reason": "Generated Work Item start receipt and before-edit binding."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.outcome.json",
+      "reason": "Generated evidence-bound active Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.outcome.md",
+      "reason": "Generated derived active Outcome Markdown."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated fixed human summary JSON from the active Outcome."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated fixed human summary Markdown from the active Outcome."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Binds finish guard fixtures to the explicit English conversation locale."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Binds finish end-to-end fixtures to the explicit English conversation locale."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Binds adoption finish fixtures to the explicit English conversation locale."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "Binds the documented adoption journey to the explicit English conversation locale."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/glossary.md",
+    "docs/features/task-outcome-report.md",
+    "docs/features/human-benefit-report.md",
+    "scripts/ai_finish.py",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:21.507739+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "1fdc47169c52ad0b8120bc3f8912d1736da3f206dcc4a78bea42d7c4e11f6463",
+      "commandHash": "8bf6b2d466a539c9452494d051a1302dc2eb7b0475c0553f3974021d1a7047cc",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "ff06cf46f0cecfdeb34384a4e0c7f2056b0ae911f98266269731f4ae084d5787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-16-outcome-human-handoff.contract.json work item contract check passed: .ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-16-outcome-human-handoff.contract.json work item contract check passed: .ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "outputBytes": 330
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:21.759075+00:00",
+      "exitCode": 0,
+      "durationMs": 151,
+      "outputDigest": "8af9b5c0996c4a65ec5c5848ee97c21368908725588db41eec62f02f6bf3e988",
+      "commandHash": "f9b669619f6c35adfd1cef711af4af16187a037d2b583ce01652b447f3a0a310",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "a88f43d154c15f23357fe47d249ace6c7702378f522afb75d65eecc3321e3c83",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-16-outcome-human-handoff.contract.json scope guard passed: 41 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-16-outcome-human-handoff.contract.json scope guard passed: 41 changed path(s) covered",
+      "outputBytes": 276
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:22.007106+00:00",
+      "exitCode": 0,
+      "durationMs": 158,
+      "outputDigest": "d5c79dfbff2077e5903f369008fb6faf03741e3e00ea2be4767b8c638b2b5c90",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "b1cb7f3099902a1a9b0ea08821f892f9cca24dc24fd328bd1ffdf39e0ebffc1e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json [warning] restricted_write: .ai/schemas/task_outcome.schema.json (.ai/**) - AI governance configuration. [warning] restricted_write: GEMINI.md (GEMINI.md) - Gemini operating rules. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 3 warning(s) report: target/ai_guard_report.js",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json [warning] restricted_write: .ai/schemas/task_outcome.schema.json (.ai/**) - AI governance configuration. [warning] restricted_write: GEMINI.md (GEMINI.md) - Gemini operating rules. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 3 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 584
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:22.678872+00:00",
+      "exitCode": 0,
+      "durationMs": 379,
+      "outputDigest": "1560f7de2c3770e14b219ca483ba80d9aea3e919c983f627eb9908427cfa03a9",
+      "commandHash": "b8d147c8ad9dbe411fb1afcd85b0754fcbe6de828ce47e5f530d4ca53123d52f",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "a006f4c566fdc05b24d4a9ee2705ee4dc2062b238dfa851ee91ef29a2516cd96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-16-outcome-human-handoff` - Contract Hash: `821a70b1b33ce583` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `8` - Unknown Count: `0` ",
+      "outputTail": "wned] `docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md` — covered by Contract scope - [active_owned] `scripts/ai_check_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_close_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_human_report.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome_multilingual.py` — covered by Contract scope - [active_owned] `scripts/end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `templates/agents/AI_COCKPIT_RULES.md` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_adoption_e2e.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `tests/test_finish_e2e.py` — covered by Contract scope - [active_owned] `tests/test_human_benefit_report.py` — covered by Contract scope - [active_owned] `tests/test_project_governance_journey.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_generator.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_markdown_renderer.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_multilingual.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_validator.py` — covered by Contract scope - [active_owned] `tests/test_work_item_lifecycle_closure.py` — covered by Contract scope ## Next Action - Ready for final status generation and human review.",
+      "outputBytes": 9923
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:22.915415+00:00",
+      "exitCode": 0,
+      "durationMs": 143,
+      "outputDigest": "5106bfb1ef5f7989fd13994744861b6c6c982df5e94537cd14937d7cd49ee37b",
+      "commandHash": "4830f277e8d68036cb209d4df6c3a5c68f20636f7631a7b02bcca73261324144",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "c7d86c3dd9a6671e9ac241259b9f4a3994968b3bee4e3b2309a9b795bc9e653e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json review policy matched 18 path(s) [review] .ai/work-items/active/wi-16-outcome-human-handoff.contract.json [review] .ai/work-items/active/wi-16-outcome-human-handoff.outcome.json [review] .ai/work-items/active/wi-16-outcome-human-handoff.outcome.md [review] .ai/work-items/starts/wi-16-outcome-human-handoff.json [review] .ai/cockpit/cu",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json review policy matched 18 path(s) [review] .ai/work-items/active/wi-16-outcome-human-handoff.contract.json [review] .ai/work-items/active/wi-16-outcome-human-handoff.outcome.json [review] .ai/work-items/active/wi-16-outcome-human-handoff.outcome.md [review] .ai/work-items/starts/wi-16-outcome-human-handoff.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/schemas/task_outcome.schema.json [review] GEMINI.md [review] Makefile [review] scripts/ai_check_task_outcome.py [review] scripts/ai_close_work_item.py [review] scripts/ai_finish.py [review] scripts/ai_generate_human_report.py [review] scripts/ai_generate_task_outcome.py [review] scripts/ai_render_task_outcome.py [review] scripts/ai_render_task_outcome_multilingual.py [review] templates/make/Makefile.ai review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 1167
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:23.143507+00:00",
+      "exitCode": 0,
+      "durationMs": 138,
+      "outputDigest": "92061fda6f2be50a2595df8c9cc177a9428e722e06b9f69724c6785542111c53",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "d0365602ab73f8732ee5145f03cba39577ffefa922b1c277e1517f26eaa2949a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 236
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:23.598085+00:00",
+      "exitCode": 0,
+      "durationMs": 175,
+      "outputDigest": "4c76b734e2318fda686c7b0d90fdb985a15e7e80e04e752291a8840ec4749d53",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "3ded88afadabd8af10188525b7655be712bef5eff02a3e90490617a46c660f84",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 245
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:23.981147+00:00",
+      "exitCode": 0,
+      "durationMs": 266,
+      "outputDigest": "a4f4f4519531715e2e9a0e14f8a852e7961798b92c5f1f9045353691f13aeb3f",
+      "commandHash": "d257b18a3aa48a8cce3247c579817b2afbb83984921b4791f11ec8f3c981b772",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "6a540230e45f54ea245c9a65f716c33321fe78b9c7407a4c3ed0302476176e5e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 373
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:24.113609+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "09f5025f5e6b5c0f7bad4de66e64b883e2d1f57b077b0b77e4b0f6fee6827b8d",
+      "commandHash": "4b4a61f127921df6ddbe7ed0059e9dbd456f6fae8b9f25592b16d08e936acbf6",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "8e32e6f33187b7dd12c2967b7b464e7b855ceebd728e9c2b61ca5ace4a4ee1d2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputBytes": 378
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:00:24.558194+00:00",
+      "exitCode": 0,
+      "durationMs": 346,
+      "outputDigest": "ecc636ab839f96ecd1875da7efa008ceb409b4bf307665ee11d796a92c5ca1c3",
+      "commandHash": "62ce4732e5149abec7b64233d6f1668d8af5ba1a9183611d81158c8904f3a2a9",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "eeee9a6c7140015500a55ede17909fa6cda0123b14c366611ee57336afcc32a8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json ## Diff Ownership Preview - active_owned: `41`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against acti",
+      "outputTail": "tation-context-registry.json` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md` — covered by Contract scope - [active_owned] `scripts/ai_check_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_close_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_human_report.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome_multilingual.py` — covered by Contract scope - [active_owned] `scripts/end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `templates/agents/AI_COCKPIT_RULES.md` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_adoption_e2e.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `tests/test_finish_e2e.py` — covered by Contract scope - [active_owned] `tests/test_human_benefit_report.py` — covered by Contract scope - [active_owned] `tests/test_project_governance_journey.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_generator.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_markdown_renderer.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_multilingual.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_validator.py` — covered by Contract scope - [active_owned] `tests/test_work_item_lifecycle_closure.py` — covered by Contract scope",
+      "outputBytes": 4113
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:06:00.249981+00:00",
+      "exitCode": 0,
+      "durationMs": 335345,
+      "outputDigest": "700ba4d6a1d60204e8e291aa960e289cd2071e2de0f81931e2b3b54508365b32",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "7cfefe15bf3258d8bff1110c50c70e27d244b7071a91d5e6e46b876c36636d1d",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"5200f1ee5813f9468b49d95d4ea8d46ec15754d3\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/schemas/task_outcome.schema.json\", \".ai/work-items/active/wi-16-outcome-human-",
+      "outputTail": "check-ai-test-weakening.json\" --log \"target/quality/sessions/5200f1ee5813-local-20260816T140025Z-44712-0/logs/check-ai-test-weakening.log\" -- \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory check-ai-test-weakening PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_test_weakening.py --root . --mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"5200f1ee5813f9468b49d95d4ea8d46ec15754d3\", \"decision\": \"continue\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"No recovery action is required for the analyzed diff.\", \"requiredExplanation\": false, \"signals\": [], \"version\": 1} \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-aggregate PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-receipt PROJECT_TEST_RECEIPT=target/quality/project-test-aggregate/receipt.json PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt \"target/quality/project-test-aggregate/receipt.json\" quality gate summary written: target/quality/sessions/5200f1ee5813-local-20260816T140025Z-44712-0/summary.json",
+      "outputBytes": 80087
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:06:01.529481+00:00",
+      "exitCode": 0,
+      "durationMs": 647,
+      "outputDigest": "a43600c286c10116a999b48c6df8bda8ae420bc94b0bed15c79d78084ca5b413",
+      "commandHash": "4ad6ba5198be309bd3e967a0062e15c3d23205355329828cc6af7f25326898d4",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "8eda347bec58fb0fe586fdc9bb45073d9142a7525e45ccd885a3d105942c77da",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 459
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:06:02.333118+00:00",
+      "exitCode": 0,
+      "durationMs": 353,
+      "outputDigest": "0dad062b7e4523e6894cc6f245629ba391c55e654262933ff825867096c47b01",
+      "commandHash": "8e8353fc1be0201ee1bc4876413d2fac8ddf74e1ab464fe84e43a4017d813b43",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "ce76c7516018652ba707f158c6b8411e05d67a81838ea7840ba915fc0567dd37",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 403
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:06:02.823293+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "ed8551da21cce204fea1086f7f30fa7d0e984b8eb92ac270e9c2b414befe0635",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "0c1a84ba8ee26162883e877c4d982fbbffb7d2714e985ab7cd02278a416607e2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 213
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:06:02.980292+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "67d794605296d9590814d71da647251b06242984051e08e602d897fefa34f335",
+      "commandHash": "5554dece45c99e2139629bea8e4c8531c88d281bdfea4360d9ad902d3c5b234c",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "b7129bbec84015f9bf627f2f2c85773cab7b09bd79d2658517aae63935d1d053",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json --summary .ai/work-items/active/wi-16-outcome-human-handoff.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 383
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wi-16-outcome-human-handoff.summary.json CONTRACT=.ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T14:06:04.633954+00:00",
+      "exitCode": 0,
+      "durationMs": 346,
+      "outputDigest": "31130cdf1265336ca4ade91d73145a3c0d10dffae9c6137502fd91e366867d30",
+      "commandHash": "480a98683c5e6f71e5b4bf462a7ec8692d5efe2aaec87cd814fbb9618683b1eb",
+      "contractHash": "821a70b1b33ce58389fbd22a9411c5b281f52023494e11b085436bb2cd40020d",
+      "commitSha": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+      "executionContractPath": ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "worktreeDigest": "a10f5b239512211e0626943f07367d274ef03da97bc14d0af9e6298ef34ee453",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-16-outcome-human-handoff.summary.json --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json ai summary check passed: .ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-16-outcome-human-handoff.summary.json --contract .ai/work-items/active/wi-16-outcome-human-handoff.contract.json ai summary check passed: .ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+      "outputBytes": 394,
+      "outcomeInputDigest": "6aaccdc6a1e7894f5bdd70094bfe8c904157f0045c53b517a1dd331f7159d335"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "The handoff projection is evidence-derived and must not invent completion, pass, risk, or recovery claims.",
+      "compliant": true,
+      "evidence": "Generator and validator tests derive and reject unbound claims; handoff items carry claim/evidenceRefs/inference."
+    },
+    {
+      "guideline": "Conversation locale is an explicit binding; do not silently fall back to English or infer a locale from filesystem metadata.",
+      "compliant": true,
+      "evidence": "ai-finish requires --language and locale normalization rejects unsupported values; multilingual tests pass."
+    },
+    {
+      "guideline": "Every agent-facing archive path must emit the localized handoff before archive and preserve the human-readable details in the archive.",
+      "compliant": true,
+      "evidence": "ai-finish renders the persisted Outcome plus human summary before archive; integration tests pass."
+    },
+    {
+      "guideline": "Do not import internal modules from other features; keep the Outcome pipeline dependency direction unchanged.",
+      "compliant": true,
+      "evidence": "Ruff and focused project checks pass; imports remain within the existing scripts dependency direction."
+    },
+    {
+      "guideline": "Do not modify historical archives; record compatibility and immutability evidence instead.",
+      "compliant": true,
+      "evidence": "Historical archives are out of scope and capability matrix refresh is current; no archive path was edited."
+    },
+    {
+      "guideline": "Before closure, verify both local and remote branch/worktree cleanup and fail closed on any residue.",
+      "compliant": true,
+      "evidence": "ai-close-work-item now verifies remote, remote-tracking, and local Work Item branch absence; lifecycle failure-path tests pass."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The change governs human-visible completion claims and lifecycle closure; any missing handoff evidence or branch residue must remain visible as a warning/blocker."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "localization",
+      "detail": "Automatic semantic language detection remains intentionally out of scope; agents must provide the conversation locale explicitly.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "direct localized handoff output before archive",
+      "humanHandoff evidence completeness and red-cause clarity",
+      "local/remote branch and worktree cleanup evidence"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified_by_finish_pipeline_pending",
+    "userVisibleOutput": "required_and_pending",
+    "persistence": "required_and_pending",
+    "localization": "required_and_pending",
+    "generatedArtifacts": "required_and_pending",
+    "makeEntrypoints": "required_and_pending"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "green_complete",
+      "required": true,
+      "status": "verified",
+      "expected": "Localized handoff lists completed and passed evidence with no red reasons.",
+      "verificationPlan": "Generator, validator, renderer, and finish integration tests.",
+      "evidence": [
+        "tests/test_task_outcome_generator.py",
+        "tests/test_task_outcome_ai_finish_integration.py"
+      ]
+    },
+    {
+      "scenario": "yellow_retained_risk",
+      "required": true,
+      "status": "verified",
+      "expected": "Localized handoff lists retained limitations and residual risks with evidence.",
+      "verificationPlan": "Warning Outcome and human report integration tests.",
+      "evidence": [
+        "tests/test_human_benefit_report.py",
+        "tests/test_task_outcome_validator.py"
+      ]
+    },
+    {
+      "scenario": "red_failure_recovery",
+      "required": true,
+      "status": "verified",
+      "expected": "Red handoff gives gate, cause, exact location, evidence, and recovery.",
+      "verificationPlan": "Blocked Outcome and direct delivery tests.",
+      "evidence": [
+        "tests/test_task_outcome_generator.py",
+        "tests/test_task_outcome_ai_finish_integration.py"
+      ]
+    },
+    {
+      "scenario": "unsupported_locale",
+      "required": true,
+      "status": "verified",
+      "expected": "Missing or unsupported locale fails closed.",
+      "verificationPlan": "CLI and locale normalization tests.",
+      "evidence": [
+        "tests/test_task_outcome_ai_finish_integration.py",
+        "tests/test_task_outcome_multilingual.py"
+      ]
+    },
+    {
+      "scenario": "legacy_archive_immutable",
+      "required": true,
+      "status": "verified",
+      "expected": "Legacy outcomes remain valid and historical archives are untouched.",
+      "verificationPlan": "Compatibility tests and archive diff audit.",
+      "evidence": [
+        "tests/test_task_outcome_validator.py",
+        "docs/features/task-outcome-report.md"
+      ]
+    },
+    {
+      "scenario": "closure_cleanup",
+      "required": true,
+      "status": "verified",
+      "expected": "Closure fails on local, remote, or remote-tracking branch residue.",
+      "verificationPlan": "Lifecycle cleanup failure-path tests and final branch audit.",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py",
+        "scripts/ai_close_work_item.py"
+      ]
+    }
+  ],
+  "userCorrectionsCaptured": [
+    "Outcome must be delivered directly into the conversation for every agent, not only stored as a report file.",
+    "Human summary must answer completion, problem counts/blockers/warnings, stops, resolutions, avoided/remaining risks, unknowns, human decisions, verification, impact, and next action.",
+    "Every factual report field must bind evidenceRefs; unsupported benefits are inference, and self-praise is forbidden without quantitative evidence.",
+    "Closure must verify local branches, local worktrees, remote branches, and remote-tracking refs are clean."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Direct conversational Outcome delivery is mandatory for all agents.",
+      "implementation": "ai-finish prints the persisted localized Outcome and fixed human summary before archive; agent rules require REPORT_LANGUAGE.",
+      "evidence": [
+        "scripts/ai_finish.py",
+        "templates/agents/AI_COCKPIT_RULES.md"
+      ]
+    },
+    {
+      "correction": "Claims without evidence must not be presented as facts.",
+      "implementation": "humanHandoff claim objects carry evidenceRefs and inference; validator fails on unbound claims.",
+      "evidence": [
+        "scripts/ai_generate_task_outcome.py",
+        "scripts/ai_check_task_outcome.py"
+      ]
+    },
+    {
+      "correction": "Local and remote cleanup must be checked at closure.",
+      "implementation": "ai-close-work-item verifies remote branch, remote-tracking ref, and local branch absence.",
+      "evidence": [
+        "scripts/ai_close_work_item.py"
+      ]
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "f5155fa131e50bd2",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "f5155fa131e50bd2",
+      "previousContractHash": "f5155fa131e50bd2",
+      "contractHash": "e0f5a3650f434694",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Add the validator regression path required by the declared coverage association for ai_check_task_outcome.py.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-16T12:43:39.746116+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "f5155fa131e50bd2",
+      "previousContractHash": "e0f5a3650f434694",
+      "contractHash": "8727bf14b7f3d74e",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Register the WI-16 design document in the documentation context registry after quality correctly blocked on missing metadata.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T12:48:52.064957+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "f5155fa131e50bd2",
+      "previousContractHash": "8727bf14b7f3d74e",
+      "contractHash": "4998b639ff22f852",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Bind the end-to-end adoption fixture to REPORT_LANGUAGE=en and include its regression path so the new locale requirement is tested in the project suite.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T12:57:10.693706+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "f5155fa131e50bd2",
+      "previousContractHash": "4998b639ff22f852",
+      "contractHash": "821a70b1b33ce583",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Bind locale-updated adoption, finish, governance, and shard regression tests to this WI scope.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T13:43:24.062660+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "821a70b1b33ce583",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 16
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-16T21:50:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md"
+        ],
+        "reason": "The approved design records the bounded handoff and cleanup requirements."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.contract.json",
+          ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.summary.json"
+        ],
+        "reason": "Contract scope, acceptance, and Summary evidence describe the same implementation boundary."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/task_report.md",
+          "GEMINI.md",
+          "Makefile",
+          "docs/features/human-benefit-report.md",
+          "docs/features/task-outcome-report.md",
+          "docs/maintainers/task-outcome-events.md",
+          "docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md",
+          "templates/agents/AI_COCKPIT_RULES.md",
+          "templates/make/Makefile.ai",
+          ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.outcome.md"
+        ],
+        "reason": "Every changed human-facing report and command surface is included in the implementation and documentation boundary."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/features/human-benefit-report.zh-CN.md",
+          "docs/features/human-benefit-report.ja.md",
+          "tests/test_task_outcome_multilingual.py"
+        ],
+        "reason": "Chinese and Japanese handoff semantics remain explicit and are covered by localized renderer tests."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/features/task-outcome-report.md",
+          "docs/features/human-benefit-report.md",
+          "docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md"
+        ],
+        "reason": "Locale auto-detection remains explicitly out of scope and historical archive compatibility remains bounded."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/wi-16-outcome-human-handoff.outcome.json",
+    "markdownPath": ".ai/work-items/active/wi-16-outcome-human-handoff.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2,
+    "humanStatusColor": "green",
+    "completionFact": "All declared finish checks passed.",
+    "recoveryCondition": ""
+  },
+  "archiveSequence": 925
+}

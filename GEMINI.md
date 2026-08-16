@@ -50,4 +50,8 @@ Before declaring the work complete, update the matching Summary with:
 - observed issues.
 
 Summary is both an audit record and a collaboration handoff for the next reviewer or agent. Use checkpoints to prevent drift during longer tasks, and record optional `intentAlignment` evidence only when it is genuinely available.
-Run `make ai-finish TASK=<task>` when the Summary is ready.
+Run `make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>` when the Summary is ready. The locale is explicit (`en`, `ja`, or `zh-CN`); missing or unsupported locale is a fail-closed error.
+
+Before archive, every agent and subagent must relay the generated Outcome directly in the conversation. The handoff is not a file path: it must answer, in order, what was completed; total/blocking/warning problems; stops and their reason/stage/resolution; resolved problems and evidence; risks avoided; remaining risks; unknowns; human decisions; verification; impact; and next action. Claims without evidence references are marked `inference`, never presented as fact. Self-congratulatory claims (for example, dramatically improving quality or saving time) are forbidden without quantitative evidence.
+
+Closure is not complete until the archived evidence is verified and both local and remote branches, plus local worktrees, are checked clean. Any residue remains a blocking Outcome and must be reported with its exact location and recovery action.

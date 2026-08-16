@@ -277,6 +277,7 @@ def test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry(tm
         "TASK=e2e",
         f"PYTHON={sys.executable}",
         "PROJECT_TEST=false",
+        "REPORT_LANGUAGE=en",
     )
     assert failed.returncode != 0
     assert "Task Outcome Report (active" in failed.stdout, failed.stdout + failed.stderr
@@ -316,7 +317,13 @@ def test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry(tm
 def test_required_failure_keeps_active_and_retry_archives(tmp_path):
     contract_path, _ = prepare_work_item(tmp_path)
     failed = run(
-        tmp_path, "make", "ai-finish", "TASK=e2e", f"PYTHON={sys.executable}", "PROJECT_TEST=false"
+        tmp_path,
+        "make",
+        "ai-finish",
+        "TASK=e2e",
+        f"PYTHON={sys.executable}",
+        "PROJECT_TEST=false",
+        "REPORT_LANGUAGE=en",
     )
     assert failed.returncode != 0
     assert "Task Outcome Report (active" in failed.stdout, failed.stdout + failed.stderr
@@ -369,6 +376,7 @@ def test_documentation_alignment_failure_emits_red_outcome_before_quality(tmp_pa
         "TASK=e2e",
         f"PYTHON={sys.executable}",
         "PROJECT_TEST=false",
+        "REPORT_LANGUAGE=en",
     )
 
     assert result.returncode != 0
@@ -397,6 +405,7 @@ def test_archive_collision_fails_after_checks_and_preserves_active(tmp_path):
         f"PYTHON={sys.executable}",
         "PROJECT_TEST=true",
         "ARCHIVE=true",
+        "REPORT_LANGUAGE=en",
     )
     assert result.returncode != 0
     assert "Target already exists" in result.stdout + result.stderr

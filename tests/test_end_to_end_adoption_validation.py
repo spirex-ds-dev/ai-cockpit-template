@@ -115,7 +115,7 @@ def test_complete_matrix_executes_real_local_lifecycle_and_failure_cases(tmp_pat
         assert phases["install"]["status"] == "passed"
         assert phases["calibrate"]["status"] == "passed"
         assert phases["finish"]["status"] == "passed"
-        assert phases["finish"]["command"] == "make ai-finish ARCHIVE=true"
+        assert phases["finish"]["command"] == "make ai-finish ARCHIVE=true REPORT_LANGUAGE=en"
         assert "qualityRoute=declared_fixture_commands" in phases["finish"]["evidence"]
         assert "humanRelay=not_run_in_fixture" not in phases["finish"]["evidence"]
         assert phases["pr_evidence"]["evidenceKind"] == "local_provider_simulation"

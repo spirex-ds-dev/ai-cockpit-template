@@ -46,6 +46,10 @@ NOT_RUN = re.compile(r"\bnot[_ -]?run\b", re.IGNORECASE)
 INCOMPATIBLE_VERIFIED_CLAIM = re.compile(
     r"\b(?:enterprise[-_ ]ready|platform[-_ ]verified)\b", re.IGNORECASE
 )
+SELF_PRAISE = re.compile(
+    r"(?:system(?:表现非常优秀|performed exceptionally)|成功保护了项目|极大提升了质量|大幅节省了时间|dramatically improved project quality|greatly improved quality|saved a lot of time)",
+    re.IGNORECASE,
+)
 # Work Item Contracts historically use both hyphenated and underscore task IDs
 # (for example, the installed first-adoption Contract is adopt_ai_cockpit).
 # Outcome validation must bind that canonical Contract ID rather than reject a
@@ -61,6 +65,16 @@ STATUS_COLORS = {
     "blocked": "red",
     "cancelled": "red",
 }
+SUPPORTED_LOCALES = {"en", "ja", "zh-CN"}
+HANDOFF_QUESTION_LISTS = (
+    "blockedProblems",
+    "resolvedProblems",
+    "resolutionApproach",
+    "avoidedRisks",
+    "remainingRisks",
+    "agentUnknowns",
+    "humanConfirmations",
+)
 
 
 def _requires_human_status_projection(outcome: Mapping[str, Any]) -> bool:
@@ -95,6 +109,110 @@ def _validate_human_status_projection(
         _error(errors, "human_status", "blocked Outcome requires failedGate and recoveryCondition")
 
 
+def _requires_human_handoff_projection(outcome: Mapping[str, Any]) -> bool:
+    bindings = outcome.get("bindings")
+    if not isinstance(bindings, Mapping):
+        return False
+    version = bindings.get("generatorVersion")
+    if not isinstance(version, str):
+        return False
+    try:
+        major, minor = (int(part) for part in version.split(".", maxsplit=1))
+    except ValueError:
+        return False
+    return (major, minor) >= (1, 2)
+
+
+def _validate_claim_items(
+    value: Any, errors: list[ValidationError], path: str, *, required: bool = False
+) -> None:
+    if not isinstance(value, list):
+        _error(errors, "human_handoff", f"{path} must be an array")
+        return
+    if required and not value:
+        _error(errors, "human_handoff", f"{path} must contain at least one evidence-backed item")
+    for index, item in enumerate(value):
+        if not isinstance(item, Mapping):
+            _error(errors, "human_handoff", f"{path}[{index}] must be an object")
+            continue
+        claim = item.get("claim")
+        refs = item.get("evidenceRefs")
+        if not isinstance(claim, str) or not claim.strip():
+            _error(errors, "human_handoff", f"{path}[{index}].claim must be non-empty text")
+        if not isinstance(refs, list):
+            _error(errors, "human_handoff", f"{path}[{index}].evidenceRefs must be an array")
+        if refs == [] and item.get("inference") is not True:
+            _error(
+                errors,
+                "human_handoff",
+                f"{path}[{index}] without evidence must be marked inference",
+            )
+        if refs and item.get("inference") is True:
+            _error(
+                errors, "human_handoff", f"{path}[{index}] with evidence cannot be marked inference"
+            )
+
+
+def _validate_human_handoff_projection(
+    outcome: Mapping[str, Any], errors: list[ValidationError]
+) -> None:
+    if not _requires_human_handoff_projection(outcome):
+        return
+    handoff = outcome.get("humanHandoff")
+    if not isinstance(handoff, Mapping):
+        _error(errors, "human_handoff", "generator >= 1.2 requires humanHandoff")
+        return
+    locale = handoff.get("locale")
+    if locale not in SUPPORTED_LOCALES:
+        _error(errors, "human_handoff", "humanHandoff.locale is unsupported or missing")
+    status = outcome.get("status")
+    for key in ("completed", "passed", "retained", "risks", "redReasons"):
+        _validate_claim_items(
+            handoff.get(key),
+            errors,
+            f"humanHandoff.{key}",
+            required=key in {"completed", "passed"},
+        )
+    if status == "blocked" and not handoff.get("redReasons"):
+        _error(errors, "human_handoff", "blocked Outcome requires humanHandoff.redReasons")
+    questions = handoff.get("questions")
+    if not isinstance(questions, Mapping):
+        _error(errors, "human_handoff", "humanHandoff.questions is required")
+        return
+    problem_count = questions.get("problemCount")
+    if not isinstance(problem_count, int) or problem_count < 0:
+        _error(
+            errors,
+            "human_handoff",
+            "humanHandoff.questions.problemCount must be a non-negative integer",
+        )
+    refs = questions.get("problemCountEvidenceRefs")
+    if not isinstance(refs, list):
+        _error(errors, "human_handoff", "problemCountEvidenceRefs must be an array")
+    for key in HANDOFF_QUESTION_LISTS:
+        _validate_claim_items(questions.get(key), errors, f"humanHandoff.questions.{key}")
+    for key in ("recurrenceLikelihood", "nextTime"):
+        item = questions.get(key)
+        if (
+            not isinstance(item, Mapping)
+            or not isinstance(item.get("claim"), str)
+            or not item.get("claim", "").strip()
+        ):
+            _error(errors, "human_handoff", f"humanHandoff.questions.{key} must contain a claim")
+        elif not isinstance(item.get("evidenceRefs"), list):
+            _error(
+                errors,
+                "human_handoff",
+                f"humanHandoff.questions.{key}.evidenceRefs must be an array",
+            )
+        elif not item.get("evidenceRefs") and item.get("inference") is not True:
+            _error(
+                errors,
+                "human_handoff",
+                f"humanHandoff.questions.{key} without evidence must be marked inference",
+            )
+
+
 @dataclass(frozen=True)
 class ValidationError:
     code: str
@@ -121,6 +239,8 @@ def _walk(value: Any, errors: list[ValidationError], path: str = "outcome") -> N
                     errors, "unsupported_quantification", f"unsupported metric key at {path}.{key}"
                 )
             _walk(child, errors, f"{path}.{key}")
+    elif isinstance(value, str) and SELF_PRAISE.search(value):
+        _error(errors, "unsupported_self_praise", f"unsupported self-praise claim at {path}")
     elif isinstance(value, list):
         for index, child in enumerate(value):
             _walk(child, errors, f"{path}[{index}]")
@@ -362,6 +482,23 @@ def _validate_markdown(
                     "markdown_parity",
                     "Markdown is missing the recovery condition diagnostic",
                 )
+    if _requires_human_handoff_projection(outcome):
+        required_titles = (
+            "Human Handoff",
+            "What was completed",
+            "What passed",
+            "What was retained",
+            "Risks",
+            "Red reasons",
+            "Human questions",
+        )
+        if any(
+            f"## {title}" not in markdown and f"### {title}" not in markdown
+            for title in required_titles
+        ):
+            _error(
+                errors, "markdown_parity", "Markdown is missing a required human handoff section"
+            )
 
 
 def validate_outcome(
@@ -384,6 +521,7 @@ def validate_outcome(
         _error(errors, "schema", "status is invalid")
     _validate_bindings(outcome, expected_task_id, errors)
     _validate_human_status_projection(outcome, errors)
+    _validate_human_handoff_projection(outcome, errors)
     _validate_sections(outcome.get("sections"), errors)
     if isinstance(outcome.get("sections"), dict):
         _validate_claims(outcome["sections"], errors)
