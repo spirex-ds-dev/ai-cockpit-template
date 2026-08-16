@@ -1,0 +1,769 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-25-outcome-retry-projection",
+  "contractPath": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.contract.json",
+      "reason": "Work Item Contract for bounded retry evidence correction."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.summary.json",
+      "reason": "AI Change Summary and verification handoff."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Preserve retry attempts and rebuild Outcome after final stabilization."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Validate optional verificationHistory evidence in AI Change Summaries."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Executable retry projection regression coverage."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Updated finish stabilization regression expectation for post-stabilization Outcome and Human Benefit Report regeneration."
+    },
+    {
+      "path": "tests/test_project_governance.py",
+      "reason": "Schema allowlist regression coverage for append-only verification history."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Document retry stop/resolution evidence semantics."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Generated capability evidence for the changed finish surface."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Generated Japanese capability evidence refreshed by the governed finish surface."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Generated human-readable Japanese capability evidence refreshed by the governed finish surface."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Generated documentation alignment evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Generated human-readable documentation alignment evidence."
+    },
+    {
+      "path": "docs/audits/wi-25-outcome-retry-projection.json",
+      "reason": "Machine-readable audit of the immutable-archive defect and correction."
+    },
+    {
+      "path": "docs/audits/wi-25-outcome-retry-projection.md",
+      "reason": "Human-readable audit of the immutable-archive defect and correction."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated active Work Item status."
+    },
+    {
+      "path": ".ai/work-items/starts/wi-25-outcome-retry-projection.json",
+      "reason": "Start receipt bound to WI-24 merge base."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.json",
+      "reason": "Mandatory evidence-derived Task Outcome."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.md",
+      "reason": "Mandatory human-readable Task Outcome."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated Human Benefit Report."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated human-readable Human Benefit Report."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/**",
+      "reason": "Generated immutable archive bundle for this Work Item only."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.outcome.json",
+    ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.summary.json",
+    "scripts/ai_finish.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "docs/features/task-outcome-report.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:10.244372+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "717626669dcf293b01027046fe032ee1ecacab27fff1d96952aa9938b07f9b99",
+      "commandHash": "e69563b843f5c0cdf683bacbbb349ad8698f0a03ae363c5c8ae7632308bfa933",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "dd9390c45220712d566504f15e77848e743e796c4028ab2864b7513db2eb070c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-25-outcome-retry-projection.contract.json work item contract check passed: .ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-25-outcome-retry-projection.contract.json work item contract check passed: .ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "outputBytes": 355
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:10.480367+00:00",
+      "exitCode": 0,
+      "durationMs": 142,
+      "outputDigest": "357b04a9fea5ac10ca36f6f8c46ca963d62c8cdf7491729eaf792009cd48ff0d",
+      "commandHash": "b1051e6e6112bcbc08e6027bf9bb93392bf527603458fa979f3f0e69a59a7cf1",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "c56c0a790ce8f1dc5b31e64c6284b12031e3a86095db4440811d0da3bb4ed619",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-25-outcome-retry-projection.contract.json scope guard passed: 21 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-25-outcome-retry-projection.contract.json scope guard passed: 21 changed path(s) covered",
+      "outputBytes": 298
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:10.722456+00:00",
+      "exitCode": 0,
+      "durationMs": 150,
+      "outputDigest": "37d1aa7e12c0d2a99ce47adf18df70dd262680f5046c696ecd1520ff61a07374",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "21236edc1dea0e1fb626105ba7c08e1f6510ba8e168227c2bb56886e219b6f85",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 335
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:11.172254+00:00",
+      "exitCode": 0,
+      "durationMs": 351,
+      "outputDigest": "2f1e8e37330eae6bc2dedc7779c0b366535479b31a1f8d3b42594fbecde8eb01",
+      "commandHash": "a9fcc6beed48f12200a159e8a2636fe2c5624b0f255cacc18ec9baa2140d4919",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "6f4b7a4f719b543aefac90573a69d98e3113cfe5f7d14a0e1330f9a6cdf0d735",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-25-outcome-retry-projection` - Contract Hash: `e710cbfa97150c94` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Co",
+      "outputTail": "sk_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wi-25-outcome-retry-projection.json` — covered by Contract scope - [active_owned] `docs/audits/wi-25-outcome-retry-projection.json` — covered by Contract scope - [active_owned] `docs/audits/wi-25-outcome-retry-projection.md` — covered by Contract scope - [active_owned] `docs/features/task-outcome-report.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_summary.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_project_governance.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 6404
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:11.429207+00:00",
+      "exitCode": 0,
+      "durationMs": 152,
+      "outputDigest": "5138997daf80945c247b92240930ab73e8c9225d2aa5a2de6a8a45fe9bc35e2e",
+      "commandHash": "a880acebfe0d0fc9df9fb3e4795e5830367fb7f8142140626844e73c65eb770b",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "eeb4748194f18fe5140597407dac725d33dbc39c5e7f85132614aa87ff2bbe99",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json review policy matched 9 path(s) [review] .ai/work-items/active/wi-25-outcome-retry-projection.outcome.json [review] .ai/work-items/active/wi-25-outcome-retry-projection.outcome.md [review] .ai/work-items/starts/wi-25-outcome-retry-projection.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review]",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json review policy matched 9 path(s) [review] .ai/work-items/active/wi-25-outcome-retry-projection.outcome.json [review] .ai/work-items/active/wi-25-outcome-retry-projection.outcome.md [review] .ai/work-items/starts/wi-25-outcome-retry-projection.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items/active/wi-25-outcome-retry-projection.contract.json [review] scripts/ai_check_summary.py [review] scripts/ai_finish.py review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 848
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:11.662144+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "852250fb86c94e9c308526fa886bc90a9246518aea4da5b9dc0934cc69c068c7",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "4a2597a55125ceefa0d1451b669940c819b3d179726911b08bed992ffca4ec85",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 255
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:11.892919+00:00",
+      "exitCode": 0,
+      "durationMs": 139,
+      "outputDigest": "882e2dfb5c1637c669aa59117038b5ae1ae8de33b7e6ca350432668ca042355c",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "3711d41e9af59ea79b4463242731374abbeb5a4a7342dff9d22230550274c7b4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 264
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:12.050209+00:00",
+      "exitCode": 0,
+      "durationMs": 62,
+      "outputDigest": "597aa9b9aef564f2353cb6c1036a5aea5f7ed88eae5f69fe87a1ff7f1edbd670",
+      "commandHash": "9c9c2c508a1c515b940ba185a3f64167d5e288049779328eff35ce3196744e04",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "fe224ea413adc7552316183307b35b4f13746d5485e5b85a07064b58c3c85694",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 398
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:12.199155+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "b90f0a19f2fcab5ec9f30c19c887c0ad2cc325b98f702154de9c07062c5eff83",
+      "commandHash": "f0b03419aac36b2b93f9435e167bf2bf275236263c5c532a7eee1206ff086d01",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "4a27b8c829854a85546a68eb3df8dee18573a79eaf94e8949ba2e57056701aa1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputBytes": 403
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:14:12.633087+00:00",
+      "exitCode": 0,
+      "durationMs": 339,
+      "outputDigest": "2fadb518dc83ad17d04bcbdd83fdd2d0caf61d277ce0ad045c499080a49127cb",
+      "commandHash": "12e45bca8e71d166e3a36019ac5c5456d57a39db4152173eddbd32b76a220d97",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "2c1fe5ec00c3ea2330a897d3d26f84ebf6157601f9f1d5c3777d131e564bae0b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json ## Diff Ownership Preview - active_owned: `21`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against a",
+      "outputTail": "us.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-25-outcome-retry-projection.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wi-25-outcome-retry-projection.json` — covered by Contract scope - [active_owned] `docs/audits/wi-25-outcome-retry-projection.json` — covered by Contract scope - [active_owned] `docs/audits/wi-25-outcome-retry-projection.md` — covered by Contract scope - [active_owned] `docs/features/task-outcome-report.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_summary.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_project_governance.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope",
+      "outputBytes": 2498
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:20:54.002318+00:00",
+      "exitCode": 0,
+      "durationMs": 401078,
+      "outputDigest": "3f07335c64ab04e976f5df1b68c94842250c394e444a6ba8acf681a07545248f",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "c291e8e45727b26edd57d6f487d9c6a1ae1f14bee19e9c78ae33fb476098bf9d",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"2f52609305c9415ffcdb81ca89955cb68cd704dc\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/wi-25-outcome-retry-projection.contract.json\", \".ai/work-items/active/w",
+      "outputTail": "check-ai-test-weakening.json\" --log \"target/quality/sessions/d62747041b94-local-20260816T211413Z-93394-0/logs/check-ai-test-weakening.log\" -- \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory check-ai-test-weakening PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_test_weakening.py --root . --mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"2f52609305c9415ffcdb81ca89955cb68cd704dc\", \"decision\": \"continue\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"No recovery action is required for the analyzed diff.\", \"requiredExplanation\": false, \"signals\": [], \"version\": 1} \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-aggregate PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-receipt PROJECT_TEST_RECEIPT=target/quality/project-test-aggregate/receipt.json PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt \"target/quality/project-test-aggregate/receipt.json\" quality gate summary written: target/quality/sessions/d62747041b94-local-20260816T211413Z-93394-0/summary.json",
+      "outputBytes": 75788
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:20:54.816144+00:00",
+      "exitCode": 0,
+      "durationMs": 442,
+      "outputDigest": "fb84a1663602838aa0ecc252663ae93c72bb47996628d99bb1cd1a90ebfed8cc",
+      "commandHash": "54d892644c97a42ffb198a4de7378895bbcab5629d4ad0383af26863537530ae",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "f973d805f1478a73b654176e49758b2e5ce5b9e0220928aa27d19182d36cc6fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 503
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:20:55.672062+00:00",
+      "exitCode": 0,
+      "durationMs": 382,
+      "outputDigest": "22cc1e3b4353590c81912eca9d15d41de062f543b0c4db13aec512116b361f46",
+      "commandHash": "6768945455e5ada676cb05485401028b9e7e645ccd833ec4edf6e9c0bf45774d",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "96d51bcd875c696a858b1c62e034bb7f5a540ef6ac1d85b7b67214ad97fbe5ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 428
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:20:56.174704+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "487fb4fc3102f8b1b4857dab2e6f3e993ca5ecaf50f88fa7ac489c207f41f631",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "8af92b974cf9393224d0b54970c25b416ed35252c03ca40d2867fd45f03922c1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 232
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:20:56.373506+00:00",
+      "exitCode": 0,
+      "durationMs": 78,
+      "outputDigest": "fcd95c5b574141493c9259a9b2f6dc9ba015952556228b282e3fddea2d19b683",
+      "commandHash": "9422b14322340c81ac93744131672c800ceaf35bab148c438a057eb1fb6bc51f",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "d9878cc801c2cefb96599e828423934900d7cad207fc966ca2fa0eeb04062bc7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json --summary .ai/work-items/active/wi-25-outcome-retry-projection.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 408
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wi-25-outcome-retry-projection.summary.json CONTRACT=.ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T21:20:57.857060+00:00",
+      "exitCode": 0,
+      "durationMs": 242,
+      "outputDigest": "8171f574df9e44977de46d543e3d11c5b6ba86f516d33402f81bc1a0ca9be0c2",
+      "commandHash": "3912363def15bb9cabcbf5210f294e429da21b0a420083eb637d797a38ab6a30",
+      "contractHash": "e710cbfa97150c941fd7424fc9a234cf742bb932637db35ea63a8814857a690c",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "dddb680d3c41a1ccb7db9bba78a63c1faf0181ef27e996402636aebc06354d95",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-25-outcome-retry-projection.summary.json --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json ai summary check passed: .ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-25-outcome-retry-projection.summary.json --contract .ai/work-items/active/wi-25-outcome-retry-projection.contract.json ai summary check passed: .ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "outputBytes": 422,
+      "outcomeInputDigest": "43049491cc980553ba58941fb86386f4df3983e4a70f98f9046a7cb86884b6ff"
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Retry history must remain evidence-bound and must not alter immutable WI-24 output."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.json",
+    ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "area": "retry-outcome-projection",
+      "detail": "A successful retry can leave the archived Outcome carrying the earlier failed verification as a current blocker.",
+      "status": "resolved_by_post_stabilization_regeneration",
+      "action": "Retained failed attempts, projected retry stop/resolution evidence, and regenerated Outcome after final stabilization.",
+      "evidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.outcome.json",
+          "subject": "humanHandoff.questions.blockedProblems"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.summary.json",
+          "subject": "verification.aiSummary retry evidence"
+        },
+        {
+          "source": "tests/test_task_outcome_ai_finish_integration.py",
+          "subject": "test_pre_merge_handoff_projects_retry_stop_and_resolution"
+        },
+        {
+          "source": "scripts/ai_finish.py",
+          "subject": "refresh_final_outcome_after_stabilization"
+        }
+      ]
+    },
+    {
+      "area": "quality-shard-evidence-contamination",
+      "detail": "The serialized quality attempt stopped because the installer shard receipt was from commit 289bf680a3feb08fa5cd673de5e8eb6cdc68b925 while the active WI commit was d62747041b94fed572246e9989ccd938a67424ae.",
+      "status": "resolved_by_serialized_retry",
+      "action": "Preserved the failed quality attempt and required a fresh serialized quality run after all competing runs stopped.",
+      "evidenceRefs": [
+        {
+          "source": "docs/audits/wi-25-outcome-retry-projection.json",
+          "subject": "quality shard evidence-contamination finding"
+        },
+        {
+          "source": "scripts/quality_test_manifest.py",
+          "subject": "aggregate rejects shard commit mismatch"
+        },
+        {
+          "source": "Makefile",
+          "subject": "project-test shard isolation and aggregate receipt"
+        }
+      ]
+    }
+  ],
+  "knownGaps": [
+    "The immutable WI-24 archive retains its historical stale retry projection; this Work Item cannot rewrite it."
+  ],
+  "residualRisks": [
+    {
+      "area": "historical-report",
+      "level": "medium",
+      "detail": "Consumers reading WI-24 must interpret its retained stale blocker as historical evidence; successor behavior is corrected prospectively."
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Every human-facing blocker, stop, resolution, and benefit claim must carry evidenceRefs; evidence-free text is inference.",
+      "compliant": true,
+      "evidence": "tests/test_task_outcome_ai_finish_integration.py"
+    },
+    {
+      "guideline": "Preserve historical archives and record the corrective boundary in the current audit only.",
+      "compliant": true,
+      "evidence": "command://archive-diff-immutability"
+    },
+    {
+      "guideline": "Do not claim release publication, provider UI delivery, performance improvement, or quality benefit without direct evidence.",
+      "compliant": true,
+      "evidence": "docs/features/task-outcome-report.md"
+    },
+    {
+      "guideline": "Keep Outcome language bound to the requested conversation language (English for this Work Item).",
+      "compliant": true,
+      "evidence": "make ai-finish REPORT_LANGUAGE=en"
+    }
+  ],
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-16T20:38:19.822417+00:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "The bounded installer record has no remediation-plan scope."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.contract.json"
+        ],
+        "reason": "The generated Contract is declared in the final installer write set."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/task_report.md",
+          "docs/audits/wi-25-outcome-retry-projection.md",
+          "docs/features/task-outcome-report.md",
+          "docs/reference/japanese-capability-assessment.md",
+          "docs/reference/pre-release-documentation-alignment.md",
+          ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.md"
+        ],
+        "reason": "Every installer-written documentation and command surface is enumerated."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "Installer-written Japanese or Chinese surfaces remain explicit for review."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.contract.json"
+        ],
+        "reason": "The generated Contract retains adoption or upgrade boundaries and follow-ups."
+      }
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "retry-failed-to-passed",
+      "riskDomain": "human_handoff_truthfulness",
+      "scenario": "A verification check failed on one attempt and passed on a later retry.",
+      "expectedResult": "The stop and resolution are both preserved with evidenceRefs; the current blocker list is empty for that check.",
+      "verificationPlan": "Focused ai_finish integration test plus generated Outcome validation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_ai_finish_integration.py::test_pre_merge_handoff_projects_retry_stop_and_resolution",
+        "tests/test_task_outcome_ai_finish_integration.py::test_pre_merge_outcome_renders_retry_stop_as_resolved"
+      ]
+    },
+    {
+      "id": "current-failure",
+      "riskDomain": "evidence_binding",
+      "scenario": "The latest verification attempt is still failed.",
+      "expectedResult": "The Outcome remains blocked and the current failure has evidence-bound stop/red-reason data.",
+      "verificationPlan": "Focused negative-path test for current failed verification.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_ai_finish_integration.py::test_pre_merge_handoff_binds_current_failed_check_to_stop_evidence"
+      ]
+    },
+    {
+      "id": "immutable-archive",
+      "riskDomain": "immutable_history",
+      "scenario": "Historical WI-01 through WI-24 archives exist during the correction.",
+      "expectedResult": "No historical archive path changes from the WI-24 merge base.",
+      "verificationPlan": "Archive diff and ownership checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "command://git-diff-archive-immutability"
+      ]
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "retry stop/resolution evidence",
+      "post-stabilization Outcome regeneration",
+      "immutable archive boundary"
+    ]
+  },
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "Retry evidence is preserved and projected after final stabilization; immutable history remains unchanged."
+  },
+  "followUps": [],
+  "userCorrectionsCaptured": [
+    {
+      "instruction": "Every blocking stop and its resolution must be explained to the human with evidence; do not rewrite immutable archives.",
+      "source": "user-request:evidence-bound-human-outcome-self-check"
+    }
+  ],
+  "overclaimPrevention": "Do not report release publication, performance improvement, or provider/UI delivery as fact without direct evidenceRefs; mark unsupported benefits as inference.",
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "67a02fea5e0db6b0",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "67a02fea5e0db6b0",
+      "previousContractHash": "67a02fea5e0db6b0",
+      "contractHash": "a7efd7ca643850a1",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Added scripts/ai_check_summary.py and tests/test_project_governance.py to cover verificationHistory schema validation and satisfy the coverage association.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-16T20:37:40.231329+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "67a02fea5e0db6b0",
+      "previousContractHash": "a7efd7ca643850a1",
+      "contractHash": "4634c78928d088dc",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Added tests/test_core_gates.py to Contract scope and updated its stabilization regression expectation for post-stabilization Outcome regeneration.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T21:09:32.053709+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "67a02fea5e0db6b0",
+      "previousContractHash": "4634c78928d088dc",
+      "contractHash": "e710cbfa97150c94",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Added generated Japanese capability assessment JSON/Markdown to Contract scope and Summary because governed evidence refresh changed both paths.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T21:12:29.923359+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "e710cbfa97150c94",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "taskOutcome": {
+    "status": "needs_human_confirmation",
+    "jsonPath": ".ai/work-items/active/wi-25-outcome-retry-projection.outcome.json",
+    "markdownPath": ".ai/work-items/active/wi-25-outcome-retry-projection.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 5,
+    "humanStatusColor": "yellow"
+  },
+  "verificationHistory": [
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "failed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T20:38:45.025147+00:00",
+      "exitCode": 2,
+      "durationMs": 15223,
+      "outputDigest": "968868868bc3ed4c8c75cd016437c41db0a5c31e7c50e0fbf6dfd4c652fab2fc",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "a7efd7ca643850a1d9f035ecd7efdd10b39372e4650a3985b1f8255de74eace9",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "11881a3c186e132cd0e8d7f7b99a43aef8f25dc435fc4702d928188e14499527",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"2f52609305c9415ffcdb81ca89955cb68cd704dc\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/wi-25-outcome-retry-projection.contract.json\", \".ai/work-items/active/w",
+      "outputTail": "OJECT_ROOT>/.venv/bin/python scripts/check_system_invariants.py documentation metadata check passed PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_capability_claims.py [ERROR] capability matrix: capabilities[5].evidenceSource does not match current evidence bytes [ERROR] capability matrix: capabilities[22].evidenceSource does not match current evidence bytes [ERROR] docs/getting-started/first-calibration.ja.md: capability project_calibration_profile_proposal has effective state evidence_stale [ERROR] docs/getting-started/first-calibration.md: capability project_calibration_profile_proposal has effective state evidence_stale [ERROR] docs/getting-started/first-calibration.zh-CN.md: capability project_calibration_profile_proposal has effective state evidence_stale [ERROR] docs/reference/calibration-profiles.ja.md: capability project_calibration_profile_proposal has effective state evidence_stale [ERROR] docs/reference/calibration-profiles.md: capability project_calibration_profile_proposal has effective state evidence_stale [ERROR] docs/reference/calibration-profiles.zh-CN.md: capability project_calibration_profile_proposal has effective state evidence_stale make[7]: *** [check-docs-metadata] Error 1 🔴 quality-full blocked Failed gate: check-docs-metadata Recovery: /Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make -f Makefile --no-print-directory check-docs-metadata Outcome: target/quality/sessions/d62747041b94-local-20260816T203830Z-25931-0/timing/check-docs-metadata.json Log: target/quality/sessions/d62747041b94-local-20260816T203830Z-25931-0/logs/check-docs-metadata.log make[6]: *** [qg-check-docs-metadata] Error 2 make[6]: *** Waiting for unfinished jobs.... AI Cockpit system invariants passed make[5]: *** [quality-fast-policy] Error 2 make[4]: *** [quality-fast-owned] Error 2 make[3]: *** [quality-fast] Error 2 make[2]: *** [quality-full-owned] Error 2 make[1]: *** [quality-full] Error 2 make: *** [ai-cockpit-quality] Error 2",
+      "outputBytes": 15871
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "failed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T20:45:58.797255+00:00",
+      "exitCode": 2,
+      "durationMs": 392456,
+      "outputDigest": "f7b2c8faf9e829361967e6ff26855a9ac9be18e539d04acc7579321b7bad88ec",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "a7efd7ca643850a1d9f035ecd7efdd10b39372e4650a3985b1f8255de74eace9",
+      "commitSha": "d62747041b94fed572246e9989ccd938a67424ae",
+      "executionContractPath": ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+      "worktreeDigest": "42bdee3c67077a6a699d82ca3bcd10255b8405ff27c7fe1706aacaaeb4c8043e",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"2f52609305c9415ffcdb81ca89955cb68cd704dc\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/wi-25-outcome-retry-projection.contract.json\", \".ai/work-items/active/w",
+      "outputTail": "n traceability check passed: <PROJECT_ROOT>/docs/reference/remediation-instruction-traceability.json; WI-01 through WI-20 audit: <PROJECT_ROOT>/docs/reference/wi01-wi20-bidirectional-traceability-audit.json PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/run_quality_gate.py --gate check-ai-test-weakening --category project-consistency --session-id \"d62747041b94-local-20260816T203926Z-27264-0\" --run-id \"local\" --output \"target/quality/sessions/d62747041b94-local-20260816T203926Z-27264-0/timing/check-ai-test-weakening.json\" --log \"target/quality/sessions/d62747041b94-local-20260816T203926Z-27264-0/logs/check-ai-test-weakening.log\" -- \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory check-ai-test-weakening PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_test_weakening.py --root . --mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"2f52609305c9415ffcdb81ca89955cb68cd704dc\", \"decision\": \"continue\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"No recovery action is required for the analyzed diff.\", \"requiredExplanation\": false, \"signals\": [], \"version\": 1} make[7]: *** [project-test-shard-installer] Error 1 make[7]: *** Waiting for unfinished jobs.... make[6]: *** [project-test-owned] Error 2 make[5]: *** [project-test] Error 2 🔴 quality-full blocked Failed gate: project-test Recovery: /Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make -f Makefile --no-print-directory project-test Outcome: target/quality/sessions/d62747041b94-local-20260816T203926Z-27264-0/timing/project-test.json Log: target/quality/sessions/d62747041b94-local-20260816T203926Z-27264-0/logs/project-test.log make[4]: *** [qg-project-test] Error 2 make[3]: *** [quality-heavy] Error 2 make[2]: *** [quality-full-owned] Error 2 make[1]: *** [quality-full] Error 2 make: *** [ai-cockpit-quality] Error 2",
+      "outputBytes": 74324
+    }
+  ],
+  "archiveSequence": 934
+}

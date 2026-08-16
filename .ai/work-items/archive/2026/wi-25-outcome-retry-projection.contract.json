@@ -1,0 +1,207 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-25-outcome-retry-projection",
+  "mode": "code",
+  "title": "Preserve and project retry resolution evidence in human Outcomes",
+  "baseCommit": "2f52609305c9415ffcdb81ca89955cb68cd704dc",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-25-outcome-retry-projection.contract.json",
+    ".ai/work-items/active/wi-25-outcome-retry-projection.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-25-outcome-retry-projection.outcome.json",
+    ".ai/work-items/active/wi-25-outcome-retry-projection.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_core_gates.py",
+    "tests/test_project_governance.py",
+    "docs/features/task-outcome-report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/audits/wi-25-outcome-retry-projection.json",
+    "docs/audits/wi-25-outcome-retry-projection.md"
+  ],
+  "outOfScope": [
+    "Rewriting or backfilling immutable WI-01 through WI-24 archives.",
+    "Changing runtime behavior, performance measurement, locale policy, or provider/UI transport.",
+    "Changing the Outcome schema or inventing unsupported benefit claims.",
+    "Deleting unrelated user-owned worktrees, dirty paths, or recovery branches."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.outcome.json",
+      "reason": "Immutable archived Outcome demonstrates a stale failed aiSummary claim after a successful retry."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.summary.json",
+      "reason": "Archived verification evidence contains the retry boundary and final pass evidence."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Finish currently replaces same-check verification records and generates Outcome before final stabilization."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Regression surface for Summary-to-Outcome retry projection."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Authoritative human Outcome evidence and lifecycle behavior documentation."
+    }
+  ],
+  "rawUserRequest": "Continue the evidence-bound self-check loop. Correct the retry-projection defect before publishing any release; every blocking stop and its resolution must be visible to the human with evidence.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:evidence-bound-human-outcome-self-check",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-outcome-retry-correction-wi25"
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["human_handoff_truthfulness", "evidence_binding", "immutable_history"],
+    "reason": "A stale retry failure in an archived human report can misstate the final status, while rewriting the immutable archive would destroy audit truth.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["The correction changes governed finish and evidence projection behavior."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The defect is reproducible from immutable WI-24 evidence and has a bounded corrective implementation with executable regression coverage."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Record checkpoints before implementation and finish to prevent retry-state drift."
+  },
+  "acceptance": [
+    "A failed verification attempt is retained as structured evidence while the latest result remains the current verification state.",
+    "When a later verification attempt passes, the Outcome contains evidence-bound stop and resolution records and does not report the superseded failure as a current blocker.",
+    "Finish regenerates the Outcome and Human Benefit Report after final stabilization so archived reports reflect the latest verification state.",
+    "Focused regression tests cover failed-to-passed retry projection, current failures, evidence references, and immutable archive boundaries.",
+    "All strict governed checks pass and no WI-01 through WI-24 archive path is modified."
+  ],
+  "guidelines": [
+    "Every human-facing blocker, stop, resolution, and benefit claim must carry evidenceRefs; evidence-free text is inference.",
+    "Preserve historical archives and record the corrective boundary in the current audit only.",
+    "Do not claim release publication, provider UI delivery, performance improvement, or quality benefit without direct evidence.",
+    "Keep Outcome language bound to the requested conversation language (English for this Work Item)."
+  ],
+  "intent": {
+    "problem": "WI-24's first strict finish stopped at aiSummary because generated projection paths were missing from changedFiles. The retry passed after that correction, but the archived Outcome still projected the earlier failed aiSummary as a blocker because Outcome generation occurred before final stabilization and failed attempts were not retained as resolution evidence.",
+    "constraints": [
+      "Do not rewrite WI-24 or any earlier archive.",
+      "Keep current verification state separate from append-only retry history.",
+      "Use only repository-recorded verification evidence for human claims."
+    ],
+    "rationale": "A human must be able to distinguish a stop that was resolved from a current blocker; the projection must be deterministic and evidence-bound at archive time."
+  },
+  "declaredIntent": {
+    "summary": "Make retry stops and resolutions explicit and ensure the final archived Outcome is generated from final verification evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "direct_user_authorization",
+    "reference": "user-request:self-check-and-correct-until-complete"
+  },
+  "scenarioCoverage": [
+    {
+      "id": "retry-failed-to-passed",
+      "riskDomain": "human_handoff_truthfulness",
+      "scenario": "A verification check failed on one attempt and passed on a later retry.",
+      "expectedResult": "The stop and resolution are both preserved with evidenceRefs; the current blocker list is empty for that check.",
+      "verificationPlan": "Focused ai_finish integration test plus generated Outcome validation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.summary.json::verification",
+        "scripts/ai_finish.py::record_result"
+      ]
+    },
+    {
+      "id": "current-failure",
+      "riskDomain": "evidence_binding",
+      "scenario": "The latest verification attempt is still failed.",
+      "expectedResult": "The Outcome remains blocked and the current failure has evidence-bound stop/red-reason data.",
+      "verificationPlan": "Focused negative-path test for current failed verification.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.outcome.json::humanHandoff",
+        "scripts/ai_finish.py::write_blocked_outcome"
+      ]
+    },
+    {
+      "id": "immutable-archive",
+      "riskDomain": "immutable_history",
+      "scenario": "Historical WI-01 through WI-24 archives exist during the correction.",
+      "expectedResult": "No historical archive path changes from the WI-24 merge base.",
+      "verificationPlan": "Archive diff and ownership checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "AGENTS.md::immutable archive lifecycle",
+        ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.archive-manifest.json"
+      ]
+    }
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the evidence-bound self-check correction; immutable archives remain protected."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore the retry projection tests and documentation.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 938}},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-25-outcome-retry-projection.json",
+    "baseCommit": "2f52609305c9415ffcdb81ca89955cb68cd704dc",
+    "initialScopeDigest": "44eba45947577b5eb18e166e869d202ce152ef7fe4979b49752f73b3b38be3d1",
+    "contractSkeletonDigest": "c6a0aaceca78af35c0957199a7f8e20f787acc1385806e65015426d30e853b43"
+  }
+}

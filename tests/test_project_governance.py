@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 import ai_calibrate
+import ai_check_summary
 import ai_project_doctor
 import check_system_invariants
 from ai_check_guard_calibration import calibration_issues
@@ -14,6 +15,10 @@ from check_system_invariants import invariant_issues
 from repository_fixture import copy_repository_tree
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_summary_schema_allows_append_only_verification_history() -> None:
+    assert "verificationHistory" in ai_check_summary.ALLOWED_FIELDS
 
 
 def test_observability_exposes_the_lifecycle_phase_event_type() -> None:

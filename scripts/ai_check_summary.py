@@ -72,6 +72,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "taskOutcome",
     "hostedPerformanceEvidence",
     "documentationAlignment",
+    "verificationHistory",
 }
 RESULTS = {"passed", "failed", "not_run"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -501,6 +502,7 @@ def _validate_summary_metadata(summary: dict[str, Any]) -> list[str]:
         "generatedFiles",
         "destructiveChanges",
         "observedIssues",
+        "verificationHistory",
         "guidelinesCompliance",
         "followUps",
         "unverifiedScenarios",

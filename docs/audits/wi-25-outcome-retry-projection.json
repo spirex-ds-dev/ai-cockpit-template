@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "wi-25-outcome-retry-projection",
+  "status": "completed_with_warnings",
+  "finding": {
+    "claim": "WI-24's first finish stopped at aiSummary after generated projection paths were omitted from changedFiles; the successful retry did not replace the earlier failure in the archived Outcome because Outcome generation preceded final stabilization.",
+    "evidenceRefs": [
+      {"source": ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.outcome.json", "subject": "humanHandoff.questions.blockedProblems"},
+      {"source": ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.summary.json", "subject": "verification.aiSummary retry evidence"},
+      {"source": "scripts/ai_finish.py", "subject": "run_task_outcome_pipeline before stabilization"}
+    ]
+  },
+  "correction": {
+    "claim": "Retain replaced failed verification attempts in verificationHistory, project retry stops and resolutions with evidenceRefs, and regenerate the Outcome and Human Benefit Report after final stabilization.",
+    "evidenceRefs": [
+      {"source": "scripts/ai_finish.py", "subject": "record_result and refresh_final_outcome_after_stabilization"},
+      {"source": "tests/test_task_outcome_ai_finish_integration.py", "subject": "retry projection regression tests"},
+      {"source": "docs/features/task-outcome-report.md", "subject": "verification retry semantics"}
+    ]
+  },
+  "qualityStop": {
+    "claim": "A strict quality retry stopped on a stale installer shard receipt whose commit differed from the active WI commit; the installer test shard itself passed 315 tests.",
+    "evidenceRefs": [
+      {"source": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.summary.json", "subject": "verificationHistory quality stop"},
+      {"source": "scripts/quality_test_manifest.py", "subject": "aggregate receipt commit validation"},
+      {"source": "Makefile", "subject": "project-test shard isolation and aggregate"}
+    ],
+    "resolution": {
+      "claim": "The condition requires a fresh serialized quality run; no installer implementation change is implied by this stop.",
+      "evidenceRefs": [
+        {"source": "tests/test_installer.py", "subject": "installer shard test coverage"},
+        {"source": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.summary.json", "subject": "resolved_by_serialized_retry"}
+      ]
+    }
+  },
+  "boundaries": [
+    "WI-01 through WI-24 archives are immutable.",
+    "Outcome locale and provider/UI transport behavior are unchanged.",
+    "Release publication and performance benefits are not claimed by this corrective Work Item.",
+    "Evidence-free claims remain inference."
+  ],
+  "finalVerification": {
+    "claim": "Strict finish archived WI-25 with all 16 declared governed checks passed; the Outcome remains yellow because the immutable WI-24 historical warning is retained.",
+    "evidenceRefs": [
+      {"source": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.summary.json", "subject": "verification all 16 checks passed"},
+      {"source": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.json", "subject": "needs_human_confirmation and retained warning"},
+      {"source": ".ai/cockpit/task_report.json", "subject": "human benefit report forced stops and resolutions"}
+    ]
+  }
+}
