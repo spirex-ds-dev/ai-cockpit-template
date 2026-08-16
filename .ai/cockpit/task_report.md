@@ -7,14 +7,14 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-10-environment-bound-reuse-successor generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-13-adoption-reality-report generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 2
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 2
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 2
+- Unresolved: 1
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,8 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Full repository quality is resource-bounded and must be run once by the parent after this implementation commit.
-- Unresolved evidence is explicitly limited: Hosted PR checks and canonical archive/closure evidence are not yet available.
+- Unresolved evidence is explicitly limited: Replace this before finishing the Work Item.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
