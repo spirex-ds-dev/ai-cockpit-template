@@ -1,0 +1,296 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-24-final-release-v0-5-63",
+  "mode": "code",
+  "title": "Publish corrected final release v0.5.63",
+  "baseCommit": "287f3355e2a9a00ded267005d411c657d8465583",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-24-final-release-v0-5-63.contract.json",
+    ".ai/work-items/active/wi-24-final-release-v0-5-63.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-24-final-release-v0-5-63.outcome.json",
+    ".ai/work-items/active/wi-24-final-release-v0-5-63.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "release-state.json",
+    "release.json",
+    "next-release.json",
+    "release-source.json",
+    "docs/audits/wi-24-final-release-v0-5-63.json",
+    "docs/audits/wi-24-final-release-v0-5-63.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/pre-release-documentation-alignment.json"
+  ],
+  "outOfScope": [
+    "Rewriting, deleting, or backfilling immutable WI-01 through WI-23 archives.",
+    "New runtime behavior, performance claims, locale changes, or provider configuration changes.",
+    "Deleting unrelated user-owned worktrees, dirty files, or recovery branches."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Canonical Work Item, release, merge, and closure lifecycle rules."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository governance terminology and evidence boundaries."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Exact-source rehearsal, publication, provider asset, and Quick Install requirements."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical published/candidate release state; v0.5.63 is the next candidate."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate v0.5.63 public contract and supply-chain baseline."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.summary.json",
+      "reason": "Latest corrective Work Item evidence is archived before publication."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.outcome.md",
+      "reason": "Historical Outcome projection gap remains immutable and must be represented as a retained limitation."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Canonical release readiness and strict quality entrypoints."
+    }
+  ],
+  "rawUserRequest": "After all corrective Work Items are complete, perform the final exact-source release and closeout. Keep human Outcomes evidence-bound and do not rewrite immutable history or unrelated user work.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request: final release after corrective self-check loop",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-wi24-final-release-v0-5-63"
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_identity",
+      "evidence_gap",
+      "repository_cleanup"
+    ],
+    "reason": "Publication is an immutable external operation; the exact merged source, rehearsal, provider assets, Outcome evidence, and cleanup identities must all remain bound. A provider or evidence failure must block publication."
+    ,"unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Final public release and repository closeout require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized final publication and evidence-bound cleanup; provider gates remain fail-closed."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Release readiness, source-bound evidence, distribution, state consistency, security, lockfile, Japanese capability, and strict quality checks pass for the exact merged v0.5.63 candidate; any provider failure remains an explicit publication block.",
+    "A same-SHA release rehearsal succeeds before publication, and provider release tag, source commit, metadata commit, archive, digests, SBOM, provenance, and tagged Quick Install are mutually consistent.",
+    "The archived Outcome and Human Benefit Report use English, contain all required human-summary sections, bind factual claims to evidenceRefs, and mark unsupported benefits as inference.",
+    "Post-closure checks report the WI-24 branch and remote branch removed, main synchronized with origin/main, and no unrelated user-owned worktree or dirty path was deleted."
+  ],
+  "guidelines": [
+    "Every factual report claim must cite evidenceRefs; unsupported benefit language is inference only.",
+    "Do not use self-praise or unquantified performance or quality claims.",
+    "Historical archive files are immutable and may only be read and referenced.",
+    "Release publication is fail-closed on missing, stale, mismatched, or provider-unverified evidence.",
+    "The human handoff is direct, clear, and emitted in the conversation language (English for this Work Item)."
+  ],
+  "intent": {
+    "problem": "The corrected Outcome evidence adapter is merged after v0.5.62, while the repository has a prepared v0.5.63 candidate. The final release must publish only the exact verified merged source and communicate the residual evidence limits without rewriting immutable history.",
+    "constraints": [
+      "Start from the latest origin/main and use the repository release workflow; a failed or mismatched rehearsal blocks publication.",
+      "Do not rewrite historical archives, move immutable tags, claim unsupported performance or Outcome delivery, or remove unrelated user work.",
+      "Keep publication and branch/worktree cleanup inside the canonical PR, hosted-check, merge, and ai-close-work-item lifecycle."
+    ],
+    "rationale": "A release is trustworthy only when the immutable provider identity, repository projections, human Outcome, and final cleanup state are all evidence-bound."
+  },
+  "declaredIntent": {
+    "summary": "Publish the exact verified v0.5.63 candidate and complete evidence-bound human closeout.",
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-current-task",
+    "reason": "The user explicitly requested final release and local/remote cleanup, subject to fail-closed evidence gates."
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "user-request: final release after corrective self-check loop",
+    "scope": "Publish only the exact verified v0.5.63 candidate after all gates; no gate bypass, historical rewrite, or unrelated cleanup is authorized."
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "externalSystem": "GitHub Releases and GitHub Actions",
+    "availableEvidence": [
+      "same_sha_rehearsal_receipt",
+      "provider_release_receipt",
+      "tag",
+      "commit",
+      "digest",
+      "sbom",
+      "provenance",
+      "asset_availability",
+      "immutable_tag",
+      "public_assets",
+      "release_digests",
+      "public_installation",
+      "closure_receipt"
+    ]
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 936
+    }
+  },
+  "scenarioCoverage": [
+    {
+      "id": "exact-source-publication",
+      "riskDomain": "release_identity",
+      "scenario": "Candidate v0.5.63 is published only when merged main, tag, metadata, rehearsal, provider assets, and Quick Install identify the same source.",
+      "expectedResult": "Publication succeeds with provider evidence, or remains blocked with the exact failure recorded.",
+      "verificationPlan": "Run repository readiness, same-SHA rehearsal, release workflow, and post-publish distribution checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["docs/reference/distribution.md", "release-state.json", "command://make-check-release-readiness"]
+    },
+    {
+      "id": "human-outcome-evidence",
+      "riskDomain": "evidence_gap",
+      "scenario": "The release Outcome communicates completed work, stops, resolutions, risks, unknowns, decisions, verification, impact, and next action in English with evidence refs.",
+      "expectedResult": "Archived Outcome and task report contain all required fields; unsupported impact is marked inference.",
+      "verificationPlan": "Run strict ai-finish and inspect archived Outcome JSON/Markdown and task_report pair.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.outcome.json", "docs/reference/task-outcome-report.md"]
+    },
+    {
+      "id": "cleanup-boundary",
+      "riskDomain": "repository_cleanup",
+      "scenario": "WI-24 closure removes only its own branch and records unrelated dirty worktrees as retained.",
+      "expectedResult": "WI-24 local/remote branch is absent and main is synchronized; unrelated user work remains untouched.",
+      "verificationPlan": "Capture branch, remote, worktree, and status evidence before and after ai-close-work-item.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["AGENTS.md", "command://git-status-branch-worktree-audit"]
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-24-final-release-v0-5-63.json",
+    "baseCommit": "287f3355e2a9a00ded267005d411c657d8465583",
+    "initialScopeDigest": "e75a3bf6e3a491a20fe490f64a09733b4939c3fff13d180a5389acb3ff4fa3d2",
+    "contractSkeletonDigest": "6b63a2dd771ea037ecb02b13d14b52dd82c2c97f4f0ff9f8fcb7609855807047"
+  }
+}
