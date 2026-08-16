@@ -32,6 +32,34 @@ def outcome() -> dict[str, object]:
             "humanDecisions": [],
             "evidence": [],
         },
+        "humanHandoff": {
+            "locale": "zh-CN",
+            "completed": [{"title": "完成内容", "detail": "完成了交接层。", "evidence": []}],
+            "passed": [{"title": "通过检查", "detail": "焦点测试已通过。", "evidence": []}],
+            "retained": [{"title": "保留事项", "detail": "仍需人工确认。", "evidence": []}],
+            "risks": [
+                {
+                    "severity": "medium",
+                    "title": "风险",
+                    "detail": "环境范围有限",
+                    "state": "unresolved",
+                    "evidence": [],
+                }
+            ],
+            "redReasons": [],
+            "questions": {
+                "problemCount": 1,
+                "blockedProblems": [],
+                "resolvedProblems": ["旧交付缺口"],
+                "resolutionApproach": ["增加结构化投影"],
+                "avoidedRisks": ["误报完成"],
+                "remainingRisks": ["需明确语言"],
+                "agentUnknowns": ["Provider UI 不在范围内"],
+                "humanConfirmations": ["确认保留事项"],
+                "recurrenceLikelihood": "低",
+                "nextTime": "开始时绑定语言",
+            },
+        },
     }
 
 
@@ -76,6 +104,9 @@ def test_three_languages_have_localized_chrome_and_shared_facts() -> None:
     for text in rendered.values():
         assert "One source summary." in text
         assert "None" in text
+    assert "## 已完成" in rendered["zh-CN"]
+    assert "完成了交接层。" in rendered["zh-CN"]
+    assert "### What was completed" in rendered["en"]
     assert rendered["ja"] != rendered["en"] != rendered["zh-CN"]
 
 

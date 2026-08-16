@@ -57,6 +57,120 @@ def test_empty_evidence_has_all_sections_and_none_markdown() -> None:
     assert "## Residual Risks\nNone" in markdown
 
 
+def test_human_handoff_answers_the_required_human_questions() -> None:
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "locale": "zh-CN",
+            "completed": [
+                {
+                    "title": "Added the handoff projection",
+                    "detail": "The Outcome now carries human-readable completion facts.",
+                    "evidence": [{"source": "summary", "subject": "changedFiles"}],
+                }
+            ],
+            "passedChecks": [
+                {
+                    "title": "Focused tests",
+                    "detail": "The generator and renderer tests passed.",
+                    "evidence": [{"source": "pytest", "subject": "focused-suite"}],
+                }
+            ],
+            "retained": [
+                {
+                    "title": "Provider verification scope",
+                    "detail": "No provider-specific claim is made in this local run.",
+                    "evidence": [{"source": "summary", "subject": "knownGaps"}],
+                }
+            ],
+            "risks": [
+                {
+                    "severity": "medium",
+                    "title": "Environment-specific evidence",
+                    "detail": "Results are bounded to the measured environment.",
+                    "state": "unresolved",
+                    "evidence": [{"source": "summary", "subject": "residualRisks"}],
+                }
+            ],
+            "handoffQuestions": {
+                "problemCount": 1,
+                "blockedProblems": [],
+                "resolvedProblems": ["Missing human-readable completion details"],
+                "resolutionApproach": ["Added a versioned evidence-derived handoff."],
+                "avoidedRisks": ["A false green archive claim"],
+                "remainingRisks": ["Locale still requires explicit agent binding"],
+                "agentUnknowns": ["Provider UI transport is intentionally unspecified"],
+                "humanConfirmations": ["Review the bounded provider-claim limitation"],
+                "recurrenceLikelihood": "低：validator and finish gate now enforce the handoff.",
+                "nextTime": "Pass the conversation locale and retain evidence details from the start.",
+            },
+        },
+    )
+    handoff = outcome["humanHandoff"]
+    assert handoff["locale"] == "zh-CN"
+    assert handoff["completed"][0]["detail"]
+    assert handoff["passed"][0]["evidence"]
+    assert handoff["questions"]["problemCount"] == 1
+    assert validate_outcome(outcome, render_markdown(outcome)).valid
+
+
+def test_red_handoff_contains_gate_cause_location_and_recovery() -> None:
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "locale": "zh-CN",
+            "status": "blocked",
+            "failedGate": "quality",
+            "recoveryCondition": "Run the quality retry after fixing the failing test.",
+            "redReasons": [
+                {
+                    "gate": "quality",
+                    "cause": "The project test failed.",
+                    "location": "tests/test_example.py::test_failure",
+                    "recovery": "Fix the failing assertion and rerun quality.",
+                    "evidence": [{"source": "pytest", "subject": "failure"}],
+                }
+            ],
+        },
+    )
+    reason = outcome["humanHandoff"]["redReasons"][0]
+    assert reason["gate"] == "quality"
+    assert reason["location"]
+    assert reason["recovery"]
+    assert validate_outcome(outcome, render_markdown(outcome)).valid
+
+
+def test_evidence_free_claims_are_marked_as_inference_and_handoff_is_required() -> None:
+    outcome = generate_outcome("task-outcome-generator", bindings(), evidence={"locale": "en"})
+    assert outcome["humanHandoff"]["completed"][0]["inference"] is True
+    assert outcome["humanHandoff"]["completed"][0]["evidenceRefs"] == []
+    missing = dict(outcome)
+    missing.pop("humanHandoff")
+    report = validate_outcome(missing, render_markdown(outcome))
+    assert any(error.code == "human_handoff" for error in report.errors)
+
+
+def test_self_praise_is_rejected_without_quantitative_evidence() -> None:
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "locale": "en",
+            "completed": [
+                {
+                    "title": "dramatically improved project quality",
+                    "detail": "dramatically improved project quality",
+                    "evidence": [],
+                }
+            ],
+        },
+    )
+    report = validate_outcome(outcome, render_markdown(outcome))
+    assert any(error.code == "unsupported_self_praise" for error in report.errors)
+
+
 def test_publication_evidence_is_bound_into_final_outcome_evidence():
     outcome = generate_outcome(
         "task-outcome-generator",

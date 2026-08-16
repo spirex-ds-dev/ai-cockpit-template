@@ -23,7 +23,7 @@ Only `ready_on_base` means the invoking worktree can start the next Work Item. `
 5. Do not remove tests, snapshots, or Work Item records without documenting the reason in the Summary.
 6. Update the matching AI Change Summary with changed files, verification evidence, guideline compliance, residual risks, and optional `intentAlignment` evidence when it is genuinely available.
    `unknowns` and `notCodable` are valid outputs when coding should not continue. Summary is a collaboration handoff, not only an audit artifact.
-7. Run `make ai-finish TASK=<task>` and treat failures as blockers for completion or archive.
+7. Run `make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>` and treat failures as blockers for completion or archive. The locale must follow the conversation (`en`, `ja`, or `zh-CN`); never silently fall back to English.
    Use checkpoints to keep long-running tasks from drifting.
    A same-active-Contract, same-scope correction of active schema or evidence
    retries in that Work Item and preserves each blocked Outcome; do not create a
@@ -34,6 +34,8 @@ Only `ready_on_base` means the invoking worktree can start the next Work Item. `
    `make ai-checkpoint CONTRACT=<contract> SUMMARY=<summary> STAGE=before_finish`;
    use `make ai-revalidate-contract-amendment` only for a stale immutable
    `before_edit` Contract binding.
+8. Before archive, every agent and subagent must deliver the active Outcome into the conversation. The human handoff must state: what was completed; problem totals, blocking problems, and warnings; stops with reason/stage/resolution; resolved problems with solutions and evidence; avoided risks; remaining risks; unknowns; human decisions; verification; impact; and next action. A file path alone is not delivery. Every factual claim is evidence-bound; unsupported benefit statements are explicitly marked `inference`, and self-praise is forbidden without quantitative evidence.
+9. Work Item closure must verify the archived record and inspect local branches, local worktrees, and remote branches. Any residue is a blocking condition with a concrete location and recovery action; only a clean local/remote state may be reported closed.
 8. If you need a pre-implementation readiness view, run `make ai-preflight`. Use `make generate-ai-preflight-review` when you want generation only, and `make check-ai-preflight-review` as the report validator. `make ai-start` in `MODE=code` should surface the same review before implementation begins.
    The rule is **Evidence over Self-Declaration**: readiness is derived from Contract evidence, not from agent confidence. When that review reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before any coding continues. Advisory mode means the command can exit successfully; it does not mean the agent may silently continue.
 

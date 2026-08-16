@@ -8,6 +8,58 @@ description: A concise evidence-derived explanation of the value and remaining d
 
 Human Benefit Report answers what changed, how many evidence-backed issues were detected, which stops occurred, what was resolved, what risk was prevented, which decisions came from a person, what remains unresolved, and the next safe action.
 
+## Default human summary format
+
+The default Markdown projection uses this exact decision order:
+
+```text
+Task Result
+Status: Success / Partial / Blocked / Failed
+
+What was completed
+- ...
+
+Problems found
+- Total:
+- Blocking:
+- Warning:
+
+Stops triggered
+- Reason:
+- Stage:
+- Resolution:
+
+Problems resolved
+- Problem:
+- Solution:
+- Evidence:
+
+Risks avoided
+- ...
+
+Remaining risks
+- ...
+
+Unknowns
+- ...
+
+Human decisions
+- ...
+
+Verification
+- ...
+
+Impact
+- Rework avoided:
+- Repeat correction prevented:
+- Major risk prevented:
+
+Next action
+- ...
+```
+
+The JSON projection behind this format is `humanHandoff`. It is derived from the validated Outcome, not authored freehand. Each claim has `evidenceRefs`; evidence-free benefit language is represented as `inference` and cannot be phrased as a fact. This prevents a path-only receipt from being mistaken for a human explanation.
+
 ## One fact source, two lifecycle views
 
 The report is a deterministic projection of the validated Task Outcome. It does not introduce another event log or allow free-form agent claims to become evidence.

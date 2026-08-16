@@ -50,6 +50,15 @@ CHROME = {
             "humanDecisions": "人間の判断",
             "evidence": "証拠",
         },
+        "handoff": {
+            "title": "人間への引き継ぎ",
+            "completed": "完了した内容",
+            "passed": "合格した確認",
+            "retained": "保留・残存事項",
+            "risks": "リスク",
+            "redReasons": "🔴の理由",
+            "questions": "人間向け確認事項",
+        },
     },
     "en": {
         "title": "Task Outcome",
@@ -71,6 +80,15 @@ CHROME = {
             "humanDecisions": "Human Decisions",
             "evidence": "Evidence",
         },
+        "handoff": {
+            "title": "Human Handoff",
+            "completed": "What was completed",
+            "passed": "What passed",
+            "retained": "What was retained",
+            "risks": "Risks",
+            "redReasons": "Red reasons",
+            "questions": "Human questions",
+        },
     },
     "zh-CN": {
         "title": "任务结果",
@@ -91,6 +109,15 @@ CHROME = {
             "residualRisks": "剩余风险",
             "humanDecisions": "人的决定",
             "evidence": "证据",
+        },
+        "handoff": {
+            "title": "面向人的交接",
+            "completed": "已完成",
+            "passed": "已通过",
+            "retained": "保留事项",
+            "risks": "风险",
+            "redReasons": "🔴原因",
+            "questions": "需要人了解和确认",
         },
     },
 }
@@ -154,11 +181,26 @@ def _item_text(item: Any, none: str) -> str:
     if isinstance(item, str) and item.strip():
         return item.strip()
     if isinstance(item, Mapping):
-        for key in ("title", "subject", "problem", "description", "kind", "stage"):
+        for key in ("claim", "title", "subject", "problem", "description", "kind", "stage"):
             value = item.get(key)
             if isinstance(value, str) and value.strip():
                 return value.strip()
     return none
+
+
+def _handoff_item_text(item: Any, none: str) -> str:
+    if isinstance(item, Mapping):
+        claim = _item_text(item, none)
+        detail = item.get("detail")
+        text = (
+            f"{claim}: {detail}"
+            if isinstance(detail, str) and detail.strip() and detail.strip() != claim
+            else claim
+        )
+        if item.get("inference") is True:
+            text += " (inference)"
+        return text
+    return _item_text(item, none)
 
 
 def render_localized_outcome(outcome: Mapping[str, Any], locale: str) -> str:
@@ -188,6 +230,37 @@ def render_localized_outcome(outcome: Mapping[str, Any], locale: str) -> str:
         values = sections.get(key, [])
         if isinstance(values, list) and values:
             lines.extend(f"- {_item_text(item, chrome['none'])}" for item in values)
+        else:
+            lines.append(chrome["none"])
+        lines.append("")
+    handoff = outcome.get("humanHandoff")
+    if isinstance(handoff, Mapping):
+        labels = chrome["handoff"]
+        lines.extend([f"## {labels['title']}", f"Locale: `{handoff.get('locale', 'unknown')}`", ""])
+        for key in ("completed", "passed", "retained", "risks", "redReasons"):
+            lines.append(f"### {labels[key]}")
+            values = handoff.get(key, [])
+            if isinstance(values, list) and values:
+                lines.extend(f"- {_handoff_item_text(item, chrome['none'])}" for item in values)
+            else:
+                lines.append(chrome["none"])
+            lines.append("")
+        questions = handoff.get("questions")
+        lines.append(f"### {labels['questions']}")
+        if isinstance(questions, Mapping):
+            for key, value in questions.items():
+                if key == "problemCountEvidenceRefs":
+                    continue
+                if isinstance(value, list):
+                    rendered = (
+                        "; ".join(_handoff_item_text(item, chrome["none"]) for item in value)
+                        or chrome["none"]
+                    )
+                elif isinstance(value, Mapping):
+                    rendered = _handoff_item_text(value, chrome["none"])
+                else:
+                    rendered = str(value)
+                lines.append(f"- {key}: {rendered}")
         else:
             lines.append(chrome["none"])
         lines.append("")

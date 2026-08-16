@@ -70,6 +70,19 @@ def test_new_outcome_diagnostics_reject_missing_or_contradictory_fields() -> Non
     assert "human_status" in {error.code for error in report.errors}
 
 
+def test_human_handoff_claims_require_evidence_refs_or_inference() -> None:
+    candidate = outcome()
+    candidate["humanHandoff"]["completed"][0]["evidenceRefs"] = ["summary://changed-files"]
+    candidate["humanHandoff"]["completed"][0]["inference"] = True
+
+    report = validate_outcome(
+        candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
+    )
+
+    assert not report.valid
+    assert "human_handoff" in {error.code for error in report.errors}
+
+
 def test_historical_generator_version_remains_readable_without_diagnostics() -> None:
     candidate = generate_outcome("task-outcome-validator", bindings())
     candidate["bindings"]["generatorVersion"] = "1.0"

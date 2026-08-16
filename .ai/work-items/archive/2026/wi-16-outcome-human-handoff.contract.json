@@ -1,0 +1,366 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-16-outcome-human-handoff",
+  "mode": "code",
+  "title": "Complete human Outcome handoff and locale binding",
+  "baseCommit": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-16-outcome-human-handoff.contract.json",
+    ".ai/work-items/active/wi-16-outcome-human-handoff.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-16-outcome-human-handoff.outcome.json",
+    ".ai/work-items/active/wi-16-outcome-human-handoff.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/schemas/task_outcome.schema.json",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_render_task_outcome_multilingual.py",
+    "scripts/ai_generate_human_report.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/end_to_end_adoption_validation.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "GEMINI.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "docs/features/task-outcome-report.md",
+    "docs/features/human-benefit-report.md",
+    "docs/features/human-benefit-report.zh-CN.md",
+    "docs/features/human-benefit-report.ja.md",
+    "docs/maintainers/task-outcome-events.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_task_outcome_schema.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_task_outcome_markdown_renderer.py",
+    "tests/test_human_benefit_report.py",
+    "tests/test_makefile.py",
+    "tests/test_task_outcome_multilingual.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "tests/test_end_to_end_adoption_validation.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_project_governance_journey.py"
+  ],
+  "outOfScope": [
+    "Historical archived Work Item records and their immutable Outcome files.",
+    "Provider-specific chat UI integrations; the repository must emit a direct conversational handoff that any agent can relay.",
+    "Automatic semantic language detection or model inference; the agent must bind the conversation locale explicitly.",
+    "Unrelated Outcome schema sections, event taxonomy, performance work, or product runtime behavior."
+  ],
+  "rawUserRequest": "Continue all Work Items without stopping. Make Outcome a core human-agent trust handoff for every agent: before archive explain completed, passed, retained, risks, and red causes with exact location and recovery; use the conversation language; verify local and remote branches/worktrees are clean at closure.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "current_user_conversation_and_authorized_continuation",
+    "capturedAt": "2026-08-16T00:00:00+09:00",
+    "digest": "sha256:wi16-human-handoff-request"
+  },
+  "sources": [
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines Human Status Color, Evidence Governance, and repository boundaries."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Current Outcome contract and direct-report expectations."
+    },
+    {
+      "path": "docs/features/human-benefit-report.md",
+      "reason": "Current human-facing report projection and limitations."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current archive pipeline and direct conversational output path."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Agent-neutral workflow rules that must require the handoff for every agent."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-16-wi16-outcome-human-handoff-design.md",
+      "reason": "Approved design for the structured handoff and locale binding."
+    }
+  ],
+  "unknowns": [],
+  "rawRequestExemption": null,
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "human_handoff",
+      "localization",
+      "evidence_integrity",
+      "lifecycle_cleanup"
+    ],
+    "reason": "Outcome is a trust-critical human handoff; locale or cleanup omissions must fail closed rather than silently disappear."
+    ,"unknownsReviewComplete": true
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make Outcome a deterministic, localized, direct human handoff for every agent and require clean local/remote lifecycle closure.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The change affects generated governance evidence and all agent-facing delivery paths."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "none"
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous execution and explicitly requires direct Outcome delivery, conversation-language binding, and local/remote cleanup verification."
+  },
+  "preReviewWarnings": [
+    "Verify that a non-empty localized handoff is printed before archive for green, yellow, and red outcomes.",
+    "Verify that finish/close checks report both local and remote branch/worktree cleanliness."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Every new Outcome contains a structured humanHandoff with completed, passed, retained, risks, and redReasons, with human-readable details and evidence references rather than file paths alone.",
+    "ai-finish binds an explicit supported conversation locale (zh-CN, ja, or en), renders the same locale to the direct conversational report, and fails closed when the locale is missing or unsupported.",
+    "The direct report is emitted before archive and after finish so any agent can relay it in the conversation; the archive is rejected if delivery or required handoff sections are absent.",
+    "Green, yellow, and red scenarios are covered: green explains completed/passed work, yellow explains retained items and residual risks, and red explains the failed gate, exact cause/location, evidence, and recovery condition.",
+    "Legacy archived Outcomes remain valid and immutable while the current human-benefit report and Markdown/JSON renderers include the new handoff when present.",
+    "Agent-neutral rules and the three language docs require all agents/subagents to pass REPORT_LANGUAGE and to relay the complete handoff before archive; paths alone are forbidden.",
+    "The Work Item close procedure verifies archived evidence plus clean local branches/worktrees and remote branch absence; failures are reported as blocking evidence.",
+    "Focused and full project/governance checks pass, including schema, generator, renderer, finish integration, human-benefit report, and Makefile tests."
+  ],
+  "guidelines": [
+    "The handoff projection is evidence-derived and must not invent completion, pass, risk, or recovery claims.",
+    "Conversation locale is an explicit binding; do not silently fall back to English or infer a locale from filesystem metadata.",
+    "Every agent-facing archive path must emit the localized handoff before archive and preserve the human-readable details in the archive.",
+    "Do not import internal modules from other features; keep the Outcome pipeline dependency direction unchanged.",
+    "Do not modify historical archives; record compatibility and immutability evidence instead.",
+    "Before closure, verify both local and remote branch/worktree cleanup and fail closed on any residue."
+  ],
+  "intent": {
+    "problem": "Recent Work Items generated Outcome files but did not reliably deliver a clear conversational handoff. Humans could see paths and generic warnings without knowing what completed, what passed, what was intentionally retained, where a red failure occurred, or how to recover. The same gap can affect any agent, and remote/local branch residue can make closure appear complete when it is not.",
+    "constraints": [
+      "Keep historical archived records immutable and backward compatible.",
+      "Use repository evidence already captured by Contract, Summary, verification, and event logs.",
+      "Support the current conversation locales en, ja, and zh-CN without automatic inference.",
+      "Preserve the canonical archive -> PR -> merge -> close lifecycle."
+    ],
+    "rationale": "A versioned handoff projection gives every agent one deterministic, reviewable contract for human communication while explicit locale binding prevents silent language drift. Making delivery and cleanup preconditions fail closed restores trust in archive status."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "implementationSurface": {
+    "production": [
+      "scripts/ai_generate_task_outcome.py",
+      "scripts/ai_check_task_outcome.py",
+      "scripts/ai_finish.py",
+      "scripts/ai_render_task_outcome.py",
+      "scripts/ai_render_task_outcome_multilingual.py",
+      "scripts/ai_generate_human_report.py",
+      "scripts/ai_close_work_item.py"
+      ,"scripts/end_to_end_adoption_validation.py"
+    ],
+    "tests": [
+      "tests/test_task_outcome_generator.py",
+      "tests/test_task_outcome_validator.py",
+      "tests/test_task_outcome_schema.py",
+      "tests/test_task_outcome_ai_finish_integration.py",
+      "tests/test_task_outcome_markdown_renderer.py",
+      "tests/test_human_benefit_report.py",
+      "tests/test_makefile.py",
+      "tests/test_task_outcome_multilingual.py",
+      "tests/test_work_item_lifecycle_closure.py"
+      ,"tests/test_end_to_end_adoption_validation.py"
+    ],
+    "documentation": [
+      "GEMINI.md",
+      "templates/agents/AI_COCKPIT_RULES.md",
+      "docs/features/task-outcome-report.md",
+      "docs/features/human-benefit-report.md",
+      "docs/features/human-benefit-report.zh-CN.md",
+      "docs/features/human-benefit-report.ja.md",
+      "docs/maintainers/task-outcome-events.md",
+      "docs/reference/documentation-context-registry.json"
+    ],
+    "generated": [
+      ".ai/work-items/active/wi-16-outcome-human-handoff.outcome.json",
+      ".ai/work-items/active/wi-16-outcome-human-handoff.outcome.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/cockpit/current_status.md"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "green_complete",
+      "required": true,
+      "riskDomain": "human_handoff",
+      "expected": "Localized handoff lists completed and passed evidence with no red reasons.",
+      "verificationPlan": "Generator, validator, renderer, and finish integration tests with completed status.",
+      "evidence": [],
+      "status": "unverified"
+    },
+    {
+      "scenario": "yellow_retained_risk",
+      "required": true,
+      "riskDomain": "human_handoff",
+      "expected": "Localized handoff lists retained limitations and residual risks with explicit evidence.",
+      "verificationPlan": "Generator and finish integration tests with completed_with_warnings status.",
+      "evidence": [],
+      "status": "unverified"
+    },
+    {
+      "scenario": "red_failure_recovery",
+      "required": true,
+      "riskDomain": "human_handoff",
+      "expected": "Localized handoff identifies failed gate, cause/location, evidence, and recovery condition.",
+      "verificationPlan": "Blocked Outcome generator/validator/renderer and finish failure-path tests.",
+      "evidence": [],
+      "status": "unverified"
+    },
+    {
+      "scenario": "unsupported_locale",
+      "required": true,
+      "riskDomain": "localization",
+      "expected": "Missing or unsupported conversation locale fails closed without an English fallback.",
+      "verificationPlan": "Locale normalization and finish CLI tests.",
+      "evidence": [],
+      "status": "unverified"
+    },
+    {
+      "scenario": "legacy_archive_immutable",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "expected": "Legacy v1.0 archived Outcomes validate unchanged and no historical archive is modified.",
+      "verificationPlan": "Compatibility tests plus git diff/archive immutability check.",
+      "evidence": [],
+      "status": "unverified"
+    },
+    {
+      "scenario": "closure_cleanup",
+      "required": true,
+      "riskDomain": "lifecycle_cleanup",
+      "expected": "Close fails on local/remote branch residue and succeeds only after both are clean.",
+      "verificationPlan": "Lifecycle command/tests plus final local and remote branch audit.",
+      "evidence": [],
+      "status": "unverified"
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-current-task",
+    "reason": "The user explicitly authorized the required agent-rule and governance-path updates for this trust-critical handoff."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 1200
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-16-outcome-human-handoff.json",
+    "baseCommit": "5200f1ee5813f9468b49d95d4ea8d46ec15754d3",
+    "initialScopeDigest": "77b001db44ce2af8304d51d870dfa1d6a7cfa05455995e06a4352495f2e3deee",
+    "contractSkeletonDigest": "e745476a766a75ce34b3ef621c6e5bdf31cd16b4f27e5bc4908d7e9250a13297"
+  }
+}

@@ -13,7 +13,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-GENERATOR_VERSION = "1.1"
+GENERATOR_VERSION = "1.2"
 FINAL_STATUSES = {
     "completed",
     "completed_with_warnings",
@@ -43,6 +43,7 @@ SECTION_TITLES = {
 SECRET_KEY = re.compile(
     r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.IGNORECASE
 )
+SUPPORTED_LOCALES = {"en", "ja", "zh-CN"}
 
 
 def _safe_text(value: Any, default: str = "") -> str:
@@ -124,6 +125,238 @@ def _conditional_impact(value: Any) -> str | None:
     if impact.lower().startswith(("if not detected", "could have", "如果未被发现")):
         return impact.rstrip(".") + "."
     return f"If not detected, could have led to {impact.rstrip('.')}."
+
+
+def _text_values(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [item.strip() for item in value if isinstance(item, str) and item.strip()]
+
+
+def _handoff_items(
+    value: Any, fallback_source: str, *, fallback_title: str
+) -> list[dict[str, Any]]:
+    """Normalize handoff entries so every human item has detail and evidence."""
+
+    if not isinstance(value, list):
+        return []
+    result: list[dict[str, Any]] = []
+    for index, item in enumerate(value, start=1):
+        if isinstance(item, Mapping):
+            title = _safe_text(item.get("title"), f"{fallback_title} {index}")
+            detail = _safe_text(
+                item.get("detail"),
+                _safe_text(item.get("description"), "Evidence-backed detail is recorded."),
+            )
+            refs = _evidence_refs(item.get("evidence"), fallback_source)
+            result.append(
+                {
+                    "claim": title,
+                    "title": title,
+                    "detail": detail,
+                    "evidenceRefs": refs,
+                    "evidence": refs,
+                    "inference": not bool(refs),
+                }
+            )
+        elif isinstance(item, str) and item.strip():
+            result.append(
+                {
+                    "claim": item.strip(),
+                    "title": f"{fallback_title} {index}",
+                    "detail": item.strip(),
+                    "evidenceRefs": [{"source": fallback_source, "subject": item.strip()}],
+                    "evidence": [{"source": fallback_source, "subject": item.strip()}],
+                    "inference": False,
+                }
+            )
+    return result
+
+
+def _handoff_risks(value: Any, fallback_source: str) -> list[dict[str, Any]]:
+    result: list[dict[str, Any]] = []
+    for item in value if isinstance(value, list) else []:
+        if not isinstance(item, Mapping):
+            continue
+        severity = _safe_text(item.get("severity"), "medium")
+        if severity not in {"informational", "low", "medium", "high", "critical"}:
+            severity = "medium"
+        state = _safe_text(item.get("state"), "unresolved")
+        if state not in {"resolved", "mitigated", "accepted", "unresolved", "not_applicable"}:
+            state = "unresolved"
+        refs = _evidence_refs(item.get("evidenceRefs", item.get("evidence")), fallback_source)
+        result.append(
+            {
+                "claim": _safe_text(
+                    item.get("claim"), _safe_text(item.get("title"), "Residual risk")
+                ),
+                "severity": severity,
+                "title": _safe_text(item.get("title"), "Residual risk"),
+                "detail": _safe_text(
+                    item.get("detail"),
+                    _safe_text(item.get("description"), "Evidence-backed risk requires review."),
+                ),
+                "state": state,
+                "evidenceRefs": refs,
+                "evidence": refs,
+                "inference": not bool(refs),
+            }
+        )
+    return result
+
+
+def _handoff_red_reasons(
+    value: Any,
+    *,
+    status: str,
+    failed_gate: str,
+    recovery: str,
+    fallback_source: str,
+    fallback_cause: str,
+) -> list[dict[str, Any]]:
+    result: list[dict[str, Any]] = []
+    if isinstance(value, list):
+        for item in value:
+            if not isinstance(item, Mapping):
+                continue
+            refs = _evidence_refs(item.get("evidenceRefs", item.get("evidence")), fallback_source)
+            result.append(
+                {
+                    "claim": _safe_text(item.get("cause"), fallback_cause),
+                    "gate": _safe_text(item.get("gate"), failed_gate or "unknown"),
+                    "cause": _safe_text(item.get("cause"), fallback_cause),
+                    "location": _safe_text(item.get("location"), "finish pipeline"),
+                    "recovery": _safe_text(
+                        item.get("recovery"), recovery or "Review the failed evidence and retry."
+                    ),
+                    "evidenceRefs": refs,
+                    "evidence": refs,
+                    "inference": not bool(refs),
+                }
+            )
+    if not result and status == "blocked":
+        refs = [{"source": fallback_source, "subject": failed_gate or "blocked"}]
+        result.append(
+            {
+                "claim": fallback_cause or "A required gate did not pass.",
+                "gate": failed_gate or "unknown",
+                "cause": fallback_cause or "A required gate did not pass.",
+                "location": "finish pipeline",
+                "recovery": recovery or "Review the failed gate and retry.",
+                "evidenceRefs": refs,
+                "evidence": refs,
+                "inference": False,
+            }
+        )
+    return result
+
+
+def _handoff_questions(
+    evidence: Mapping[str, Any],
+    *,
+    findings: Sequence[Mapping[str, Any]],
+    risks: Sequence[Mapping[str, Any]],
+    forced_stops: Sequence[Mapping[str, Any]],
+    resolutions: Sequence[Mapping[str, Any]],
+    avoided: Sequence[str],
+    residual: Sequence[Mapping[str, Any]],
+    human_decisions: Sequence[str],
+    prevention: Sequence[Mapping[str, Any]],
+    red_reasons: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    supplied = evidence.get("handoffQuestions")
+    supplied = supplied if isinstance(supplied, Mapping) else {}
+    blocked = _text_values(supplied.get("blockedProblems")) or [
+        _safe_text(item.get("reason"), "Blocked by a forced stop.")
+        for item in forced_stops
+        if _safe_text(item.get("result")) not in {"resolved", "mitigated", "accepted"}
+    ]
+    if not blocked:
+        blocked = [_safe_text(item.get("cause"), "Blocked by a red gate.") for item in red_reasons]
+    resolved = _text_values(supplied.get("resolvedProblems")) or [
+        _safe_text(item.get("problem"), "Recorded problem") for item in resolutions
+    ]
+    approach = _text_values(supplied.get("resolutionApproach")) or [
+        _safe_text(item.get("action"), "Recorded corrective action") for item in resolutions
+    ]
+    remaining = _text_values(supplied.get("remainingRisks")) or [
+        _safe_text(item.get("detail"), "Residual risk requires review.") for item in residual
+    ]
+
+    def claims(values: Sequence[str], source: str) -> list[dict[str, Any]]:
+        return [
+            {
+                "claim": value,
+                "evidenceRefs": [],
+                "inference": True,
+            }
+            for value in values
+            if isinstance(value, str) and value.strip()
+        ]
+
+    def supplied_claims(key: str, fallback: list[str], source: str) -> list[dict[str, Any]]:
+        raw = supplied.get(key)
+        if not isinstance(raw, list):
+            return claims(fallback, source)
+        result: list[dict[str, Any]] = []
+        for item in raw:
+            if isinstance(item, Mapping):
+                value = _safe_text(item.get("claim"), _safe_text(item.get("detail")))
+                refs = _evidence_refs(item.get("evidenceRefs", item.get("evidence")), source)
+                if value:
+                    result.append(
+                        {"claim": value, "evidenceRefs": refs, "inference": not bool(refs)}
+                    )
+            elif isinstance(item, str) and item.strip():
+                result.append({"claim": item.strip(), "evidenceRefs": [], "inference": True})
+        return result or claims(fallback, source)
+
+    supplied_problem_count = supplied.get("problemCount")
+    if isinstance(supplied_problem_count, int) and supplied_problem_count >= 0:
+        problem_count = supplied_problem_count
+    else:
+        problem_count = (
+            len(findings) + len(risks) + len(forced_stops) + len(evidence.get("warnings", []))
+        )
+    recurrence = _safe_text(
+        supplied.get("recurrenceLikelihood"),
+        "low" if prevention else "unknown: no recurrence-prevention evidence was recorded.",
+    )
+    next_time = _safe_text(
+        supplied.get("nextTime"),
+        "Bind the conversation locale and preserve evidence details from the start of the Work Item.",
+    )
+    return {
+        "problemCount": problem_count,
+        "problemCountEvidenceRefs": _evidence_refs(
+            supplied.get("problemCountEvidenceRefs"), "structured-evidence"
+        ),
+        "blockedProblems": supplied_claims("blockedProblems", blocked, "task-outcome"),
+        "resolvedProblems": supplied_claims("resolvedProblems", resolved, "task-outcome"),
+        "resolutionApproach": supplied_claims("resolutionApproach", approach, "task-outcome"),
+        "avoidedRisks": supplied_claims("avoidedRisks", list(avoided), "task-outcome"),
+        "remainingRisks": supplied_claims("remainingRisks", remaining, "task-outcome"),
+        "agentUnknowns": supplied_claims(
+            "agentUnknowns", _text_values(evidence.get("unknowns")), "contract"
+        ),
+        "humanConfirmations": supplied_claims(
+            "humanConfirmations", list(human_decisions), "task-outcome"
+        ),
+        "recurrenceLikelihood": {
+            "claim": recurrence,
+            "evidenceRefs": _evidence_refs(supplied.get("recurrenceEvidenceRefs"), "task-outcome"),
+            "inference": not bool(
+                _evidence_refs(supplied.get("recurrenceEvidenceRefs"), "task-outcome")
+            ),
+        },
+        "nextTime": {
+            "claim": next_time,
+            "evidenceRefs": _evidence_refs(supplied.get("nextTimeEvidenceRefs"), "task-outcome"),
+            "inference": not bool(
+                _evidence_refs(supplied.get("nextTimeEvidenceRefs"), "task-outcome")
+            ),
+        },
+    }
 
 
 def _status(
@@ -358,6 +591,89 @@ def generate_outcome(
         "humanDecisions": human_decisions,
         "evidence": unique_refs(all_evidence),
     }
+    locale = _safe_text(evidence.get("locale"), _safe_text(bindings.get("locale"), "en"))
+    if locale not in SUPPORTED_LOCALES:
+        raise ValueError(f"unsupported Outcome locale: {locale}")
+    completed = _handoff_items(
+        evidence.get("completed"), "structured-evidence", fallback_title="Completed item"
+    )
+    if not completed:
+        refs = unique_refs(all_evidence)
+        completed = [
+            {
+                "claim": "Governed Outcome recorded",
+                "title": "Governed Outcome recorded",
+                "detail": _safe_text(
+                    evidence.get("outcomeSummary"),
+                    "No file change was declared; the recorded governance evidence is the bounded result.",
+                ),
+                "evidenceRefs": refs,
+                "evidence": refs,
+                "inference": not bool(refs),
+            }
+        ]
+    passed = _handoff_items(
+        evidence.get("passedChecks"), "verification", fallback_title="Passed check"
+    )
+    if not passed:
+        refs = unique_refs(all_evidence)
+        passed = [
+            {
+                "claim": "Outcome validation",
+                "title": "Outcome validation",
+                "detail": "The evidence-derived Outcome was generated for review.",
+                "evidenceRefs": refs,
+                "evidence": refs,
+                "inference": not bool(refs),
+            }
+        ]
+    retained = _handoff_items(evidence.get("retained"), "summary", fallback_title="Retained item")
+    if not retained:
+        retained = _handoff_items(
+            [
+                {
+                    "title": "Warning retained",
+                    "detail": warning,
+                    "evidence": [{"source": "summary", "subject": "knownGaps"}],
+                }
+                for warning in sorted(set(warnings))
+            ],
+            "summary",
+            fallback_title="Retained item",
+        )
+    handoff_risks = _handoff_risks(evidence.get("handoffRisks"), "summary")
+    if not handoff_risks:
+        handoff_risks = _handoff_risks(residual, "task-outcome")
+    failed_gate = _safe_text(evidence.get("failedGate"))
+    recovery_condition = _safe_text(evidence.get("recoveryCondition"))
+    red_reasons = _handoff_red_reasons(
+        evidence.get("redReasons"),
+        status=status,
+        failed_gate=failed_gate,
+        recovery=recovery_condition,
+        fallback_source="task-outcome",
+        fallback_cause=warnings[-1] if warnings else "A required gate did not pass.",
+    )
+    handoff = {
+        "locale": locale,
+        "completed": completed,
+        "passed": passed,
+        "retained": retained,
+        "risks": handoff_risks,
+        "redReasons": red_reasons,
+        "questions": _handoff_questions(
+            evidence,
+            findings=findings,
+            risks=risks,
+            forced_stops=forced_stops,
+            resolutions=resolutions,
+            avoided=avoided,
+            residual=residual,
+            human_decisions=human_decisions,
+            prevention=prevention,
+            red_reasons=red_reasons,
+        ),
+    }
     canonical_bindings = dict(bindings)
     canonical_bindings["generatorVersion"] = GENERATOR_VERSION
     return {
@@ -366,10 +682,11 @@ def generate_outcome(
         "workItemId": task_id,
         "status": status,
         "humanStatusColor": _human_status_color(status),
-        "failedGate": _safe_text(evidence.get("failedGate")),
-        "recoveryCondition": _safe_text(evidence.get("recoveryCondition")),
+        "failedGate": failed_gate,
+        "recoveryCondition": recovery_condition,
         "bindings": canonical_bindings,
         "sections": sections,
+        "humanHandoff": handoff,
     }
 
 
@@ -389,6 +706,54 @@ def render_markdown(outcome: Mapping[str, Any]) -> str:
         lines.append(f"Failed Gate: `{failed_gate}`")
     if recovery:
         lines.append(f"Recovery Condition: {recovery}")
+    handoff = outcome.get("humanHandoff")
+    if isinstance(handoff, Mapping):
+        lines.extend(["", "## Human Handoff", f"Locale: `{handoff.get('locale', 'unknown')}`"])
+        for key, title in (
+            ("completed", "What was completed"),
+            ("passed", "What passed"),
+            ("retained", "What was retained"),
+            ("risks", "Risks"),
+            ("redReasons", "Red reasons"),
+        ):
+            lines.extend([f"### {title}"])
+            values = handoff.get(key, [])
+            if not isinstance(values, list) or not values:
+                lines.append("None")
+            else:
+                for item in values:
+                    if isinstance(item, Mapping):
+                        detail = _safe_text(
+                            item.get("detail"), json.dumps(item, ensure_ascii=False, sort_keys=True)
+                        )
+                        title_value = _safe_text(
+                            item.get("title"), _safe_text(item.get("gate"), title)
+                        )
+                        lines.append(f"- {title_value}: {detail}")
+                    else:
+                        lines.append(f"- {item}")
+        questions = handoff.get("questions")
+        if isinstance(questions, Mapping):
+            lines.extend(["### Human questions"])
+            for key in (
+                "problemCount",
+                "blockedProblems",
+                "resolvedProblems",
+                "resolutionApproach",
+                "avoidedRisks",
+                "remainingRisks",
+                "agentUnknowns",
+                "humanConfirmations",
+                "recurrenceLikelihood",
+                "nextTime",
+            ):
+                value = questions.get(key)
+                if isinstance(value, list):
+                    rendered = "; ".join(str(item) for item in value) if value else "None"
+                else:
+                    rendered = str(value) if value not in (None, "") else "None"
+                lines.append(f"- {key}: {rendered}")
+        lines.append("")
     lines.append("")
     for key, title in SECTION_TITLES.items():
         lines.extend([f"## {title}"])

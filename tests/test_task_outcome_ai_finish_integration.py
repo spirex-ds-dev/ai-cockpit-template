@@ -346,6 +346,33 @@ def test_blocked_finish_failure_delivers_persisted_outcome_to_conversation(
     assert "Blocked Task Outcome persisted" in captured.err
 
 
+def test_blocked_finish_default_uses_bound_conversation_locale(monkeypatch, tmp_path):
+    captured: dict[str, object] = {}
+    monkeypatch.setattr(ai_finish, "CURRENT_REPORT_LANGUAGE", "zh-CN")
+
+    def persist(*_args, **kwargs):
+        captured["language"] = kwargs.get("language")
+        return True, "persisted"
+
+    monkeypatch.setattr(ai_finish, "write_blocked_outcome", persist)
+    monkeypatch.setattr(
+        ai_finish, "deliver_direct_outcome_report", lambda *_args: (True, "delivered")
+    )
+
+    assert (
+        ai_finish.return_blocked_finish_failure(
+            task="example-task",
+            contract_path=tmp_path / "contract.json",
+            summary_path=tmp_path / "summary.json",
+            failed_check="quality",
+            failure_message="gate failed",
+            code=2,
+        )
+        == 2
+    )
+    assert captured["language"] == "zh-CN"
+
+
 def test_documentation_alignment_failure_is_reported_without_raising(tmp_path):
     summary_path = tmp_path / "summary.json"
     summary_path.write_text("not-json", encoding="utf-8")
@@ -582,7 +609,13 @@ def test_prepare_documentation_alignment_binds_existing_human_report_before_fini
     summary_path.write_text(
         json.dumps(
             {
-                "changedFiles": [{"path": ".ai/cockpit/task_report.md", "reason": "prior report"}],
+                "changedFiles": [
+                    {"path": ".ai/cockpit/task_report.md", "reason": "prior report"},
+                    {
+                        "path": ".ai/work-items/active/example-task.outcome.md",
+                        "reason": "future outcome",
+                    },
+                ],
                 "documentationAlignment": {
                     "checks": [{"area": "documentationCommandsCapability", "evidence": []}]
                 },
@@ -612,6 +645,8 @@ def test_prepare_documentation_alignment_binds_existing_human_report_before_fini
             tmp_path / ".ai/work-items/active/outcome.md",
         ),
     )
+    (tmp_path / ".ai/cockpit/task_report.md").parent.mkdir(parents=True, exist_ok=True)
+    (tmp_path / ".ai/cockpit/task_report.md").write_text("# prior report\n", encoding="utf-8")
 
     ai_finish.prepare_documentation_alignment_evidence(task, summary_path)
 
@@ -896,7 +931,7 @@ def test_finish_defaults_to_active_outcome_and_accepts_conversation_language(mon
     args = ai_finish.parse_args()
 
     assert args.archive is False
-    assert args.language == "en"
+    assert args.language is None
 
 
 def test_direct_outcome_report_is_localized_and_explicit_about_archive_boundary():
@@ -991,7 +1026,7 @@ def test_finish_prepares_candidate_coverage_for_separate_or_inline_archive(
         "run",
         lambda command, **_kwargs: commands.append(command) or (0, 1, "ok"),
     )
-    argv = ["ai_finish.py", "--task", task]
+    argv = ["ai_finish.py", "--task", task, "--language", "en"]
     if archive:
         argv.append("--archive")
     monkeypatch.setattr(sys, "argv", argv)
@@ -1101,7 +1136,9 @@ def test_reused_finish_verification_blocks_archive_when_documentation_alignment_
         "run",
         lambda command, **_kwargs: commands.append(command) or (0, 1, "ok"),
     )
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", task, "--archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", task, "--archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 1
     assert blocked["failed_check"] == "documentationAlignment"

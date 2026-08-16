@@ -6,6 +6,8 @@ description: 从证据中简洁说明单个受治理任务的价值和待决事�
 
 # Human Benefit Report
 
+新版本的人类摘要固定按以下顺序输出：Task Result、What was completed、Problems found、Stops triggered、Problems resolved、Risks avoided、Remaining risks、Unknowns、Human decisions、Verification、Impact、Next action。摘要由已验证的 Outcome 生成；每个事实声明都绑定 `evidenceRefs`，没有证据的收益只能标记为 `inference`，不得写成事实。归档前所有 agent 都必须将该摘要和本地化 Outcome 直接交付到对话框，不能只给文件路径。
+
 Human Benefit Report 简洁回答任务做了什么、发现多少有证据的问题、发生了哪些停止、哪些问题已解决、避免了什么风险、哪些决定来自人、还剩什么风险以及下一安全动作。
 
 Task Outcome 是唯一机器事实源。`ai-finish` 在 `.ai/cockpit/task_report.json` 和 `.ai/cockpit/task_report.md` 生成 Review Report；`check-ai-pr` 将其与已归档 Outcome 对照，缺失、格式错误、陈旧或不一致时失败关闭。

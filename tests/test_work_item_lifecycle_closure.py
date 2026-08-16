@@ -927,6 +927,28 @@ def test_clean_worktree_and_remote_postconditions_fail_closed():
         closure._remote_branch_absent(unverifiable, "origin", "branch")
 
 
+def test_remote_postcondition_rejects_stale_tracking_branch():
+    def stale_tracking(args, _check):
+        if args[:3] == ["ls-remote", "--exit-code", "--heads"]:
+            return closure.CommandResult(2, "", "")
+        if args[:3] == ["branch", "--remotes", "--list"]:
+            return closure.CommandResult(0, "  origin/codex/example\n", "")
+        return closure.CommandResult(0, "", "")
+
+    with pytest.raises(RuntimeError, match="remote-tracking"):
+        closure._remote_branch_absent(stale_tracking, "origin", "codex/example")
+
+
+def test_local_postcondition_rejects_branch_residue():
+    def stale_local(args, _check):
+        if args[:2] == ["branch", "--list"]:
+            return closure.CommandResult(0, "* codex/example\n", "")
+        return closure.CommandResult(0, "", "")
+
+    with pytest.raises(RuntimeError, match="local Work Item branch still exists"):
+        closure._delete_local_branch(stale_local, "codex/example", detach_required=False)
+
+
 def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
     monkeypatch.setattr(
         closure,

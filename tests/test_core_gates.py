@@ -1,6 +1,7 @@
 import hashlib
 import json
 import sys
+from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
 
 import ai_check_review_policy
@@ -114,6 +115,16 @@ def test_finish_discards_verification_evidence_bound_to_a_prior_contract(tmp_pat
     assert removed == 2
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     assert summary["verification"] == [{"check": "aiScope", "contractHash": "current-contract"}]
+
+
+def test_finish_summary_text_list_keeps_only_non_empty_strings():
+    assert ai_finish._summary_text_list([" completed ", "", 7, "  "]) == ["completed"]
+
+
+def test_finish_metadata_stale_detects_expired_timezone_aware_owner():
+    now = datetime.now(UTC)
+    started = now - timedelta(seconds=ai_finish.FINISH_LOCK_MAX_AGE_SECONDS + 1)
+    assert ai_finish._metadata_is_stale({"startedAt": started.isoformat()}, now=now)
 
 
 def test_finish_console_output_is_bounded_but_marks_truncation():
@@ -1200,7 +1211,7 @@ def test_finish_main_fails_when_contract_is_missing(tmp_path, monkeypatch):
     active.mkdir(parents=True)
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "missing"])
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "missing", "--language", "en"])
 
     assert ai_finish.main() == 1
 
@@ -1222,7 +1233,9 @@ def test_finish_refuses_repository_base_branch_before_running_checks(tmp_path, m
         )
 
     monkeypatch.setattr(ai_finish, "ensure_work_item_branch", reject_base_branch)
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 2
     assert "dedicated Work Item branch" in capsys.readouterr().err
@@ -1325,7 +1338,9 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
 
     monkeypatch.setattr(ai_finish, "run", fail_quality)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 3
     assert executed == [
@@ -1391,7 +1406,9 @@ def test_finish_main_does_not_inject_release_source_evidence_into_work_item_chec
         ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
     )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 0
     assert executed[0] == ["make", "ai-cockpit-quality", "GOVERNANCE_PROFILE=standard"]
@@ -1469,7 +1486,9 @@ def test_finish_main_rejects_stale_checkpoint_before_declared_checks(tmp_path, m
 
     monkeypatch.setattr(ai_finish, "run", run)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 2
     assert executed == []
@@ -1523,7 +1542,9 @@ def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, mo
         lambda *_args, **_kwargs: pytest.fail("Outcome must not run after source-bound failure"),
     )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 4
     assert executed == [
@@ -1585,7 +1606,9 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
         ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
     )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 0
     # Status is regenerated before each status-derived assertion so persisted
@@ -1645,7 +1668,9 @@ def test_finish_main_deduplicates_explicit_source_bound_check(tmp_path, monkeypa
 
     monkeypatch.setattr(ai_finish, "run", fail_quality)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 3
     assert executed == [
@@ -1703,7 +1728,9 @@ def test_finish_main_demotes_readiness_when_final_status_check_fails(tmp_path, m
 
     monkeypatch.setattr(ai_finish, "run", fail_final_status)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 1
     readiness = json.loads(summary.read_text(encoding="utf-8"))["reviewReadiness"]
@@ -1720,7 +1747,7 @@ def test_finish_main_fails_when_summary_is_missing(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task"])
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--language", "en"])
 
     assert ai_finish.main() == 1
 
@@ -1737,7 +1764,7 @@ def test_finish_main_rejects_invalid_verification_list(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task"])
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--language", "en"])
 
     assert ai_finish.main() == 1
 
@@ -1761,7 +1788,9 @@ def test_finish_main_rejects_skip_quality_for_required_check(tmp_path, monkeypat
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(
-        sys, "argv", ["ai_finish.py", "--task", "task", "--skip-quality", "--no-archive"]
+        sys,
+        "argv",
+        ["ai_finish.py", "--task", "task", "--skip-quality", "--no-archive", "--language", "en"],
     )
 
     assert ai_finish.main() == 2
@@ -1801,7 +1830,9 @@ def test_finish_main_reports_unknown_check_id(tmp_path, monkeypatch):
         "run",
         lambda command, **_kwargs: executed.append(command) or (0, 1, "passed"),
     )
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 2
     assert rendered == ["missingCheck"]
@@ -1846,7 +1877,9 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
     monkeypatch.setattr(
         ai_finish, "bind_pre_archive_candidate_coverage_to_outcome", lambda _task: (True, "ok")
     )
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 5
 
@@ -1886,7 +1919,9 @@ def test_finish_main_fails_when_stabilization_check_fails(tmp_path, monkeypatch)
 
     monkeypatch.setattr(ai_finish, "run", run)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 4
 
@@ -1932,7 +1967,9 @@ def test_finish_main_allows_optional_check_failure(tmp_path, monkeypatch):
         ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
     )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 0
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
@@ -1952,7 +1989,9 @@ def test_finish_main_rejects_contract_version_one(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 2
 
@@ -1982,7 +2021,9 @@ def test_finish_main_rejects_inline_command_verification(tmp_path, monkeypatch):
             "Malformed verification must be rejected before any command executes"
         ),
     )
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive", "--language", "en"]
+    )
 
     assert ai_finish.main() == 2
 
@@ -2019,7 +2060,7 @@ def test_finish_main_archives_on_success(tmp_path, monkeypatch):
         ai_finish, "prepare_pre_archive_candidate_coverage", lambda *_args, **_kwargs: (0, "")
     )
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task"])
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--language", "en"])
 
     assert ai_finish.main() == 0
 

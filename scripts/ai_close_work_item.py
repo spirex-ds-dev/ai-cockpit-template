@@ -477,6 +477,11 @@ def _remote_branch_absent(runner: Runner, remote: str, branch: str) -> None:
         raise RuntimeError("remote work branch still exists")
     if result.returncode != 2:
         raise RuntimeError("could not verify remote work branch deletion")
+    tracking = runner(["branch", "--remotes", "--list", f"{remote}/{branch}"], False)
+    if tracking.returncode != 0:
+        raise RuntimeError("could not verify local remote-tracking branch cleanup")
+    if tracking.stdout.strip():
+        raise RuntimeError("local remote-tracking Work Item branch still exists")
 
 
 def _delete_remote_branch(runner: Runner, remote: str, branch: str) -> None:
@@ -495,22 +500,27 @@ def _delete_local_branch(
     """Delete the local branch while preserving a retryable linked checkout."""
     if not detach_required:
         runner(["branch", "-D", branch], True)
-        return
-
-    runner(["switch", "--detach", "HEAD"], True)
-    try:
-        runner(["branch", "-D", branch], True)
-    except RuntimeError as exc:
-        restored = runner(["switch", branch], False)
-        if restored.returncode != 0:
+    else:
+        runner(["switch", "--detach", "HEAD"], True)
+        try:
+            runner(["branch", "-D", branch], True)
+        except RuntimeError as exc:
+            restored = runner(["switch", branch], False)
+            if restored.returncode != 0:
+                raise RuntimeError(
+                    "local Work Item branch deletion failed after detach; "
+                    "checkout restoration also failed"
+                ) from exc
             raise RuntimeError(
                 "local Work Item branch deletion failed after detach; "
-                "checkout restoration also failed"
+                "the Work Item checkout was restored for retry"
             ) from exc
-        raise RuntimeError(
-            "local Work Item branch deletion failed after detach; "
-            "the Work Item checkout was restored for retry"
-        ) from exc
+
+    result = runner(["branch", "--list", branch], False)
+    if result.returncode != 0:
+        raise RuntimeError("could not verify local Work Item branch cleanup")
+    if result.stdout.strip():
+        raise RuntimeError("local Work Item branch still exists")
 
 
 def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:

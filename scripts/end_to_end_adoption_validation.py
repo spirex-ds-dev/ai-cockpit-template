@@ -310,6 +310,7 @@ def _make_env() -> dict[str, str]:
             "PROJECT_LINT": "true",
             "AI_COCKPIT_PROJECT_FORMAT_CONFIGURED": "true",
             "AI_COCKPIT_PROJECT_LINT_CONFIGURED": "true",
+            "REPORT_LANGUAGE": "en",
         }
     )
     return env
@@ -686,7 +687,7 @@ def _run_fixture(
             "finish",
             "passed" if finished else "failed",
             "governance finish checks, declared project quality, and immutable archive completed",
-            command="make ai-finish ARCHIVE=true",
+            command="make ai-finish ARCHIVE=true REPORT_LANGUAGE=en",
             evidence=[
                 f"archiveExit={archive.returncode}",
                 "qualityRoute=declared_fixture_commands",

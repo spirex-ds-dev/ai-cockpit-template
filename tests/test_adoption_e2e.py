@@ -163,6 +163,7 @@ def test_first_adoption_finishes_and_passes_complete_pr_check(tmp_path):
         "ai-finish",
         "TASK=adopt_ai_cockpit",
         f"PYTHON={sys.executable}",
+        "REPORT_LANGUAGE=en",
     )
     assert finish.returncode == 0, finish.stdout + finish.stderr
     assert contract.is_file()

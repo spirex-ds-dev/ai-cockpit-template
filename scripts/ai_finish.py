@@ -774,7 +774,9 @@ def prepare_documentation_alignment_evidence(task: str, summary_path: Path) -> N
             for generated_path in sorted(
                 candidate
                 for candidate in documented_generated_paths & declared_paths
-                if included(candidate, scope) and candidate not in evidence_paths
+                if included(candidate, scope)
+                and (PROJECT_ROOT / candidate).is_file()
+                and candidate not in evidence_paths
             ):
                 evidence_paths.append(generated_path)
         break
@@ -905,10 +907,23 @@ def _sha256_json(value: Any) -> str:
     ).hexdigest()
 
 
-def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path) -> dict[str, Any]:
+def _summary_text_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [item.strip() for item in value if isinstance(item, str) and item.strip()]
+
+
+def _pre_merge_outcome_input(
+    task: str, contract_path: Path, summary_path: Path, language: str | None = "en"
+) -> dict[str, Any]:
     """Derive truthful Outcome evidence before a provider PR can exist."""
     contract = load_json(contract_path)
     summary = load_json(summary_path)
+    from ai_render_task_outcome_multilingual import normalize_locale
+
+    if not language:
+        raise ValueError("conversation language is required for human Outcome delivery")
+    locale = normalize_locale(language)
     head_commit = current_head()
     base_commit = contract.get("baseCommit")
     if not isinstance(base_commit, str) or len(base_commit) != 40:
@@ -949,6 +964,82 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
         if isinstance(item, dict) and isinstance(item.get("instruction"), str)
     ]
     verification = summary.get("verification", [])
+    completed = [
+        {
+            "title": f"Changed {item.get('path')}",
+            "detail": item.get("reason", "The declared Work Item change was recorded."),
+            "evidence": [
+                {
+                    "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "subject": item.get("path", "changed file"),
+                }
+            ],
+        }
+        for item in changed
+        if isinstance(item, dict) and isinstance(item.get("path"), str)
+    ]
+    passed_checks = [
+        {
+            "title": str(item.get("check")),
+            "detail": item.get("outputSummary") or f"{item.get('check')} passed.",
+            "evidence": [
+                {
+                    "source": item.get(
+                        "executionContractPath", summary_path.relative_to(PROJECT_ROOT).as_posix()
+                    ),
+                    "subject": item.get("check", "verification"),
+                    **(
+                        {"digest": item["outputDigest"]}
+                        if isinstance(item.get("outputDigest"), str)
+                        else {}
+                    ),
+                }
+            ],
+        }
+        for item in verification
+        if isinstance(item, dict) and item.get("result") == "passed"
+    ]
+    retained = [
+        {
+            "title": "Retained limitation",
+            "detail": warning,
+            "evidence": [
+                {
+                    "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "subject": "knownGaps",
+                }
+            ],
+        }
+        for warning in warnings
+    ]
+    residual_risks = [
+        {
+            "severity": item.get("level", "medium"),
+            "title": item.get("area", "Residual risk"),
+            "detail": item.get("detail", "Residual risk remains under review."),
+            "state": "unresolved",
+            "evidence": [
+                {
+                    "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "subject": "residualRisks",
+                }
+            ],
+        }
+        for item in summary.get("residualRisks", [])
+        if isinstance(item, dict)
+    ]
+    failed_checks = [
+        item.get("check")
+        for item in verification
+        if isinstance(item, dict) and item.get("result") == "failed" and item.get("check")
+    ]
+    user_decisions: list[str] = []
+    for item in summary.get("userCorrectionsCaptured", []):
+        if isinstance(item, str) and item.strip():
+            user_decisions.append(item.strip())
+        elif isinstance(item, dict) and isinstance(item.get("instruction"), str):
+            user_decisions.append(item["instruction"])
+    problem_count = len(summary.get("observedIssues", [])) + len(warnings) + len(failed_checks)
     return {
         "taskId": task,
         "bindings": {
@@ -961,10 +1052,43 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
             "lifecycleStage": "pre_merge",
             "pullRequest": {"state": "not_created"},
             "aiCockpitVersion": "repository-governance",
-            "generatorVersion": "1.1",
+            "generatorVersion": "1.2",
+            "locale": locale,
         },
         "evidence": {
             "deliveredChanges": delivered,
+            "locale": locale,
+            "completed": completed,
+            "passedChecks": passed_checks,
+            "retained": retained,
+            "handoffRisks": residual_risks,
+            "handoffQuestions": {
+                "problemCount": problem_count,
+                "blockedProblems": failed_checks,
+                "resolvedProblems": [
+                    item.get("problem")
+                    for item in summary.get("resolutions", [])
+                    if isinstance(item, dict) and isinstance(item.get("problem"), str)
+                ],
+                "resolutionApproach": [
+                    item.get("action")
+                    for item in summary.get("resolutions", [])
+                    if isinstance(item, dict) and isinstance(item.get("action"), str)
+                ],
+                "avoidedRisks": _summary_text_list(summary.get("avoidedRisks")),
+                "remainingRisks": [item["detail"] for item in residual_risks],
+                "agentUnknowns": [
+                    *[item for item in contract.get("unknowns", []) if isinstance(item, str)],
+                    *[
+                        item
+                        for item in summary.get("unknownsRemaining", [])
+                        if isinstance(item, str)
+                    ],
+                ],
+                "humanConfirmations": user_decisions,
+                "recurrenceLikelihood": "unknown: no direct recurrence probability evidence was recorded.",
+                "nextTime": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+            },
             "warnings": warnings,
             "limitations": limitations,
             "nonRiskExplanations": [
@@ -974,7 +1098,7 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
             "forbiddenClaims": ["Do not claim an unresolved warning was verified or resolved."]
             if warnings
             else [],
-            "humanDecisions": human_decisions,
+            "humanDecisions": [*human_decisions, *user_decisions],
             "sources": [
                 {
                     "source": contract_path.relative_to(PROJECT_ROOT).as_posix(),
@@ -987,14 +1111,19 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
 
 
 def _write_and_validate_pre_merge_outcome(
-    task: str, contract_path: Path, summary_path: Path, json_path: Path, markdown_path: Path
+    task: str,
+    contract_path: Path,
+    summary_path: Path,
+    json_path: Path,
+    markdown_path: Path,
+    language: str | None = "en",
 ) -> tuple[bool, str]:
     from ai_check_task_outcome import validate_outcome
     from ai_generate_task_outcome import generate_outcome
     from ai_render_task_outcome import render_task_outcome
 
     try:
-        payload = _pre_merge_outcome_input(task, contract_path, summary_path)
+        payload = _pre_merge_outcome_input(task, contract_path, summary_path, language)
         outcome = generate_outcome(task, payload["bindings"], evidence=payload["evidence"])
         markdown = render_task_outcome(outcome)
         report = validate_outcome(outcome, markdown, expected_task_id=task)
@@ -1014,6 +1143,7 @@ def write_blocked_outcome(
     *,
     failed_check: str,
     failure_message: str,
+    language: str | None = "en",
 ) -> tuple[bool, str]:
     """Persist a valid blocked Outcome, then derive its exact review report.
 
@@ -1029,7 +1159,7 @@ def write_blocked_outcome(
     json_path, markdown_path = _outcome_paths(task)
     message = outcome_failure_message(failed_check, failure_message)
     try:
-        payload = _pre_merge_outcome_input(task, contract_path, summary_path)
+        payload = _pre_merge_outcome_input(task, contract_path, summary_path, language)
         evidence = dict(payload["evidence"])
         warnings = list(evidence.get("warnings", []))
         warnings.append(message)
@@ -1037,6 +1167,20 @@ def write_blocked_outcome(
         evidence["status"] = "blocked"
         evidence["failedGate"] = failed_check
         evidence["recoveryCondition"] = f"Run a passing {failed_check} retry."
+        evidence["redReasons"] = [
+            {
+                "gate": failed_check,
+                "cause": message,
+                "location": f"verification:{failed_check}",
+                "recovery": evidence["recoveryCondition"],
+                "evidence": [
+                    {
+                        "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                        "subject": failed_check,
+                    }
+                ],
+            }
+        ]
         evidence["limitations"] = [
             *list(evidence.get("limitations", [])),
             {
@@ -1162,6 +1306,7 @@ def return_blocked_finish_failure(
         summary_path,
         failed_check=failed_check,
         failure_message=failure_message,
+        language=language or CURRENT_REPORT_LANGUAGE,
     )
     if blocked_ok:
         print(f"Blocked Task Outcome persisted: {blocked_message}", file=sys.stderr)
@@ -1182,7 +1327,10 @@ def return_blocked_finish_failure(
 
 
 def run_task_outcome_pipeline(
-    task: str, summary_path: Path, contract_path: Path | None = None
+    task: str,
+    summary_path: Path,
+    contract_path: Path | None = None,
+    language: str | None = "en",
 ) -> tuple[bool, str]:
     """Generate a mandatory pre-merge Outcome or validate explicit raw evidence."""
     summary = load_json(summary_path)
@@ -1192,7 +1340,7 @@ def run_task_outcome_pipeline(
             return False, "mandatory Task Outcome requires the active Contract"
         json_path, markdown_path = _outcome_paths(task)
         ok, message = _write_and_validate_pre_merge_outcome(
-            task, contract_path, summary_path, json_path, markdown_path
+            task, contract_path, summary_path, json_path, markdown_path, language
         )
         if not ok:
             _record_outcome_state(summary_path, {"status": "failed", "error": message})
@@ -1291,19 +1439,26 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--language",
-        default="en",
-        help="Conversation language for the direct human report (en, zh-CN, or ja).",
+        default=None,
+        help="Explicit conversation language for the direct human report (en, zh-CN, or ja).",
     )
     return parser.parse_args()
 
 
 def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
     """Render the active Outcome and the explicit archive boundary for the human."""
+    from ai_generate_human_report import generate_human_report, render_human_report
     from ai_render_task_outcome_multilingual import normalize_locale, render_localized_outcome
 
     locale = normalize_locale(language)
     heading, limitation, next_action = REPORT_BOUNDARY_TEXT[locale]
-    return f"{heading}\n{render_localized_outcome(outcome, locale)}{limitation}\n{next_action}\n"
+    try:
+        human_summary = render_human_report(generate_human_report(outcome))
+    except (KeyError, TypeError, ValueError):
+        # Legacy/test fixtures may contain only the localized Outcome surface;
+        # the governed finish path always supplies and validates the full report.
+        human_summary = ""
+    return f"{heading}\n{render_localized_outcome(outcome, locale)}\n{human_summary}{limitation}\n{next_action}\n"
 
 
 def deliver_direct_outcome_report(task: str, language: str) -> tuple[bool, str]:
@@ -1649,7 +1804,7 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
         human_report_ok, human_report_message = outcome_ok, outcome_message
     else:
         outcome_ok, outcome_message = run_task_outcome_pipeline(
-            contract_data["workItemId"], summary_path, contract_path
+            contract_data["workItemId"], summary_path, contract_path, args.language
         )
         if outcome_ok:
             human_report_ok, human_report_message = run_human_report_pipeline(
@@ -1993,6 +2148,12 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
 
 def main() -> int:
     args = parse_args()
+    if not args.language:
+        print(
+            "ERROR: --language is required; bind the Outcome to the conversation locale (en, ja, or zh-CN).",
+            file=sys.stderr,
+        )
+        return 2
     global CURRENT_REPORT_LANGUAGE
     CURRENT_REPORT_LANGUAGE = args.language
     try:
