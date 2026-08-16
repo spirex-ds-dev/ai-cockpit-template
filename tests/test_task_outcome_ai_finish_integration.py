@@ -112,6 +112,44 @@ def test_pre_merge_handoff_projects_evidence_bound_observed_issue_resolutions(
     ]
 
 
+def test_pre_merge_handoff_consumes_summary_evidence_refs_for_resolutions(tmp_path, monkeypatch):
+    task = "example-evidence-refs"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    refs = [
+        {"source": "archive/wi-22.summary.json", "subject": "observedIssues[0].evidenceRefs"},
+        {"source": "tests/test_task_outcome_ai_finish_integration.py", "subject": "pass"},
+    ]
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "knownGaps": [],
+                "verification": [],
+                "observedIssues": [
+                    {
+                        "area": "evidence-ref-adapter",
+                        "detail": "Summary evidenceRefs must reach Outcome resolutions.",
+                        "status": "resolved_by_adapter_fix",
+                        "action": "Read evidenceRefs as the canonical source.",
+                        "evidenceRefs": refs,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+
+    payload = ai_finish._pre_merge_outcome_input(task, contract_path, summary_path, "en")
+
+    assert payload["evidence"]["resolutions"][0]["evidenceRefs"] == refs
+    assert payload["evidence"]["handoffQuestions"]["resolvedProblems"][0]["evidenceRefs"] == refs
+    assert payload["evidence"]["handoffQuestions"]["resolutionApproach"][0]["evidenceRefs"] == refs
+
+
 def _outcome(task: str) -> dict:
     sections = {
         "outcomeSummary": "Completed from structured evidence.",
