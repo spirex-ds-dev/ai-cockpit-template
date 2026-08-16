@@ -54,7 +54,15 @@ when quality fails. Recover by setting the missing variable in
   artifacts. `template-smoke` itself is the `always()` fail-closed aggregate
   consumer: it rejects missing, cancelled, failed, stale, wrong-SHA, or
   incomplete shard evidence before it runs the remaining quality gates. Local
-  `make project-test` remains the serial diagnostic equivalent.
+  `make project-test` now uses the same source-bound manifest with five
+  duration-balanced shards and a bounded `PROJECT_TEST_SHARD_JOBS` limit
+  (default `5`), then runs aggregate coverage, critical coverage, and receipt
+  validation. Coverage path aliases bind each isolated shard's `scripts` source
+  back to the repository tree so aggregate validation remains valid after each
+  shard worktree is cleaned up. The local path
+  is repository-maintenance behavior; an installed
+  adopter's `PROJECT_TEST` command remains adopter-owned and is not inferred or
+  rewritten by this template.
 - The release-blocking full-history secret scan has one independent owner,
   `secret-scan`, and starts alongside the project-test graph. `template-smoke`
   waits for both the successful source checkout scan and all shard evidence,

@@ -308,6 +308,51 @@ def test_project_test_uses_stricter_coverage_floor():
     assert "--cov-fail-under=85.10" in result.stdout
 
 
+def test_project_test_owned_runs_the_bounded_manifest_shards_and_aggregate():
+    result = subprocess.run(
+        ["make", "-n", "project-test-owned"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "project-test-manifest" in result.stdout
+    assert "project-test-shards" in result.stdout
+    assert "-j5" in result.stdout
+    assert "project-test-aggregate" in result.stdout
+    assert "project-test-receipt" in result.stdout
+    assert "-m pytest -q --cov=scripts" not in result.stdout
+
+
+def test_project_test_exposes_each_bounded_shard_alias():
+    result = subprocess.run(
+        ["make", "-n", "project-test-shard-core"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert 'shard="core"' in result.stdout
+    assert '--shard "$shard"' in result.stdout
+
+
+def test_project_test_shards_isolate_mutating_tests_in_source_bound_worktrees():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+
+    assert "git worktree add --detach" in makefile
+    assert "git worktree remove --force" in makefile
+    assert 'workspace="$(abspath' in makefile
+    assert '--root "$$workspace"' in makefile
+    assert "ai_capability_truth.py --write" in makefile
+    assert "ai_japanese_capability.py --write" in makefile
+    assert "check_pre_release_documentation_alignment.py --write" in makefile
+    assert "target/quality/shards/$$shard" in makefile
+
+
 def test_project_test_manifest_is_a_public_make_target_with_live_collection():
     result = subprocess.run(
         ["make", "-n", "project-test-manifest"],

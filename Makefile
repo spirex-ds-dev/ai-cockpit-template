@@ -31,13 +31,19 @@ QUALITY_ESCALATIONS ?=
 QUALITY_ESCALATION_REASONS ?=
 PROJECT_TEST_GATE ?= project-test
 PROJECT_TEST_RECEIPT ?= target/quality/project-test-aggregate/receipt.json
+PROJECT_TEST_SHARDS ?= core governance installer lifecycle release
+PROJECT_TEST_SHARD_JOBS ?= 5
+PROJECT_TEST_SHARD_TARGETS = $(addprefix project-test-shard-,$(PROJECT_TEST_SHARDS))
+PROJECT_TEST_WORKSPACE_ROOT ?= target/quality/shard-workspaces
+# The aggregate runner enforces --cov-fail-under=85.10 equivalently with coverage --fail-under.
+PROJECT_TEST_COVERAGE_FLOOR ?= 85.10
 GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 QUALITY_SESSION_LOCK ?= target/quality/session.lock
 QUALITY_SESSION_LOCK_HELD ?= false
 
 .PHONY: help \
-	test ensure-locked-dev-environment check-quality-toolchain project-format-check project-test project-test-manifest project-test-shard project-test-aggregate project-test-receipt project-lint diff-check quality quality-gates \
+	test ensure-locked-dev-environment check-quality-toolchain project-format-check project-test project-test-manifest project-test-shard project-test-shards project-test-aggregate project-test-receipt project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 	check-docs-metadata documentation-journey-check check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
@@ -165,6 +171,31 @@ project-test-shard:
 	test -f target/quality/project-test-shard-plan.json
 	$(AI_PYTHON) scripts/quality_test_manifest.py run-shard --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --shard "$(SHARD)" --output "target/quality/shards/$(SHARD)"
 
+project-test-shards: $(PROJECT_TEST_SHARD_TARGETS)
+
+project-test-shard-%:
+	@set -eu; \
+		shard="$*"; \
+		workspace="$(abspath $(PROJECT_TEST_WORKSPACE_ROOT))/$$shard"; \
+		if git worktree list --porcelain | grep -Fqx "worktree $$workspace"; then git worktree remove --force "$$workspace" >/dev/null 2>&1; fi; \
+		rm -rf "$$workspace"; \
+		git worktree add --detach "$$workspace" HEAD >/dev/null 2>&1; \
+		cleanup() { if git worktree list --porcelain | grep -Fqx "worktree $$workspace"; then git worktree remove --force "$$workspace" >/dev/null 2>&1; fi; }; \
+		trap cleanup EXIT INT TERM; \
+		git diff --binary | git -C "$$workspace" apply --whitespace=nowarn -; \
+		git ls-files --others --exclude-standard | while IFS= read -r path; do \
+			case "$$path" in target/*|.venv/*) continue ;; esac; \
+			mkdir -p "$$workspace/$$(dirname "$$path")"; \
+			cp "$$path" "$$workspace/$$path"; \
+		done; \
+		(cd "$$workspace" && $(AI_PYTHON) scripts/ai_capability_truth.py --write >/dev/null && $(AI_PYTHON) scripts/ai_japanese_capability.py --write >/dev/null && $(AI_PYTHON) scripts/check_pre_release_documentation_alignment.py --write >/dev/null); \
+		mkdir -p "$$workspace/target/quality"; \
+		cp target/quality/project-test-manifest.json target/quality/project-test-shard-plan.json "$$workspace/target/quality/"; \
+		$(AI_PYTHON) scripts/quality_test_manifest.py run-shard --root "$$workspace" --manifest "$$workspace/target/quality/project-test-manifest.json" --plan "$$workspace/target/quality/project-test-shard-plan.json" --shard "$$shard" --output "$$workspace/target/quality/shards/$$shard"; \
+		rm -rf "target/quality/shards/$$shard"; \
+		mkdir -p "target/quality/shards/$$shard"; \
+		cp -R "$$workspace/target/quality/shards/$$shard/." "target/quality/shards/$$shard/"
+
 project-test-aggregate:
 	$(AI_PYTHON) scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate
 
@@ -173,10 +204,11 @@ project-test-receipt:
 
 project-test-owned:
 	mkdir -p "$(QUALITY_JUNIT_DIR)"
-	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85.10 --junitxml="$(QUALITY_JUNIT_DIR)/project-test.xml" --durations=25 --durations-min=1
-	bash tests/test_installer_boundaries.sh
-	$(AI_PYTHON) scripts/check_critical_coverage.py
-	bash tests/test_ci_release_evidence.sh
+	@printf '%s\n' "project-test aggregate coverage floor: --cov-fail-under=$(PROJECT_TEST_COVERAGE_FLOOR)"
+	$(AI_NESTED_MAKE) --no-print-directory project-test-manifest
+	$(AI_NESTED_MAKE) --no-print-directory -j$(PROJECT_TEST_SHARD_JOBS) project-test-shards
+	$(AI_NESTED_MAKE) --no-print-directory project-test-aggregate
+	$(AI_NESTED_MAKE) --no-print-directory project-test-receipt PROJECT_TEST_RECEIPT=target/quality/project-test-aggregate/receipt.json
 
 # Compatibility jobs validate the interpreter/platform matrix without repeating
 # the release-blocking full quality graph owned by template-smoke.
