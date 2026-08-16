@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "wi-20-post-release-projection-sync",
+  "purpose": "Evidence-bound post-publication projection synchronization and Outcome-language repair.",
+  "claims": [
+    {
+      "claim": "Provider v0.5.62 is an immutable stable release targeting merged source commit f208e012d5345f270b9500351a6ffaecb378661e.",
+      "evidenceRefs": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.62",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31961572862",
+        "provider://release/v0.5.62/release-digests.json"
+      ]
+    },
+    {
+      "claim": "The repository published projection was synchronized from provider v0.5.62 assets and the next candidate advanced exactly to v0.5.63.",
+      "evidenceRefs": [
+        "command://sync-published-release-projection-v0.5.62",
+        "release.json",
+        "release-state.json",
+        "next-release.json",
+        ".ai/cockpit/version.json",
+        ".ai/cockpit/release-digests.json",
+        "install.sh"
+      ]
+    },
+    {
+      "claim": "The public v0.5.62 archive digest recorded in release.json matches the downloaded provider archive.",
+      "evidenceRefs": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/download/v0.5.62/release.json",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/download/v0.5.62/v0.5.62.tar.gz",
+        "command://verify-v062-provider-assets"
+      ]
+    },
+    {
+      "claim": "Post-publication adoption validation binds an explicit English report language before invoking ai-finish.",
+      "evidenceRefs": [
+        "scripts/check_release_distribution.py",
+        "tests/test_release_distribution.py",
+        "command://make-check-release-distribution-post-publish"
+      ]
+    }
+  ],
+  "discoveredProblems": [
+    {
+      "problem": "Repository release.json lagged the stable provider v0.5.62 release.",
+      "severity": "high",
+      "evidenceRefs": ["command://make-check-release-distribution", "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.62"]
+    },
+    {
+      "problem": "Post-publication adoption validation omitted REPORT_LANGUAGE and stopped before Outcome generation.",
+      "severity": "high",
+      "evidenceRefs": ["command://make-check-release-distribution-post-publish", "scripts/check_release_distribution.py"]
+    }
+  ],
+  "resolutions": [
+    {"problem": "published-projection-lag", "resolution": "Promote provider assets with the canonical synchronizer and advance candidate to v0.5.63.", "evidenceRefs": ["command://sync-published-release-projection-v0.5.62", "release-state.json", "next-release.json"]},
+    {"problem": "adoption-outcome-language", "resolution": "Pass REPORT_LANGUAGE=en to the adoption ai-finish subprocess and add a regression assertion.", "evidenceRefs": ["scripts/check_release_distribution.py", "tests/test_release_distribution.py"]}
+  ],
+  "remainingRisks": [
+    {"risk": "Unrelated user-owned dirty/detached worktrees remain outside the governed WI-20 worktree.", "evidenceRefs": ["command://git-worktree-list-final"]}
+  ],
+  "inferenceBoundary": "No unsupported performance, quality, or time-saving benefit is claimed by this audit."
+}

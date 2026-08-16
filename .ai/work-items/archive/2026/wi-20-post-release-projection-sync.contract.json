@@ -1,0 +1,102 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-20-post-release-projection-sync",
+  "mode": "code",
+  "title": "Synchronize published v0.5.62 projection and finalize release closure",
+  "baseCommit": "f208e012d5345f270b9500351a6ffaecb378661e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-20-post-release-projection-sync.contract.json",
+    ".ai/work-items/active/wi-20-post-release-projection-sync.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/decisions/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-20-post-release-projection-sync.outcome.json",
+    ".ai/work-items/active/wi-20-post-release-projection-sync.outcome.md",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "install.sh",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/audits/wi-20-post-release-projection-sync.json",
+    "docs/audits/wi-20-post-release-projection-sync.md",
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py"
+  ],
+  "outOfScope": [
+    "Creating, moving, deleting, or republishing any immutable provider tag or release",
+    "Rewriting WI-01 through WI-19 archived evidence",
+    "Changes to runtime or product behavior unrelated to release projections and adoption validation",
+    "Publishing another release from this Work Item"
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.62", "reason": "Provider evidence that v0.5.62 is immutable stable release and public assets are authoritative."},
+    {"path": "make check-release-distribution", "reason": "Observed failure showing repository release.json lagged the stable provider release."},
+    {"path": "make check-release-distribution-post-publish", "reason": "Observed adoption validation failure caused by missing explicit Outcome report language."},
+    {"path": "scripts/sync_published_release_projection.py", "reason": "Canonical atomic provider-to-source projection synchronizer."},
+    {"path": "docs/reference/distribution.md", "reason": "Release projection, post-publication, and candidate progression contract."},
+    {"path": "docs/trust-layer.md", "reason": "Outcome and human-facing evidence handoff requirements."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "provider_evidence", "human_handoff"],
+    "reason": "Post-publication source projections are stale and the adoption validator invokes ai-finish without a required explicit report language; both can misstate release or human-facing Outcome facts.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["Published release identity and human-facing Outcome evidence require strict verification."],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "User authorized final release completion and requested evidence-backed self-check loops; no provider mutation is in scope."},
+  "preReviewWarnings": [],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints before projection edits and final verification to prevent stale release evidence."},
+  "acceptance": [
+    "Provider v0.5.62 release.json and release-digests.json assets are downloaded, hash-verified, and promoted as the published projection; canonical state advances exactly to candidate v0.5.63 without mutating v0.5.62.",
+    "release.json, release-state.json, next-release.json, install.sh, version.json, release-digests.json, capability truth, and documentation-alignment projections are mutually consistent and pass release distribution, state, readiness, and preflight checks.",
+    "Post-publication distribution validation passes, including adoption lifecycle validation with an explicit REPORT_LANGUAGE value so generated Outcome and human reports are never language-ambiguous.",
+    "The human audit and generated Outcome/Task Report list observed failures, resolutions, evidence references, remaining risks, unknowns, and human decisions without unsupported benefit claims."
+  ],
+  "guidelines": [
+    "Treat provider v0.5.62 assets as evidence and never overwrite or reuse immutable tags.",
+    "Use the canonical projection synchronizer and preserve atomic validation before writes.",
+    "Every human-facing Outcome generation command must bind an explicit report language.",
+    "Bind release and benefit claims to evidenceRefs; label unsupported benefits as inference.",
+    "Do not rewrite historical Work Item archives."
+  ],
+  "intent": {
+    "problem": "After v0.5.62 was published successfully, the repository still advertised v0.5.61 as release.json and the post-publication checker failed before it could validate adoption because its ai-finish subprocess omitted the required report language.",
+    "constraints": ["Provider v0.5.62 is immutable evidence and must not be moved, deleted, or republished.", "Advance the repository candidate exactly one patch to v0.5.63 after synchronizing v0.5.62.", "Preserve WI-01 through WI-19 archived records and keep factual human-facing claims evidence-bound."],
+    "rationale": "A published release must be reflected by the repository's canonical projections, and adoption validation must exercise the same explicit-language Outcome contract required of real agents."
+  },
+  "declaredIntent": {"summary": "Promote verified v0.5.62 provider assets into repository projections, advance the next candidate, and make post-publication adoption validation language-safe.", "requestedCapabilities": ["ai_governance", "documentation"]},
+  "rawUserRequest": "Complete the final release and closeout. Continue self-checking until all discovered issues are resolved, keep Outcomes evidence-bound and language-correct, and leave local and remote Work Item state clean.",
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "rawRequestSource": {"type": "human", "reference": "user-request:final-release-closeout-self-check-loop", "capturedAt": "2026-08-17T00:00:00+09:00", "digest": "sha256:user-authorized-wi20-post-release-projection-sync"},
+  "authorityEvidence": {"type": "direct_user_authorization", "reference": "user-request:complete-final-release-closeout-and-publish-version"},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User authorized the governed self-check loop and its generated preflight decision evidence; no provider mutation is performed by WI-20."},
+  "scenarioCoverage": [
+    {"id": "published-projection-lag", "riskDomain": "release_identity", "scenario": "The provider has a stable v0.5.62 release while repository release.json still names v0.5.61.", "expectedResult": "Provider assets are hash-verified, release.json becomes v0.5.62, and candidate/state advance exactly to v0.5.63.", "verificationPlan": "Run the canonical synchronizer and release distribution/state/readiness/preflight checks.", "required": true, "status": "unverified", "evidence": []},
+    {"id": "adoption-outcome-language", "riskDomain": "human_handoff", "scenario": "Post-publication adoption validation invokes ai-finish without REPORT_LANGUAGE.", "expectedResult": "The validator supplies an explicit language and completes the adoption check without an ambiguous Outcome.", "verificationPlan": "Add a regression assertion and run post-publication distribution validation with REPORT_LANGUAGE=en.", "required": true, "status": "unverified", "evidence": []},
+    {"id": "historical-archive-preservation", "riskDomain": "governance", "scenario": "Projection synchronization runs after WI-19 closure.", "expectedResult": "WI-01 through WI-19 archived evidence remains unchanged and only WI-20-owned paths are modified.", "verificationPlan": "Run scope/diff ownership checks and compare historical archive paths before and after the Work Item.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "rollbackNote": "Revert only the WI-20 projection and validator diff; retain immutable provider v0.5.62 and all historical Work Item archives.",
+  "startReceipt": {"path": ".ai/work-items/starts/wi-20-post-release-projection-sync.json", "baseCommit": "f208e012d5345f270b9500351a6ffaecb378661e", "initialScopeDigest": "eeb7d5719cf72603ef3cedfbc2f55099d9d1a799425f3b9e3435be587b166013", "contractSkeletonDigest": "ec18dc7c806fda3249f14c5c50291c5a7af85ef3fdb8b612b2803fcd720b4158"}
+}

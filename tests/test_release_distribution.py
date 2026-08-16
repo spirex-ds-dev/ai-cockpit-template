@@ -1295,6 +1295,11 @@ def test_highest_semver_tag_requires_release_tags():
         highest_semver_tag("a refs/tags/latest")
 
 
+def test_post_publication_adoption_finish_binds_report_language():
+    source = Path(release_distribution.__file__).read_text(encoding="utf-8")
+    assert '"REPORT_LANGUAGE=en"' in source
+
+
 def test_canonical_release_state_has_single_state_machine_record():
     state = json.loads(
         (release_distribution.ROOT / "release-state.json").read_text(encoding="utf-8")
