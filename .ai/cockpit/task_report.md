@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-02-governance-cost-metrics generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-03-safe-parallel-verification generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Local observability does not contain provider wait, human wait, token usage, or recovery duration; the report intentionally preserves these as unknown.
+- Unresolved evidence is explicitly limited: Runtime wall-clock savings depend on the job mix and declared scope quality.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
