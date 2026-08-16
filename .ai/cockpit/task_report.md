@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-00-lifecycle-handoff-unblock generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-01-performance-baseline generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: The implementation and focused regression evidence are not yet recorded.
+- Unresolved evidence is explicitly limited: Provider and human wait measurements remain unknown without external evidence.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.

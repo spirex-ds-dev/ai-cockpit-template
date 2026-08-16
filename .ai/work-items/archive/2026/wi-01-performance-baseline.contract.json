@@ -1,0 +1,231 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-01-performance-baseline",
+  "mode": "code",
+  "title": "Performance measurement baseline and top bottlenecks",
+  "rawUserRequest": "Implement the performance-first Work Item plan in English low-token mode, starting with an evidence-backed baseline and top bottleneck report.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-14-wi-performance-first-plan",
+    "capturedAt": "2026-08-16T00:00:00Z",
+    "digest": "sha256:user-authorized-performance-first-plan"
+  },
+  "declaredIntent": {
+    "summary": "Measure Work Item governance cost and explain the top three observed bottlenecks without changing gate decisions.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "a88e3d1ae87757ab4f322451e72aa38de9fedeb5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-01-performance-baseline.contract.json",
+    ".ai/work-items/active/wi-01-performance-baseline.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_performance_diagnosis.py",
+    "tests/test_ai_performance_diagnosis.py",
+    "docs/reference/performance-diagnosis.md",
+    ".ai/work-items/active/wi-01-performance-baseline.outcome.json",
+    ".ai/work-items/active/wi-01-performance-baseline.outcome.md"
+  ],
+  "outOfScope": [
+    "Task scheduling, agent assignment, and external orchestration.",
+    "Changing governance decisions based on measured cost.",
+    "Provider token estimates when exact values are unavailable."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_observability.py",
+      "reason": "Existing structured lifecycle and gate timing events."
+    },
+    {
+      "path": "scripts/summarize_quality_gates.py",
+      "reason": "Existing quality timing aggregation."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Work Item-local lifecycle facts and read-only status."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "performance_observability"
+    ],
+    "reason": "Measurement must remain evidence-only and must not alter governance outcomes.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Performance measurement is a non-authoritative observability change."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Evidence-only metrics are within the Work Item scope."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A Work Item metrics report records elapsed, phase, gate, retry, backtrack, and human-decision facts without estimates.",
+    "Unknown provider token and wait values remain explicitly unknown.",
+    "The report identifies the top three measured bottlenecks deterministically.",
+    "Metrics are advisory and cannot change a gate result.",
+    "Focused tests cover empty, malformed, mixed, and multi-run observability logs."
+  ],
+  "guidelines": [
+    "Keep metrics evidence-only; never use it to bypass a required check.",
+    "Use exact observed durations and represent unavailable values as unknown.",
+    "Document the machine-readable schema and human-readable bottleneck output."
+  ],
+  "intent": {
+    "problem": "Current governance timing exists in several local receipts, but there is no Work Item-level baseline that explains where execution time and retries are spent.",
+    "constraints": [
+      "Do not infer provider or human wait time from local elapsed time.",
+      "Do not change gate eligibility based on metrics.",
+      "Keep the report repository-local and free of credentials or sensitive values."
+    ],
+    "rationale": "A deterministic baseline is required before optimizing verification or enabling controlled parallel Work Items."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A complete observability log contains lifecycle and gate timings.",
+      "expected": "The report preserves observed durations and ranks bottlenecks.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused unit test with deterministic event fixtures."
+    },
+    {
+      "scenario": "Provider or human wait data is absent.",
+      "expected": "Unavailable values remain unknown rather than estimated.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused unit test with no wait events."
+    },
+    {
+      "scenario": "A malformed or cross-Work-Item event is present.",
+      "expected": "The report rejects the record or excludes it fail-closed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused validation test for malformed JSON and identity mismatch."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 913
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-01-performance-baseline.json",
+    "baseCommit": "a88e3d1ae87757ab4f322451e72aa38de9fedeb5",
+    "initialScopeDigest": "6c420b7f681ad33f7c43c96e0a2c22e4378f9a4f20e6608b17afbc1ab84ab907",
+    "contractSkeletonDigest": "8d70940f2c6c6b047b3a27eab69c5de843968fe874cef2fa585a764874d4a48d"
+  }
+}
