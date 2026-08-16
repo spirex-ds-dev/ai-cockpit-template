@@ -1,0 +1,271 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-22-outcome-section-projection",
+  "mode": "code",
+  "title": "Project evidence-bound resolutions into top-level Outcome sections",
+  "baseCommit": "7b9d8148206a55da81e5a78bbab16f9263d563c8",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-22-outcome-section-projection.contract.json",
+    ".ai/work-items/active/wi-22-outcome-section-projection.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/decisions/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-22-outcome-section-projection.outcome.json",
+    ".ai/work-items/active/wi-22-outcome-section-projection.outcome.md",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_finish.py",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "docs/features/task-outcome-report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/audits/wi-22-outcome-section-projection.json",
+    "docs/audits/wi-22-outcome-section-projection.md"
+  ],
+  "outOfScope": [
+    "Rewriting any WI-01 through WI-21 archived Contract, Summary, Outcome, or manifest",
+    "Changing Outcome locale policy or provider/UI transport behavior",
+    "Changing unrelated quality, release, or runtime behavior",
+    "Claiming historical Outcomes were retroactively repaired"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-21-outcome-resolution-projection.outcome.md",
+      "reason": "Archived Outcome demonstrates resolved handoff claims present while top-level Resolutions and Residual Risks render empty, and human confirmations duplicate."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Canonical generator for top-level Outcome sections and human-readable rendering input."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Canonical pre-merge evidence input builder for resolutions and handoff questions."
+    },
+    {
+      "path": "tests/test_task_outcome_generator.py",
+      "reason": "Generator regression-test surface."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Authoritative human-facing Outcome contract."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "human_handoff_truthfulness",
+      "evidence_binding",
+      "cross_agent_consistency"
+    ],
+    "reason": "If structured resolution evidence reaches only the handoff subsection, the mandatory top-level Outcome sections mislead human reviewers and can omit verified resolution context.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly requested evidence-bound Outcome self-check correction until all required human-facing fields are populated."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Evidence-bound resolution records supplied to Outcome generation populate top-level Resolutions with problem, action, verification/result, and evidence references.",
+    "Remaining risks and evidence-free explanations remain visible in top-level Residual Risks or are explicitly marked inference; no claim is promoted from prose alone.",
+    "Human confirmations are order-preserving and de-duplicated without changing their language or evidence status.",
+    "Focused generator and ai-finish tests cover resolved, unresolved, malformed, and duplicate decision inputs; historical WI-01 through WI-21 archives remain byte-preserved.",
+    "Human-facing documentation records the structured evidence-to-section projection rule."
+  ],
+  "guidelines": [
+    "Generate human-facing claims only from structured Summary or verification evidence.",
+    "Every non-inference resolution or residual-risk claim must carry evidenceRefs; evidence-free text must be marked inference.",
+    "Preserve immutable historical Work Item archives and do not rewrite prior Outcomes.",
+    "Keep locale selection bound to the explicit conversation/report language.",
+    "Document and test the projection contract, including negative and duplicate-input states."
+  ],
+  "intent": {
+    "problem": "WI-21 verified that resolution claims can be generated in humanHandoff, but the generic generator still renders top-level Resolutions and Residual Risks as None and duplicates human confirmations.",
+    "constraints": [
+      "Do not rewrite any archived Work Item evidence.",
+      "Use structured evidenceRefs for factual claims and mark evidence-free explanations as inference.",
+      "Keep the fix bounded to Outcome generation, tests, and authoritative documentation."
+    ],
+    "rationale": "Projecting the same structured evidence into every mandatory human-facing section prevents a reviewer from seeing contradictory or incomplete Outcome surfaces."
+  },
+  "declaredIntent": {
+    "summary": "Ensure every mandatory human Outcome section is populated from the same evidence-bound structured resolution and risk records.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "rawUserRequest": "Continue the evidence-bound self-check loop. Every archived task must clearly explain completed work, problems, stops, resolutions, risks, unknowns, human decisions, verification, and next action; do not rewrite immutable historical archives.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:evidence-bound-human-outcome-self-check",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-outcome-self-check-wi22"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "direct_user_authorization",
+    "reference": "user-request:self-check-and-correct-until-complete"
+  },
+  "scenarioCoverage": [
+    {
+      "id": "resolved-section-projection",
+      "riskDomain": "human_handoff_truthfulness",
+      "scenario": "Structured evidence contains a resolved issue with problem, action, verification, and refs.",
+      "expectedResult": "Top-level Resolutions and humanHandoff resolvedProblems contain the same evidence-bound claim.",
+      "verificationPlan": "Focused generator and ai-finish integration tests plus Outcome validator.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_generator.py::test_structured_resolution_and_risk_records_populate_top_level_sections",
+        "tests/test_task_outcome_ai_finish_integration.py::test_pre_merge_handoff_projects_evidence_bound_observed_issue_resolutions"
+      ]
+    },
+    {
+      "id": "risk-and-inference-boundary",
+      "riskDomain": "evidence_binding",
+      "scenario": "Unresolved or evidence-free records reach the generator.",
+      "expectedResult": "Residual Risks remains visible; evidence-free text is explicitly marked inference and never presented as verified resolution.",
+      "verificationPlan": "Focused negative-path tests and validator checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_generator.py::test_structured_resolution_and_risk_records_populate_top_level_sections",
+        "tests/test_task_outcome_validator.py"
+      ]
+    },
+    {
+      "id": "decision-deduplication-and-immutability",
+      "riskDomain": "cross_agent_consistency",
+      "scenario": "Human decision inputs contain duplicates while historical archives already exist.",
+      "expectedResult": "Current Outcome deduplicates decisions and WI-01 through WI-21 archives remain byte-preserved.",
+      "verificationPlan": "Focused duplicate-input test, archive digest comparison, and scope/diff ownership checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_generator.py::test_structured_resolution_and_risk_records_populate_top_level_sections",
+        "command://git-diff-archive-immutability (0 archive paths changed from WI-22 base)"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the governed self-check correction and required lifecycle verification."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 934
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-22-outcome-section-projection.json",
+    "baseCommit": "7b9d8148206a55da81e5a78bbab16f9263d563c8",
+    "initialScopeDigest": "5399fef943d5ffe3ff6905a5316082e7e9b7fc7dfd1381c34527c2b91771d54e",
+    "contractSkeletonDigest": "a42454759c0c10d92b55283a3fb332341eb0284ea8417bad28a26e6134e7f2d8"
+  }
+}

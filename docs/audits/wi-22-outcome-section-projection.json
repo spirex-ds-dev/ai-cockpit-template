@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "wi-22-outcome-section-projection",
+  "status": "in_progress",
+  "finding": {
+    "claim": "WI-21 generated human-handoff resolution claims while top-level Resolutions and Residual Risks rendered None, and duplicate human confirmations were present.",
+    "evidenceRefs": [
+      {
+        "source": ".ai/work-items/archive/2026/wi-21-outcome-resolution-projection.outcome.md",
+        "subject": "Resolutions, Residual Risks, Human Decisions"
+      }
+    ]
+  },
+  "plannedCorrection": {
+    "claim": "Project structured resolutions and risks into the same top-level sections used by Markdown, and deduplicate human decisions in first-seen order.",
+    "evidenceRefs": [
+      {
+        "source": "scripts/ai_generate_task_outcome.py",
+        "subject": "generate_outcome and render_markdown"
+      },
+      {
+        "source": "tests/test_task_outcome_generator.py",
+        "subject": "structured section projection regression"
+      }
+    ]
+  },
+  "boundaries": [
+    "Evidence-free claims remain inference.",
+    "WI-01 through WI-21 archive bytes are not rewritten.",
+    "Locale remains selected by REPORT_LANGUAGE."
+  ]
+}

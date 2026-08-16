@@ -94,6 +94,22 @@ def test_pre_merge_handoff_projects_evidence_bound_observed_issue_resolutions(
         "Marked resolved without evidence" in item["claim"] and item["inference"]
         for item in remaining
     )
+    assert payload["evidence"]["resolutions"] == [
+        {
+            "problem": "The published projection was stale.",
+            "action": "Synchronized the provider projection and candidate metadata.",
+            "verification": "Evidence review",
+            "result": "resolved",
+            "evidenceRefs": [
+                {"source": "release.json", "subject": "publishedVersion"},
+                {"source": "command://check-release-distribution", "subject": "pass"},
+            ],
+            "evidence": [
+                {"source": "release.json", "subject": "publishedVersion"},
+                {"source": "command://check-release-distribution", "subject": "pass"},
+            ],
+        }
+    ]
 
 
 def _outcome(task: str) -> dict:

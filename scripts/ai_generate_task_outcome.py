@@ -205,6 +205,27 @@ def _handoff_risks(value: Any, fallback_source: str) -> list[dict[str, Any]]:
     return result
 
 
+def _structured_resolutions(value: Any, fallback_source: str) -> list[dict[str, Any]]:
+    """Normalize evidence-bound resolution records for the top-level Outcome section."""
+    result: list[dict[str, Any]] = []
+    for item in value if isinstance(value, list) else []:
+        if not isinstance(item, Mapping):
+            continue
+        refs = _evidence_refs(item.get("evidenceRefs", item.get("evidence")), fallback_source)
+        result.append(
+            {
+                "problem": _safe_text(item.get("problem"), "Recorded problem"),
+                "action": _safe_text(item.get("action"), "Recorded corrective action"),
+                "verification": _safe_text(item.get("verification"), "Evidence review"),
+                "result": _state(item, "resolved"),
+                "evidenceRefs": refs,
+                "evidence": refs,
+                "inference": not bool(refs),
+            }
+        )
+    return result
+
+
 def _handoff_red_reasons(
     value: Any,
     *,
@@ -406,7 +427,9 @@ def generate_outcome(
     ]
     interventions: list[dict[str, Any]] = []
     forced_stops: list[dict[str, Any]] = []
-    resolutions: list[dict[str, Any]] = []
+    resolutions: list[dict[str, Any]] = _structured_resolutions(
+        evidence.get("resolutions"), "structured-evidence"
+    )
     prevention: list[dict[str, Any]] = []
     avoided: list[str] = []
     human_decisions: list[str] = [
@@ -559,11 +582,18 @@ def generate_outcome(
                 }
             )
 
+    human_decisions = list(dict.fromkeys(human_decisions))
+    residual = [risk for risk in risks if risk["state"] in {"accepted", "unresolved"}]
+    structured_risks = _handoff_risks(evidence.get("handoffRisks"), "summary")
+    if structured_risks:
+        residual.extend(
+            risk for risk in structured_risks if risk["state"] in {"accepted", "unresolved"}
+        )
+
     def unique_refs(refs: list[dict[str, str]]) -> list[dict[str, str]]:
         return list({json.dumps(ref, sort_keys=True): ref for ref in refs}.values())
 
     status = _status(evidence, ordered, warnings)
-    residual = [risk for risk in risks if risk["state"] in {"accepted", "unresolved"}]
     delivered = [
         item
         for item in evidence.get("deliveredChanges", evidence.get("changedFiles", []))
@@ -764,6 +794,19 @@ def render_markdown(outcome: Mapping[str, Any]) -> str:
             else:
                 for item in value:
                     if isinstance(item, dict):
+                        if key == "resolutions":
+                            problem = _safe_text(item.get("problem"), "Recorded problem")
+                            action = _safe_text(item.get("action"), "Recorded corrective action")
+                            verification = _safe_text(item.get("verification"), "Evidence review")
+                            lines.append(f"- {problem}: {action} (Verification: {verification})")
+                            continue
+                        if key == "residualRisks":
+                            title = _safe_text(item.get("title"), "Residual risk")
+                            detail = _safe_text(
+                                item.get("detail"), "Evidence-backed risk requires review."
+                            )
+                            lines.append(f"- {title}: {detail}")
+                            continue
                         lines.append(
                             f"- {item.get('title', item.get('subject', item.get('kind', json.dumps(item, sort_keys=True))))}"
                         )
