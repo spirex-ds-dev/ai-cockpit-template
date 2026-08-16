@@ -185,23 +185,31 @@ def _handoff_risks(value: Any, fallback_source: str) -> list[dict[str, Any]]:
         if state not in {"resolved", "mitigated", "accepted", "unresolved", "not_applicable"}:
             state = "unresolved"
         refs = _evidence_refs(item.get("evidenceRefs", item.get("evidence")), fallback_source)
-        result.append(
-            {
-                "claim": _safe_text(
-                    item.get("claim"), _safe_text(item.get("title"), "Residual risk")
-                ),
-                "severity": severity,
-                "title": _safe_text(item.get("title"), "Residual risk"),
-                "detail": _safe_text(
-                    item.get("detail"),
-                    _safe_text(item.get("description"), "Evidence-backed risk requires review."),
-                ),
-                "state": state,
-                "evidenceRefs": refs,
-                "evidence": refs,
-                "inference": not bool(refs),
-            }
-        )
+        normalized = {
+            "claim": _safe_text(item.get("claim"), _safe_text(item.get("title"), "Residual risk")),
+            "severity": severity,
+            "title": _safe_text(item.get("title"), "Residual risk"),
+            "detail": _safe_text(
+                item.get("detail"),
+                _safe_text(item.get("description"), "Evidence-backed risk requires review."),
+            ),
+            "state": state,
+            "evidenceRefs": refs,
+            "evidence": refs,
+            "inference": not bool(refs),
+        }
+        for key in (
+            "sourceWarning",
+            "affectedClaims",
+            "requiredEvidence",
+            "decisionOwner",
+            "mitigation",
+            "acceptanceStatus",
+            "blockingFor",
+        ):
+            if key in item:
+                normalized[key] = item[key]
+        result.append(normalized)
     return result
 
 

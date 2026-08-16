@@ -191,6 +191,35 @@ def test_structured_resolution_and_risk_records_populate_top_level_sections() ->
     assert validate_outcome(outcome, markdown).valid
 
 
+def test_handoff_risk_controls_survive_outcome_normalization() -> None:
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "handoffRisks": [
+                {
+                    "severity": "high",
+                    "title": "Provider publication",
+                    "detail": "Provider evidence is pending.",
+                    "state": "unresolved",
+                    "decisionOwner": "release maintainer",
+                    "requiredEvidence": ["same-SHA rehearsal receipt"],
+                    "mitigation": "Do not publish until the receipt passes.",
+                    "acceptanceStatus": "pending",
+                    "evidence": [{"source": "summary.json", "subject": "residualRisks"}],
+                }
+            ]
+        },
+    )
+
+    risk = outcome["humanHandoff"]["risks"][0]
+    assert risk["decisionOwner"] == "release maintainer"
+    assert risk["requiredEvidence"] == ["same-SHA rehearsal receipt"]
+    assert risk["mitigation"] == "Do not publish until the receipt passes."
+    assert risk["acceptanceStatus"] == "pending"
+    assert validate_outcome(outcome, render_markdown(outcome)).valid
+
+
 def test_red_handoff_contains_gate_cause_location_and_recovery() -> None:
     outcome = generate_outcome(
         "task-outcome-generator",

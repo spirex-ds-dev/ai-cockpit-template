@@ -1,0 +1,115 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-26-final-release-v0-5-63",
+  "mode": "code",
+  "title": "Re-finalize and publish v0.5.63 after all corrective Work Items",
+  "baseCommit": "9b57097fd5a8360291dcf52ffb16087345167115",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-26-final-release-v0-5-63.contract.json",
+    ".ai/work-items/active/wi-26-final-release-v0-5-63.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/work-items/active/wi-26-final-release-v0-5-63.outcome.json",
+    ".ai/work-items/active/wi-26-final-release-v0-5-63.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "scripts/ai_finish.py",
+    "scripts/ai_generate_task_outcome.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_task_outcome_generator.py",
+    "release-state.json",
+    "release.json",
+    "next-release.json",
+    "docs/audits/wi-26-final-release-v0-5-63.json",
+    "docs/audits/wi-26-final-release-v0-5-63.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting, deleting, or backfilling immutable WI-01 through WI-25 archives.",
+    "New runtime behavior, performance claims, locale changes, or provider configuration changes.",
+    "Deleting unrelated user-owned worktrees, dirty files, or recovery branches.",
+    "Publishing any tag other than v0.5.63 or bypassing a failed release gate."
+  ],
+  "sources": [
+    {"path": "AGENTS.md", "reason": "Canonical Work Item, release, merge, closure, and cleanup lifecycle."},
+    {"path": ".ai/glossary.md", "reason": "Governance terminology and evidence boundaries."},
+    {"path": "docs/reference/distribution.md", "reason": "Exact-source rehearsal, provider evidence, and Quick Install requirements."},
+    {"path": "release-state.json", "reason": "Canonical candidate state and reserved-tag history."},
+    {"path": "next-release.json", "reason": "Unpublished v0.5.63 candidate contract."},
+    {"path": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.summary.json", "reason": "Latest corrective WI is merged and contains retry projection verification evidence."},
+    {"path": ".ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.json", "reason": "Immutable human Outcome and retained warning boundary."},
+    {"path": ".ai/work-items/archive/2026/wi-24-final-release-v0-5-63.outcome.json", "reason": "Immutable historical release attempt; its warning must be referenced, not rewritten."},
+    {"path": "Makefile", "reason": "Canonical readiness, freeze, strict quality, and release checks."},
+    {"path": ".github/workflows/release.yml", "reason": "Provider publication and exact-source verification workflow."}
+  ],
+  "rawUserRequest": "Complete every remaining Work Item without stopping. The final release may proceed after the corrective loop; record any human confirmation in the Contract and keep all Outcome claims evidence-bound.",
+  "rawRequestSource": {"type": "human", "reference": "user-authorized-goal:complete-all-work-items", "capturedAt": "2026-08-17T00:00:00+09:00", "digest": "sha256:user-authorized-final-release-after-correction"},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "evidence_gap", "immutable_history", "repository_cleanup"],
+    "reason": "Publication is an immutable external operation; source, tag, provider assets, human Outcome, and branch cleanup must remain mutually bound.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["Final public release and repository closeout require strict verification."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user explicitly authorized completion and final publication subject to fail-closed evidence gates."},
+  "preReviewWarnings": ["WI-24's archived warning is immutable historical evidence; it is accepted as a retained limitation and must not be rewritten."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints before finalization and finish to bind the release evidence to the final source."},
+  "acceptance": [
+    "The candidate is regenerated or validated from the latest merged origin/main after WI-25, with v0.5.63 remaining exactly one patch after v0.5.62.",
+    "Release readiness, source-bound evidence, distribution, state consistency, security, lockfile, Japanese capability, and strict quality checks pass for the exact candidate source.",
+    "A successful same-SHA rehearsal is recorded before provider publication; the publication workflow verifies the same source commit, tag, metadata, provider assets, SBOM, provenance, digests, and tagged Quick Install.",
+    "The archived English Outcome and Human Benefit Report contain every required human-summary section; factual claims have evidenceRefs and unsupported benefits are explicitly marked inference.",
+    "WI-26 is merged and closed through the canonical lifecycle; its local and remote branch are absent, main equals origin/main, and unrelated user work remains untouched.",
+    "No immutable WI-01 through WI-25 archive path is modified."
+  ],
+  "guidelines": [
+    "Every factual human-facing stop, resolution, risk, verification, and benefit claim must carry evidenceRefs.",
+    "Unsupported benefit language is inference, never a fact; do not use self-praise or unquantified performance claims.",
+    "Historical archives are immutable and may only be read and referenced.",
+    "Release publication is fail-closed on missing, stale, mismatched, or provider-unverified evidence.",
+    "Human Outcome language follows the conversation language: English for this Work Item.",
+    "The user-authorized acceptance of the immutable WI-24 warning is recorded as a human decision, not as a claim that the warning was removed."
+  ],
+  "intent": {
+    "problem": "WI-24 prepared v0.5.63 but its archived Outcome was created before final retry stabilization. WI-25 corrected retry projection and is now merged, so the release must be re-finalized from the new merged main rather than reusing WI-24's candidate evidence.",
+    "constraints": ["Start from latest origin/main.", "Do not rewrite historical archives or reuse stale rehearsal/provider evidence.", "Publish only after exact-source rehearsal, provider verification, and tagged Quick Install pass.", "Preserve unrelated dirty worktrees and recovery branches."],
+    "rationale": "A fresh release WI makes the final source, corrected Outcome behavior, provider identity, and cleanup evidence auditable as one bounded lifecycle."
+  },
+  "declaredIntent": {"summary": "Publish the exact verified v0.5.63 source and complete evidence-bound human closeout.", "requestedCapabilities": ["ai_governance", "documentation"]},
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "direct_user_authorization", "reference": "user-authorized-goal:complete-all-work-items", "scope": "Publish only exact verified v0.5.63; no gate bypass, historical rewrite, or unrelated cleanup."},
+  "requiredEvidenceContext": {"destructiveLevel": "none", "externalSystem": "GitHub Releases and GitHub Actions", "availableEvidence": ["same_sha_rehearsal_receipt", "provider_release_receipt", "tag", "commit", "digest", "sbom", "provenance", "asset_availability", "immutable_tag", "public_assets", "public_installation", "closure_receipt"]},
+  "scenarioCoverage": [
+    {"id": "corrected-exact-source-publication", "riskDomain": "release_identity", "scenario": "v0.5.63 is published from the latest merged main after WI-25.", "expectedResult": "Tag, metadata, archive, provider assets, and Quick Install all identify the same source commit.", "verificationPlan": "Readiness, premerge freeze, same-SHA rehearsal, hosted release workflow, and post-publication distribution checks.", "required": true, "status": "unverified", "evidence": []},
+    {"id": "evidence-bound-human-closeout", "riskDomain": "evidence_gap", "scenario": "The final human handoff explains completion, problems, stops, resolutions, risks, unknowns, decisions, verification, impact, and next action.", "expectedResult": "Archived English Outcome and task report contain all required sections and non-empty evidenceRefs; unsupported benefits are inference.", "verificationPlan": "Strict ai-finish plus archived JSON/Markdown and task_report inspection.", "required": true, "status": "unverified", "evidence": []},
+    {"id": "cleanup-boundary", "riskDomain": "repository_cleanup", "scenario": "WI-26 closure removes only its own identity while preserving unrelated user work.", "expectedResult": "WI-26 local/remote branch is absent, main is synchronized, and retained unrelated worktrees are explicitly recorded.", "verificationPlan": "Closure receipt plus final git branch, remote, status, and worktree audit.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user authorized completion of all remaining Work Items and final publication; this does not authorize bypassing evidence gates or rewriting history."},
+  "rollbackNote": "If any gate fails, leave the candidate unpublished, preserve the failure evidence, and revert only this Work Item's changes through its PR.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 950}},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-26-final-release-v0-5-63.json",
+    "baseCommit": "9b57097fd5a8360291dcf52ffb16087345167115",
+    "initialScopeDigest": "c7d94385ef5ba014c330efbc0d5e1cb66c50aef85286f714e5b89c7fe93994e2",
+    "contractSkeletonDigest": "09d0ec4239102098af2ac91b73d07da178bbb162bc213f25adcaaf6864e5b0ec"
+  }
+}
