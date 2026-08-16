@@ -69,3 +69,21 @@ After a group of Work Items closes, the Agent records reusable lessons and
 improves the Skill or reference documentation in its own governed Work Item.
 Final delivery runs a separate audit–repair–re-audit loop before a separately
 governed release workflow.
+
+## Human conversation handoff
+
+An archived Outcome or a `task_report` file is durable repository evidence,
+not proof that a human saw the result. Every owning Agent must therefore relay
+its completion to the human conversation (or have the parent orchestrator do
+so) immediately after the governed finish/closure boundary. The handoff must
+include:
+
+- one visible traffic-light marker: 🟢, 🟡, or 🔴;
+- the Work Item id and Outcome status;
+- the concise delivered/finding/limitation summary; and
+- the next safe action or explicit recovery condition.
+
+The relay is required for every Agent and subagent, not only the root Codex
+conversation. If the execution surface cannot expose a conversation receipt,
+the status remains yellow with `conversationUiReceipt=not_observable`; the
+Agent must not claim delivery merely because stdout, Markdown, or JSON exists.

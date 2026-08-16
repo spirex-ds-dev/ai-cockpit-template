@@ -1,0 +1,278 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-14-cross-wi-integration",
+  "mode": "code",
+  "title": "WI-14 cross-WI integration and final regression",
+  "rawUserRequest": "对请仔细验收，每个WI的对应状况。起码我对性能改善和Outcome感觉是有疑问的。outcome不是没有report是没有交付到对话框里。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-conversation-2026-08-16-wi14-acceptance",
+    "capturedAt": "2026-08-16T00:00:00+09:00",
+    "digest": "wi14-user-request-captured-in-contract"
+  },
+  "declaredIntent": {
+    "summary": "Independently reconcile every WI-04 through WI-13 acceptance result, with special evidence checks for performance improvement and Outcome delivery to the conversation UI.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "8c7c4483eb6cbfc73643bd9bcd9cc1f857648d54",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-14-cross-wi-integration.contract.json",
+    ".ai/work-items/active/wi-14-cross-wi-integration.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-14-cross-wi-integration.outcome.json",
+    ".ai/work-items/active/wi-14-cross-wi-integration.outcome.md",
+    ".ai/schemas/cross-wi-integration-report.schema.json",
+    "scripts/ai_cross_wi_integration.py",
+    "tests/test_ai_cross_wi_integration.py",
+    "docs/reference/cross-wi-integration.md",
+    "docs/reference/agent-parallel-work-items.md"
+  ],
+  "outOfScope": [
+    "Changing existing archived Work Item evidence or collision receipts",
+    "Changing runtime, scheduler, provider, CI, network, cache, or execution policy behavior",
+    "Changing WI-00 through WI-13 implementation semantics",
+    "Opening, closing, or modifying external Issues or Pull Requests",
+    "Making causal performance, adoption-readiness, or human-receipt claims"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/",
+      "reason": "Immutable archived Contract, Summary, Outcome, and manifest evidence for WI-04 through WI-13."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Current machine-readable Outcome-derived handoff projection."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Current human-readable Outcome-derived handoff projection."
+    },
+    {
+      "path": "scripts/ai_evidence_binding.py",
+      "reason": "WI-07 evidence classification and reuse boundary."
+    },
+    {
+      "path": "scripts/ai_diff_bound_reuse.py",
+      "reason": "WI-09 diff-bound evidence reuse behavior."
+    },
+    {
+      "path": "scripts/ai_environment_reuse.py",
+      "reason": "WI-10 environment-bound evidence reuse behavior."
+    },
+    {
+      "path": "scripts/ai_performance_diagnosis.py",
+      "reason": "WI-12 evidence-only performance diagnosis and explicit limitations."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "WI-05 direct Outcome handoff and persisted report pipeline."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "WI-05 regression evidence for direct handoff and projections."
+    },
+    {
+      "path": "docs/reference/agent-parallel-work-items.md",
+      "reason": "Agent-wide requirement to relay each Outcome to the human conversation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "release"
+    ],
+    "reason": "The integration report must compare immutable evidence across ten Work Items and fail closed when identity, status, or projection evidence is incomplete.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Cross-WI evidence reconciliation and final regression require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The report is repository-local, read-only over archived evidence, deterministic, and advisory-only."
+  },
+  "preReviewWarnings": [
+    "Outcome delivery is verified as repository stdout/projection evidence only; UI conversation receipt remains outside repository proof.",
+    "Performance status must distinguish measured evidence from unknown causal improvement and must not report an optimization result without a comparable baseline.",
+    "All archived Work Item identities and status colors must be checked; a malformed or mismatched archive is a red fail-closed result."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The report discovers and validates exactly the required WI-04 through WI-13 successor/archive identities, including Contract/Summary/Outcome/manifest presence, matching workItemId, status, and humanStatusColor.",
+    "The report produces deterministic JSON and Markdown with a stable source digest, sorted Work Item rows, explicit overall status, limitations, and decisionImpact=none; malformed, missing, cross-identity, or mismatched evidence yields red fail-closed output.",
+    "The report cross-checks WI-04 cost-metric limitations, WI-05 Outcome direct-handoff/projection evidence, WI-06 status interface, WI-07 foundation plus WI-08/09/10 policy reuse, WI-11 governance effect, WI-12 performance diagnosis, and WI-13 adoption reality without rewriting their archives.",
+    "Outcome delivery is explicitly accepted only when the persisted Outcome, task_report JSON/Markdown pair, and tested direct CLI handoff are present; every Outcome section is preserved per WI, and the report records that a UI conversation receipt cannot be proven by repository artifacts alone.",
+    "Every agent completion must be relayed by the owning agent or orchestrator into the human conversation with a visible traffic-light marker and concise Outcome facts; file existence alone is not accepted as delivery.",
+    "Performance is explicitly accepted only as measured diagnosis/advisory evidence; absent comparable before/after baseline, the report must state that runtime performance improvement is unverified and must not infer causality.",
+    "Focused TDD tests cover green, warning/unknown, red/malformed, deterministic digest, archive identity, Outcome projection, and performance no-overclaim scenarios.",
+    "Documentation describes the command, evidence contract, per-WI verdicts, Outcome boundary, performance boundary, and rerun guidance."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "All required archives, outcomes, and projection evidence are present and internally consistent.",
+      "expected": "The report is green only when every required Work Item passes identity/status checks and no unresolved limitation affects the integration verdict.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused complete-fixture integration test and CLI JSON/Markdown validation."
+    },
+    {
+      "scenario": "Archives are complete but one or more Work Items carry completed_with_warnings, explicit unknowns, or Outcome UI-receipt limitations.",
+      "expected": "The report is yellow, preserves each limitation, and does not claim performance improvement, adoption readiness, or human dialog receipt.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused warning fixture covering WI-04/WI-12 and WI-05 projection boundary."
+    },
+    {
+      "scenario": "A required archive, Outcome, identity, binding, or projection is missing, malformed, or mismatched.",
+      "expected": "The report is red and fail-closed with the exact source defect; it never falls back to green or inferred completion.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused malformed, missing, cross-task, and digest mismatch tests."
+    }
+  ],
+  "guidelines": [
+    "Read archived evidence only; never mutate or reinterpret immutable WI-00 through WI-13 archives.",
+    "Use deterministic sorted serialization and source digests; do not include wall-clock timestamps in the fact digest.",
+    "Keep the integration report advisory-only with decisionImpact=none; do not change gates, runtime behavior, scheduling, or trust decisions.",
+    "Preserve unknown, warning, external-responsibility, and human-receipt boundaries in both JSON and Markdown.",
+    "Document every new public function and use standard-library-only implementation code.",
+    "Every agent completion must be relayed by the owning agent or orchestrator into the human conversation with a visible traffic-light marker and concise Outcome facts."
+  ],
+  "intent": {
+    "problem": "The individual WI archives now exist, but their combined status, Outcome delivery, and performance claims have not been independently reconciled in one deterministic final gate.",
+    "constraints": [
+      "Treat archived evidence as immutable and inspect only repository-local files.",
+      "Do not claim that strict verification throughput or runtime execution became faster without comparable measured evidence.",
+      "Do not claim the assistant UI received an Outcome merely because a CLI stream or Markdown file exists.",
+      "Keep all findings advisory and fail closed for malformed or mismatched evidence."
+    ],
+    "rationale": "A final cross-WI report gives the user a per-WI acceptance record and makes the two disputed areas—performance and Outcome delivery—explicitly evidence-bound rather than inferred from successful merges."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user conversation",
+    "reason": "User explicitly authorized complete WI-14 execution and careful acceptance of every prior WI."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 926
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-14-cross-wi-integration.json",
+    "baseCommit": "8c7c4483eb6cbfc73643bd9bcd9cc1f857648d54",
+    "initialScopeDigest": "a0a96774a4c8099cfd369f6c6404d80bc897a076b50f0be0cdc44c0e7b74d233",
+    "contractSkeletonDigest": "1ed351e431eaba313d626b18fc4e9441941df726a954550f36eec57584c130ae"
+  }
+}
