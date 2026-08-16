@@ -3,7 +3,7 @@ title: "WI-24 v0.5.63 final release audit"
 author: "AI Cockpit"
 description: "Evidence-bound release, human Outcome, and cleanup audit for the corrected v0.5.63 candidate."
 workItemId: wi-24-final-release-v0-5-63
-status: in_progress
+status: completed_with_warnings
 ---
 
 # WI-24 v0.5.63 final release audit
@@ -25,3 +25,10 @@ environments. Any broader benefit statement is `inference`, not fact.
 Unrelated dirty worktrees and recovery branches are outside this Work Item and
 must remain untouched. Final status, provider identity, assets, Quick Install,
 and branch cleanup will be updated only from their direct receipts.
+
+Local strict verification and archive completed with warnings; provider
+publication remains a separate post-merge gate. The archived human report also
+exposed a retry-projection gap: a transient `aiSummary` stop remained listed as
+blocked without a corresponding evidence-bound resolution. That report gap is
+not rewritten here; a successor corrective Work Item is required because the
+WI-24 archive is immutable.
