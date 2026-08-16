@@ -65,6 +65,14 @@
       "reason": "Supply-chain provenance baseline."
     },
     {
+      "path": "scripts/ai_finish.py",
+      "reason": "Preserve structured residual-risk ownership and mitigation fields in the human Outcome projection."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Regression test for preserving high residual-risk controls in the Outcome input."
+    },
+    {
       "path": "release-state.json",
       "reason": "Canonical candidate/published release state."
     },
@@ -228,12 +236,26 @@
     {
       "level": "medium",
       "area": "immutable-history",
-      "detail": "WI-24's historical Outcome warning remains in the archive and is intentionally not rewritten."
+      "detail": "WI-24's historical Outcome warning remains in the archive and is intentionally not rewritten.",
+      "decisionOwner": "release maintainer",
+      "requiredEvidence": [
+        "immutable archive inspection"
+      ],
+      "mitigation": "Reference the warning and do not rewrite the archive.",
+      "acceptanceStatus": "accepted_as_retained_history"
     },
     {
       "level": "high",
       "area": "provider-publication",
-      "detail": "Provider and public asset state cannot be known until the hosted workflow completes."
+      "detail": "Provider and public asset state cannot be known until the hosted workflow completes.",
+      "decisionOwner": "release maintainer",
+      "requiredEvidence": [
+        "same-SHA rehearsal receipt",
+        "provider release receipt",
+        "tagged Quick Install receipt"
+      ],
+      "mitigation": "Keep v0.5.63 unpublished until every exact-source and provider gate passes.",
+      "acceptanceStatus": "pending"
     }
   ],
   "reviewReadiness": {
@@ -290,6 +312,31 @@
       "invalidatedRequiredChecks": [],
       "requiredChecksPassedAtAmendment": 0,
       "recordedAt": "2026-08-16T21:42:37.841769+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "3488803b739ae886",
+      "previousContractHash": "54ff4d6b50334803",
+      "contractHash": "774fae747bb5bbe4",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Added the current-WI regression test and retained high residual-risk control fields after the first finish attempt exposed an Outcome validation gap.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-16T21:45:51.517740+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "774fae747bb5bbe4",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
     }
   ],
   "knownGaps": [
@@ -379,12 +426,12 @@
     "cleanup-boundary"
   ],
   "decisionEvidence": {
-    "decisionId": "HD-54ff4d6b5033",
+    "decisionId": "HD-774fae747bb5",
     "decision": "A",
     "workItemId": "wi-26-final-release-v0-5-63",
-    "contractHash": "54ff4d6b50334803",
-    "preflightHash": "12da095a2c6583bd",
-    "recordedAt": "2026-08-16T21:42:33.076212+00:00",
+    "contractHash": "774fae747bb5bbe4",
+    "preflightHash": "7967e517b4a2488a",
+    "recordedAt": "2026-08-16T21:45:46.037024+00:00",
     "recordedBy": "user-authorized-goal:complete-all-work-items"
   }
 }

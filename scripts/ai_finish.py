@@ -1273,6 +1273,19 @@ def _pre_merge_outcome_input(
                     "subject": "residualRisks",
                 }
             ],
+            **{
+                key: item[key]
+                for key in (
+                    "sourceWarning",
+                    "affectedClaims",
+                    "requiredEvidence",
+                    "decisionOwner",
+                    "mitigation",
+                    "acceptanceStatus",
+                    "blockingFor",
+                )
+                if key in item
+            },
         }
         for item in summary.get("residualRisks", [])
         if isinstance(item, dict)

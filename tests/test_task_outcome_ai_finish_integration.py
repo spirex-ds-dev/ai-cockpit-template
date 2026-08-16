@@ -150,6 +150,45 @@ def test_pre_merge_handoff_consumes_summary_evidence_refs_for_resolutions(tmp_pa
     assert payload["evidence"]["handoffQuestions"]["resolutionApproach"][0]["evidenceRefs"] == refs
 
 
+def test_pre_merge_handoff_preserves_high_residual_risk_controls(tmp_path, monkeypatch):
+    task = "residual-risk-controls"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "knownGaps": [],
+                "verification": [],
+                "observedIssues": [],
+                "residualRisks": [
+                    {
+                        "level": "high",
+                        "area": "provider-publication",
+                        "detail": "Provider evidence is pending.",
+                        "decisionOwner": "release maintainer",
+                        "requiredEvidence": ["same-SHA rehearsal receipt"],
+                        "mitigation": "Do not publish until the receipt passes.",
+                        "acceptanceStatus": "pending",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+
+    payload = ai_finish._pre_merge_outcome_input(task, contract_path, summary_path, "en")
+    risk = payload["evidence"]["handoffRisks"][0]
+
+    assert risk["decisionOwner"] == "release maintainer"
+    assert risk["requiredEvidence"] == ["same-SHA rehearsal receipt"]
+    assert risk["mitigation"] == "Do not publish until the receipt passes."
+    assert risk["acceptanceStatus"] == "pending"
+
+
 def test_record_result_preserves_failed_attempt_when_retry_passes(tmp_path):
     summary_path = tmp_path / "summary.json"
     failed = {"check": "aiSummary", "result": "failed", "outputDigest": "a" * 64}
