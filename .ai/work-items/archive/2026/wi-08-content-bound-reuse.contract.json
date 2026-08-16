@@ -1,0 +1,74 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-08-content-bound-reuse",
+  "mode": "code",
+  "title": "Content-bound evidence reuse policy",
+  "rawUserRequest": "Implement WI-08 of the approved 14-WI AI Cockpit improvement plan: add a content-bound evidence reuse policy on the WI-07 binding foundation. Identical content bytes may reuse eligible evidence after an unrelated Base update, while changed, missing, malformed, or policy-incompatible inputs fail closed to rerun. Keep all required security, scope, governance, and verification gates authoritative; execute as one isolated Work Item with TDD, strict verification, PR, archive, merge, and closure lifecycle.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-14-wi-performance-first-plan#WI-08", "capturedAt": "2026-08-16T04:30:00Z", "digest": "sha256:user-authorized-content-bound-reuse-policy"},
+  "declaredIntent": {"summary": "Allow safe reuse of content-bound evidence when the exact covered bytes and mandatory governance identities are unchanged, without coupling the decision to an unrelated Git Base commit.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "cc9ad16ed014bbd25526e51916fda7f52148ef9f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-08-content-bound-reuse.contract.json",
+    ".ai/work-items/active/wi-08-content-bound-reuse.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-08-content-bound-reuse.outcome.json",
+    ".ai/work-items/active/wi-08-content-bound-reuse.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_evidence_binding.py",
+    "tests/test_ai_evidence_binding.py",
+    "docs/reference/content-bound-evidence-reuse.md"
+  ],
+  "outOfScope": [
+    "Implementing WI-09 diff-bound or WI-10 environment-bound policy behavior.",
+    "Changing the WI-07 schema, existing diff/environment decision behavior, ai_verify, required-check gates, security gates, scope guards, governance gates, scheduler, cache, provider integration, or automatic execution.",
+    "Reusing evidence based on timestamps, Git Base identity, agent self-report, or a partial content match.",
+    "Mutating caller input, repository files, or any external state while calculating a content identity or decision."
+  ],
+  "sources": [
+    {"path": "scripts/ai_evidence_binding.py", "reason": "WI-07 versioned binding validation and fail-closed decision boundary to extend only with content-specific policy helpers."},
+    {"path": "tests/test_ai_evidence_binding.py", "reason": "Existing binding fixtures and deterministic decision assertions for focused TDD coverage."},
+    {"path": "docs/reference/evidence-binding-foundation.md", "reason": "WI-07 handoff contract and explicit boundary for subsequent content policy work."},
+    {"path": "conversation:user-authorized-14-wi-performance-first-plan", "reason": "User-authorized plan definition of content-bound evidence, byte identity, and Unknown-to-rerun acceptance."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["evidence_integrity", "security_boundary", "api_change"], "reason": "An overly broad content identity or permissive current-input adapter could reuse evidence after covered bytes, security scope, or governance policy changed; the policy must remain deterministic and fail closed.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["This Work Item changes a governance decision API and must prove integrity with full strict verification."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The policy is bounded to pure content identity and decision helpers; all execution, cache, scheduler, and gate authority remains out of scope."},
+  "preReviewWarnings": [],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record implementation and finish checkpoints to bind the final evidence to the completed contract."},
+  "acceptance": [
+    "The content policy exposes a deterministic byte-oriented content identity helper that canonicalizes sorted, unique relative paths and hashes each path and exact byte payload with unambiguous framing; text encoding, path order, and unrelated Base SHA changes cannot alter the result for identical covered bytes.",
+    "The content policy exposes a content-bound decision helper that accepts a current content identity plus mandatory security scope and governance policy digests and returns the WI-07 decision shape without mutating caller data.",
+    "An exact content digest and exact covered path set with matching scope/governance identities and unexpired binding returns state=fresh, action=reuse; a content byte/path change returns state=stale, action=rerun with deterministic reason codes even when a Base commit changes.",
+    "Missing, unknown, malformed, empty, duplicate, absolute, traversal, unsupported, or classification-incompatible content inputs return state=unknown, action=rerun; no partial-content or timestamp-only result can reuse evidence.",
+    "Focused tests cover byte identity determinism and separation, Base-independent reuse, path/content mismatch, missing/unknown/malformed inputs, scope/governance mismatch, expiry, classification rejection, immutability, and stable output ordering; the existing WI-07 classification tests remain green.",
+    "A reference document records the content identity algorithm, current-input contract, deterministic decision/reason semantics, Base-independent reuse boundary, fail-closed behavior, and explicit non-integration handoff to WI-09/10."
+  ],
+  "guidelines": [
+    "Hash exact attributable bytes with path identity; never infer content equality from timestamps, Git ancestry, or a display string.",
+    "Fail closed to rerun for Unknown, malformed, incomplete, mismatched, expired, or cross-scope/cross-governance inputs.",
+    "Keep this policy pure and local; it may decide eligibility but never executes checks or bypasses required gates.",
+    "Document every new public API and preserve the WI-07 foundation behavior for other classifications."
+  ],
+  "intent": {"problem": "Parallel Work Items and unrelated Base merges can invalidate all verification by commit identity even when a content-bound result still covers exactly the same bytes. Re-running such evidence is costly, but unsafe reuse would undermine calibrated trust.", "constraints": ["Only content-bound behavior is implemented here; WI-09 and WI-10 own their classifications.", "Exact bytes and attributable paths, mandatory security scope, governance policy, and freshness remain required.", "Unknown, malformed, changed, incomplete, or incompatible inputs must require rerun.", "The helper is pure, deterministic, repository-local, and cannot execute or skip any gate."], "rationale": "A content-specific identity adapter and policy wrapper provide the planned safe fast path while keeping dependency classes isolated and preserving the WI-07 fail-closed contract."},
+  "scenarioCoverage": [
+    {"scenario": "The same sorted path set and exact bytes produce a content-bound binding decision after an unrelated Base commit update.", "expected": "The result is state=fresh and action=reuse with no reasons; Base identity is not consulted by the content policy.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused test builds current content identity from the same bytes while varying an out-of-band Base value and asserts identical reuse output."},
+    {"scenario": "A covered byte, path attribution, security scope, governance policy, or freshness limit changes.", "expected": "The decision is stale or unknown with action=rerun and deterministic reason codes; reuse is never returned.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused parameterized tests exercise each mismatch and expiry path."},
+    {"scenario": "Current content input is missing, malformed, duplicate, absolute, traversal-based, empty, or only partially supplied.", "expected": "The policy returns state=unknown, action=rerun without guessing or mutating input.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused tests assert fail-closed output, stable reason ordering, and deep immutability for invalid inputs."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted schema path is changed; WI-07 schema remains unchanged."},
+  "rollbackNote": "Revert this Work Item diff and restore the focused tests and reference document; WI-07 foundation files remain recoverable from the base commit.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 920}},
+  "startReceipt": {"path": ".ai/work-items/starts/wi-08-content-bound-reuse.json", "baseCommit": "cc9ad16ed014bbd25526e51916fda7f52148ef9f", "initialScopeDigest": "fd3f722d7cf54c0294f9e35ec63c756d785698606ff1f20b5902c5f10835193c", "contractSkeletonDigest": "8a05eba3d8a446a5721d1bd56babb5924b463a3c2f330799d78e43245a9a32af"}
+}

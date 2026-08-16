@@ -57,6 +57,45 @@ def canonical_digest(value: object) -> str:
     return "sha256:" + hashlib.sha256(_canonical(value)).hexdigest()
 
 
+def _validate_content_path(path: object) -> None:
+    """Reject ambiguous paths before they become part of a content identity."""
+
+    if not isinstance(path, str) or not path or path.startswith("/") or "\\" in path:
+        raise BindingError("content path must be a non-empty relative POSIX path")
+    parts = path.split("/")
+    if any(part in {"", ".", ".."} for part in parts):
+        raise BindingError("content path must not contain empty, dot, or traversal segments")
+
+
+def build_content_dependency(files: Mapping[str, bytes]) -> dict[str, Any]:
+    """Build a content dependency from exact bytes and attributable paths.
+
+    The digest uses length-prefixed UTF-8 paths and byte payloads in sorted
+    path order.  Length framing prevents concatenation ambiguity and avoids
+    text decoding or Git ancestry becoming part of content identity.
+    """
+
+    if not isinstance(files, Mapping) or not files:
+        raise BindingError("content files must be a non-empty mapping")
+    normalized: dict[str, bytes] = {}
+    for path, payload in files.items():
+        _validate_content_path(path)
+        if not isinstance(payload, bytes):
+            raise BindingError("content payload must be exact bytes")
+        if path in normalized:
+            raise BindingError("content paths must be unique")
+        normalized[path] = payload
+    digest = hashlib.sha256()
+    for path in sorted(normalized):
+        path_bytes = path.encode("utf-8")
+        payload = normalized[path]
+        digest.update(len(path_bytes).to_bytes(8, "big"))
+        digest.update(path_bytes)
+        digest.update(len(payload).to_bytes(8, "big"))
+        digest.update(payload)
+    return {"digest": "sha256:" + digest.hexdigest(), "paths": sorted(normalized)}
+
+
 def _iso(value: datetime) -> str:
     if value.tzinfo is None:
         raise BindingError("timestamp must include a timezone")
@@ -283,3 +322,66 @@ def decide_reuse(
     if reasons:
         return {"state": "stale", "action": "rerun", "reasons": reasons}
     return {"state": "fresh", "action": "reuse", "reasons": []}
+
+
+def decide_content_reuse(
+    binding: Mapping[str, Any],
+    current: Mapping[str, Any],
+    *,
+    scope_digest: object,
+    governance_digest: object,
+    now: datetime,
+) -> dict[str, Any]:
+    """Apply the content-bound policy without consulting Git Base identity.
+
+    ``current`` contains a ``content`` dependency produced by
+    :func:`build_content_dependency`; an optional ``baseCommit`` is ignored by
+    design because content-bound evidence is tied to bytes and paths, not an
+    unrelated ancestor.  This helper only returns eligibility evidence.  It
+    never runs a check or authorizes a caller to bypass one.
+    """
+
+    try:
+        validate_binding(binding)
+    except BindingError:
+        return {"state": "unknown", "action": "rerun", "reasons": ["binding_invalid"]}
+    if binding["classification"] != "content-bound":
+        return {
+            "state": "unknown",
+            "action": "rerun",
+            "reasons": ["content_policy_classification_mismatch"],
+        }
+    if not isinstance(current, Mapping):
+        return {"state": "unknown", "action": "rerun", "reasons": ["content_input_unknown"]}
+    content = current.get("content")
+    if not isinstance(content, Mapping):
+        return {"state": "unknown", "action": "rerun", "reasons": ["content_input_unknown"]}
+    try:
+        if set(content) != {"digest", "paths"}:
+            raise BindingError("content input fields are invalid")
+        _require_digest(content.get("digest"), "content.digest")
+        paths = content.get("paths")
+        if not isinstance(paths, list) or not paths or paths != sorted(set(paths)):
+            raise BindingError("content input paths are invalid")
+        for path in paths:
+            _validate_content_path(path)
+    except (BindingError, TypeError):
+        return {"state": "unknown", "action": "rerun", "reasons": ["content_input_unknown"]}
+    unknown_reasons: list[str] = []
+    for value, reason in (
+        (scope_digest, "security_scope_unknown"),
+        (governance_digest, "governance_policy_unknown"),
+    ):
+        if not isinstance(value, str) or not _DIGEST.fullmatch(value):
+            unknown_reasons.append(reason)
+    if unknown_reasons:
+        return {"state": "unknown", "action": "rerun", "reasons": unknown_reasons}
+    return decide_reuse(
+        binding,
+        {
+            "dependencies": {"content": dict(content)},
+            "scopeDigest": scope_digest,
+            "governanceDigest": governance_digest,
+        },
+        now=now,
+    )
