@@ -52,6 +52,54 @@
       },
       "additionalProperties": false
     },
+    "time": {
+      "type": "object",
+      "required": [
+        "totalElapsedMs",
+        "agentActiveMs",
+        "verificationMs",
+        "ciWaitMs",
+        "humanWaitMs",
+        "recoveryRetryMs",
+        "phaseDurationsMs"
+      ],
+      "properties": {
+        "totalElapsedMs": {"anyOf": [{"type": "integer", "minimum": 0}, {"const": "unknown"}]},
+        "agentActiveMs": {"anyOf": [{"type": "integer", "minimum": 0}, {"const": "unknown"}]},
+        "verificationMs": {"anyOf": [{"type": "integer", "minimum": 0}, {"const": "unknown"}]},
+        "ciWaitMs": {"anyOf": [{"type": "integer", "minimum": 0}, {"const": "unknown"}]},
+        "humanWaitMs": {"anyOf": [{"type": "integer", "minimum": 0}, {"const": "unknown"}]},
+        "recoveryRetryMs": {"anyOf": [{"type": "integer", "minimum": 0}, {"const": "unknown"}]},
+        "phaseDurationsMs": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}}
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "required": ["gateRuns", "verificationRuns", "retries", "backtracks", "humanDecisions"],
+      "properties": {
+        "gateRuns": {"type": "integer", "minimum": 0},
+        "verificationRuns": {"type": "integer", "minimum": 0},
+        "retries": {"type": "integer", "minimum": 0},
+        "backtracks": {"type": "integer", "minimum": 0},
+        "humanDecisions": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "topBottlenecks": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["name", "durationMs", "source"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "durationMs": {"type": "integer", "minimum": 0},
+          "source": {"type": "string", "enum": ["check_result", "explicit_wait", "explicit_recovery", "lifecycle_phase_finished"]}
+        },
+        "additionalProperties": false
+      }
+    },
     "unknown": {
       "type": "object",
       "required": ["providerWaitMs", "humanWaitMs", "recoveryRetryMs", "tokenUsage"],
