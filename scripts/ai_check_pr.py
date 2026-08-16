@@ -852,6 +852,27 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     generated_archive_index = f"{ARCHIVE_PREFIX}index.json"
     report_paths = {HUMAN_REPORT_JSON, HUMAN_REPORT_MARKDOWN}
 
+    def current_archive_generated_paths() -> set[str]:
+        """Return generated archive artifacts named by the current Summary.
+
+        Archive artifacts are immutable and intentionally outside a Work Item's
+        implementation scope.  Their ownership is the frozen Summary's exact
+        changed-file projection, not the Contract's historical archive scope.
+        """
+        generated: set[str] = set()
+        for contract_path, _contract, summary, _rank in archive_entries:
+            stem = contract_path.name.replace(".contract.json", "")
+            archive_dir = contract_path.parent.relative_to(PROJECT_ROOT).as_posix()
+            candidates = {
+                f"{archive_dir}/{stem}.outcome.json",
+                f"{archive_dir}/{stem}.outcome.md",
+                f"{archive_dir}/{stem}.archive-manifest.json",
+            }
+            summary_paths = set(changed_file_paths(summary))
+            if candidates.issubset(summary_paths) and candidates.issubset(all_paths):
+                generated.update(candidates)
+        return generated
+
     def current_archive_owns_report_pair() -> bool:
         """Accept only a complete current archive transaction's exact report pair.
 
@@ -882,6 +903,8 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         """Accept generated archive metadata only when archived evidence names it."""
         if path in report_paths:
             return current_archive_owns_report_pair()
+        if path in current_archive_generated_paths():
+            return True
         return path == generated_archive_index and any(
             path in changed_file_paths(summary)
             for _contract_path, _contract, summary, _rank in archive_entries
