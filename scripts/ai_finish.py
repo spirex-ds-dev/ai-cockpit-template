@@ -48,17 +48,22 @@ FINISH_LOCK_MAX_AGE_SECONDS = 24 * 60 * 60
 REPORT_BOUNDARY_TEXT = {
     "en": (
         "## Task Outcome Report (active; relay to the human before archive)",
+        "CLI output cannot authenticate human receipt or approval.",
         "Next lifecycle action: archive is explicit and must follow the direct human report.",
     ),
     "zh-CN": (
         "## 工单结果报告（active；归档前必须直接告知相关人员）",
+        "CLI 输出不能证明人类已阅读或批准报告。 (CLI output cannot authenticate human receipt or approval.)",
         "下一生命周期动作：归档必须显式执行，并且只能在直接报告之后进行。",
     ),
     "ja": (
         "## タスク結果レポート（active。アーカイブ前に直接人へ報告してください）",
+        "CLI 出力は人間による受領または承認を認証できません。 (CLI output cannot authenticate human receipt or approval.)",
         "次のライフサイクル操作：アーカイブは明示的に実行し、直接報告の後にのみ行います。",
     ),
 }
+
+CURRENT_REPORT_LANGUAGE = "en"
 
 
 def checkpoint_recovery_guidance(issues: list[str], *, contract: str, summary: str) -> str:
@@ -1148,6 +1153,7 @@ def return_blocked_finish_failure(
     failed_check: str,
     failure_message: str,
     code: int,
+    language: str | None = None,
 ) -> int:
     """Fail closed while retaining the standard blocked recovery evidence."""
     blocked_ok, blocked_message = write_blocked_outcome(
@@ -1159,6 +1165,14 @@ def return_blocked_finish_failure(
     )
     if blocked_ok:
         print(f"Blocked Task Outcome persisted: {blocked_message}", file=sys.stderr)
+        report_ok, report_message = deliver_direct_outcome_report(
+            task, language or CURRENT_REPORT_LANGUAGE
+        )
+        if not report_ok:
+            print(
+                "ERROR: active Task Outcome conversation delivery failed: " + report_message,
+                file=sys.stderr,
+            )
     else:
         print(
             "ERROR: blocked Task Outcome/report recovery failed: " + blocked_message,
@@ -1288,8 +1302,19 @@ def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
     from ai_render_task_outcome_multilingual import normalize_locale, render_localized_outcome
 
     locale = normalize_locale(language)
-    heading, next_action = REPORT_BOUNDARY_TEXT[locale]
-    return f"{heading}\n{render_localized_outcome(outcome, locale)}{next_action}\n"
+    heading, limitation, next_action = REPORT_BOUNDARY_TEXT[locale]
+    return f"{heading}\n{render_localized_outcome(outcome, locale)}{limitation}\n{next_action}\n"
+
+
+def deliver_direct_outcome_report(task: str, language: str) -> tuple[bool, str]:
+    """Relay the persisted active Outcome to the conversation-facing stream."""
+
+    outcome_path, _ = _outcome_paths(task)
+    try:
+        print(render_direct_outcome_report(load_json(outcome_path), language), end="")
+    except (OSError, TypeError, ValueError) as exc:
+        return False, str(exc)
+    return True, "active Task Outcome delivered"
 
 
 def finish_quality_paths(contract_data: dict[str, Any]) -> list[str]:
@@ -1968,6 +1993,8 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
 
 def main() -> int:
     args = parse_args()
+    global CURRENT_REPORT_LANGUAGE
+    CURRENT_REPORT_LANGUAGE = args.language
     try:
         # Acquire before Preflight, verification, Outcome/report/status, or
         # archive paths can perform mutable lifecycle work. Legacy serial
