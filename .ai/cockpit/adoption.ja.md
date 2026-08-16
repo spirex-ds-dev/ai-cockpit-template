@@ -73,7 +73,7 @@ Doctor は `target/` 配下のレポート以外は読み取り専用です。Cr
 初回インストール後は `configure_ai_cockpit` Work Item が Project Profile、Guard、品質コマンド、CI 適応を所有します。上記チェックリストを完了したら:
 
 ```sh
-make ai-finish TASK=configure_ai_cockpit
+make ai-finish TASK=configure_ai_cockpit REPORT_LANGUAGE=ja
 git add .
 git commit -m "configure AI Cockpit for this project"
 make check-ai-pr AI_BASE_COMMIT=<configure-base-commit>
@@ -83,5 +83,5 @@ make check-ai-pr AI_BASE_COMMIT=<configure-base-commit>
 
 ```sh
 make ai-start TASK=<task> TITLE="..." MODE=code
-make ai-finish TASK=<task>
+make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>
 ```

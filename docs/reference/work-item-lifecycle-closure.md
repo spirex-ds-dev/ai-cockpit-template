@@ -100,7 +100,7 @@ verified worktree owns the base. The invoking worktree is deliberately
 detached and is not ready for the next Work Item. Continue from the base
 worktree path printed by the command. Closure never removes that worktree.
 
-`make ai-finish TASK=<task>` is an archive milestone, not lifecycle closure. Its successful output explicitly directs the operator to push the Work Item branch, open and merge the PR, and then run `ai-close-work-item`. Historical local branches or detached worktrees outside the current Work Item are not deleted automatically because their ownership cannot be established safely from a branch name alone; audit and remove them only with explicit operator authorization.
+`make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>` is an archive milestone, not lifecycle closure. Its successful output explicitly directs the operator to push the Work Item branch, open and merge the PR, and then run `ai-close-work-item`. Historical local branches or detached worktrees outside the current Work Item are not deleted automatically because their ownership cannot be established safely from a branch name alone; audit and remove them only with explicit operator authorization.
 
 ## Exceptional stacked-PR executor
 

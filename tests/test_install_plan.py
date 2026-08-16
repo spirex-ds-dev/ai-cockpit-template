@@ -72,3 +72,4 @@ def test_wizard_plan_has_exactly_ten_stages_and_operator_fields() -> None:
     }
     assert plan.to_dict()["steps"][5]["facts"]["conflicts"] == []
     assert "calibration remains separate" in plan.steps[9].expected_result.lower()
+    assert "REPORT_LANGUAGE=<conversation-locale>" in plan.steps[9].example

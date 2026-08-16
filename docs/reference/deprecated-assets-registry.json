@@ -19,12 +19,17 @@
       ".ai/events/",
       ".ai/release/",
       "docs/releases/",
-      "docs/superpowers/"
+      "docs/superpowers/",
+      "docs/reference/remediation-instruction-traceability.json"
     ],
     "prohibitedCommandChains": [
       {
         "id": "obsolete-quality-staging-finish-chain",
         "pattern": "make\\s+quality(?:\\s+[^&;\\n]*)?\\s*(?:&&|;)\\s*make\\s+staging(?:\\s+[^&;\\n]*)?\\s*(?:&&|;)\\s*make\\s+ai-finish\\b"
+      },
+      {
+        "id": "ai-finish-requires-explicit-report-language",
+        "pattern": "^(?![^\\n]*REPORT_LANGUAGE=)[^\\n]*\\bmake\\s+ai-finish\\b[^\\n]*\\bTASK="
       }
     ]
   },

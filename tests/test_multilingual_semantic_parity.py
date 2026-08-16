@@ -19,7 +19,7 @@ def facts() -> dict[str, object]:
         "humanDecisions": ["repository_administrator"],
         "risks": ["local evidence cannot prove provider controls"],
         "limitations": ["arbitrary evidence prose remains source text"],
-        "commands": ["make ai-finish TASK=example"],
+        "commands": ["make ai-finish TASK=example REPORT_LANGUAGE=<conversation-locale>"],
         "paths": [".ai/cockpit/current_status.md"],
         "capabilityClaims": ["governance_status_verified"],
     }

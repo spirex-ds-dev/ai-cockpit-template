@@ -47,7 +47,7 @@ one script and do not start configuration before Adoption closure.
 
 <!-- command-evidence: adopter_required -->
 ```sh
-make ai-finish TASK=adopt_ai_cockpit
+make ai-finish TASK=adopt_ai_cockpit REPORT_LANGUAGE=en
 ```
 
 Stop, show the archive/diff, and obtain separate commit approval. Only then:

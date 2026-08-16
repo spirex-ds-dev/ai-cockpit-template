@@ -58,7 +58,7 @@ MESSAGES = {
             "  2. make check-ai-project-profile && make check-ai-guard-calibration",
             "  3. make ai-cockpit-quality",
             "  4. make check-ai-adoption-ready",
-            "  5. make ai-finish TASK=configure_ai_cockpit",
+            "  5. make ai-finish TASK=configure_ai_cockpit REPORT_LANGUAGE=en",
         ],
     },
     "ja": {
@@ -92,7 +92,7 @@ MESSAGES = {
             "  2. make check-ai-project-profile && make check-ai-guard-calibration",
             "  3. make ai-cockpit-quality",
             "  4. make check-ai-adoption-ready",
-            "  5. make ai-finish TASK=configure_ai_cockpit",
+            "  5. make ai-finish TASK=configure_ai_cockpit REPORT_LANGUAGE=ja",
         ],
     },
 }

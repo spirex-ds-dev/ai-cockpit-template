@@ -73,7 +73,8 @@ def test_current_facing_scan_rejects_reintroduced_obsolete_lifecycle_chain(tmp_p
     guide = tmp_path / "docs" / "guide.md"
     guide.parent.mkdir(parents=True)
     guide.write_text(
-        "Run `make quality && make staging && make ai-finish TASK=example`.", encoding="utf-8"
+        "Run `make quality && make staging && make ai-finish TASK=example REPORT_LANGUAGE=en`.",
+        encoding="utf-8",
     )
     assert validate_current_facing_paths(tmp_path, payload) == [
         "obsolete-quality-staging-finish-chain: docs/guide.md matches prohibited command chain"
@@ -86,10 +87,22 @@ def test_current_facing_scan_rejects_reintroduced_workflow_chain(tmp_path: Path)
     workflow = tmp_path / ".github" / "workflows" / "obsolete.yml"
     workflow.parent.mkdir(parents=True)
     workflow.write_text(
-        "run: make quality && make staging && make ai-finish TASK=example\n", encoding="utf-8"
+        "run: make quality && make staging && make ai-finish TASK=example REPORT_LANGUAGE=en\n",
+        encoding="utf-8",
     )
     assert validate_current_facing_paths(tmp_path, payload) == [
         "obsolete-quality-staging-finish-chain: .github/workflows/obsolete.yml matches prohibited command chain"
+    ]
+
+
+def test_current_facing_scan_rejects_finish_without_explicit_locale(tmp_path: Path) -> None:
+    payload = load_registry()
+    payload["currentFacingScan"]["paths"] = ["docs"]
+    guide = tmp_path / "docs" / "guide.md"
+    guide.parent.mkdir(parents=True)
+    guide.write_text("Run `make ai-finish TASK=example`.", encoding="utf-8")
+    assert validate_current_facing_paths(tmp_path, payload) == [
+        "ai-finish-requires-explicit-report-language: docs/guide.md matches prohibited command chain"
     ]
 
 
@@ -99,7 +112,8 @@ def test_current_facing_scan_excludes_immutable_archive_history(tmp_path: Path) 
     archive = tmp_path / ".ai" / "work-items" / "archive" / "2026" / "history.md"
     archive.parent.mkdir(parents=True)
     archive.write_text(
-        "Run `make quality && make staging && make ai-finish TASK=example`.", encoding="utf-8"
+        "Run `make quality && make staging && make ai-finish TASK=example REPORT_LANGUAGE=en`.",
+        encoding="utf-8",
     )
     assert validate_current_facing_paths(tmp_path, payload) == []
 

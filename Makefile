@@ -124,7 +124,7 @@ help:
 	@printf '%s\n' '  make check-ai-status CONTRACT=<contract.json> SUMMARY=<summary.json>'
 	@printf '%s\n' '  make check-ai-status-consistency'
 	@printf '%s\n' '  make repair-ai-status'
-	@printf '%s\n' '  make ai-finish TASK=<task>'
+	@printf '%s\n' '  make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>'
 	@printf '%s\n' '  make check-ai'
 	@printf '%s\n' '  make quality'
 	@printf '%s\n' '  make test'

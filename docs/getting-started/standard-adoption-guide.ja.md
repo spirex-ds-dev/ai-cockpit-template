@@ -36,7 +36,7 @@ Adoption closure 前に configuration を開始しないでください。
 
 <!-- command-evidence: adopter_required -->
 ```sh
-make ai-finish TASK=adopt_ai_cockpit
+make ai-finish TASK=adopt_ai_cockpit REPORT_LANGUAGE=ja
 ```
 
 停止して archive/diff を示し、別の commit 承認を取得します。その後だけ:

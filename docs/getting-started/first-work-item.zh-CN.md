@@ -28,7 +28,7 @@ capabilityClaims:
      SUMMARY=.ai/work-items/active/<task>.summary.json
    ```
 
-5. 运行 `make ai-finish TASK=example_change ARCHIVE=true` 归档证据，然后按提交、推送分支、创建 PR、合并 PR 的顺序执行。
+5. 运行 `make ai-finish TASK=example_change ARCHIVE=true REPORT_LANGUAGE=zh-CN` 归档证据，然后按提交、推送分支、创建 PR、合并 PR 的顺序执行。
 6. 合并后运行 `make ai-close-work-item TASK=example_change`，确认基线同步且分支清理成功。
 
 不要在 PR 前把分支合入本地 main，也不要把 Agent 的说明当作证据。接下来阅读[质量门](../operations/quality-gates.zh-CN.md)。

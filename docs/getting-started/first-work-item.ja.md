@@ -27,7 +27,7 @@ capabilityClaims:
      SUMMARY=.ai/work-items/active/<task>.summary.json
    ```
 
-5. `make ai-finish TASK=example_change ARCHIVE=true` を実行して証拠を archive し、commit、push、PR、merge の順に進める。
+5. `make ai-finish TASK=example_change ARCHIVE=true REPORT_LANGUAGE=ja` を実行して証拠を archive し、commit、push、PR、merge の順に進める。
 6. merge 後に `make ai-close-work-item TASK=example_change` を実行し、base 同期と branch cleanup を確認する。
 
 Agent の説明は証拠ではありません。次は[Quality Gates](../operations/quality-gates.ja.md)を参照してください。

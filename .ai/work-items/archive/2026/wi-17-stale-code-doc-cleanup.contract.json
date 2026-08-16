@@ -1,0 +1,266 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-17-stale-code-doc-cleanup",
+  "mode": "code",
+  "title": "Remove stale code and documentation descriptions",
+  "baseCommit": "603fd85a1ced489b165a3d59a1f17c5939895921",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-17-stale-code-doc-cleanup.contract.json",
+    ".ai/work-items/active/wi-17-stale-code-doc-cleanup.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/cockpit/**",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/README.md",
+    ".ai/glossary.md",
+    "AGENTS.md",
+    "Makefile",
+    ".github/**",
+    "docs/**",
+    "scripts/**",
+    "templates/**",
+    "tests/**",
+    ".ai/work-items/active/wi-17-stale-code-doc-cleanup.outcome.json",
+    ".ai/work-items/active/wi-17-stale-code-doc-cleanup.outcome.md"
+  ],
+  "outOfScope": [
+    ".ai/work-items/archive/** (historical evidence is immutable)",
+    "New product behavior, runtime feature changes, or performance claims",
+    "Provider-hosted configuration outside repository files",
+    "Deleting branches or worktrees (reserved for WI-18 final closure)"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Archive inventory and immutable historical boundary."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Current Outcome and direct handoff contract."
+    },
+    {
+      "path": "docs/features/human-benefit-report.md",
+      "reason": "Current evidence-bound human report contract."
+    },
+    {
+      "path": "docs/reference/agent-parallel-work-items.md",
+      "reason": "All-agent completion handoff protocol."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current public lifecycle commands and locale requirements."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Authoritative finish/archive behavior."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Regression coverage for finish and report delivery."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "stale_instruction",
+      "evidence_integrity",
+      "runtime_regression"
+    ],
+    "reason": "Stale instructions can misroute agents; cleanup must preserve runtime behavior and immutable evidence.",
+    "unknownsReviewComplete": true
+  },
+  "declaredIntent": {
+    "summary": "Remove stale active code and documentation descriptions before final release without changing runtime behavior or immutable archives.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "none"
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized continuous execution of stale code/documentation cleanup before final release."
+  },
+  "preReviewWarnings": [
+    "Do not rewrite immutable archives; distinguish active instructions from historical examples.",
+    "Do not claim every stale reference is removed unless the deterministic scan and regression checks pass."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic repository scan inventories stale code/documentation descriptions and records each changed path with evidence.",
+    "Every confirmed stale active description or obsolete executable path is removed or synchronized with the current lifecycle, locale, and Outcome contract; immutable archives remain byte-for-byte untouched.",
+    "Regression checks fail closed for the confirmed stale patterns and preserve existing runtime behavior, test ownership, and evidence semantics.",
+    "Current human-facing docs and agent guidance consistently require explicit conversation locale and direct evidence-bound handoff before archive.",
+    "The Summary records findings, blocking stops, resolutions, residual risks, unknowns, and evidenceRefs; unsupported benefits are labeled inference."
+  ],
+  "guidelines": [
+    "Historical archived Work Item records remain immutable.",
+    "Factual cleanup claims bind to scan, diff, or verification evidence; unsupported benefits are inference.",
+    "Runtime behavior, test ownership, coverage thresholds, and provider orchestration remain unchanged.",
+    "Current agent-facing instructions preserve explicit locale binding and direct human handoff before archive."
+  ],
+  "rawUserRequest": "Continue the self-check/fix loop. Before final release, comprehensively remove stale code and documentation descriptions that could mislead agents; keep the plan convergent and evidence-bound.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request: add stale code/documentation cleanup Work Item before final release",
+    "capturedAt": "2026-08-16T00:00:00+09:00",
+    "digest": "sha256:user-authorized-wi17-stale-cleanup"
+  },
+  "intent": {
+    "problem": "The repository contains historical, superseded, or incomplete descriptions that can mislead agents about current Outcome delivery, locale binding, lifecycle commands, or active implementation paths.",
+    "constraints": [
+      "Archive scope: read-only.",
+      "Repository boundary: no provider edits.",
+      "Runtime boundary: no product behavior change.",
+      "Evidence boundary: every factual claim uses evidence references.",
+      "Cleanup boundary: branch/worktree deletion is deferred to WI-18."
+    ],
+    "rationale": "A bounded scan plus targeted corrections reduces instruction drift while preserving historical evidence and keeping the next agent on the current governed path."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A stale active command or description is detected.",
+      "required": true,
+      "expected": "The scan identifies the exact path and the correction updates or removes the stale instruction without touching archives.",
+      "verificationPlan": "Run the focused stale-reference tests, inspect the diff, and validate the generated scan evidence.",
+      "evidence": [],
+      "status": "unverified"
+    },
+    {
+      "scenario": "A historical archive contains an old description.",
+      "required": true,
+      "expected": "The archive remains unchanged and the active documentation explicitly labels historical authority boundaries.",
+      "verificationPlan": "Compare archive hashes before/after and run archive immutability checks.",
+      "evidence": [],
+      "status": "unverified"
+    },
+    {
+      "scenario": "The cleanup could accidentally change behavior or report semantics.",
+      "required": true,
+      "expected": "Focused and full quality checks pass, with no unbound report claims or locale fallback introduced.",
+      "verificationPlan": "Run focused regression tests, project quality, strict governed finish, and pre-release documentation alignment.",
+      "evidence": [],
+      "status": "unverified"
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-current-task",
+    "reason": "The user authorized continuous execution and explicitly requested stale governance/code/documentation cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 929
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-17-stale-code-doc-cleanup.json",
+    "baseCommit": "603fd85a1ced489b165a3d59a1f17c5939895921",
+    "initialScopeDigest": "912f4345a796f937f1ca61f724a2142dabb511632acfe374ad7a9fe73584c584",
+    "contractSkeletonDigest": "9cb535feec8ab4b280596a15977264bdbc8e3ffd8c2b375622c82c9d708650b5"
+  }
+}

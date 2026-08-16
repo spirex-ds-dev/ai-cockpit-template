@@ -20,7 +20,7 @@ keywords:
 3. `make ai-start TASK=<task> TITLE="..." MODE=code` で Work Item を作成する。
 4. Contract の scope、outOfScope、sources、acceptance、verification、unknowns、executionDecision を確定する。
 5. `before_edit` checkpoint 後に宣言範囲だけを変更する。
-6. Summary を更新し、`before_finish` checkpoint を記録して `make ai-finish TASK=<task>` を実行する。
+6. Summary を更新し、`before_finish` checkpoint を記録して `make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>` を実行する。
 7. archived Contract/Summary と生成 Status を確認し、ブランチを push して PR を作成する。
 
 ## リポジトリ全体の active Work Item 境界

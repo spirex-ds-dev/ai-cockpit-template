@@ -344,7 +344,7 @@ Do not report a candidate as published. `check-release-distribution` remains the
 Only after the PR is merged and the Work Item is archived may `make ai-close-work-item TASK=<task>` run. The command owns branch deletion and must fail closed on any lifecycle mismatch. After closure, verify the local base equals the remote base and only then begin the next serial Work Item.
 ## Preflight hard gates before PR and release
 
-After `make ai-finish TASK=<task>` archives the Work Item, commit the complete
+After `make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>` archives the Work Item, commit the complete
 Work Item bundle, then run `make check-ai-pr AI_BASE_COMMIT=<latest-default-branch-sha>`.
 Do not run the aggregate PR check against an uncommitted archive or generated
 release evidence. Independent review must finish while evidence is active. The order is:

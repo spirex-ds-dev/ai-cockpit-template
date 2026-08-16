@@ -127,7 +127,7 @@ evidence へ fallback しません。
 2. Contract の `scope`、`sources`、`acceptance`、`verification`、リスク評価、エージェント能力、実行判断を明確にする。
 3. 宣言したスコープ内のみ実装する。
 4. Summary に変更ファイル、チェック結果、リスク、レビュー準備、境界チェック、既知ギャップ、破壊的変更を記録する。
-5. `make ai-finish TASK=<task>` を実行する。
+5. `make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>` を実行する。
 6. 生成されたステータスとアーカイブ済み Contract/Summary をレビューする。
 
 前置フローで導入準備状況を先に確認したい場合は `make ai-preflight` を実行してください。

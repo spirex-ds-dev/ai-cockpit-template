@@ -105,7 +105,7 @@ Native Governance Evidence 由本仓库自己的受治理命令和 schema 产生
 make unsupported-claim-regression
 make delusion-test-gate
 make ai-preflight CONTRACT=.ai/work-items/active/<task>.contract.json
-make ai-finish TASK=<task>
+make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>
 make ai-close-work-item TASK=<task>
 ```
 

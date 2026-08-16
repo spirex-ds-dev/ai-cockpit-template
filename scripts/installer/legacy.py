@@ -1827,7 +1827,9 @@ class Installer:
         print()
         print("Next steps:")
         if self.create_adoption:
-            print("  1. Run: make ai-finish TASK=adopt_ai_cockpit")
+            print(
+                "  1. Run: make ai-finish TASK=adopt_ai_cockpit REPORT_LANGUAGE=<conversation-locale>"
+            )
             print(
                 "  2. HUMAN APPROVAL REQUIRED before commit and push; human review/merge PR; approve ai-close-work-item after merge."
             )
@@ -1840,12 +1842,16 @@ class Installer:
             print("  1. Add this line to your Makefile: include Makefile.ai")
             print('  2. Run: make ai-start TASK=example_change TITLE="Example change" MODE=code')
             print("  3. Edit the generated Contract before changing project files.")
-            print("  4. Finish with: make ai-finish TASK=example_change")
+            print(
+                "  4. Finish with: make ai-finish TASK=example_change REPORT_LANGUAGE=<conversation-locale>"
+            )
             print("  5. In PR CI run: make check-ai-pr AI_BASE_COMMIT=<merge-base-sha>")
         else:
             print('  1. Run: make ai-start TASK=example_change TITLE="Example change" MODE=code')
             print("  2. Edit the generated Contract before changing project files.")
-            print("  3. Finish with: make ai-finish TASK=example_change")
+            print(
+                "  3. Finish with: make ai-finish TASK=example_change REPORT_LANGUAGE=<conversation-locale>"
+            )
             print("  4. In PR CI run: make check-ai-pr AI_BASE_COMMIT=<merge-base-sha>")
 
     def has_initial_commit(self) -> bool:
