@@ -1,0 +1,276 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-00-lifecycle-handoff-unblock",
+  "mode": "code",
+  "title": "Unblock resolved archived external handoff from new Work Item start",
+  "baseCommit": "f836b99ae77128e25c52db6254f862f0b7d72f31",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-00-lifecycle-handoff-unblock.contract.json",
+    ".ai/work-items/active/wi-00-lifecycle-handoff-unblock.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_start.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/troubleshooting.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/wi-00-lifecycle-handoff-unblock.outcome.json",
+    ".ai/work-items/active/wi-00-lifecycle-handoff-unblock.outcome.md"
+  ],
+  "outOfScope": [
+    "Changing archived Contract, Summary, Outcome, or Manifest bytes.",
+    "Changing external provider state, PR state, or remote branches.",
+    "Changing external handoff validation semantics or allowing unresolved handoffs to be ignored.",
+    "Implementing WI-01 performance behavior before this lifecycle defect is closed."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Current ai-start treats resolved archived handoff/receipt records as an active Work Item and blocks the next Work Item.",
+    "digest": "4489ee76dc5ef60de6555e8cdfb246de7e3a96d48cd13dbfa3df849742e5cffa"
+    },
+    {
+    "path": "tests/test_start_and_archive.py",
+      "reason": "Regression evidence must prove valid resolved archived handoffs are ignored while unresolved or malformed handoffs still block.",
+    "digest": "dc2504b25aa0d5fe7013bb9a78f39566c3b01d0704be6cf171cefd7f616e1f20"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-current-revision-reader-validation.archive-manifest.json",
+      "reason": "The observed active handoff is paired with a complete immutable archive; this is the required eligibility condition for unblocking.",
+    "digest": "670cdc197a16a5f94beacc3439a00d058d2507962348625a3bc6d404ca685464"
+    },
+    {
+      "path": ".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json",
+      "reason": "Observed active handoff record that currently blocks ai-start despite a matching receipt and complete archive.",
+    "digest": "03bf9e4f4a91b17debf2115265b71e66cc4ac5bcb2312070946eee2ab569c921"
+    },
+    {
+      "path": ".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json",
+      "reason": "Observed matching external receipt used to validate the resolved state; receipt bytes remain unchanged.",
+    "digest": "d65f4c2a70f5a12b239e0cb0ac96e62c4cc0e18e07199411c94692d63653ef46"
+    },
+    {
+      "path": "docs/reference/troubleshooting.md",
+      "reason": "Documents the resolved archived handoff condition and fail-closed recovery behavior."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Capability source that binds scripts/ai_start.py to the repository governance layer."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_integrity",
+      "fail_closed_start_gate"
+    ],
+    "reason": "A resolved, archived external handoff must not block new Work Item creation, while unresolved, malformed, unarchived, or mismatched handoffs must remain blocking.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Lifecycle gate behavior changes affect strict lifecycle governance and require strict verification."
+    ],
+    "override": {
+      "approvalEvidence": "conversation:ai-cockpit-operational-improvement-2026-08-16-user-authorized-continuous-execution",
+      "reason": "The user authorized continuous execution and the minimum corrective lifecycle change.",
+      "risks": [
+        "lifecycle_integrity",
+        "fail_closed_start_gate"
+      ],
+      "notRunChecks": [
+        "provider-side closure verification"
+      ],
+      "workItemOnly": true,
+      "workItemId": "wi-00-lifecycle-handoff-unblock"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The observed failure is reproducible, the safe eligibility rule is explicit, and the user authorized the corrective lifecycle work."
+  },
+  "preReviewWarnings": [
+    "Review that only a valid receipt paired with a complete archive is ignored; all other handoff states remain fail-closed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-start permits a new Work Item when an external handoff has a matching valid receipt and the same Work Item has a complete immutable archive.",
+    "ai-start continues to block unresolved, expired, malformed, mismatched, or unarchived handoffs.",
+    "Regression tests cover valid resolved, missing receipt, invalid receipt, and missing archive cases without mutating evidence.",
+    "The implementation preserves the existing read-only handoff validator and does not claim provider or human completion beyond the receipt.",
+    "Troubleshooting documentation describes the exact fail-closed recovery boundary."
+  ],
+  "guidelines": [
+    "Keep resolved-handoff eligibility separate from external handoff validation and archive closure.",
+    "Do not weaken fail-closed behavior for unresolved or unbound evidence.",
+    "Every behavior change has a focused regression test and a negative test."
+  ],
+  "intent": {
+    "problem": "The repository's ai-start gate treats any active handoff or receipt JSON as an active Work Item, even when the handoff receipt validates and the original Work Item already has a complete immutable archive. This prevents the next Work Item from starting after a legitimate external action has resolved.",
+    "constraints": [
+      "Preserve immutable archive bytes and the exact active handoff and receipt bytes.",
+      "Do not treat a receipt as archive, merge, release, or branch-deletion evidence.",
+      "Ignore a handoff only when the receipt validates against it and the archived Work Item is complete.",
+      "Keep unresolved, expired, malformed, cross-task, and unarchived handoffs fail-closed.",
+      "Do not change the 14-WI product scope; this is a necessary lifecycle corrective prerequisite."
+    ],
+    "rationale": "Starting the performance Work Item is impossible while a resolved archived handoff is misclassified as active. A narrowly tested eligibility filter restores the documented lifecycle without weakening evidence validation."
+  },
+  "rawUserRequest": "Execute the complete 14-WI improvement program continuously. If a lifecycle defect blocks the first WI, correct that defect with the minimum necessary Work Item and executable regression gate, preserving fail-closed behavior and recording the user authorization in the Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:ai-cockpit-operational-improvement-2026-08-16",
+    "capturedAt": "2026-08-16T08:45:00+09:00",
+    "digest": "sha256:ai-cockpit-operational-improvement-authorized"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Allow the next governed Work Item to start after a resolved, archived external handoff while preserving fail-closed behavior for every unresolved or unbound state.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "humanDecisionPoints": [
+    "The user authorized continuous execution and corrective lifecycle work; no provider, release, merge, or branch-deletion operation is performed by this corrective implementation."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A valid receipt matches an archived Work Item handoff.",
+      "expected": "The handoff and receipt are not returned as blocking active Work Item paths.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused unit test with complete archive fixture and exact receipt bindings."
+    },
+    {
+      "scenario": "The receipt is missing, malformed, mismatched, or expired.",
+      "expected": "The handoff remains blocking and ai-start cannot continue.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Negative unit tests using real validator behavior."
+    },
+    {
+      "scenario": "The receipt validates but the archive is incomplete or absent.",
+      "expected": "The handoff remains blocking.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Fixture removes one required archive artifact and asserts blocking."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous execution and corrective lifecycle work for the complete 14-WI program."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 912
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-00-lifecycle-handoff-unblock.json",
+    "baseCommit": "f836b99ae77128e25c52db6254f862f0b7d72f31",
+    "initialScopeDigest": "d668c26a2d80964dda55ac22181b374b0b45b9fe24704dfc9b3286882c9d232a",
+    "contractSkeletonDigest": "378fc96b54160c406b318977e1bb9a6b8cf634866d2ffeca3eadc3fcdc10c75c"
+  }
+}
