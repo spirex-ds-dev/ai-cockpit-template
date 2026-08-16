@@ -156,7 +156,7 @@ def test_smoke_assigns_quality_installation_and_release_to_distinct_jobs():
 def test_installation_smoke_archives_active_outcome_before_commit_and_guards():
     smoke = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
     installation = smoke.split("  installation-smoke:", 1)[1].split("\n  release-evidence:", 1)[0]
-    finish = "make ai-finish TASK=adopt_ai_cockpit"
+    finish = "make ai-finish TASK=adopt_ai_cockpit REPORT_LANGUAGE=en"
     archive = "make archive-work-item CONTRACT=.ai/work-items/active/adopt_ai_cockpit.contract.json"
     active = "if test -f .ai/work-items/active/adopt_ai_cockpit.contract.json; then"
     archived = "test -f .ai/work-items/archive/2026/adopt_ai_cockpit.contract.json"

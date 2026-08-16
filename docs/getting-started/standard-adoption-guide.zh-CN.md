@@ -32,7 +32,7 @@ AI Cockpit 是为校准 Human-Agent Trust 服务的 Repository Governance Layer�
 
 <!-- command-evidence: adopter_required -->
 ```sh
-make ai-finish TASK=adopt_ai_cockpit
+make ai-finish TASK=adopt_ai_cockpit REPORT_LANGUAGE=zh-CN
 ```
 
 停止并展示 archive/diff，另行取得 commit 批准。之后才能执行：

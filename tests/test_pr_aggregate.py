@@ -1629,6 +1629,42 @@ def test_pr_bundle_accepts_only_valid_current_archive_report_pair(tmp_path, monk
     assert any("task_report.md" in issue for issue in issues)
 
 
+def test_pr_bundle_accepts_summary_bound_generated_archive_artifacts_outside_scope(
+    tmp_path, monkeypatch
+):
+    task = "generated-archive"
+    archive = f".ai/work-items/archive/2026/{task}"
+    generated = [
+        f"{archive}.outcome.json",
+        f"{archive}.outcome.md",
+        f"{archive}.archive-manifest.json",
+    ]
+    contract = write_pair(
+        tmp_path,
+        task,
+        ["scripts/ai_archive_work_item.py"],
+        generated,
+    )
+    contract_rel = contract.relative_to(tmp_path).as_posix()
+    summary_rel = contract_rel.replace(".contract", ".summary")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "archive_evidence_changes",
+        lambda _base: {contract_rel: "A", summary_rel: "A"},
+    )
+    monkeypatch.setattr(ai_check_pr, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(ai_check_pr, "validate_summary", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(ai_check_pr, "human_benefit_report_issues", lambda _contract: [])
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    changed = [contract_rel, summary_rel, *generated]
+    patch_changes(monkeypatch, changed)
+
+    assert ai_check_pr.validate_pr_bundle("a" * 40, [contract]) == []
+
+
 def test_human_benefit_report_issues_rejects_stale_review_report(tmp_path, monkeypatch):
     from ai_generate_human_report import generate_human_report, render_human_report
 

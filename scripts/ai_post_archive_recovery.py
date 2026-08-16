@@ -26,6 +26,7 @@ ALLOWED_GATES = {
     "hostedAggregateCoverage",
     "hostedFunctionalFailure",
 }
+RECOVERABLE_OUTCOME_STATUSES = {"completed", "completed_with_warnings"}
 HOSTED_RECEIPT_VERSION = 2
 HOSTED_FUNCTIONAL_RECEIPT_VERSION = 3
 GITHUB_REPOSITORY = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
@@ -119,6 +120,15 @@ def archive_files(root: Path, task: str) -> dict[str, Path]:
             f"{task}: {', '.join(missing_or_ambiguous)}"
         )
     return {name: paths[0] for name, paths in found.items()}
+
+
+def _require_recoverable_outcome(artifacts: dict[str, Path], task: str) -> None:
+    outcome = json.loads(artifacts["outcome"].read_text(encoding="utf-8"))
+    if (
+        outcome.get("workItemId") != task
+        or outcome.get("status") not in RECOVERABLE_OUTCOME_STATUSES
+    ):
+        raise ValueError("same-Work-Item recovery requires a completed archived Outcome")
 
 
 def classify_failure(output: str) -> str:
@@ -417,9 +427,7 @@ def open_hosted_post_archive_recovery(
     if not worktree_clean():
         raise ValueError("post-archive recovery must start from a clean committed worktree")
     artifacts = archive_files(root, task)
-    outcome = json.loads(artifacts["outcome"].read_text(encoding="utf-8"))
-    if outcome.get("workItemId") != task or outcome.get("status") != "completed":
-        raise ValueError("same-Work-Item recovery requires a completed archived Outcome")
+    _require_recoverable_outcome(artifacts, task)
     provider = verified_hosted_coverage_failure(
         repository=repository,
         pull_request=pull_request,
@@ -563,9 +571,7 @@ def open_hosted_functional_failure_recovery(
     if not worktree_clean():
         raise ValueError("post-archive recovery must start from a clean committed worktree")
     artifacts = archive_files(root, task)
-    outcome = json.loads(artifacts["outcome"].read_text(encoding="utf-8"))
-    if outcome.get("workItemId") != task or outcome.get("status") != "completed":
-        raise ValueError("same-Work-Item recovery requires a completed archived Outcome")
+    _require_recoverable_outcome(artifacts, task)
     provider = verified_hosted_functional_failure(
         repository=repository,
         pull_request=pull_request,
@@ -618,9 +624,7 @@ def open_post_archive_recovery(
     if not worktree_clean():
         raise ValueError("post-archive recovery must start from a clean committed worktree")
     artifacts = archive_files(root, task)
-    outcome = json.loads(artifacts["outcome"].read_text(encoding="utf-8"))
-    if outcome.get("workItemId") != task or outcome.get("status") != "completed":
-        raise ValueError("same-Work-Item recovery requires a completed archived Outcome")
+    _require_recoverable_outcome(artifacts, task)
     code, output = run_pr_audit(["make", "check-ai-pr", f"AI_BASE_COMMIT={base_commit}"])
     if code == 0:
         raise ValueError("post-archive recovery may open only after check-ai-pr must fail")

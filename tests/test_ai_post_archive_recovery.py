@@ -8,13 +8,13 @@ import ai_post_archive_recovery as recovery
 import pytest
 
 
-def write_archive(root, task="example-task"):
+def write_archive(root, task="example-task", *, outcome_status="completed"):
     archive = root / ".ai/work-items/archive/2026"
     archive.mkdir(parents=True)
     files = {
         f"{task}.contract.json": {"workItemId": task},
         f"{task}.summary.json": {"workItemId": task},
-        f"{task}.outcome.json": {"workItemId": task, "status": "completed"},
+        f"{task}.outcome.json": {"workItemId": task, "status": outcome_status},
         f"{task}.archive-manifest.json": {"workItemId": task},
     }
     for name, value in files.items():
@@ -61,6 +61,23 @@ def test_open_recovery_refuses_when_pr_audit_is_not_failing(tmp_path):
             run_pr_audit=lambda _command: (0, "aggregate PR check passed"),
             worktree_clean=lambda: True,
         )
+
+
+def test_open_recovery_accepts_completed_with_warnings_outcome(tmp_path):
+    write_archive(tmp_path, outcome_status="completed_with_warnings")
+
+    receipt = recovery.open_post_archive_recovery(
+        root=tmp_path,
+        task="example-task",
+        base_commit="a" * 40,
+        issue="https://github.com/example/repo/issues/1",
+        authority="user-authorized same Work Item recovery",
+        recovery_paths=["scripts/ai_finish.py"],
+        run_pr_audit=lambda _command: (1, "archive evidence failed: paired ownership"),
+        worktree_clean=lambda: True,
+    )
+
+    assert receipt["workItemId"] == "example-task"
 
 
 def hosted_provider(endpoint: str) -> bytes:

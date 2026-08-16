@@ -65,7 +65,7 @@ Update the Summary before finishing:
 Run the finish flow:
 
 ```sh
-make ai-finish TASK=example_change ARCHIVE=true
+make ai-finish TASK=example_change ARCHIVE=true REPORT_LANGUAGE=en
 ```
 
 `ARCHIVE=true` is required for this command to archive the Contract/Summary pair. After a successful finish, commit the archive bundle, push the Work Item branch, open and merge its PR, then run `make ai-close-work-item TASK=<task>`. A successful walkthrough ends only after closure verifies archived evidence and merged PR identity, synchronizes the base, deletes the owned local and remote branches, and confirms a clean repository. Do not delete the corresponding remote or local work branch directly. Installation and upgrade tasks follow the same rule, but their source is a published template release tag recorded in the adopter project's Work Item.

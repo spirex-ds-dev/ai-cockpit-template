@@ -57,6 +57,11 @@ def test_onboard_resolve_locale_prefers_explicit_and_lang(monkeypatch):
     assert ai_onboard.resolve_locale(None) == "ja"
 
 
+def test_onboard_finish_guidance_binds_the_conversation_locale() -> None:
+    assert "REPORT_LANGUAGE=en" in ai_onboard.MESSAGES["en"]["remaining_steps"][-1]
+    assert "REPORT_LANGUAGE=ja" in ai_onboard.MESSAGES["ja"]["remaining_steps"][-1]
+
+
 def test_onboard_phase_one_runs_in_repository(capsys):
     code = ai_onboard.phase_environment(ROOT, "en")
     output = capsys.readouterr().out

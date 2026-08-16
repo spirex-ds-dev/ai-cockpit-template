@@ -277,7 +277,7 @@ def build_wizard_plan(
             },
             suggested="review the generated Work Item before any Git publication",
             impact="The successful installation branch remains for human review.",
-            example="make ai-finish TASK=adopt_ai_cockpit",
+            example="make ai-finish TASK=adopt_ai_cockpit REPORT_LANGUAGE=<conversation-locale>",
             expected="The next action is reviewable and calibration remains separate.",
             stop=common_stop,
             checklist=("review Work Item", "calibrate separately", "retain branch"),
