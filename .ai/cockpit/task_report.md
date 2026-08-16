@@ -4,50 +4,27 @@ Task Result
 Status: Partial
 
 What was completed
-- Changed .ai/work-items/active/wi-17-stale-code-doc-cleanup.contract.json [evidence: .ai/work-items/archive/2026/wi-17-stale-code-doc-cleanup.contract.json]
-- Changed .ai/work-items/active/wi-17-stale-code-doc-cleanup.summary.json [evidence: .ai/work-items/archive/2026/wi-17-stale-code-doc-cleanup.summary.json]
-- Changed docs/reference/deprecated-assets-registry.json [evidence: docs/reference/deprecated-assets-registry.json]
-- Changed tests/test_deprecated_assets.py [evidence: tests/test_deprecated_assets.py]
-- Changed .ai/guards/coverage_policy.yaml [evidence: .ai/guards/coverage_policy.yaml]
-- Changed Makefile [evidence: Makefile]
-- Changed templates/make/Makefile.ai [evidence: templates/make/Makefile.ai]
-- Changed scripts/ai_onboard.py [evidence: scripts/ai_onboard.py]
-- Changed scripts/ai_install_plan.py [evidence: scripts/ai_install_plan.py]
-- Changed scripts/installer/legacy.py [evidence: scripts/installer/legacy.py]
-- Changed tests/test_multilingual_semantic_parity.py [evidence: tests/test_multilingual_semantic_parity.py]
-- Changed tests/test_quality_gate_architecture.py [evidence: tests/test_quality_gate_architecture.py]
-- Changed tests/test_ai_onboard.py [evidence: tests/test_ai_onboard.py]
-- Changed tests/test_install_plan.py [evidence: tests/test_install_plan.py]
-- Changed .ai/cockpit/README.md [evidence: .ai/cockpit/README.md]
-- Changed .ai/cockpit/README.ja.md [evidence: .ai/cockpit/README.ja.md]
-- Changed .ai/cockpit/adoption.ja.md [evidence: .ai/cockpit/adoption.ja.md]
-- Changed docs/getting-started/first-work-item.md [evidence: docs/getting-started/first-work-item.md]
-- Changed docs/getting-started/first-work-item.ja.md [evidence: docs/getting-started/first-work-item.ja.md]
-- Changed docs/getting-started/first-work-item.zh-CN.md [evidence: docs/getting-started/first-work-item.zh-CN.md]
-- Changed docs/getting-started/standard-adoption-guide.md [evidence: docs/getting-started/standard-adoption-guide.md]
-- Changed docs/getting-started/standard-adoption-guide.ja.md [evidence: docs/getting-started/standard-adoption-guide.ja.md]
-- Changed docs/getting-started/standard-adoption-guide.zh-CN.md [evidence: docs/getting-started/standard-adoption-guide.zh-CN.md]
-- Changed docs/reference/repository-workflow.ja.md [evidence: docs/reference/repository-workflow.ja.md]
-- Changed docs/reference/ai-cockpit-work-item-lifecycle.md [evidence: docs/reference/ai-cockpit-work-item-lifecycle.md]
-- Changed docs/reference/work-item-lifecycle-closure.md [evidence: docs/reference/work-item-lifecycle-closure.md]
-- Changed docs/trust-layer.md [evidence: docs/trust-layer.md]
-- Changed docs/trust-layer.ja.md [evidence: docs/trust-layer.ja.md]
-- Changed docs/trust-layer.zh-CN.md [evidence: docs/trust-layer.zh-CN.md]
-- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
-- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/active/wi-17-stale-code-doc-cleanup.outcome.json [evidence: .ai/work-items/archive/2026/wi-17-stale-code-doc-cleanup.outcome.json]
-- Changed .ai/work-items/active/wi-17-stale-code-doc-cleanup.outcome.md [evidence: .ai/work-items/archive/2026/wi-17-stale-code-doc-cleanup.outcome.md]
+- Changed .ai/work-items/active/wi-18-final-release-closeout.contract.json [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.contract.json]
+- Changed .ai/work-items/active/wi-18-final-release-closeout.summary.json [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.summary.json]
+- Changed docs/audits/wi-18-final-release-closeout.json [evidence: docs/audits/wi-18-final-release-closeout.json]
+- Changed docs/audits/wi-18-final-release-closeout.md [evidence: docs/audits/wi-18-final-release-closeout.md]
+- Changed .ai/work-items/active/wi-18-final-release-closeout.outcome.json [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.outcome.json]
+- Changed .ai/work-items/active/wi-18-final-release-closeout.outcome.md [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
+- Changed .ai/decisions/HDR-c5bc289751daede5-874a28e0.request.json [evidence: .ai/decisions/HDR-c5bc289751daede5-874a28e0.request.json]
+- Changed .ai/decisions/HDR-c5bc289751daede5-874a28e0.evidence.json [evidence: .ai/decisions/HDR-c5bc289751daede5-874a28e0.evidence.json]
+- Changed .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.request.json [evidence: .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.request.json]
+- Changed .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.evidence.json [evidence: .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.evidence.json]
+- Changed .ai/decisions/HDR-0c1531a849967540-b2009dd8.request.json [evidence: .ai/decisions/HDR-0c1531a849967540-b2009dd8.request.json]
+- Changed .ai/decisions/HDR-0c1531a849967540-b2009dd8.evidence.json [evidence: .ai/decisions/HDR-0c1531a849967540-b2009dd8.evidence.json]
+- Changed .ai/decisions/HDR-23c25beb7125a22f-b379440b.request.json [evidence: .ai/decisions/HDR-23c25beb7125a22f-b379440b.request.json]
+- Changed .ai/decisions/HDR-23c25beb7125a22f-b379440b.evidence.json [evidence: .ai/decisions/HDR-23c25beb7125a22f-b379440b.evidence.json]
 
 Problems found
-- Total: 3
-- Blocking: 0
-- Warning: 1
+- Total: 7
+- Blocking: 1
+- Warning: 3
 
 Stops triggered
 - None recorded.
@@ -59,17 +36,24 @@ Risks avoided
 - None recorded.
 
 Remaining risks
-- WI-01 through WI-15 archived Outcomes do not contain the WI-16 humanHandoff projection; archives remain immutable and are not rewritten in this cleanup. (inference)
+- WI-01 through WI-15 archives remain immutable and lack the newer humanHandoff projection. (inference)
+- Exact source, tag, release assets, and Quick Install evidence cannot be claimed until the post-merge release workflow completes. (inference)
+- Dirty user worktrees remain outside the active WI-18 identity and are preserved rather than deleted. (inference)
 
 Unknowns
 - None recorded.
 
 Human decisions
-- Remove stale code and documentation descriptions before release so agents are not misled. (inference)
-- Keep the self-check/fix loop convergent and evidence-bound. (inference)
-- Preserve the explicit human Outcome handoff and conversation-language rule. (inference)
+- Outcome must be delivered directly into the conversation for every agent, not only stored as a report file. (inference)
+- Every factual report field must bind evidenceRefs; unsupported benefits are inference, and self-praise is forbidden without quantitative evidence. (inference)
+- Performance improvement must not be claimed without comparable evidence. (inference)
+- Closure must verify local branches, local worktrees, remote branches, and remote-tracking refs. (inference)
 
 Verification
+- aiStatus [evidence: aiStatus]
+- aiStatusCheck [evidence: aiStatusCheck]
+- aiStatusConsistency [evidence: aiStatusConsistency]
+- aiAgentRisk [evidence: aiAgentRisk]
 - aiWorkItem [evidence: aiWorkItem]
 - aiScope [evidence: aiScope]
 - aiGuards [evidence: aiGuards]
