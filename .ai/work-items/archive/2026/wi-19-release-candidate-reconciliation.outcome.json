@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "wi-19-release-candidate-reconciliation",
-  "phase": "review",
-  "result": "completed_with_warnings",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "e4477c417b35b83d02080f188b7f3ef22f609f221de7d29e33026c708df03ef5"
+  "status": "completed_with_warnings",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "wi-19-release-candidate-reconciliation",
+    "contractDigest": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+    "summaryDigest": "d49bd1efe6bccc4ee7ab5dbe14726be24660c2f2129431814b07ff5e9a2437f2",
+    "verificationDigest": "ed0b4349f00a30410c384f64b3c9c5e5b2dd04064d73999612543162f95c9b28",
+    "baseCommit": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+    "headCommit": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "34cf3714ea021e32966eaddb0a0baf835b435b0550753bc0bfc0b57c974a32a7",
+      "binding": {
+        "baseCommit": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+        "candidateHead": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+        "candidateTreeDigest": "27c336c589de1ee78040652a18c4571ccb7270ae1e56277146d157064e396dd7",
+        "candidateDiffDigest": "f76bae009c38abe2e1244194fd99c26e3ec683ea06a755153d20cfc0d5097263"
+      }
+    }
   },
-  "task": {
-    "summary": "Task wi-19-release-candidate-reconciliation generated an evidence-derived outcome with status completed_with_warnings.",
+  "sections": {
+    "outcomeSummary": "Task wi-19-release-candidate-reconciliation generated an evidence-derived outcome with status completed_with_warnings.",
+    "taskOverview": "Governed Work Item: wi-19-release-candidate-reconciliation",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.contract.json",
       ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.summary.json",
@@ -43,41 +66,58 @@
       "tests/test_release_preflight.py",
       ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.outcome.json",
       ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.outcome.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "v0.5.62 provider publication is pending exact-source rehearsal and provider assets; evidenceRefs: release-state.json, .github/workflows/release.yml."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "v0.5.62 provider publication is pending exact-source rehearsal and provider assets; evidenceRefs: release-state.json, .github/workflows/release.yml.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "v0.5.62 provider publication is pending exact-source rehearsal and provider assets; evidenceRefs: release-state.json, .github/workflows/release.yml.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [],
+    "humanDecisions": [
+      "Do not reuse the reserved v0.5.61 tag; continue with the next valid candidate and keep publication evidence-bound.",
+      "Do not reuse the reserved v0.5.61 tag; continue with the next valid candidate and keep publication evidence-bound."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.summary.json",
+        "subject": "Summary"
+      }
     ]
   },
-  "issues": {
-    "detected": 1,
-    "hardStops": 0,
-    "warnings": 1,
-    "resolved": 0,
-    "unresolved": 1
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [
-    "Do not reuse the reserved v0.5.61 tag; continue with the next valid candidate and keep publication evidence-bound.",
-    "Do not reuse the reserved v0.5.61 tag; continue with the next valid candidate and keep publication evidence-bound."
-  ],
-  "limitations": [
-    {
-      "sourceWarning": "v0.5.62 provider publication is pending exact-source rehearsal and provider assets; evidenceRefs: release-state.json, .github/workflows/release.yml.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [],
   "humanHandoff": {
     "locale": "en",
     "completed": [
@@ -1048,6 +1088,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the pull request and provider checks before merge."
+  }
 }

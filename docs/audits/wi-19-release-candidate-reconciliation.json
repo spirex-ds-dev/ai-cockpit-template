@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "wi-19-release-candidate-reconciliation",
+  "purpose": "Evidence-bound reconciliation of an already-reserved release candidate.",
+  "claims": [
+    {
+      "claim": "Provider v0.5.61 is an immutable release targeting source commit a3ed6e5fe052e4100151b788c5541c87cbc84cb2 and must not be reused.",
+      "evidenceRefs": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61",
+        "provider://release/v0.5.61/release-digests.json",
+        "command://release-rehearsal-31957662456"
+      ]
+    },
+    {
+      "claim": "The repository projection was synchronized from the provider v0.5.61 assets and the next candidate advanced exactly to v0.5.62.",
+      "evidenceRefs": [
+        "command://sync-published-release-projection-v0.5.61",
+        "release.json",
+        "release-state.json",
+        "next-release.json",
+        ".ai/cockpit/version.json",
+        ".ai/cockpit/release-digests.json",
+        "install.sh"
+      ]
+    },
+    {
+      "claim": "The v0.5.61 provider asset digests are bound to the synchronized release projection.",
+      "evidenceRefs": [
+        "provider://release/v0.5.61/release.json",
+        "provider://release/v0.5.61/release-digests.json",
+        ".ai/cockpit/release-digests.json"
+      ]
+    },
+    {
+      "claim": "v0.5.62 publication and Quick Install evidence are not claimed until an exact-source rehearsal and publication receipt are available.",
+      "evidenceRefs": [
+        "release-state.json",
+        "docs/reference/distribution.md",
+        ".github/workflows/release.yml"
+      ],
+      "inference": false
+    }
+  ],
+  "collision": {
+    "requestedCandidate": "v0.5.61",
+    "providerTarget": "a3ed6e5fe052e4100151b788c5541c87cbc84cb2",
+    "rehearsalRun": "31957662456",
+    "result": "blocked_before_mutation",
+    "evidenceRefs": [
+      "command://release-rehearsal-31957662456",
+      "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61"
+    ]
+  },
+  "candidate": {
+    "reserved": "v0.5.61",
+    "next": "v0.5.62",
+    "evidenceRefs": ["release-state.json", "next-release.json", ".ai/cockpit/version.json"]
+  },
+  "remainingDependency": {
+    "status": "pending_exact_source_rehearsal",
+    "claim": "Provider publication and Quick Install receipt for v0.5.62 remain pending.",
+    "evidenceRefs": ["release-state.json", ".github/workflows/release.yml"]
+  }
+}

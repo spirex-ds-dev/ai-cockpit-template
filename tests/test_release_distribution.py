@@ -1100,12 +1100,13 @@ def test_release_preparation_allows_candidate_installer_to_differ_from_public_ba
 
     assert len(issues) == 2
     assert all("supplyChain." in issue for issue in issues)
-    assert {
-        "tag": "v0.5.60",
-        "kind": "stable_release_unverified",
-        "reason": state["unavailableTags"][-1]["reason"],
-        "evidence": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.60",
-    } == state["unavailableTags"][-1]
+    latest = state["unavailableTags"][-1]
+    assert latest["tag"] == metadata["releaseTag"]
+    assert latest["kind"] == "stable_release_unverified"
+    assert latest["reason"]
+    assert latest["evidence"] == (
+        f"https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/{latest['tag']}"
+    )
 
 
 def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tmp_path, capsys):

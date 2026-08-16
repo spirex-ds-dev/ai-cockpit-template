@@ -1,0 +1,769 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-19-release-candidate-reconciliation",
+  "contractPath": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".ai/cockpit/version.json",
+      "reason": "Advance installer version to the next valid candidate."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Bind provider release digest evidence."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Refresh candidate SBOM evidence for the current source projection."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Refresh candidate provenance evidence for the current source projection."
+    },
+    {
+      "path": "release.json",
+      "reason": "Synchronize the published projection from provider evidence."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Prepare candidate v0.5.62 after reserved v0.5.61."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Record reserved v0.5.61 and candidate v0.5.62."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Synchronize installer default and documented candidate refs."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated status projection for the active Work Item."
+    },
+    {
+      "path": ".ai/decisions/**",
+      "reason": "Record the structured preflight decision matching the user authorization."
+    },
+    {
+      "path": ".ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.evidence.json",
+      "reason": "Bind the recorded preflight decision evidence to the amended Contract."
+    },
+    {
+      "path": ".ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.request.json",
+      "reason": "Bind the recorded preflight decision request to the amended Contract."
+    },
+    {
+      "path": ".ai/decisions/HDR-8cdf457624ce7329-fff3ac23.evidence.json",
+      "reason": "Retain prior contract-amendment decision evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-8cdf457624ce7329-fff3ac23.request.json",
+      "reason": "Retain prior contract-amendment decision request evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-c0fe64348e59dc4a-2418146d.evidence.json",
+      "reason": "Bind the latest preflight decision evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-c0fe64348e59dc4a-2418146d.request.json",
+      "reason": "Bind the latest preflight decision request."
+    },
+    {
+      "path": ".ai/decisions/HDR-c17cc4459e11d703-5de36d8c.evidence.json",
+      "reason": "Retain the initial contract-amendment decision evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-c17cc4459e11d703-5de36d8c.request.json",
+      "reason": "Retain the initial contract-amendment decision request evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-cd557c964586ac10-d6c51ed4.evidence.json",
+      "reason": "Retain the earlier preflight decision evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-cd557c964586ac10-d6c51ed4.request.json",
+      "reason": "Retain the earlier preflight decision request."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerate source-bound evidence after the installer projection changed."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Refresh generated documentation alignment after release metadata changed."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Refresh the human-readable generated documentation alignment report."
+    },
+    {
+      "path": "docs/audits/wi-19-release-candidate-reconciliation.json",
+      "reason": "Record evidence-bound release collision and resolution."
+    },
+    {
+      "path": "docs/audits/wi-19-release-candidate-reconciliation.md",
+      "reason": "Provide the human-readable release reconciliation audit."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Remove a stale v0.5.60 expectation exposed by the synchronized provider projection."
+    },
+    {
+      "path": "tests/test_release_state_consistency.py",
+      "reason": "Bind release-state assertions to the current published and candidate projections."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Bind source-version validation to the generated current candidate instead of a retired literal."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Regenerated from the rewritten archived Task Outcome during this archive transaction."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Regenerated from the rewritten archived Task Outcome during this archive transaction."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/wi-18-final-release-closeout.contract.json",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61",
+    "provider://release/v0.5.61/release.json",
+    "provider://release/v0.5.61/release-digests.json",
+    "docs/reference/distribution.md",
+    "scripts/sync_published_release_projection.py",
+    ".github/workflows/release.yml"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:56:59.277855+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "74d22c2f3af6df1a8a75795bc132da72b6ad404ad562095a31def9c84b848c92",
+      "commandHash": "cd4bd0992acbc902f1537e4fd40430d777e44ee1bc3d48b5c016c7b8d0877c67",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "6c1919ac4e90e95eb03b4c688c5c2d5edd476311fabfc2d1b8a8ac9d76cfe3a9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json work item contract check passed: .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json work item contract check passed: .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "outputBytes": 371
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:56:59.515273+00:00",
+      "exitCode": 0,
+      "durationMs": 138,
+      "outputDigest": "d97695908874195c2833bf75ff129b21595d9b7ecd5264d7b3a21f6d63d94767",
+      "commandHash": "58dcfdd48b774c5c28d4e5334c5aa6b36b087e2fb9062a3987175b98837b557c",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "1e2cd5562985f921ed3ce78de4320f663fd26bbcf99aa73812f8082991be18ed",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json scope guard passed: 34 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json scope guard passed: 34 changed path(s) covered",
+      "outputBytes": 306
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:56:59.829710+00:00",
+      "exitCode": 0,
+      "durationMs": 211,
+      "outputDigest": "31364241892fdb9ef8c02dcbdaca1e1e9fe462d17ee9717799f3237732e42787",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "e06da3e9c47eb22e71e83cb581437b644dbbed93ed69133c2bffa2d13258f846",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json [warning] restricted_write: .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.eviden",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json [warning] restricted_write: .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/version.json (.ai/**) - AI governance configuration. guard check completed: 14 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 1979
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:57:00.278773+00:00",
+      "exitCode": 0,
+      "durationMs": 349,
+      "outputDigest": "6c1c43b21357c5be648685f61aa7a033c750b56cd5004821d276d172d20040eb",
+      "commandHash": "dfd16a9c086a9ee438249378fa45970b3af791fa550d5b115b1f002defedb87d",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "460aa76d0a3ecf31d4e39389df3260fc18f4ec53d704f6c80031b1f857112841",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-19-release-candidate-reconciliation` - Contract Hash: `c0fe64348e59dc4a` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance",
+      "outputTail": "ered by Contract scope - [active_owned] `.ai/decisions/HDR-c17cc4459e11d703-5de36d8c.request.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-cd557c964586ac10-d6c51ed4.evidence.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-cd557c964586ac10-d6c51ed4.request.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wi-19-release-candidate-reconciliation.json` — covered by Contract scope - [active_owned] `docs/audits/wi-19-release-candidate-reconciliation.json` — covered by Contract scope - [active_owned] `docs/audits/wi-19-release-candidate-reconciliation.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `install.sh` — covered by Contract scope - [active_owned] `next-release.json` — covered by Contract scope - [active_owned] `release-state.json` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `tests/test_release_distribution.py` — covered by Contract scope - [active_owned] `tests/test_release_preflight.py` — covered by Contract scope - [active_owned] `tests/test_release_state_consistency.py` — covered by Contract scope ## Next Action - Run or record required verification: aiScenarioCoverage",
+      "outputBytes": 7297
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:57:00.512740+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "34b65253192781b8193e9567652abda010c78ea25474af21b0cf3b5d081a435b",
+      "commandHash": "1b246edc1ab1c4879759a7d543abc853620d36fb3151317e8490450f9a234eb0",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "6e1726b47be93f221eb28abef47b9cb9f0ac4797ba4cdf94b1afe9eea44fd03d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json review policy matched 21 path(s) [review] .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.evidence.json [review] .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.request.json [review] .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.evidence.json [review] .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.request.json [review] .ai/decisions/HD",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json review policy matched 21 path(s) [review] .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.evidence.json [review] .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.request.json [review] .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.evidence.json [review] .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.request.json [review] .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.evidence.json [review] .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.request.json [review] .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.evidence.json [review] .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.request.json [review] .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.evidence.json [review] .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.request.json [review] .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json [review] .ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.json [review] .ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.md [review] .ai/work-items/starts/wi-19-release-candidate-reconciliation.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/cockpit/version.json review focus recorded: 2 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 1631
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:57:00.734451+00:00",
+      "exitCode": 0,
+      "durationMs": 129,
+      "outputDigest": "852250fb86c94e9c308526fa886bc90a9246518aea4da5b9dc0934cc69c068c7",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "bfe2ce1d11c238426b14e769db1738c9b8792745bd8ddea109972ab3a24d9294",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 255
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:57:00.955797+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "882e2dfb5c1637c669aa59117038b5ae1ae8de33b7e6ca350432668ca042355c",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "509ba2439e790f32baa478a8ecf4d2840ea884fc81d333bd705e8a25dddae334",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 264
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:57:01.095937+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "d0893e43a6580c31545ed43722a5111d234aee1655e8e17f1c75655c86c4ee13",
+      "commandHash": "a4854d16408481044ec8c8a8c9c9d2295bedd2647fb8cd16225a2830e5da0818",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "01896fafa7c472338f1ca6ba57bb6956380226a3f863a57ca01873862d83e478",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json [warning] required_scenario_unverified: The v0.5.62 candidate is rehearsed against the merged main source before publication. - required scenario remains unverified report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json [warning] required_scenario_unverified: The v0.5.62 candidate is rehearsed against the merged main source before publication. - required scenario remains unverified report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 579
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:57:01.234683+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "cf657e4898deeaec8e30325d32e761ee71c5f53a181b9a169ffb055e6746baf2",
+      "commandHash": "032c2e76d439b5e8c97d721da33657de6877db6d74774af02c0184fd049831b5",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "5e9a251be55630550061db72b3208750f4d1b25f5092e45e3295d92141a0a76a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputBytes": 419
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T16:57:01.674700+00:00",
+      "exitCode": 0,
+      "durationMs": 344,
+      "outputDigest": "e8c65ee348f15dc629a3f5a5e4e28db44bef6e3236f9b2b80397e84ef303c368",
+      "commandHash": "a4b78fc5b5a5eaff4e3c536593b511097499188a7a55c9f137ce051e5fd2fa3c",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "2468ff0c4a93f333e93b31762738d9ae97354f852b279a82d9ccefdab016bc09",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json ## Diff Ownership Preview - active_owned: `34`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpi",
+      "outputTail": "_owned] `.ai/decisions/HDR-c17cc4459e11d703-5de36d8c.evidence.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-c17cc4459e11d703-5de36d8c.request.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-cd557c964586ac10-d6c51ed4.evidence.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-cd557c964586ac10-d6c51ed4.request.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wi-19-release-candidate-reconciliation.json` — covered by Contract scope - [active_owned] `docs/audits/wi-19-release-candidate-reconciliation.json` — covered by Contract scope - [active_owned] `docs/audits/wi-19-release-candidate-reconciliation.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `install.sh` — covered by Contract scope - [active_owned] `next-release.json` — covered by Contract scope - [active_owned] `release-state.json` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `tests/test_release_distribution.py` — covered by Contract scope - [active_owned] `tests/test_release_preflight.py` — covered by Contract scope - [active_owned] `tests/test_release_state_consistency.py` — covered by Contract scope",
+      "outputBytes": 3757
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T17:04:15.218286+00:00",
+      "exitCode": 0,
+      "durationMs": 433212,
+      "outputDigest": "e31b980b6f93f1f3373d362ac8025cc7bea73828b1077bf68e602e8451c78daf",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "f704d4e657ac9a3cb30e3afcdbe54b60a586d556a5215f053316b4baff29537f",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"installer\", \"release\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"ff32e937f670d1c394ee3f827fea7ece5df3aad5\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/provenance.json\", \".ai/cockpit/release-digests.json\", \".ai/cockpit/sbom.json\", \".ai/cockpit/task_report.json\", \".ai/cockpit/",
+      "outputTail": "mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"ff32e937f670d1c394ee3f827fea7ece5df3aad5\", \"decision\": \"warning\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"Restore test strength or provide independently reviewable changed-requirement evidence.\", \"requiredExplanation\": true, \"signals\": [{\"after\": 43, \"before\": 43, \"path\": \"tests/test_release_preflight.py\", \"removed\": [\"test_repository_source_version_matches_the_v061_candidate\"], \"severity\": \"low\", \"type\": \"test_case_renamed_or_refactored\"}, {\"after\": 63, \"before\": 64, \"path\": \"tests/test_release_state_consistency.py\", \"severity\": \"low\", \"type\": \"assertion_reduction\"}], \"version\": 1} \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-aggregate PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-receipt PROJECT_TEST_RECEIPT=target/quality/project-test-aggregate/receipt.json PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt \"target/quality/project-test-aggregate/receipt.json\" quality gate summary written: target/quality/sessions/ff32e937f670-local-20260816T165702Z-73949-0/summary.json",
+      "outputBytes": 80124
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T17:04:16.110020+00:00",
+      "exitCode": 0,
+      "durationMs": 389,
+      "outputDigest": "f67e5e56015c5dbe0215157efdd582c7f8a4b970fd6bcf1ba88e08a15a1343a3",
+      "commandHash": "e9affca50b7d6e510dbb1e2cebeb42f8dc3f3a952e3b820b3018ec345670064a",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "30e832896bfa67bcacd8823b2fe21a983d437200290c9df35e80dd1e1265dd30",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 519
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T17:04:17.167982+00:00",
+      "exitCode": 0,
+      "durationMs": 353,
+      "outputDigest": "64d2147af63e382640f5a15b3c9baf8213d49087ecaa7f66a21dffa9dfcdcd6d",
+      "commandHash": "c33c834a8c9865c279034af2e522b671ce89903803df8c1e6de21c40ce91239c",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "f8f9c715e367eec6d76f4d49190b96e0aa9e27a7957611525c986266f1dc8b87",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 444
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T17:04:17.673786+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "487fb4fc3102f8b1b4857dab2e6f3e993ca5ecaf50f88fa7ac489c207f41f631",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "86e6d08f19a2e107729d8b8976e7a229cbb401bee08a18b2049ea4703b377916",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 232
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T17:04:17.831513+00:00",
+      "exitCode": 0,
+      "durationMs": 58,
+      "outputDigest": "973af8873088fb3cf13349943d76f24167646b6f0f26f290d2bb061df523f099",
+      "commandHash": "8e97ac4e178108ebbed3f30b540165d2118f2658540692a27bae96b151593c4b",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "cde9cc108dfe4df55d69155e260e068f1e610b029f4fb1ef869049355368b7eb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json --summary .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 424
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json CONTRACT=.ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T17:04:19.583381+00:00",
+      "exitCode": 0,
+      "durationMs": 308,
+      "outputDigest": "590d4912348d51aa4c99fe6d3ecaafaa311321d3586982fafba103d606cb94f6",
+      "commandHash": "ec6714f36f693065de2dc65c70a967587c01ccb8660f486f94599effa69edfa0",
+      "contractHash": "c0fe64348e59dc4a4169f8c7079855f405f16d9715445dca13afa4c31503d438",
+      "commitSha": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+      "executionContractPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "worktreeDigest": "babb3b36e2b544f8e3c7539844163e7eec0eb1e00b47a9bedd6e88a332ce9f58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json ai summary check passed: .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json --contract .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json ai summary check passed: .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+      "outputBytes": 446,
+      "outcomeInputDigest": "b81a8a5018c281e13b95489d6eb9f690603890eae1bb6a54d927f693879f86a7"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Never reuse an immutable semantic-version tag.",
+      "compliant": true,
+      "evidence": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61; command://release-rehearsal-31957662456"
+    },
+    {
+      "guideline": "Bind every release claim to provider evidence and the exact source commit.",
+      "compliant": true,
+      "evidence": "provider://release/v0.5.61/release-digests.json; release-state.json"
+    },
+    {
+      "guideline": "Keep release projections and installer references synchronized atomically.",
+      "compliant": true,
+      "evidence": "command://sync-published-release-projection-v0.5.61; command://make-check-release-state-consistency; command://make-check-release-distribution"
+    },
+    {
+      "guideline": "Do not claim publication until the provider release workflow supplies exact-source assets.",
+      "compliant": true,
+      "evidence": "release-state.json; .github/workflows/release.yml"
+    }
+  ],
+  "unknownsRemaining": [
+    "Exact v0.5.62 provider assets remain unknown until the rehearsal and publication workflow completes."
+  ],
+  "risk": {
+    "level": "high",
+    "detail": "Release identity and provider evidence must remain exact across the candidate advance and publication workflow."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "severity": "high",
+      "area": "reserved-release-tag-collision",
+      "detail": "The requested v0.5.61 tag already exists as an immutable provider release and cannot be reused.",
+      "status": "resolved_by_candidate_advance",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61",
+        "command://release-rehearsal-31957662456"
+      ]
+    },
+    {
+      "severity": "warning",
+      "area": "stale-release-regression-expectations",
+      "detail": "Three release regression tests still asserted retired v0.5.60/v0.5.61 literals after the provider projection advanced to v0.5.61/v0.5.62.",
+      "status": "resolved_by_projection_bound_assertions",
+      "evidence": [
+        "tests/test_release_distribution.py:1103",
+        "tests/test_release_state_consistency.py:64",
+        "tests/test_release_preflight.py:84",
+        "release-state.json",
+        "next-release.json",
+        ".ai/cockpit/version.json"
+      ]
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "provider-release-evidence",
+      "detail": "v0.5.62 publication and Quick Install evidence remain pending exact-source rehearsal.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The requested candidate tag already exists as an immutable provider release.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61",
+        "command://release-rehearsal-31957662456"
+      ],
+      "verificationPlan": "Inspect provider release metadata and the failed rehearsal receipt."
+    },
+    {
+      "scenario": "The stale local candidate advances exactly one patch beyond the reserved provider tag.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "command://sync-published-release-projection-v0.5.61",
+        "release-state.json",
+        "next-release.json",
+        ".ai/cockpit/version.json"
+      ],
+      "verificationPlan": "Run the projection synchronizer and release consistency/distribution checks."
+    },
+    {
+      "scenario": "The v0.5.62 candidate is rehearsed against the merged main source before publication.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Dispatch the exact-source rehearsal after WI-19 is merged; publication remains blocked until it succeeds."
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Required verification or known-unknown evidence is incomplete.",
+    "expectedReviewFocus": [
+      "exact v0.5.62 source/tag/assets binding",
+      "provider rehearsal result"
+    ]
+  },
+  "followUps": [
+    "After WI-19 merges, dispatch the v0.5.62 exact-source rehearsal and record the provider receipt before publication."
+  ],
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [
+    {
+      "instruction": "Do not reuse the reserved v0.5.61 tag; continue with the next valid candidate and keep publication evidence-bound."
+    }
+  ],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "c17cc4459e11d703",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "c17cc4459e11d703",
+      "previousContractHash": "c17cc4459e11d703",
+      "contractHash": "8cdf457624ce7329",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Record provider projection files and mark the candidate-advance scenario verified after synchronized release evidence.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-16T16:19:48.454619+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "c17cc4459e11d703",
+      "previousContractHash": "8cdf457624ce7329",
+      "contractHash": "2295d7baabb5bc16",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Include canonical candidate SBOM and provenance refresh after the quality gate detected stale v0.5.60 baseline evidence.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T16:29:48.332169+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "c17cc4459e11d703",
+      "previousContractHash": "2295d7baabb5bc16",
+      "contractHash": "c0fe64348e59dc4a",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Update release regression tests to consume the synchronized v0.5.61 published projection and v0.5.62 candidate instead of stale v0.5.60/v0.5.61 literals; no runtime behavior changes.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T16:44:33.996106+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "c0fe64348e59dc4a",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 14
+    }
+  ],
+  "knownGaps": [
+    "v0.5.62 provider publication is pending exact-source rehearsal and provider assets; evidenceRefs: release-state.json, .github/workflows/release.yml."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-17T00:00:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.contract.json",
+          "docs/audits/wi-19-release-candidate-reconciliation.md"
+        ],
+        "reason": "Audit scope and candidate boundary match the Contract."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.summary.json",
+          "docs/audits/wi-19-release-candidate-reconciliation.json"
+        ],
+        "reason": "Summary claims point to the audit and release projection evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/sync_published_release_projection.py",
+          "release-state.json",
+          "docs/reference/distribution.md",
+          "docs/reference/pre-release-documentation-alignment.md",
+          ".ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.outcome.md",
+          ".ai/cockpit/task_report.md"
+        ],
+        "reason": "Release checks and the synchronizer are the declared execution path."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/distribution.md"
+        ],
+        "reason": "The audit uses the current English conversation language and preserves source terminology."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "release-state.json",
+          ".github/workflows/release.yml",
+          "docs/audits/wi-19-release-candidate-reconciliation.json"
+        ],
+        "reason": "The pending provider dependency and non-claim boundary are explicit."
+      }
+    ]
+  },
+  "decisionEvidence": {
+    "decisionId": "HD-c0fe64348e59",
+    "decision": "A",
+    "workItemId": "wi-19-release-candidate-reconciliation",
+    "contractHash": "c0fe64348e59dc4a",
+    "preflightHash": "2418146d60e4e71f",
+    "recordedAt": "2026-08-16T16:44:19.471291+00:00",
+    "recordedBy": "user-authorized-current-task"
+  },
+  "taskOutcome": {
+    "status": "completed_with_warnings",
+    "jsonPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.json",
+    "markdownPath": ".ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2,
+    "humanStatusColor": "yellow"
+  },
+  "archiveSequence": 928
+}
