@@ -1,0 +1,258 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-21-outcome-resolution-projection",
+  "mode": "code",
+  "title": "Project evidence-bound issue resolutions into human Outcome handoff",
+  "baseCommit": "31a999c1e38d3b3e80eacc53a95ea9ca750efef3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-21-outcome-resolution-projection.contract.json",
+    ".ai/work-items/active/wi-21-outcome-resolution-projection.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/decisions/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-21-outcome-resolution-projection.outcome.json",
+    ".ai/work-items/active/wi-21-outcome-resolution-projection.outcome.md",
+    "scripts/ai_finish.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_task_outcome_generator.py",
+    "docs/features/task-outcome-report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/audits/wi-21-outcome-resolution-projection.json",
+    "docs/audits/wi-21-outcome-resolution-projection.md"
+  ],
+  "outOfScope": [
+    "Rewriting any WI-01 through WI-20 archived Contract, Summary, Outcome, or manifest",
+    "Changing Outcome locale policy or provider/UI transport behavior",
+    "Changing unrelated quality, release, or runtime behavior",
+    "Claiming historical Outcomes were retroactively repaired"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-20-post-release-projection-sync.summary.json",
+      "reason": "Evidence showing observed issues with explicit resolution statuses that were omitted from the human handoff projection."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.md",
+      "reason": "Archived Outcome demonstrating the missing Problems resolved and Resolution approach details."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Canonical pre-merge Outcome and human-handoff generator."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Focused integration-test surface for ai-finish Outcome projection."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Current human-facing Outcome contract and evidence-binding rules."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "human_handoff_truthfulness",
+      "evidence_binding",
+      "cross_agent_consistency"
+    ],
+    "reason": "The human handoff is the trust boundary for every agent; omitted resolution evidence can make a completed repair appear unresolved or make a report incomplete.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Human-facing evidence projection affects all agent Outcomes and requires strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly requested evidence-complete Outcome handoff and self-check correction; immutable historical archives remain untouched."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "When Summary observedIssues contain a resolution status, ai-finish projects each resolved issue into humanHandoff.questions.resolvedProblems and resolutionApproach with non-empty evidenceRefs.",
+    "Unresolved or warning issues are not projected as resolved; evidence-free claims remain explicit inference and locale remains bound to REPORT_LANGUAGE.",
+    "Focused tests cover resolved, unresolved, and malformed issue records without weakening Outcome validation or self-praise guards.",
+    "Human-facing Outcome documentation records the observedIssues-to-handoff projection rule, and WI-01 through WI-20 archives remain byte-preserved."
+  ],
+  "guidelines": [
+    "Generate human-facing claims only from Summary or verification evidence; do not infer a resolution from prose alone.",
+    "Every non-inference handoff claim must include evidenceRefs; claims with no evidence must be marked inference.",
+    "Preserve immutable historical Work Item archives and do not rewrite prior Outcomes.",
+    "Keep locale selection bound to the explicit conversation/report language.",
+    "Document the projection contract and test both positive and negative issue states."
+  ],
+  "intent": {
+    "problem": "The WI-20 self-check found that Summary observedIssues recorded two resolved defects with evidence and resolution statuses, but the generated human Outcome reported problemCount 2 while leaving Problems resolved and Resolution approach empty.",
+    "constraints": [
+      "Do not rewrite any archived Work Item evidence.",
+      "Use existing evidenceRefs from each observed issue and mark only evidence-free explanatory claims as inference.",
+      "Keep the fix bounded to Outcome generation, tests, and its authoritative documentation."
+    ],
+    "rationale": "Deriving handoff questions directly from structured observedIssues prevents omission of resolution facts while preserving the existing fail-closed evidence validator."
+  },
+  "declaredIntent": {
+    "summary": "Project evidence-bound observed issue resolutions into the mandatory human Outcome handoff for every future agent.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "rawUserRequest": "Self-check the Outcomes and fix any omission in the current work item where possible. Every archived task must explain completed work, problems, blockers, resolutions, risks, unknowns, human decisions, verification, and next action using evidence; do not rewrite immutable historical archives.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:evidence-bound-human-outcome-self-check",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-outcome-self-check-wi21"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "direct_user_authorization",
+    "reference": "user-request:self-check-and-correct-until-complete"
+  },
+  "scenarioCoverage": [
+    {
+      "id": "resolved-issue-projection",
+      "riskDomain": "human_handoff_truthfulness",
+      "scenario": "Summary observedIssues contain resolved statuses, actions, and evidence refs.",
+      "expectedResult": "resolvedProblems and resolutionApproach contain matching evidence-bound claims.",
+      "verificationPlan": "Focused ai-finish integration test and Outcome schema validation.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_task_outcome_ai_finish_integration.py", "tests/test_task_outcome_generator.py"]
+    },
+    {
+      "id": "unresolved-issue-boundary",
+      "riskDomain": "evidence_binding",
+      "scenario": "Summary observedIssues contain unresolved or warning statuses.",
+      "expectedResult": "The issue is not reported as resolved and remains visible as a risk or limitation.",
+      "verificationPlan": "Focused negative-path integration test and validator check.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_task_outcome_ai_finish_integration.py", "docs/audits/wi-21-outcome-resolution-projection.json"]
+    },
+    {
+      "id": "historical-archive-immutability",
+      "riskDomain": "cross_agent_consistency",
+      "scenario": "The corrective WI is implemented after WI-20 has archived.",
+      "expectedResult": "Only future generated Outcomes change; WI-01 through WI-20 archive digests remain unchanged.",
+      "verificationPlan": "Archive digest comparison and scope/diff-ownership checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/2026/wi-20-post-release-projection-sync.archive-manifest.json", "command://check-ai-scope", "command://check-ai-diff-ownership"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the self-check correction; generated governance evidence remains governed and historical archives are immutable."
+  },
+  "rollbackNote": "Revert this Work Item diff; historical archive files are not part of the rollback target.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 933
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-21-outcome-resolution-projection.json",
+    "baseCommit": "31a999c1e38d3b3e80eacc53a95ea9ca750efef3",
+    "initialScopeDigest": "b34708b112aa1b0c23cca7a06d587e519572bf2d0878a478359651f23a8af2fc",
+    "contractSkeletonDigest": "e60aee2b2310f1b521de6dab926ec50c4eaaf6f65c56ea38d5a4ca8bc6c638c8"
+  }
+}

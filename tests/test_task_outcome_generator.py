@@ -115,6 +115,40 @@ def test_human_handoff_answers_the_required_human_questions() -> None:
     assert validate_outcome(outcome, render_markdown(outcome)).valid
 
 
+def test_handoff_preserves_evidence_bound_resolution_claims() -> None:
+    refs = [{"source": "summary.json", "subject": "observedIssues[0]"}]
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "locale": "en",
+            "handoffQuestions": {
+                "problemCount": 1,
+                "problemCountEvidenceRefs": refs,
+                "resolvedProblems": [
+                    {
+                        "claim": "The projection was synchronized.",
+                        "evidenceRefs": refs,
+                        "inference": False,
+                    }
+                ],
+                "resolutionApproach": [
+                    {
+                        "claim": "Used the canonical synchronizer.",
+                        "evidenceRefs": refs,
+                        "inference": False,
+                    }
+                ],
+            },
+        },
+    )
+    questions = outcome["humanHandoff"]["questions"]
+    assert questions["resolvedProblems"][0]["evidenceRefs"] == refs
+    assert questions["resolvedProblems"][0]["inference"] is False
+    assert questions["resolutionApproach"][0]["evidenceRefs"] == refs
+    assert validate_outcome(outcome, render_markdown(outcome)).valid
+
+
 def test_red_handoff_contains_gate_cause_location_and_recovery() -> None:
     outcome = generate_outcome(
         "task-outcome-generator",

@@ -16,6 +16,8 @@ The report contains these sections: Outcome Summary, Task Overview, Delivered Ch
 
 New generator versions also include `humanHandoff`. This is the mandatory conversational projection for every agent (Codex, Gemini, subagents, or another client), and it is emitted before archive. It contains `completed`, `passed`, `retained`, `risks`, `redReasons`, and the fixed human-question set: problem count, blocking problems, resolved problems, resolution approach, avoided risks, remaining risks, agent unknowns, human confirmations, recurrence likelihood, and next-time prevention. Every claim carries `evidenceRefs`; a claim with no references is explicitly marked `inference` and is not a fact. Red reasons include gate, cause, exact location, evidence, and recovery.
 
+When a Summary records `observedIssues`, `ai-finish` projects an issue marked with a resolved/fixed/mitigated/accepted status into `resolvedProblems` and `resolutionApproach`, preserving that issue's evidence references. An issue without evidence is never presented as verified resolution; it remains visible as an inference/remaining risk. This projection is prospective and does not rewrite immutable historical archives.
+
 ## Warning color semantics
 
 `knownGaps` means an intentionally unaddressed requirement. Each genuine known gap becomes a Warning with a limitation binding and makes an otherwise completed Outcome `completed_with_warnings` (yellow). It must not be used as free-form completion commentary.

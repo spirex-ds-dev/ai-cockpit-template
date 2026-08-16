@@ -4,48 +4,23 @@ Task Result
 Status: Success
 
 What was completed
-- Changed .ai/work-items/active/wi-20-post-release-projection-sync.contract.json [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.contract.json]
-- Changed .ai/work-items/active/wi-20-post-release-projection-sync.summary.json [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.summary.json]
-- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
-- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed .ai/work-items/starts/wi-20-post-release-projection-sync.json [evidence: .ai/work-items/starts/wi-20-post-release-projection-sync.json]
-- Changed .ai/decisions/HDR-0abf235ba6350294-f4a69041.evidence.json [evidence: .ai/decisions/HDR-0abf235ba6350294-f4a69041.evidence.json]
-- Changed .ai/decisions/HDR-0abf235ba6350294-f4a69041.request.json [evidence: .ai/decisions/HDR-0abf235ba6350294-f4a69041.request.json]
-- Changed .ai/decisions/HDR-3baab2db5bd8206a-a0921925.evidence.json [evidence: .ai/decisions/HDR-3baab2db5bd8206a-a0921925.evidence.json]
-- Changed .ai/decisions/HDR-3baab2db5bd8206a-a0921925.request.json [evidence: .ai/decisions/HDR-3baab2db5bd8206a-a0921925.request.json]
-- Changed .ai/decisions/HDR-4e7afb438b982eae-8d11625a.evidence.json [evidence: .ai/decisions/HDR-4e7afb438b982eae-8d11625a.evidence.json]
-- Changed .ai/decisions/HDR-4e7afb438b982eae-8d11625a.request.json [evidence: .ai/decisions/HDR-4e7afb438b982eae-8d11625a.request.json]
-- Changed .ai/decisions/HDR-18a81e9967d8e69e-0eb70b97.evidence.json [evidence: .ai/decisions/HDR-18a81e9967d8e69e-0eb70b97.evidence.json]
-- Changed .ai/decisions/HDR-18a81e9967d8e69e-0eb70b97.request.json [evidence: .ai/decisions/HDR-18a81e9967d8e69e-0eb70b97.request.json]
-- Changed .ai/decisions/HDR-084183284fd6ca4f-7616f5d9.evidence.json [evidence: .ai/decisions/HDR-084183284fd6ca4f-7616f5d9.evidence.json]
-- Changed .ai/decisions/HDR-084183284fd6ca4f-7616f5d9.request.json [evidence: .ai/decisions/HDR-084183284fd6ca4f-7616f5d9.request.json]
-- Changed .ai/work-items/archive/2026/wi-20-post-release-projection-sync.contract.json [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.contract.json]
-- Changed .ai/work-items/archive/2026/wi-20-post-release-projection-sync.summary.json [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.summary.json]
-- Changed .ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.json [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.json]
-- Changed .ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.md [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.md]
-- Changed .ai/work-items/archive/2026/wi-20-post-release-projection-sync.archive-manifest.json [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.archive-manifest.json]
-- Changed .ai/work-items/archive/index.json [evidence: .ai/work-items/archive/index.json]
-- Changed .ai/cockpit/version.json [evidence: .ai/cockpit/version.json]
-- Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
-- Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
-- Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
-- Changed release.json [evidence: release.json]
-- Changed next-release.json [evidence: next-release.json]
-- Changed release-state.json [evidence: release-state.json]
-- Changed install.sh [evidence: install.sh]
+- Changed .ai/work-items/active/wi-21-outcome-resolution-projection.contract.json [evidence: .ai/work-items/archive/2026/wi-21-outcome-resolution-projection.contract.json]
+- Changed .ai/work-items/active/wi-21-outcome-resolution-projection.summary.json [evidence: .ai/work-items/archive/2026/wi-21-outcome-resolution-projection.summary.json]
+- Changed .ai/work-items/starts/wi-21-outcome-resolution-projection.json [evidence: .ai/work-items/starts/wi-21-outcome-resolution-projection.json]
+- Changed .ai/decisions/HDR-82167194432204a5-d17054fc.request.json [evidence: .ai/decisions/HDR-82167194432204a5-d17054fc.request.json]
+- Changed .ai/decisions/HDR-82167194432204a5-d17054fc.evidence.json [evidence: .ai/decisions/HDR-82167194432204a5-d17054fc.evidence.json]
+- Changed .ai/decisions/HDR-558fdf993c866fdd-b6883085.request.json [evidence: .ai/decisions/HDR-558fdf993c866fdd-b6883085.request.json]
+- Changed .ai/decisions/HDR-558fdf993c866fdd-b6883085.evidence.json [evidence: .ai/decisions/HDR-558fdf993c866fdd-b6883085.evidence.json]
+- Changed scripts/ai_finish.py [evidence: scripts/ai_finish.py]
+- Changed tests/test_task_outcome_ai_finish_integration.py [evidence: tests/test_task_outcome_ai_finish_integration.py]
+- Changed tests/test_task_outcome_generator.py [evidence: tests/test_task_outcome_generator.py]
+- Changed docs/features/task-outcome-report.md [evidence: docs/features/task-outcome-report.md]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed docs/audits/wi-20-post-release-projection-sync.json [evidence: docs/audits/wi-20-post-release-projection-sync.json]
-- Changed docs/audits/wi-20-post-release-projection-sync.md [evidence: docs/audits/wi-20-post-release-projection-sync.md]
-- Changed scripts/check_release_distribution.py [evidence: scripts/check_release_distribution.py]
-- Changed tests/test_release_distribution.py [evidence: tests/test_release_distribution.py]
-- Changed .ai/work-items/active/wi-20-post-release-projection-sync.outcome.json [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.json]
-- Changed .ai/work-items/active/wi-20-post-release-projection-sync.outcome.md [evidence: .ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.md]
+- Changed docs/audits/wi-21-outcome-resolution-projection.json [evidence: docs/audits/wi-21-outcome-resolution-projection.json]
+- Changed docs/audits/wi-21-outcome-resolution-projection.md [evidence: docs/audits/wi-21-outcome-resolution-projection.md]
 
 Problems found
-- Total: 2
+- Total: 1
 - Blocking: 0
 - Warning: 0
 
@@ -53,19 +28,21 @@ Stops triggered
 - None recorded.
 
 Problems resolved
-- None recorded.
+- Problem: WI-20 recorded two resolved observed issues, but generated human handoff fields Problems resolved and Resolution approach were empty.
+  Solution: Project resolved observedIssues into evidence-bound humanHandoff claims and retain unresolved issues as remaining risks.
+  Evidence: [evidence: observedIssues, Problems resolved, observed issue projection, regression]
 
 Risks avoided
 - None recorded.
 
 Remaining risks
-- The governed WI-20 worktree can close cleanly, but unrelated user-owned dirty/detached worktrees remain and are intentionally preserved. (inference)
+- WI-01 through WI-20 archived Outcomes retain their original handoff projections and are not retroactively rewritten. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- None recorded.
+- Clarify and verify all human Outcome resolution fields before implementation proceeds. (inference)
 
 Verification
 - aiWorkItem [evidence: aiWorkItem]

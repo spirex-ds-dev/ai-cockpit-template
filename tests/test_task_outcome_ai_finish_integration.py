@@ -30,6 +30,72 @@ def test_finish_digest_excludes_derived_lifecycle_projections(monkeypatch):
     assert digest == ai_finish.worktree_digest(["scripts/example.py"])
 
 
+def test_pre_merge_handoff_projects_evidence_bound_observed_issue_resolutions(
+    tmp_path, monkeypatch
+):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "knownGaps": [],
+                "verification": [],
+                "observedIssues": [
+                    {
+                        "area": "projection-lag",
+                        "detail": "The published projection was stale.",
+                        "status": "resolved_by_provider_projection_sync",
+                        "action": "Synchronized the provider projection and candidate metadata.",
+                        "evidence": [
+                            {"source": "release.json", "subject": "publishedVersion"},
+                            {"source": "command://check-release-distribution", "subject": "pass"},
+                        ],
+                    },
+                    {
+                        "area": "remaining-gap",
+                        "detail": "A separate limitation remains.",
+                        "status": "open",
+                        "evidence": [{"source": "summary", "subject": "remaining-gap"}],
+                    },
+                    {
+                        "area": "malformed-resolution",
+                        "detail": "Marked resolved without evidence.",
+                        "status": "resolved_by_manual_note",
+                        "action": "Manual note only.",
+                        "evidence": [],
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+
+    payload = ai_finish._pre_merge_outcome_input(task, contract_path, summary_path, "en")
+    questions = payload["evidence"]["handoffQuestions"]
+
+    assert [item["claim"] for item in questions["resolvedProblems"]] == [
+        "The published projection was stale."
+    ]
+    assert questions["resolvedProblems"][0]["evidenceRefs"] == [
+        {"source": "release.json", "subject": "publishedVersion"},
+        {"source": "command://check-release-distribution", "subject": "pass"},
+    ]
+    assert [item["claim"] for item in questions["resolutionApproach"]] == [
+        "Synchronized the provider projection and candidate metadata."
+    ]
+    remaining = questions["remainingRisks"]
+    assert any(item["claim"] == "A separate limitation remains." for item in remaining)
+    assert any(
+        "Marked resolved without evidence" in item["claim"] and item["inference"]
+        for item in remaining
+    )
+
+
 def _outcome(task: str) -> dict:
     sections = {
         "outcomeSummary": "Completed from structured evidence.",
