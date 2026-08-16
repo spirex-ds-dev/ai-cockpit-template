@@ -1,0 +1,28 @@
+{
+  "workItemId": "wi-21-outcome-resolution-projection",
+  "status": "in_progress",
+  "purpose": "Correct prospective human Outcome projection for evidence-bound observed issue resolutions.",
+  "findings": [
+    {
+      "id": "observed-issue-resolution-omitted",
+      "severity": "high",
+      "claim": "WI-20 Summary observedIssues contained two resolution statuses, but its generated handoff left resolvedProblems and resolutionApproach empty.",
+      "evidenceRefs": [
+        {"source": ".ai/work-items/archive/2026/wi-20-post-release-projection-sync.summary.json", "subject": "observedIssues"},
+        {"source": ".ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.md", "subject": "Problems resolved"},
+        {"source": ".ai/work-items/archive/2026/wi-20-post-release-projection-sync.outcome.md", "subject": "Resolutions"}
+      ],
+      "resolution": "Project resolved observed issues and their action/status into evidence-bound humanHandoff claims for future ai-finish runs.",
+      "resolutionEvidenceRefs": [
+        {"source": "scripts/ai_finish.py", "subject": "observed issue projection"},
+        {"source": "tests/test_task_outcome_ai_finish_integration.py", "subject": "evidence-bound resolution regression"}
+      ]
+    }
+  ],
+  "boundary": {
+    "historicalArchivesRewritten": false,
+    "providerOrUiTransportChanged": false,
+    "unsupportedBenefitClaim": false
+  },
+  "claimsPolicy": "Claims without evidenceRefs are inference; no performance, quality, or time-saving benefit is asserted."
+}

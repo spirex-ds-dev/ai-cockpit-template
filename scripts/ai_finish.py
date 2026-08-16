@@ -913,6 +913,110 @@ def _summary_text_list(value: Any) -> list[str]:
     return [item.strip() for item in value if isinstance(item, str) and item.strip()]
 
 
+def _observed_issue_evidence_refs(
+    item: dict[str, Any], *, summary_path: Path, index: int
+) -> list[dict[str, str]]:
+    """Normalize one Summary observed-issue evidence list for human claims."""
+    raw = item.get("evidence")
+    if not isinstance(raw, list):
+        return []
+    refs: list[dict[str, str]] = []
+    area = item.get("area") if isinstance(item.get("area"), str) else "observed issue"
+    fallback_subject = f"observedIssues[{index}] {area}"
+    for value in raw:
+        if isinstance(value, str) and value.strip():
+            refs.append({"source": value.strip(), "subject": fallback_subject})
+        elif isinstance(value, dict):
+            source = value.get("source")
+            subject = value.get("subject")
+            if isinstance(source, str) and source.strip():
+                ref = {
+                    "source": source.strip(),
+                    "subject": subject.strip()
+                    if isinstance(subject, str) and subject.strip()
+                    else fallback_subject,
+                }
+                digest = value.get("digest")
+                if isinstance(digest, str) and re.fullmatch(r"[a-f0-9]{64}", digest):
+                    ref["digest"] = digest
+                refs.append(ref)
+    return refs
+
+
+def _observed_issue_handoff(
+    observed: Any, *, summary_path: Path
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """Project resolved and unresolved Summary issues without inventing evidence."""
+    resolved: list[dict[str, Any]] = []
+    approach: list[dict[str, Any]] = []
+    remaining: list[dict[str, Any]] = []
+    if not isinstance(observed, list):
+        return resolved, approach, remaining
+    resolved_prefixes = ("resolved", "fixed", "mitigated", "accepted")
+    for index, value in enumerate(observed):
+        if not isinstance(value, dict):
+            continue
+        raw_area = value.get("area")
+        area = (
+            raw_area.strip() if isinstance(raw_area, str) and raw_area.strip() else "observed issue"
+        )
+        raw_detail = value.get("detail")
+        detail = raw_detail.strip() if isinstance(raw_detail, str) else ""
+        claim = detail or area or "Observed issue lacks a detail record."
+        raw_status = value.get("status")
+        status_text = (
+            raw_status.strip()
+            if isinstance(raw_status, str) and raw_status.strip()
+            else "unresolved"
+        )
+        refs = _observed_issue_evidence_refs(value, summary_path=summary_path, index=index)
+        is_resolved = status_text.lower().startswith(resolved_prefixes)
+        if is_resolved and refs:
+            resolved.append(
+                {
+                    "claim": claim,
+                    "title": area,
+                    "detail": f"Status: {status_text}",
+                    "evidenceRefs": refs,
+                    "inference": False,
+                }
+            )
+            action = f"Resolution status: {status_text}"
+            for key in ("action", "resolution", "solution"):
+                candidate = value.get(key)
+                if isinstance(candidate, str) and candidate.strip():
+                    action = candidate.strip()
+                    break
+            approach.append(
+                {
+                    "claim": action,
+                    "title": f"Resolution for {area}",
+                    "evidenceRefs": refs,
+                    "inference": False,
+                }
+            )
+            continue
+        if is_resolved and not refs:
+            remaining.append(
+                {
+                    "claim": f"{claim} Status {status_text} has no evidence references; resolution is not reported as verified.",
+                    "evidenceRefs": [],
+                    "inference": True,
+                }
+            )
+            continue
+        remaining.append(
+            {
+                "claim": claim,
+                "title": area,
+                "detail": f"Status: {status_text}",
+                "evidenceRefs": refs,
+                "inference": not bool(refs),
+            }
+        )
+    return resolved, approach, remaining
+
+
 def _pre_merge_outcome_input(
     task: str, contract_path: Path, summary_path: Path, language: str | None = "en"
 ) -> dict[str, Any]:
@@ -1033,6 +1137,51 @@ def _pre_merge_outcome_input(
         for item in verification
         if isinstance(item, dict) and item.get("result") == "failed" and item.get("check")
     ]
+    observed_resolved, observed_approach, observed_remaining = _observed_issue_handoff(
+        summary.get("observedIssues"), summary_path=summary_path
+    )
+    remaining_issue_claims = [
+        *observed_remaining,
+        *[
+            {
+                "claim": item["detail"],
+                "title": item["area"],
+                "evidenceRefs": [
+                    {
+                        "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                        "subject": "residualRisks",
+                    }
+                ],
+                "inference": False,
+            }
+            for item in summary.get("residualRisks", [])
+            if isinstance(item, dict)
+            and isinstance(item.get("detail"), str)
+            and isinstance(item.get("area"), str)
+        ],
+    ]
+    problem_count_refs = []
+    if isinstance(summary.get("observedIssues"), list) and summary.get("observedIssues"):
+        problem_count_refs.append(
+            {
+                "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                "subject": "observedIssues",
+            }
+        )
+    if warnings:
+        problem_count_refs.append(
+            {
+                "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                "subject": "knownGaps",
+            }
+        )
+    if failed_checks:
+        problem_count_refs.append(
+            {
+                "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                "subject": "verification",
+            }
+        )
     user_decisions: list[str] = []
     for item in summary.get("userCorrectionsCaptured", []):
         if isinstance(item, str) and item.strip():
@@ -1064,19 +1213,12 @@ def _pre_merge_outcome_input(
             "handoffRisks": residual_risks,
             "handoffQuestions": {
                 "problemCount": problem_count,
+                "problemCountEvidenceRefs": problem_count_refs,
                 "blockedProblems": failed_checks,
-                "resolvedProblems": [
-                    item.get("problem")
-                    for item in summary.get("resolutions", [])
-                    if isinstance(item, dict) and isinstance(item.get("problem"), str)
-                ],
-                "resolutionApproach": [
-                    item.get("action")
-                    for item in summary.get("resolutions", [])
-                    if isinstance(item, dict) and isinstance(item.get("action"), str)
-                ],
+                "resolvedProblems": observed_resolved,
+                "resolutionApproach": observed_approach,
                 "avoidedRisks": _summary_text_list(summary.get("avoidedRisks")),
-                "remainingRisks": [item["detail"] for item in residual_risks],
+                "remainingRisks": remaining_issue_claims,
                 "agentUnknowns": [
                     *[item for item in contract.get("unknowns", []) if isinstance(item, str)],
                     *[
