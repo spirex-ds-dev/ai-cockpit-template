@@ -4,19 +4,50 @@
   "mode": "code",
   "title": "Authorized WI-08 content-bound evidence reuse successor",
   "rawUserRequest": "Complete the approved WI-08 content-bound evidence reuse Work Item after its archived branch collided on archive sequence 917. Redeliver the same bounded behavior from the current remote main, preserve predecessor evidence byte-for-byte, and continue the full Work Item lifecycle.",
-  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-successor-redelivery-20260816", "capturedAt": "2026-08-16T06:00:00Z", "digest": "sha256:user-authorized-wi08-successor-redelivery"},
-  "declaredIntent": {"summary": "Redeliver only the WI-08 content-bound reuse policy on current main after a governed archive-sequence collision.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
-  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-successor-redelivery-20260816",
+    "capturedAt": "2026-08-16T06:00:00Z",
+    "digest": "sha256:user-authorized-wi08-successor-redelivery"
+  },
+  "declaredIntent": {
+    "summary": "Redeliver only the WI-08 content-bound reuse policy on current main after a governed archive-sequence collision.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
   "baseCommit": "c1795eb5ca2ef4b170df3dfc196627f2a9ada682",
-  "baselineDirtyPaths": [{"path": ".ai/cockpit/current_status.md", "status": "M", "fingerprint": "9d914688ccefb0cae25e2559925a5a7a1dfd1c25c2ba53035cf26a70f727a905"}],
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "9d914688ccefb0cae25e2559925a5a7a1dfd1c25c2ba53035cf26a70f727a905"
+    }
+  ],
   "scope": [
     ".ai/work-items/active/wi-08-content-bound-reuse-successor.contract.json",
     ".ai/work-items/active/wi-08-content-bound-reuse-successor.summary.json",
     ".ai/work-items/active/wi-08-content-bound-reuse-successor.outcome.json",
     ".ai/work-items/active/wi-08-content-bound-reuse-successor.outcome.md",
-    ".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md",
-    ".ai/work-items/starts/**", ".ai/work-items/archive/**", ".ai/work-items/conflict-successor-receipts/**",
-    "scripts/ai_evidence_binding.py", "tests/test_ai_evidence_binding.py", "docs/reference/content-bound-evidence-reuse.md"
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/conflict-successor-receipts/**",
+    "scripts/ai_evidence_binding.py",
+    "tests/test_ai_evidence_binding.py",
+    "docs/reference/content-bound-evidence-reuse.md"
   ],
   "outOfScope": [
     "Rewriting, deleting, rebasing, or renumbering the predecessor WI-08 archive, its outcome, its summary, or PR #853.",
@@ -26,21 +57,91 @@
     "Granting reuse for unknown, malformed, expired, scope-mismatched, governance-mismatched, or content-mismatched evidence."
   ],
   "sources": [
-    {"path": ".ai/work-items/archive/2026/wi-08-content-bound-reuse.contract.json", "reason": "Immutable predecessor contract and original bounded WI-08 requirements."},
-    {"path": ".ai/work-items/archive/2026/wi-08-content-bound-reuse.summary.json", "reason": "Immutable predecessor implementation and verification record."},
-    {"path": ".ai/work-items/archive/2026/wi-08-content-bound-reuse.outcome.json", "reason": "Immutable predecessor outcome and collision context."},
-    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/854", "reason": "Human-authorized collision successor record."},
-    {"path": "scripts/ai_evidence_binding.py", "reason": "WI-07 foundation API consumed without changing its contract."},
-    {"path": "docs/reference/evidence-binding-foundation.md", "reason": "Foundation handoff and exact-match semantics."},
-    {"path": ".ai/work-items/archive/2026/wi-09-diff-bound-reuse.contract.json", "reason": "Current-main archive sequence ownership and adjacent policy boundary."}
+    {
+      "path": ".ai/work-items/archive/2026/wi-08-content-bound-reuse.contract.json",
+      "reason": "Immutable predecessor contract and original bounded WI-08 requirements."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-08-content-bound-reuse.summary.json",
+      "reason": "Immutable predecessor implementation and verification record."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-08-content-bound-reuse.outcome.json",
+      "reason": "Immutable predecessor outcome and collision context."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/854",
+      "reason": "Human-authorized collision successor record."
+    },
+    {
+      "path": "scripts/ai_evidence_binding.py",
+      "reason": "WI-07 foundation API consumed without changing its contract."
+    },
+    {
+      "path": "docs/reference/evidence-binding-foundation.md",
+      "reason": "Foundation handoff and exact-match semantics."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-09-diff-bound-reuse.contract.json",
+      "reason": "Current-main archive sequence ownership and adjacent policy boundary."
+    }
   ],
-  "unknowns": [], "notCodable": false,
-  "riskAssessment": {"level": "medium", "riskTypes": ["evidence_integrity", "security_boundary", "archive_collision"], "reason": "A successor must preserve immutable predecessor evidence while adding exact content identity checks that fail closed.", "unknownsReviewComplete": true},
-  "governanceProfile": {"selected": "strict", "source": "human_override", "reasons": ["Authorized governance successor and evidence policy require strict verification."], "operationClasses": ["repository_governance"], "verificationEscalations": [], "override": {"approvalEvidence": "User approved all necessary successor Work Items in this thread.", "reason": "Strict verification for archive-collision successor redelivery.", "risks": ["archive_collision", "evidence_integrity", "security_boundary"], "notRunChecks": ["none; all required checks remain required"], "workItemOnly": true, "workItemId": "wi-08-content-bound-reuse-successor"}},
-  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
-  "executionDecision": {"status": "continue", "reason": "The user explicitly authorized successor redelivery; scope and preservation boundaries are explicit."},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "security_boundary",
+      "archive_collision"
+    ],
+    "reason": "A successor must preserve immutable predecessor evidence while adding exact content identity checks that fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Authorized governance successor and evidence policy require strict verification."
+    ],
+    "operationClasses": [
+      "repository_governance"
+    ],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "User approved all necessary successor Work Items in this thread.",
+      "reason": "Strict verification for archive-collision successor redelivery.",
+      "risks": [
+        "archive_collision",
+        "evidence_integrity",
+        "security_boundary"
+      ],
+      "notRunChecks": [
+        "none; all required checks remain required"
+      ],
+      "workItemOnly": true,
+      "workItemId": "wi-08-content-bound-reuse-successor"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized successor redelivery; scope and preservation boundaries are explicit."
+  },
   "preReviewWarnings": [],
-  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints before implementation and finish."},
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record checkpoints before implementation and finish."
+  },
   "acceptance": [
     "The successor is created from the exact current origin/main commit and a canonical conflict-successor receipt binds source, successor, Issue #854, authority, reason, and immutable predecessor evidence.",
     "A pure API builds deterministic content identity from non-empty repository-relative POSIX paths and exact bytes using sorted length-and-payload framing; unsafe, duplicate, empty, or non-byte inputs fail closed.",
@@ -56,17 +157,136 @@
     "Keep the policy pure and local; existing verification runners retain authority to execute every required check.",
     "Use locked repository format and lint tools and record generated projections through their owning commands."
   ],
-  "intent": {"problem": "The original WI-08 archive allocated sequence 917 from a divergent base and cannot be merged because current main already owns sequence 917 for WI-09. Direct rebase would rewrite immutable evidence.", "constraints": ["The user's 2026-08-16 approval permits all necessary successor Work Items to complete the approved plan.", "Preserve predecessor WI-08 archive, summary, outcome, manifest, and PR #853 byte-for-byte; do not add new product scope.", "Start from current origin/main, bind the canonical transition to Issue #854, and keep WI-09/WI-10 boundaries unchanged.", "Unknown, malformed, expired, or mismatched evidence must rerun and never bypass required gates."], "rationale": "A clean, explicitly user-approved successor provides the same bounded behavior without mutating historical evidence or accepting an archive collision."},
+  "intent": {
+    "problem": "The original WI-08 archive allocated sequence 917 from a divergent base and cannot be merged because current main already owns sequence 917 for WI-09. Direct rebase would rewrite immutable evidence.",
+    "constraints": [
+      "The user's 2026-08-16 approval permits all necessary successor Work Items to complete the approved plan.",
+      "Preserve predecessor WI-08 archive, summary, outcome, manifest, and PR #853 byte-for-byte; do not add new product scope.",
+      "Start from current origin/main, bind the canonical transition to Issue #854, and keep WI-09/WI-10 boundaries unchanged.",
+      "Unknown, malformed, expired, or mismatched evidence must rerun and never bypass required gates."
+    ],
+    "rationale": "A clean, explicitly user-approved successor provides the same bounded behavior without mutating historical evidence or accepting an archive collision."
+  },
   "scenarioCoverage": [
-    {"scenario": "Exact content bytes and paths match with identical scope, governance, and valid freshness after an unrelated base update.", "expected": "state=fresh and action=reuse with no reasons.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused test evaluates the same binding against a different informational base commit."},
-    {"scenario": "Content bytes, paths, or canonical path safety differ.", "expected": "state=stale or state=unknown and action=rerun with stable reasons.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused tests cover changed bytes, path sets, ordering, duplicates, traversal, absolute, backslash, and non-byte values."},
-    {"scenario": "Binding, freshness, security scope, governance, or classification is missing, malformed, expired, or mismatched.", "expected": "The policy fails closed to rerun without mutating caller inputs or granting gate authority.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused tests cover unknown, malformed, expiry, scope, governance, and classification boundaries."},
-    {"scenario": "Successor is reconciled after an archive-sequence collision.", "expected": "Predecessor evidence remains byte-identical and the transition receipt records the authorized source-to-successor binding.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Canonical transition, archive recovery, and hosted lifecycle checks."}
+    {
+      "scenario": "Exact content bytes and paths match with identical scope, governance, and valid freshness after an unrelated base update.",
+      "expected": "state=fresh and action=reuse with no reasons.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused test evaluates the same binding against a different informational base commit."
+    },
+    {
+      "scenario": "Content bytes, paths, or canonical path safety differ.",
+      "expected": "state=stale or state=unknown and action=rerun with stable reasons.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests cover changed bytes, path sets, ordering, duplicates, traversal, absolute, backslash, and non-byte values."
+    },
+    {
+      "scenario": "Binding, freshness, security scope, governance, or classification is missing, malformed, expired, or mismatched.",
+      "expected": "The policy fails closed to rerun without mutating caller inputs or granting gate authority.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests cover unknown, malformed, expiry, scope, governance, and classification boundaries."
+    },
+    {
+      "scenario": "Successor is reconciled after an archive-sequence collision.",
+      "expected": "Predecessor evidence remains byte-identical and the transition receipt records the authorized source-to-successor binding.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Canonical transition, archive recovery, and hosted lifecycle checks."
+    }
   ],
-  "verification": [{"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}],
-  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
-  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted schema or secret writes are required."},
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted schema or secret writes are required."
+  },
   "rollbackNote": "Revert this successor Work Item diff and restore related tests and docs; predecessor evidence remains immutable.",
-  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 920}},
-  "startReceipt": {"path": ".ai/work-items/starts/wi-08-content-bound-reuse-successor.json", "baseCommit": "c1795eb5ca2ef4b170df3dfc196627f2a9ada682", "initialScopeDigest": "4090399d7abe5b738b94ae10e166a20811bb3e144ea79314b50eee4bf04cfbf2", "contractSkeletonDigest": "33420f3936240eba8814fc4765d459d97f800355029435f41b7ade00007d8133"}
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 920
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-08-content-bound-reuse-successor.json",
+    "baseCommit": "c1795eb5ca2ef4b170df3dfc196627f2a9ada682",
+    "initialScopeDigest": "4090399d7abe5b738b94ae10e166a20811bb3e144ea79314b50eee4bf04cfbf2",
+    "contractSkeletonDigest": "33420f3936240eba8814fc4765d459d97f800355029435f41b7ade00007d8133"
+  }
 }
