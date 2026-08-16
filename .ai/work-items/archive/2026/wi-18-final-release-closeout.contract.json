@@ -1,0 +1,282 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-18-final-release-closeout",
+  "mode": "code",
+  "title": "Final release and repository closeout",
+  "baseCommit": "2a173b568fc9cbc1e9a97027e0dbdf9555e506ef",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-18-final-release-closeout.contract.json",
+    ".ai/work-items/active/wi-18-final-release-closeout.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/decisions/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-18-final-release-closeout.outcome.json",
+    ".ai/work-items/active/wi-18-final-release-closeout.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/version.json",
+    "release-state.json",
+    "release.json",
+    "next-release.json",
+    "release-source.json",
+    "docs/audits/**",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "scripts/**",
+    "tests/**",
+    "Makefile"
+  ],
+  "outOfScope": [
+    "Rewriting or deleting immutable historical archive evidence for WI-01 through WI-17.",
+    "New product/runtime behavior or unrequested performance claims.",
+    "Provider configuration changes unrelated to the requested release workflow.",
+    "Deleting files outside the explicitly audited stale Work Item branches/worktrees."
+  ],
+  "sources": [
+    {"path": ".ai/glossary.md", "reason": "Repository governance terminology and evidence boundaries."},
+    {"path": "AGENTS.md", "reason": "Canonical Work Item, release, and closure lifecycle rules."},
+    {"path": "docs/reference/distribution.md", "reason": "PR-first release and exact-source publication workflow."},
+    {"path": "docs/reference/work-item-lifecycle-closure.md", "reason": "Archive immutability, recovery, and closure rules."},
+    {"path": ".ai/work-items/archive/index.json", "reason": "Archived Work Item discovery and sequence evidence."},
+    {"path": "release-state.json", "reason": "Canonical candidate/published release state."},
+    {"path": "next-release.json", "reason": "Unpublished candidate projection."},
+    {"path": "release.json", "reason": "Published release projection and public contract."},
+    {"path": "Makefile", "reason": "Canonical release and governed verification entrypoints."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "repository_cleanup", "evidence_gap"],
+    "reason": "Publication and deletion decisions must remain bound to exact source, archived evidence, and audited identities.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["Final release and repository cleanup require full strict verification."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized final release, evidence audit, and local/remote cleanup."
+  },
+  "declaredIntent": {
+    "summary": "Audit all prior Work Items, publish the exact verified candidate release, and leave repository state clean.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "user-request: final stale-code cleanup and perfect release closeout",
+    "scope": "Publish only the exact verified candidate after all gates, then complete canonical Work Item cleanup; no gate bypass, historical rewrite, or blind retry is authorized."
+  },
+  "rawUserRequest": "Continue the authorized current Work Item lifecycle until its evidence, archive, merge, cleanup, and closure are complete.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request: final stale-code cleanup and perfect release closeout",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-wi18-final-release-closeout"
+  },
+  "preReviewWarnings": [
+    "Release provider evidence, exact source identity, and branch/worktree residue must be rechecked immediately before mutation.",
+    "Historical Outcomes remain immutable; any legacy human-handoff gap must be reported as a retained risk, not rewritten."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The Summary and final audit report enumerate WI-01 through WI-17 with status, Outcome/handoff evidence, blocking history, retained risks, and explicit performance/Outcome limitations.",
+    "All release readiness, source-bound evidence, distribution, state-consistency, security, lockfile, and strict full-quality checks pass on the exact candidate base, or a provider-bound failure is recorded and publication is blocked.",
+    "The published release tag, source commit, metadata commit, release assets, and Quick Install validation are mutually consistent; no claim of publication is made without provider evidence.",
+    "All audited stale local/remote Work Item branches and linked worktrees are removed only after identity and cleanliness checks; the final closure audit reports no residue outside explicitly retained user worktrees.",
+    "The archived Outcome and Human Benefit Report use the conversation locale, follow the required Human Summary structure, bind factual fields to evidenceRefs, and mark unsupported benefits as inference.",
+    "The Work Item is merged and closed through the canonical lifecycle, with clean local and remote branch state verified after closure."
+  ],
+  "guidelines": [
+    "Every factual report claim must cite evidenceRefs; unsupported benefit language is inference only.",
+    "Do not use self-praise or unquantified performance/quality claims.",
+    "Historical archive files are immutable and may only be read and referenced.",
+    "Release publication is fail-closed on missing, stale, mismatched, or provider-unverified evidence.",
+    "The human handoff must be direct, clear, and emitted in the conversation language (English for this Work Item)."
+  ],
+  "intent": {
+    "problem": "The remediation sequence needs one final exact-source publication and a repository audit that makes historical Outcome gaps, performance evidence limits, and branch/worktree residue explicit without rewriting immutable history.",
+    "constraints": [
+      "Use the latest synchronized origin/main and the repository release workflow; fail closed on missing or mismatched provider evidence.",
+      "Do not rewrite historical archive files, move immutable tags, or claim performance or Outcome delivery beyond recorded evidence.",
+      "Delete only branches and worktrees whose identity and cleanliness are recorded by this Work Item; preserve unrelated user work."
+    ],
+    "rationale": "A final release and cleanup can be trusted only when each prior Work Item, the exact release identity, and the final repository state are independently auditable."
+  },
+  "scenarioCoverage": [
+    {
+      "id": "historical-work-item-audit",
+      "riskDomain": "evidence_gap",
+      "scenario": "WI-01 through WI-17 archives, Outcomes, human handoffs, retained warnings, and performance claims are enumerated without rewriting history.",
+      "expectedResult": "Every archived WI has a recorded status and evidence-backed gap or pass classification.",
+      "verificationPlan": "Audit archive index and Outcome JSON, then record counts and evidenceRefs in the Summary and final audit report.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "repository-residue-audit",
+      "riskDomain": "repository_cleanup",
+      "scenario": "Local branches, remote branches, linked worktrees, and open/merged PR identities are reconciled before deletion.",
+      "expectedResult": "Only the active WI-18 branch/worktree remains until canonical closure; no stale remote branch remains after closure.",
+      "verificationPlan": "Capture git branch/worktree/remote/PR evidence, delete only audited residue, and repeat the audit after close.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "exact-release-publication",
+      "riskDomain": "release_identity",
+      "scenario": "Candidate v0.5.61 is published only when sourceCommit, tagTarget, metadataCommit, CI evidence, and release assets match.",
+      "expectedResult": "The release workflow reports the exact merged main SHA and tagged Quick Install evidence, or publication remains blocked with a documented reason.",
+      "verificationPlan": "Run local release readiness, dispatch the exact-source workflow if eligible, and validate release-state/distribution evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "human-outcome-closeout",
+      "riskDomain": "evidence_gap",
+      "scenario": "The final Outcome is delivered to the human in English with completed, passed, retained, risks, unknowns, decisions, and next action fields.",
+      "expectedResult": "Direct handoff is clear, evidenceRefs are present for factual claims, and unsupported benefits are marked inference.",
+      "verificationPlan": "Run strict ai-finish with REPORT_LANGUAGE=en and inspect archived Outcome JSON/Markdown and task_report pair.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": ["codex/wi-*", ".worktrees/*", "/private/tmp/wi*-*"],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "The user explicitly authorized the final release and repository closeout, including audited branch/worktree cleanup.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "user",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "user-request: final stale-code cleanup and perfect release closeout",
+          "directUserInstructionDigest": "sha256:46d96473166bfa2e2b3cad289df396708cb61ccfda4af0fb712a69eee602d318",
+          "authorizedAt": "2026-08-17T00:00:00+09:00"
+        },
+        "scope": ["codex/wi-*", ".worktrees/*", "/private/tmp/wi*-*"]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-current-task",
+    "reason": "User explicitly requested final release and local/remote branch/worktree cleanup."
+  },
+  "rollbackNote": "Do not move or delete an immutable release tag. If release verification fails, retain evidence, block publication, and repair through a new governed Work Item.",
+  "budgetImpact": {
+    "expectedMetrics": {"archiveGrowth": 931}
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-18-final-release-closeout.json",
+    "baseCommit": "2a173b568fc9cbc1e9a97027e0dbdf9555e506ef",
+    "initialScopeDigest": "85639af857c9644d021d187b49cb6b8c5ba5c71649f8c654ae30b0d5d04ebc77",
+    "contractSkeletonDigest": "7b3e14e676a87ccb068a5c464a35721864fc0b4a7060dfdb4bfc0fcec81c74b3"
+  }
+}

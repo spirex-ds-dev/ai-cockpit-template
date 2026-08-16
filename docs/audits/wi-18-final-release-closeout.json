@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "wi-18-final-release-closeout",
+  "purpose": "Evidence-bound audit before final release and lifecycle closure.",
+  "claims": [
+    {
+      "claim": "WI-01 through WI-17 have archived Contract, Summary, and Outcome records in the canonical archive index.",
+      "evidenceRefs": [".ai/work-items/archive/index.json", "command://archive-index-wi-01-wi-17"]
+    },
+    {
+      "claim": "WI-01 through WI-15 archived Outcomes do not contain the WI-16 humanHandoff projection; WI-16 and WI-17 do contain it.",
+      "evidenceRefs": [".ai/work-items/archive/2026/wi-01-performance-baseline.outcome.json", ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.outcome.json", ".ai/work-items/archive/2026/wi-16-outcome-human-handoff.outcome.json", ".ai/work-items/archive/2026/wi-17-stale-code-doc-cleanup.outcome.json", "command://outcome-humanHandoff-scan"]
+    },
+    {
+      "claim": "The archive records no causal performance improvement across environments; WI-15 records a bounded same-environment comparison of 550.85 seconds versus 343.22 seconds, approximately 37.7% lower wall time.",
+      "evidenceRefs": [".ai/work-items/archive/2026/wi-12-performance-diagnosis-successor.summary.json", ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.summary.json", ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.outcome.json"]
+    },
+    {
+      "claim": "A recorded parallel run observed approximately 11 minutes for three concurrent strict finishes versus approximately 10 minutes for the comparable serial run.",
+      "evidenceRefs": [".ai/work-items/archive/2026/wi-05-outcome-dialog-delivery.summary.json", ".ai/work-items/archive/2026/wi-06-status-interface.summary.json"]
+    },
+    {
+      "claim": "The current local release-readiness gate passed for candidate v0.5.61, while provider publication evidence remains pending until the exact merged main commit is dispatched through the release workflow.",
+      "evidenceRefs": ["command://make-check-release-readiness", "release-state.json", "next-release.json", ".github/workflows/release.yml", "docs/reference/distribution.md"]
+    },
+    {
+      "claim": "The stale remote branch codex/wi-08-content-bound-reuse was superseded by merged PR #855 and was deleted after identity review.",
+      "evidenceRefs": ["pr://855", "pr://853", "command://git-push-delete-codex-wi-08-content-bound-reuse"]
+    },
+    {
+      "claim": "After audited cleanup, no codex/* remote branch remains; local recovery branch backup/wi08-pre-base-reconcile and the dirty pre-release branch remain intentionally retained.",
+      "evidenceRefs": ["command://git-ls-remote-codex-post-cleanup", "command://git-branch-post-cleanup", "AGENTS.md"]
+    },
+    {
+      "claim": "Seven linked worktrees remain: the active WI-18 worktree, the dirty root worktree, the dirty pre-release worktree, and four dirty temporary WI-16 governance worktrees; clean superseded Work Item worktrees were removed.",
+      "evidenceRefs": ["command://git-worktree-list-post-cleanup", "command://git-worktree-status-audit", "AGENTS.md"]
+    }
+  ],
+  "workItems": [
+    {"id": "WI-01", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #845", "retained": ["provider/human wait unknown"]},
+    {"id": "WI-02", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #846", "retained": ["provider/human wait, token usage, recovery duration unknown"]},
+    {"id": "WI-03", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #847", "retained": ["runtime savings depend on job mix and scope quality"]},
+    {"id": "WI-04", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #848", "retained": ["external wait categories uninstrumented"]},
+    {"id": "WI-05", "archivedStatus": "completed", "lifecycle": "merged PR #849", "retained": ["caller may discard CLI output; durable files remain evidence"]},
+    {"id": "WI-06", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #850", "retained": ["status cannot observe provider CI or human wait"]},
+    {"id": "WI-07", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #851", "retained": ["no runtime verifier/cache integration by design"]},
+    {"id": "WI-08", "archivedStatus": "completed_with_warnings", "lifecycle": "successor merged PR #855; predecessor PR #853 closed", "retained": ["archive-time hosted-pending warning is historical"]},
+    {"id": "WI-09", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #852", "retained": ["no verifier/cache/scheduler/provider integration by design"]},
+    {"id": "WI-10", "archivedStatus": "completed_with_warnings", "lifecycle": "successor merged PR #857", "retained": ["archive-time hosted-pending warning is historical"]},
+    {"id": "WI-11", "archivedStatus": "completed_with_warnings", "lifecycle": "successor merged PR #860", "retained": ["mandatory-control floor remains adopter responsibility"]},
+    {"id": "WI-12", "archivedStatus": "completed_with_warnings", "lifecycle": "successor merged PR #862", "retained": ["no causal improvement; external durations unknown"]},
+    {"id": "WI-13", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #858", "retained": ["adopter/provider evidence unavailable; historical placeholder warning remains"]},
+    {"id": "WI-14", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #863", "retained": ["repository evidence cannot prove a human saw a UI receipt"]},
+    {"id": "WI-15", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #864", "retained": ["same-environment measurement only; full quality remains serialized"]},
+    {"id": "WI-16", "archivedStatus": "completed", "lifecycle": "merged PR #865", "retained": ["semantic locale detection remains explicit, not automatic"]},
+    {"id": "WI-17", "archivedStatus": "completed_with_warnings", "lifecycle": "merged PR #866", "retained": ["historical Outcomes remain immutable and legacy-shaped"]}
+  ],
+  "performanceAssessment": {
+    "status": "bounded_evidence_only",
+    "claim": "Measured local same-environment reduction exists for WI-15, but broad performance improvement is not established.",
+    "inference": "The shard optimization may reduce local wall time for the measured path; this is not a cross-machine, provider, human-wait, or adopter-project result.",
+    "evidenceRefs": [".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.summary.json", ".ai/work-items/archive/2026/wi-12-performance-diagnosis-successor.summary.json"]
+  },
+  "outcomeAssessment": {
+    "status": "prospective_handoff_enforced",
+    "claim": "WI-16 and WI-17 enforce localized direct handoff generation before archive; repository evidence cannot authenticate that a human saw a Codex or other agent UI receipt.",
+    "evidenceRefs": [".ai/work-items/archive/2026/wi-16-outcome-human-handoff.summary.json", ".ai/work-items/archive/2026/wi-17-stale-code-doc-cleanup.summary.json", ".ai/work-items/archive/2026/wi-14-cross-wi-integration.outcome.json", "docs/features/task-outcome-report.md"]
+  },
+  "cleanup": {
+    "preCleanup": {"remoteCodexBranches": 1, "localBranches": 12, "linkedWorktrees": 38},
+    "postCleanup": {"remoteCodexBranches": 0, "localBranches": 4, "linkedWorktrees": 7},
+    "retainedDirtyIdentities": [
+      "/Users/sei-rinn/dev/workspace_python/ai-cockpit-template",
+      "/Users/sei-rinn/dev/workspace_python/ai-cockpit-template/.worktrees/pre-release-deprecated-assets-cleanup-current-main-20260816",
+      "/private/tmp/wi16-gov.4MDphj",
+      "/private/tmp/wi16-gov.AnhoGw",
+      "/private/tmp/wi16-gov.NHv7tq",
+      "/private/tmp/wi16-gov.TNM1sE"
+    ],
+    "retainedReason": "Uncommitted changes were detected; deleting them would violate the repository rule to preserve user changes.",
+    "evidenceRefs": ["command://git-worktree-status-audit", "AGENTS.md"]
+  },
+  "release": {
+    "candidate": "v0.5.61",
+    "localReadiness": "passed",
+    "providerPublication": "pending_exact_merged_main_sha",
+    "evidenceRefs": ["command://make-check-release-readiness", "release-state.json", "next-release.json", ".github/workflows/release.yml"]
+  }
+}

@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "wi-18-final-release-closeout",
-  "phase": "review",
-  "result": "completed_with_warnings",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "b61327a3510f8491f10e4a8a64339814f928211bf3f35b7d8c59a8bd0a1cfe61"
+  "status": "completed_with_warnings",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "wi-18-final-release-closeout",
+    "contractDigest": "23c25beb7125a22fc9e549294dc958857488bbf3b38632e30dfd9b3816d082ce",
+    "summaryDigest": "b632166b79e775ed531549ee75cf3df82a7b29c468867b31356e0a1488eb724a",
+    "verificationDigest": "28c02d31e6352b91e6ffdb0cd14ee6695cf68574a38b1ad9d3a16b4f9221182f",
+    "baseCommit": "2a173b568fc9cbc1e9a97027e0dbdf9555e506ef",
+    "headCommit": "2a173b568fc9cbc1e9a97027e0dbdf9555e506ef",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "30bdc7e009cff77a15b376b8fa0c75a8cca959679466c5030426b1c452006fd5",
+      "binding": {
+        "baseCommit": "2a173b568fc9cbc1e9a97027e0dbdf9555e506ef",
+        "candidateHead": "2a173b568fc9cbc1e9a97027e0dbdf9555e506ef",
+        "candidateTreeDigest": "2cdf79e9a65b2953796d9cc8dd91b56739e5241a208c85634aa69de4f12886a3",
+        "candidateDiffDigest": "2f2778c9f7c52d78f2b71d460f121579a824f20ac19576b2b32b571e0ed30ea5"
+      }
+    }
   },
-  "task": {
-    "summary": "Task wi-18-final-release-closeout generated an evidence-derived outcome with status completed_with_warnings.",
+  "sections": {
+    "outcomeSummary": "Task wi-18-final-release-closeout generated an evidence-derived outcome with status completed_with_warnings.",
+    "taskOverview": "Governed Work Item: wi-18-final-release-closeout",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/wi-18-final-release-closeout.contract.json",
       ".ai/work-items/archive/2026/wi-18-final-release-closeout.summary.json",
@@ -27,69 +50,98 @@
       ".ai/decisions/HDR-0c1531a849967540-b2009dd8.evidence.json",
       ".ai/decisions/HDR-23c25beb7125a22f-b379440b.request.json",
       ".ai/decisions/HDR-23c25beb7125a22f-b379440b.evidence.json"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "Provider publication evidence and Quick Install validation are pending the exact merged WI-18 main SHA.",
+      "Repository evidence cannot prove a human saw an agent UI receipt.",
+      "WI-01 through WI-15 historical Outcomes cannot be retrofitted without violating archive immutability."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "Provider publication evidence and Quick Install validation are pending the exact merged WI-18 main SHA.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      },
+      {
+        "sourceWarning": "Repository evidence cannot prove a human saw an agent UI receipt.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      },
+      {
+        "sourceWarning": "WI-01 through WI-15 historical Outcomes cannot be retrofitted without violating archive immutability.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "Provider publication evidence and Quick Install validation are pending the exact merged WI-18 main SHA.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      },
+      {
+        "sourceWarning": "Repository evidence cannot prove a human saw an agent UI receipt.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      },
+      {
+        "sourceWarning": "WI-01 through WI-15 historical Outcomes cannot be retrofitted without violating archive immutability.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [],
+    "humanDecisions": [
+      "Outcome must be delivered directly into the conversation for every agent, not only stored as a report file.",
+      "Every factual report field must bind evidenceRefs; unsupported benefits are inference, and self-praise is forbidden without quantitative evidence.",
+      "Performance improvement must not be claimed without comparable evidence.",
+      "Closure must verify local branches, local worktrees, remote branches, and remote-tracking refs."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/wi-18-final-release-closeout.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/wi-18-final-release-closeout.summary.json",
+        "subject": "Summary"
+      }
     ]
   },
-  "issues": {
-    "detected": 3,
-    "hardStops": 0,
-    "warnings": 3,
-    "resolved": 0,
-    "unresolved": 3
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [
-    "Outcome must be delivered directly into the conversation for every agent, not only stored as a report file.",
-    "Every factual report field must bind evidenceRefs; unsupported benefits are inference, and self-praise is forbidden without quantitative evidence.",
-    "Performance improvement must not be claimed without comparable evidence.",
-    "Closure must verify local branches, local worktrees, remote branches, and remote-tracking refs."
-  ],
-  "limitations": [
-    {
-      "sourceWarning": "Provider publication evidence and Quick Install validation are pending the exact merged WI-18 main SHA.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    },
-    {
-      "sourceWarning": "Repository evidence cannot prove a human saw an agent UI receipt.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    },
-    {
-      "sourceWarning": "WI-01 through WI-15 historical Outcomes cannot be retrofitted without violating archive immutability.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [],
   "humanHandoff": {
     "locale": "en",
     "completed": [
@@ -867,6 +919,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the pull request and provider checks before merge."
+  }
 }
