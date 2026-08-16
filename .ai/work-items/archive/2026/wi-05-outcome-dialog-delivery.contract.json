@@ -1,0 +1,274 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-05-outcome-dialog-delivery",
+  "mode": "code",
+  "title": "Deliver Task Outcome to the conversation handoff",
+  "baseCommit": "e862e1a68df67c4e975b97ac84c1f950b44dd785",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-05-outcome-dialog-delivery.contract.json",
+    ".ai/work-items/active/wi-05-outcome-dialog-delivery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-05-outcome-dialog-delivery.outcome.json",
+    ".ai/work-items/active/wi-05-outcome-dialog-delivery.outcome.md",
+    "scripts/ai_finish.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_finish_e2e.py",
+    "docs/features/task-outcome-report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "Changing Task Outcome JSON schema or machine-truth generation semantics.",
+    "Changing Cockpit Status, cost metrics, status interface, archive, or closure semantics.",
+    "Authenticating human receipt, approval, or conversation identity.",
+    "Adding an agent runtime, scheduler, provider integration, or network transport."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current finish pipeline and direct Outcome renderer."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Existing direct-render and blocked-finish integration coverage."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "CLI-facing finish and retry behavior."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Current Outcome delivery and human boundary documentation."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-30-rfe-108-prearchive-outcome-successor-20260730.md",
+      "reason": "Historical delivery boundary: active report before archive and no human-receipt claim."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "user_visible_output"
+    ],
+    "reason": "A finish failure must expose the same truthful active Outcome handoff as a success without implying human receipt.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "User-visible governance output and fail-closed Outcome delivery require strict verification."
+    ],
+    "override": {
+      "approvalEvidence": "User authorized execution of the 14-WI improvement plan in this thread.",
+      "reason": "Strict evidence-integrity verification is required for user-visible governance output.",
+      "risks": ["evidence_integrity", "user_visible_output"],
+      "notRunChecks": ["Release and provider publication checks are not applicable to this repository-local change."],
+      "workItemOnly": true,
+      "workItemId": "wi-05-outcome-dialog-delivery"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The implementation boundary is explicit and independently testable."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A successful ai-finish prints a clearly delimited active Outcome handoff to the CLI conversation stream.",
+    "A fail-closed ai-finish that persists a blocked Outcome prints that same truthful active Outcome handoff before returning non-zero.",
+    "The handoff is derived from the persisted Outcome and does not change machine-readable Outcome or report facts.",
+    "The handoff states that CLI output cannot authenticate human receipt or approval and preserves the explicit archive boundary.",
+    "Focused integration and end-to-end tests cover success, blocked failure, and the supported conversation language.",
+    "Outcome documentation describes the conversation/CLI handoff and its limitation."
+  ],
+  "guidelines": [
+    "Render the conversation handoff only from the persisted validated Outcome.",
+    "Keep machine truth in Outcome JSON and derived Markdown; never infer receipt or approval from stdout.",
+    "Keep the archive transition explicit and separate from direct reporting."
+  ],
+  "intent": {
+    "problem": "Users can miss the Task Outcome in the conversation when ai-finish stops early on a failed gate because that path persists the blocked files but only emits a terse stderr message.",
+    "constraints": [
+      "One Work Item, one branch, and one PR lifecycle.",
+      "Task Outcome JSON remains the sole machine truth.",
+      "CLI output is a delivery view, not proof of human receipt or approval.",
+      "No implicit archive may occur."
+    ],
+    "rationale": "Making both success and fail-closed paths emit the same active Outcome handoff lets the conversation surface the decision facts without weakening governance or changing archive semantics."
+  },
+  "rawUserRequest": "Execute WI-05: reliably deliver Task Outcome/Human Benefit Report output to the conversation/CLI handoff, including fail-closed outcomes, without changing machine truth or governance semantics.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-16-wi-05-outcome-dialog-delivery",
+    "capturedAt": "2026-08-16",
+    "digest": "sha256:wi05-outcome-dialog-delivery"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": [
+      "finish integration tests",
+      "end-to-end CLI tests",
+      "Task Outcome validation",
+      "human boundary documentation"
+    ],
+    "externalSystem": "none"
+  },
+  "declaredIntent": {
+    "summary": "Deliver every active Task Outcome through the conversation-facing finish stream while preserving fail-closed governance.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "success_handoff",
+      "scenario": "A successful finish emits the active Outcome handoff in the requested locale.",
+      "riskDomain": "user_visible_output",
+      "expected": "stdout contains the Outcome and explicit archive boundary.",
+      "verificationPlan": "Focused integration test of render and successful finish path.",
+      "status": "unverified",
+      "evidence": [],
+      "required": true
+    },
+    {
+      "id": "blocked_handoff",
+      "scenario": "A failed finish persists a blocked Outcome and still emits it to the conversation stream.",
+      "riskDomain": "user_visible_output",
+      "expected": "stdout contains the blocked Outcome; process remains non-zero; archive is not implied.",
+      "verificationPlan": "Focused integration and end-to-end blocked-finish tests.",
+      "status": "unverified",
+      "evidence": [],
+      "required": true
+    },
+    {
+      "id": "receipt_boundary",
+      "scenario": "The handoff does not claim that CLI output proves human receipt or approval.",
+      "riskDomain": "governance_integrity",
+      "expected": "The rendered handoff contains the limitation and machine files remain unchanged in meaning.",
+      "verificationPlan": "Renderer assertion and report documentation check.",
+      "status": "unverified",
+      "evidence": [],
+      "required": true
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized execution of the 14-WI improvement plan, including governed Outcome delivery artifacts."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 916
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-05-outcome-dialog-delivery.json",
+    "baseCommit": "e862e1a68df67c4e975b97ac84c1f950b44dd785",
+    "initialScopeDigest": "162ebeb8406a366938d2c9039f49ef04c4a92e779002424574ab3783199ab843",
+    "contractSkeletonDigest": "d180ae2ce9eda23b1338927bb5e26f99647e61469ea455e080b543de8d18cca3"
+  }
+}

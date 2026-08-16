@@ -279,6 +279,7 @@ def test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry(tm
         "PROJECT_TEST=false",
     )
     assert failed.returncode != 0
+    assert "Task Outcome Report (active" in failed.stdout, failed.stdout + failed.stderr
     assert contract_path.exists()
     assert "No rule to make target" not in failed.stdout + failed.stderr
 
@@ -318,6 +319,7 @@ def test_required_failure_keeps_active_and_retry_archives(tmp_path):
         tmp_path, "make", "ai-finish", "TASK=e2e", f"PYTHON={sys.executable}", "PROJECT_TEST=false"
     )
     assert failed.returncode != 0
+    assert "Task Outcome Report (active" in failed.stdout, failed.stdout + failed.stderr
     assert contract_path.exists()
     blocked_outcome = tmp_path / ".ai/work-items/active/e2e.outcome.json"
     blocked_report = tmp_path / ".ai/cockpit/task_report.json"
