@@ -1,0 +1,181 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-03-safe-parallel-verification",
+  "mode": "code",
+  "title": "Safe parallel verification execution",
+  "rawUserRequest": "Implement the approved 14-WI AI Cockpit improvement plan in performance-first order. Execute in English low-token mode; preserve separate WIs and keep each WI convergent. This WI must enable safe bounded parallel verification after performance baselining.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-14-wi-performance-first-plan", "capturedAt": "2026-08-16T00:00:00Z", "digest": "sha256:user-authorized-safe-parallel-plan"},
+  "declaredIntent": {"summary": "Run independent verification jobs concurrently while serializing conflicting scopes and preserving per-job evidence.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "a958f2f60e208908a1bea086ab45f807a5e1ecba",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-03-safe-parallel-verification.contract.json",
+    ".ai/work-items/active/wi-03-safe-parallel-verification.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-03-safe-parallel-verification.outcome.json",
+    ".ai/work-items/active/wi-03-safe-parallel-verification.outcome.md",
+    ".ai/schemas/parallel-verification-plan.schema.json",
+    "scripts/ai_parallel_verification.py",
+    "tests/test_ai_parallel_verification.py",
+    "docs/reference/safe-parallel-verification.md"
+  ],
+  "outOfScope": ["Unbounded concurrency", "Scheduler changes", "Network execution", "Changing gate policy or bypassing required checks"],
+  "sources": [
+    {
+      "path": "scripts/run_quality_session.py",
+      "reason": "Existing quality-session parallel execution boundary."
+    },
+    {
+      "path": "scripts/ai_observability.py",
+      "reason": "Existing structured evidence event semantics."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Existing Work Item-local runtime isolation semantics."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["concurrency_safety"],
+    "reason": "Parallel execution must be bounded, conflict-aware, and evidence-preserving.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["Restricted schema and concurrency safety require strict verification; parallelism remains explicit and bounded."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The contract defines a bounded local execution helper with conflict serialization."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Independent jobs run concurrently up to an explicit worker bound.",
+    "Jobs with overlapping declared scopes are serialized deterministically.",
+    "Every job receives an independent result with command, status, duration, and captured evidence.",
+    "Invalid plans, empty identifiers, and unsafe worker bounds fail closed without execution.",
+    "Schema, focused tests, and documentation cover independent, conflicting, and failing jobs."
+  ],
+  "guidelines": ["Keep concurrency bounded and explicit.", "Serialize conflicting scopes; never infer independence.", "Document the public CLI and evidence format."],
+  "intent": {
+    "problem": "Verification is currently dominated by serial work even when independent checks could run concurrently, but naive parallelism can corrupt shared evidence or race on overlapping files.",
+    "constraints": ["No shell command strings; execute argv arrays only.", "No network or scheduler integration.", "Conflict detection is conservative and deterministic."],
+    "rationale": "A reusable conflict-aware runner enables later parallel Work Items without weakening governance or evidence integrity."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Independent jobs have disjoint scopes.", "expected": "They run concurrently within the worker bound and each result is retained.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused subprocess fixture."},
+    {"scenario": "Jobs share a declared scope.", "expected": "They are placed in separate deterministic batches.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Planner unit test."},
+    {"scenario": "A job fails or the plan is invalid.", "expected": "Failure is recorded per job; invalid input fails before execution.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Failure and validation tests."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user conversation",
+    "reason": "User explicitly authorized the complete 14-WI implementation plan, including the bounded parallel-verification schema."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 915
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-03-safe-parallel-verification.json",
+    "baseCommit": "a958f2f60e208908a1bea086ab45f807a5e1ecba",
+    "initialScopeDigest": "a963d61116fce97566cca592d08bec61dcec9940d1c1cbe39afc47c79aff8b25",
+    "contractSkeletonDigest": "3ddd5824fa05247794a8163cd61a81cdf615a5bf4ffe1eb03f669abe8b257a68"
+  }
+}
