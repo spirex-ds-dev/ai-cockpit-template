@@ -4,29 +4,43 @@ Task Result
 Status: Blocked
 
 What was completed
-- Changed .ai/work-items/active/wi-25-outcome-retry-projection.contract.json [evidence: .ai/work-items/archive/2026/wi-25-outcome-retry-projection.contract.json]
-- Changed .ai/work-items/active/wi-25-outcome-retry-projection.summary.json [evidence: .ai/work-items/archive/2026/wi-25-outcome-retry-projection.summary.json]
+- Changed .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json [evidence: .ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json]
+- Changed .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json [evidence: .ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json]
+- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
+- Changed .ai/work-items/starts/** [evidence: .ai/work-items/starts/**]
+- Changed .ai/work-items/archive/** [evidence: .ai/work-items/archive/**]
+- Changed .ai/decisions/** [evidence: .ai/decisions/**]
+- Changed .ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json [evidence: .ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json]
+- Changed .ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json [evidence: .ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json]
+- Changed .ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json [evidence: .ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json]
+- Changed .ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json [evidence: .ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json]
+- Changed .ai/decisions/HDR-774fae747bb5bbe4-7967e517.evidence.json [evidence: .ai/decisions/HDR-774fae747bb5bbe4-7967e517.evidence.json]
+- Changed .ai/decisions/HDR-774fae747bb5bbe4-7967e517.request.json [evidence: .ai/decisions/HDR-774fae747bb5bbe4-7967e517.request.json]
+- Changed .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.evidence.json [evidence: .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.evidence.json]
+- Changed .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.request.json [evidence: .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.request.json]
+- Changed .ai/work-items/active/wi-26-final-release-v0-5-63.outcome.json [evidence: .ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.json]
+- Changed .ai/work-items/active/wi-26-final-release-v0-5-63.outcome.md [evidence: .ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.md]
+- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
+- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
+- Changed .ai/cockpit/version.json [evidence: .ai/cockpit/version.json]
+- Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
+- Changed .ai/cockpit/release-freeze.json [evidence: .ai/cockpit/release-freeze.json]
+- Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
+- Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
 - Changed scripts/ai_finish.py [evidence: scripts/ai_finish.py]
-- Changed scripts/ai_check_summary.py [evidence: scripts/ai_check_summary.py]
+- Changed scripts/ai_generate_task_outcome.py [evidence: scripts/ai_generate_task_outcome.py]
 - Changed tests/test_task_outcome_ai_finish_integration.py [evidence: tests/test_task_outcome_ai_finish_integration.py]
-- Changed tests/test_core_gates.py [evidence: tests/test_core_gates.py]
-- Changed tests/test_project_governance.py [evidence: tests/test_project_governance.py]
-- Changed docs/features/task-outcome-report.md [evidence: docs/features/task-outcome-report.md]
+- Changed tests/test_task_outcome_generator.py [evidence: tests/test_task_outcome_generator.py]
+- Changed release-state.json [evidence: release-state.json]
+- Changed release.json [evidence: release.json]
+- Changed next-release.json [evidence: next-release.json]
+- Changed docs/audits/wi-26-final-release-v0-5-63.json [evidence: docs/audits/wi-26-final-release-v0-5-63.json]
+- Changed docs/audits/wi-26-final-release-v0-5-63.md [evidence: docs/audits/wi-26-final-release-v0-5-63.md]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
 - Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
 - Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
 - Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
 - Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed docs/audits/wi-25-outcome-retry-projection.json [evidence: docs/audits/wi-25-outcome-retry-projection.json]
-- Changed docs/audits/wi-25-outcome-retry-projection.md [evidence: docs/audits/wi-25-outcome-retry-projection.md]
-- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/starts/wi-25-outcome-retry-projection.json [evidence: .ai/work-items/starts/wi-25-outcome-retry-projection.json]
-- Changed .ai/work-items/active/wi-25-outcome-retry-projection.outcome.json [evidence: .ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.json]
-- Changed .ai/work-items/active/wi-25-outcome-retry-projection.outcome.md [evidence: .ai/work-items/archive/2026/wi-25-outcome-retry-projection.outcome.md]
-- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
-- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed .ai/work-items/archive/index.json [evidence: .ai/work-items/archive/index.json]
-- Changed .ai/work-items/archive/** [evidence: .ai/work-items/archive/**]
 
 Problems found
 - Total: 5
@@ -34,35 +48,40 @@ Problems found
 - Warning: 1
 
 Stops triggered
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Reason: aiScenarioCoverage failed before the retry. | Stage: verification | Resolution: Retry aiScenarioCoverage after correcting the recorded failure. [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
+- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Reason: aiSummary failed before the retry. | Stage: verification | Resolution: Retry aiSummary after correcting the recorded failure. [evidence: verificationHistory[3] aiSummary failed, verification[aiSummary] retry passed]
+- Reason: aiScenarioCoverage failed before the retry. | Stage: verification | Resolution: Retry aiScenarioCoverage after correcting the recorded failure. [evidence: verificationHistory[2] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
 
 Problems resolved
-- Problem: A successful retry can leave the archived Outcome carrying the earlier failed verification as a current blocker.
-  Solution: Retained failed attempts, projected retry stop/resolution evidence, and regenerated Outcome after final stabilization.
-  Evidence: [evidence: humanHandoff.questions.blockedProblems, verification.aiSummary retry evidence, test_pre_merge_handoff_projects_retry_stop_and_resolution, refresh_final_outcome_after_stabilization]
-- Problem: The serialized quality attempt stopped because the installer shard receipt was from commit 289bf680a3feb08fa5cd673de5e8eb6cdc68b925 while the active WI commit was d62747041b94fed572246e9989ccd938a67424ae.
-  Solution: Preserved the failed quality attempt and required a fresh serialized quality run after all competing runs stopped.
-  Evidence: [evidence: quality shard evidence-contamination finding, aggregate rejects shard commit mismatch, project-test shard isolation and aggregate receipt]
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Problem: aiScenarioCoverage failed before the retry.
+  Solution: Re-ran aiScenarioCoverage after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
+- Problem: aiGuidelines failed before the retry.
+  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Problem: aiScenarioCoverage failed before the retry.
+  Solution: Re-ran aiScenarioCoverage after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[2] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
+- Problem: aiSummary failed before the retry.
+  Solution: Re-ran aiSummary after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[3] aiSummary failed, verification[aiSummary] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
 - If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- Consumers reading WI-24 must interpret its retained stale blocker as historical evidence; successor behavior is corrected prospectively. [evidence: residualRisks]
+- WI-24's historical Outcome warning remains in the archive and is intentionally not rewritten. [evidence: residualRisks]
+- Provider and public asset state cannot be known until the hosted workflow completes. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- Every blocking stop and its resolution must be explained to the human with evidence; do not rewrite immutable archives. (inference)
+- None recorded.
 
 Verification
 - aiWorkItem [evidence: aiWorkItem]
