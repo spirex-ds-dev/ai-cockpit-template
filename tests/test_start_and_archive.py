@@ -20,6 +20,7 @@ import ai_start
 import ai_start_receipt
 import pytest
 from ai_acceptance_policy import validate_acceptance_evidence
+from ai_external_handoff import build_handoff
 from ai_observability import AiEventType
 from ai_resume_work_item import ResumeError, resume_contract, synchronize_contract
 from ai_start_receipt import (
@@ -3153,3 +3154,100 @@ def test_ai_start_rolls_back_pair_when_status_generation_fails(tmp_path, monkeyp
     assert ai_start.main() == 1
     assert not list(active.glob("status_task.*.json"))
     assert status.read_text(encoding="utf-8") == "previous status\n"
+
+
+RESOLVED_HANDOFF_TASK = "previous-work-item"
+
+
+def _resolved_handoff_bindings() -> dict[str, str]:
+    return {
+        "workItemId": RESOLVED_HANDOFF_TASK,
+        "branch": "codex/previous-work-item",
+        "headCommit": "a" * 40,
+        "tree": "b" * 40,
+        "contractDigest": "c" * 64,
+        "summaryDigest": "d" * 64,
+    }
+
+
+def _write_resolved_handoff_records(
+    root: Path, *, archive: bool, receipt_update: dict[str, object] | None = None
+) -> None:
+    active = root / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    handoff = build_handoff(
+        _resolved_handoff_bindings(),
+        action="human.confirm",
+        fulfiller="human",
+        receipt_kind="human_confirmation",
+        deadline="2099-01-01T00:00:00Z",
+    )
+    receipt: dict[str, object] = {
+        "receiptVersion": 1,
+        "kind": "human_confirmation",
+        "fulfilledBy": "human",
+        "bindings": _resolved_handoff_bindings(),
+    }
+    if receipt_update:
+        receipt.update(receipt_update)
+    (active / f"{RESOLVED_HANDOFF_TASK}.handoff.json").write_text(
+        json.dumps(handoff), encoding="utf-8"
+    )
+    (active / f"{RESOLVED_HANDOFF_TASK}.receipt.json").write_text(
+        json.dumps(receipt), encoding="utf-8"
+    )
+    if archive:
+        archive_dir = root / ".ai" / "work-items" / "archive" / "2026"
+        archive_dir.mkdir(parents=True)
+        for suffix in ("contract.json", "summary.json", "outcome.json", "archive-manifest.json"):
+            (archive_dir / f"{RESOLVED_HANDOFF_TASK}.{suffix}").write_text("{}\n", encoding="utf-8")
+
+
+def _configure_resolved_handoff_start(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", tmp_path / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
+
+
+def test_ai_start_ignores_resolved_handoff_with_complete_archive(tmp_path, monkeypatch):
+    _configure_resolved_handoff_start(tmp_path, monkeypatch)
+    _write_resolved_handoff_records(tmp_path, archive=True)
+
+    assert ai_start.active_work_item_paths() == []
+
+
+@pytest.mark.parametrize(
+    "archive,receipt_update",
+    [
+        (False, None),
+        (True, {"bindings": {**_resolved_handoff_bindings(), "tree": "f" * 40}}),
+        (True, {"receiptVersion": 2}),
+    ],
+)
+def test_ai_start_keeps_unresolved_or_untrusted_handoff_active(
+    tmp_path, monkeypatch, archive, receipt_update
+):
+    _configure_resolved_handoff_start(tmp_path, monkeypatch)
+    _write_resolved_handoff_records(tmp_path, archive=archive, receipt_update=receipt_update)
+
+    assert len(ai_start.active_work_item_paths()) == 2
+
+
+def test_ai_start_keeps_missing_receipt_active(tmp_path, monkeypatch):
+    _configure_resolved_handoff_start(tmp_path, monkeypatch)
+    _write_resolved_handoff_records(tmp_path, archive=True)
+    (tmp_path / ".ai" / "work-items" / "active" / f"{RESOLVED_HANDOFF_TASK}.receipt.json").unlink()
+
+    assert len(ai_start.active_work_item_paths()) == 1
+
+
+def test_ai_start_keeps_expired_handoff_active(tmp_path, monkeypatch):
+    _configure_resolved_handoff_start(tmp_path, monkeypatch)
+    _write_resolved_handoff_records(tmp_path, archive=True)
+    handoff_path = (
+        tmp_path / ".ai" / "work-items" / "active" / f"{RESOLVED_HANDOFF_TASK}.handoff.json"
+    )
+    handoff = json.loads(handoff_path.read_text(encoding="utf-8"))
+    handoff["deadline"] = "2000-01-01T00:00:00Z"
+    handoff_path.write_text(json.dumps(handoff), encoding="utf-8")
+
+    assert len(ai_start.active_work_item_paths()) == 2

@@ -31,6 +31,7 @@ Use this page when installation or adoption fails and you need a direct recovery
 - Android/Java preset commands do not exist in this repo: treat `testDebugUnitTest`, `spotlessCheck`, and `lint` as starting points only, then replace them with the actual variant-aware Gradle tasks that `./gradlew tasks` shows for your flavor layout.
 - Android coverage is too broad at first pass: keep `.ai/guards/coverage_policy.yaml` report-only while you map `app/src/main/**`, `*/src/main/**`, `app/src/test/**`, and `app/src/androidTest/**` for the modules that own each variant.
 - An active task must be abandoned: preserve or document relevant evidence, then remove or archive the pair deliberately. Do not delete a single record from the pair.
+- `ai-start` reports a resolved external handoff as active: the handoff and receipt are ignored only when the paired receipt passes the existing binding validator and the same Work Item has a complete archive (`contract`, `summary`, `outcome`, and `archive-manifest`). Missing, expired, malformed, mismatched, or unarchived records remain blocking. Preserve the evidence and resolve the missing condition; do not delete the handoff or receipt to unblock the gate.
 
 ## Recovery Path
 

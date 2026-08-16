@@ -33,6 +33,7 @@ from ai_common import (
     nested_make_command,
     save_json,
 )
+from ai_external_handoff import HandoffError, ingest_receipt
 from ai_generate_status import write_active_status, write_no_active_status
 from ai_lifecycle_truth import validate_successor_receipt
 from ai_observability import create_observability
@@ -132,7 +133,26 @@ def refresh_stale_no_active_status(issues: list[str]) -> list[str]:
 def active_work_item_paths() -> list[Path]:
     if not ACTIVE_DIR.exists():
         return []
-    return sorted(path for path in ACTIVE_DIR.glob("*.json") if path.is_file())
+    paths = sorted(path for path in ACTIVE_DIR.glob("*.json") if path.is_file())
+    resolved: set[Path] = set()
+    now = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    for handoff_path in paths:
+        if not handoff_path.name.endswith(".handoff.json"):
+            continue
+        task = handoff_path.name.removesuffix(".handoff.json")
+        receipt_path = ACTIVE_DIR / f"{task}.receipt.json"
+        if not receipt_path.is_file():
+            continue
+        try:
+            handoff = json.loads(handoff_path.read_text(encoding="utf-8"))
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            if not has_complete_archived_work_item(PROJECT_ROOT, task):
+                continue
+            ingest_receipt(handoff, receipt, now=now)
+        except (HandoffError, OSError, json.JSONDecodeError, TypeError):
+            continue
+        resolved.update({handoff_path, receipt_path})
+    return [path for path in paths if path not in resolved]
 
 
 def linked_worktree_records(*, root: Path = PROJECT_ROOT) -> list[tuple[Path, str | None]]:
