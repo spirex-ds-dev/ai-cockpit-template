@@ -1,36 +1,34 @@
 {
   "reportVersion": 1,
-  "workItemId": "wi-09-diff-bound-reuse",
+  "workItemId": "wi-08-content-bound-reuse-successor",
   "phase": "review",
   "result": "completed_with_warnings",
   "sourceOutcome": {
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1,
-    "digest": "d63875c3be839825fcef0e0c1b3f63fbec5ba9004ba5b5cdab09ca611bfecdb7"
+    "digest": "ae020f3c40080c143374afddd8346937bf4f730b52cff405942d92afb967af8a"
   },
   "task": {
-    "summary": "Task wi-09-diff-bound-reuse generated an evidence-derived outcome with status completed_with_warnings.",
+    "summary": "Task wi-08-content-bound-reuse-successor generated an evidence-derived outcome with status completed_with_warnings.",
     "deliveredChanges": [
-      ".ai/work-items/archive/2026/wi-09-diff-bound-reuse.contract.json",
-      ".ai/work-items/archive/2026/wi-09-diff-bound-reuse.summary.json",
-      ".ai/cockpit/current_status.md",
-      ".ai/work-items/starts/**",
-      ".ai/work-items/archive/**",
+      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.contract.json",
+      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.summary.json",
+      ".ai/work-items/conflict-successor-receipts/wi-08-content-bound-reuse-collision-source.json",
+      "scripts/ai_evidence_binding.py",
+      "tests/test_ai_evidence_binding.py",
+      "docs/reference/content-bound-evidence-reuse.md",
+      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.outcome.json",
+      ".ai/work-items/archive/2026/wi-08-content-bound-reuse-successor.outcome.md",
       ".ai/cockpit/task_report.json",
-      ".ai/cockpit/task_report.md",
-      "scripts/ai_diff_bound_reuse.py",
-      "tests/test_ai_diff_bound_reuse.py",
-      "docs/reference/diff-bound-evidence-reuse.md",
-      ".ai/work-items/archive/2026/wi-09-diff-bound-reuse.outcome.json",
-      ".ai/work-items/archive/2026/wi-09-diff-bound-reuse.outcome.md"
+      ".ai/cockpit/task_report.md"
     ]
   },
   "issues": {
-    "detected": 1,
+    "detected": 2,
     "hardStops": 0,
-    "warnings": 1,
+    "warnings": 2,
     "resolved": 0,
-    "unresolved": 1
+    "unresolved": 2
   },
   "preventedRisks": [],
   "interventions": [],
@@ -38,7 +36,20 @@
   "humanDecisions": [],
   "limitations": [
     {
-      "sourceWarning": "No ai_verify, cache, scheduler, provider, or network integration is included by design; future consumers must preserve required-check execution and their own policy gates.",
+      "sourceWarning": "Full repository quality is resource-bounded and must be run once by the parent after this implementation commit.",
+      "title": "Unresolved evidence is explicitly limited",
+      "affectedClaims": [
+        "completion_claim"
+      ],
+      "requiredEvidence": [
+        "fresh verification evidence"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this warning was verified or resolved."
+      ]
+    },
+    {
+      "sourceWarning": "Hosted PR checks and canonical archive/closure evidence are not yet available.",
       "title": "Unresolved evidence is explicitly limited",
       "affectedClaims": [
         "completion_claim"

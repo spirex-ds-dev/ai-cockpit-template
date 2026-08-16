@@ -10,7 +10,9 @@ import pytest
 from scripts.ai_evidence_binding import (
     BindingError,
     build_binding,
+    build_content_dependency,
     canonical_digest,
+    decide_content_reuse,
     decide_reuse,
     validate_binding,
 )
@@ -158,3 +160,99 @@ def test_schema_declares_version_and_security_dependencies() -> None:
         "environment-bound",
     }
     assert {"scopeDigest", "governanceDigest"} <= set(schema["required"])
+
+
+def test_content_dependency_hashes_exact_bytes_and_is_order_independent() -> None:
+    first = build_content_dependency({"src/b.txt": b"b", "src/a.txt": b"a\x00"})
+    second = build_content_dependency({"src/a.txt": b"a\x00", "src/b.txt": b"b"})
+    assert first == second
+    assert first["paths"] == ["src/a.txt", "src/b.txt"]
+    assert first["digest"].startswith("sha256:")
+    assert build_content_dependency({"src/a.txt": b"a"}) != first
+
+
+def test_content_policy_reuses_same_bytes_after_unrelated_base_update() -> None:
+    dependency = build_content_dependency({"src/a.py": b"return 1\n"})
+    binding = build_binding(
+        subject={"workItemId": "wi-08-content-bound-reuse-successor", "evidenceId": "quality"},
+        classification="content-bound",
+        dependencies={"content": dependency},
+        scope_digest="sha256:" + "e" * 64,
+        governance_digest="sha256:" + "f" * 64,
+        producer={"command": "pytest -q", "version": "runner-1"},
+        created_at=NOW,
+        expires_at=NOW + timedelta(hours=1),
+    )
+    current = {"content": dependency, "baseCommit": "b" * 40}
+    assert decide_content_reuse(
+        binding,
+        current,
+        scope_digest=binding["scopeDigest"],
+        governance_digest=binding["governanceDigest"],
+        now=NOW,
+    ) == {"state": "fresh", "action": "reuse", "reasons": []}
+
+
+def test_content_policy_rejects_changed_or_incomplete_inputs_without_mutation() -> None:
+    dependency = build_content_dependency({"src/a.py": b"return 1\n"})
+    binding = build_binding(
+        subject={"workItemId": "wi-08-content-bound-reuse-successor", "evidenceId": "quality"},
+        classification="content-bound",
+        dependencies={"content": dependency},
+        scope_digest="sha256:" + "e" * 64,
+        governance_digest="sha256:" + "f" * 64,
+        producer={"command": "pytest -q", "version": "runner-1"},
+        created_at=NOW,
+        expires_at=NOW + timedelta(hours=1),
+    )
+    current = {"content": {"digest": dependency["digest"], "paths": ["src/a.py", "src/missing.py"]}}
+    original = deepcopy(current)
+    assert decide_content_reuse(
+        binding,
+        current,
+        scope_digest=binding["scopeDigest"],
+        governance_digest=binding["governanceDigest"],
+        now=NOW,
+    ) == {
+        "state": "stale",
+        "action": "rerun",
+        "reasons": ["content_dependency_mismatch"],
+    }
+    assert current == original
+    assert decide_content_reuse(
+        binding,
+        {},
+        scope_digest=binding["scopeDigest"],
+        governance_digest=binding["governanceDigest"],
+        now=NOW,
+    ) == {"state": "unknown", "action": "rerun", "reasons": ["content_input_unknown"]}
+
+
+@pytest.mark.parametrize(
+    "files",
+    [
+        {},
+        {"/absolute.py": b"x"},
+        {"../escape.py": b"x"},
+        {"src\\windows.py": b"x"},
+        {"src/a.py": "text"},
+    ],
+)
+def test_content_identity_rejects_unsafe_or_non_byte_inputs(files: object) -> None:
+    with pytest.raises(BindingError):
+        build_content_dependency(files)  # type: ignore[arg-type]
+
+
+def test_content_policy_rejects_non_content_binding() -> None:
+    binding = binding_for("diff-bound")
+    assert decide_content_reuse(
+        binding,
+        {"content": {"digest": "sha256:" + "a" * 64, "paths": ["src/a.py"]}},
+        scope_digest=binding["scopeDigest"],
+        governance_digest=binding["governanceDigest"],
+        now=NOW,
+    ) == {
+        "state": "unknown",
+        "action": "rerun",
+        "reasons": ["content_policy_classification_mismatch"],
+    }
