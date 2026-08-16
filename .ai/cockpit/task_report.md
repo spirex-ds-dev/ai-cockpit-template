@@ -7,14 +7,14 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-11-governance-profile-effect-successor generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-12-performance-diagnosis-successor generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 1
+- Detected issues: 2
 - Hard stops: 0
-- Warnings: 1
+- Warnings: 2
 - Resolved: 0
-- Unresolved: 1
+- Unresolved: 2
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,7 +32,8 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Full governed quality and lifecycle checks, archive, and hosted lifecycle remain pending; this handoff intentionally does not claim Work Item completion.
+- Unresolved evidence is explicitly limited: No causal performance claim is made from a single Work Item or unmatched baseline.
+- Unresolved evidence is explicitly limited: Provider, human, token, and ambiguous contention durations remain unknown unless explicitly recorded.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
