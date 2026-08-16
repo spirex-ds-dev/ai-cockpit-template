@@ -1,0 +1,237 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-11-governance-profile-effect",
+  "contractPath": ".ai/work-items/active/wi-11-governance-profile-effect.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/active/wi-11-governance-profile-effect.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/active/wi-11-governance-profile-effect.summary.json",
+      "reason": "Records the governed implementation and verification handoff."
+    },
+    {
+      "path": ".ai/quality/governance-routing.yaml",
+      "reason": "Declares profile depth, required evidence, optional checks, and invariant mandatory controls."
+    },
+    {
+      "path": "scripts/determine_governance_profile.py",
+      "reason": "Validates and emits the deterministic profile projection in the routing receipt."
+    },
+    {
+      "path": "tests/test_governance_profile.py",
+      "reason": "Covers profile projections, monotonicity, mandatory-control floor, and release separation."
+    },
+    {
+      "path": "docs/reference/governance-profiles.md",
+      "reason": "Documents profile depth, evidence, optional checks, and mandatory-control floor."
+    },
+    {
+      "path": "docs/reference/governance-profiles.zh-CN.md",
+      "reason": "Aligns Simplified Chinese profile-effect semantics."
+    },
+    {
+      "path": "docs/reference/governance-profiles.ja.md",
+      "reason": "Aligns Japanese profile-effect semantics."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerates source-bound capability identity for the updated routing claim."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerated documentation-alignment evidence after profile reference changes."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Regenerated human documentation-alignment projection."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/wi-11-governance-profile-effect.contract.json",
+    "docs/reference/governance-profiles.md",
+    ".ai/quality/governance-routing.yaml",
+    "scripts/determine_governance_profile.py",
+    "Makefile"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "result": "not_run"
+    },
+    {
+      "check": "aiScope",
+      "result": "not_run"
+    },
+    {
+      "check": "aiGuards",
+      "result": "not_run"
+    },
+    {
+      "check": "aiCheckpoint",
+      "result": "not_run"
+    },
+    {
+      "check": "aiAgentRisk",
+      "result": "not_run"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "result": "not_run"
+    },
+    {
+      "check": "aiBacktrack",
+      "result": "not_run"
+    },
+    {
+      "check": "aiCoverage",
+      "result": "not_run"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "result": "not_run"
+    },
+    {
+      "check": "aiGuidelines",
+      "result": "not_run"
+    },
+    {
+      "check": "aiSummary",
+      "result": "not_run"
+    },
+    {
+      "check": "aiStatus",
+      "result": "not_run"
+    },
+    {
+      "check": "aiStatusCheck",
+      "result": "not_run"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "result": "not_run"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "result": "not_run"
+    },
+    {
+      "check": "quality",
+      "result": "not_run"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Profiles may reduce optional verification cost only; they may not disable security, scope, required controls, mandatory lifecycle gates, or evidence integrity.",
+      "compliant": true,
+      "evidence": "Loader validation enforces the invariant mandatoryControls tuple and rejects optional-check overlap; focused profile tests passed."
+    },
+    {
+      "guideline": "Keep release as an operation-specific strict escalation rather than a fourth governance profile.",
+      "compliant": true,
+      "evidence": "Routing keeps release_preflight/distribution in verificationEscalations and tests non-release Strict separately."
+    },
+    {
+      "guideline": "Risk can escalate automatically but cannot be lowered by explicit input or incomplete human override evidence.",
+      "compliant": true,
+      "evidence": "Existing monotonic routing and override tests remain green; the new projection is derived only after selected profile validation."
+    },
+    {
+      "guideline": "Keep profile projections deterministic, auditable, and documented in all supported reference locales.",
+      "compliant": true,
+      "evidence": "The YAML projection is emitted in the routing receipt and English, Chinese, and Japanese references describe the same boundary."
+    },
+    {
+      "guideline": "Do not add scheduler/runtime orchestration or performance claims to this Work Item.",
+      "compliant": true,
+      "evidence": "The implementation is limited to policy validation, receipt projection, focused tests, and reference documentation."
+    }
+  ],
+  "unknownsRemaining": [
+    "Full governed quality and lifecycle checks remain pending for the parent agent; focused implementation checks are recorded below."
+  ],
+  "risk": {
+    "level": "medium",
+    "detail": "Profile policy changes are governance-sensitive; full gates must prove no mandatory-control downgrade."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Initial skeleton; required checks have not run.",
+    "expectedReviewFocus": []
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "f1e3b4151e2bd08c",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [
+    "Full governed quality and lifecycle checks, archive, and hosted lifecycle remain pending; this handoff intentionally does not claim Work Item completion."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "not_checked",
+    "checkedAt": null,
+    "checks": [
+      {
+        "area": "plan",
+        "status": "not_checked",
+        "evidence": [],
+        "reason": "Complete this alignment check before finishing the Work Item."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "not_checked",
+        "evidence": [],
+        "reason": "Complete this alignment check before finishing the Work Item."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "not_checked",
+        "evidence": [],
+        "reason": "Complete this alignment check before finishing the Work Item."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_checked",
+        "evidence": [],
+        "reason": "Complete this alignment check before finishing the Work Item."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "not_checked",
+        "evidence": [],
+        "reason": "Complete this alignment check before finishing the Work Item."
+      }
+    ]
+  }
+}

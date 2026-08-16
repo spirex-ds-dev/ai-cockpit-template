@@ -34,6 +34,15 @@ Standard 复用现有 Fast、项目测试、引用影响和完整测试削弱检
 release-preflight 和分发验证。`make quality` 继续作为 Full 的兼容别名，`make ai-cockpit-quality`
 是按证据路由的工单入口。
 
+## 配置效果契约
+
+路由 Receipt 会写入确定性的 `profileProjection`：Light 使用 `focused` 深度，要求 scope、trust、
+lifecycle 和 evidence integrity 证据；Standard 使用 `project` 深度，并增加项目测试、引用影响和测试削弱证据；
+Strict 使用 `full` 深度，并增加 heavy、供应链和项目一致性证据。各级别的可选检查集合不同，
+但三者始终保留相同的强制控制底线：scope、trust、lifecycle、evidence integrity。可选检查只是成本控制，
+不是安全、授权或生命周期 Gate 的开关。未知 Profile、损坏策略、无效降级、危险路径或删除强制控制均失败关闭。
+该投影是路由证据，不表示本地检查等同于 Hosted 证据，也不表示执行 Agent Runtime。
+
 ## 会话归属
 
 每个公开质量级别和直接 `project-test` 都会在 coverage 或报告写入者运行前取得一个非阻塞、
@@ -43,7 +52,8 @@ release-preflight 和分发验证。`make quality` 继续作为 Full 的兼容�
 
 ## Contract 证据
 
-Contract 的 `governanceProfile` 记录 `selected`、`source`、`reasons` 和 `override`。
+Contract 的 `governanceProfile` 记录 `selected`、`source`、`reasons` 和 `override`；Receipt 另外记录深度、
+required evidence、optional checks 和 mandatory-control floor。
 路由器读取 `.ai/quality/governance-routing.yaml`，合并 Contract base 之后的已提交、已暂存、
 未暂存和未跟踪路径，并向 `target/quality/governance-profile.json` 写入自动/最终级别、理由、
 所需分组、调度目标和 override 处置。生成的当前状态、工单 Start Receipt 与当前 Outcome 仍保留在证据中，

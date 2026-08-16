@@ -22,6 +22,22 @@ profiles:
     requiredGroups:
       - quality-fast
     dispatchTarget: quality-fast
+    verificationDepth: focused
+    requiredEvidence:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
+    optionalChecks:
+      - project-test
+      - reference-impact
+      - test-weakening
+      - quality-heavy
+    mandatoryControls:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
   standard:
     patterns:
       - src/**
@@ -36,6 +52,24 @@ profiles:
       - check-ai-reference-impact
       - check-ai-test-weakening
     dispatchTarget: quality-standard
+    verificationDepth: project
+    requiredEvidence:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
+      - project-test
+      - reference-impact
+      - test-weakening
+    optionalChecks:
+      - quality-heavy
+      - supply-chain
+      - project-consistency
+    mandatoryControls:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
   strict:
     patterns:
       - .ai/**
@@ -69,6 +103,25 @@ profiles:
     requiredGroups:
       - quality-full
     dispatchTarget: quality-full
+    verificationDepth: full
+    requiredEvidence:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
+      - project-test
+      - reference-impact
+      - test-weakening
+      - quality-heavy
+      - supply-chain
+      - project-consistency
+    optionalChecks:
+      - quality-project-consistency
+    mandatoryControls:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
 releaseOwnedPatterns:
   - release.json
   - next-release.json

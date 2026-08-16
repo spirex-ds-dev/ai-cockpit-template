@@ -36,6 +36,23 @@ scope, resource claim, or capability claim is release-related also runs
 `quality-release` for release-preflight and distribution verification. `make quality` remains a compatibility alias for Full;
 `make ai-cockpit-quality` is the evidence-routed Work Item entrypoint.
 
+## Profile effect contract
+
+The routing receipt includes a deterministic `profileProjection`:
+
+| Profile | Verification depth | Required evidence | Optional checks |
+| --- | --- | --- | --- |
+| Light | `focused` | scope, trust, lifecycle, evidence integrity | project tests, reference impact, test-weakening, heavy groups |
+| Standard | `project` | Light evidence plus project test, reference impact, test-weakening | heavy, supply-chain, project-consistency groups |
+| Strict | `full` | Standard evidence plus heavy, supply-chain, project-consistency groups | additional project-consistency checks; release checks only when release escalation applies |
+
+Every projection also carries the same mandatory-control floor: `scope`,
+`trust`, `lifecycle`, and `evidence_integrity`. Optional checks are cost
+controls, not security or authorization switches. Invalid policy fields,
+unknown profiles, unsafe paths, incomplete overrides, and mandatory-check
+removal fail closed. The projection is routing evidence; it does not claim
+that a local check is hosted or that profile selection executes an agent runtime.
+
 ## Session ownership
 
 Every public quality profile and direct `project-test` acquire one non-blocking,
@@ -73,7 +90,8 @@ and dispatch `quality-fast`. Any Strict implementation path, release-owned
 resource, release context, malformed policy, unsafe path, or invalid Git base
 retains conservative escalation or fails closed.
 
-The receipt carries `operationClasses`, `verificationEscalations`, and their
+The receipt carries `operationClasses`, `verificationEscalations`, profile
+projection, and their
 evidence reasons. `release` is not an accepted governance-profile input.
 Non-release Strict work never acquires the release graph merely because of its
 governance intensity.

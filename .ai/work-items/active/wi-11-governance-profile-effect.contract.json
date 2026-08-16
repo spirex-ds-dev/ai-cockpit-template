@@ -1,0 +1,278 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-11-governance-profile-effect",
+  "mode": "code",
+  "title": "WI-11 governance profile effect",
+  "baseCommit": "e187b6254e0f8db289cd57b4207a8e9d53c44fc1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-11-governance-profile-effect.contract.json",
+    ".ai/work-items/active/wi-11-governance-profile-effect.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-11-governance-profile-effect.outcome.json",
+    ".ai/work-items/active/wi-11-governance-profile-effect.outcome.md",
+    ".ai/quality/governance-routing.yaml",
+    "scripts/ai_verification_policy.py",
+    "scripts/determine_governance_profile.py",
+    "scripts/determine_quality_scope.py",
+    "scripts/ai_required_evidence.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_governance_profile.py",
+    "tests/test_verification_policy.py",
+    "tests/test_required_evidence.py",
+    "tests/test_makefile.py",
+    "docs/reference/governance-profiles.md",
+    "docs/reference/governance-profiles.zh-CN.md",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "WI-12 performance diagnosis, benchmark design, or runtime hotspot changes.",
+    "WI-13 adoption reports, Outcome UI/dialog delivery, and user-facing reporting flows.",
+    "Scheduler, agent orchestration, provider configuration, release publication, and hosted infrastructure.",
+    "Disabling or weakening security, scope, required controls, mandatory lifecycle gates, or evidence integrity checks.",
+    "Rewriting immutable archived Work Item records."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/governance-profiles.md",
+      "reason": "Canonical three-profile vocabulary, routing boundary, and current evidence limitations."
+    },
+    {
+      "path": "docs/reference/governance-profile-cost-separation.md",
+      "reason": "Separates governance intensity from operation-specific escalation."
+    },
+    {
+      "path": ".ai/quality/governance-routing.yaml",
+      "reason": "Current machine-readable profile order, required groups, and dispatch targets."
+    },
+    {
+      "path": "scripts/ai_verification_policy.py",
+      "reason": "Current verification policy and monotonic profile selection."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Quality graph owners and mandatory lifecycle/check entrypoints."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Approved remediation plan and profile governance boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_downgrade",
+      "verification_omission",
+      "security_boundary"
+    ],
+    "reason": "Profile routing controls verification depth and evidence obligations; a downgrade could omit mandatory security, scope, or lifecycle controls.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Changes verification policy, quality dispatch, required evidence, and governance documentation."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User-authorized WI-11 implementation with bounded profile-effect and fail-closed governance requirements."
+  },
+  "preReviewWarnings": [
+    "Review that lower profiles only omit explicitly optional checks and never disable mandatory security, scope, evidence, or lifecycle controls.",
+    "Review release escalation and human overrides for monotonic, fail-closed behavior."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The routing policy declares deterministic verification depth, required evidence categories, and optional checks for light, standard, and strict; each profile has a materially different projection.",
+    "Profile selection and quality dispatch consume the profile projection: light is focused, standard adds project verification and reference/test-weakening checks, and strict adds the full quality graph plus strict evidence; release escalation remains separate and automatic.",
+    "Mandatory controls remain invariant across profiles: scope, trust/security, required lifecycle checks, evidence integrity, and fail-closed unknown/invalid override behavior cannot be disabled or downgraded.",
+    "Focused tests prove profile monotonicity, profile-specific depth/evidence/optional-check projections, non-release strict behavior, release escalation, and rejection of attempts to remove mandatory controls.",
+    "Canonical English, Simplified Chinese, and Japanese governance-profile references describe the profile effect, mandatory-control floor, optional-check boundary, and release distinction without claiming runtime orchestration or performance improvement."
+  ],
+  "guidelines": [
+    "Profiles may reduce optional verification cost only; they may not disable security, scope, required controls, mandatory lifecycle gates, or evidence integrity.",
+    "Risk can escalate automatically but cannot be lowered by explicit input or incomplete human override evidence.",
+    "Keep release as an operation-specific strict escalation rather than a fourth governance profile.",
+    "Keep profile projections deterministic, auditable, and documented in all supported reference locales.",
+    "Do not add scheduler/runtime orchestration or performance claims to this Work Item."
+  ],
+  "intent": {
+    "problem": "The repository already routes work to Light, Standard, and Strict quality targets, but the profile effect is not explicit enough in the machine-readable verification and evidence contract. Operators cannot reliably see which checks are required versus optional, and a future optimization could accidentally lower mandatory controls.",
+    "constraints": [
+      "Use only light, standard, and strict as Governance Profile values; release is a separate operation escalation.",
+      "Make depth, evidence requirements, and optional checks deterministic and auditable.",
+      "Preserve mandatory security, scope, required controls, lifecycle gates, and fail-closed behavior at every profile.",
+      "Keep implementation within routing/verification policy, quality dispatch, tests, and canonical profile documentation."
+    ],
+    "rationale": "An explicit profile projection makes cost and evidence tradeoffs reviewable while preserving an invariant mandatory-control floor. This enables later performance work to optimize optional work without weakening trust."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Light profile uses focused verification while preserving mandatory controls",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Light has focused depth, smaller optional set, and the same mandatory scope/security/lifecycle floor as other profiles.",
+      "verificationPlan": "Run focused routing and projection tests for a documentation-only change."
+    },
+    {
+      "scenario": "Standard profile adds project verification and evidence",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Standard is full project depth and adds project-test/reference/test-weakening evidence without release checks.",
+      "verificationPlan": "Run focused policy and Make dispatch tests for ordinary source/test changes."
+    },
+    {
+      "scenario": "Strict profile requires full governance and cannot be lowered",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Strict requires the full graph and strict evidence; invalid or incomplete lower-profile requests fail closed.",
+      "verificationPlan": "Run monotonicity, override, mandatory-floor, and strict routing tests."
+    },
+    {
+      "scenario": "Release operation escalates independently of profile intensity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Release paths/claims add release_preflight and distribution, while non-release Strict does not acquire release checks.",
+      "verificationPlan": "Run release derivation and non-release strict focused tests."
+    }
+  ],
+  "rawUserRequest": "Execute WI-11 governance profile effect so Lite/Standard/Strict materially control verification depth, evidence requirements, and optional checks while never disabling mandatory security, scope, required controls, or lifecycle gates.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-approved WI-11 execution plan",
+    "capturedAt": "2026-08-16T00:00:00Z",
+    "digest": "sha256:user-approved-wi11-governance-profile-effect"
+  },
+  "declaredIntent": {
+    "summary": "Make governance profile effects explicit, deterministic, and fail-closed.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": ["routing policy", "quality graph", "focused tests", "profile documentation"],
+    "externalSystem": "none"
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized the governed implementation and verification of the planned Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 923
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-11-governance-profile-effect.json",
+    "baseCommit": "e187b6254e0f8db289cd57b4207a8e9d53c44fc1",
+    "initialScopeDigest": "845c71119a01ff7c41da281d3a9484b5f6359a6894077b355d92727dae3dcef4",
+    "contractSkeletonDigest": "f34c4462193396d49c14e08940bf96c1e2a9d4f50896c7d4413bdf675c426b55"
+  }
+}
