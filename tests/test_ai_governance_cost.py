@@ -115,3 +115,53 @@ def test_cli_writes_report_files(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     saved = json.loads(output_json.read_text(encoding="utf-8"))
     assert saved["observed"]["gateRuns"] == 1
     assert output_md.exists()
+
+
+def test_lifecycle_report_separates_explicit_waits_and_ranks_bottlenecks() -> None:
+    report = build_report(
+        [
+            event("item", "work_item_started"),
+            event("item", "lifecycle_phase_finished", durationMs=100, fields={"phase": "verify"}),
+            event("item", "check_started", checkId="quality"),
+            event("item", "check_passed", checkId="quality", durationMs=80),
+            event("item", "wait_finished", fields={"category": "ci", "durationMs": 300}),
+            event("item", "wait_finished", fields={"category": "human", "durationMs": 200}),
+            event("item", "retry", fields={"durationMs": 50}),
+            event("item", "work_item_finished", result="passed", durationMs=1000),
+        ],
+        work_item_id="item",
+    )
+
+    assert report["time"] == {
+        "totalElapsedMs": 1000,
+        "agentActiveMs": 100,
+        "verificationMs": 80,
+        "ciWaitMs": 300,
+        "humanWaitMs": 200,
+        "recoveryRetryMs": 50,
+        "phaseDurationsMs": {"verify": 100},
+    }
+    assert report["topBottlenecks"][0] == {
+        "name": "wait:ci",
+        "durationMs": 300,
+        "source": "explicit_wait",
+    }
+    assert report["decisionImpact"] == "none"
+
+
+def test_lifecycle_report_keeps_unavailable_categories_unknown() -> None:
+    report = build_report(
+        [event("item", "work_item_finished", result="passed", durationMs=7)],
+        work_item_id="item",
+    )
+
+    assert report["time"] == {
+        "totalElapsedMs": 7,
+        "agentActiveMs": "unknown",
+        "verificationMs": "unknown",
+        "ciWaitMs": "unknown",
+        "humanWaitMs": "unknown",
+        "recoveryRetryMs": "unknown",
+        "phaseDurationsMs": {},
+    }
+    assert report["topBottlenecks"] == []
