@@ -1,0 +1,236 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-07-evidence-binding-foundation",
+  "mode": "code",
+  "title": "Evidence binding foundation",
+  "rawUserRequest": "Implement WI-07 of the approved 14-WI AI Cockpit improvement plan: establish a versioned evidence-binding foundation for safe future reuse. Define content-bound, diff-bound, and environment-bound classifications, dependency metadata, deterministic freshness/reuse decisions, and fail-closed Unknown-to-rerun behavior. Preserve security, scope, and governance gates; execute in English low-token mode with a dedicated branch, PR, archive, merge, and closure lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-14-wi-performance-first-plan#WI-07",
+    "capturedAt": "2026-08-16T04:00:00Z",
+    "digest": "sha256:user-authorized-evidence-binding-foundation-plan"
+  },
+  "declaredIntent": {
+    "summary": "Create a small, reusable, evidence-only binding model that later Work Items can use without silently skipping security, scope, governance, or required verification gates.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "afaf23536f663f2eac91cadc80928c2657d8f9a9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-07-evidence-binding-foundation.contract.json",
+    ".ai/work-items/active/wi-07-evidence-binding-foundation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-07-evidence-binding-foundation.outcome.json",
+    ".ai/work-items/active/wi-07-evidence-binding-foundation.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/schemas/evidence-binding.schema.json",
+    "scripts/ai_evidence_binding.py",
+    "tests/test_ai_evidence_binding.py",
+    "docs/reference/evidence-binding-foundation.md"
+  ],
+  "outOfScope": [
+    "Implementing WI-08, WI-09, or WI-10 reuse policies or integrating this foundation into existing verification runners.",
+    "Changing security, scope, governance, coverage, or required-check gates.",
+    "Adding a cache, scheduler, network/provider integration, automatic retries, or unbounded parallel execution.",
+    "Making reuse decisions from timestamps alone or from agent self-report."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_capability_freshness.py",
+      "reason": "Existing local freshness vocabulary and environment matching pattern."
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "reason": "Existing checkpoint binding and fail-closed governance evidence checks."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Existing versioned digest and Work Item evidence binding conventions."
+    },
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Existing repository-local, read-only, evidence-derived boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "security_boundary", "api_change"],
+    "reason": "An incorrectly accepted binding could let a later Work Item reuse evidence after content, diff, environment, security scope, or governance policy changed; this foundation must fail closed and must not itself bypass any gate.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The versioned evidence-binding schema is a governance-facing restricted path and requires strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The foundation is bounded to a versioned local model and deterministic decision function; future policy integrations remain out of scope."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The versioned JSON schema and Python API define one binding with a subject, classification (`content-bound`, `diff-bound`, or `environment-bound`), relevant dependency metadata, security scope digest, governance policy digest, producer metadata, and freshness timestamps.",
+    "The implementation validates bindings deterministically and returns a structured `reuse` decision only when the classification-specific dependency values, security scope, governance policy, and unexpired freshness all match exactly.",
+    "Missing, malformed, unknown, expired, stale, mismatched, or cross-scope/cross-governance inputs return `state=unknown` or `state=stale` with `action=rerun`; no decision can authorize bypassing a required check or security/scope/governance gate.",
+    "Focused tests cover each classification, exact-match reuse, each dependency mismatch, expiration, malformed/unknown inputs, security/scope/governance mismatch, deterministic output, schema validation, and no mutation of caller data.",
+    "A reference document records the schema, Python API, CLI-independent boundary, failure semantics, and explicit handoff contract for WI-08/09/10; no later reuse policy or verifier integration is introduced."
+  ],
+  "guidelines": [
+    "Compare only canonical, attributable evidence; never infer independence or freshness from a timestamp alone.",
+    "Fail closed to rerun for Unknown, malformed, stale, or mismatched dependency, security, scope, or governance inputs.",
+    "Keep the foundation pure and local; later Work Items own policy integrations and required-check execution."
+  ],
+  "intent": {
+    "problem": "The planned parallel batches need a shared evidence-binding primitive before WI-08, WI-09, and WI-10 can safely reuse prior verification. Without explicit classification and dependency identity, a fast path can accidentally treat stale, cross-scope, or policy-incompatible evidence as current.",
+    "constraints": [
+      "This Work Item defines the foundation only; it does not change any existing verifier, cache, scheduler, or governance gate.",
+      "Unknown, malformed, expired, or mismatched evidence must require rerun and must never be upgraded to reusable by inference.",
+      "Security scope and governance policy identity are mandatory comparisons for every classification.",
+      "The API must be deterministic, repository-local, and safe for later callers to compose without bypassing their own gates."
+    ],
+    "rationale": "A small versioned contract plus a pure decision function gives the next batch a common identity boundary while keeping reuse policy and execution authority in their own Work Items."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A content-bound binding has identical content, security scope, governance policy, and valid freshness.",
+      "expected": "The decision is deterministic `state=fresh`, `action=reuse`, with no reasons.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused test creates a binding and compares it with an identical current dependency set twice."
+    },
+    {
+      "scenario": "A diff-bound or environment-bound dependency, security scope, or governance policy is missing, unknown, or changed.",
+      "expected": "The decision is non-reusable with `action=rerun` and explicit deterministic reason codes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests cover each mismatch and unknown value, asserting no reuse action."
+    },
+    {
+      "scenario": "A binding is expired or malformed, including invalid classification or digest metadata.",
+      "expected": "Validation/decision fails closed; malformed input is `unknown`, expiration is `stale`, and both require rerun.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Schema and API tests exercise invalid records, expiration, and stable reason ordering."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user conversation",
+    "reason": "User explicitly authorized implementation of the complete 14-WI plan, including the governance-facing evidence-binding schema."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 919
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-07-evidence-binding-foundation.json",
+    "baseCommit": "afaf23536f663f2eac91cadc80928c2657d8f9a9",
+    "initialScopeDigest": "26706e51b851cf7660b694771fe1b60ef594b91ebc74e551aad9a51bdfa0f6f2",
+    "contractSkeletonDigest": "92f17a4d4ef9aaee7a3245921990e40c9429714ff89a7cf83509c765efcf718e"
+  }
+}
