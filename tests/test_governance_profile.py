@@ -29,6 +29,19 @@ profiles:
     requiredGroups:
       - quality-fast
     dispatchTarget: quality-fast
+    verificationDepth: focused
+    requiredEvidence:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
+    optionalChecks:
+      - project-test
+    mandatoryControls:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
   standard:
     patterns:
       - src/**
@@ -39,6 +52,20 @@ profiles:
       - check-ai-reference-impact
       - check-ai-test-weakening
     dispatchTarget: quality-standard
+    verificationDepth: project
+    requiredEvidence:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
+      - project-test
+    optionalChecks:
+      - quality-heavy
+    mandatoryControls:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
   strict:
     patterns:
       - .ai/**
@@ -47,6 +74,21 @@ profiles:
     requiredGroups:
       - quality-full
     dispatchTarget: quality-full
+    verificationDepth: full
+    requiredEvidence:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
+      - project-test
+      - quality-heavy
+    optionalChecks:
+      - quality-project-consistency
+    mandatoryControls:
+      - scope
+      - trust
+      - lifecycle
+      - evidence_integrity
 releaseOwnedPatterns:
   - release.json
   - .github/workflows/release*.yml
@@ -97,6 +139,83 @@ def test_selects_highest_profile_conservatively(policy_path, paths, expected):
     assert receipt["selectedProfile"] == expected
     assert receipt["changedPaths"] == sorted(paths)
     assert receipt["dispatchTarget"] == policy["profiles"][expected]["dispatchTarget"]
+
+
+def test_profile_projection_declares_depth_evidence_and_optional_checks(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    projections = {
+        name: routing.determine(["docs/guide.md"], policy, requested=name)["profileProjection"]
+        for name in routing.PROFILE_ORDER
+    }
+
+    assert [projections[name]["verificationDepth"] for name in routing.PROFILE_ORDER] == [
+        "focused",
+        "project",
+        "full",
+    ]
+    assert set(projections["light"]["requiredEvidence"]).issubset(
+        projections["standard"]["requiredEvidence"]
+    )
+    assert set(projections["standard"]["requiredEvidence"]).issubset(
+        projections["strict"]["requiredEvidence"]
+    )
+    assert projections["light"]["optionalChecks"]
+    assert projections["standard"]["optionalChecks"]
+    assert projections["strict"]["optionalChecks"]
+    assert (
+        projections["light"]["mandatoryControls"]
+        == projections["standard"]["mandatoryControls"]
+        == projections["strict"]["mandatoryControls"]
+    )
+
+
+def test_profile_projection_never_disables_mandatory_controls(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    for name in routing.PROFILE_ORDER:
+        projection = routing.determine(["docs/guide.md"], policy, requested=name)[
+            "profileProjection"
+        ]
+        assert set(projection["mandatoryControls"]) >= {
+            "scope",
+            "trust",
+            "lifecycle",
+            "evidence_integrity",
+        }
+        assert not set(projection["optionalChecks"]) & set(projection["mandatoryControls"])
+
+
+def test_policy_rejects_optional_check_that_overlaps_mandatory_control(tmp_path):
+    path = tmp_path / "governance-routing.yaml"
+    path.write_text(
+        POLICY.replace(
+            "      - project-test\n    mandatoryControls:",
+            "      - scope\n    mandatoryControls:",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="cannot disable mandatory controls"):
+        routing.load_policy(path)
+
+
+def test_release_escalation_is_separate_from_profile_projection(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    non_release = routing.determine(["Makefile"], policy)
+    release = routing.determine(["release.json"], policy)
+
+    assert non_release["selectedProfile"] == "strict"
+    assert non_release["verificationEscalations"] == []
+    assert release["selectedProfile"] == "strict"
+    assert release["verificationEscalations"] == ["release_preflight", "distribution"]
+    assert "release_preflight" not in non_release["profileProjection"]["optionalChecks"]
+    assert (
+        release["profileProjection"]["optionalChecks"]
+        != non_release["profileProjection"]["optionalChecks"]
+    )
 
 
 def test_receipt_is_independent_of_input_order(policy_path):

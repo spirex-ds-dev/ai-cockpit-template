@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-13-adoption-reality-report generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-11-governance-profile-effect-successor generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Replace this before finishing the Work Item.
+- Unresolved evidence is explicitly limited: Full governed quality and lifecycle checks, archive, and hosted lifecycle remain pending; this handoff intentionally does not claim Work Item completion.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.

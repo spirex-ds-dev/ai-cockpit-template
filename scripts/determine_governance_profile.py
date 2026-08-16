@@ -14,6 +14,8 @@ from typing import Any
 from ai_common import parse_yaml
 
 PROFILE_ORDER = ("light", "standard", "strict")
+PROFILE_DEPTHS = {"light": "focused", "standard": "project", "strict": "full"}
+MANDATORY_CONTROLS = ("scope", "trust", "lifecycle", "evidence_integrity")
 EXPECTED_TARGETS = {
     "light": "quality-fast",
     "standard": "quality-standard",
@@ -71,6 +73,30 @@ def load_policy(path: Path) -> dict[str, Any]:
         _string_list(config.get("requiredGroups"), f"profiles.{name}.requiredGroups")
         if config.get("dispatchTarget") != EXPECTED_TARGETS[name]:
             raise ValueError(f"profiles.{name}.dispatchTarget must be {EXPECTED_TARGETS[name]}")
+        if config.get("verificationDepth") != PROFILE_DEPTHS[name]:
+            raise ValueError(f"profiles.{name}.verificationDepth must be {PROFILE_DEPTHS[name]}")
+        required_evidence = _string_list(
+            config.get("requiredEvidence"), f"profiles.{name}.requiredEvidence"
+        )
+        optional_checks = _string_list(
+            config.get("optionalChecks"), f"profiles.{name}.optionalChecks"
+        )
+        mandatory_controls = tuple(
+            _string_list(config.get("mandatoryControls"), f"profiles.{name}.mandatoryControls")
+        )
+        if mandatory_controls != MANDATORY_CONTROLS:
+            raise ValueError(
+                f"profiles.{name}.mandatoryControls must be {list(MANDATORY_CONTROLS)}"
+            )
+        if set(optional_checks) & set(mandatory_controls):
+            raise ValueError(f"profiles.{name}.optionalChecks cannot disable mandatory controls")
+        if name != PROFILE_ORDER[0]:
+            previous = data["profiles"][PROFILE_ORDER[PROFILE_ORDER.index(name) - 1]]
+            previous_evidence = set(previous["requiredEvidence"])
+            if not previous_evidence.issubset(required_evidence):
+                raise ValueError(
+                    f"profiles.{name}.requiredEvidence must include the lower profile requirements"
+                )
     return data
 
 
@@ -312,6 +338,15 @@ def determine(
         reasons = sorted({*reasons, "release context requires strict governance"})
     escalations = ["release_preflight", "distribution"] if release_reasons else []
     config = policy["profiles"][selected]
+    optional_checks = list(config["optionalChecks"])
+    if release_reasons:
+        optional_checks.extend(escalations)
+    profile_projection = {
+        "verificationDepth": config["verificationDepth"],
+        "requiredEvidence": list(config["requiredEvidence"]),
+        "optionalChecks": sorted(set(optional_checks)),
+        "mandatoryControls": list(config["mandatoryControls"]),
+    }
     return {
         "schemaVersion": 1,
         "base": base,
@@ -327,6 +362,7 @@ def determine(
         "operationClasses": ["release"] if release_reasons else [],
         "verificationEscalations": escalations,
         "releaseEscalationReasons": release_reasons,
+        "profileProjection": profile_projection,
         "override": override_result,
     }
 

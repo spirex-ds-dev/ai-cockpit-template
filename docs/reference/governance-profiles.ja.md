@@ -37,6 +37,18 @@ capability claim を持つ Strict Work Item だけが `quality-release` の rele
 distribution verification を追加で実行します。`make quality` は Full の
 互換 Alias のまま、`make ai-cockpit-quality` が Evidence-based Entry Point です。
 
+## Profile effect contract
+
+Router Receipt の `profileProjection` は、Profile の効果を決定的に記録します。Light は `focused` 深度で
+scope、trust、lifecycle、evidence integrity の証拠を要求します。Standard は `project` 深度で、Project Test、
+Reference Impact、Test Weakening の証拠を追加します。Strict は `full` 深度で、Heavy、Supply-chain、
+Project-consistency の証拠も要求します。Optional Check はコスト調整用であり、Security、Authorization、
+Scope、Lifecycle Gate、Evidence Integrity を無効化するスイッチではありません。全 Profile に同じ
+Mandatory Control floor（`scope`、`trust`、`lifecycle`、`evidence_integrity`）があります。不正な Profile、
+壊れた Policy、不完全な Override、危険な Path、Mandatory Control の削除は Fail Closed です。
+この Projection は Routing Evidence であり、Local Check が Hosted Evidence と同じであることや、
+Agent Runtime の実行を意味しません。
+
 ## Session ownership
 
 公開 Quality Profile と直接の `project-test` は、Coverage または Report writer の前に
@@ -47,7 +59,8 @@ lock は owner の終了時に OS が解放するため、lock file を削除し
 
 ## Contract Evidence
 
-Contract の `governanceProfile` は `selected`、`source`、`reasons`、`override` を記録します。
+Contract の `governanceProfile` は `selected`、`source`、`reasons`、`override` を記録します。Receipt はさらに
+Verification Depth、Required Evidence、Optional Check、Mandatory Control floor を記録します。
 Router は `.ai/quality/governance-routing.yaml` を読み、Contract base からの Commit、Stage、
 Unstage、Untracked Path を統合し、`target/quality/governance-profile.json` に自動/選択 Profile、
 理由、Group、Dispatch、Override 判定を出力します。不正 Git base、Traversal、Policy 破損は
