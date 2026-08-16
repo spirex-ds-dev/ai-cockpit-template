@@ -1,0 +1,264 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-19-release-candidate-reconciliation",
+  "mode": "code",
+  "title": "Reconcile reserved release candidate and closeout report evidence",
+  "baseCommit": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json",
+    ".ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/decisions/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.json",
+    ".ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.md",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "install.sh",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/audits/wi-19-release-candidate-reconciliation.json",
+    "docs/audits/wi-19-release-candidate-reconciliation.md",
+    "tests/test_release_distribution.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_preflight.py"
+  ],
+  "outOfScope": [
+    "Creating, moving, or deleting any existing immutable tag",
+    "Publishing a release before the exact-source rehearsal succeeds",
+    "Rewriting WI-01 through WI-18 archived evidence",
+    "Changes to runtime/product behavior unrelated to release projections"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-18-final-release-closeout.contract.json",
+      "reason": "WI-18 release candidate and lifecycle boundary."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61",
+      "reason": "Provider evidence that v0.5.61 is already immutable and must not be reused."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Canonical release progression and candidate rules."
+    },
+    {
+      "path": "scripts/sync_published_release_projection.py",
+      "reason": "Atomic provider-to-source projection synchronization implementation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_identity",
+      "provider_evidence"
+    ],
+    "reason": "A stale candidate projection must be reconciled to immutable provider evidence without reusing v0.5.61 or publishing a mismatched source.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Release identity and provider evidence require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized release completion; all provider mutations remain fail-closed behind exact evidence."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The provider v0.5.61 release and immutable tag are recorded as reserved evidence, and the source candidate advances exactly to v0.5.62 without deleting or moving v0.5.61.",
+    "release.json, release-state.json, next-release.json, install.sh, version.json, and release-digests.json pass all release consistency and readiness checks with provider evidence bound to v0.5.61.",
+    "The v0.5.62 exact-source rehearsal succeeds on the merged main SHA before any publication attempt; a failed rehearsal blocks publication and is recorded in the Summary.",
+    "The human-readable audit records the collision, evidence, resolution, remaining provider dependency, and no unsupported publication claim."
+  ],
+  "guidelines": [
+    "Never reuse an immutable semantic-version tag.",
+    "Bind every release claim to provider evidence and the exact source commit.",
+    "Keep release projections and installer references synchronized atomically.",
+    "Do not claim publication until the provider release workflow supplies exact-source assets."
+  ],
+  "intent": {
+    "problem": "WI-18 attempted v0.5.61, but the provider already has an immutable v0.5.61 release while the repository candidate projection still names v0.5.61.",
+    "constraints": [
+      "Do not reuse or move v0.5.61.",
+      "Use provider release assets as evidence, not local assumptions.",
+      "Advance exactly one patch to v0.5.62 and keep publication gated by exact-source rehearsal."
+    ],
+    "rationale": "Candidate truth must follow the highest immutable reserved version so release identity remains unambiguous and installer projections cannot target stale metadata."
+  },
+  "declaredIntent": {
+    "summary": "Reconcile the reserved provider release into repository projections and prepare the next exact-source release candidate without reusing an immutable tag.",
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "rawUserRequest": "Complete the final release closeout; if the candidate is already reserved, reconcile it safely and continue with the next valid release.",
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:final-release-closeout-and-publish-version",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-wi19-release-reconciliation"
+  },
+  "authorityEvidence": {
+    "type": "direct_user_authorization",
+    "reference": "user-request:complete-final-release-closeout-and-publish-version"
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized final release completion; exact provider evidence and immutable-tag rules remain mandatory."
+  },
+  "scenarioCoverage": [
+    {
+      "id": "reserved-tag-collision",
+      "riskDomain": "release_identity",
+      "scenario": "The requested candidate tag already exists as an immutable provider release.",
+      "expectedResult": "Publication of the reused tag is blocked and the tag is recorded as reserved evidence.",
+      "verificationPlan": "Inspect provider tag/release metadata and record the failed rehearsal receipt.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.61"]
+    },
+    {
+      "id": "candidate-advance",
+      "riskDomain": "release_identity",
+      "scenario": "The local candidate is stale after the provider has reserved a higher patch.",
+      "expectedResult": "The candidate advances exactly one patch beyond v0.5.61 and projections remain mutually consistent.",
+      "verificationPlan": "Run the projection synchronizer and all release consistency/readiness checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "command://sync-published-release-projection-v0.5.61",
+        "release-state.json",
+        "next-release.json",
+        ".ai/cockpit/version.json"
+      ]
+    },
+    {
+      "id": "exact-source-rehearsal",
+      "riskDomain": "provider_evidence",
+      "scenario": "The next candidate is prepared for publication.",
+      "expectedResult": "The exact-source rehearsal succeeds or publication remains blocked with its failure evidence.",
+      "verificationPlan": "Dispatch release rehearsal against the freshly synchronized origin/main SHA.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 931
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-19-release-candidate-reconciliation.json",
+    "baseCommit": "ff32e937f670d1c394ee3f827fea7ece5df3aad5",
+    "initialScopeDigest": "451b41cd67c94a388fc2e3bafba4a22209319413e2f4f1b8e545964487741981",
+    "contractSkeletonDigest": "ee49ee4698c97b2faac0ef5489f6d27e7015104b06f26eef82ea584d4d165345"
+  }
+}

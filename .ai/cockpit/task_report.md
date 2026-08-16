@@ -4,27 +4,43 @@ Task Result
 Status: Partial
 
 What was completed
-- Changed .ai/work-items/active/wi-18-final-release-closeout.contract.json [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.contract.json]
-- Changed .ai/work-items/active/wi-18-final-release-closeout.summary.json [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.summary.json]
-- Changed docs/audits/wi-18-final-release-closeout.json [evidence: docs/audits/wi-18-final-release-closeout.json]
-- Changed docs/audits/wi-18-final-release-closeout.md [evidence: docs/audits/wi-18-final-release-closeout.md]
-- Changed .ai/work-items/active/wi-18-final-release-closeout.outcome.json [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.outcome.json]
-- Changed .ai/work-items/active/wi-18-final-release-closeout.outcome.md [evidence: .ai/work-items/archive/2026/wi-18-final-release-closeout.outcome.md]
-- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
-- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed .ai/decisions/HDR-c5bc289751daede5-874a28e0.request.json [evidence: .ai/decisions/HDR-c5bc289751daede5-874a28e0.request.json]
-- Changed .ai/decisions/HDR-c5bc289751daede5-874a28e0.evidence.json [evidence: .ai/decisions/HDR-c5bc289751daede5-874a28e0.evidence.json]
-- Changed .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.request.json [evidence: .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.request.json]
-- Changed .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.evidence.json [evidence: .ai/decisions/HDR-127ef79c55b38c1f-e53a5e67.evidence.json]
-- Changed .ai/decisions/HDR-0c1531a849967540-b2009dd8.request.json [evidence: .ai/decisions/HDR-0c1531a849967540-b2009dd8.request.json]
-- Changed .ai/decisions/HDR-0c1531a849967540-b2009dd8.evidence.json [evidence: .ai/decisions/HDR-0c1531a849967540-b2009dd8.evidence.json]
-- Changed .ai/decisions/HDR-23c25beb7125a22f-b379440b.request.json [evidence: .ai/decisions/HDR-23c25beb7125a22f-b379440b.request.json]
-- Changed .ai/decisions/HDR-23c25beb7125a22f-b379440b.evidence.json [evidence: .ai/decisions/HDR-23c25beb7125a22f-b379440b.evidence.json]
+- Changed .ai/work-items/active/wi-19-release-candidate-reconciliation.contract.json [evidence: .ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.contract.json]
+- Changed .ai/work-items/active/wi-19-release-candidate-reconciliation.summary.json [evidence: .ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.summary.json]
+- Changed .ai/cockpit/version.json [evidence: .ai/cockpit/version.json]
+- Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
+- Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
+- Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
+- Changed release.json [evidence: release.json]
+- Changed next-release.json [evidence: next-release.json]
+- Changed release-state.json [evidence: release-state.json]
+- Changed install.sh [evidence: install.sh]
+- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
+- Changed .ai/decisions/** [evidence: .ai/decisions/**]
+- Changed .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.evidence.json [evidence: .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.evidence.json]
+- Changed .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.request.json [evidence: .ai/decisions/HDR-2295d7baabb5bc16-0f9cc446.request.json]
+- Changed .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.evidence.json [evidence: .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.evidence.json]
+- Changed .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.request.json [evidence: .ai/decisions/HDR-8cdf457624ce7329-fff3ac23.request.json]
+- Changed .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.evidence.json [evidence: .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.evidence.json]
+- Changed .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.request.json [evidence: .ai/decisions/HDR-c0fe64348e59dc4a-2418146d.request.json]
+- Changed .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.evidence.json [evidence: .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.evidence.json]
+- Changed .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.request.json [evidence: .ai/decisions/HDR-c17cc4459e11d703-5de36d8c.request.json]
+- Changed .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.evidence.json [evidence: .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.evidence.json]
+- Changed .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.request.json [evidence: .ai/decisions/HDR-cd557c964586ac10-d6c51ed4.request.json]
+- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
+- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
+- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
+- Changed docs/audits/wi-19-release-candidate-reconciliation.json [evidence: docs/audits/wi-19-release-candidate-reconciliation.json]
+- Changed docs/audits/wi-19-release-candidate-reconciliation.md [evidence: docs/audits/wi-19-release-candidate-reconciliation.md]
+- Changed tests/test_release_distribution.py [evidence: tests/test_release_distribution.py]
+- Changed tests/test_release_state_consistency.py [evidence: tests/test_release_state_consistency.py]
+- Changed tests/test_release_preflight.py [evidence: tests/test_release_preflight.py]
+- Changed .ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.json [evidence: .ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.outcome.json]
+- Changed .ai/work-items/active/wi-19-release-candidate-reconciliation.outcome.md [evidence: .ai/work-items/archive/2026/wi-19-release-candidate-reconciliation.outcome.md]
 
 Problems found
-- Total: 7
+- Total: 4
 - Blocking: 1
-- Warning: 3
+- Warning: 1
 
 Stops triggered
 - None recorded.
@@ -36,18 +52,13 @@ Risks avoided
 - None recorded.
 
 Remaining risks
-- WI-01 through WI-15 archives remain immutable and lack the newer humanHandoff projection. (inference)
-- Exact source, tag, release assets, and Quick Install evidence cannot be claimed until the post-merge release workflow completes. (inference)
-- Dirty user worktrees remain outside the active WI-18 identity and are preserved rather than deleted. (inference)
+- v0.5.62 publication and Quick Install evidence remain pending exact-source rehearsal. (inference)
 
 Unknowns
-- None recorded.
+- Exact v0.5.62 provider assets remain unknown until the rehearsal and publication workflow completes. (inference)
 
 Human decisions
-- Outcome must be delivered directly into the conversation for every agent, not only stored as a report file. (inference)
-- Every factual report field must bind evidenceRefs; unsupported benefits are inference, and self-praise is forbidden without quantitative evidence. (inference)
-- Performance improvement must not be claimed without comparable evidence. (inference)
-- Closure must verify local branches, local worktrees, remote branches, and remote-tracking refs. (inference)
+- Do not reuse the reserved v0.5.61 tag; continue with the next valid candidate and keep publication evidence-bound. (inference)
 
 Verification
 - aiStatus [evidence: aiStatus]
