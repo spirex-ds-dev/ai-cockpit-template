@@ -1,20 +1,20 @@
 # AI Cockpit Task Report
 
 Phase: `review`
-Result: `completed`
+Result: `completed_with_warnings`
 
 ## 任务结论 / Task conclusion
-Task Outcome status: `completed`.
+Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-05-outcome-dialog-delivery generated an evidence-derived outcome with status completed.
+Task wi-06-status-interface generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
-- Detected issues: 0
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 0
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 0
+- Unresolved: 1
 
 ## AI Cockpit 的干预 / AI Cockpit interventions
 None recorded.
@@ -32,10 +32,10 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-None recorded.
+- Unresolved evidence is explicitly limited: The interface cannot observe provider CI or human wait without an external receipt; those values remain outside this WI.
 
 ## 当前禁止声明 / Forbidden claims
-None recorded.
+- Do not claim an unresolved warning was verified or resolved.
 
 ## 需要人的决定 / Human decisions
 None recorded.

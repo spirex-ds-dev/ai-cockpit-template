@@ -1,0 +1,237 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-06-status-interface",
+  "mode": "code",
+  "title": "Machine-readable Work Item status interface",
+  "rawUserRequest": "Implement WI-06 of the approved 14-WI AI Cockpit improvement plan: publish a machine-readable per-Work-Item status interface and optional index for external Agents, preserve current_status.md, and fail closed for stale, malformed, or cross-Work-Item evidence. Execute in English low-token mode with a dedicated branch, PR, archive, merge, and closure lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-14-wi-performance-first-plan#WI-06",
+    "capturedAt": "2026-08-16T00:00:00Z",
+    "digest": "sha256:user-authorized-status-interface-plan"
+  },
+  "declaredIntent": {
+    "summary": "Expose each active Work Item's evidence-derived state and safe next actions as JSON for external Agent orchestration.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e862e1a68df67c4e975b97ac84c1f950b44dd785",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-06-status-interface.contract.json",
+    ".ai/work-items/active/wi-06-status-interface.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/work-items/**",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-06-status-interface.outcome.json",
+    ".ai/work-items/active/wi-06-status-interface.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+    ,".ai/schemas/work-item-status-interface.schema.json",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_generate_work_item_status.py",
+    "tests/test_ai_generate_work_item_status.py",
+    "docs/reference/work-item-status-interface.md"
+  ],
+  "outOfScope": [
+    "Changing governance decisions, gate policy, or current_status.md rendering",
+    "Replacing Work Item Intelligence runtime facts or creating a scheduler/orchestrator",
+    "Network, provider, CI, billing, or token integrations",
+    "Inferring progress percentages from Agent self-report"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "Existing evidence-derived human-facing status model to preserve and project."
+    },
+    {
+      "path": "scripts/ai_governance_compression.py",
+      "reason": "Canonical recommendation, signal, and human decision derivation."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Existing repository-local machine status boundary and fail-closed vocabulary."
+    },
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Existing distinction between repository-local read-only status and external orchestration."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "api_change"],
+    "reason": "The projection must never turn stale, malformed, or cross-Work-Item evidence into a green state.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The status schema is a governance-facing machine interface and requires strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The interface is bounded to local Contract/Summary evidence and must fail closed on invalid bindings."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The generator publishes one schema-validated JSON status per active Work Item under .ai/cockpit/work-items and an index containing independently derived entries.",
+    "Each status exposes Work Item ID, green/yellow/red/unknown state, lifecycle phase, blocking and blocker reasons, human decision requirement, safe actions, base commit, branch, last verification time, evidence freshness, and generation time.",
+    "Malformed Contract/Summary input, stale verification evidence, and cross-Work-Item evidence produce unknown or non-green status with explicit diagnostics and never green.",
+    "Two independent active Work Items can be projected without one status being inferred from the other; no scheduler or priority decision is introduced.",
+    "Existing .ai/cockpit/current_status.md generation and checks remain unchanged, and the status script CLI, schema, focused tests, and reference documentation are present."
+  ],
+  "guidelines": [
+    "Derive status only from attributable local Contract and Summary evidence.",
+    "Fail closed for malformed, stale, or cross-Work-Item evidence; never infer green.",
+    "Keep the interface read-only and document the JSON schema and safe-action vocabulary."
+  ],
+  "intent": {
+    "problem": "External Agents need a stable JSON status per Work Item; parsing current_status.md is fragile and cannot safely distinguish stale or cross-item evidence.",
+    "constraints": [
+      "Keep one Work Item per branch, Contract, Summary, and archive lifecycle.",
+      "Use repository-local evidence only and preserve unknown semantics.",
+      "Do not alter policy decisions, scheduling, or current_status.md rendering."
+    ],
+    "rationale": "A small schema-validated projection allows bounded parallel orchestration while preserving evidence-first trust boundaries."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Two active Work Items with independent Contracts and Summaries are projected.",
+      "expected": "The index contains two independently derived status records with their own branch and base values.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused fixture test creates two active pairs and asserts independent JSON outputs."
+    },
+    {
+      "scenario": "Required verification evidence is stale, malformed, or bound to another Work Item.",
+      "expected": "The resulting status is unknown or otherwise non-green and includes an explicit diagnostic.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests cover commit mismatch, invalid JSON, and executionContractPath identity mismatch."
+    },
+    {
+      "scenario": "The existing current_status.md generator runs after the interface is added.",
+      "expected": "The Markdown status remains generated and checkable through existing targets.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Existing status generation/check tests plus a focused non-interference test."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user conversation",
+    "reason": "User explicitly authorized implementation of the complete 14-WI plan, including a governance-facing status schema."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 916
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-06-status-interface.json",
+    "baseCommit": "e862e1a68df67c4e975b97ac84c1f950b44dd785",
+    "initialScopeDigest": "6b2e183b77b80cde026687e38b66025b07014a48904ff69af6b09529dbd05958",
+    "contractSkeletonDigest": "c1a1f7a42e81a62341c7471053d6177d3426213ac92097c11ffe73930d9ad638"
+  }
+}
