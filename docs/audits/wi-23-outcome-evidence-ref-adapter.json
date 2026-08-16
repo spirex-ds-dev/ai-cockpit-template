@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "wi-23-outcome-evidence-ref-adapter",
+  "status": "in_progress",
+  "finding": {
+    "claim": "WI-22 Summary observedIssues used evidenceRefs, but the pre-merge adapter read only evidence; archived WI-22 top-level Resolutions therefore remained empty.",
+    "evidenceRefs": [
+      {"source": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.summary.json", "subject": "observedIssues[0].evidenceRefs"},
+      {"source": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.outcome.md", "subject": "Resolutions: None"},
+      {"source": "scripts/ai_finish.py", "subject": "_observed_issue_evidence_refs"}
+    ]
+  },
+  "correction": {
+    "claim": "Read evidenceRefs as the canonical Summary field and retain legacy evidence fallback; preserve inference for missing or malformed evidence.",
+    "evidenceRefs": [
+      {"source": "scripts/ai_finish.py", "subject": "evidenceRefs adapter"},
+      {"source": "tests/test_task_outcome_ai_finish_integration.py", "subject": "evidenceRefs regression"}
+    ]
+  },
+  "boundaries": [
+    "WI-01 through WI-22 archives are immutable.",
+    "Outcome locale and provider/UI transport behavior are unchanged.",
+    "Evidence-free claims remain inference."
+  ]
+}

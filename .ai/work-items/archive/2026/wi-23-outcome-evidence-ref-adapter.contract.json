@@ -1,0 +1,256 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-23-outcome-evidence-ref-adapter",
+  "mode": "code",
+  "title": "Bind observed-issue evidenceRefs into Outcome resolutions",
+  "baseCommit": "f2fe4305cacd5836b495fa857687d957f8889bf2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-23-outcome-evidence-ref-adapter.contract.json",
+    ".ai/work-items/active/wi-23-outcome-evidence-ref-adapter.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/decisions/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-23-outcome-evidence-ref-adapter.outcome.json",
+    ".ai/work-items/active/wi-23-outcome-evidence-ref-adapter.outcome.md",
+    "scripts/ai_finish.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_task_outcome_generator.py",
+    "docs/features/task-outcome-report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/audits/wi-23-outcome-evidence-ref-adapter.json",
+    "docs/audits/wi-23-outcome-evidence-ref-adapter.md"
+  ],
+  "outOfScope": [
+    "Rewriting any WI-01 through WI-22 archived Contract, Summary, Outcome, or manifest",
+    "Changing Outcome locale policy or provider/UI transport behavior",
+    "Changing unrelated generator behavior outside observed-issue evidence adaptation",
+    "Claiming WI-22 historical archive output was retroactively repaired"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.summary.json",
+      "reason": "Archived WI-22 Summary exposes observedIssues evidenceRefs that were not consumed by ai_finish."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Observed-issue handoff adapter currently reads evidence but not evidenceRefs."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Integration regression surface for Summary-to-Outcome evidence binding."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Authoritative evidence binding and human Outcome documentation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["human_handoff_truthfulness", "evidence_binding"],
+    "reason": "If Summary evidenceRefs are ignored, verified observed-issue resolutions remain absent from top-level human Outcomes.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Evidence-bound human Outcome and governance adapter changes require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User-required self-check loop found an adapter mismatch after immutable WI-22 archival; correct only the bounded evidenceRefs path."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Observed-issue records using evidenceRefs are normalized into humanHandoff resolvedProblems and resolutionApproach with the same refs.",
+    "The pre-merge Outcome evidence contains structured resolutions for resolved observed issues and never promotes evidence-free records.",
+    "A regression test fails before the adapter fix and passes after it; malformed and legacy evidence inputs remain fail-closed.",
+    "The archive diff from the WI-23 base contains zero WI-01 through WI-22 paths, and the corrective boundary is recorded in the WI-23 audit files."
+  ],
+  "guidelines": [
+    "Generate human-facing claims only from structured Summary evidenceRefs or verification evidence.",
+    "Keep evidence-free records explicitly inference and never report them as verified resolutions.",
+    "Preserve immutable WI-01 through WI-22 archives and keep locale behavior unchanged.",
+    "Test both evidenceRefs and legacy evidence input shapes at the adapter boundary."
+  ],
+  "intent": {
+    "problem": "WI-22 archived a truthful generator fix, but its pre-merge adapter consumed observedIssues.evidence rather than the Summary's evidenceRefs field, leaving top-level Resolutions empty.",
+    "constraints": [
+      "Do not rewrite WI-01 through WI-22 archives.",
+      "Preserve evidenceRefs exactly and mark evidence-free records as inference.",
+      "Keep the correction limited to the observed-issue handoff adapter and regression tests."
+    ],
+    "rationale": "The source Summary contract uses evidenceRefs; consuming that field is required for verified human handoff claims to reach Outcome generation."
+  },
+  "declaredIntent": {
+    "summary": "Bind Summary observed-issue evidenceRefs into the pre-merge Outcome resolution records.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "rawUserRequest": "Continue the evidence-bound self-check loop. Correct the remaining Outcome delivery defect without rewriting immutable archives; every human-facing resolution must be evidence-bound.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:evidence-bound-human-outcome-self-check",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-outcome-self-check-wi23"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "direct_user_authorization",
+    "reference": "user-request:self-check-and-correct-until-complete"
+  },
+  "scenarioCoverage": [
+    {
+      "id": "evidenceRefs-resolution",
+      "riskDomain": "human_handoff_truthfulness",
+      "scenario": "A resolved observed issue supplies evidenceRefs in the Summary.",
+      "expectedResult": "resolvedProblems, resolutionApproach, and structured resolutions carry the same evidence references.",
+      "verificationPlan": "Focused ai_finish integration test and Outcome validator.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_ai_finish_integration.py::test_pre_merge_handoff_consumes_summary_evidence_refs_for_resolutions"
+      ]
+    },
+    {
+      "id": "legacy-and-malformed-input",
+      "riskDomain": "evidence_binding",
+      "scenario": "Observed issue evidence is absent, malformed, or supplied through legacy evidence.",
+      "expectedResult": "Legacy evidence remains accepted; malformed or absent evidence remains inference and is not a verified resolution.",
+      "verificationPlan": "Focused negative-path integration tests.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_ai_finish_integration.py::test_pre_merge_handoff_projects_evidence_bound_observed_issue_resolutions",
+        "tests/test_task_outcome_validator.py"
+      ]
+    },
+    {
+      "id": "archive-boundary",
+      "riskDomain": "cross_agent_consistency",
+      "scenario": "Historical WI-01 through WI-22 archives are present during the correction.",
+      "expectedResult": "No historical archive path changes from the WI-23 base.",
+      "verificationPlan": "Archive diff and ownership checks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "command://git-diff-archive-immutability (0 archive paths changed from WI-23 base)"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the bounded self-check correction and lifecycle verification."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 935
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-23-outcome-evidence-ref-adapter.json",
+    "baseCommit": "f2fe4305cacd5836b495fa857687d957f8889bf2",
+    "initialScopeDigest": "63da4e1d897107e4b46d7ce97a1b17426e0280df12e1b04a119d7f557d1c63e6",
+    "contractSkeletonDigest": "6aed634a5c1f5fe456c21b7c8a55dd46392509063c3e6f1491f6c94b30fb3080"
+  }
+}

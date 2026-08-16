@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "wi-23-outcome-evidence-ref-adapter",
-  "phase": "review",
-  "result": "completed_with_warnings",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "9ab01364aac4be9cbb2389d335a8997f5931478bee866e3b4f403d6d661e43be"
+  "status": "completed_with_warnings",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "wi-23-outcome-evidence-ref-adapter",
+    "contractDigest": "ff44e3abd717e0872ac428de9a5ede0d0cdd26731d66bdc01518b123a5fa46d0",
+    "summaryDigest": "4b3702ae05324c19509f5b2fd93bd340dc8b769cc7b4d78fe10d5f3a53b1a106",
+    "verificationDigest": "8980415ba4da5436c91501c9f5c763e928a55c4240c82697419a5e48a7e30c64",
+    "baseCommit": "f2fe4305cacd5836b495fa857687d957f8889bf2",
+    "headCommit": "f2fe4305cacd5836b495fa857687d957f8889bf2",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "a821cebeb42d1175ae75c68579431dc5ecd58df1ea00731256244d4a10166928",
+      "binding": {
+        "baseCommit": "f2fe4305cacd5836b495fa857687d957f8889bf2",
+        "candidateHead": "f2fe4305cacd5836b495fa857687d957f8889bf2",
+        "candidateTreeDigest": "b7151b3f304e3acd4a1e4dc27922e76f61f4325dc95d32b7431710daf77a42a1",
+        "candidateDiffDigest": "239f9cdf3aa030b63d99e1ab466d600c4709e2e5a4fe276ac969138f8250c78b"
+      }
+    }
   },
-  "task": {
-    "summary": "Task wi-23-outcome-evidence-ref-adapter generated an evidence-derived outcome with status completed_with_warnings.",
+  "sections": {
+    "outcomeSummary": "Task wi-23-outcome-evidence-ref-adapter generated an evidence-derived outcome with status completed_with_warnings.",
+    "taskOverview": "Governed Work Item: wi-23-outcome-evidence-ref-adapter",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.contract.json",
       ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.summary.json",
@@ -28,51 +51,122 @@
       "docs/audits/wi-23-outcome-evidence-ref-adapter.md",
       ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.outcome.json",
       ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.outcome.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "Historical WI-01 through WI-22 Outcomes remain immutable and may retain prior section omissions."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "Historical WI-01 through WI-22 Outcomes remain immutable and may retain prior section omissions.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "Historical WI-01 through WI-22 Outcomes remain immutable and may retain prior section omissions.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [
+      {
+        "problem": "WI-22 Summary observedIssues carry evidenceRefs, but ai_finish reads only evidence, so verified resolutions disappear from top-level Outcome sections.",
+        "action": "Accept evidenceRefs as the canonical field while preserving legacy evidence compatibility.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.summary.json",
+            "subject": "observedIssues[0].evidenceRefs"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.outcome.md",
+            "subject": "Resolutions: None"
+          },
+          {
+            "source": "scripts/ai_finish.py",
+            "subject": "_observed_issue_evidence_refs reads evidence"
+          },
+          {
+            "source": "tests/test_task_outcome_ai_finish_integration.py",
+            "subject": "evidenceRefs regression passed"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.summary.json",
+            "subject": "observedIssues[0].evidenceRefs"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/wi-22-outcome-section-projection.outcome.md",
+            "subject": "Resolutions: None"
+          },
+          {
+            "source": "scripts/ai_finish.py",
+            "subject": "_observed_issue_evidence_refs reads evidence"
+          },
+          {
+            "source": "tests/test_task_outcome_ai_finish_integration.py",
+            "subject": "evidenceRefs regression passed"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [
+      {
+        "claim": "historical-archive",
+        "severity": "medium",
+        "title": "historical-archive",
+        "detail": "WI-01 through WI-22 Outcomes remain byte-preserved and may retain prior omissions.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "Every human-facing resolution must be evidence-bound; do not rewrite immutable archives."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.summary.json",
+        "subject": "Summary"
+      }
     ]
   },
-  "issues": {
-    "detected": 1,
-    "hardStops": 0,
-    "warnings": 1,
-    "resolved": 0,
-    "unresolved": 1
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [
-    "Every human-facing resolution must be evidence-bound; do not rewrite immutable archives."
-  ],
-  "limitations": [
-    {
-      "sourceWarning": "Historical WI-01 through WI-22 Outcomes remain immutable and may retain prior section omissions.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "WI-01 through WI-22 Outcomes remain byte-preserved and may retain prior omissions.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-23-outcome-evidence-ref-adapter.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "en",
     "completed": [
@@ -741,6 +835,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

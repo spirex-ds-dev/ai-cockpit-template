@@ -917,7 +917,7 @@ def _observed_issue_evidence_refs(
     item: dict[str, Any], *, summary_path: Path, index: int
 ) -> list[dict[str, str]]:
     """Normalize one Summary observed-issue evidence list for human claims."""
-    raw = item.get("evidence")
+    raw = item.get("evidenceRefs", item.get("evidence"))
     if not isinstance(raw, list):
         return []
     refs: list[dict[str, str]] = []
