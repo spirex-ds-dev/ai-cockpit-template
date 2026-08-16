@@ -1,0 +1,237 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-04-cost-metrics-integration",
+  "mode": "code",
+  "title": "Integrate governance cost metrics with lifecycle and bottleneck reporting",
+  "rawUserRequest": "Implement the approved 14-WI AI Cockpit improvement plan in performance-first order. Execute in English low-token mode; preserve separate WIs and keep each WI convergent. This WI must integrate lifecycle-aware governance cost and bottleneck reporting without changing policy decisions.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-14-wi-performance-first-plan",
+    "capturedAt": "2026-08-16T00:00:00Z",
+    "digest": "sha256:user-authorized-cost-metrics-integration-plan"
+  },
+  "declaredIntent": {
+    "summary": "Make one Work Item's start-to-close governance cost and measured bottlenecks reusable for later optimization and parallel execution WIs.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e862e1a68df67c4e975b97ac84c1f950b44dd785",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-04-cost-metrics-integration.contract.json",
+    ".ai/work-items/active/wi-04-cost-metrics-integration.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-04-cost-metrics-integration.outcome.json",
+    ".ai/work-items/active/wi-04-cost-metrics-integration.outcome.md",
+    ".ai/schemas/governance-cost-report.schema.json",
+    "scripts/ai_governance_cost.py",
+    "tests/test_ai_governance_cost.py",
+    "docs/reference/governance-cost-metrics.md"
+  ],
+  "outOfScope": [
+    "Changing gate, scheduling, or governance decisions based on metrics",
+    "Provider billing, token-cost estimation, or external telemetry integrations",
+    "Outcome dialog delivery, machine status interface, evidence reuse, or parallel execution behavior",
+    "Task scheduling, agent assignment, or workflow orchestration"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_governance_cost.py",
+      "reason": "WI-02 evidence-only cost report foundation to extend compatibly."
+    },
+    {
+      "path": "scripts/ai_observability.py",
+      "reason": "Canonical local lifecycle and gate event semantics."
+    },
+    {
+      "path": "scripts/ai_performance_diagnosis.py",
+      "reason": "Existing top-bottleneck and elapsed-time semantics to make reusable."
+    },
+    {
+      "path": "docs/reference/performance-diagnosis.md",
+      "reason": "Existing evidence-only boundary and unknown semantics."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-02-governance-cost-metrics.contract.json",
+      "reason": "Archived WI-02 contract records the user-authorized execution-metrics boundary and unknown semantics."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["performance_observability"],
+    "reason": "Lifecycle aggregation must preserve exact observed values, deterministic bottleneck ordering, and advisory-only semantics.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Governance schema and lifecycle evidence changes require strict verification; report remains advisory-only."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The Contract bounds an evidence-only local lifecycle report and explicitly preserves gate decisions."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A reusable report records start-to-close elapsed time when authoritative lifecycle evidence provides it, while preserving local active/verification/gate phase durations.",
+    "CI wait, human wait, and recovery/retry durations are reported only from explicit event evidence; unavailable values remain unknown and are never inferred.",
+    "The report ranks deterministic top bottlenecks from observed lifecycle phases, gates, and explicit waits without double-counting a source category.",
+    "Execution counts, cross-Work-Item exclusion, malformed-input fail-closed behavior, deterministic digesting, and advisory decisionImpact=none remain intact.",
+    "The common JSON schema, focused tests, and human-readable documentation cover complete, partial, empty, and invalid evidence scenarios."
+  ],
+  "guidelines": [
+    "Keep metrics evidence-only; never use them to bypass a required check or change scheduling.",
+    "Use explicit event durations and represent unavailable categories as unknown.",
+    "Keep report output deterministic apart from generatedAt and document the machine-readable and Markdown contracts."
+  ],
+  "intent": {
+    "problem": "The WI-02 cost report exposes basic counts but does not yet provide a reusable start-to-close lifecycle breakdown or explain which measured phases and gates dominate execution.",
+    "constraints": [
+      "Use repository-local observability evidence only.",
+      "Preserve unknown semantics; never estimate provider usage, human wait, or recovery values.",
+      "Do not alter gate outcomes, scheduling behavior, or Work Item lifecycle decisions."
+    ],
+    "rationale": "A compatible lifecycle and bottleneck projection gives WI-11, WI-12, WI-13, and external agents comparable evidence for optimization while keeping the Governance Trust Layer authoritative and advisory metrics separate."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A complete lifecycle log includes start/finish, phases, gates, retries, and explicit waits.",
+      "expected": "The report retains total elapsed, time categories, execution counts, and deterministic top bottlenecks.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused deterministic event fixture and CLI report assertions."
+    },
+    {
+      "scenario": "Provider, human, token, or recovery evidence is absent or has no authoritative duration.",
+      "expected": "Unavailable categories remain unknown and no proxy duration is emitted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused partial/empty evidence tests."
+    },
+    {
+      "scenario": "Malformed or cross-Work-Item evidence is present.",
+      "expected": "Malformed input fails closed and cross-item events are excluded and counted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused loader validation tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user conversation",
+    "reason": "User explicitly authorized the complete 14-WI implementation plan, including governance-cost schema integration."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 916
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-04-cost-metrics-integration.json",
+    "baseCommit": "e862e1a68df67c4e975b97ac84c1f950b44dd785",
+    "initialScopeDigest": "de04592aa8575d6f4c8a129895285f57b675f3ed38aaa209347c6177428d177e",
+    "contractSkeletonDigest": "cbce7c8e8382f6009630e6e641ec79968f544b067a54b03e26d9beb5de082771"
+  }
+}
