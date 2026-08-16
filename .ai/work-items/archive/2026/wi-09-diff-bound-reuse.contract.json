@@ -1,0 +1,243 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-09-diff-bound-reuse",
+  "mode": "code",
+  "title": "Diff-bound evidence reuse policy",
+  "rawUserRequest": "Implement WI-09 of the approved 14-WI AI Cockpit improvement plan: add a repository-local, deterministic diff-bound evidence reuse policy on top of the WI-07 binding foundation. Bind exact base/head commits, normalized changed-path identity, security scope, and governance policy; fail closed to rerun for unknown, malformed, stale, or mismatched inputs; preserve all required verification and gate authority. Execute in English low-token mode with a dedicated branch, PR, archive, merge, closure lifecycle, and no new Work Item for in-scope defects.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-14-wi-performance-first-plan#WI-09",
+    "capturedAt": "2026-08-16T05:00:00Z",
+    "digest": "sha256:user-authorized-diff-bound-reuse-policy-plan"
+  },
+  "declaredIntent": {
+    "summary": "Provide a narrow diff-bound policy that can identify an exactly matching changed-path evidence binding without permitting skipped checks or governance bypass.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "cc9ad16ed014bbd25526e51916fda7f52148ef9f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-09-diff-bound-reuse.contract.json",
+    ".ai/work-items/active/wi-09-diff-bound-reuse.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-09-diff-bound-reuse.outcome.json",
+    ".ai/work-items/active/wi-09-diff-bound-reuse.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_diff_bound_reuse.py",
+    "tests/test_ai_diff_bound_reuse.py",
+    "docs/reference/diff-bound-evidence-reuse.md"
+  ],
+  "outOfScope": [
+    "Implementing WI-08 content-bound or WI-10 environment-bound reuse policies.",
+    "Changing the WI-07 evidence-binding schema or foundation API.",
+    "Changing ai_verify, verification context, required-check execution, cache, scheduler, retry, provider, CI, or network behavior.",
+    "Granting permission to skip security, scope, governance, coverage, or required-check gates, or inferring reuse from timestamps, branch names, or agent self-report."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_evidence_binding.py",
+      "reason": "WI-07 foundation API and fail-closed binding identity to consume without changing."
+    },
+    {
+      "path": "tests/test_ai_evidence_binding.py",
+      "reason": "Existing classification, digest, immutability, and Unknown-to-rerun conventions."
+    },
+    {
+      "path": "docs/reference/evidence-binding-foundation.md",
+      "reason": "Documented handoff boundary and exact-match semantics for WI-08/09/10."
+    },
+    {
+      "path": "scripts/ai_verification_context.py",
+      "reason": "Repository-local changed-path and verification input vocabulary; no runtime integration is permitted."
+    },
+    {
+      "path": "docs/reference/verification-evidence-reuse.md",
+      "reason": "Existing source-backed requirements for exact source revision and normalized changed-path identity."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "security_boundary",
+      "api_change"
+    ],
+    "reason": "An incorrectly accepted diff binding could reuse evidence after the source revision, changed paths, security scope, or governance policy changed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The diff-bound policy is a governance-facing evidence decision API and requires strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The policy is bounded to exact diff identity and deterministic local decisions; execution authority remains with existing verification gates."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A pure Python policy API consumes a valid WI-07 diff-bound binding plus current base commit, head commit, normalized changed paths, security scope digest, and governance policy digest, and returns a deterministic structured decision.",
+    "Reuse is eligible only when baseCommit, headCommit, changedPathsDigest, security scope, governance policy, and binding freshness match exactly; changed paths are canonicalized as a sorted unique repository-relative set before digesting.",
+    "Missing, malformed, unknown, stale, cross-scope, cross-governance, commit-mismatched, or changed-path-mismatched inputs return state=unknown or state=stale with action=rerun and stable reason codes; no result grants authority to skip a required check.",
+    "Focused tests cover exact reuse, base/head mismatch, added/removed/renamed path changes, path normalization and duplicate rejection, scope/governance mismatch, unknown/malformed/expired bindings, deterministic output, and caller-input immutability.",
+    "A reference document records the policy input contract, changed-path canonicalization, fail-closed semantics, API boundary, and explicit non-integration handoff to WI-08/WI-10; no scheduler, cache, verifier, or gate integration is introduced."
+  ],
+  "guidelines": [
+    "Compare exact canonical repository-relative changed-path identity and source revision; never infer equivalence from branch names or timestamps.",
+    "Fail closed to rerun for Unknown, malformed, stale, mismatched, cross-scope, or cross-governance evidence.",
+    "Keep the policy pure and local; existing verification runners retain authority to execute every required check."
+  ],
+  "intent": {
+    "problem": "WI-07 provides a generic diff-bound binding, but without a policy-specific changed-path identity check a later caller could treat a receipt from another base/head or path set as reusable.",
+    "constraints": [
+      "Use the WI-07 foundation as-is and keep this Work Item limited to diff-bound policy behavior.",
+      "Unknown, malformed, expired, or mismatched evidence must require rerun and never be upgraded by inference.",
+      "Every decision must compare security scope and governance policy identity in addition to source revision and changed paths.",
+      "Do not alter required-check execution or add caching, scheduling, provider, or network behavior."
+    ],
+    "rationale": "A small policy-specific pure function makes changed-path reuse conditions explicit and testable while preserving the existing verification authority boundary."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A diff-bound binding has identical base/head commits, normalized changed paths, security scope, governance policy, and valid freshness.",
+      "expected": "The decision is deterministic state=fresh, action=reuse, with no reasons.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused test builds a diff binding and evaluates the same canonical current diff twice."
+    },
+    {
+      "scenario": "The current diff changes by commit, added/removed/renamed path, or path ordering/duplication.",
+      "expected": "The decision is state=stale or state=unknown, action=rerun, with stable reason codes and no reuse.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests cover each source and changed-path identity variation, including normalization and malformed paths."
+    },
+    {
+      "scenario": "Security scope or governance policy is missing, malformed, or different from the binding.",
+      "expected": "The decision fails closed to rerun and never becomes reusable.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests cover both mismatch and unknown cases and assert stable reason ordering."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 920
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-09-diff-bound-reuse.json",
+    "baseCommit": "cc9ad16ed014bbd25526e51916fda7f52148ef9f",
+    "initialScopeDigest": "874f9bfb0ab9451a524c169e98c09e8e795b000de4cece933578ec79ecab3d02",
+    "contractSkeletonDigest": "c77fae5d6ac270504d7db59637acb87da9187b2f38a55b87a9d409bc020a1632"
+  }
+}

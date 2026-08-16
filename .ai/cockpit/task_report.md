@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-07-evidence-binding-foundation generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-09-diff-bound-reuse generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: No runtime verifier/cache integration is included by design; WI-08/09/10 must add and validate their own policy-specific use.
+- Unresolved evidence is explicitly limited: No ai_verify, cache, scheduler, provider, or network integration is included by design; future consumers must preserve required-check execution and their own policy gates.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
