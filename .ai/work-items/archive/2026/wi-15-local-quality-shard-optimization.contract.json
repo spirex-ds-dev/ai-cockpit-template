@@ -1,0 +1,135 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-15-local-quality-shard-optimization",
+  "mode": "code",
+  "title": "Bounded local project-test shard optimization",
+  "baseCommit": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "The user authorized continuous execution until the remaining Work Items are genuinely closed. For this Work Item, improve the local project-test performance after the parallel-processing lessons, while preserving complete test ownership, evidence integrity, existing coverage thresholds, and the requirement that completion evidence be measured rather than inferred.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-16:user-authorized-continuation-and-performance-review",
+    "capturedAt": "2026-08-16T00:00:00+09:00",
+    "digest": "user-authorized-continuation-performance-wi15-20260816"
+  },
+  "declaredIntent": {
+    "summary": "Reduce local project-test wall time with bounded, source-bound sharding while preserving every governed verification and evidence boundary.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "scope": [
+    ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+    ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.json",
+    ".ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.md",
+    "Makefile",
+    "pyproject.toml",
+    "scripts/quality_test_manifest.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_test_manifest.py",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/reference/performance-diagnosis.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    ".github/workflows/**",
+    "templates/make/Makefile.ai",
+    "scripts/run_quality_session.py",
+    "coverage thresholds",
+    "provider/network/scheduler orchestration",
+    "test omission, test weakening, or coverage-floor reduction",
+    "rewriting immutable historical archive evidence",
+    "release metadata or publication changes"
+  ],
+  "sources": [
+    {"path": "Makefile", "reason": "Current local project-test entrypoints, manifest, shard, aggregate, and receipt targets."},
+    {"path": "scripts/quality_test_manifest.py", "reason": "Source-bound shard ownership, execution, aggregate, and fail-closed receipt behavior; aggregate JSON must tolerate unavailable ephemeral fixture sources without changing the coverage floor."},
+    {"path": ".github/workflows/smoke.yml", "reason": "Hosted five-shard topology is an existing reference boundary, not a new CI change."},
+    {"path": "tests/test_makefile.py", "reason": "Existing Make DAG and public quality-entrypoint regression expectations."},
+    {"path": "tests/test_quality_test_manifest.py", "reason": "Existing manifest, shard, aggregate, coverage, and receipt regression expectations."},
+    {"path": "pyproject.toml", "reason": "Coverage path aliases must bind isolated shard sources back to the repository tree so aggregate reporting remains valid after worktree cleanup."},
+    {"path": "docs/operations/quality-gates.md", "reason": "Current English quality-gate and local-versus-hosted execution boundary."},
+    {"path": "docs/operations/quality-gates.ja.md", "reason": "Japanese quality-gate documentation requiring synchronized behavior claims."},
+    {"path": "docs/operations/quality-gates.zh-CN.md", "reason": "Chinese quality-gate documentation requiring synchronized behavior claims."},
+    {"path": "docs/reference/performance-diagnosis.md", "reason": "Evidence-only timing and baseline-comparison rules; causal claims are prohibited without comparable evidence."},
+    {"path": "target/quality/sessions/1c12d3065312-local-20260815T230323Z-16047-0/summary.json", "reason": "Exact-base serial project-test timing evidence used as the pre-change benchmark."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["performance", "evidence_integrity", "resource_contention"],
+    "reason": "Local quality execution is currently serial and resource-bound. Bounded sharding can reduce wall time, but concurrent shard outputs, coverage combination, exact source identity, and failure diagnostics must remain deterministic and fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["This changes a governed quality gate and its evidence boundary.", "The user explicitly authorized continued execution, but no test ownership or verification threshold may be weakened."],
+    "override": {
+      "approvalEvidence": "The user explicitly authorized continuous execution and performance improvement in the current conversation.",
+      "reason": "Strict profile is required for a governed quality-gate performance change.",
+      "risks": ["resource contention", "evidence integrity"],
+      "notRunChecks": ["No checks are being waived; all declared checks remain required."],
+      "workItemOnly": true,
+      "workItemId": "wi-15-local-quality-shard-optimization"
+    }
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user explicitly authorized continued execution and this Work Item has bounded scope, explicit evidence, and deterministic acceptance criteria."},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "preReviewWarnings": [
+    "Review that the default local path executes every manifest entry exactly once across bounded shards.",
+    "Review that aggregate coverage, critical coverage, shell boundaries, and receipts remain fail closed.",
+    "Review performance claims only against same-base comparable timing evidence; do not infer a general speedup from one environment."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record the implementation checkpoint before editing and a strict pre-finish checkpoint after comparable timing and regression evidence are available."},
+  "acceptance": [
+    "The default local `make project-test` path uses the existing source-bound manifest and runs its five balanced shards with an explicit bounded concurrency limit, then performs the existing aggregate coverage, critical-coverage, and receipt gates; coverage path aliases bind isolated shard sources to the repository source tree, aggregate JSON tolerates unavailable ephemeral fixture sources, and the 85.10 floor remains enforced after shard cleanup.",
+    "Every manifest entry is owned by exactly one shard; shard, aggregate, and receipt evidence bind the current commit/tree/manifest/plan and fail closed on missing, failed, duplicate, or mismatched evidence.",
+    "The existing 85.10 coverage floor and installer/CI-release boundary checks remain enforced without omission, weakening, or duplicate execution.",
+    "Focused regression tests cover the Make DAG, all five shard aliases, exact manifest ownership, failure diagnostics, and aggregate receipt identity.",
+    "A same-base serial baseline and candidate local timing are captured with the performance-diagnosis evidence rules; any improvement claim is limited to the measured environment and makes no causal or general claim without comparable evidence.",
+    "English, Japanese, and Simplified Chinese quality-gate documentation state the bounded local shard behavior and its boundary from hosted CI and adopter-owned project test commands.",
+    "The Work Item completes the strict AI lifecycle, generated status, outcome pair, archive, PR, hosted checks, merge, and close-work-item sequence."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "All five source-bound shards pass", "required": true, "status": "unverified", "expected": "Each manifest entry has one owner, aggregate coverage and critical coverage pass, and the receipt is current and verified.", "evidence": ["tests/test_makefile.py", "tests/test_quality_test_manifest.py"], "verificationPlan": "Run the focused suite and one serialized strict project-test."},
+    {"scenario": "A shard fails, is missing, or reports a mismatched source identity", "required": true, "status": "unverified", "expected": "Aggregation and receipt validation fail closed while preserving shard diagnostics; no green project-test result is emitted.", "evidence": ["tests/test_quality_test_manifest.py"], "verificationPlan": "Run the manifest failure-path tests and inspect retained receipts."},
+    {"scenario": "Concurrent shard outputs and coverage data are combined", "required": true, "status": "unverified", "expected": "Shard artifacts remain isolated, coverage is combined exactly once, and no shell boundary is silently skipped or duplicated.", "evidence": ["tests/test_makefile.py", "docs/operations/quality-gates.md"], "verificationPlan": "Run shard ownership/aggregate tests and inspect the candidate receipt."},
+    {"scenario": "Same-base serial baseline is compared with the candidate", "required": true, "status": "unverified", "expected": "Timing evidence records both runs and limits conclusions to measured wall time on the same environment.", "evidence": ["docs/reference/performance-diagnosis.md"], "verificationPlan": "Capture pre-change and post-change /usr/bin/time evidence with exact-base identity."}
+  ],
+  "guidelines": [
+    "Preserve the existing source-bound manifest, shard, aggregate, receipt, coverage, and critical-boundary checks.",
+    "Do not import internal modules from unrelated features or introduce a second test ownership mechanism.",
+    "Document public Make targets and the local-versus-hosted/adopter execution boundary in all maintained locales.",
+    "Do not claim performance improvement beyond comparable measured evidence."
+  ],
+  "intent": {
+    "problem": "The repository's local project-test gate remains serial even though the source-bound manifest and hosted five-shard topology already provide a bounded, auditable execution model. The resulting quality feedback is slow and has been observed as a practical performance bottleneck.",
+    "constraints": ["No test ownership, coverage threshold, evidence identity, or failure diagnostics may be weakened.", "Hosted CI topology and adopter-owned PROJECT_TEST commands are reference boundaries, not this Work Item's implementation surface.", "Historical archive evidence is immutable; any correction must be delivered by a successor Work Item.", "All quality verification must be serialized when full-repository resource contention would otherwise invalidate evidence."],
+    "rationale": "Reuse the existing manifest/shard/aggregate infrastructure, expose a bounded local Make DAG, and verify exact ownership plus same-base timing so efficiency improves without trading away trust."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized continuous execution through completion and specifically authorized performance improvement work, provided that governed verification and evidence integrity are preserved."},
+  "implementationSurface": {
+    "production": ["Makefile", "pyproject.toml", "scripts/quality_test_manifest.py"],
+    "tests": ["tests/test_makefile.py", "tests/test_quality_test_manifest.py"],
+    "generated": [".ai/cockpit/current_status.md", ".ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.json", ".ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.md", "docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"],
+    "documentation": ["docs/operations/quality-gates.md", "docs/operations/quality-gates.ja.md", "docs/operations/quality-gates.zh-CN.md", "docs/reference/performance-diagnosis.md"]
+  },
+  "rollbackNote": "Revert the Work Item diff to restore the serial project-test-owned recipe and its documentation; do not delete generated or archived evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 934}},
+  "startReceipt": {"path": ".ai/work-items/starts/wi-15-local-quality-shard-optimization.json", "baseCommit": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e", "initialScopeDigest": "888d9e751d551ecac8b36c10c9af33c96f63b1a59388c73bbae14b243ea14a8e", "contractSkeletonDigest": "6f6a7af71fdabe8bc8980435600298461a3b49ac93444101b68aeb2549531877"}
+}

@@ -8,6 +8,8 @@ audience:
   - auditor
 status: reference
 authority: canonical
+capabilityClaims:
+  - repository_governance_layer
 ---
 
 # Performance diagnosis
@@ -57,3 +59,12 @@ reproducible from the same event fixture. The JSON contract is
 
 This tool explains measured cost for later human or orchestrator decisions. It
 does not change gate outcomes, scheduling, trust decisions, or runtime behavior.
+
+For the repository-local project-test optimization, capture a same-base serial
+or prior-session baseline and a candidate run with the exact commit/tree and
+manifest identity. `/usr/bin/time -p make project-test` supplies wall-clock
+evidence; the shard receipts and `target/quality/sessions/` timing JSON supply
+ownership and phase evidence. A lower wall time on this machine is a measured
+local result only. It is not evidence of a cross-machine, hosted, or adopter
+speedup, and it must not be reported as causal unless comparable diagnosis
+reports support that claim.

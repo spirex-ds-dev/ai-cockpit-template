@@ -8,6 +8,14 @@ import pytest
 from scripts import quality_test_manifest
 
 
+def test_coverage_is_source_relative_for_isolated_shard_aggregation():
+    coverage_config = Path("pyproject.toml").read_text(encoding="utf-8")
+
+    assert "[tool.coverage.run]" in coverage_config
+    assert "[tool.coverage.paths]" in coverage_config
+    assert '"*/scripts"' in coverage_config
+
+
 def _entry(entry_id: str, duration: int, kind: str = "pytest") -> dict[str, object]:
     return {"id": entry_id, "durationMs": duration, "kind": kind}
 

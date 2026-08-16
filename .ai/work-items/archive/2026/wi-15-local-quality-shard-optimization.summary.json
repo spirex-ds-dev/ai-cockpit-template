@@ -1,0 +1,781 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-15-local-quality-shard-optimization",
+  "contractPath": ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.contract.json",
+  "title": "Bounded local project-test shard optimization",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.contract.json",
+      "reason": "Records the user's authorization, scope, boundaries, acceptance, scenarios, and strict verification contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.summary.json",
+      "reason": "Tracks implementation, evidence, and user-facing handoff for the Work Item."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated status projection updated by the governed lifecycle."
+    },
+    {
+      "path": ".ai/work-items/starts/**",
+      "reason": "Generated lifecycle start evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/**",
+      "reason": "Generated immutable archive evidence after strict finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.outcome.json",
+      "reason": "Generated structured Outcome for direct human handoff."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.outcome.md",
+      "reason": "Generated readable Outcome for direct human handoff."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Adds bounded local project-test shard orchestration while retaining existing gates."
+    },
+    {
+      "path": "pyproject.toml",
+      "reason": "Maps isolated shard scripts sources back to the repository for aggregate coverage without hiding temporary fixture paths."
+    },
+    {
+      "path": "scripts/quality_test_manifest.py",
+      "reason": "Keeps aggregate coverage JSON tolerant of unavailable ephemeral fixture sources while retaining the enforced coverage floor."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Locks the public Make DAG, shard aliases, and non-omission behavior."
+    },
+    {
+      "path": "tests/test_quality_test_manifest.py",
+      "reason": "Locks exact ownership, failure, aggregation, and receipt behavior."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerated source-bound capability evidence after the Makefile change."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerated source-bound Japanese capability evidence after the Makefile change."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerated readable Japanese capability evidence after the Makefile change."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerated source-bound documentation alignment evidence after the Makefile change."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Regenerated readable documentation alignment evidence after the Makefile change."
+    },
+    {
+      "path": "docs/operations/quality-gates.md",
+      "reason": "Documents local bounded sharding and execution boundaries."
+    },
+    {
+      "path": "docs/operations/quality-gates.ja.md",
+      "reason": "Synchronizes Japanese quality-gate behavior and boundaries."
+    },
+    {
+      "path": "docs/operations/quality-gates.zh-CN.md",
+      "reason": "Synchronizes Chinese quality-gate behavior and boundaries."
+    },
+    {
+      "path": "docs/reference/performance-diagnosis.md",
+      "reason": "Documents comparable timing evidence and claim limits."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Regenerated from the rewritten archived Task Outcome during this archive transaction."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Regenerated from the rewritten archived Task Outcome during this archive transaction."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "Makefile",
+    "scripts/quality_test_manifest.py",
+    ".github/workflows/smoke.yml",
+    "tests/test_makefile.py",
+    "tests/test_quality_test_manifest.py",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/reference/performance-diagnosis.md",
+    "target/quality/sessions/1c12d3065312-local-20260815T230323Z-16047-0/summary.json",
+    "pyproject.toml"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:20.823021+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "dc2e4db7c162c323b7e5909fa8af46dece23858f2679cce74843611cab2b2259",
+      "commandHash": "c9c1cb9bdeafe118c868b83ae842a6849a7b4d6f9ebe8c707bb2ad930e0a1ac3",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "0351211a3b761762b0c5a44795a137771186e4f9501804a4c7dc6e744d8f31c5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json work item contract check passed: .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json work item contract check passed: .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "outputBytes": 313
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:21.092447+00:00",
+      "exitCode": 0,
+      "durationMs": 160,
+      "outputDigest": "ce394293d6b2942ef5dc26a668491343ffc71cbd5aacb281700e1aa20f147c60",
+      "commandHash": "3489be0ef4325dde7ada9c9f9b29df7937b5a4b25cfea0298798f56f0158f739",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "2f05d36ac62716a013a36202132ab5b347a528ba906effacd60fd8031c8b9ffe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json scope guard passed: 22 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json scope guard passed: 22 changed path(s) covered",
+      "outputBytes": 248
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:21.375521+00:00",
+      "exitCode": 0,
+      "durationMs": 173,
+      "outputDigest": "9ac730008702bb125e8fd16304fcab7101db733c3a62f35cb938a62e86e62d34",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "5232f1919a381e909026be792f75c8b9078114eb9d2d188b44b7598f607c400f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 375
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:21.885967+00:00",
+      "exitCode": 0,
+      "durationMs": 401,
+      "outputDigest": "b0e0f7b0af23d3807863ad57ff4391478f3fe28658be627881f31f83b44abbda",
+      "commandHash": "59ddb96996bf4f323f83369738c01b9763beaa1ecffb88a79c053a02989c414c",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "8319e66167d5a557a9d2742508399604de3c3e0276c457486eb04af44482eda5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-15-local-quality-shard-optimization` - Contract Hash: `818fa0a6d8f5f33d` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `7` - Unkno",
+      "outputTail": "idates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wi-15-local-quality-shard-optimization.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.ja.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/performance-diagnosis.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `pyproject.toml` — covered by Contract scope - [active_owned] `scripts/quality_test_manifest.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_quality_test_manifest.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 7454
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:22.155499+00:00",
+      "exitCode": 0,
+      "durationMs": 159,
+      "outputDigest": "60ae7dc3a25cd30b050a0c09bd3d381088b86446f118fea1b279d41f8648787b",
+      "commandHash": "e87565806a383a84d0064b77207b6ecd1e206bbfc03036805373b874649f730a",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "d0fe4560f5d9e2c6170ead902ce8bb761f3fd5b80c6d769a82bc7519f6af7bb5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json [review] .ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.json [review] .ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.md [review] .ai/work-items/starts/wi-15-local-quality-shard-optimi",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json [review] .ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.json [review] .ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.md [review] .ai/work-items/starts/wi-15-local-quality-shard-optimization.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] Makefile review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 781
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:22.438791+00:00",
+      "exitCode": 0,
+      "durationMs": 160,
+      "outputDigest": "470f5fb6f6e2bd7a8461008724d0dd9532731afaa7087c10a452e024987897d1",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "b3ff0c4fdc2663a8cbab8abf43cf0bdbe82474fa52d50d324d8b879068689310",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 197
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:22.676069+00:00",
+      "exitCode": 0,
+      "durationMs": 151,
+      "outputDigest": "bf0eeab5d1f9c6e35a2d4a984d1cacedcdb4fd6c3bfa6d43d0ddcd1c4e00b2d5",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "6614e4c29e0fba04250e060067e46b8047b72f9c28931a8ab2ce84c03ec65f49",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 206
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:22.816132+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "8d34060c993b52267c2c2b0961e277e4788e06e5e8e23002cfec212d40ec7b6d",
+      "commandHash": "43f0c07bcd6cf59bf6a0895e475060d877054a973882fdb2a9f0b0e8ae21049c",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "420d12567e30852a8f33c101fd5ab3c03ebcb6878052a6ccb3bae39e7d88986a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 356
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:22.965864+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "fc59d751162c590d4121bcac94401d41ef59dcd2b97a63e152ae3338026f3fed",
+      "commandHash": "399d7a0d280c38702bf345550afcb61bbefbaf1b9a2c0835d0622967dcd5d08f",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "1ffdb34793bac1ad63b668aa9a715aa1c5f06aa8929d6247a842fb639980ec07",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputBytes": 361
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T11:54:23.407692+00:00",
+      "exitCode": 0,
+      "durationMs": 344,
+      "outputDigest": "0ed5293488f9a4c47dd00f416ff3e91afdeadf1f9b184f9ece0864751b954850",
+      "commandHash": "7d7e40c81b6504145121c78c977d993908389821bdad463fbb4d0dc87afc1a08",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "d1166c6f39037ff4fdec1a8078768b38c15793dba7109764c10831eba28b2c5d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json ## Diff Ownership Preview - active_owned: `22`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task ",
+      "outputTail": "/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wi-15-local-quality-shard-optimization.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.ja.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/performance-diagnosis.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `pyproject.toml` — covered by Contract scope - [active_owned] `scripts/quality_test_manifest.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_quality_test_manifest.py` — covered by Contract scope",
+      "outputBytes": 2514
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T12:00:28.862886+00:00",
+      "exitCode": 0,
+      "durationMs": 365172,
+      "outputDigest": "b979c03640e1e18bd593ee44070e92d8fe308ce75e85b83b4aa5b9805f048dfa",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "307864d5de641837c03a6fabefaea2d2d368e081facc403bd0acc444bcb30548",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"dependency\", \"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"0801a62948ae1c2eb6b6d6d23f9654b7d669720e\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/wi-15-local-quality-shard-optimization.contrac",
+      "outputTail": "sions/0801a62948ae-local-20260816T115423Z-52247-0/timing/check-ai-test-weakening.json\" --log \"target/quality/sessions/0801a62948ae-local-20260816T115423Z-52247-0/logs/check-ai-test-weakening.log\" -- \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory check-ai-test-weakening PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_test_weakening.py --root . --mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"0801a62948ae1c2eb6b6d6d23f9654b7d669720e\", \"decision\": \"continue\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"No recovery action is required for the analyzed diff.\", \"requiredExplanation\": false, \"signals\": [], \"version\": 1} \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-aggregate PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-receipt PROJECT_TEST_RECEIPT=target/quality/project-test-aggregate/receipt.json PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt \"target/quality/project-test-aggregate/receipt.json\" quality gate summary written: target/quality/sessions/0801a62948ae-local-20260816T115423Z-52247-0/summary.json",
+      "outputBytes": 72946
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T12:00:29.916669+00:00",
+      "exitCode": 0,
+      "durationMs": 478,
+      "outputDigest": "7efde9408bdc57f472c157c7dde076a9b4f51627147f4ef1f34b89806f613b9f",
+      "commandHash": "369060ac382a5d34ed6d57b4c09ce7051b994d10ebfeb7f46544d2bd119b0bd3",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "26d04937565067c3563ed0ac023f8f1424c14527a2ef8e0ab044570b08f36ff9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 453
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T12:00:30.931788+00:00",
+      "exitCode": 0,
+      "durationMs": 374,
+      "outputDigest": "b03ee8e7b7fef9b2dbfdc6cd0583ed1a61439c62ff73e0cde90421a9757f0506",
+      "commandHash": "638a5e7de9152a05ed38e5bc8105e75932459da5f86157d841ebd9c4c95c2ed4",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "701469cc37e574d3fe4cc58d3c2c0ffae8f23be53ddbd4a5f8bec64ce54027f2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 386
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T12:00:31.577212+00:00",
+      "exitCode": 0,
+      "durationMs": 61,
+      "outputDigest": "b187d28fe830a2b09f5c02be6f1905679b26cfaced00e9e8422e60d2d6c20ec5",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "d2574b1e326954452e00b4e8cd0ee105e5edbb453092b46ac227f06596adf2f2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 174
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T12:00:31.734990+00:00",
+      "exitCode": 0,
+      "durationMs": 61,
+      "outputDigest": "a6a4456817a5a2e20f3562d821e07e4540ccec85de7a0500e4eee1261a087fc9",
+      "commandHash": "8fa07c8b50592891e6483c25e0d783757366e56f27d91b79548c2fbd3ca71025",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "ec205287236148c38bce41a067a5b48c01e477927eb56de12a067d08ae41c063",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json --summary .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 366
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json CONTRACT=.ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-16T12:00:33.591827+00:00",
+      "exitCode": 0,
+      "durationMs": 363,
+      "outputDigest": "f32c9f6197afb3766594fbad1d0c0fc0442d19be1db3591e5b7490c918c80f12",
+      "commandHash": "e2a9ae701f5e309f53434b7b063fb9c8d1e09b974619d0ea70af4393892a97c6",
+      "contractHash": "818fa0a6d8f5f33d64b06dcf4c2e35d65d1f550a3617907d1cce2f640471d302",
+      "commitSha": "0801a62948ae1c2eb6b6d6d23f9654b7d669720e",
+      "executionContractPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "worktreeDigest": "186f79f8ebc244fd6ad7be55098170fd506426bcf4608eba00e8634115c32e15",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json ai summary check passed: .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json --contract .ai/work-items/active/wi-15-local-quality-shard-optimization.contract.json ai summary check passed: .ai/work-items/active/wi-15-local-quality-shard-optimization.summary.json",
+      "outputBytes": 388,
+      "outcomeInputDigest": "4ff62d32a874a340796c04a98c038878b31ae8139ac615c036b7cb4242f50fbf"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve the existing source-bound manifest, shard, aggregate, receipt, coverage, and critical-boundary checks.",
+      "compliant": true,
+      "evidence": "Final project-test aggregate, critical coverage, receipt, and focused manifest tests passed."
+    },
+    {
+      "guideline": "Do not import internal modules from unrelated features or introduce a second test ownership mechanism.",
+      "compliant": true,
+      "evidence": "Project Ruff and mypy checks passed; one existing manifest/shard ownership path is retained."
+    },
+    {
+      "guideline": "Document public Make targets and the local-versus-hosted/adopter execution boundary in all maintained locales.",
+      "compliant": true,
+      "evidence": "English, Japanese, and Simplified Chinese quality-gate docs describe bounded shards, coverage path aliases, and hosted/adopter boundaries; alignment checks passed."
+    },
+    {
+      "guideline": "Do not claim performance improvement beyond comparable measured evidence.",
+      "compliant": true,
+      "evidence": "Same-base serial baseline was 550.85s and the final locked-environment candidate was 343.22s on the same local environment (~37.7% lower wall time); claims are limited to this measurement."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "A bounded local shard DAG can reduce wall time but must preserve exact source identity, coverage, shell boundaries, diagnostics, and deterministic receipt validation under resource contention."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "severity": "medium",
+      "area": "coverage_aggregation",
+      "detail": "Initial isolated candidate runs exposed relative output-path and deleted-worktree source bindings; both were corrected in this Work Item and the final candidate aggregate passed.",
+      "status": "resolved",
+      "evidence": [
+        "target/quality/project-test-aggregate/gate.log",
+        "tests/test_quality_test_manifest.py"
+      ]
+    },
+    {
+      "severity": "medium",
+      "area": "coverage_report_ephemeral_source",
+      "detail": "The locked coverage reporter also rejected a deleted temporary fixture after JSON generation; aggregate JSON and report now ignore only unavailable ephemeral sources while retaining the 85.10 floor and critical-coverage gate.",
+      "status": "resolved",
+      "evidence": [
+        "scripts/quality_test_manifest.py",
+        "target/quality/project-test-aggregate/gate.log",
+        "tests/test_quality_test_manifest.py"
+      ]
+    },
+    {
+      "severity": "low",
+      "area": "documentation_format",
+      "detail": "The Japanese quality-gate sentence triggered the repository number-spacing rule; it was corrected before the final candidate.",
+      "status": "resolved",
+      "evidence": [
+        "docs/operations/quality-gates.ja.md",
+        "tests/test_docs_metadata.py"
+      ]
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "performance",
+      "detail": "Local speedup is environment-specific and cannot be generalized without comparable evidence across environments.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    },
+    {
+      "level": "medium",
+      "area": "resource_contention",
+      "detail": "Full strict quality remains serialized at the Work Item level; concurrent full-repository runs can invalidate timing and extend runtime.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "exact manifest ownership",
+      "fail-closed aggregate/receipt behavior",
+      "bounded concurrency and measured timing",
+      "localized documentation boundary"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "verified_by_generated_outcome",
+    "persistence": "not_applicable",
+    "localization": "planned",
+    "generatedArtifacts": "planned",
+    "makeEntrypoints": "planned"
+  },
+  "userCorrectionsCaptured": [
+    "User authorized continuous execution through genuine closure of the remaining Work Items.",
+    "User identified performance as a practical bottleneck and authorized optimization after the parallel-processing lessons.",
+    "User requires evidence-backed completion reporting and does not authorize weakening trust or verification boundaries."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Continue until the remaining Work Items are genuinely closed.",
+      "contractEvidence": "rawUserRequest, executionDecision, acceptance[6]"
+    },
+    {
+      "correction": "Measure performance rather than infer it.",
+      "contractEvidence": "acceptance[4], scenarioCoverage[3], performance-impact boundaries"
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "10fca8052ceee720",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "10fca8052ceee720",
+      "previousContractHash": "10fca8052ceee720",
+      "contractHash": "5a2e52f6dab92673",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "The first full candidate exposed that isolated worktrees produced coverage data bound to deleted absolute paths; this amendment adds pyproject coverage relative_files configuration so aggregate coverage remains valid without retaining shard worktrees.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-16T11:07:15.437511+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "10fca8052ceee720",
+      "previousContractHash": "5a2e52f6dab92673",
+      "contractHash": "c380af3a79100dca",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "The relative-files experiment exposed a second coverage edge case: temporary fixture modules became ambiguous relative paths. Replace it with coverage path aliases that map only isolated shard scripts sources back to the repository while preserving fixture path identity.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-16T11:15:28.712399+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "10fca8052ceee720",
+      "previousContractHash": "c380af3a79100dca",
+      "contractHash": "e41e0c049a9ab26b",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Strict locked quality runs coverage.py 7.15.0, which rejects aggregate JSON when ephemeral fixture modules disappear after their tests. Keep the 85.10 report floor and source-path aliases, but pass --ignore-errors only to aggregate JSON so missing temporary fixture sources do not invalidate otherwise source-bound production coverage.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T11:34:57.956630+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "10fca8052ceee720",
+      "previousContractHash": "e41e0c049a9ab26b",
+      "contractHash": "818fa0a6d8f5f33d",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Align requested operation with the governed runtime helper change in scripts/quality_test_manifest.py so diff ownership treats the implementation as repository governance enforcement rather than a test-only effect.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 10,
+      "recordedAt": "2026-08-16T11:45:26.867357+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "818fa0a6d8f5f33d",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "All five source-bound shards pass",
+      "required": true,
+      "status": "verified",
+      "expected": "Each manifest entry has one owner, aggregate coverage and critical coverage pass, and the receipt is current and verified.",
+      "evidence": [
+        "target/quality/project-test-manifest.json",
+        "target/quality/project-test-shard-plan.json",
+        "target/quality/project-test-aggregate/receipt.json",
+        "tests/test_makefile.py",
+        "tests/test_quality_test_manifest.py"
+      ],
+      "verificationPlan": "Focused suite and final serialized make project-test."
+    },
+    {
+      "scenario": "A shard fails, is missing, or reports a mismatched source identity",
+      "required": true,
+      "status": "verified",
+      "expected": "Aggregation and receipt validation fail closed while preserving shard diagnostics; no green project-test result is emitted.",
+      "evidence": [
+        "tests/test_quality_test_manifest.py",
+        "target/quality/project-test-aggregate/gate.log"
+      ],
+      "verificationPlan": "Manifest failure-path tests and observed candidate diagnostics."
+    },
+    {
+      "scenario": "Concurrent shard outputs and coverage data are combined",
+      "required": true,
+      "status": "verified",
+      "expected": "Shard artifacts remain isolated, coverage is combined exactly once, and no shell boundary is silently skipped or duplicated.",
+      "evidence": [
+        "target/quality/project-test-aggregate/coverage.json",
+        "target/quality/project-test-aggregate/receipt.json",
+        "docs/operations/quality-gates.md"
+      ],
+      "verificationPlan": "Final five-shard candidate and aggregate receipt."
+    },
+    {
+      "scenario": "Same-base serial baseline is compared with the candidate",
+      "required": true,
+      "status": "verified",
+      "expected": "Timing evidence records both runs and limits conclusions to measured wall time on the same environment.",
+      "evidence": [
+        "target/quality/sessions/1c12d3065312-local-20260815T230323Z-16047-0/summary.json",
+        "docs/reference/performance-diagnosis.md",
+        "target/quality/project-test-aggregate/timing.json"
+      ],
+      "verificationPlan": "Compare exact-base serial and final candidate /usr/bin/time evidence."
+    }
+  ],
+  "knownGaps": [
+    "No cross-machine or adopter-project performance claim will be made; this Work Item measures the repository-local same-base path only."
+  ],
+  "overclaimPrevention": "Do not report a general performance improvement, test completeness, or green quality result unless the corresponding same-base timing, exact manifest ownership, aggregate coverage, receipt, and strict lifecycle evidence is present.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-16T20:10:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.contract.json",
+          "Makefile"
+        ],
+        "reason": "Implementation remains bounded to the local quality gate and existing hosted/adopter boundaries."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.contract.json",
+          "tests/test_quality_test_manifest.py"
+        ],
+        "reason": "Summary scenarios and measured evidence mirror the Contract acceptance."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "docs/operations/quality-gates.md",
+          "Makefile",
+          "tests/test_makefile.py",
+          "docs/reference/japanese-capability-assessment.md",
+          "docs/reference/pre-release-documentation-alignment.md",
+          ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.outcome.md",
+          ".ai/cockpit/task_report.md"
+        ],
+        "reason": "Documented local targets and coverage path aliases exist and are regression-tested."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/operations/quality-gates.md",
+          "docs/operations/quality-gates.ja.md",
+          "docs/operations/quality-gates.zh-CN.md",
+          "docs/reference/japanese-capability-assessment.md",
+          "docs/reference/pre-release-documentation-alignment.json"
+        ],
+        "reason": "All three maintained locales carry bounded-shard and aggregate-boundary semantics."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/performance-diagnosis.md",
+          ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.summary.json"
+        ],
+        "reason": "Same-base timing limits and immutable-history boundaries are explicit."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed_with_warnings",
+    "jsonPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.json",
+    "markdownPath": ".ai/work-items/active/wi-15-local-quality-shard-optimization.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2,
+    "humanStatusColor": "yellow"
+  },
+  "archiveSequence": 924
+}

@@ -359,8 +359,8 @@ def run_aggregate(
     recovery = "make project-test"
     commands = [
         [sys.executable, "-m", "coverage", "combine", "--keep", *coverage_inputs],
-        [sys.executable, "-m", "coverage", "json", "-o", str(coverage)],
-        [sys.executable, "-m", "coverage", "report", "--fail-under=85.10"],
+        [sys.executable, "-m", "coverage", "json", "--ignore-errors", "-o", str(coverage)],
+        [sys.executable, "-m", "coverage", "report", "--ignore-errors", "--fail-under=85.10"],
     ]
     for entry in aggregate_entries:
         identifier = entry["id"]
