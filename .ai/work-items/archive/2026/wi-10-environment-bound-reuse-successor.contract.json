@@ -1,0 +1,289 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-10-environment-bound-reuse-successor",
+  "mode": "code",
+  "title": "Authorized WI-10 environment-bound evidence reuse successor",
+  "rawUserRequest": "Complete the approved WI-10 environment-bound evidence reuse Work Item after its archived branch collided on archive sequence 917. Redeliver the same bounded behavior from current remote main, preserve predecessor evidence byte-for-byte, and complete the full Work Item lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-successor-redelivery-20260816",
+    "capturedAt": "2026-08-16T06:00:00Z",
+    "digest": "sha256:user-authorized-wi10-successor-redelivery"
+  },
+  "declaredIntent": {
+    "summary": "Redeliver only the WI-10 environment-bound reuse policy on current main after a governed archive-sequence collision.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "2d08ebd26157a9894c5d103f7fa159840558e8c0",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-10-environment-bound-reuse-successor.contract.json",
+    ".ai/work-items/active/wi-10-environment-bound-reuse-successor.summary.json",
+    ".ai/work-items/active/wi-10-environment-bound-reuse-successor.outcome.json",
+    ".ai/work-items/active/wi-10-environment-bound-reuse-successor.outcome.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/conflict-successor-receipts/**",
+    "scripts/ai_environment_reuse.py",
+    "tests/test_ai_environment_reuse.py",
+    "docs/reference/environment-bound-reuse.md"
+  ],
+  "outOfScope": [
+    "Rewriting, deleting, rebasing, or renumbering the predecessor WI-10 archive, outcome, summary, manifest, or held branch.",
+    "Implementing WI-08 content-bound or WI-09 diff-bound policies.",
+    "Changing the WI-07 evidence-binding schema, generic validator, ai_verify, verification context, cache, scheduler, parallel runner, or required-check execution.",
+    "Network/provider integration, sensitive-value collection, automatic retries, or any security, scope, governance, or required-check bypass."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-environment-bound-reuse.contract.json",
+      "reason": "Immutable predecessor contract and original bounded WI-10 requirements."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-environment-bound-reuse.summary.json",
+      "reason": "Immutable predecessor implementation and verification record."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-environment-bound-reuse.outcome.json",
+      "reason": "Immutable predecessor outcome and collision context."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/856",
+      "reason": "Human-authorized WI-10 collision successor record."
+    },
+    {
+      "path": "scripts/ai_evidence_binding.py",
+      "reason": "WI-07 binding model and fail-closed decision primitive."
+    },
+    {
+      "path": "scripts/ai_capability_freshness.py",
+      "reason": "Repository-local runtime and freshness vocabulary."
+    },
+    {
+      "path": "docs/reference/evidence-binding-foundation.md",
+      "reason": "Classification contract and handoff boundary."
+    },
+    {
+      "path": ".ai/schemas/evidence-binding.schema.json",
+      "reason": "Environment dependency shape reused without schema changes."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "security_boundary",
+      "archive_collision"
+    ],
+    "reason": "The successor must preserve immutable predecessor evidence while comparing environment identity and rejecting unsafe metadata.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Authorized governance successor and environment policy require strict verification."
+    ],
+    "operationClasses": [
+      "repository_governance"
+    ],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "User approved all necessary successor Work Items in this thread.",
+      "reason": "Strict verification for WI-10 archive-collision successor redelivery.",
+      "risks": [
+        "archive_collision",
+        "environment_identity",
+        "evidence_integrity"
+      ],
+      "notRunChecks": [
+        "none; all required checks remain required"
+      ],
+      "workItemOnly": true,
+      "workItemId": "wi-10-environment-bound-reuse-successor"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly approved successor redelivery; scope and preservation boundaries are explicit."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record checkpoints before implementation and finish."
+  },
+  "acceptance": [
+    "The successor starts at exact current origin/main and a canonical conflict-successor receipt binds source, successor, Issue #856, approval, reason, and immutable predecessor evidence.",
+    "The policy exposes deterministic environment snapshot and fingerprint functions that normalize runtime, explicit toolchain metadata, and allowlisted non-sensitive host metadata; fingerprints are canonical SHA-256 values.",
+    "The policy builds an environment-bound WI-07 binding and returns fresh/reuse only when runtime, toolchain, environment fingerprint, unexpired binding, security scope, and governance policy match exactly.",
+    "Missing, malformed, unknown, stale, expired, scope-mismatched, governance-mismatched, classification-mismatched, or environment-mismatched inputs return unknown or stale with action=rerun; no result authorizes skipping a required check.",
+    "Focused tests cover deterministic snapshots/fingerprints, explicit/current environment handling, runtime/toolchain/environment mismatch, unknown/expiry/scope/governance cases, unsafe metadata boundaries, and caller immutability.",
+    "The file docs/reference/environment-bound-reuse.md defines the API, allowlisted metadata boundary, decision table, and no-integration handoff; all 16 local checks plus hosted PR checks pass before archive, merge, and ai-close-work-item."
+  ],
+  "guidelines": [
+    "Treat environment fingerprints as evidence identity, not authority; retain caller-owned security, scope, governance, and required-check gates.",
+    "Fail closed to rerun when any runtime, toolchain, environment, scope, governance, binding, or freshness input is unknown or malformed.",
+    "Never collect or serialize tokens, provider credentials, or unrestricted process-environment values.",
+    "Preserve predecessor evidence byte-for-byte and use the canonical successor transition receipt.",
+    "Use locked repository format and lint tools and record generated projections through their owning commands."
+  ],
+  "intent": {
+    "problem": "The original WI-10 archive allocated sequence 917 from a divergent base and cannot be merged because current main now owns that sequence. Direct rebase would rewrite immutable evidence.",
+    "constraints": [
+      "The user's 2026-08-16 approval permits all necessary successor Work Items to complete the approved plan.",
+      "Preserve predecessor WI-10 archive, summary, outcome, manifest, and held branch evidence byte-for-byte; do not add product scope.",
+      "Start from current origin/main, bind the canonical transition to Issue #856, and keep WI-07/WI-08/WI-09 boundaries unchanged.",
+      "Unknown, malformed, expired, or mismatched environment metadata must rerun and never bypass required gates."
+    ],
+    "rationale": "A clean, explicitly approved successor makes environment identity comparison reproducible without mutating historical evidence or accepting an archive collision."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Equivalent explicit environment snapshots and toolchain metadata are normalized and compared with matching scope, governance, and freshness.",
+      "expected": "Fingerprint and decision are deterministic and return fresh/reuse.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests use mapping-order variations and assert equal fingerprint and exact reuse."
+    },
+    {
+      "scenario": "Runtime, toolchain, environment fingerprint, scope, governance, or freshness differs, is missing, or is unknown.",
+      "expected": "Decision is unknown or stale with action=rerun and stable reasons.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Parameterized tests mutate or omit each mandatory identity input and cover expiry."
+    },
+    {
+      "scenario": "Sensitive-looking or malformed metadata is supplied.",
+      "expected": "Input is rejected or unknown-to-rerun without serialization or caller mutation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests cover allowlist rejection, invalid types, and immutability."
+    },
+    {
+      "scenario": "Successor is reconciled after the archive-sequence collision.",
+      "expected": "Predecessor evidence is byte-identical and Issue #856 transition receipt is recorded.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Canonical transition, archive recovery, hosted PR, merge, and closure checks."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted schema or sensitive-value writes are required."
+  },
+  "rollbackNote": "Revert this successor Work Item diff and restore related tests/docs; predecessor evidence remains immutable.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 922
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-10-environment-bound-reuse-successor.json",
+    "baseCommit": "2d08ebd26157a9894c5d103f7fa159840558e8c0",
+    "initialScopeDigest": "37140d06810260407014a818c790a035dd4522b2faa839bf43abcfada29a1a4c",
+    "contractSkeletonDigest": "ad6917db1330c5ab3588bc15924f195357df7fc080a3d57ce078c7efc066d835"
+  }
+}

@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wi-08-content-bound-reuse-successor generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-10-environment-bound-reuse-successor generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 2
