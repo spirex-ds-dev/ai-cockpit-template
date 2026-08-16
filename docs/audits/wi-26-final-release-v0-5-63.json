@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "wi-26-final-release-v0-5-63",
+  "status": "candidate_pending_provider",
+  "claims": [
+    {
+      "claim": "The v0.5.63 candidate freeze is bound to source commit 948361eeb7b50a9dd288f8e67eae27f01f0a0bfe.",
+      "evidenceRefs": [
+        ".ai/cockpit/release-freeze.json",
+        ".ai/cockpit/release-digests.json"
+      ],
+      "inference": false
+    },
+    {
+      "claim": "The final Outcome projection preserves high residual-risk ownership, required evidence, mitigation, and acceptance status through both finish handoff and Outcome normalization.",
+      "evidenceRefs": [
+        "scripts/ai_finish.py",
+        "scripts/ai_generate_task_outcome.py",
+        "tests/test_task_outcome_ai_finish_integration.py",
+        "tests/test_task_outcome_generator.py"
+      ],
+      "inference": false
+    },
+    {
+      "claim": "Provider publication, public assets, tagged Quick Install, and final branch cleanup are not yet evidenced.",
+      "evidenceRefs": [
+        ".ai/work-items/active/wi-26-final-release-v0-5-63.summary.json",
+        "release-state.json",
+        "next-release.json"
+      ],
+      "inference": false,
+      "status": "pending"
+    },
+    {
+      "claim": "A causal performance improvement is not established by this release closeout.",
+      "evidenceRefs": [
+        ".ai/work-items/archive/2026/wi-12-performance-diagnosis-successor.summary.json",
+        ".ai/work-items/archive/2026/wi-15-local-quality-shard-optimization.summary.json"
+      ],
+      "inference": false
+    }
+  ],
+  "boundaries": {
+    "immutableArchives": "WI-01 through WI-25 are read-only inputs.",
+    "userOwnedWorktrees": "Unrelated dirty worktrees and recovery branches are retained.",
+    "publication": "No provider publication claim is valid without same-SHA rehearsal, provider receipt, assets, and tagged Quick Install evidence."
+  }
+}
