@@ -32,7 +32,7 @@ tag、GitHub Release、public asset を作成できません。実際の公開�
 
 共通の quality entrypoint は、worktree-local の `.venv` が存在しない、利用不能、または `requirements-dev.in` の直接 Ruff pin と異なる場合、gate の前に環境を provision します。provision は `requirements-dev.lock` だけを `--require-hashes` で install し、直接 pin を再確認します。収束しなければ fail closed します。グローバルに install された formatter や linter は同等の証拠として扱わないため、新しい linked worktree でも保守担当者の手作業なしに同一 toolchain を再現できます。
 
-Release job の通常の runner は `ubuntu-latest` です。GitHub IP allow list を有効にし、標準 hosted runner の egress からの GitHub API 呼び出しを拒否する企業では、リポジトリーの Actions variable `AI_COCKPIT_RELEASE_RUNNER` に、許可済み static IP range を持つリポジトリー認可済み GitHub-hosted runner の label、または認可済み self-hosted runner の label を設定します。Workflow は exact-SHA evidence query を含む release job 全体でその label を選択します。これは gate bypass ではなく routing の前提条件です。runner が未設定、未認可、または利用不可の場合は release を blocked のままにし、この variable を設定しないリポジトリーは portable な `ubuntu-latest` を使用します。
+Release job は標準の GitHub-hosted `ubuntu-latest` runner を固定して使用します。組織 Actions variable を読み取らず、self-hosted runner や repository 固有の runner label へ公開処理を routing しません。CodeQL など security 所有の Workflow はそれぞれの runner 設定を保持し、この固定 label は release job にだけ適用されます。
 
 ## PR を起点とするリリース手順
 

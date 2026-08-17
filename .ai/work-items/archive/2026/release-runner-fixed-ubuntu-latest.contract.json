@@ -1,0 +1,240 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-runner-fixed-ubuntu-latest",
+  "mode": "code",
+  "title": "Fix release workflow runner to fixed ubuntu-latest",
+  "baseCommit": "d35ec3d7467e5ef4540e7a328c24bd8dc29dab33",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "发布完成后，新开一个 WI，将除 CodeQL 外的 release 相关 Actions runner 固定为 ubuntu-latest，避免组织级 runner 路由消耗组织资源；保持 CodeQL 的现有专用配置不变。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation",
+    "capturedAt": "2026-08-17",
+    "digest": "sha256:release-runner-fixed-ubuntu-latest-user-request"
+  },
+  "declaredIntent": {
+    "summary": "Make the release workflow use the free standard ubuntu-latest hosted runner explicitly while preserving CodeQL and unrelated workflow runner choices.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "scope": [
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/release-runner-fixed-ubuntu-latest.contract.json",
+    ".ai/work-items/active/release-runner-fixed-ubuntu-latest.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-runner-fixed-ubuntu-latest.outcome.json",
+    ".ai/work-items/active/release-runner-fixed-ubuntu-latest.outcome.md"
+  ],
+  "outOfScope": [
+    "Do not modify CodeQL configuration or any workflow other than the release workflow.",
+    "Do not change release evidence ordering, tag creation, public assets, installer behavior, or release metadata.",
+    "Do not create or alter self-hosted runner registration, organization billing, or runner-group settings.",
+    "Do not publish a new release solely for this workflow routing change unless separately authorized."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The release job currently resolves its runner through the organization variable AI_COCKPIT_RELEASE_RUNNER."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Workflow regression tests currently assert the configurable runner override and must lock the fixed runner contract."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Canonical English release operations documentation currently describes the runner override."
+    },
+    {
+      "path": "docs/reference/distribution.ja.md",
+      "reason": "Japanese release operations documentation must describe the same fixed runner boundary."
+    },
+    {
+      "path": "https://api.github.com/orgs/spirex-ds-dev/actions/runner-groups/1/hosted-runners",
+      "reason": "Observed organization hosted-runner evidence identifies the current code-scanning runner as a standard Ubuntu Latest 24.04, 2-core hosted runner."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["workflow_execution", "resource_usage"],
+    "reason": "The release workflow runner selection changes future hosted execution routing; release behavior and other workflows must remain unchanged.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["A single workflow routing change with explicit regression coverage is bounded but affects release execution."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly requested the bounded release runner routing change; no open contract unknowns remain."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "preReviewWarnings": ["Only the release job may change; preserve CodeQL and all unrelated workflow runner assignments."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release job in .github/workflows/release.yml uses the literal runs-on value ubuntu-latest and no longer reads AI_COCKPIT_RELEASE_RUNNER.",
+    "tests/test_release_workflow.py asserts the exact release runs-on line, asserts AI_COCKPIT_RELEASE_RUNNER is absent, and asserts no CodeQL or unrelated workflow path is changed.",
+    "docs/reference/distribution.md and docs/reference/distribution.ja.md state that the release job uses ubuntu-latest and no longer advertise AI_COCKPIT_RELEASE_RUNNER.",
+    "Release evidence ordering, publication steps, and all non-runner release behavior remain byte-for-byte unchanged outside the intended runner line and documentation/test assertions.",
+    "All governed checks and project quality checks pass with no test deletion, weakening, or unrelated workflow modification."
+  ],
+  "guidelines": [
+    "Keep the change limited to the release workflow runner contract, its regression test, and aligned documentation.",
+    "Do not modify CodeQL or unrelated Actions runner selection.",
+    "Do not weaken or delete tests; add assertions that fail if the configurable release runner returns.",
+    "Do not claim billing savings as a measured fact unless provider billing evidence is available; describe runner routing and public-repository eligibility separately."
+  ],
+  "intent": {
+    "problem": "The release job currently resolves runs-on through AI_COCKPIT_RELEASE_RUNNER, which routes the public release workflow through an organization-level hosted runner label even though the release job only needs the standard Ubuntu runner.",
+    "constraints": ["Keep CodeQL and unrelated workflows unchanged.", "Do not change release correctness, evidence, or publication behavior.", "Use a literal standard hosted runner label so the release job cannot silently consume an organization-specific runner route."],
+    "rationale": "A fixed ubuntu-latest declaration removes the organization-level routing indirection at the source and a regression test prevents the override from being reintroduced."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Release job runner is fixed to the standard hosted runner",
+      "riskDomain": "workflow_execution",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "release job contains runs-on: ubuntu-latest and no AI_COCKPIT_RELEASE_RUNNER expression",
+      "verificationPlan": "Focused workflow regression test and YAML inspection."
+    },
+    {
+      "scenario": "CodeQL and unrelated Actions runner choices are preserved",
+      "riskDomain": "scope_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "diff contains no CodeQL or unrelated workflow paths",
+      "verificationPlan": "Scope guard, diff ownership, and focused path assertions."
+    },
+    {
+      "scenario": "Release publication behavior remains unchanged",
+      "riskDomain": "release_integrity",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "only runner routing and aligned test/documentation text change",
+      "verificationPlan": "Focused release workflow suite plus full governed quality checks."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly requested the release workflow runner change; CodeQL and unrelated workflows remain out of scope."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 941
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-runner-fixed-ubuntu-latest.json",
+    "baseCommit": "d35ec3d7467e5ef4540e7a328c24bd8dc29dab33",
+    "initialScopeDigest": "008d18d4018880fa327d183655b2f73977697d5d36b71423742954f3f2bb87d4",
+    "contractSkeletonDigest": "f81814d6f57e9daff71df6a62fe7fe489b2180ceefbf511843544e8b50fe2b9f"
+  }
+}
