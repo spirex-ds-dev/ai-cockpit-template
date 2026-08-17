@@ -321,26 +321,25 @@ def test_pre_merge_outcome_renders_retry_stop_as_resolved(tmp_path, monkeypatch)
 
 
 def _outcome(task: str) -> dict:
-    sections = {
-        "outcomeSummary": "Completed from structured evidence.",
-        "taskOverview": "A governed Work Item.",
-    }
-    for key in (
-        "deliveredChanges",
-        "findings",
-        "risks",
-        "warnings",
-        "interventions",
-        "forcedStops",
-        "resolutions",
-        "recurrencePrevention",
-        "avoidedImpact",
-        "residualRisks",
-        "humanDecisions",
-        "evidence",
-    ):
-        sections[key] = [{"subject": "evidence"}] if key == "evidence" else []
-    return {"workItemId": task, "status": "completed", "sections": sections}
+    return generate_outcome(
+        task,
+        {
+            "taskId": task,
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "1" * 40,
+            "headCommit": "2" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "1.0",
+            "generatorVersion": "1.2",
+        },
+        evidence={
+            "outcomeSummary": "Completed from structured evidence.",
+            "sources": [{"source": "fixture", "subject": "evidence"}],
+        },
+    )
 
 
 def test_outcome_pipeline_orders_generation_validation_render_validation_and_records_link(
@@ -1197,6 +1196,44 @@ def test_outcome_pipeline_preserves_non_risk_explanation_without_warning_or_yell
     assert outcome["sections"]["nonRiskExplanations"] == [explanation]
 
 
+def test_outcome_pipeline_classifies_evidenced_known_gap_as_non_risk(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "verification": []}),
+        encoding="utf-8",
+    )
+    explanation = {
+        "sourceWarning": "Provider-hosted timing is outside this Work Item's acceptance boundary.",
+        "reason": "The Contract requires portable source/template parity, not provider-hosted timing.",
+        "evidence": [{"source": "contract", "subject": "acceptance"}],
+    }
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [],
+                "changedFiles": [],
+                "knownGaps": [explanation["sourceWarning"]],
+                "nonRiskExplanations": [explanation],
+            }
+        ),
+        encoding="utf-8",
+    )
+    json_path = tmp_path / "outcome.json"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _: (json_path, tmp_path / "outcome.md"))
+
+    ok, message = ai_finish.run_task_outcome_pipeline(task, summary_path, contract_path)
+
+    assert ok, message
+    outcome = json.loads(json_path.read_text(encoding="utf-8"))
+    assert outcome["status"] == "completed"
+    assert outcome["sections"]["warnings"] == []
+    assert outcome["sections"]["limitations"] == []
+    assert outcome["sections"]["nonRiskExplanations"] == [explanation]
+
+
 def test_outcome_pipeline_missing_input_fails_closed(tmp_path, monkeypatch):
     summary_path = tmp_path / "summary.json"
     summary_path.write_text(json.dumps({"taskOutcomeInput": "missing-raw.json"}), encoding="utf-8")
@@ -1225,13 +1262,101 @@ def test_finish_defaults_to_active_outcome_and_accepts_conversation_language(mon
 
 
 def test_direct_outcome_report_is_localized_and_explicit_about_archive_boundary():
-    outcome = _outcome("example-task")
+    outcome = generate_outcome(
+        "example-task",
+        {
+            "taskId": "example-task",
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "1" * 40,
+            "headCommit": "2" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "1.0",
+            "generatorVersion": "1.2",
+        },
+    )
 
     report = ai_finish.render_direct_outcome_report(outcome, "zh-CN")
 
     assert "工单结果报告" in report
     assert "任务结果: example-task" in report
     assert "归档必须显式执行" in report
+
+
+def test_direct_outcome_report_fails_closed_when_full_report_is_missing():
+    outcome = _outcome("example-task")
+    outcome.pop("format")
+
+    with pytest.raises(ValueError, match="Task Outcome is invalid"):
+        ai_finish.render_direct_outcome_report(outcome, "zh-CN")
+
+
+def test_direct_outcome_report_contains_the_complete_conversation_surface():
+    outcome = generate_outcome(
+        "example-task",
+        {
+            "taskId": "example-task",
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "1" * 40,
+            "headCommit": "2" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "1.0",
+            "generatorVersion": "1.2",
+        },
+        evidence={
+            "locale": "zh-CN",
+            "completed": [
+                {
+                    "title": "Direct delivery",
+                    "detail": "The complete Outcome is rendered into the conversation stream.",
+                    "evidence": [{"source": "pytest", "subject": "direct-report"}],
+                }
+            ],
+            "passedChecks": [
+                {
+                    "title": "Conversation delivery",
+                    "detail": "The full report surface is present.",
+                    "evidence": [{"source": "pytest", "subject": "direct-report"}],
+                }
+            ],
+            "handoffQuestions": {
+                "problemCount": 0,
+                "blockedProblems": [],
+                "resolvedProblems": [],
+                "resolutionApproach": [],
+                "avoidedRisks": [],
+                "remainingRisks": [],
+                "agentUnknowns": [],
+                "humanConfirmations": [],
+                "recurrenceLikelihood": "low",
+                "nextTime": "Keep the complete report in the conversation stream.",
+            },
+        },
+    )
+
+    report = ai_finish.render_direct_outcome_report(outcome, "zh-CN")
+
+    for marker in (
+        "状态: 🟢 `completed`",
+        "## 结果摘要",
+        "## 已完成",
+        "# AI Cockpit Task Report",
+        "What was completed",
+        "Problems found",
+        "Problems resolved",
+        "Risks avoided",
+        "Remaining risks",
+        "Human decisions",
+        "Verification",
+        "Next action",
+        "归档必须显式执行",
+    ):
+        assert marker in report
 
 
 @pytest.mark.parametrize("archive", [False, True])

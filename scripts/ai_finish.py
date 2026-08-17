@@ -1193,9 +1193,28 @@ def _pre_merge_outcome_input(
         for item in changed
         if isinstance(item, dict) and isinstance(item.get("path"), str)
     ]
-    warnings = [item for item in summary.get("knownGaps", []) if isinstance(item, str)]
     non_risk_explanations = [
         dict(item) for item in summary.get("nonRiskExplanations", []) if isinstance(item, dict)
+    ]
+    evidenced_non_risk_warnings = {
+        item["sourceWarning"]
+        for item in non_risk_explanations
+        if isinstance(item.get("sourceWarning"), str)
+        and isinstance(item.get("evidence"), list)
+        and item["evidence"]
+        and all(
+            isinstance(reference, dict)
+            and isinstance(reference.get("source"), str)
+            and reference["source"].strip()
+            and isinstance(reference.get("subject"), str)
+            and reference["subject"].strip()
+            for reference in item["evidence"]
+        )
+    }
+    warnings = [
+        item
+        for item in summary.get("knownGaps", [])
+        if isinstance(item, str) and item not in evidenced_non_risk_warnings
     ]
     limitations = [
         {
@@ -1859,12 +1878,11 @@ def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
 
     locale = normalize_locale(language)
     heading, limitation, next_action = REPORT_BOUNDARY_TEXT[locale]
-    try:
-        human_summary = render_human_report(generate_human_report(outcome))
-    except (KeyError, TypeError, ValueError):
-        # Legacy/test fixtures may contain only the localized Outcome surface;
-        # the governed finish path always supplies and validates the full report.
-        human_summary = ""
+    # A conversation delivery is only valid when both the localized Outcome
+    # and the complete human-benefit report are renderable.  Do not silently
+    # downgrade to a status-only or localized-only surface: that would make a
+    # missing report look like a successful human handoff.
+    human_summary = render_human_report(generate_human_report(outcome))
     return f"{heading}\n{render_localized_outcome(outcome, locale)}\n{human_summary}{limitation}\n{next_action}\n"
 
 

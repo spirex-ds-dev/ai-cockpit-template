@@ -1,107 +1,30 @@
 # Task Outcome: outcome-report-delivery-integrity-20260817
 
-Status: `needs_human_confirmation`
-Human Status: `yellow`
-
-## Outcome Summary
-Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status needs_human_confirmation.
-
-## Task Overview
-Governed Work Item: outcome-report-delivery-integrity-20260817
-
-## Delivered Changes
-- .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json
-- .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json
-- .ai/cockpit/current_status.md
-- .ai/work-items/starts/outcome-report-delivery-integrity-20260817.json
-- Makefile
-- templates/make/Makefile.ai
-- docs/reference/capability-truth-matrix.json
-- docs/reference/japanese-capability-assessment.json
-- docs/reference/japanese-capability-assessment.md
-- docs/reference/pre-release-documentation-alignment.json
-- docs/reference/pre-release-documentation-alignment.md
-- scripts/ai_archive_work_item.py
-- scripts/ai_render_task_outcome_multilingual.py
-- tests/test_makefile.py
-- tests/test_start_and_archive.py
-- tests/test_task_outcome_ai_finish_integration.py
-- tests/test_task_outcome_multilingual.py
-- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json
-- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md
-- .ai/cockpit/task_report.json
-- .ai/cockpit/task_report.md
-- .ai/work-items/archive/index.json
-- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json
-- .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.json
-- .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.md
-
-## Findings
-None
-
-## Risks
-None
-
-## Warnings
-- Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests.
-
-## Limitations
-- Unresolved evidence is explicitly limited
-
-## Non-Risk Explanations
-- {"evidence": [], "reason": "The Summary records this item as an unresolved gap rather than a verified result.", "sourceWarning": "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests."}
-
-## Forbidden Claims
-- Do not claim an unresolved warning was verified or resolved.
-
-## Interventions
-None
-
-## Forced Stops
-- verification
-
-## Resolutions
-- quality failed before the retry.
-
-## Recurrence Prevention
-None
-
-## Avoided Impact
-- If not detected, could have led to a stale completion claim.
-
-## Residual Risks
-- adopter-runtime
-
-## Human Decisions
-- Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.
-- Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.
-
-## Evidence
-- Contract
-- Summary
-- verificationHistory[0] quality failed
-- verification[quality] retry passed
+Status: `completed`
+Human Status: `green`
 
 ## Human Handoff
 Locale: `zh-CN`
-
 ### What was completed
-- Changed .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json: Governed scope, authorization, acceptance, and evidence boundaries for Outcome delivery and report binding.
-- Changed .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json: AI Change Summary and verification handoff for this Work Item.
+- Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json: Governed scope, authorization, acceptance, and evidence boundaries for Outcome delivery and report binding.
+- Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json: AI Change Summary and verification handoff for this Work Item.
 - Changed .ai/cockpit/current_status.md: Generated lifecycle projection.
 - Changed .ai/work-items/starts/outcome-report-delivery-integrity-20260817.json: Generated Work Item start receipt.
 - Changed Makefile: Default report-language binding and direct Outcome delivery entrypoint for this repository.
 - Changed templates/make/Makefile.ai: Mirrored default report-language behavior for future installed adopter projects.
+- Changed scripts/ai_finish.py: Direct conversation delivery now requires the complete localized Outcome and Human Benefit Report.
 - Changed docs/reference/capability-truth-matrix.json: Regenerated capability evidence bindings after the Makefile entrypoint change.
 - Changed docs/reference/japanese-capability-assessment.json: Regenerated source-bound Japanese capability evidence after the Makefile entrypoint change.
 - Changed docs/reference/japanese-capability-assessment.md: Regenerated human-readable Japanese capability assessment projection.
 - Changed docs/reference/pre-release-documentation-alignment.json: Regenerated pre-release alignment evidence after bound source refresh.
 - Changed docs/reference/pre-release-documentation-alignment.md: Regenerated human-readable pre-release alignment projection.
 - Changed scripts/ai_archive_work_item.py: Deterministic singleton human-benefit report refresh from the archived Outcome.
+- Changed scripts/ai_generate_task_outcome.py: Resolved verification stops remain visible without blocking the current Outcome.
 - Changed scripts/ai_render_task_outcome_multilingual.py: Conversation-facing localized Outcome status line with canonical traffic-light markers.
 - Changed tests/test_makefile.py: Regression coverage for default and explicit report-language forwarding across entrypoints.
 - Changed tests/test_start_and_archive.py: Regression coverage proving the archive creates the singleton report when no prior report exists.
 - Changed tests/test_task_outcome_ai_finish_integration.py: Regression coverage for persisted and direct Outcome delivery failure paths.
+- Changed tests/test_task_outcome_generator.py: Regression coverage for resolved versus unresolved verification stops.
 - Changed tests/test_task_outcome_multilingual.py: Regression coverage for 🟢, 🟡, and 🔴 markers across all supported Outcome statuses.
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json: Mandatory Task Outcome evidence generated by ai-finish.
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md: Mandatory localized Task Outcome evidence generated by ai-finish.
@@ -109,9 +32,8 @@ Locale: `zh-CN`
 - Changed .ai/cockpit/task_report.md: Regenerated from the rewritten archived Task Outcome during the archive transaction.
 - Changed .ai/work-items/archive/index.json: Generated archive discovery index.
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json: Immutable archive evidence root.
-- Changed .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.json: Mandatory Task Outcome evidence generated by ai-finish.
-- Changed .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.md: Mandatory Task Outcome evidence generated by ai-finish.
-
+- Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json: Mandatory Task Outcome evidence generated by ai-finish.
+- Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md: Mandatory Task Outcome evidence generated by ai-finish.
 ### What passed
 - aiWorkItem: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json work item contract check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json
 - aiScope: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json scope guard passed: 20 changed path(s) covered
@@ -129,24 +51,103 @@ Locale: `zh-CN`
 - aiStatusConsistency: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed
 - aiAgentRisk: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json agent risk check passed report: target/ai_agent_risk_report.json
 - aiSummary: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json
-
 ### What was retained
-- Retained limitation: Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests.
-
+None
 ### Risks
-- adopter-runtime: Local source/template parity and failure-path behavior are covered; a provider-hosted adopter run is not measured by this Work Item.
-
+None
 ### Red reasons
 None
-
 ### Human questions
-- problemCount: 2
+- problemCount: 1
 - blockedProblems: None
-- resolvedProblems: quality failed before the retry.
-- resolutionApproach: Re-ran quality after the correction; the latest attempt passed.
-- avoidedRisks: If not detected, could have led to a stale completion claim.
-- remainingRisks: Local source/template parity and failure-path behavior are covered; a provider-hosted adopter run is not measured by this Work Item.
+- resolvedProblems: {'claim': 'quality failed before the retry.', 'evidenceRefs': [{'source': '.ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json', 'subject': 'verificationHistory[0] quality failed', 'digest': '0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65'}, {'source': '.ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json', 'subject': 'verification[quality] retry passed', 'digest': '798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84'}], 'inference': False}
+- resolutionApproach: {'claim': 'Re-ran quality after the correction; the latest attempt passed.', 'evidenceRefs': [{'source': '.ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json', 'subject': 'verificationHistory[0] quality failed', 'digest': '0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65'}, {'source': '.ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json', 'subject': 'verification[quality] retry passed', 'digest': '798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84'}], 'inference': False}
+- avoidedRisks: {'claim': 'If not detected, could have led to a stale completion claim.', 'evidenceRefs': [], 'inference': True}
+- remainingRisks: None
 - agentUnknowns: None
-- humanConfirmations: Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.; Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.
-- recurrenceLikelihood: unknown: no direct recurrence probability evidence was recorded.
-- nextTime: Bind conversation locale and preserve evidence details before the next Work Item starts.
+- humanConfirmations: {'claim': 'Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.', 'evidenceRefs': [], 'inference': True}; {'claim': 'Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.', 'evidenceRefs': [], 'inference': True}
+- recurrenceLikelihood: {'claim': 'unknown: no direct recurrence probability evidence was recorded.', 'evidenceRefs': [], 'inference': True}
+- nextTime: {'claim': 'Bind conversation locale and preserve evidence details before the next Work Item starts.', 'evidenceRefs': [], 'inference': True}
+
+
+## Outcome Summary
+Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed.
+
+## Task Overview
+Governed Work Item: outcome-report-delivery-integrity-20260817
+
+## Delivered Changes
+- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json
+- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json
+- .ai/cockpit/current_status.md
+- .ai/work-items/starts/outcome-report-delivery-integrity-20260817.json
+- Makefile
+- templates/make/Makefile.ai
+- scripts/ai_finish.py
+- docs/reference/capability-truth-matrix.json
+- docs/reference/japanese-capability-assessment.json
+- docs/reference/japanese-capability-assessment.md
+- docs/reference/pre-release-documentation-alignment.json
+- docs/reference/pre-release-documentation-alignment.md
+- scripts/ai_archive_work_item.py
+- scripts/ai_generate_task_outcome.py
+- scripts/ai_render_task_outcome_multilingual.py
+- tests/test_makefile.py
+- tests/test_start_and_archive.py
+- tests/test_task_outcome_ai_finish_integration.py
+- tests/test_task_outcome_generator.py
+- tests/test_task_outcome_multilingual.py
+- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json
+- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md
+- .ai/cockpit/task_report.json
+- .ai/cockpit/task_report.md
+- .ai/work-items/archive/index.json
+- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json
+- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json
+- .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md
+
+## Findings
+None
+
+## Risks
+None
+
+## Warnings
+None
+
+## Limitations
+None
+
+## Non-Risk Explanations
+- {"evidence": [{"source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json", "subject": "acceptance"}, {"source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json", "subject": "verification"}], "reason": "Provider-hosted adopter timing is not an acceptance requirement for this Work Item; the declared boundary is portable Makefile behavior and source/template parity.", "sourceWarning": "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests."}
+
+## Forbidden Claims
+None
+
+## Interventions
+None
+
+## Forced Stops
+- {"attemptedAction": "complete the Work Item", "conditionalImpact": "If not detected, could have led to a stale completion claim.", "evidence": [{"digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65", "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json", "subject": "verificationHistory[0] quality failed"}, {"digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84", "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json", "subject": "verification[quality] retry passed"}], "handoff": "", "humanDecision": "", "policyOrGuard": "required verification: quality", "reason": "quality failed before the retry.", "recovery": "Retry quality after correcting the recorded failure.", "result": "resolved", "stage": "verification"}
+
+## Resolutions
+- quality failed before the retry.: Re-ran quality after the correction; the latest attempt passed. (Verification: quality latest verification result is passed.)
+
+## Recurrence Prevention
+None
+
+## Avoided Impact
+- If not detected, could have led to a stale completion claim.
+
+## Residual Risks
+None
+
+## Human Decisions
+- Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.
+- Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.
+
+## Evidence
+- Contract
+- Summary
+- verificationHistory[0] quality failed
+- verification[quality] retry passed
