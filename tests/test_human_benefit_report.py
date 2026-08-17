@@ -129,13 +129,71 @@ def test_review_report_derives_counts_risks_decisions_and_next_action():
     assert report["limitations"][0]["title"] == "Hosted evidence is absent"
     assert report["forbiddenClaims"] == ["Do not claim provider verification."]
     assert report["remainingRisks"][0]["severity"] == "medium"
-    assert report["nextSafeAction"] == "Provide owner evidence."
+    assert report["nextSafeAction"] == (
+        "Review the remaining risks and obtain the named evidence before proceeding."
+    )
     assert human.validate_human_report(report, source) == []
     markdown = human.render_human_report(report)
     assert "AI Cockpit Task Report" in markdown
     assert "Detected issues: 4" in markdown
     assert "Provide owner evidence." in markdown
     assert "Do not claim provider verification." in markdown
+
+
+def test_review_report_ignores_resolved_stop_recovery_for_next_action():
+    source = outcome(
+        status="needs_human_confirmation",
+        sections={
+            "forcedStops": [
+                {
+                    "reason": "quality failed before the retry.",
+                    "recovery": "Retry quality after correcting the recorded failure.",
+                    "result": "resolved",
+                    "evidence": [{"source": "history.json", "subject": "quality retry"}],
+                }
+            ],
+            "limitations": [
+                {
+                    "title": "Hosted evidence is pending",
+                    "sourceWarning": "The merged release has not run yet.",
+                }
+            ],
+            "residualRisks": [
+                {
+                    "severity": "medium",
+                    "description": "The merged release has not run yet.",
+                    "state": "unresolved",
+                    "evidence": [{"source": "release.json", "subject": "pending"}],
+                }
+            ],
+        },
+    )
+
+    report = human.generate_human_report(source)
+
+    assert report["nextSafeAction"] == (
+        "Review the remaining risks and obtain the named evidence before proceeding."
+    )
+
+
+def test_review_report_keeps_unresolved_stop_recovery_actionable():
+    source = outcome(
+        status="blocked",
+        sections={
+            "forcedStops": [
+                {
+                    "reason": "quality failed.",
+                    "recovery": "Run a passing quality retry.",
+                    "result": "unresolved",
+                    "evidence": [{"source": "failure.json", "subject": "quality"}],
+                }
+            ]
+        },
+    )
+
+    report = human.generate_human_report(source)
+
+    assert report["nextSafeAction"] == "Run a passing quality retry."
 
 
 def test_report_exposes_the_full_human_handoff_question_set():

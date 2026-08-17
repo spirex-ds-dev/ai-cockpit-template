@@ -39,6 +39,7 @@ PUBLIC_ASSET_ARTIFACTS = {
     "sbom.json": ".ai/cockpit/sbom.json",
     "provenance.json": ".ai/cockpit/provenance.json",
     "release-digests.json": ".ai/cockpit/release-digests.json",
+    "release.json": "release.json",
 }
 REQUIRED_MANIFEST_ARTIFACTS = {
     "requirements-dev.lock",
@@ -51,6 +52,7 @@ SOURCE_BOUND_ARTIFACTS = {
     ".ai/cockpit/sbom.json",
     ".ai/cockpit/provenance.json",
     ".ai/cockpit/release-digests.json",
+    "release.json",
 }
 
 
@@ -578,7 +580,7 @@ def fetch_published_release_assets(
     if not isinstance(assets, list):
         raise InvalidProviderPayloadError(f"{tag}: published release assets are missing")
     payloads: dict[str, bytes] = {}
-    requested_assets = {"provenance.json", "release-digests.json", "sbom.json"}
+    requested_assets = {"provenance.json", "release-digests.json", "sbom.json", "release.json"}
     requested_assets.update(extra_asset_names or set())
     for asset in assets:
         if not isinstance(asset, dict):
@@ -595,7 +597,12 @@ def fetch_published_release_assets(
             )
             with urllib.request.urlopen(asset_request, timeout=30) as response:  # nosec B310
                 payloads[name] = response.read()
-    missing = {"provenance.json", "release-digests.json", "sbom.json"} - payloads.keys()
+    missing = {
+        "provenance.json",
+        "release-digests.json",
+        "sbom.json",
+        "release.json",
+    } - payloads.keys()
     if missing:
         raise RuntimeError(
             f"{tag}: published release is missing assets: {', '.join(sorted(missing))}"
@@ -973,6 +980,7 @@ def inspect_tagged_release(
                     archive_metadata.get("assetName"), str
                 ):
                     extra_assets.add(archive_metadata["assetName"])
+                extra_assets.add("release.json")
             try:
                 assets = fetch_published_release_assets(tag, extra_asset_names=extra_assets)
                 provenance = json.loads(assets["provenance.json"].decode("utf-8"))

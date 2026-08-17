@@ -132,19 +132,41 @@ def test_draft_quick_install_verification_uses_authenticated_asset_api_after_upl
     assert 'test "$asset_id" =~' not in quick_install
     assert '"repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"' in quick_install
     assert "download_draft_asset release.json" in quick_install
+    assert "download_draft_asset release-digests.json" in quick_install
+    assert "public release.json digest does not match release-digests.json" in quick_install
+    assert '.artifacts["release.json"]' in quick_install
 
 
-def test_release_archive_projects_and_compares_the_runtime_digest_manifest():
+def test_release_workflow_binds_final_release_json_before_publishing_digest_manifest():
     workflow = WORKFLOW.read_text(encoding="utf-8")
     evidence = workflow.index("Generate source-bound release evidence")
-    verification = workflow.index("Verify source-bound release evidence subjects")
+    verification = workflow.index("Bind the generated evidence bundle digest")
     segment = workflow[evidence:verification]
 
     assert 'cp "$RUNNER_TEMP/release-evidence/release-digests.json"' in segment
     assert '"$GITHUB_WORKSPACE/.ai/cockpit/release-digests.json"' in segment
     assert "--use-worktree" in segment
-    assert '"ai-cockpit/.ai/cockpit/release-digests.json"' in segment
-    assert 'cmp -s "$RUNNER_TEMP/archive-release-digests.json"' in segment
+    assert "--include-runtime-release-digests" not in segment
+    archive_projection = segment.index('mv "$RUNNER_TEMP/release-runtime.json" release.json')
+    final_manifest = segment.index("Refresh final release digest manifest")
+    assert archive_projection < final_manifest
+    assert 'release_json_digest="$(sha256sum release.json' in segment
+    assert '.artifacts["release.json"]' in segment
+
+
+def test_release_archive_projects_and_compares_the_runtime_digest_manifest():
+    """Retain the historical regression id while asserting the corrected ordering."""
+    test_release_workflow_binds_final_release_json_before_publishing_digest_manifest()
+
+
+def test_release_workflow_rejects_runtime_digest_projection_into_archive():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    evidence = workflow.index("Generate source-bound release evidence")
+    verification = workflow.index("Bind the generated evidence bundle digest")
+    segment = workflow[evidence:verification]
+
+    assert 'tar -tzf "$evidence/$archive_name"' in segment
+    assert "mutable release-digests.json must not be embedded in the source archive" in segment
 
 
 def test_runtime_projection_rebinds_supply_chain_to_exact_source_evidence():

@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "release-digest-final-binding",
-  "phase": "review",
-  "result": "needs_human_confirmation",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "cc59681995b66b7ffbc1af6148718e71cab9599a549c39271d9bcf1b9a485a27"
+  "status": "needs_human_confirmation",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "release-digest-final-binding",
+    "contractDigest": "8a7d3686c9e5fb6ec4f8f8a70b1f2401605710ed356dc19410caaf3aeabef21a",
+    "summaryDigest": "ab2dd89178e8161d376a968f5df0eacb8362bb8f2e70b26ee7ed97ea0adda085",
+    "verificationDigest": "1098f512c6ba8f4770262cfdc77f2fa047cbb7c8881668a096ba738f9b90f879",
+    "baseCommit": "03177485ce2647f8c66a0697272c94d8e47d4221",
+    "headCommit": "03177485ce2647f8c66a0697272c94d8e47d4221",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "003f902aa7a504cecc4299d63ecc696bf5ac54c799773cb98e9c50c39202ff16",
+      "binding": {
+        "baseCommit": "03177485ce2647f8c66a0697272c94d8e47d4221",
+        "candidateHead": "03177485ce2647f8c66a0697272c94d8e47d4221",
+        "candidateTreeDigest": "270e4b9e21edc75066b8af26654cef5bd3309565acb30a2e9aafceaeb9185330",
+        "candidateDiffDigest": "cce2a5bfb259e09f4db1934aec1e66ee402cc0d94fe4cb07d3975dd923f86a86"
+      }
+    }
   },
-  "task": {
-    "summary": "Task release-digest-final-binding generated an evidence-derived outcome with status needs_human_confirmation.",
+  "sections": {
+    "outcomeSummary": "Task release-digest-final-binding generated an evidence-derived outcome with status needs_human_confirmation.",
+    "taskOverview": "Governed Work Item: release-digest-final-binding",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/release-digest-final-binding.contract.json",
       ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
@@ -37,303 +60,366 @@
       ".ai/work-items/archive/2026/release-digest-final-binding.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "The exact merged source SHA, provider workflow run, release tag, and post-publish adoption evidence are intentionally deferred until the implementation PR is merged and the release workflow runs."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "The exact merged source SHA, provider workflow run, release tag, and post-publish adoption evidence are intentionally deferred until the implementation PR is merged and the release workflow runs.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "The exact merged source SHA, provider workflow run, release tag, and post-publish adoption evidence are intentionally deferred until the implementation PR is merged and the release workflow runs.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[1] aiGuidelines failed",
+            "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "ea7d57edec1c16c533a46f6d127e0519628a5130436717e7ca3fa52dbba04248"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[3] aiGuidelines failed",
+            "digest": "c7bf8c359385291cabd4cbaf91c593df830e443dbee5469b9bf343879d496a49"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[4] quality failed",
+            "digest": "ee82290a08122958cb247e7726650ecd418c220269d85953c872232d2b277c81"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[5] quality failed",
+            "digest": "f13eb98e957c5c8edf80421ca23bc6f3016fd6c70fb1e3a99fc110285d0bb2c0"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
+          }
+        ]
+      },
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[1] aiGuidelines failed",
+            "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
+          }
+        ]
+      },
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[3] aiGuidelines failed",
+            "digest": "c7bf8c359385291cabd4cbaf91c593df830e443dbee5469b9bf343879d496a49"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "ea7d57edec1c16c533a46f6d127e0519628a5130436717e7ca3fa52dbba04248"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[4] quality failed",
+            "digest": "ee82290a08122958cb247e7726650ecd418c220269d85953c872232d2b277c81"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verificationHistory[5] quality failed",
+            "digest": "f13eb98e957c5c8edf80421ca23bc6f3016fd6c70fb1e3a99fc110285d0bb2c0"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "The historical v0.5.63 release remains evidence-inconsistent; it is not rewritten. The next correction release depends on hosted provider availability and exact-source CI.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verificationHistory[1] aiGuidelines failed",
+        "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verificationHistory[2] quality failed",
+        "digest": "ea7d57edec1c16c533a46f6d127e0519628a5130436717e7ca3fa52dbba04248"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verificationHistory[3] aiGuidelines failed",
+        "digest": "c7bf8c359385291cabd4cbaf91c593df830e443dbee5469b9bf343879d496a49"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verificationHistory[4] quality failed",
+        "digest": "ee82290a08122958cb247e7726650ecd418c220269d85953c872232d2b277c81"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
+        "subject": "verificationHistory[5] quality failed",
+        "digest": "f13eb98e957c5c8edf80421ca23bc6f3016fd6c70fb1e3a99fc110285d0bb2c0"
+      }
     ]
   },
-  "issues": {
-    "detected": 7,
-    "hardStops": 6,
-    "warnings": 1,
-    "resolved": 6,
-    "unresolved": 1
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "ea7d57edec1c16c533a46f6d127e0519628a5130436717e7ca3fa52dbba04248"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[3] aiGuidelines failed",
-          "digest": "c7bf8c359385291cabd4cbaf91c593df830e443dbee5469b9bf343879d496a49"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[4] quality failed",
-          "digest": "ee82290a08122958cb247e7726650ecd418c220269d85953c872232d2b277c81"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[5] quality failed",
-          "digest": "f13eb98e957c5c8edf80421ca23bc6f3016fd6c70fb1e3a99fc110285d0bb2c0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "1fc17f07aec3aa4d2e5d6f61931778c1d94ed9ef2c57b381e1ef2c7e25873d56"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "ea7d57edec1c16c533a46f6d127e0519628a5130436717e7ca3fa52dbba04248"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[3] aiGuidelines failed",
-          "digest": "c7bf8c359385291cabd4cbaf91c593df830e443dbee5469b9bf343879d496a49"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "710fed823009dc3f4c47c537ba78c1ccb3243ed6b47257b15ec1e76dba095a1c"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[4] quality failed",
-          "digest": "ee82290a08122958cb247e7726650ecd418c220269d85953c872232d2b277c81"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verificationHistory[5] quality failed",
-          "digest": "f13eb98e957c5c8edf80421ca23bc6f3016fd6c70fb1e3a99fc110285d0bb2c0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3d2569e12b72a5dee88cc7d752cc52f17bb46d702769e2ff54e3dd5e2dc31252"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [
-    {
-      "sourceWarning": "The exact merged source SHA, provider workflow run, release tag, and post-publish adoption evidence are intentionally deferred until the implementation PR is merged and the release workflow runs.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The historical v0.5.63 release remains evidence-inconsistent; it is not rewritten. The next correction release depends on hosted provider availability and exact-source CI.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-digest-final-binding.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -1497,6 +1583,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

@@ -38,7 +38,7 @@ keywords:
 
 只使用权威公开投影或另行验证的私有镜像。平台 stable Release、tag 固定 metadata、source、installer、archive asset 和 digest 任一不一致都必须停止；不得用最高 tag 代替。
 
-对于选定的公开 tag，`release-digests.json` 是在 source commit 固定后生成的 release asset。Quick Install 会把该 asset 下载到一次性的 tag clone 中，再验证 tag、source commit 与 artifact digest，验证通过前不会写入对象工程。Tag tree 中的副本可能只是历史基线，不能作为后续 release 的权威。下载或验证失败时，不得替换文件或绕过失败：保留错误，针对准确 tag 验证公开 release asset；若不可变历史 release 有误，只能发布新的修正 tag。
+对于选定的公开 tag，`release.json` 与 `release-digests.json` 都是 source commit 固定后生成的 release asset。manifest 的 `artifacts.release.json` 必须等于最终公开 `release.json` 的实际 SHA-256；archive 不再嵌入这两个可变 projection，以避免 archive SHA 与 manifest 互相引用。Quick Install 会下载并校验这两个 asset、tag、source commit 与 artifact digest，验证通过前不会写入对象工程。Tag tree 中的副本可能只是历史基线，不能作为后续 release 的权威。下载或验证失败时，不得替换文件或绕过失败：保留错误，针对准确 tag 验证公开 release asset；若不可变历史 release 有误，只能发布新的修正 tag。
 
 ### 维护者路径
 

@@ -279,8 +279,6 @@ jobs:
             --workflow-run-sha "$GITHUB_SHA" \
             --release-tag "$RELEASE_TAG" \
             --output-dir "$RUNNER_TEMP/release-evidence"
-          cp "$RUNNER_TEMP/release-evidence/release-digests.json" \
-            "$GITHUB_WORKSPACE/.ai/cockpit/release-digests.json"
           jq -n \
             --arg source "$SOURCE_COMMIT" \
             --arg merge "$GITHUB_SHA" \
@@ -310,19 +308,22 @@ jobs:
           python3 scripts/release_archive.py --root "$GITHUB_WORKSPACE" \
             --source-commit "$SOURCE_COMMIT" \
             --use-worktree \
-            --include-runtime-release-digests \
             --output "$RUNNER_TEMP/release-evidence/$archive_name"
           archive_sha="$(sha256sum "$RUNNER_TEMP/release-evidence/$archive_name" | cut -d' ' -f1)"
           jq --arg archive_sha "$archive_sha" \
             '.releaseArchive.sha256 = $archive_sha
-             | .capabilities.sha256ArchiveVerification.reason = "Runtime archive projection includes the source-bound release-digests manifest."' \
+             | .capabilities.sha256ArchiveVerification.reason = "Source-bound archive excludes mutable release projections; final public metadata is verified separately."' \
             release.json > "$RUNNER_TEMP/release-runtime.json"
           mv "$RUNNER_TEMP/release-runtime.json" release.json
-          tar -xOf "$RUNNER_TEMP/release-evidence/$archive_name" \
-            "ai-cockpit/.ai/cockpit/release-digests.json" \
-            > "$RUNNER_TEMP/archive-release-digests.json"
-          cmp -s "$RUNNER_TEMP/archive-release-digests.json" \
-            "$RUNNER_TEMP/release-evidence/release-digests.json"
+          echo "Refresh final release digest manifest after release.json archive binding"
+          python3 scripts/check_supply_chain.py release-assets \
+            --source-commit "$SOURCE_COMMIT" \
+            --workflow-run-id "$GITHUB_RUN_ID" \
+            --workflow-run-sha "$GITHUB_SHA" \
+            --release-tag "$RELEASE_TAG" \
+            --output-dir "$RUNNER_TEMP/release-evidence"
+          cp "$RUNNER_TEMP/release-evidence/release-digests.json" \
+            "$GITHUB_WORKSPACE/.ai/cockpit/release-digests.json"
 
       - name: Verify source-bound release evidence subjects
         shell: bash
@@ -343,6 +344,12 @@ jobs:
           test "$(jq -r '.artifacts[".ai/cockpit/provenance.json"]' "$evidence/release-digests.json")" = "$provenance_digest"
           archive_name="$(jq -r '.releaseArchive.assetName' release.json)"
           test "$(jq -r '.releaseArchive.sha256' release.json)" = "$(sha256sum "$evidence/$archive_name" | cut -d' ' -f1)"
+          release_json_digest="$(sha256sum release.json | cut -d' ' -f1)"
+          test "$(jq -r '.artifacts["release.json"]' "$evidence/release-digests.json")" = "$release_json_digest"
+          if tar -tzf "$evidence/$archive_name" | grep -Fx 'ai-cockpit/.ai/cockpit/release-digests.json' >/dev/null; then
+            echo "mutable release-digests.json must not be embedded in the source archive" >&2
+            exit 1
+          fi
 
       - name: Bind the generated evidence bundle digest
         shell: bash
@@ -507,6 +514,11 @@ jobs:
           download_draft_asset "$archive_name"
           download_draft_asset release.json
           download_draft_asset release-digests.json
+          public_release_json_digest="$(sha256sum "$download_dir/release.json" | cut -d' ' -f1)"
+          if [[ "$(jq -r '.artifacts["release.json"]' "$download_dir/release-digests.json")" != "$public_release_json_digest" ]]; then
+            echo "public release.json digest does not match release-digests.json" >&2
+            exit 1
+          fi
           verified_archive="$download_dir/$archive_name"
           test "$(sha256sum "$verified_archive" | cut -d' ' -f1)" = \
             "$(jq -r '.releaseArchive.sha256' release.json)"

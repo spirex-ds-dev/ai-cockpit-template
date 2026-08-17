@@ -1307,6 +1307,12 @@ def test_finish_prepares_candidate_coverage_for_separate_or_inline_archive(
     )
     monkeypatch.setattr(ai_finish, "render_direct_outcome_report", lambda *_args: "report\n")
     monkeypatch.setattr(ai_finish, "refresh_archived_human_report", lambda _task: (True, "ok"))
+    report_refreshes = []
+    monkeypatch.setattr(
+        ai_finish,
+        "run_human_report_pipeline",
+        lambda _task, _summary: report_refreshes.append((_task, _summary)) or (True, "ok"),
+    )
     monkeypatch.setattr(
         ai_finish, "bind_pre_archive_candidate_coverage_to_outcome", lambda _task: (True, "ok")
     )
@@ -1334,6 +1340,8 @@ def test_finish_prepares_candidate_coverage_for_separate_or_inline_archive(
         f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}",
     ]
     assert coverage_command in commands
+    assert report_refreshes
+    assert report_refreshes[-1] == (task, summary_path)
     if archive:
         assert archive_command in commands
     else:

@@ -164,6 +164,13 @@ def _next_safe_action(
     closure_facts: Mapping[str, Any] | None,
 ) -> str:
     for stop in reversed(_mapping_list(sections.get("forcedStops"))):
+        # Historical stops remain in the Outcome as evidence, but a resolved
+        # stop is not an actionable recovery condition for the current task.
+        # Only unresolved stops may drive the next action; otherwise a stale
+        # retry instruction can be shown after a later passing verification.
+        state = stop.get("state") or stop.get("result")
+        if state in RESOLVED_STATES:
+            continue
         recovery = stop.get("recovery")
         if isinstance(recovery, str) and recovery.strip():
             return recovery.strip()

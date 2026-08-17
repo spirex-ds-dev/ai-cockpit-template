@@ -264,7 +264,7 @@ def test_worktree_archive_uses_current_tracked_file_bytes(tmp_path: Path):
     assert len(release_archive.canonical_archive_sha(tmp_path, source)) == 64
 
 
-def test_worktree_archive_includes_runtime_release_digests_when_export_ignored(tmp_path: Path):
+def test_worktree_archive_excludes_mutable_runtime_release_projections(tmp_path: Path):
     source = _commit_worktree_file(
         tmp_path, ".gitattributes", ".ai/cockpit/release-digests.json export-ignore\n"
     )
@@ -272,13 +272,17 @@ def test_worktree_archive_includes_runtime_release_digests_when_export_ignored(t
     digest_path.parent.mkdir(parents=True)
     digest_path.write_text('{"runtime":true}\n', encoding="utf-8")
 
-    archive = release_archive.canonical_tar_from_worktree(
-        tmp_path, source, include_runtime_digests=True
-    )
+    archive = release_archive.canonical_tar_from_worktree(tmp_path, source)
     with tarfile.open(fileobj=io.BytesIO(archive), mode="r:") as contents:
-        member = contents.extractfile("ai-cockpit/.ai/cockpit/release-digests.json")
-        assert member is not None
-        assert member.read() == b'{"runtime":true}\n'
+        names = contents.getnames()
+    assert "ai-cockpit/.ai/cockpit/release-digests.json" not in names
+
+
+def test_worktree_archive_includes_runtime_release_digests_when_export_ignored(
+    tmp_path: Path,
+):
+    """Retain the historical regression id while asserting the corrected invariant."""
+    test_worktree_archive_excludes_mutable_runtime_release_projections(tmp_path)
 
 
 def test_worktree_archive_rejects_symlinked_tracked_member(tmp_path: Path):
