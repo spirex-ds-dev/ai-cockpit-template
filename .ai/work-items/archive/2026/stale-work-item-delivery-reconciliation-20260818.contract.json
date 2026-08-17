@@ -1,0 +1,303 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stale-work-item-delivery-reconciliation-20260818",
+  "mode": "cleanup",
+  "title": "Reconcile stale Work Item delivery identities",
+  "baseCommit": "3ca0cb1424f8628b23377ea3973ac2e647cad7fb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json",
+    ".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json",
+    ".ai/work-items/active/stale-work-item-delivery-reconciliation-20260818.contract.json",
+    ".ai/work-items/active/stale-work-item-delivery-reconciliation-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stale-work-item-delivery-reconciliation-20260818.outcome.json",
+    ".ai/work-items/active/stale-work-item-delivery-reconciliation-20260818.outcome.md",
+    ".ai/guards/changed_critical_coverage_policy.json",
+    "scripts/ai_check_backtrack.py",
+    "tests/test_ai_check_backtrack.py",
+    "scripts/check_changed_critical_coverage.py",
+    "tests/test_changed_critical_coverage.py"
+  ],
+  "outOfScope": [
+    "docs/**",
+    "Product source and unrelated scripts/tests.",
+    "release/**",
+    "Merging stale PR #879 or #883 and rewriting their immutable evidence.",
+    "Changing the archived reader Contract, Summary, Outcome, Manifest, or event bytes."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json",
+      "reason": "The stale active handoff that remains after the completed reader Work Item."
+    },
+    {
+      "path": ".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json",
+      "reason": "The stale active receipt that duplicates immutable archived evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-current-revision-reader-validation.events.jsonl",
+      "reason": "Immutable append-only event evidence that must remain unchanged."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-current-revision-reader-validation.archive-manifest.json",
+      "reason": "Immutable archive manifest proving the original reader Work Item is already archived."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/879",
+      "reason": "Historical cleanup draft that contains the bounded guard correction but was never merged."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/883",
+      "reason": "Historical yellow canonical predecessor superseded by the merged successor."
+    }
+  ],
+  "rawUserRequest": "Continue the active thread goal: investigate residual Work Items, repair them in the current Work Item where possible, write any required authorization into the Contract, and ensure Outcome is directly visible with its traffic-light marker.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:active-goal-residual-work-item-and-outcome-output",
+    "capturedAt": "2026-08-18T00:00:00+09:00",
+    "digest": "sha256:34ff9d3d6d5562663701e91f36df885da313fe433bf39e90cda10408eaa71fc3"
+  },
+  "declaredIntent": {
+    "summary": "Remove the two stale active reader duplicates and deliver the fail-closed cleanup guard correction on the current main base.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "intent": {
+    "problem": "The current origin/main still contains documentation-current-revision-reader-validation.handoff.json and receipt.json under active/, even though the corresponding reader Work Item is archived with resolved event evidence. The old cleanup PR is stale and unmerged, so the repository also lacks its bounded deletion approval seam and v2 baseline compatibility correction.",
+    "constraints": [
+      "Delete only the two exact active duplicate paths after the Contract and Summary bind the approved destructive change.",
+      "Keep the archived reader Contract, Summary, Outcome, Manifest, event log, timestamps, bindings, and comprehension result byte-for-byte unchanged.",
+      "Repair the backtrack guard in this Work Item so only an approved Contract policy plus explicit Summary destructiveChanges can allow Work Item evidence deletion.",
+      "Accept v2 object-shaped baselineDirtyPaths in changed-critical coverage while retaining fail-closed ownership checks.",
+      "Do not merge stale PR #879 or #883; preserve their historical evidence and record their disposition rather than rewriting it.",
+      "The active Outcome must be directly delivered in the conversation and include the canonical 🔴🟡🟢 marker before archive."
+    ],
+    "rationale": "The root defect is not merely leftover files: the cleanup delivery never reached current main, and the deletion guard did not encode the approved exception. Delivering both the exact cleanup and its guard correction from the current base restores the lifecycle invariant without weakening fail-closed behavior."
+  },
+  "problemStatement": "Current origin/main retains two active reader receipt duplicates even though their immutable archived Work Item evidence is resolved; the stale cleanup delivery was never merged.",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "destructive_cleanup",
+      "historical_evidence",
+      "governance_guard"
+    ],
+    "reason": "The WI removes two active evidence duplicates and changes a deletion guard; exact paths and immutable archive boundaries are explicitly declared.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["Cleanup guard and tests are bounded to repository governance paths."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user-authorized destructive paths, immutable evidence boundaries, and verification plan are explicit."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The two exact documentation-current-revision-reader-validation active duplicates are removed, while the archived Contract, Summary, Outcome, Manifest, event log, and comprehension evidence remain byte-for-byte unchanged.",
+    "The backtrack guard authorizes Work Item evidence deletion only when the active Contract has an approved destructiveChangePolicy and the Summary explicitly declares the exact delete paths.",
+    "Regression tests cover authorized deletion, fail-closed unapproved deletion, malformed authorization, and the v2 object-shaped baselineDirtyPaths record.",
+    "Current-main active inventory contains no handoff or receipt record for the completed reader Work Item after the cleanup.",
+    "The active Outcome is persisted, directly delivered in the conversation as a complete report beginning with Outcome: 🔴, Outcome: 🟡, or Outcome: 🟢, and only a green completed Outcome permits archive.",
+    "The stale #879 and #883 delivery identities are dispositioned without merging stale branches or rewriting immutable predecessor evidence.",
+    "No release, tag, product source, unrelated documentation, or unrelated Work Item evidence is changed."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The two exact reader active duplicates are removed and the immutable archive remains unchanged.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["make check-ai-status-consistency", "git diff --check"],
+      "reason": "The exact two active paths are absent after the governed deletion.",
+      "expected": "Only the two exact active duplicates disappear and the archived reader evidence is byte-identical.",
+      "verificationPlan": "Run the targeted status/consistency checks and compare the archived files against the base commit."
+    },
+    {
+      "scenario": "Backtrack accepts only the approved Contract plus explicit Summary deletion paths.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["python -m pytest -q tests/test_ai_check_backtrack.py", "make check-ai-backtrack"],
+      "reason": "Approved deletion passes while unapproved and malformed approval remains fail closed.",
+      "expected": "Unapproved or malformed deletions fail closed; only the exact approved paths pass.",
+      "verificationPlan": "Run tests/test_ai_check_backtrack.py and make check-ai-backtrack."
+    },
+    {
+      "scenario": "v2 object-shaped baselineDirtyPaths remains valid for changed-critical ownership.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["python -m pytest -q tests/test_changed_critical_coverage.py", "make check-ai-coverage-guard"],
+      "reason": "v2 object-shaped baselineDirtyPaths is accepted and ownership checks remain enforced.",
+      "expected": "v2 object-shaped baselineDirtyPaths is normalized and ownership remains enforced.",
+      "verificationPlan": "Run tests/test_changed_critical_coverage.py and make check-ai-coverage-guard."
+    },
+    {
+      "scenario": "The Outcome is directly visible with exactly one traffic-light marker before archive.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["python -m pytest -q tests/test_task_outcome_ai_finish_integration.py tests/test_finish_e2e.py tests/test_outcome_lifecycle_rules.py"],
+      "reason": "The integration and lifecycle tests verify direct stdout delivery and the green archive boundary; the final report will be relayed directly after ai-finish.",
+      "expected": "The complete Outcome starts with a visible traffic-light marker and is delivered as a direct assistant message.",
+      "verificationPlan": "Run ai-finish, inspect stdout, and relay the complete report directly in the conversation before archive."
+    },
+    {
+      "scenario": "Historical PR #879 and #883 are dispositioned without merging stale branches.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/pull/879", "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/883"],
+      "reason": "Both stale PRs are closed as superseded; their remote branches remain retained historical identities.",
+      "expected": "PR #879 and #883 are closed as superseded while their historical branches/evidence are retained.",
+      "verificationPlan": "Inspect provider state and record the close receipts in the Summary."
+    }
+  ],
+  "guidelines": [
+    "Preserve immutable archived Work Item evidence and never hand-edit generated status projections.",
+    "Use fail-closed authorization for destructive active-record deletion.",
+    "Keep the correction bounded to the declared cleanup guard, exact active records, and regression tests.",
+    "Preserve the direct Outcome handoff and traffic-light marker as a lifecycle boundary."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      ".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json",
+      ".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "repository-owner",
+      "reason": "The active thread goal explicitly authorizes necessary scoped corrective changes and requires residual Work Items to be investigated and processed.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "repository-owner",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "conversation:active-goal-residual-work-item-and-outcome-output",
+          "directUserInstructionDigest": "sha256:34ff9d3d6d5562663701e91f36df885da313fe433bf39e90cda10408eaa71fc3",
+          "authorizedAt": "2026-08-18T00:00:00Z"
+        },
+        "scope": [
+          ".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json",
+          ".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json"
+        ]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository-owner",
+    "reason": "The user authorized the scoped governance guard, test, and active-record cleanup changes in the current Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 951
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/stale-work-item-delivery-reconciliation-20260818.json",
+    "baseCommit": "3ca0cb1424f8628b23377ea3973ac2e647cad7fb",
+    "initialScopeDigest": "4ddf150af81ffd48dcdf5795055246f63cbd3ec986f110318271096a72f4ca3b",
+    "contractSkeletonDigest": "0812cb7f73c912e04be2dba920d805e69f6f0379aa0aaf6f1e38aacabbee69b0"
+  }
+}
