@@ -12,6 +12,7 @@ from itertools import pairwise
 from pathlib import Path
 from typing import Any
 
+from ai_capability_truth import validate_matrix
 from ai_check_summary import changed_file_paths, validate_summary
 from ai_check_work_item import validate_contract
 from ai_common import (
@@ -25,6 +26,11 @@ from ai_common import (
     parse_simple_manifest,
     run_git,
     simple_yaml_lists,
+)
+from ai_evidence_dependencies import (
+    EvidenceDependencyError,
+    changed_path_dependency_issues,
+    load_capability_evidence_dependencies,
 )
 from ai_lifecycle_truth import (
     archived_outcome_projection,
@@ -59,6 +65,26 @@ ARCHIVE_BOUND_RELEASE_METADATA = frozenset(
         "release.json",
     }
 )
+
+
+def capability_truth_dependency_issues(paths: list[str]) -> list[str]:
+    """Reject stale or unsynchronized Capability Truth evidence at PR time."""
+    try:
+        dependencies = load_capability_evidence_dependencies(PROJECT_ROOT)
+    except EvidenceDependencyError as exc:
+        return [str(exc)]
+    if dependencies is None:
+        return []
+    changed = set(paths)
+    if not (
+        dependencies.matrix_path in changed
+        or any(path in dependencies.capability_ids_by_path for path in changed)
+    ):
+        return []
+    issues = changed_path_dependency_issues(paths, dependencies)
+    if issues:
+        return issues
+    return validate_matrix(PROJECT_ROOT / dependencies.matrix_path, root=PROJECT_ROOT)
 
 
 def _git_blob_hash(revision: str, path: str) -> str:
@@ -833,6 +859,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     all_paths = changed_paths(
         {"baseCommit": base, "baselineDirtyPaths": []}, ignore_baseline_dirty=True
     )
+    issues.extend(capability_truth_dependency_issues(all_paths))
     report_required = (
         HUMAN_REPORT_JSON in all_paths
         or HUMAN_REPORT_MARKDOWN in all_paths

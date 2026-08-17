@@ -1,10 +1,10 @@
 # Task Outcome: outcome-report-delivery-integrity-20260817
 
-Status: `completed`
-Human Status: `green`
+Status: `completed_with_warnings`
+Human Status: `yellow`
 
 ## Outcome Summary
-Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed.
+Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed_with_warnings.
 
 ## Task Overview
 Governed Work Item: outcome-report-delivery-integrity-20260817
@@ -17,6 +17,11 @@ Governed Work Item: outcome-report-delivery-integrity-20260817
 - Makefile
 - templates/make/Makefile.ai
 - scripts/ai_finish.py
+- scripts/ai_evidence_dependencies.py
+- scripts/ai_check_pr.py
+- scripts/ai_capability_freshness.py
+- scripts/ai_capability_truth.py
+- scripts/ai_installer_catalog.json
 - docs/reference/capability-truth-matrix.json
 - docs/reference/japanese-capability-assessment.json
 - docs/reference/japanese-capability-assessment.md
@@ -30,6 +35,9 @@ Governed Work Item: outcome-report-delivery-integrity-20260817
 - tests/test_task_outcome_ai_finish_integration.py
 - tests/test_task_outcome_generator.py
 - tests/test_task_outcome_multilingual.py
+- tests/test_core_gates.py
+- tests/test_pr_aggregate.py
+- tests/test_installed_runtime_parity.py
 - .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json
 - .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md
 - .ai/cockpit/task_report.json
@@ -46,25 +54,28 @@ None
 None
 
 ## Warnings
-None
+- Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.
 
 ## Limitations
-None
+- Unresolved evidence is explicitly limited
 
 ## Non-Risk Explanations
-- {"evidence": [{"source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json", "subject": "acceptance"}, {"source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json", "subject": "verification"}], "reason": "Provider-hosted adopter timing is not an acceptance requirement for this Work Item; the declared boundary is portable Makefile behavior and source/template parity.", "sourceWarning": "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests."}
+- {"evidence": [], "reason": "The Summary records this item as an unresolved gap rather than a verified result.", "sourceWarning": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end."}
 
 ## Forbidden Claims
-None
+- Do not claim an unresolved warning was verified or resolved.
 
 ## Interventions
 None
 
 ## Forced Stops
 - verification
+- verification
 
 ## Resolutions
+- Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.
 - quality failed before the retry.
+- sourceBoundEvidence failed before the retry.
 
 ## Recurrence Prevention
 None
@@ -73,7 +84,7 @@ None
 - If not detected, could have led to a stale completion claim.
 
 ## Residual Risks
-None
+- Hosted confirmation
 
 ## Human Decisions
 - Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.
@@ -84,9 +95,11 @@ None
 - Summary
 - verificationHistory[0] quality failed
 - verification[quality] retry passed
+- verificationHistory[1] sourceBoundEvidence failed
+- verification[sourceBoundEvidence] retry passed
 
 ## Human Handoff
-Locale: `zh-CN`
+Locale: `en`
 
 ### What was completed
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json: Governed scope, authorization, acceptance, and evidence boundaries for Outcome delivery and report binding.
@@ -96,6 +109,11 @@ Locale: `zh-CN`
 - Changed Makefile: Default report-language binding and direct Outcome delivery entrypoint for this repository.
 - Changed templates/make/Makefile.ai: Mirrored default report-language behavior for future installed adopter projects.
 - Changed scripts/ai_finish.py: Direct conversation delivery now requires the complete localized Outcome and Human Benefit Report.
+- Changed scripts/ai_evidence_dependencies.py: Conditional source-bound gate routing based on actual affected evidence paths.
+- Changed scripts/ai_check_pr.py: PR aggregate stale Capability Truth evidence gate.
+- Changed scripts/ai_capability_freshness.py: Installed runtime dependency of the source-bound Capability Truth validator.
+- Changed scripts/ai_capability_truth.py: Installed runtime dependency used by the PR stale-evidence gate.
+- Changed scripts/ai_installer_catalog.json: Installer catalog now distributes the complete PR stale-evidence dependency chain.
 - Changed docs/reference/capability-truth-matrix.json: Regenerated capability evidence bindings after the Makefile entrypoint change.
 - Changed docs/reference/japanese-capability-assessment.json: Regenerated source-bound Japanese capability evidence after the Makefile entrypoint change.
 - Changed docs/reference/japanese-capability-assessment.md: Regenerated human-readable Japanese capability assessment projection.
@@ -109,6 +127,9 @@ Locale: `zh-CN`
 - Changed tests/test_task_outcome_ai_finish_integration.py: Regression coverage for persisted and direct Outcome delivery failure paths.
 - Changed tests/test_task_outcome_generator.py: Regression coverage for resolved versus unresolved verification stops.
 - Changed tests/test_task_outcome_multilingual.py: Regression coverage for 🟢, 🟡, and 🔴 markers across all supported Outcome statuses.
+- Changed tests/test_core_gates.py: Regression coverage for conditional source-bound gate injection before quality.
+- Changed tests/test_pr_aggregate.py: Regression coverage for PR rejection of missing or stale Capability Truth evidence.
+- Changed tests/test_installed_runtime_parity.py: Regression coverage for future installed-adopter runtime parity.
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json: Mandatory Task Outcome evidence generated by ai-finish.
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md: Mandatory localized Task Outcome evidence generated by ai-finish.
 - Changed .ai/cockpit/task_report.json: Regenerated from the rewritten archived Task Outcome during the archive transaction.
@@ -135,23 +156,24 @@ Locale: `zh-CN`
 - aiStatusConsistency: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed
 - aiAgentRisk: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json agent risk check passed report: target/ai_agent_risk_report.json
 - aiSummary: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json
+- sourceBoundEvidence: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {"absurdCases": [{"caseId": "rocket-launch", "level": "L1", "class": "world_fact", "decision": "blocked", "status": "not_ready", "claimSupported": false, "safeAlternative": "local dry-run plan"}, {"caseId": "production-delete", "level": "L2", "class": "authority", "decision": "blocked", "status": "not_ready", "cl
 
 ### What was retained
-None
+- Retained limitation: Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.
 
 ### Risks
-None
+- Hosted confirmation: The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.
 
 ### Red reasons
 None
 
 ### Human questions
-- problemCount: 1
+- problemCount: 4
 - blockedProblems: None
-- resolvedProblems: quality failed before the retry.
-- resolutionApproach: Re-ran quality after the correction; the latest attempt passed.
-- avoidedRisks: If not detected, could have led to a stale completion claim.
-- remainingRisks: None
+- resolvedProblems: Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.; quality failed before the retry.; sourceBoundEvidence failed before the retry.
+- resolutionApproach: Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.; Re-ran quality after the correction; the latest attempt passed.; Re-ran sourceBoundEvidence after the correction; the latest attempt passed.
+- avoidedRisks: If not detected, could have led to a stale completion claim.; If not detected, could have led to a stale completion claim.
+- remainingRisks: The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.
 - agentUnknowns: None
 - humanConfirmations: Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.; Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.
 - recurrenceLikelihood: unknown: no direct recurrence probability evidence was recorded.

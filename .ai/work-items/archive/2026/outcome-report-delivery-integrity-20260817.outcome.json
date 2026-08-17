@@ -2,27 +2,27 @@
   "format": "ai-cockpit-task-outcome",
   "schemaVersion": 1,
   "workItemId": "outcome-report-delivery-integrity-20260817",
-  "status": "completed",
-  "humanStatusColor": "green",
+  "status": "completed_with_warnings",
+  "humanStatusColor": "yellow",
   "failedGate": "",
   "recoveryCondition": "",
   "bindings": {
     "taskId": "outcome-report-delivery-integrity-20260817",
-    "contractDigest": "efd80bda8d3d1f0ed867e5e08cc1ecaebf756c9dc9673d9768467d7bb18fc0a8",
-    "summaryDigest": "f17199965c89cec22b0a062455e30e216be8887c6168554b052fe17e5d5e7102",
-    "verificationDigest": "09b2b73cc221209168a5cc37ae4b7763a8466ea87bb2fff6552ba842e5de7ec9",
+    "contractDigest": "7997fbd62959db13aad99827822c46b463747bfad0bf44d56597b163f35b8982",
+    "summaryDigest": "17d85dc6fa981e31f5e29916c99c78a68769b8ecb8709fcb14ae2524ba06b880",
+    "verificationDigest": "8fea00158346c92679ccb945ae8d48e1aafc9013997abd5bb20537e392be888f",
     "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
-    "headCommit": "43c0d73d20351894159e5805bc2f5cf9c0cc994b",
+    "headCommit": "5263089d6747d3e289772e164f7da7cb7b379233",
     "lifecycleStage": "pre_merge",
     "pullRequest": {
       "state": "not_created"
     },
     "aiCockpitVersion": "repository-governance",
     "generatorVersion": "1.2",
-    "locale": "zh-CN"
+    "locale": "en"
   },
   "sections": {
-    "outcomeSummary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed.",
+    "outcomeSummary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed_with_warnings.",
     "taskOverview": "Governed Work Item: outcome-report-delivery-integrity-20260817",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
@@ -32,6 +32,11 @@
       "Makefile",
       "templates/make/Makefile.ai",
       "scripts/ai_finish.py",
+      "scripts/ai_evidence_dependencies.py",
+      "scripts/ai_check_pr.py",
+      "scripts/ai_capability_freshness.py",
+      "scripts/ai_capability_truth.py",
+      "scripts/ai_installer_catalog.json",
       "docs/reference/capability-truth-matrix.json",
       "docs/reference/japanese-capability-assessment.json",
       "docs/reference/japanese-capability-assessment.md",
@@ -45,6 +50,9 @@
       "tests/test_task_outcome_ai_finish_integration.py",
       "tests/test_task_outcome_generator.py",
       "tests/test_task_outcome_multilingual.py",
+      "tests/test_core_gates.py",
+      "tests/test_pr_aggregate.py",
+      "tests/test_installed_runtime_parity.py",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md",
       ".ai/cockpit/task_report.json",
@@ -56,25 +64,34 @@
     ],
     "findings": [],
     "risks": [],
-    "warnings": [],
-    "limitations": [],
-    "nonRiskExplanations": [
+    "warnings": [
+      "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end."
+    ],
+    "limitations": [
       {
-        "sourceWarning": "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests.",
-        "reason": "Provider-hosted adopter timing is not an acceptance requirement for this Work Item; the declared boundary is portable Makefile behavior and source/template parity.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "acceptance"
-          },
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "verification"
-          }
+        "sourceWarning": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
         ]
       }
     ],
-    "forbiddenClaims": [],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
     "interventions": [],
     "forcedStops": [
       {
@@ -99,9 +116,59 @@
             "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
           }
         ]
+      },
+      {
+        "stage": "verification",
+        "reason": "sourceBoundEvidence failed before the retry.",
+        "policyOrGuard": "required verification: sourceBoundEvidence",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry sourceBoundEvidence after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[1] sourceBoundEvidence failed",
+            "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[sourceBoundEvidence] retry passed",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ]
       }
     ],
     "resolutions": [
+      {
+        "problem": "Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.",
+        "action": "Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "hosted-run:32032966957",
+            "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "source-bound remediation"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "hosted-run:32032966957",
+            "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "source-bound remediation"
+          }
+        ],
+        "inference": false
+      },
       {
         "problem": "quality failed before the retry.",
         "action": "Re-ran quality after the correction; the latest attempt passed.",
@@ -119,13 +186,58 @@
             "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
           }
         ]
+      },
+      {
+        "problem": "sourceBoundEvidence failed before the retry.",
+        "action": "Re-ran sourceBoundEvidence after the correction; the latest attempt passed.",
+        "verification": "sourceBoundEvidence latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[1] sourceBoundEvidence failed",
+            "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[sourceBoundEvidence] retry passed",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ]
       }
     ],
     "recurrencePrevention": [],
     "avoidedImpact": [
       "If not detected, could have led to a stale completion claim."
     ],
-    "residualRisks": [],
+    "residualRisks": [
+      {
+        "claim": "Hosted confirmation",
+        "severity": "high",
+        "title": "Hosted confirmation",
+        "detail": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false,
+        "requiredEvidence": [
+          "fresh Hosted smoke pass on the corrected PR commit"
+        ],
+        "decisionOwner": "human reviewer",
+        "mitigation": "Keep Outcome yellow and block WI completion until the fresh Hosted smoke result is recorded.",
+        "acceptanceStatus": "pending Hosted confirmation"
+      }
+    ],
     "humanDecisions": [
       "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
       "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
@@ -148,11 +260,21 @@
         "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
         "subject": "verification[quality] retry passed",
         "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verificationHistory[1] sourceBoundEvidence failed",
+        "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verification[sourceBoundEvidence] retry passed",
+        "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
       }
     ]
   },
   "humanHandoff": {
-    "locale": "zh-CN",
+    "locale": "en",
     "completed": [
       {
         "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
@@ -276,6 +398,96 @@
           {
             "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
             "subject": "scripts/ai_finish.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_evidence_dependencies.py",
+        "title": "Changed scripts/ai_evidence_dependencies.py",
+        "detail": "Conditional source-bound gate routing based on actual affected evidence paths.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_evidence_dependencies.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_evidence_dependencies.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_check_pr.py",
+        "title": "Changed scripts/ai_check_pr.py",
+        "detail": "PR aggregate stale Capability Truth evidence gate.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_check_pr.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_check_pr.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_capability_freshness.py",
+        "title": "Changed scripts/ai_capability_freshness.py",
+        "detail": "Installed runtime dependency of the source-bound Capability Truth validator.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_freshness.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_freshness.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_capability_truth.py",
+        "title": "Changed scripts/ai_capability_truth.py",
+        "detail": "Installed runtime dependency used by the PR stale-evidence gate.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_truth.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_truth.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_installer_catalog.json",
+        "title": "Changed scripts/ai_installer_catalog.json",
+        "detail": "Installer catalog now distributes the complete PR stale-evidence dependency chain.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
           }
         ],
         "inference": false
@@ -510,6 +722,60 @@
           {
             "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
             "subject": "tests/test_task_outcome_multilingual.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_core_gates.py",
+        "title": "Changed tests/test_core_gates.py",
+        "detail": "Regression coverage for conditional source-bound gate injection before quality.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_core_gates.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_core_gates.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_pr_aggregate.py",
+        "title": "Changed tests/test_pr_aggregate.py",
+        "detail": "Regression coverage for PR rejection of missing or stale Capability Truth evidence.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_pr_aggregate.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_pr_aggregate.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_installed_runtime_parity.py",
+        "title": "Changed tests/test_installed_runtime_parity.py",
+        "detail": "Regression coverage for future installed-adopter runtime parity.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_installed_runtime_parity.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_installed_runtime_parity.py"
           }
         ],
         "inference": false
@@ -979,14 +1245,88 @@
           }
         ],
         "inference": false
+      },
+      {
+        "claim": "sourceBoundEvidence",
+        "title": "sourceBoundEvidence",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"cl",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ],
+        "inference": false
       }
     ],
-    "retained": [],
-    "risks": [],
+    "retained": [
+      {
+        "claim": "Retained limitation",
+        "title": "Retained limitation",
+        "detail": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "knownGaps"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "knownGaps"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "risks": [
+      {
+        "claim": "Hosted confirmation",
+        "severity": "high",
+        "title": "Hosted confirmation",
+        "detail": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false,
+        "requiredEvidence": [
+          "fresh Hosted smoke pass on the corrected PR commit"
+        ],
+        "decisionOwner": "human reviewer",
+        "mitigation": "Keep Outcome yellow and block WI completion until the fresh Hosted smoke result is recorded.",
+        "acceptanceStatus": "pending Hosted confirmation"
+      }
+    ],
     "redReasons": [],
     "questions": {
-      "problemCount": 1,
+      "problemCount": 4,
       "problemCountEvidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+          "subject": "observedIssues"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+          "subject": "knownGaps"
+        },
         {
           "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
           "subject": "verification and verificationHistory"
@@ -994,6 +1334,20 @@
       ],
       "blockedProblems": [],
       "resolvedProblems": [
+        {
+          "claim": "Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.",
+          "evidenceRefs": [
+            {
+              "source": "hosted-run:32032966957",
+              "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "source-bound remediation"
+            }
+          ],
+          "inference": false
+        },
         {
           "claim": "quality failed before the retry.",
           "evidenceRefs": [
@@ -1009,9 +1363,39 @@
             }
           ],
           "inference": false
+        },
+        {
+          "claim": "sourceBoundEvidence failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verificationHistory[1] sourceBoundEvidence failed",
+              "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verification[sourceBoundEvidence] retry passed",
+              "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+            }
+          ],
+          "inference": false
         }
       ],
       "resolutionApproach": [
+        {
+          "claim": "Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.",
+          "evidenceRefs": [
+            {
+              "source": "hosted-run:32032966957",
+              "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "source-bound remediation"
+            }
+          ],
+          "inference": false
+        },
         {
           "claim": "Re-ran quality after the correction; the latest attempt passed.",
           "evidenceRefs": [
@@ -1027,6 +1411,22 @@
             }
           ],
           "inference": false
+        },
+        {
+          "claim": "Re-ran sourceBoundEvidence after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verificationHistory[1] sourceBoundEvidence failed",
+              "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verification[sourceBoundEvidence] retry passed",
+              "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+            }
+          ],
+          "inference": false
         }
       ],
       "avoidedRisks": [
@@ -1034,9 +1434,25 @@
           "claim": "If not detected, could have led to a stale completion claim.",
           "evidenceRefs": [],
           "inference": true
+        },
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
         }
       ],
-      "remainingRisks": [],
+      "remainingRisks": [
+        {
+          "claim": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "residualRisks"
+            }
+          ],
+          "inference": false
+        }
+      ],
       "agentUnknowns": [],
       "humanConfirmations": [
         {
