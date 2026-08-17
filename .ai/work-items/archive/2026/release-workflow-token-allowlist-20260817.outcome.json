@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "release-workflow-token-allowlist-20260817",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "4f4edb25c9be032f9962b86915a457faccff262327fc787426f6b2324640f8a2"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "release-workflow-token-allowlist-20260817",
+    "contractDigest": "6fde90da4bbf829bf0bb7e08e213d03dea6f7bd72b58159d696f461f51d8d44b",
+    "summaryDigest": "e569d2bc43100e7f0095ef6b891abfdef055a6fa43b69ef54da21cd4b5d8ce27",
+    "verificationDigest": "69d2b6fcb47cdeeb311000aa8ee610a5ebd5c9bad8f891a94abcf5b7a0d9ed0e",
+    "baseCommit": "d8c6ac6ff8b7b52655e98ebc7c69c2ea31b7fcc2",
+    "headCommit": "d8c6ac6ff8b7b52655e98ebc7c69c2ea31b7fcc2",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "d16420ac7bad2268558be4c0e7dfd79382a0201672c4460f8c32d85118839ac7",
+      "binding": {
+        "baseCommit": "d8c6ac6ff8b7b52655e98ebc7c69c2ea31b7fcc2",
+        "candidateHead": "d8c6ac6ff8b7b52655e98ebc7c69c2ea31b7fcc2",
+        "candidateTreeDigest": "431936fbdebeb231a1bb90785b4ff9cf21ceef2c9b06592d7b1be0ce8e8450f3",
+        "candidateDiffDigest": "99573186a44030ec5e85ba298112f980b11c28310bf9fc6f45a72422875ecfa6"
+      }
+    }
   },
-  "task": {
-    "summary": "Task release-workflow-token-allowlist-20260817 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task release-workflow-token-allowlist-20260817 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: release-workflow-token-allowlist-20260817",
     "deliveredChanges": [
       ".github/workflows/release.yml",
       "tests/test_release_workflow.py",
@@ -22,79 +45,109 @@
       ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "b6d2a3502426981fa38fa3d7d3dfb5a333afe5971058c3e3ed24e22c938de563"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "156418c3c214635ec6d2d206a3569bcf353d633c37df2c40bfbb877106dc0385"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "b6d2a3502426981fa38fa3d7d3dfb5a333afe5971058c3e3ed24e22c938de563"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "156418c3c214635ec6d2d206a3569bcf353d633c37df2c40bfbb877106dc0385"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "The provider secret/configuration is external state and its value is intentionally not inspectable in repository evidence; hosted rehearsal remains required.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "The hosted rehearsal failure must be fixed at its provider-access root cause; no workaround or gate bypass is acceptable."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "b6d2a3502426981fa38fa3d7d3dfb5a333afe5971058c3e3ed24e22c938de563"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "156418c3c214635ec6d2d206a3569bcf353d633c37df2c40bfbb877106dc0385"
+      }
     ]
   },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "b6d2a3502426981fa38fa3d7d3dfb5a333afe5971058c3e3ed24e22c938de563"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "156418c3c214635ec6d2d206a3569bcf353d633c37df2c40bfbb877106dc0385"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "b6d2a3502426981fa38fa3d7d3dfb5a333afe5971058c3e3ed24e22c938de563"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "156418c3c214635ec6d2d206a3569bcf353d633c37df2c40bfbb877106dc0385"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "The hosted rehearsal failure must be fixed at its provider-access root cause; no workaround or gate bypass is acceptable."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The provider secret/configuration is external state and its value is intentionally not inspectable in repository evidence; hosted rehearsal remains required.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "en",
     "completed": [
@@ -746,6 +799,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
