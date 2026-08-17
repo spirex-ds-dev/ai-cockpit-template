@@ -1,0 +1,250 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-workflow-token-allowlist-20260817",
+  "mode": "code",
+  "title": "Make release dependency verification work with the organization allow-listed token",
+  "baseCommit": "d8c6ac6ff8b7b52655e98ebc7c69c2ea31b7fcc2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    ".ai/work-items/active/release-workflow-token-allowlist-20260817.contract.json",
+    ".ai/work-items/active/release-workflow-token-allowlist-20260817.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-workflow-token-allowlist-20260817.outcome.json",
+    ".ai/work-items/active/release-workflow-token-allowlist-20260817.outcome.md"
+  ],
+  "outOfScope": [
+    "Do not modify CodeQL configuration or unrelated workflows.",
+    "Do not change release metadata, release assets, tag creation, or public Release publication in this WI.",
+    "Do not change organization IP allow-list, repository secret values, runner registration, billing, or permissions outside the workflow token reference.",
+    "Do not alter or reopen the already closed release-projection-reconciliation-20260817 WI."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The release dependency-verification steps currently use github.token for GitHub Actions API calls."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Focused release workflow regression coverage must lock the token source and preserve the release contract."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32056061770",
+      "reason": "Exact-source rehearsal evidence: the release workflow failed at the dependency API lookup because the organization IP allow list rejected github.token from the runner."
+    },
+    {
+      "path": "GitHub repository secret AI_COCKPIT_RELEASE_RUNNER",
+      "reason": "Existing repository secret listed in the provider configuration; its value is never read, logged, or committed."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_authorization",
+      "release_integrity"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The workflow must use the existing organization-allow-listed repository secret for read/write Actions API calls while remaining fail-closed and never exposing its value."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failure evidence identifies a concrete workflow-token root cause, and the user authorized root-cause correction before publication."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release workflow uses the existing AI_COCKPIT_RELEASE_RUNNER secret as GH_TOKEN for provider API calls and does not fall back to github.token.",
+    "Focused tests assert the secret-backed token reference, reject the github.token dependency for release API operations, and preserve the existing release workflow inputs and exact-source gates.",
+    "The token value is never printed, committed, or included in generated evidence; no CodeQL or unrelated workflow is modified.",
+    "The exact-source v0.5.65 rehearsal succeeds on main commit d8c6ac6ff8b7b52655e98ebc7c69c2ea31b7fcc2 without creating a tag, Release, or public asset.",
+    "The Work Item finishes only with a complete direct conversation-visible Outcome carrying the canonical traffic-light marker and a green terminal gate."
+  ],
+  "guidelines": [
+    "Use the existing repository secret by name only; never read or expose its value in repository files or logs.",
+    "Keep the release workflow change limited to the provider-token boundary and its focused regression test.",
+    "Preserve exact-source release identity and fail closed when provider API verification cannot be performed.",
+    "Do not create a tag or public Release before the candidate and same-SHA rehearsal gates pass."
+  ],
+  "intent": {
+    "problem": "The v0.5.65 exact-source rehearsal reached the release dependency verification step but GitHub returned HTTP 403 because the organization IP allow list rejected the workflow's default provider access when it queried Actions workflow runs. The release content and source SHA were not the cause, and no public release mutation occurred.",
+    "constraints": [
+      "Use the already configured repository value AI_COCKPIT_RELEASE_RUNNER for release workflow provider API calls.",
+      "Do not change the configured value, organization allow-list settings, CodeQL configuration, or unrelated workflows.",
+      "Keep the publication gate exact-source and fail closed if the provider access value is unavailable or cannot verify dependency evidence."
+    ],
+    "rationale": "The root cause is the workflow's provider-access selection, not a transient release projection. Binding GH_TOKEN to the existing allow-listed repository value is the smallest durable correction that lets the workflow perform its existing exact-source dependency checks without weakening them."
+  },
+  "rawUserRequest": "必须根治当前问题；在既定目标完成后发布新版本。发现发布 rehearsal 因组织 IP allow list 拒绝 workflow 使用 github.token 时，修复根因后再继续，不绕过 Outcome、exact-SHA 或发布门禁。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-root-cause-release-rehearsal",
+    "capturedAt": "2026-08-18T00:00:00+09:00",
+    "digest": "sha256:release-workflow-token-allowlist-root-cause"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Bind the release workflow's provider API calls to the existing organization-allow-listed repository configuration value while preserving all exact-source publication gates.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "allowlisted-provider-token",
+      "riskDomain": "workflow_authorization",
+      "scenario": "The release workflow queries Actions metadata from an organization IP-allow-listed runner.",
+      "expected": "The workflow uses the existing AI_COCKPIT_RELEASE_RUNNER secret and the provider API request is authorized.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused workflow regression test plus exact-source hosted rehearsal."
+    },
+    {
+      "id": "secret-non-disclosure",
+      "riskDomain": "workflow_authorization",
+      "scenario": "The token is unavailable, malformed, printed, or accidentally committed.",
+      "expected": "The workflow fails closed without exposing the secret value or falling back to github.token.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Static workflow assertions, secret-scan, and provider-run log inspection."
+    },
+    {
+      "id": "release-gate-preservation",
+      "riskDomain": "release_integrity",
+      "scenario": "The token fix is applied while the candidate/source or public release state is invalid.",
+      "expected": "Exact-source, candidate identity, rehearsal, and no-public-mutation gates remain unchanged and block publication when invalid.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused workflow tests, full governed checks, and successful rehearsal with no tag/Release asset."
+    }
+  ],
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-current-thread",
+    "reason": "The user explicitly required root-cause correction before proceeding and authorized the existing release publication objective; this WI records the narrow workflow authorization fix needed to execute that objective."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 946
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-workflow-token-allowlist-20260817.json",
+    "baseCommit": "d8c6ac6ff8b7b52655e98ebc7c69c2ea31b7fcc2",
+    "initialScopeDigest": "be894d7edf1ab824f92f268dec5ae57022484f5bd13898116a20384bbacac29a",
+    "contractSkeletonDigest": "da2d3dfad0627e9909c8920bc82c1163af05fef755d5d90f4c7b63fe1ed5d1db"
+  }
+}

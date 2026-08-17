@@ -4,51 +4,42 @@ Task Result
 Status: Success
 
 What was completed
-- Changed .ai/work-items/active/release-projection-reconciliation-20260817.contract.json [evidence: .ai/work-items/archive/2026/release-projection-reconciliation-20260817.contract.json]
-- Changed .ai/work-items/active/release-projection-reconciliation-20260817.summary.json [evidence: .ai/work-items/archive/2026/release-projection-reconciliation-20260817.summary.json]
-- Changed .ai/work-items/starts/release-projection-reconciliation-20260817.json [evidence: .ai/work-items/starts/release-projection-reconciliation-20260817.json]
-- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
-- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
-- Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
-- Changed release.json [evidence: release.json]
-- Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
-- Changed next-release.json [evidence: next-release.json]
-- Changed release-state.json [evidence: release-state.json]
-- Changed .ai/cockpit/version.json [evidence: .ai/cockpit/version.json]
-- Changed install.sh [evidence: install.sh]
+- Changed .github/workflows/release.yml [evidence: .github/workflows/release.yml]
+- Changed tests/test_release_workflow.py [evidence: tests/test_release_workflow.py]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
 - Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
 - Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/work-items/active/release-projection-reconciliation-20260817.outcome.json [evidence: .ai/work-items/archive/2026/release-projection-reconciliation-20260817.outcome.json]
-- Changed .ai/work-items/active/release-projection-reconciliation-20260817.outcome.md [evidence: .ai/work-items/archive/2026/release-projection-reconciliation-20260817.outcome.md]
+- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.contract.json [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.contract.json]
+- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.summary.json [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json]
+- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.outcome.json [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.outcome.json]
+- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.outcome.md [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.outcome.md]
+- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
+- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 
 Problems found
-- Total: 4
+- Total: 1
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- None recorded.
+- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
 
 Problems resolved
-- None recorded.
+- Problem: aiGuidelines failed before the retry.
+  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
 
 Risks avoided
-- None recorded.
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- None recorded.
+- The provider secret/configuration is external state and its value is intentionally not inspectable in repository evidence; hosted rehearsal remains required. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- Outcome must be a complete, independent, explicit conversation-visible result with 🔴/🟡/🟢; folded tool output is not acceptable. (inference)
-- A Work Item cannot end unless Outcome passes; the result is not complete merely because it is stored in files or mixed into status updates. (inference)
-- Fix discovered problems in the current Work Item first; create a successor only for genuinely different scope, authority, or base. (inference)
-- After the existing objectives are complete, publish a new version. (inference)
+- The hosted rehearsal failure must be fixed at its provider-access root cause; no workaround or gate bypass is acceptable. (inference)
 
 Verification
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
@@ -70,9 +61,9 @@ Verification
 - aiSummary [evidence: aiSummary]
 
 Impact
-- Rework avoided: None recorded.
+- Rework avoided: If not detected, could have led to a stale completion claim. (inference)
 - Repeat correction prevented: unknown: no direct recurrence probability evidence was recorded. (inference)
-- Major risk prevented: None recorded.
+- Major risk prevented: If not detected, could have led to a stale completion claim. (inference)
 
 Next action
 - Bind conversation locale and preserve evidence details before the next Work Item starts. (inference)

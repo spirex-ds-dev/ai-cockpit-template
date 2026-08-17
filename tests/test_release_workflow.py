@@ -4,11 +4,13 @@ ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "release.yml"
 
 
-def test_release_workflow_uses_fixed_standard_hosted_runner():
+def test_release_workflow_uses_the_allowlisted_provider_access_value():
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
     assert "runs-on: ubuntu-latest" in workflow
-    assert "AI_COCKPIT_RELEASE_RUNNER" not in workflow
+    assert "GH_TOKEN: ${{ secrets.AI_COCKPIT_RELEASE_RUNNER }}" in workflow
+    assert "github.token" not in workflow
+    assert "AI_COCKPIT_RELEASE_RUNNER ||" not in workflow
 
 
 def test_release_workflow_projects_candidate_metadata_at_runtime():
