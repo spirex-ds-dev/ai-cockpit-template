@@ -1,0 +1,287 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-27-post-publish-v0-5-63-projection",
+  "mode": "code",
+  "title": "Synchronize published v0.5.63 projection and close release state",
+  "baseCommit": "5684c70a8c9f47a97b659cef92fd85f853ef145e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json",
+    ".ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/capability-truth.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/version.json",
+    "install.sh",
+    "next-release.json",
+    "release-state.json",
+    "release.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.json",
+    ".ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Creating, moving, deleting, or republishing any immutable provider tag or Release.",
+    "Rewriting any WI-01 through WI-26 archived Contract, Summary, Outcome, or manifest.",
+    "Runtime or product behavior changes unrelated to release projections.",
+    "Performance, locale, provider configuration, or new Outcome transport behavior.",
+    "Publishing any tag other than v0.5.63."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.63",
+      "reason": "Immutable public release and authoritative provider assets."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/31979902867",
+      "reason": "Successful publication workflow bound to source commit 5684c70a."
+    },
+    {
+      "path": "make check-release-distribution",
+      "reason": "Observed post-publication failure proving repository release projection lag."
+    },
+    {
+      "path": "make check-release-preflight",
+      "reason": "Observed source-bound and installer digest mismatch after publication."
+    },
+    {
+      "path": "scripts/sync_published_release_projection.py",
+      "reason": "Canonical atomic provider-to-source projection synchronizer."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Release projection and post-publication distribution contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
+      "reason": "Predecessor release Contract; immutable history and scope boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.json",
+      "reason": "Predecessor Outcome records provider publication and retained limitations."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_identity",
+      "provider_evidence",
+      "source_projection"
+    ],
+    "reason": "Public v0.5.63 is valid, but the repository projections still describe the pre-publication candidate and fail normal release preflight.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Published release identity and source-bound installer evidence require strict verification."
+    ],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "User authorized completion of all remaining Work Items and final release closeout in this thread.",
+      "reason": "Strict source-bound release projection synchronization after immutable publication.",
+      "risks": ["release_identity", "provider_evidence", "historical_archive_preservation"],
+      "notRunChecks": ["No provider publication mutation is performed; v0.5.63 publication is already immutable and separately evidenced."],
+      "workItemOnly": true,
+      "workItemId": "wi-27-post-publish-v0-5-63-projection"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized completion of the release closeout; provider publication is already immutable and this WI only synchronizes projections."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Provider v0.5.63 release.json and release-digests.json assets are downloaded and SHA-256 verified before projection writes.",
+    "release.json, release-state.json, next-release.json, install.sh, version.json, and release-digests.json are synchronized atomically; the candidate advances exactly to v0.5.64.",
+    "make check-release-distribution, make check-release-preflight, make check-release-state-consistency, make check-release-readiness, and make check-release-distribution-post-publish pass after synchronization.",
+    "Capability truth and pre-release documentation alignment projections are regenerated and pass their checks.",
+    "The archived WI-26 evidence and all WI-01 through WI-26 archives remain byte-identical; only WI-27-owned paths change.",
+    "WI-27 is merged and closed through the canonical lifecycle with local and remote branch cleanup."
+  ],
+  "guidelines": [
+    "Treat provider release assets as evidence and never overwrite or reuse the immutable v0.5.63 tag.",
+    "Use scripts/sync_published_release_projection.py for atomic provider-to-source synchronization.",
+    "Bind release and benefit claims to evidenceRefs; unsupported benefits remain inference.",
+    "Do not rewrite historical Work Item archives."
+  ],
+  "intent": {
+    "problem": "Public v0.5.63 was successfully published from 5684c70a, but normal repository release checks still fail because release.json, release-state.json, release-digests.json, and installer evidence remain on the pre-publication candidate projection.",
+    "constraints": [
+      "Do not mutate the immutable v0.5.63 tag or public Release.",
+      "Do not rewrite WI-01 through WI-26 archives or claim UI Outcome delivery that is not observable here.",
+      "Use only provider assets from release workflow 31979902867 and verify their digests before writing.",
+      "Keep the change limited to release projections, generated evidence, and human report artifacts."
+    ],
+    "rationale": "A published release is not a closed repository release until canonical projections and source-bound preflight agree with the immutable public assets."
+  },
+  "rawUserRequest": "Continue the final release closeout without expanding into unrelated work; resolve the concrete post-publication projection failure and finish with evidence-bound reports and clean local/remote Work Item state.",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "direct_user_authorization",
+    "reference": "user-request:complete-all-work-items-and-final-release-closeout"
+  },
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:complete-all-work-items-and-final-release-closeout",
+    "capturedAt": "2026-08-17",
+    "digest": "sha256:wi27-post-publish-projection-closeout-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Synchronize the verified public v0.5.63 release projection and advance the next candidate without mutating immutable history.",
+    "requestedCapabilities": ["ai_governance", "software_design"]
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized the governed closeout loop; this WI writes only release projections after immutable provider publication."
+  },
+  "scenarioCoverage": [
+    {
+      "id": "published-projection-lag",
+      "riskDomain": "release_identity",
+      "scenario": "The provider has stable v0.5.63 while repository release.json still names v0.5.62.",
+      "expected": "Provider assets are verified and release.json becomes v0.5.63 while next-release advances exactly to v0.5.64.",
+      "expectedResult": "Provider assets are verified and release.json becomes v0.5.63 while next-release advances exactly to v0.5.64.",
+      "verificationPlan": "Run the canonical synchronizer followed by release distribution and state checks.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "source-bound-preflight",
+      "riskDomain": "provider_evidence",
+      "scenario": "Source-bound release preflight detects stale source or installer digests after publication.",
+      "expected": "All source, tag, metadata, archive, and installer identities match the verified public assets.",
+      "expectedResult": "All source, tag, metadata, archive, and installer identities match the verified public assets.",
+      "verificationPlan": "Run check-release-preflight and check-release-readiness from the synchronized candidate.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "historical-archive-preservation",
+      "riskDomain": "governance",
+      "scenario": "Post-publication synchronization is performed after WI-26 closure.",
+      "expected": "WI-01 through WI-26 archive bytes remain unchanged and only WI-27-owned paths are modified.",
+      "expectedResult": "WI-01 through WI-26 archive bytes remain unchanged and only WI-27-owned paths are modified.",
+      "verificationPlan": "Run diff ownership, archive recovery, and full PR governance checks before merge.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 939
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-27-post-publish-v0-5-63-projection.json",
+    "baseCommit": "5684c70a8c9f47a97b659cef92fd85f853ef145e",
+    "initialScopeDigest": "3fbddb4afb30618e710f68495874ce8f5db0839c1af29514e3be8697997d139d",
+    "contractSkeletonDigest": "3f19fcc1da8f694cca0977f42613849c7afc8ce21e561f5c8b21e993a4383ed7"
+  }
+}

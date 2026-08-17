@@ -1,1490 +1,713 @@
 {
-  "reportVersion": 1,
-  "workItemId": "wi-26-final-release-v0-5-63",
-  "phase": "review",
-  "result": "needs_human_confirmation",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "b915b495748da49e9883b67ce11f7a07f02c797e97786edc40a378c41efd2d04"
-  },
-  "task": {
-    "summary": "Task wi-26-final-release-v0-5-63 generated an evidence-derived outcome with status needs_human_confirmation.",
-    "deliveredChanges": [
-      ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-      ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-      ".ai/cockpit/current_status.md",
-      ".ai/work-items/starts/**",
-      ".ai/work-items/archive/**",
-      ".ai/decisions/**",
-      ".ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json",
-      ".ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json",
-      ".ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json",
-      ".ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json",
-      ".ai/decisions/HDR-774fae747bb5bbe4-7967e517.evidence.json",
-      ".ai/decisions/HDR-774fae747bb5bbe4-7967e517.request.json",
-      ".ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.evidence.json",
-      ".ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.request.json",
-      ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.json",
-      ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.md",
-      ".ai/cockpit/task_report.json",
-      ".ai/cockpit/task_report.md",
-      ".ai/cockpit/version.json",
-      ".ai/cockpit/release-digests.json",
-      ".ai/cockpit/release-freeze.json",
-      ".ai/cockpit/sbom.json",
-      ".ai/cockpit/provenance.json",
-      "scripts/ai_finish.py",
-      "scripts/ai_generate_task_outcome.py",
-      "tests/test_task_outcome_ai_finish_integration.py",
-      "tests/test_task_outcome_generator.py",
-      "release-state.json",
-      "release.json",
-      "next-release.json",
-      "docs/audits/wi-26-final-release-v0-5-63.json",
-      "docs/audits/wi-26-final-release-v0-5-63.md",
-      "docs/reference/capability-truth-matrix.json",
-      "docs/reference/japanese-capability-assessment.json",
-      "docs/reference/japanese-capability-assessment.md",
-      "docs/reference/pre-release-documentation-alignment.json",
-      "docs/reference/pre-release-documentation-alignment.md"
-    ]
-  },
-  "issues": {
-    "detected": 5,
-    "hardStops": 4,
-    "warnings": 1,
-    "resolved": 4,
-    "unresolved": 1
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiScenarioCoverage",
-      "action": "blocked",
-      "resolution": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "2df3790b908a9a576f542a7218a3672fa98991f4d575a267c29c90b73f76bcfb"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "9a18e508e4d203f1ec679e38fa114c434f650eb433ca315935c10f116b365a1b"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[3] aiSummary failed",
-          "digest": "66374efb4b839bc8b1f49b4ee357575d4388771ac2f492370242e20eb4ea5241"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "3d82e982596ea4c3bd48a9cfa4c78fb8a688046a3fb36da069669cec16bf0f03"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiScenarioCoverage",
-      "action": "blocked",
-      "resolution": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[2] aiScenarioCoverage failed",
-          "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiScenarioCoverage failed before the retry.",
-      "policyOrGuard": "required verification: aiScenarioCoverage",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "2df3790b908a9a576f542a7218a3672fa98991f4d575a267c29c90b73f76bcfb"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "9a18e508e4d203f1ec679e38fa114c434f650eb433ca315935c10f116b365a1b"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[3] aiSummary failed",
-          "digest": "66374efb4b839bc8b1f49b4ee357575d4388771ac2f492370242e20eb4ea5241"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "3d82e982596ea4c3bd48a9cfa4c78fb8a688046a3fb36da069669cec16bf0f03"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiScenarioCoverage failed before the retry.",
-      "policyOrGuard": "required verification: aiScenarioCoverage",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verificationHistory[2] aiScenarioCoverage failed",
-          "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [
-    {
-      "sourceWarning": "Provider publication and final cleanup evidence are not yet available.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
   "forbiddenClaims": [
     "Do not claim an unresolved warning was verified or resolved."
   ],
-  "remainingRisks": [
+  "forcedStops": [
     {
-      "severity": "medium",
-      "detail": "WI-24's historical Outcome warning remains in the archive and is intentionally not rewritten.",
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "residualRisks"
+          "digest": "137631f2a3df77c37583761f57956e52af11526ebabd9d6a43dd066209d8c6ff",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verificationHistory[0] quality failed"
+        },
+        {
+          "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verification[quality] retry passed"
         }
-      ]
+      ],
+      "handoff": "",
+      "humanDecision": "",
+      "policyOrGuard": "required verification: quality",
+      "reason": "quality failed before the retry.",
+      "recovery": "Retry quality after correcting the recorded failure.",
+      "result": "resolved",
+      "stage": "verification"
     },
     {
-      "severity": "high",
-      "detail": "Provider and public asset state cannot be known until the hosted workflow completes.",
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "residualRisks"
+          "digest": "dfc15b4a64a374ab77d470dfe3552059a98ff5547858ad46807d133d42e47dc6",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verificationHistory[1] quality failed"
+        },
+        {
+          "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verification[quality] retry passed"
         }
-      ]
+      ],
+      "handoff": "",
+      "humanDecision": "",
+      "policyOrGuard": "required verification: quality",
+      "reason": "quality failed before the retry.",
+      "recovery": "Retry quality after correcting the recorded failure.",
+      "result": "resolved",
+      "stage": "verification"
+    },
+    {
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+      "evidence": [
+        {
+          "digest": "028740928de775691c8b83a83ac92246b5e8f05dc953f74f9e9b7134c7aaed9a",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verificationHistory[2] aiSummary failed"
+        },
+        {
+          "digest": "8b2a20e58cb0611c22ce1df97af68d7fea7cbdc2b5787d9b290c203ff33b986d",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verification[aiSummary] retry passed"
+        }
+      ],
+      "handoff": "",
+      "humanDecision": "",
+      "policyOrGuard": "required verification: aiSummary",
+      "reason": "aiSummary failed before the retry.",
+      "recovery": "Retry aiSummary after correcting the recorded failure.",
+      "result": "resolved",
+      "stage": "verification"
     }
   ],
+  "humanDecisions": [],
   "humanHandoff": {
-    "locale": "en",
     "completed": [
       {
-        "claim": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json",
-        "title": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json",
-        "detail": "Strict final-release scope, explicit user authorization, immutable-history boundary, and acceptance.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json",
+        "detail": "Bound the post-publication projection repair to provider evidence, generated projections, and immutable-history preservation.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json"
       },
       {
-        "claim": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json",
-        "title": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json",
-        "detail": "Evidence-bound final-release and human closeout handoff.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json",
+        "detail": "Records evidence-bound changes, stops, verification, and retained release limitations.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json"
+      },
+      {
+        "claim": "Changed .ai/work-items/starts/wi-27-post-publish-v0-5-63-projection.json",
+        "detail": "Generated governed start receipt bound to merged main 5684c70a.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/starts/wi-27-post-publish-v0-5-63-projection.json"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/starts/wi-27-post-publish-v0-5-63-projection.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/starts/wi-27-post-publish-v0-5-63-projection.json"
       },
       {
         "claim": "Changed .ai/cockpit/current_status.md",
-        "title": "Changed .ai/cockpit/current_status.md",
-        "detail": "Generated active Work Item status.",
-        "evidenceRefs": [
+        "detail": "Generated active Work Item status during the governed repair.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": ".ai/cockpit/current_status.md"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": ".ai/cockpit/current_status.md"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/starts/**",
-        "title": "Changed .ai/work-items/starts/**",
-        "detail": "Generated start receipt bound to latest merged main.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/starts/**"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/starts/**"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/**",
-        "title": "Changed .ai/work-items/archive/**",
-        "detail": "Generated immutable archive bundle for WI-26 only.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/**"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/**"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/**",
-        "title": "Changed .ai/decisions/**",
-        "detail": "Structured preflight decision request/evidence generated by the governed decision protocol.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/**"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/**"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json",
-        "title": "Changed .ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json",
-        "detail": "Structured human decision evidence for the first Contract clarification.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json",
-        "title": "Changed .ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json",
-        "detail": "Structured human decision request for the first Contract clarification.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json",
-        "title": "Changed .ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json",
-        "detail": "Structured human decision evidence for the second Contract clarification.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json",
-        "title": "Changed .ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json",
-        "detail": "Structured human decision request for the second Contract clarification.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-774fae747bb5bbe4-7967e517.evidence.json",
-        "title": "Changed .ai/decisions/HDR-774fae747bb5bbe4-7967e517.evidence.json",
-        "detail": "Structured human decision evidence for the implementation-surface clarification.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-774fae747bb5bbe4-7967e517.evidence.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-774fae747bb5bbe4-7967e517.evidence.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-774fae747bb5bbe4-7967e517.request.json",
-        "title": "Changed .ai/decisions/HDR-774fae747bb5bbe4-7967e517.request.json",
-        "detail": "Structured human decision request for the implementation-surface clarification.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-774fae747bb5bbe4-7967e517.request.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-774fae747bb5bbe4-7967e517.request.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.evidence.json",
-        "title": "Changed .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.evidence.json",
-        "detail": "Structured human decision evidence for the Outcome normalization correction.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.evidence.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.evidence.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.request.json",
-        "title": "Changed .ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.request.json",
-        "detail": "Structured human decision request for the Outcome normalization correction.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.request.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/decisions/HDR-9ef8a0465b397ae4-dd70298c.request.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.outcome.json",
-        "title": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.outcome.json",
-        "detail": "Mandatory evidence-derived Task Outcome.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.outcome.md",
-        "title": "Changed .ai/work-items/active/wi-26-final-release-v0-5-63.outcome.md",
-        "detail": "Mandatory human-readable Task Outcome.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.outcome.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.json",
-        "title": "Changed .ai/cockpit/task_report.json",
-        "detail": "Generated structured Human Benefit Report.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.md",
-        "title": "Changed .ai/cockpit/task_report.md",
-        "detail": "Generated human-readable Human Benefit Report.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/cockpit/version.json",
-        "title": "Changed .ai/cockpit/version.json",
-        "detail": "Release version projection.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/version.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/version.json"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed .ai/cockpit/current_status.md"
       },
       {
         "claim": "Changed .ai/cockpit/release-digests.json",
-        "title": "Changed .ai/cockpit/release-digests.json",
-        "detail": "Source-bound release digest projection.",
-        "evidenceRefs": [
+        "detail": "Synchronized to the SHA-256-verified public v0.5.63 release asset.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": ".ai/cockpit/release-digests.json"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": ".ai/cockpit/release-digests.json"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/cockpit/release-freeze.json",
-        "title": "Changed .ai/cockpit/release-freeze.json",
-        "detail": "Source-bound release freeze projection.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/release-freeze.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/release-freeze.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/cockpit/sbom.json",
-        "title": "Changed .ai/cockpit/sbom.json",
-        "detail": "Supply-chain evidence baseline.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/sbom.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": ".ai/cockpit/sbom.json"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed .ai/cockpit/release-digests.json"
       },
       {
         "claim": "Changed .ai/cockpit/provenance.json",
-        "title": "Changed .ai/cockpit/provenance.json",
-        "detail": "Supply-chain provenance baseline.",
-        "evidenceRefs": [
+        "detail": "Regenerated source-bound provenance for the published v0.5.63 source identity.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": ".ai/cockpit/provenance.json"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": ".ai/cockpit/provenance.json"
           }
         ],
-        "inference": false
+        "inference": false,
+        "title": "Changed .ai/cockpit/provenance.json"
       },
       {
-        "claim": "Changed scripts/ai_finish.py",
-        "title": "Changed scripts/ai_finish.py",
-        "detail": "Preserve structured residual-risk ownership and mitigation fields in the human Outcome projection.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "scripts/ai_finish.py"
-          }
-        ],
+        "claim": "Changed .ai/cockpit/sbom.json",
+        "detail": "Regenerated the source-bound SBOM baseline used by provenance verification.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "scripts/ai_finish.py"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/cockpit/sbom.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/cockpit/sbom.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/cockpit/sbom.json"
       },
       {
-        "claim": "Changed scripts/ai_generate_task_outcome.py",
-        "title": "Changed scripts/ai_generate_task_outcome.py",
-        "detail": "Preserve structured residual-risk ownership and mitigation fields through final Outcome normalization.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "scripts/ai_generate_task_outcome.py"
-          }
-        ],
+        "claim": "Changed .ai/cockpit/version.json",
+        "detail": "Advanced the next candidate projection to v0.5.64 after v0.5.63 publication.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "scripts/ai_generate_task_outcome.py"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/cockpit/version.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/cockpit/version.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/cockpit/version.json"
       },
       {
-        "claim": "Changed tests/test_task_outcome_ai_finish_integration.py",
-        "title": "Changed tests/test_task_outcome_ai_finish_integration.py",
-        "detail": "Regression test for preserving high residual-risk controls in the Outcome input.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "tests/test_task_outcome_ai_finish_integration.py"
-          }
-        ],
+        "claim": "Changed install.sh",
+        "detail": "Updated the generated installer release reference to the next candidate.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "tests/test_task_outcome_ai_finish_integration.py"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "install.sh"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_generator.py",
-        "title": "Changed tests/test_task_outcome_generator.py",
-        "detail": "Regression test for preserving high residual-risk controls in the rendered Outcome.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "tests/test_task_outcome_generator.py"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "install.sh"
           }
         ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "tests/test_task_outcome_generator.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed release-state.json",
-        "title": "Changed release-state.json",
-        "detail": "Canonical candidate/published release state.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "release-state.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "release-state.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed release.json",
-        "title": "Changed release.json",
-        "detail": "Published release projection prepared for provider verification.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "release.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "release.json"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed install.sh"
       },
       {
         "claim": "Changed next-release.json",
-        "title": "Changed next-release.json",
-        "detail": "Unpublished v0.5.63 candidate projection.",
-        "evidenceRefs": [
+        "detail": "Advanced the candidate projection from the published v0.5.63 release.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": "next-release.json"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": "next-release.json"
           }
         ],
-        "inference": false
+        "inference": false,
+        "title": "Changed next-release.json"
       },
       {
-        "claim": "Changed docs/audits/wi-26-final-release-v0-5-63.json",
-        "title": "Changed docs/audits/wi-26-final-release-v0-5-63.json",
-        "detail": "Machine-readable final release and cleanup audit.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/audits/wi-26-final-release-v0-5-63.json"
-          }
-        ],
+        "claim": "Changed release-state.json",
+        "detail": "Recorded published v0.5.63 and candidate-prepared v0.5.64 state.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/audits/wi-26-final-release-v0-5-63.json"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "release-state.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "release-state.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed release-state.json"
       },
       {
-        "claim": "Changed docs/audits/wi-26-final-release-v0-5-63.md",
-        "title": "Changed docs/audits/wi-26-final-release-v0-5-63.md",
-        "detail": "Human-readable final release and retained-risk audit.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/audits/wi-26-final-release-v0-5-63.md"
-          }
-        ],
+        "claim": "Changed release.json",
+        "detail": "Projected the provider-authoritative v0.5.63 release asset into the repository.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/audits/wi-26-final-release-v0-5-63.md"
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "release.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "release.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed release.json"
       },
       {
         "claim": "Changed docs/reference/capability-truth-matrix.json",
-        "title": "Changed docs/reference/capability-truth-matrix.json",
-        "detail": "Generated source-bound capability evidence.",
-        "evidenceRefs": [
+        "detail": "Regenerated source-bound capability evidence after release projection bytes changed.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.json",
-        "title": "Changed docs/reference/japanese-capability-assessment.json",
-        "detail": "Generated Japanese capability evidence.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.md",
-        "title": "Changed docs/reference/japanese-capability-assessment.md",
-        "detail": "Generated Japanese human-readable capability evidence.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed docs/reference/capability-truth-matrix.json"
       },
       {
         "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "title": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "detail": "Generated documentation alignment evidence.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
+        "detail": "Regenerated machine-readable documentation alignment evidence.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/pre-release-documentation-alignment.json"
       },
       {
         "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "title": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "detail": "Generated human-readable documentation alignment evidence.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
+        "detail": "Regenerated human-readable documentation alignment evidence.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.md"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/pre-release-documentation-alignment.md"
+      },
+      {
+        "claim": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.outcome.json"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.outcome.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.json"
+      },
+      {
+        "claim": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.md",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.outcome.md"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.outcome.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.md"
       }
     ],
+    "locale": "en",
     "passed": [
       {
         "claim": "aiWorkItem",
-        "title": "aiWorkItem",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json work item contract check passed: .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiWorkItem",
-            "digest": "2890775d1978458b96014938643fa5327b0df2eae8ec1ac700538e31735d656b"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json work item contract check passed: .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiWorkItem",
-            "digest": "2890775d1978458b96014938643fa5327b0df2eae8ec1ac700538e31735d656b"
+            "digest": "3d818586653ee4203731c70879b969d0e11a0abba06bbeb2bedffdc5b17aacf8",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiWorkItem"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "3d818586653ee4203731c70879b969d0e11a0abba06bbeb2bedffdc5b17aacf8",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiWorkItem"
+          }
+        ],
+        "inference": false,
+        "title": "aiWorkItem"
       },
       {
         "claim": "aiScope",
-        "title": "aiScope",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json scope guard passed: 27 changed path(s) covered",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiScope",
-            "digest": "03bb1d1d24285a53259667ee17441fd4577513ddd9049709147ea5c701ff0486"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json scope guard passed: 19 changed path(s) covered",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiScope",
-            "digest": "03bb1d1d24285a53259667ee17441fd4577513ddd9049709147ea5c701ff0486"
+            "digest": "3e197d5c3cf356fa9579e19199b28f27895b881e7503fc6e55884d2a0f2f7524",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiScope"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "3e197d5c3cf356fa9579e19199b28f27895b881e7503fc6e55884d2a0f2f7524",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiScope"
+          }
+        ],
+        "inference": false,
+        "title": "aiScope"
       },
       {
         "claim": "aiGuards",
-        "title": "aiGuards",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json [warning] restricted_write: .ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json (.a",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiGuards",
-            "digest": "ff6e6a5f48f3c82752cb75d2e239ddcff09a8e53ff9ad3af36639e874699b168"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/ver",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiGuards",
-            "digest": "ff6e6a5f48f3c82752cb75d2e239ddcff09a8e53ff9ad3af36639e874699b168"
+            "digest": "c24298bcd7f434621940843260fe6c8f8fd7c660bcdd711304f180e8ca749ebd",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiGuards"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "c24298bcd7f434621940843260fe6c8f8fd7c660bcdd711304f180e8ca749ebd",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiGuards"
+          }
+        ],
+        "inference": false,
+        "title": "aiGuards"
       },
       {
         "claim": "aiCheckpoint",
-        "title": "aiCheckpoint",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json --summary .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-26-final-release-v0-5-63` - Contract Hash: `9ef8a0465b397ae4` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0`",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiCheckpoint",
-            "digest": "a864933894b788c54311a95a7323eeb0067b513509075654d7009532f38b9999"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json --summary .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-27-post-publish-v0-5-63-projection` - Contract Hash: `0485be88eb362afc` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Co",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiCheckpoint",
-            "digest": "a864933894b788c54311a95a7323eeb0067b513509075654d7009532f38b9999"
+            "digest": "ae446f1c9564b82e33f8911157dbb6b26b42a46f13d3459486f07660fbbd6527",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiCheckpoint"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "ae446f1c9564b82e33f8911157dbb6b26b42a46f13d3459486f07660fbbd6527",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiCheckpoint"
+          }
+        ],
+        "inference": false,
+        "title": "aiCheckpoint"
       },
       {
         "claim": "aiReviewPolicy",
-        "title": "aiReviewPolicy",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json review policy matched 19 path(s) [review] .ai/decisions/HDR-3488803b739ae886-71b0e06e.evidence.json [review] .ai/decisions/HDR-3488803b739ae886-71b0e06e.request.json [review] .ai/decisions/HDR-54ff4d6b50334803-12da095a.evidence.json [review] .ai/decisions/HDR-54ff4d6b50334803-12da095a.request.json [review] .ai/decisions/HDR-774fae747",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiReviewPolicy",
-            "digest": "424122129ed67d63e3e1f33b75b7a59e518ab2b2a53584a9269afa0155be6456"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json review policy matched 11 path(s) [review] .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json [review] .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.json [review] .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.outcome.md [review] .ai/work-items/starts/wi-27-post-publi",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiReviewPolicy",
-            "digest": "424122129ed67d63e3e1f33b75b7a59e518ab2b2a53584a9269afa0155be6456"
+            "digest": "37b469ec213d92436bc636f2856dc624b7e670f19e708aeed1f83ed06d7f25de",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiReviewPolicy"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "37b469ec213d92436bc636f2856dc624b7e670f19e708aeed1f83ed06d7f25de",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiReviewPolicy"
+          }
+        ],
+        "inference": false,
+        "title": "aiReviewPolicy"
       },
       {
         "claim": "aiBacktrack",
-        "title": "aiBacktrack",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiBacktrack",
-            "digest": "852250fb86c94e9c308526fa886bc90a9246518aea4da5b9dc0934cc69c068c7"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiBacktrack",
-            "digest": "852250fb86c94e9c308526fa886bc90a9246518aea4da5b9dc0934cc69c068c7"
+            "digest": "852250fb86c94e9c308526fa886bc90a9246518aea4da5b9dc0934cc69c068c7",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiBacktrack"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "852250fb86c94e9c308526fa886bc90a9246518aea4da5b9dc0934cc69c068c7",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiBacktrack"
+          }
+        ],
+        "inference": false,
+        "title": "aiBacktrack"
       },
       {
         "claim": "aiCoverage",
-        "title": "aiCoverage",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiCoverage",
-            "digest": "882e2dfb5c1637c669aa59117038b5ae1ae8de33b7e6ca350432668ca042355c"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiCoverage",
-            "digest": "882e2dfb5c1637c669aa59117038b5ae1ae8de33b7e6ca350432668ca042355c"
+            "digest": "882e2dfb5c1637c669aa59117038b5ae1ae8de33b7e6ca350432668ca042355c",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiCoverage"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "882e2dfb5c1637c669aa59117038b5ae1ae8de33b7e6ca350432668ca042355c",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiCoverage"
+          }
+        ],
+        "inference": false,
+        "title": "aiCoverage"
       },
       {
         "claim": "aiScenarioCoverage",
-        "title": "aiScenarioCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json --summary .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json [warning] required_scenario_unverified: v0.5.63 is published from the latest merged main after WI-25. - required scenario remains unverified [warning] required_scenario_unverified: The final human handoff contains all required sections with evidenceRefs. -",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiScenarioCoverage",
-            "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json --summary .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiScenarioCoverage",
-            "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
+            "digest": "f1244dcee275430fe3ba71418df7e3f99076036b6b522bb659f52a3aabfc54eb",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiScenarioCoverage"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "f1244dcee275430fe3ba71418df7e3f99076036b6b522bb659f52a3aabfc54eb",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiScenarioCoverage"
+          }
+        ],
+        "inference": false,
+        "title": "aiScenarioCoverage"
       },
       {
         "claim": "aiGuidelines",
-        "title": "aiGuidelines",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json --summary .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json guidelines compliance check passed: 6 guideline(s) verified",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiGuidelines",
-            "digest": "9a18e508e4d203f1ec679e38fa114c434f650eb433ca315935c10f116b365a1b"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json --summary .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json guidelines compliance check passed: 4 guideline(s) verified",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiGuidelines",
-            "digest": "9a18e508e4d203f1ec679e38fa114c434f650eb433ca315935c10f116b365a1b"
+            "digest": "08f23b7b89d788e74638ad726cc2eb6c53849c91ed5a0c98cd6710a866f2852e",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiGuidelines"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "08f23b7b89d788e74638ad726cc2eb6c53849c91ed5a0c98cd6710a866f2852e",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiGuidelines"
+          }
+        ],
+        "inference": false,
+        "title": "aiGuidelines"
       },
       {
         "claim": "aiDiffOwnership",
-        "title": "aiDiffOwnership",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json ## Diff Ownership Preview - active_owned: `27`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/rele",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiDiffOwnership",
-            "digest": "5e763ce11d2756cbd169817d098b401b6b24b630c6b4a9412311e5cc0f6fb84d"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json ## Diff Ownership Preview - active_owned: `19`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiDiffOwnership",
-            "digest": "5e763ce11d2756cbd169817d098b401b6b24b630c6b4a9412311e5cc0f6fb84d"
+            "digest": "70a58d23d0cc8057c576018cc38435ed388fd5077ea958aa93db4615087745e8",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiDiffOwnership"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "70a58d23d0cc8057c576018cc38435ed388fd5077ea958aa93db4615087745e8",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiDiffOwnership"
+          }
+        ],
+        "inference": false,
+        "title": "aiDiffOwnership"
       },
       {
         "claim": "quality",
-        "title": "quality",
-        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"9b57097fd5a8360291dcf52ffb16087345167115\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/release-digests.json\", \".ai/cockpit/release-freeze.json\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/decisio",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "quality",
-            "digest": "3ae0a0336b32a00b4021c67ab5b5d01e77bad562f02655b49a9c08d8bb937e42"
-          }
-        ],
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"installer\", \"release\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"5684c70a8c9f47a97b659cef92fd85f853ef145e\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/provenance.json\", \".ai/cockpit/release-digests.json\", \".ai/cockpit/sbom.json\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_repo",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "quality",
-            "digest": "3ae0a0336b32a00b4021c67ab5b5d01e77bad562f02655b49a9c08d8bb937e42"
+            "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "quality"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "quality"
+          }
+        ],
+        "inference": false,
+        "title": "quality"
       },
       {
         "claim": "aiStatus",
-        "title": "aiStatus",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json --summary .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiStatus",
-            "digest": "399e173c9f009c9f16736f4b460414a9e5d3a88890ebd5610732c2a705331795"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json --summary .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiStatus",
-            "digest": "399e173c9f009c9f16736f4b460414a9e5d3a88890ebd5610732c2a705331795"
+            "digest": "1bad0d8e3f3bfd0e9f8f4a62dfcea99afaaa0adf6c8a16ddf51bef1da621ef19",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiStatus"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "1bad0d8e3f3bfd0e9f8f4a62dfcea99afaaa0adf6c8a16ddf51bef1da621ef19",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiStatus"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatus"
       },
       {
         "claim": "aiStatusCheck",
-        "title": "aiStatusCheck",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json --summary .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiStatusCheck",
-            "digest": "60f455f990bd1b4ab75568e38d117cd812ed781f5b484d28a55a6f9793acd611"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json --summary .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiStatusCheck",
-            "digest": "60f455f990bd1b4ab75568e38d117cd812ed781f5b484d28a55a6f9793acd611"
+            "digest": "918c82fd8db5790dbd9f85ece992712c4515b8ba0ed21b0f131ebb017569c59d",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiStatusCheck"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "918c82fd8db5790dbd9f85ece992712c4515b8ba0ed21b0f131ebb017569c59d",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiStatusCheck"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatusCheck"
       },
       {
         "claim": "aiStatusConsistency",
-        "title": "aiStatusConsistency",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiStatusConsistency",
-            "digest": "487fb4fc3102f8b1b4857dab2e6f3e993ca5ecaf50f88fa7ac489c207f41f631"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiStatusConsistency",
-            "digest": "487fb4fc3102f8b1b4857dab2e6f3e993ca5ecaf50f88fa7ac489c207f41f631"
+            "digest": "487fb4fc3102f8b1b4857dab2e6f3e993ca5ecaf50f88fa7ac489c207f41f631",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiStatusConsistency"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "487fb4fc3102f8b1b4857dab2e6f3e993ca5ecaf50f88fa7ac489c207f41f631",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiStatusConsistency"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatusConsistency"
       },
       {
         "claim": "aiAgentRisk",
-        "title": "aiAgentRisk",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json --summary .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiAgentRisk",
-            "digest": "2a5c52a375b6db8cb92e19a0c7709cce36de60307eedf82659346666a54c1163"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json --summary .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiAgentRisk",
-            "digest": "2a5c52a375b6db8cb92e19a0c7709cce36de60307eedf82659346666a54c1163"
+            "digest": "68259766a6963f174c821d889fe7d26c5b1cda67cc4c6e454e438d4baa82b071",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiAgentRisk"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "68259766a6963f174c821d889fe7d26c5b1cda67cc4c6e454e438d4baa82b071",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiAgentRisk"
+          }
+        ],
+        "inference": false,
+        "title": "aiAgentRisk"
       },
       {
         "claim": "aiSummary",
-        "title": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json --contract .ai/work-items/active/wi-26-final-release-v0-5-63.contract.json ai summary check passed: .ai/work-items/active/wi-26-final-release-v0-5-63.summary.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiSummary",
-            "digest": "3d82e982596ea4c3bd48a9cfa4c78fb8a688046a3fb36da069669cec16bf0f03"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json --contract .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.contract.json ai summary check passed: .ai/work-items/active/wi-27-post-publish-v0-5-63-projection.summary.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.contract.json",
-            "subject": "aiSummary",
-            "digest": "3d82e982596ea4c3bd48a9cfa4c78fb8a688046a3fb36da069669cec16bf0f03"
+            "digest": "8b2a20e58cb0611c22ce1df97af68d7fea7cbdc2b5787d9b290c203ff33b986d",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiSummary"
           }
         ],
-        "inference": false
-      }
-    ],
-    "retained": [
-      {
-        "claim": "Retained limitation",
-        "title": "Retained limitation",
-        "detail": "Provider publication and final cleanup evidence are not yet available.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "knownGaps"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "knownGaps"
-          }
-        ],
-        "inference": false
-      }
-    ],
-    "risks": [
-      {
-        "claim": "immutable-history",
-        "severity": "medium",
-        "title": "immutable-history",
-        "detail": "WI-24's historical Outcome warning remains in the archive and is intentionally not rewritten.",
-        "state": "unresolved",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "residualRisks"
+            "digest": "8b2a20e58cb0611c22ce1df97af68d7fea7cbdc2b5787d9b290c203ff33b986d",
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+            "subject": "aiSummary"
           }
         ],
         "inference": false,
-        "requiredEvidence": [
-          "immutable archive inspection"
-        ],
-        "decisionOwner": "release maintainer",
-        "mitigation": "Reference the warning and do not rewrite the archive.",
-        "acceptanceStatus": "accepted_as_retained_history"
-      },
-      {
-        "claim": "provider-publication",
-        "severity": "high",
-        "title": "provider-publication",
-        "detail": "Provider and public asset state cannot be known until the hosted workflow completes.",
-        "state": "unresolved",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "inference": false,
-        "requiredEvidence": [
-          "same-SHA rehearsal receipt",
-          "provider release receipt",
-          "tagged Quick Install receipt"
-        ],
-        "decisionOwner": "release maintainer",
-        "mitigation": "Keep v0.5.63 unpublished until every exact-source and provider gate passes.",
-        "acceptanceStatus": "pending"
+        "title": "aiSummary"
       }
     ],
-    "redReasons": [],
     "questions": {
-      "problemCount": 5,
-      "problemCountEvidenceRefs": [
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "knownGaps"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-          "subject": "verification and verificationHistory"
-        }
-      ],
-      "blockedProblems": [],
-      "resolvedProblems": [
-        {
-          "claim": "aiScenarioCoverage failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[0] aiScenarioCoverage failed",
-              "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiScenarioCoverage] retry passed",
-              "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "aiGuidelines failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[1] aiGuidelines failed",
-              "digest": "2df3790b908a9a576f542a7218a3672fa98991f4d575a267c29c90b73f76bcfb"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiGuidelines] retry passed",
-              "digest": "9a18e508e4d203f1ec679e38fa114c434f650eb433ca315935c10f116b365a1b"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "aiScenarioCoverage failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[2] aiScenarioCoverage failed",
-              "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiScenarioCoverage] retry passed",
-              "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "aiSummary failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[3] aiSummary failed",
-              "digest": "66374efb4b839bc8b1f49b4ee357575d4388771ac2f492370242e20eb4ea5241"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiSummary] retry passed",
-              "digest": "3d82e982596ea4c3bd48a9cfa4c78fb8a688046a3fb36da069669cec16bf0f03"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "resolutionApproach": [
-        {
-          "claim": "Re-ran aiScenarioCoverage after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[0] aiScenarioCoverage failed",
-              "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiScenarioCoverage] retry passed",
-              "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[1] aiGuidelines failed",
-              "digest": "2df3790b908a9a576f542a7218a3672fa98991f4d575a267c29c90b73f76bcfb"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiGuidelines] retry passed",
-              "digest": "9a18e508e4d203f1ec679e38fa114c434f650eb433ca315935c10f116b365a1b"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran aiScenarioCoverage after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[2] aiScenarioCoverage failed",
-              "digest": "2f5a718026649c29e136c5de7a049b9fe704ebc8c987c8f44b0e9e6a62c28e1d"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiScenarioCoverage] retry passed",
-              "digest": "8465ff21c20844a478e98e0c2dcb652009cce57785bddfaf7fafd9d3cc25e7e6"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran aiSummary after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verificationHistory[3] aiSummary failed",
-              "digest": "66374efb4b839bc8b1f49b4ee357575d4388771ac2f492370242e20eb4ea5241"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "verification[aiSummary] retry passed",
-              "digest": "3d82e982596ea4c3bd48a9cfa4c78fb8a688046a3fb36da069669cec16bf0f03"
-            }
-          ],
-          "inference": false
-        }
-      ],
+      "agentUnknowns": [],
       "avoidedRisks": [
         {
           "claim": "If not detected, could have led to a stale completion claim.",
@@ -1500,48 +723,498 @@
           "claim": "If not detected, could have led to a stale completion claim.",
           "evidenceRefs": [],
           "inference": true
-        },
-        {
-          "claim": "If not detected, could have led to a stale completion claim.",
-          "evidenceRefs": [],
-          "inference": true
         }
       ],
-      "remainingRisks": [
-        {
-          "claim": "WI-24's historical Outcome warning remains in the archive and is intentionally not rewritten.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "residualRisks"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Provider and public asset state cannot be known until the hosted workflow completes.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/wi-26-final-release-v0-5-63.summary.json",
-              "subject": "residualRisks"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "agentUnknowns": [],
+      "blockedProblems": [],
       "humanConfirmations": [],
+      "nextTime": {
+        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+        "evidenceRefs": [],
+        "inference": true
+      },
+      "problemCount": 9,
+      "problemCountEvidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "observedIssues"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "knownGaps"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verification and verificationHistory"
+        }
+      ],
       "recurrenceLikelihood": {
         "claim": "unknown: no direct recurrence probability evidence was recorded.",
         "evidenceRefs": [],
         "inference": true
       },
-      "nextTime": {
-        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
-        "evidenceRefs": [],
-        "inference": true
+      "remainingRisks": [
+        {
+          "claim": "Provider-side runtime behavior, installer execution outside the repository, and the earlier Outcome transport/UI receipt remain outside this release-projection Work Item and are not claimed as verified here.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "residualRisks"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolutionApproach": [
+        {
+          "claim": "Downloaded the public release assets, verified their SHA-256 digests, and ran scripts/sync_published_release_projection.py.",
+          "evidenceRefs": [
+            {
+              "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.63",
+              "subject": "release-assets"
+            },
+            {
+              "source": "command://scripts/sync_published_release_projection.py",
+              "subject": "synchronized"
+            },
+            {
+              "source": "command://make-check-release-distribution",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Regenerated capability truth and pre-release documentation alignment projections, then reran the source-bound evidence checks.",
+          "evidenceRefs": [
+            {
+              "source": "command://scripts/ai_capability_truth.py--write",
+              "subject": "passed"
+            },
+            {
+              "source": "command://scripts/check_pre_release_documentation_alignment.py--write",
+              "subject": "passed"
+            },
+            {
+              "source": "command://make-check-source-bound-evidence",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Reran the canonical synchronizer with the verified public v0.5.63 stable_release_unverified entry and reran release-state consistency.",
+          "evidenceRefs": [
+            {
+              "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.63",
+              "subject": "immutable-release"
+            },
+            {
+              "source": "command://scripts/sync_published_release_projection.py",
+              "subject": "unavailable-tag-bound"
+            },
+            {
+              "source": "command://make-check-release-state-consistency",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Ran the canonical check_supply_chain.py refresh with source commit 5684c70a and reran check-provenance and check-sbom.",
+          "evidenceRefs": [
+            {
+              "source": "command://scripts/check_supply_chain.py-refresh",
+              "subject": "passed"
+            },
+            {
+              "source": "command://make-check-provenance",
+              "subject": "passed"
+            },
+            {
+              "source": "command://make-check-sbom",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran quality after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "137631f2a3df77c37583761f57956e52af11526ebabd9d6a43dd066209d8c6ff",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verificationHistory[0] quality failed"
+            },
+            {
+              "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verification[quality] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran quality after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "dfc15b4a64a374ab77d470dfe3552059a98ff5547858ad46807d133d42e47dc6",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verificationHistory[1] quality failed"
+            },
+            {
+              "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verification[quality] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran aiSummary after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "028740928de775691c8b83a83ac92246b5e8f05dc953f74f9e9b7134c7aaed9a",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verificationHistory[2] aiSummary failed"
+            },
+            {
+              "digest": "8b2a20e58cb0611c22ce1df97af68d7fea7cbdc2b5787d9b290c203ff33b986d",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verification[aiSummary] retry passed"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolvedProblems": [
+        {
+          "claim": "After v0.5.63 publication, repository release.json and related candidate projections still described the previous candidate, so normal distribution and preflight checks failed.",
+          "evidenceRefs": [
+            {
+              "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.63",
+              "subject": "release-assets"
+            },
+            {
+              "source": "command://scripts/sync_published_release_projection.py",
+              "subject": "synchronized"
+            },
+            {
+              "source": "command://make-check-release-distribution",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "The first post-sync preflight run detected stale capability evidence bytes for two capability rows.",
+          "evidenceRefs": [
+            {
+              "source": "command://scripts/ai_capability_truth.py--write",
+              "subject": "passed"
+            },
+            {
+              "source": "command://scripts/check_pre_release_documentation_alignment.py--write",
+              "subject": "passed"
+            },
+            {
+              "source": "command://make-check-source-bound-evidence",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "The canonical synchronizer preserved v0.5.63 in reservedTags but the first invocation did not add its required unavailableTags explanation, so release-state consistency and project-test shards failed closed.",
+          "evidenceRefs": [
+            {
+              "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.63",
+              "subject": "immutable-release"
+            },
+            {
+              "source": "command://scripts/sync_published_release_projection.py",
+              "subject": "unavailable-tag-bound"
+            },
+            {
+              "source": "command://make-check-release-state-consistency",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Strict quality found the committed provenance and SBOM baselines still bound to the prior source identity after v0.5.63 publication.",
+          "evidenceRefs": [
+            {
+              "source": "command://scripts/check_supply_chain.py-refresh",
+              "subject": "passed"
+            },
+            {
+              "source": "command://make-check-provenance",
+              "subject": "passed"
+            },
+            {
+              "source": "command://make-check-sbom",
+              "subject": "passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "quality failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "137631f2a3df77c37583761f57956e52af11526ebabd9d6a43dd066209d8c6ff",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verificationHistory[0] quality failed"
+            },
+            {
+              "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verification[quality] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "quality failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "dfc15b4a64a374ab77d470dfe3552059a98ff5547858ad46807d133d42e47dc6",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verificationHistory[1] quality failed"
+            },
+            {
+              "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verification[quality] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "aiSummary failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "028740928de775691c8b83a83ac92246b5e8f05dc953f74f9e9b7134c7aaed9a",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verificationHistory[2] aiSummary failed"
+            },
+            {
+              "digest": "8b2a20e58cb0611c22ce1df97af68d7fea7cbdc2b5787d9b290c203ff33b986d",
+              "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+              "subject": "verification[aiSummary] retry passed"
+            }
+          ],
+          "inference": false
+        }
+      ]
+    },
+    "redReasons": [],
+    "retained": [
+      {
+        "claim": "Retained limitation",
+        "detail": "Provider/runtime behavior and user-visible Outcome transport are not tested by this projection-only Work Item.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "knownGaps"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "knownGaps"
+          }
+        ],
+        "inference": false,
+        "title": "Retained limitation"
+      },
+      {
+        "claim": "Retained limitation",
+        "detail": "Final repository release preflight must be rerun after active Work Item closure because the preflight gate intentionally rejects active Work Items.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "knownGaps"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "knownGaps"
+          }
+        ],
+        "inference": false,
+        "title": "Retained limitation"
       }
-    }
+    ],
+    "risks": [
+      {
+        "acceptanceStatus": "accepted_with_bounded_scope",
+        "claim": "release_identity",
+        "decisionOwner": "release maintainer",
+        "detail": "Provider-side runtime behavior, installer execution outside the repository, and the earlier Outcome transport/UI receipt remain outside this release-projection Work Item and are not claimed as verified here.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false,
+        "mitigation": "Keep provider and runtime claims explicitly bounded; rerun repository release checks after Work Item closure and retain the public release asset receipts.",
+        "requiredEvidence": [
+          "post-closure release distribution and preflight checks",
+          "provider release asset identity"
+        ],
+        "severity": "high",
+        "state": "unresolved",
+        "title": "release_identity"
+      }
+    ]
   },
-  "nextSafeAction": "Retry aiScenarioCoverage after correcting the recorded failure."
+  "interventions": [],
+  "issues": {
+    "detected": 5,
+    "hardStops": 3,
+    "resolved": 3,
+    "unresolved": 2,
+    "warnings": 2
+  },
+  "limitations": [
+    {
+      "affectedClaims": [
+        "completion_claim"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this warning was verified or resolved."
+      ],
+      "requiredEvidence": [
+        "fresh verification evidence"
+      ],
+      "sourceWarning": "Provider/runtime behavior and user-visible Outcome transport are not tested by this projection-only Work Item.",
+      "title": "Unresolved evidence is explicitly limited"
+    },
+    {
+      "affectedClaims": [
+        "completion_claim"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this warning was verified or resolved."
+      ],
+      "requiredEvidence": [
+        "fresh verification evidence"
+      ],
+      "sourceWarning": "Final repository release preflight must be rerun after active Work Item closure because the preflight gate intentionally rejects active Work Items.",
+      "title": "Unresolved evidence is explicitly limited"
+    }
+  ],
+  "nextSafeAction": "Retry aiSummary after correcting the recorded failure.",
+  "phase": "review",
+  "preventedRisks": [
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: quality",
+      "evidence": [
+        {
+          "digest": "137631f2a3df77c37583761f57956e52af11526ebabd9d6a43dd066209d8c6ff",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verificationHistory[0] quality failed"
+        },
+        {
+          "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verification[quality] retry passed"
+        }
+      ],
+      "resolution": "Retry quality after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    },
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: quality",
+      "evidence": [
+        {
+          "digest": "dfc15b4a64a374ab77d470dfe3552059a98ff5547858ad46807d133d42e47dc6",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verificationHistory[1] quality failed"
+        },
+        {
+          "digest": "5f9a79faacdfdaf7acee3ed918412b0799d6db5e48e07e21dc9499662aa87b17",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verification[quality] retry passed"
+        }
+      ],
+      "resolution": "Retry quality after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    },
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: aiSummary",
+      "evidence": [
+        {
+          "digest": "028740928de775691c8b83a83ac92246b5e8f05dc953f74f9e9b7134c7aaed9a",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verificationHistory[2] aiSummary failed"
+        },
+        {
+          "digest": "8b2a20e58cb0611c22ce1df97af68d7fea7cbdc2b5787d9b290c203ff33b986d",
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "verification[aiSummary] retry passed"
+        }
+      ],
+      "resolution": "Retry aiSummary after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    }
+  ],
+  "remainingRisks": [
+    {
+      "detail": "Provider-side runtime behavior, installer execution outside the repository, and the earlier Outcome transport/UI receipt remain outside this release-projection Work Item and are not claimed as verified here.",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+          "subject": "residualRisks"
+        }
+      ],
+      "severity": "high"
+    }
+  ],
+  "reportVersion": 1,
+  "result": "needs_human_confirmation",
+  "sourceOutcome": {
+    "digest": "5f481974e07316a0fea6d10e05a98f77107a029dde4592a291f375abb0cab3ba",
+    "format": "ai-cockpit-task-outcome",
+    "schemaVersion": 1
+  },
+  "task": {
+    "deliveredChanges": [
+      ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.contract.json",
+      ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.summary.json",
+      ".ai/work-items/starts/wi-27-post-publish-v0-5-63-projection.json",
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/release-digests.json",
+      ".ai/cockpit/provenance.json",
+      ".ai/cockpit/sbom.json",
+      ".ai/cockpit/version.json",
+      "install.sh",
+      "next-release.json",
+      "release-state.json",
+      "release.json",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md",
+      ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.outcome.json",
+      ".ai/work-items/archive/2026/wi-27-post-publish-v0-5-63-projection.outcome.md"
+    ],
+    "summary": "Task wi-27-post-publish-v0-5-63-projection generated an evidence-derived outcome with status needs_human_confirmation."
+  },
+  "workItemId": "wi-27-post-publish-v0-5-63-projection"
 }
