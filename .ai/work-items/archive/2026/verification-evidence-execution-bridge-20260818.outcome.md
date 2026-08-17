@@ -13,10 +13,10 @@ Governed Work Item: verification-evidence-execution-bridge-20260818
 - .ai/cockpit/current_status.md
 - .ai/cockpit/task_report.json
 - .ai/cockpit/task_report.md
-- .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json
-- .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.json
-- .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.md
-- .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json
+- .ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json
+- .ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.json
+- .ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.md
+- .ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json
 - .ai/work-items/starts/verification-evidence-execution-bridge-20260818.json
 - Makefile
 - docs/reference/capability-truth-matrix.json
@@ -129,8 +129,8 @@ Locale: `zh-CN`
 - aiWorkItem: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json work item contract check passed: .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json
 - aiScope: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json scope guard passed: 24 changed path(s) covered
 - aiGuards: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json
-- aiCheckpoint: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json --stage "before_finish" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `verification-evidence-execution-bridge-20260818` - Contract Hash: `2278eb6eef694cc7` - Mode: `code` - notCodable: `False` - Execution Decisi
-- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json review policy matched 11 path(s) [review] .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json [review] .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.json [review] .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.md [review
+- aiCheckpoint: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json --stage "before_finish" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `verification-evidence-execution-bridge-20260818` - Contract Hash: `576ff369b521c617` - Mode: `code` - notCodable: `False` - Execution Decisi
+- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json review policy matched 11 path(s) [review] .ai/work-items/starts/verification-evidence-execution-bridge-20260818.json [review] scripts/ai_verification_runtime.py [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items/active/verificati
 - aiBacktrack: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json
 - aiCoverage: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json
 - aiScenarioCoverage: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json

@@ -1,43 +1,70 @@
 {
   "reportVersion": 1,
-  "workItemId": "canonical-lifecycle-parallel-successor-20260818",
+  "workItemId": "verification-evidence-execution-bridge-20260818",
   "phase": "review",
   "result": "completed",
   "sourceOutcome": {
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1,
-    "digest": "c5388b9d31a4d180f84be29456718d721c06fae03b49d419d4f47558cd672a49"
+    "digest": "ed8e79ce20f54e29f74c381fe47b473488aa58c5285b703ee08aaeca0961b0bc"
   },
   "task": {
-    "summary": "Task canonical-lifecycle-parallel-successor-20260818 generated an evidence-derived outcome with status completed.",
+    "summary": "Task verification-evidence-execution-bridge-20260818 generated an evidence-derived outcome with status completed.",
     "deliveredChanges": [
       ".ai/cockpit/current_status.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md",
-      ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
-      ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json",
-      ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.md",
-      ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-      ".ai/work-items/starts/canonical-lifecycle-parallel-successor-20260818.json",
-      "AGENTS.md",
-      "docs/operations/work-item-lifecycle.ja.md",
-      "docs/operations/work-item-lifecycle.md",
-      "docs/operations/work-item-lifecycle.zh-CN.md",
+      ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
+      ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.json",
+      ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.md",
+      ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+      ".ai/work-items/starts/verification-evidence-execution-bridge-20260818.json",
+      "Makefile",
       "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
       "docs/reference/pre-release-documentation-alignment.json",
       "docs/reference/pre-release-documentation-alignment.md",
-      "templates/agents/AI_COCKPIT_RULES.md",
-      "tests/test_parallel_lifecycle_contract.py"
+      "docs/reference/verification-evidence-reuse-runtime.md",
+      "docs/reference/verification-evidence-reuse.md",
+      "scripts/ai_check_registry.py",
+      "scripts/ai_installer_catalog.json",
+      "scripts/ai_verification_runtime.py",
+      "scripts/ai_verify.py",
+      "scripts/installer/legacy.py",
+      "templates/make/Makefile.ai",
+      "tests/test_ai_verification_runtime.py",
+      "tests/test_ai_verify.py",
+      "tests/test_installed_runtime_parity.py"
     ]
   },
   "issues": {
-    "detected": 1,
-    "hardStops": 1,
+    "detected": 4,
+    "hardStops": 4,
     "warnings": 0,
-    "resolved": 1,
+    "resolved": 4,
     "unresolved": 0
   },
   "preventedRisks": [
+    {
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium",
+      "detectedBy": "required verification: aiCoverage",
+      "action": "blocked",
+      "resolution": "Retry aiCoverage after correcting the recorded failure.",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[0] aiCoverage failed",
+          "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verification[aiCoverage] retry passed",
+          "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
+        }
+      ]
+    },
     {
       "risk": "If not detected, could have led to a stale completion claim.",
       "severity": "medium",
@@ -46,20 +73,81 @@
       "resolution": "Retry quality after correcting the recorded failure.",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[1] quality failed",
+          "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
         },
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
           "subject": "verification[quality] retry passed",
-          "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+        }
+      ]
+    },
+    {
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium",
+      "detectedBy": "required verification: quality",
+      "action": "blocked",
+      "resolution": "Retry quality after correcting the recorded failure.",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[2] quality failed",
+          "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verification[quality] retry passed",
+          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+        }
+      ]
+    },
+    {
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium",
+      "detectedBy": "required verification: quality",
+      "action": "blocked",
+      "resolution": "Retry quality after correcting the recorded failure.",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[3] quality failed",
+          "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verification[quality] retry passed",
+          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
         }
       ]
     }
   ],
   "interventions": [],
   "forcedStops": [
+    {
+      "stage": "verification",
+      "reason": "aiCoverage failed before the retry.",
+      "policyOrGuard": "required verification: aiCoverage",
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+      "handoff": "",
+      "humanDecision": "",
+      "recovery": "Retry aiCoverage after correcting the recorded failure.",
+      "result": "resolved",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[0] aiCoverage failed",
+          "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verification[aiCoverage] retry passed",
+          "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
+        }
+      ]
+    },
     {
       "stage": "verification",
       "reason": "quality failed before the retry.",
@@ -72,43 +160,88 @@
       "result": "resolved",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[1] quality failed",
+          "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
         },
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
           "subject": "verification[quality] retry passed",
-          "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+        }
+      ]
+    },
+    {
+      "stage": "verification",
+      "reason": "quality failed before the retry.",
+      "policyOrGuard": "required verification: quality",
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+      "handoff": "",
+      "humanDecision": "",
+      "recovery": "Retry quality after correcting the recorded failure.",
+      "result": "resolved",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[2] quality failed",
+          "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verification[quality] retry passed",
+          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+        }
+      ]
+    },
+    {
+      "stage": "verification",
+      "reason": "quality failed before the retry.",
+      "policyOrGuard": "required verification: quality",
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+      "handoff": "",
+      "humanDecision": "",
+      "recovery": "Retry quality after correcting the recorded failure.",
+      "result": "resolved",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verificationHistory[3] quality failed",
+          "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+          "subject": "verification[quality] retry passed",
+          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
         }
       ]
     }
   ],
   "humanDecisions": [
-    "Outcome must be independently visible in the conversation, separate from progress/state updates, and include 🔴, 🟡, or 🟢.",
-    "A Work Item cannot end or archive unless its Outcome is green; a blocked Work Item must not block a compatible independent Work Item.",
-    "Problems found during a WI must be repaired in that WI when in scope; a successor is reserved for changed base, invalidated scope, immutable failed delivery, or a genuinely new delivery.",
-    "The user authorized the scoped corrective changes, guarded parallel WIs, installed-adopter synchronization, and required repository writes; release/tag publication remains out of scope."
+    "Outcome must be independently visible in the conversation and carry 🔴, 🟡, or 🟢; this runtime Work Item does not claim to replace the lifecycle Outcome handoff.",
+    "When a verification problem is found during this Work Item, repair it here when it is within the authorized runtime scope; do not create a new WI for this seam.",
+    "The user authorized the scoped corrective changes, independent parallel WIs, and required repository writes; release/tag publication remains out of scope."
   ],
   "limitations": [],
   "forbiddenClaims": [],
   "remainingRisks": [
     {
       "severity": "low",
-      "detail": "Automated parity covers required lifecycle concepts; native-language editorial nuance still benefits from human review.",
+      "detail": "Hosted/provider execution remains a separate stage and is not satisfied by local receipts; this is an explicit boundary, not an unresolved local failure.",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
           "subject": "residualRisks"
         }
       ]
     },
     {
       "severity": "low",
-      "detail": "Shared status and documentation projections remain serialized and must be refreshed after any later base synchronization.",
+      "detail": "Shared capability and documentation projections must be regenerated again if a later base synchronization changes their source bytes.",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
           "subject": "residualRisks"
         }
       ]
@@ -123,13 +256,13 @@
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": ".ai/cockpit/current_status.md"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": ".ai/cockpit/current_status.md"
           }
         ],
@@ -141,13 +274,13 @@
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": ".ai/cockpit/task_report.json"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": ".ai/cockpit/task_report.json"
           }
         ],
@@ -159,176 +292,122 @@
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": ".ai/cockpit/task_report.md"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": ".ai/cockpit/task_report.md"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json",
-        "title": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json",
+        "claim": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json",
+        "title": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json",
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.json",
-        "title": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.json",
+        "claim": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.json",
+        "title": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.json",
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.json"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.json"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.md",
-        "title": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.md",
+        "claim": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.md",
+        "title": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.outcome.md",
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.md"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.md"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.md"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.outcome.md"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json",
-        "title": "Changed .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json",
+        "claim": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json",
+        "title": "Changed .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json",
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed .ai/work-items/starts/canonical-lifecycle-parallel-successor-20260818.json",
-        "title": "Changed .ai/work-items/starts/canonical-lifecycle-parallel-successor-20260818.json",
+        "claim": "Changed .ai/work-items/starts/verification-evidence-execution-bridge-20260818.json",
+        "title": "Changed .ai/work-items/starts/verification-evidence-execution-bridge-20260818.json",
         "detail": "Work Item lifecycle evidence generated or refreshed during this corrective run.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/starts/canonical-lifecycle-parallel-successor-20260818.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/starts/verification-evidence-execution-bridge-20260818.json"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": ".ai/work-items/starts/canonical-lifecycle-parallel-successor-20260818.json"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": ".ai/work-items/starts/verification-evidence-execution-bridge-20260818.json"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed AGENTS.md",
-        "title": "Changed AGENTS.md",
+        "claim": "Changed Makefile",
+        "title": "Changed Makefile",
         "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "AGENTS.md"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "Makefile"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "AGENTS.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/operations/work-item-lifecycle.ja.md",
-        "title": "Changed docs/operations/work-item-lifecycle.ja.md",
-        "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "docs/operations/work-item-lifecycle.ja.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "docs/operations/work-item-lifecycle.ja.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/operations/work-item-lifecycle.md",
-        "title": "Changed docs/operations/work-item-lifecycle.md",
-        "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "docs/operations/work-item-lifecycle.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "docs/operations/work-item-lifecycle.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/operations/work-item-lifecycle.zh-CN.md",
-        "title": "Changed docs/operations/work-item-lifecycle.zh-CN.md",
-        "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "docs/operations/work-item-lifecycle.zh-CN.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "docs/operations/work-item-lifecycle.zh-CN.md"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "Makefile"
           }
         ],
         "inference": false
@@ -339,14 +418,50 @@
         "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.json",
+        "title": "Changed docs/reference/japanese-capability-assessment.json",
+        "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.md",
+        "title": "Changed docs/reference/japanese-capability-assessment.md",
+        "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
           }
         ],
         "inference": false
@@ -357,13 +472,13 @@
         "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.json"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.json"
           }
         ],
@@ -375,50 +490,212 @@
         "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.md"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.md"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed templates/agents/AI_COCKPIT_RULES.md",
-        "title": "Changed templates/agents/AI_COCKPIT_RULES.md",
+        "claim": "Changed docs/reference/verification-evidence-reuse-runtime.md",
+        "title": "Changed docs/reference/verification-evidence-reuse-runtime.md",
         "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "templates/agents/AI_COCKPIT_RULES.md"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/verification-evidence-reuse-runtime.md"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "templates/agents/AI_COCKPIT_RULES.md"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/verification-evidence-reuse-runtime.md"
           }
         ],
         "inference": false
       },
       {
-        "claim": "Changed tests/test_parallel_lifecycle_contract.py",
-        "title": "Changed tests/test_parallel_lifecycle_contract.py",
-        "detail": "Regression or parity coverage added or updated for this Work Item.",
+        "claim": "Changed docs/reference/verification-evidence-reuse.md",
+        "title": "Changed docs/reference/verification-evidence-reuse.md",
+        "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "tests/test_parallel_lifecycle_contract.py"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/verification-evidence-reuse.md"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-            "subject": "tests/test_parallel_lifecycle_contract.py"
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "docs/reference/verification-evidence-reuse.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_check_registry.py",
+        "title": "Changed scripts/ai_check_registry.py",
+        "detail": "Runtime or installer implementation updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_check_registry.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_check_registry.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_installer_catalog.json",
+        "title": "Changed scripts/ai_installer_catalog.json",
+        "detail": "Runtime or installer implementation updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_verification_runtime.py",
+        "title": "Changed scripts/ai_verification_runtime.py",
+        "detail": "Runtime or installer implementation updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_verification_runtime.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_verification_runtime.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_verify.py",
+        "title": "Changed scripts/ai_verify.py",
+        "detail": "Runtime or installer implementation updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_verify.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/ai_verify.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/installer/legacy.py",
+        "title": "Changed scripts/installer/legacy.py",
+        "detail": "Runtime or installer implementation updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/installer/legacy.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "scripts/installer/legacy.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed templates/make/Makefile.ai",
+        "title": "Changed templates/make/Makefile.ai",
+        "detail": "Documentation, command, or installed-adopter contract updated and verified for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "templates/make/Makefile.ai"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "templates/make/Makefile.ai"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_ai_verification_runtime.py",
+        "title": "Changed tests/test_ai_verification_runtime.py",
+        "detail": "Regression or parity coverage added or updated for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "tests/test_ai_verification_runtime.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "tests/test_ai_verification_runtime.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_ai_verify.py",
+        "title": "Changed tests/test_ai_verify.py",
+        "detail": "Regression or parity coverage added or updated for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "tests/test_ai_verify.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "tests/test_ai_verify.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_installed_runtime_parity.py",
+        "title": "Changed tests/test_installed_runtime_parity.py",
+        "detail": "Regression or parity coverage added or updated for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "tests/test_installed_runtime_parity.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "tests/test_installed_runtime_parity.py"
           }
         ],
         "inference": false
@@ -431,16 +708,16 @@
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"cl",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "sourceBoundEvidence",
-            "digest": "69c05b2e2b8c51a0ee6672c396fd66439e201d9ee29d7212b82194c4c76e99cd"
+            "digest": "1f651f127e428372b667d430affe77975ae3cbc53ef239ff7afaaa1dd9f7b523"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "sourceBoundEvidence",
-            "digest": "69c05b2e2b8c51a0ee6672c396fd66439e201d9ee29d7212b82194c4c76e99cd"
+            "digest": "1f651f127e428372b667d430affe77975ae3cbc53ef239ff7afaaa1dd9f7b523"
           }
         ],
         "inference": false
@@ -448,19 +725,19 @@
       {
         "claim": "aiWorkItem",
         "title": "aiWorkItem",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json work item contract check passed: .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json work item contract check passed: .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiWorkItem",
-            "digest": "1f09aeee25f74515d1ec5e19c58011074949ddba1ac2c86026e4788b556aa053"
+            "digest": "c11921318d8dc8b38bc3379f8d9c47a475b655cd270efb3ef3bbdcbc4fdcf6ee"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiWorkItem",
-            "digest": "1f09aeee25f74515d1ec5e19c58011074949ddba1ac2c86026e4788b556aa053"
+            "digest": "c11921318d8dc8b38bc3379f8d9c47a475b655cd270efb3ef3bbdcbc4fdcf6ee"
           }
         ],
         "inference": false
@@ -468,19 +745,19 @@
       {
         "claim": "aiScope",
         "title": "aiScope",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json scope guard passed: 17 changed path(s) covered",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json scope guard passed: 24 changed path(s) covered",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiScope",
-            "digest": "e33893af8935f1b9faf0f70285140e6c24ae23355edc96c6751ef27560c750ed"
+            "digest": "e29930c8dfaa56463c487f21d61608584f8b57703b6afad6bd447609589df77b"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiScope",
-            "digest": "e33893af8935f1b9faf0f70285140e6c24ae23355edc96c6751ef27560c750ed"
+            "digest": "e29930c8dfaa56463c487f21d61608584f8b57703b6afad6bd447609589df77b"
           }
         ],
         "inference": false
@@ -488,19 +765,19 @@
       {
         "claim": "aiGuards",
         "title": "aiGuards",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json [warning] restricted_write: AGENTS.md (AGENTS.md) - Agent operating rules. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiGuards",
-            "digest": "3cfd3663dfe968ed4d578fc4c414076a340ce5830e2415909643e825dfd0c70a"
+            "digest": "01bb79e70015dab40792b13576d1cb290cc57d4f1e2b1ca8fb3c065dd2de910e"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiGuards",
-            "digest": "3cfd3663dfe968ed4d578fc4c414076a340ce5830e2415909643e825dfd0c70a"
+            "digest": "01bb79e70015dab40792b13576d1cb290cc57d4f1e2b1ca8fb3c065dd2de910e"
           }
         ],
         "inference": false
@@ -508,19 +785,19 @@
       {
         "claim": "aiCheckpoint",
         "title": "aiCheckpoint",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `canonical-lifecycle-parallel-successor-20260818` - Contract Hash: `192d6c96ffc098c3` - Mode: `code` - notCodable: `False` - Execution Decisi",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `verification-evidence-execution-bridge-20260818` - Contract Hash: `576ff369b521c617` - Mode: `code` - notCodable: `False` - Execution Decisi",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiCheckpoint",
-            "digest": "f7c8de19edfe9d2074bc4665df9ab80a4f21b3158ed576f0861dfc1f7ccc839e"
+            "digest": "a3514112e0a0fb57014deed5c11e8667cf388504e1e7a750d3ea56afbc8ca6a2"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiCheckpoint",
-            "digest": "f7c8de19edfe9d2074bc4665df9ab80a4f21b3158ed576f0861dfc1f7ccc839e"
+            "digest": "a3514112e0a0fb57014deed5c11e8667cf388504e1e7a750d3ea56afbc8ca6a2"
           }
         ],
         "inference": false
@@ -528,19 +805,19 @@
       {
         "claim": "aiReviewPolicy",
         "title": "aiReviewPolicy",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json [review] .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.json [review] .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.md [review]",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json review policy matched 11 path(s) [review] .ai/work-items/starts/verification-evidence-execution-bridge-20260818.json [review] scripts/ai_verification_runtime.py [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items/active/verificati",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiReviewPolicy",
-            "digest": "b1ab1c9a67c338a9480dc0215f77ae99aa704f7469b17c7ae3c642db3c6ba892"
+            "digest": "f75cd4a932211f6da596bb8cedcfeb6319d70e4d9b58583caa48b02dec700e99"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiReviewPolicy",
-            "digest": "b1ab1c9a67c338a9480dc0215f77ae99aa704f7469b17c7ae3c642db3c6ba892"
+            "digest": "f75cd4a932211f6da596bb8cedcfeb6319d70e4d9b58583caa48b02dec700e99"
           }
         ],
         "inference": false
@@ -551,16 +828,16 @@
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiBacktrack",
-            "digest": "fd5d801b6f46e007c7bc6240c9e02a52d40583c0e3ecfc89a6c5ab155fbc780b"
+            "digest": "95965c855aa5932845b8c4e442aba9f6591b625d07f177d054980e89d0ca3433"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiBacktrack",
-            "digest": "fd5d801b6f46e007c7bc6240c9e02a52d40583c0e3ecfc89a6c5ab155fbc780b"
+            "digest": "95965c855aa5932845b8c4e442aba9f6591b625d07f177d054980e89d0ca3433"
           }
         ],
         "inference": false
@@ -571,16 +848,16 @@
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiCoverage",
-            "digest": "e63cec4600a9ecdefff22aa5fd411123918eed8c7f26e88ccdcddddd01b580f4"
+            "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiCoverage",
-            "digest": "e63cec4600a9ecdefff22aa5fd411123918eed8c7f26e88ccdcddddd01b580f4"
+            "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
           }
         ],
         "inference": false
@@ -588,19 +865,19 @@
       {
         "claim": "aiScenarioCoverage",
         "title": "aiScenarioCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiScenarioCoverage",
-            "digest": "0beee42be042e1832615d7bc6d578d10047cf997f9c603dea8a03265ad3be5dd"
+            "digest": "87f998adc7dd8078810b87e55aaf0b6a39508a682bf234f8741eb7bd66f9c77d"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiScenarioCoverage",
-            "digest": "0beee42be042e1832615d7bc6d578d10047cf997f9c603dea8a03265ad3be5dd"
+            "digest": "87f998adc7dd8078810b87e55aaf0b6a39508a682bf234f8741eb7bd66f9c77d"
           }
         ],
         "inference": false
@@ -608,19 +885,19 @@
       {
         "claim": "aiGuidelines",
         "title": "aiGuidelines",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json guidelines compliance check passed: 4 guideline(s) verified",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiGuidelines",
-            "digest": "976d29807892737bfd1d6345e1863d0ed492179596df8e643ca8bce70d21f7fd"
+            "digest": "3b688dcf005d42cc90a1e9b75d427a8b20fe1a0ccf693c3fa09e09a3bf112967"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiGuidelines",
-            "digest": "976d29807892737bfd1d6345e1863d0ed492179596df8e643ca8bce70d21f7fd"
+            "digest": "3b688dcf005d42cc90a1e9b75d427a8b20fe1a0ccf693c3fa09e09a3bf112967"
           }
         ],
         "inference": false
@@ -628,19 +905,19 @@
       {
         "claim": "aiDiffOwnership",
         "title": "aiDiffOwnership",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json ## Diff Ownership Preview - active_owned: `17`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair va",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json ## Diff Ownership Preview - active_owned: `24`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair va",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiDiffOwnership",
-            "digest": "21453ffd6463ecc361d270262fc75db6ca444d47d20ddc93f836a1393e491582"
+            "digest": "141b3dff986d1ae5898f0778b5cb87e25d3666861f853b0f66093fe40ba0885e"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiDiffOwnership",
-            "digest": "21453ffd6463ecc361d270262fc75db6ca444d47d20ddc93f836a1393e491582"
+            "digest": "141b3dff986d1ae5898f0778b5cb87e25d3666861f853b0f66093fe40ba0885e"
           }
         ],
         "inference": false
@@ -648,19 +925,19 @@
       {
         "claim": "quality",
         "title": "quality",
-        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"tests\", \"trust\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"explicit strict governance requires the complete quality graph\", \"requiredGroups\": [\"quality-full\"], \"target\": \"quality-full\"}, \"qualityTarget\": \"quality-full\", \"requiredGroups\": [\"quality-full\"], \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"c58c9b99e74646149ac1b6f1b651738d2627b5d",
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"installer\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"explicit strict governance requires the complete quality graph\", \"requiredGroups\": [\"quality-full\"], \"target\": \"quality-full\"}, \"qualityTarget\": \"quality-full\", \"requiredGroups\": [\"quality-full\"], \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\":",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "quality",
-            "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "quality",
-            "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
           }
         ],
         "inference": false
@@ -668,19 +945,19 @@
       {
         "claim": "aiStatus",
         "title": "aiStatus",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiStatus",
-            "digest": "2d4c98780f108666ff1b082fcdd2d1b0e387741007f131efff06ba19f439f0b0"
+            "digest": "d1406dd0ed65f9d0f8e1d6fbe553bb080c2dba684893933324081adcafb9f74a"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiStatus",
-            "digest": "2d4c98780f108666ff1b082fcdd2d1b0e387741007f131efff06ba19f439f0b0"
+            "digest": "d1406dd0ed65f9d0f8e1d6fbe553bb080c2dba684893933324081adcafb9f74a"
           }
         ],
         "inference": false
@@ -688,19 +965,19 @@
       {
         "claim": "aiStatusCheck",
         "title": "aiStatusCheck",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiStatusCheck",
-            "digest": "b1506f66021d50db99991bfacc947b7e5de23e2377f6c92a995161b763ed3021"
+            "digest": "e30cc6affe05055ca68bb953d6f1bdfdd21c99a2fa08b3d088167ba4ef2e6cb8"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiStatusCheck",
-            "digest": "b1506f66021d50db99991bfacc947b7e5de23e2377f6c92a995161b763ed3021"
+            "digest": "e30cc6affe05055ca68bb953d6f1bdfdd21c99a2fa08b3d088167ba4ef2e6cb8"
           }
         ],
         "inference": false
@@ -711,16 +988,16 @@
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiStatusConsistency",
-            "digest": "56b0766ed694bb28678b3cacb4d1d49d16eac5da9fbe203a67bcb5c10291417b"
+            "digest": "4341769c2fe929891f7888a2b3dcadb685076239abdd66b6b30f8cd6966c46e0"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiStatusConsistency",
-            "digest": "56b0766ed694bb28678b3cacb4d1d49d16eac5da9fbe203a67bcb5c10291417b"
+            "digest": "4341769c2fe929891f7888a2b3dcadb685076239abdd66b6b30f8cd6966c46e0"
           }
         ],
         "inference": false
@@ -728,19 +1005,19 @@
       {
         "claim": "aiAgentRisk",
         "title": "aiAgentRisk",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json --summary .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiAgentRisk",
-            "digest": "25654961b99396d0c62f4df86d518fa021ac77a9746be3277f5e5825d0f01222"
+            "digest": "74a08a72ea0464192967a607f05aa078bb7c9b8dcaf127cc2390afc4e7f6e78e"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiAgentRisk",
-            "digest": "25654961b99396d0c62f4df86d518fa021ac77a9746be3277f5e5825d0f01222"
+            "digest": "74a08a72ea0464192967a607f05aa078bb7c9b8dcaf127cc2390afc4e7f6e78e"
           }
         ],
         "inference": false
@@ -748,19 +1025,19 @@
       {
         "claim": "aiSummary",
         "title": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json --contract .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json ai summary check passed: .ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json --contract .ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json ai summary check passed: .ai/work-items/active/verification-evidence-execution-bridge-20260818.summary.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiSummary",
-            "digest": "c902caa6ac57c0b24f3701ce3d8c2a615ac52914b3454b6c34efc6f39fbb1216"
+            "digest": "6487d57d95072682260ee0d007d758db8ca40080c151152f4c09fb9ad0112d49"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
             "subject": "aiSummary",
-            "digest": "c902caa6ac57c0b24f3701ce3d8c2a615ac52914b3454b6c34efc6f39fbb1216"
+            "digest": "6487d57d95072682260ee0d007d758db8ca40080c151152f4c09fb9ad0112d49"
           }
         ],
         "inference": false
@@ -769,40 +1046,40 @@
     "retained": [],
     "risks": [
       {
-        "claim": "translation-review",
+        "claim": "hosted-stage",
         "severity": "low",
-        "title": "translation-review",
-        "detail": "Automated parity covers required lifecycle concepts; native-language editorial nuance still benefits from human review.",
+        "title": "hosted-stage",
+        "detail": "Hosted/provider execution remains a separate stage and is not satisfied by local receipts; this is an explicit boundary, not an unresolved local failure.",
         "state": "unresolved",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "residualRisks"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "residualRisks"
           }
         ],
         "inference": false
       },
       {
-        "claim": "shared-projections",
+        "claim": "generated-projections",
         "severity": "low",
-        "title": "shared-projections",
-        "detail": "Shared status and documentation projections remain serialized and must be refreshed after any later base synchronization.",
+        "title": "generated-projections",
+        "detail": "Shared capability and documentation projections must be regenerated again if a later base synchronization changes their source bytes.",
         "state": "unresolved",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "residualRisks"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
             "subject": "residualRisks"
           }
         ],
@@ -811,31 +1088,79 @@
     ],
     "redReasons": [],
     "questions": {
-      "problemCount": 3,
+      "problemCount": 6,
       "problemCountEvidenceRefs": [
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
           "subject": "observedIssues"
         },
         {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
           "subject": "verification and verificationHistory"
         }
       ],
       "blockedProblems": [],
       "resolvedProblems": [
         {
+          "claim": "aiCoverage failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[0] aiCoverage failed",
+              "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verification[aiCoverage] retry passed",
+              "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
+            }
+          ],
+          "inference": false
+        },
+        {
           "claim": "quality failed before the retry.",
           "evidenceRefs": [
             {
-              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-              "subject": "verificationHistory[0] quality failed",
-              "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[1] quality failed",
+              "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
             },
             {
-              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
               "subject": "verification[quality] retry passed",
-              "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+              "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "quality failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[2] quality failed",
+              "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "quality failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[3] quality failed",
+              "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
             }
           ],
           "inference": false
@@ -843,23 +1168,86 @@
       ],
       "resolutionApproach": [
         {
+          "claim": "Re-ran aiCoverage after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[0] aiCoverage failed",
+              "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verification[aiCoverage] retry passed",
+              "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
+            }
+          ],
+          "inference": false
+        },
+        {
           "claim": "Re-ran quality after the correction; the latest attempt passed.",
           "evidenceRefs": [
             {
-              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-              "subject": "verificationHistory[0] quality failed",
-              "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[1] quality failed",
+              "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
             },
             {
-              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
               "subject": "verification[quality] retry passed",
-              "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+              "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran quality after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[2] quality failed",
+              "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran quality after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verificationHistory[3] quality failed",
+              "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
             }
           ],
           "inference": false
         }
       ],
       "avoidedRisks": [
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        },
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        },
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        },
         {
           "claim": "If not detected, could have led to a stale completion claim.",
           "evidenceRefs": [],
@@ -878,20 +1266,20 @@
           "inference": true
         },
         {
-          "claim": "Automated parity covers required lifecycle concepts; native-language editorial nuance still benefits from human review.",
+          "claim": "Hosted/provider execution remains a separate stage and is not satisfied by local receipts; this is an explicit boundary, not an unresolved local failure.",
           "evidenceRefs": [
             {
-              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
               "subject": "residualRisks"
             }
           ],
           "inference": false
         },
         {
-          "claim": "Shared status and documentation projections remain serialized and must be refreshed after any later base synchronization.",
+          "claim": "Shared capability and documentation projections must be regenerated again if a later base synchronization changes their source bytes.",
           "evidenceRefs": [
             {
-              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+              "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
               "subject": "residualRisks"
             }
           ],
@@ -901,22 +1289,17 @@
       "agentUnknowns": [],
       "humanConfirmations": [
         {
-          "claim": "Outcome must be independently visible in the conversation, separate from progress/state updates, and include 🔴, 🟡, or 🟢.",
+          "claim": "Outcome must be independently visible in the conversation and carry 🔴, 🟡, or 🟢; this runtime Work Item does not claim to replace the lifecycle Outcome handoff.",
           "evidenceRefs": [],
           "inference": true
         },
         {
-          "claim": "A Work Item cannot end or archive unless its Outcome is green; a blocked Work Item must not block a compatible independent Work Item.",
+          "claim": "When a verification problem is found during this Work Item, repair it here when it is within the authorized runtime scope; do not create a new WI for this seam.",
           "evidenceRefs": [],
           "inference": true
         },
         {
-          "claim": "Problems found during a WI must be repaired in that WI when in scope; a successor is reserved for changed base, invalidated scope, immutable failed delivery, or a genuinely new delivery.",
-          "evidenceRefs": [],
-          "inference": true
-        },
-        {
-          "claim": "The user authorized the scoped corrective changes, guarded parallel WIs, installed-adopter synchronization, and required repository writes; release/tag publication remains out of scope.",
+          "claim": "The user authorized the scoped corrective changes, independent parallel WIs, and required repository writes; release/tag publication remains out of scope.",
           "evidenceRefs": [],
           "inference": true
         }

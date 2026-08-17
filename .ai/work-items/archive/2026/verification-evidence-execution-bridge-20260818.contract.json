@@ -10,7 +10,7 @@
     "capturedAt": "2026-08-18T00:00:00+09:00",
     "digest": "sha256:user-authorized-runtime-evidence-reuse-correction-successor"
   },
-  "baseCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+  "baseCommit": "2aed620ca31b260b49401cd08538d70deff810da",
   "baselineDirtyPaths": [],
   "scope": [
     ".ai/work-items/active/verification-evidence-execution-bridge-20260818.contract.json",
@@ -106,8 +106,15 @@
     "override": {
       "approvalEvidence": "The user explicitly authorized all scoped corrective changes, parallel WIs where boundaries are disjoint, and required repository writes.",
       "reason": "Bounded corrective successor for an archived predecessor whose CLI execution acceptance was not actually met.",
-      "risks": ["verification", "evidence_integrity", "security_boundary", "performance"],
-      "notRunChecks": ["Hosted release verification is out of scope."],
+      "risks": [
+        "verification",
+        "evidence_integrity",
+        "security_boundary",
+        "performance"
+      ],
+      "notRunChecks": [
+        "Hosted release verification is out of scope."
+      ],
       "workItemOnly": true,
       "workItemId": "verification-evidence-execution-bridge-20260818"
     }
@@ -173,25 +180,103 @@
   },
   "declaredIntent": {
     "summary": "Connect evidence reuse policy decisions to actual verification execution.",
-    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
   },
   "implementationSurface": {
-    "production": ["scripts/ai_verify.py", "scripts/ai_verification_runtime.py", "scripts/ai_check_registry.py", "scripts/ai_verification_context.py", "scripts/ai_verification_policy.py", "Makefile", "templates/make/Makefile.ai", "scripts/ai_installer_catalog.json", "scripts/installer/legacy.py"],
-    "tests": ["tests/test_ai_verify.py", "tests/test_ai_verification_runtime.py", "tests/test_installed_runtime_parity.py"],
-    "documentation": ["docs/reference/verification-evidence-reuse.md", "docs/reference/verification-evidence-reuse-runtime.md"],
-    "generated": ["docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", ".ai/guards/governance_complexity_policy.yaml"]
+    "production": [
+      "scripts/ai_verify.py",
+      "scripts/ai_verification_runtime.py",
+      "scripts/ai_check_registry.py",
+      "scripts/ai_verification_context.py",
+      "scripts/ai_verification_policy.py",
+      "Makefile",
+      "templates/make/Makefile.ai",
+      "scripts/ai_installer_catalog.json",
+      "scripts/installer/legacy.py"
+    ],
+    "tests": [
+      "tests/test_ai_verify.py",
+      "tests/test_ai_verification_runtime.py",
+      "tests/test_installed_runtime_parity.py"
+    ],
+    "documentation": [
+      "docs/reference/verification-evidence-reuse.md",
+      "docs/reference/verification-evidence-reuse-runtime.md"
+    ],
+    "generated": [
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md",
+      ".ai/guards/governance_complexity_policy.yaml"
+    ]
   },
   "requiredEvidenceContext": {
     "destructiveLevel": "none",
     "externalSystem": "",
-    "availableEvidence": ["Current VerificationContext inputs and digests", "Validated passed verification receipts", "End-to-end execution adapter metrics and scenario logs"]
+    "availableEvidence": [
+      "Current VerificationContext inputs and digests",
+      "Validated passed verification receipts",
+      "End-to-end execution adapter metrics and scenario logs"
+    ]
   },
   "scenarioCoverage": [
-    {"id": "wi-a-source", "riskDomain": "verification", "scenario": "WI-A changes src/a.py and produces a passed receipt for an allowlisted non-protected content-bound node.", "expected": "The receipt binds current inputs and all protected gates execute.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run planner and end-to-end adapter tests with a fake checker executor."},
-    {"id": "wi-b-docs", "riskDomain": "performance", "scenario": "WI-B changes only docs/b.md while WI-A content remains identical.", "expected": "The reusable node is actually skipped and the executed count decreases without reducing protected execution.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Assert executor call count and plan metrics in an ai_verify integration test."},
-    {"id": "wi-c-hosted", "riskDomain": "evidence_integrity", "scenario": "WI-C changes stage/runner, diff, environment, toolchain, policy, command, or receipt freshness.", "expected": "The prior receipt cannot satisfy the current node; it executes again with an explicit rerun reason.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run a mismatch matrix covering hosted separation, stale, malformed, unknown, and binding mismatch."},
-    {"id": "protected-gates", "riskDomain": "security_boundary", "scenario": "A protected gate presents a fresh reusable receipt.", "expected": "The adapter executes it and reports protectedNodesSkipped=0.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add protected-gate planner and adapter assertions."},
-    {"id": "installed-adopter", "riskDomain": "installed_adopter", "scenario": "An installed adopter invokes the supported verification entry point.", "expected": "Catalog, template, runtime module, and parity tests expose the same planner/executor behavior.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run installer parity and adopter smoke tests."}
+    {
+      "id": "wi-a-source",
+      "riskDomain": "verification",
+      "scenario": "WI-A changes src/a.py and produces a passed receipt for an allowlisted non-protected content-bound node.",
+      "expected": "The receipt binds current inputs and all protected gates execute.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run planner and end-to-end adapter tests with a fake checker executor."
+    },
+    {
+      "id": "wi-b-docs",
+      "riskDomain": "performance",
+      "scenario": "WI-B changes only docs/b.md while WI-A content remains identical.",
+      "expected": "The reusable node is actually skipped and the executed count decreases without reducing protected execution.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Assert executor call count and plan metrics in an ai_verify integration test."
+    },
+    {
+      "id": "wi-c-hosted",
+      "riskDomain": "evidence_integrity",
+      "scenario": "WI-C changes stage/runner, diff, environment, toolchain, policy, command, or receipt freshness.",
+      "expected": "The prior receipt cannot satisfy the current node; it executes again with an explicit rerun reason.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run a mismatch matrix covering hosted separation, stale, malformed, unknown, and binding mismatch."
+    },
+    {
+      "id": "protected-gates",
+      "riskDomain": "security_boundary",
+      "scenario": "A protected gate presents a fresh reusable receipt.",
+      "expected": "The adapter executes it and reports protectedNodesSkipped=0.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add protected-gate planner and adapter assertions."
+    },
+    {
+      "id": "installed-adopter",
+      "riskDomain": "installed_adopter",
+      "scenario": "An installed adopter invokes the supported verification entry point.",
+      "expected": "Catalog, template, runtime module, and parity tests expose the same planner/executor behavior.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run installer parity and adopter smoke tests."
+    }
   ],
   "verification": [
     {
@@ -280,5 +365,20 @@
     "baseCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
     "initialScopeDigest": "22056590bf939a5e663111edb356aac8cc06082b21aeb38fe459dc4d8d6d4cd8",
     "contractSkeletonDigest": "c063e298084b751d15c425414db71d43d762ba3937e04fac5c80a27653c70e7f"
-  }
+  },
+  "synchronizationHistory": [
+    {
+      "synchronizationVersion": 1,
+      "fromBaseCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+      "toBaseCommit": "2aed620ca31b260b49401cd08538d70deff810da",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/verification-evidence-execution-bridge-20260818",
+      "recordedAt": "2026-08-17T22:49:43.628506+00:00",
+      "priorContractDigest": "2278eb6eef694cc78b8d21e80aa40d98c6b3cf343b170bbd8a40f043a7239ea0",
+      "priorSummaryDigest": "ada172f3e311f6073c40b80c3f67cd4f2928b591fc74d67ae024e2643dea9ddb",
+      "rebaseHeadBefore": "2a53b6adeb9432d9914e62b17924baaa0d152887",
+      "rebaseHeadAfter": "2a53b6adeb9432d9914e62b17924baaa0d152887"
+    }
+  ]
 }
