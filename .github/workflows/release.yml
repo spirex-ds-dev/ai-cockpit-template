@@ -27,10 +27,10 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.AI_COCKPIT_RELEASE_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 70
     env:
-      GH_TOKEN: ${{ secrets.AI_COCKPIT_RELEASE_RUNNER }}
+      GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: ${{ inputs.tag }}
       SOURCE_COMMIT: ${{ inputs.source_commit }}
       REHEARSAL: ${{ inputs.rehearsal }}

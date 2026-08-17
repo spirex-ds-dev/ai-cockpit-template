@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "release-runner-allowlist-repair-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "5386809ec12246eba639547dbae3e698607f775e08ded526b0c2817eb1b203d0"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "release-runner-allowlist-repair-20260818",
+    "contractDigest": "ebd906f1c60f5e465fc9ae47432a09e9d63bee5ad98d5531abb8f359598bb080",
+    "summaryDigest": "ceb82c4a637bef5f1d5fadf2cb7a60f3896bdc7cb2c155a9ae3ddd922907e531",
+    "verificationDigest": "60404919d63a771a4198483043fbfdaf46865aaef726c10a5950b164e88d2809",
+    "baseCommit": "a034378c8863ca45b8b75586c551201003700fb4",
+    "headCommit": "99668b7057f6c28360a882fb2d4b14356476c667",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "8d32e18c79a611761bef172c169dcdc4560862aede353c50536dada35d6e4bb5",
+      "binding": {
+        "baseCommit": "a034378c8863ca45b8b75586c551201003700fb4",
+        "candidateHead": "99668b7057f6c28360a882fb2d4b14356476c667",
+        "candidateTreeDigest": "2363433aa139e150b416193f18ef4fcfac8274d16dd8ccf56cf9e1a706507ec8",
+        "candidateDiffDigest": "40a0655687dd5b2e58a789a79692de3fc47de99232c34f574d8701e017b9bc0e"
+      }
+    }
   },
-  "task": {
-    "summary": "Task release-runner-allowlist-repair-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task release-runner-allowlist-repair-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: release-runner-allowlist-repair-20260818",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.contract.json",
       ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
@@ -26,79 +49,109 @@
       ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "be7e9711924cb50a1d7ae77aab6d2d07155582f6ac7798005e31d0fe4a9e1a5c"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "6a841f34f2a642a63b4143a90db8bcc4d2bf5b1f69f7db52b823091c40766b3c"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "be7e9711924cb50a1d7ae77aab6d2d07155582f6ac7798005e31d0fe4a9e1a5c"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "6a841f34f2a642a63b4143a90db8bcc4d2bf5b1f69f7db52b823091c40766b3c"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "Provider-side runner label and IP allow-list state cannot be proven from repository files; hosted same-SHA rehearsal is the required external verification.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "The provider-access failure must be fixed at root cause; Outcome must be independently visible in the conversation with its traffic-light marker; no gate bypass is acceptable."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "be7e9711924cb50a1d7ae77aab6d2d07155582f6ac7798005e31d0fe4a9e1a5c"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "6a841f34f2a642a63b4143a90db8bcc4d2bf5b1f69f7db52b823091c40766b3c"
+      }
     ]
   },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "be7e9711924cb50a1d7ae77aab6d2d07155582f6ac7798005e31d0fe4a9e1a5c"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "6a841f34f2a642a63b4143a90db8bcc4d2bf5b1f69f7db52b823091c40766b3c"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "be7e9711924cb50a1d7ae77aab6d2d07155582f6ac7798005e31d0fe4a9e1a5c"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "6a841f34f2a642a63b4143a90db8bcc4d2bf5b1f69f7db52b823091c40766b3c"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "The provider-access failure must be fixed at root cause; Outcome must be independently visible in the conversation with its traffic-light marker; no gate bypass is acceptable."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "Provider-side runner label and IP allow-list state cannot be proven from repository files; hosted same-SHA rehearsal is the required external verification.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -826,6 +879,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
