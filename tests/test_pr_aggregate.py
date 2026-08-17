@@ -240,6 +240,32 @@ def test_pr_boundary_accepts_clean_worktree(monkeypatch):
     assert ai_check_pr.validate_pr_boundary() == []
 
 
+def test_pr_requires_capability_matrix_when_bound_evidence_changes():
+    issues = ai_check_pr.capability_truth_dependency_issues(["scripts/ai_check_pr.py"])
+
+    assert issues == [
+        (
+            "Capability Truth evidence dependency requires a changed "
+            "docs/reference/capability-truth-matrix.json: scripts/ai_check_pr.py is bound to "
+            "capabilities [human_benefit_report]"
+        )
+    ]
+
+
+def test_pr_rejects_stale_capability_matrix(monkeypatch):
+    monkeypatch.setattr(
+        ai_check_pr,
+        "validate_matrix",
+        lambda *_args, **_kwargs: [
+            "capabilities[3].evidenceSource does not match current evidence bytes"
+        ],
+    )
+
+    assert ai_check_pr.capability_truth_dependency_issues(
+        ["docs/reference/capability-truth-matrix.json"]
+    ) == ["capabilities[3].evidenceSource does not match current evidence bytes"]
+
+
 def fake_git_result(stdout="", returncode=0, stderr=""):
     return type(
         "Result",
