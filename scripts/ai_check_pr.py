@@ -243,11 +243,7 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
         contract, receipt_base
     ):
         return False
-    if (
-        receipt_base != archived_base
-        and resume_history is None
-        and synchronization_history is None
-    ):
+    if receipt_base != archived_base and resume_history is None and synchronization_history is None:
         return False
     if archived_base == pr_base:
         return True
