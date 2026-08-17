@@ -2,17 +2,17 @@
   "format": "ai-cockpit-task-outcome",
   "schemaVersion": 1,
   "workItemId": "outcome-report-delivery-integrity-20260817",
-  "status": "completed_with_warnings",
-  "humanStatusColor": "yellow",
+  "status": "completed",
+  "humanStatusColor": "green",
   "failedGate": "",
   "recoveryCondition": "",
   "bindings": {
     "taskId": "outcome-report-delivery-integrity-20260817",
     "contractDigest": "7997fbd62959db13aad99827822c46b463747bfad0bf44d56597b163f35b8982",
-    "summaryDigest": "17d85dc6fa981e31f5e29916c99c78a68769b8ecb8709fcb14ae2524ba06b880",
-    "verificationDigest": "8fea00158346c92679ccb945ae8d48e1aafc9013997abd5bb20537e392be888f",
+    "summaryDigest": "421a047cf465fb2473b54a93ca81d300da9990bb44992fe84430e78c2d8c21a4",
+    "verificationDigest": "134e15a13984d326a8b35b09eb297b55cf94e6d49dc26a44b6ce52ea9208206f",
     "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
-    "headCommit": "5263089d6747d3e289772e164f7da7cb7b379233",
+    "headCommit": "499778fd3116b06655c5d7ed02ff0b574d6506e8",
     "lifecycleStage": "pre_merge",
     "pullRequest": {
       "state": "not_created"
@@ -22,7 +22,7 @@
     "locale": "en"
   },
   "sections": {
-    "outcomeSummary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed_with_warnings.",
+    "outcomeSummary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed.",
     "taskOverview": "Governed Work Item: outcome-report-delivery-integrity-20260817",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
@@ -64,34 +64,10 @@
     ],
     "findings": [],
     "risks": [],
-    "warnings": [
-      "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end."
-    ],
-    "limitations": [
-      {
-        "sourceWarning": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
-        "title": "Unresolved evidence is explicitly limited",
-        "affectedClaims": [
-          "completion_claim"
-        ],
-        "requiredEvidence": [
-          "fresh verification evidence"
-        ],
-        "forbiddenClaims": [
-          "Do not claim this warning was verified or resolved."
-        ]
-      }
-    ],
-    "nonRiskExplanations": [
-      {
-        "sourceWarning": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
-        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
-        "evidence": []
-      }
-    ],
-    "forbiddenClaims": [
-      "Do not claim an unresolved warning was verified or resolved."
-    ],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
     "interventions": [],
     "forcedStops": [
       {
@@ -155,6 +131,14 @@
           {
             "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
             "subject": "source-bound remediation"
+          },
+          {
+            "source": "hosted-run:32036310755",
+            "subject": "fresh smoke pass on corrected commit"
+          },
+          {
+            "source": "hosted-run:32036310634",
+            "subject": "fresh compatibility pass on corrected commit"
           }
         ],
         "evidence": [
@@ -165,6 +149,14 @@
           {
             "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
             "subject": "source-bound remediation"
+          },
+          {
+            "source": "hosted-run:32036310755",
+            "subject": "fresh smoke pass on corrected commit"
+          },
+          {
+            "source": "hosted-run:32036310634",
+            "subject": "fresh compatibility pass on corrected commit"
           }
         ],
         "inference": false
@@ -210,34 +202,7 @@
     "avoidedImpact": [
       "If not detected, could have led to a stale completion claim."
     ],
-    "residualRisks": [
-      {
-        "claim": "Hosted confirmation",
-        "severity": "high",
-        "title": "Hosted confirmation",
-        "detail": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
-        "state": "unresolved",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "inference": false,
-        "requiredEvidence": [
-          "fresh Hosted smoke pass on the corrected PR commit"
-        ],
-        "decisionOwner": "human reviewer",
-        "mitigation": "Keep Outcome yellow and block WI completion until the fresh Hosted smoke result is recorded.",
-        "acceptanceStatus": "pending Hosted confirmation"
-      }
-    ],
+    "residualRisks": [],
     "humanDecisions": [
       "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
       "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
@@ -1227,26 +1192,6 @@
         "inference": false
       },
       {
-        "claim": "aiSummary",
-        "title": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiSummary",
-            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiSummary",
-            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8"
-          }
-        ],
-        "inference": false
-      },
-      {
         "claim": "sourceBoundEvidence",
         "title": "sourceBoundEvidence",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"cl",
@@ -1265,67 +1210,37 @@
           }
         ],
         "inference": false
-      }
-    ],
-    "retained": [
+      },
       {
-        "claim": "Retained limitation",
-        "title": "Retained limitation",
-        "detail": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
+        "claim": "aiSummary",
+        "title": "aiSummary",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "knownGaps"
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiSummary",
+            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8"
           }
         ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "knownGaps"
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiSummary",
+            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8"
           }
         ],
         "inference": false
       }
     ],
-    "risks": [
-      {
-        "claim": "Hosted confirmation",
-        "severity": "high",
-        "title": "Hosted confirmation",
-        "detail": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
-        "state": "unresolved",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "inference": false,
-        "requiredEvidence": [
-          "fresh Hosted smoke pass on the corrected PR commit"
-        ],
-        "decisionOwner": "human reviewer",
-        "mitigation": "Keep Outcome yellow and block WI completion until the fresh Hosted smoke result is recorded.",
-        "acceptanceStatus": "pending Hosted confirmation"
-      }
-    ],
+    "retained": [],
+    "risks": [],
     "redReasons": [],
     "questions": {
-      "problemCount": 4,
+      "problemCount": 3,
       "problemCountEvidenceRefs": [
         {
           "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
           "subject": "observedIssues"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "knownGaps"
         },
         {
           "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
@@ -1344,6 +1259,14 @@
             {
               "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
               "subject": "source-bound remediation"
+            },
+            {
+              "source": "hosted-run:32036310755",
+              "subject": "fresh smoke pass on corrected commit"
+            },
+            {
+              "source": "hosted-run:32036310634",
+              "subject": "fresh compatibility pass on corrected commit"
             }
           ],
           "inference": false
@@ -1392,6 +1315,14 @@
             {
               "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
               "subject": "source-bound remediation"
+            },
+            {
+              "source": "hosted-run:32036310755",
+              "subject": "fresh smoke pass on corrected commit"
+            },
+            {
+              "source": "hosted-run:32036310634",
+              "subject": "fresh compatibility pass on corrected commit"
             }
           ],
           "inference": false
@@ -1441,18 +1372,7 @@
           "inference": true
         }
       ],
-      "remainingRisks": [
-        {
-          "claim": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "residualRisks"
-            }
-          ],
-          "inference": false
-        }
-      ],
+      "remainingRisks": [],
       "agentUnknowns": [],
       "humanConfirmations": [
         {

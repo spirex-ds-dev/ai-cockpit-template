@@ -1,10 +1,10 @@
 # Task Outcome: outcome-report-delivery-integrity-20260817
 
-Status: `completed_with_warnings`
-Human Status: `yellow`
+Status: `completed`
+Human Status: `green`
 
 ## Outcome Summary
-Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed_with_warnings.
+Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed.
 
 ## Task Overview
 Governed Work Item: outcome-report-delivery-integrity-20260817
@@ -54,16 +54,16 @@ None
 None
 
 ## Warnings
-- Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.
+None
 
 ## Limitations
-- Unresolved evidence is explicitly limited
+None
 
 ## Non-Risk Explanations
-- {"evidence": [], "reason": "The Summary records this item as an unresolved gap rather than a verified result.", "sourceWarning": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end."}
+None
 
 ## Forbidden Claims
-- Do not claim an unresolved warning was verified or resolved.
+None
 
 ## Interventions
 None
@@ -84,7 +84,7 @@ None
 - If not detected, could have led to a stale completion claim.
 
 ## Residual Risks
-- Hosted confirmation
+None
 
 ## Human Decisions
 - Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.
@@ -155,25 +155,25 @@ Locale: `en`
 - aiStatusCheck: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json cockpit status check passed: .ai/cockpit/current_status.md
 - aiStatusConsistency: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed
 - aiAgentRisk: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json agent risk check passed report: target/ai_agent_risk_report.json
-- aiSummary: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json
 - sourceBoundEvidence: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {"absurdCases": [{"caseId": "rocket-launch", "level": "L1", "class": "world_fact", "decision": "blocked", "status": "not_ready", "claimSupported": false, "safeAlternative": "local dry-run plan"}, {"caseId": "production-delete", "level": "L2", "class": "authority", "decision": "blocked", "status": "not_ready", "cl
+- aiSummary: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json
 
 ### What was retained
-- Retained limitation: Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.
+None
 
 ### Risks
-- Hosted confirmation: The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.
+None
 
 ### Red reasons
 None
 
 ### Human questions
-- problemCount: 4
+- problemCount: 3
 - blockedProblems: None
 - resolvedProblems: Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.; quality failed before the retry.; sourceBoundEvidence failed before the retry.
 - resolutionApproach: Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.; Re-ran quality after the correction; the latest attempt passed.; Re-ran sourceBoundEvidence after the correction; the latest attempt passed.
 - avoidedRisks: If not detected, could have led to a stale completion claim.; If not detected, could have led to a stale completion claim.
-- remainingRisks: The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.
+- remainingRisks: None
 - agentUnknowns: None
 - humanConfirmations: Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.; Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.
 - recurrenceLikelihood: unknown: no direct recurrence probability evidence was recorded.

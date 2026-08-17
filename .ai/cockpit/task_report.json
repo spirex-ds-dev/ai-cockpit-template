@@ -1,7 +1,5 @@
 {
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
+  "forbiddenClaims": [],
   "forcedStops": [
     {
       "attemptedAction": "complete the Work Item",
@@ -1008,26 +1006,6 @@
         "title": "aiAgentRisk"
       },
       {
-        "claim": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json",
-        "evidence": [
-          {
-            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiSummary"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiSummary"
-          }
-        ],
-        "inference": false,
-        "title": "aiSummary"
-      },
-      {
         "claim": "sourceBoundEvidence",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"cl",
         "evidence": [
@@ -1046,6 +1024,26 @@
         ],
         "inference": false,
         "title": "sourceBoundEvidence"
+      },
+      {
+        "claim": "aiSummary",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json",
+        "evidence": [
+          {
+            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8",
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiSummary"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8",
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiSummary"
+          }
+        ],
+        "inference": false,
+        "title": "aiSummary"
       }
     ],
     "questions": {
@@ -1080,15 +1078,11 @@
         "evidenceRefs": [],
         "inference": true
       },
-      "problemCount": 4,
+      "problemCount": 3,
       "problemCountEvidenceRefs": [
         {
           "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
           "subject": "observedIssues"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "knownGaps"
         },
         {
           "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
@@ -1100,18 +1094,7 @@
         "evidenceRefs": [],
         "inference": true
       },
-      "remainingRisks": [
-        {
-          "claim": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "residualRisks"
-            }
-          ],
-          "inference": false
-        }
-      ],
+      "remainingRisks": [],
       "resolutionApproach": [
         {
           "claim": "Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.",
@@ -1123,6 +1106,14 @@
             {
               "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
               "subject": "source-bound remediation"
+            },
+            {
+              "source": "hosted-run:32036310755",
+              "subject": "fresh smoke pass on corrected commit"
+            },
+            {
+              "source": "hosted-run:32036310634",
+              "subject": "fresh compatibility pass on corrected commit"
             }
           ],
           "inference": false
@@ -1171,6 +1162,14 @@
             {
               "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
               "subject": "source-bound remediation"
+            },
+            {
+              "source": "hosted-run:32036310755",
+              "subject": "fresh smoke pass on corrected commit"
+            },
+            {
+              "source": "hosted-run:32036310634",
+              "subject": "fresh compatibility pass on corrected commit"
             }
           ],
           "inference": false
@@ -1210,79 +1209,19 @@
       ]
     },
     "redReasons": [],
-    "retained": [
-      {
-        "claim": "Retained limitation",
-        "detail": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "knownGaps"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "knownGaps"
-          }
-        ],
-        "inference": false,
-        "title": "Retained limitation"
-      }
-    ],
-    "risks": [
-      {
-        "acceptanceStatus": "pending Hosted confirmation",
-        "claim": "Hosted confirmation",
-        "decisionOwner": "human reviewer",
-        "detail": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "inference": false,
-        "mitigation": "Keep Outcome yellow and block WI completion until the fresh Hosted smoke result is recorded.",
-        "requiredEvidence": [
-          "fresh Hosted smoke pass on the corrected PR commit"
-        ],
-        "severity": "high",
-        "state": "unresolved",
-        "title": "Hosted confirmation"
-      }
-    ]
+    "retained": [],
+    "risks": []
   },
   "interventions": [],
   "issues": {
-    "detected": 3,
+    "detected": 2,
     "hardStops": 2,
     "resolved": 2,
-    "unresolved": 1,
-    "warnings": 1
+    "unresolved": 0,
+    "warnings": 0
   },
-  "limitations": [
-    {
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "sourceWarning": "Fresh Hosted smoke verification of the source-bound evidence routing fix is required before Outcome can be green or the WI can end.",
-      "title": "Unresolved evidence is explicitly limited"
-    }
-  ],
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding.",
+  "limitations": [],
+  "nextSafeAction": "Review the pull request and provider checks before merge.",
   "phase": "review",
   "preventedRisks": [
     {
@@ -1324,22 +1263,11 @@
       "severity": "medium"
     }
   ],
-  "remainingRisks": [
-    {
-      "detail": "The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "residualRisks"
-        }
-      ],
-      "severity": "high"
-    }
-  ],
+  "remainingRisks": [],
   "reportVersion": 1,
-  "result": "completed_with_warnings",
+  "result": "completed",
   "sourceOutcome": {
-    "digest": "9c7c6614ee68f910d4eb0046eb4885df64d0b61654195e9eac1196cad599520b",
+    "digest": "66558518fbc5a96963bc4cc8b39ae6bd1fe14ff204623d5f945d6d991c89ac74",
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1
   },
@@ -1382,7 +1310,7 @@
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
     ],
-    "summary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed_with_warnings."
+    "summary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed."
   },
   "workItemId": "outcome-report-delivery-integrity-20260817"
 }

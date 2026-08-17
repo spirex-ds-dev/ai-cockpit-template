@@ -1,7 +1,7 @@
 # AI Cockpit Task Report
 
 Task Result
-Status: Partial
+Status: Success
 
 What was completed
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json [evidence: .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json]
@@ -42,9 +42,9 @@ What was completed
 - Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md [evidence: .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md]
 
 Problems found
-- Total: 4
+- Total: 3
 - Blocking: 0
-- Warning: 1
+- Warning: 0
 
 Stops triggered
 - Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
@@ -53,7 +53,7 @@ Stops triggered
 Problems resolved
 - Problem: Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.
   Solution: Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.
-  Evidence: [evidence: project-test lifecycle/governance/installer stale evidenceSource failure, source-bound remediation]
+  Evidence: [evidence: project-test lifecycle/governance/installer stale evidenceSource failure, source-bound remediation, fresh smoke pass on corrected commit, fresh compatibility pass on corrected commit]
 - Problem: quality failed before the retry.
   Solution: Re-ran quality after the correction; the latest attempt passed.
   Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
@@ -66,7 +66,7 @@ Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- The corrected dependency routing and regenerated evidence still require a fresh Hosted smoke result before this Work Item can be considered passed. [evidence: residualRisks]
+- None recorded.
 
 Unknowns
 - None recorded.
@@ -91,8 +91,8 @@ Verification
 - aiStatusCheck [evidence: aiStatusCheck]
 - aiStatusConsistency [evidence: aiStatusConsistency]
 - aiAgentRisk [evidence: aiAgentRisk]
-- aiSummary [evidence: aiSummary]
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
+- aiSummary [evidence: aiSummary]
 
 Impact
 - Rework avoided: If not detected, could have led to a stale completion claim. (inference)
