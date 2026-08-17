@@ -57,6 +57,7 @@ def test_public_quality_paths_use_one_worktree_local_nonblocking_lock():
         "quality-fast",
         "quality-standard",
         "quality-full",
+        "quality-strict-targeted",
         "quality-release",
         "project-test",
     ):
@@ -77,6 +78,22 @@ def test_default_quality_entrypoint_routes_without_duplicating_gate_commands():
     assert "check-ai-test-weakening" in standard
     assert "quality-full" not in standard
     assert "quality-release" not in standard
+
+
+def test_targeted_strict_quality_owns_only_receipt_selected_groups():
+    targeted = _target_block("quality-strict-targeted-owned")
+
+    assert "QUALITY_REQUIRED_GROUPS" in targeted
+    assert "quality-project-consistency-group" in MAKEFILE.read_text(encoding="utf-8")
+    assert "quality-evidence-group" not in targeted
+    assert "quality-supply-chain-group" not in targeted
+
+
+def test_portable_quality_entrypoints_include_targeted_strict_route():
+    for path in ("Makefile", "templates/make/Makefile.ai"):
+        text = (ROOT / path).read_text(encoding="utf-8")
+        assert "quality-strict-targeted" in text
+        assert "quality-strict-targeted:" in text
 
 
 def test_standard_quality_dry_run_uses_only_its_required_owners():

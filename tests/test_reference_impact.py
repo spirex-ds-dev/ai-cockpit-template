@@ -504,6 +504,43 @@ def test_enforced_cli_fails_closed_for_non_continue_decision(tmp_path):
     assert json.loads(output.read_text(encoding="utf-8"))["decision"] == "needs_human_confirmation"
 
 
+def test_coverage_cli_writes_not_applicable_without_loading_repository_records(
+    tmp_path, monkeypatch
+):
+    records_dir = tmp_path / "records"
+    records_dir.mkdir()
+    (records_dir / "stale-invalid.json").write_text("not-json", encoding="utf-8")
+    contract_path = tmp_path / "contract.json"
+    output = tmp_path / "coverage.decision.json"
+    contract_path.write_text(
+        json.dumps({"requestedOperation": {"action": "modify"}}), encoding="utf-8"
+    )
+    monkeypatch.setattr(
+        ai_check_reference_impact,
+        "changed_name_status",
+        lambda contract: [("M", "docs/guide.md")],
+    )
+
+    result = ai_check_reference_impact.main(
+        [
+            "--root",
+            str(tmp_path),
+            "--coverage-contract",
+            str(contract_path),
+            "--records-dir",
+            str(records_dir),
+            "--output",
+            str(output),
+            "--enforce",
+        ]
+    )
+
+    assert result == 0
+    decision = json.loads(output.read_text(encoding="utf-8"))
+    assert decision["decision"] == "not_applicable"
+    assert decision["recordsEvaluated"] == 0
+
+
 def test_reference_impact_schema_declares_fail_closed_contract():
     schema = json.loads(
         (PROJECT_ROOT / ".ai/schemas/reference_impact.schema.json").read_text(encoding="utf-8")

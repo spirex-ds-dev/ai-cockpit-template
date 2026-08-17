@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "verification-gate-routing-optimization-20260817",
-  "phase": "review",
-  "result": "needs_human_confirmation",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "2fefe7980f361283955252a317ae2e0534d9f00fc834e7e456e7fe2eaa44b3b1"
+  "status": "needs_human_confirmation",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "verification-gate-routing-optimization-20260817",
+    "contractDigest": "1189b740fe9eff3aca49bd96a00301a9db6fa11b18094f2baf4019f96eef5367",
+    "summaryDigest": "0840dad84831187c5f337c99de24b7dcf00479ba22005ad4acba9b698de280da",
+    "verificationDigest": "03c95dc8a781faaf7435137795a0b7d843e1325a4ea15e79ea0ef07e7871e651",
+    "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+    "headCommit": "ac195a7abc01661e87bc819048414f776650c473",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "731202a06aa2ab591d1a70d70b0e4d608f236066d6db7421cbf9768bfcd8ade1",
+      "binding": {
+        "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+        "candidateHead": "ac195a7abc01661e87bc819048414f776650c473",
+        "candidateTreeDigest": "6a44438e9a42349e2f54321b9d6213e4af19a8b95120de9a18050dafd1d74057",
+        "candidateDiffDigest": "c05d9224fac12a1ef30347e96889fe1add8212bfdca935aa220e2b8f8fc60b78"
+      }
+    }
   },
-  "task": {
-    "summary": "Task verification-gate-routing-optimization-20260817 generated an evidence-derived outcome with status needs_human_confirmation.",
+  "sections": {
+    "outcomeSummary": "Task verification-gate-routing-optimization-20260817 generated an evidence-derived outcome with status needs_human_confirmation.",
+    "taskOverview": "Governed Work Item: verification-gate-routing-optimization-20260817",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.contract.json",
       ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
@@ -27,221 +50,271 @@
       "tests/test_quality_gate_architecture.py",
       ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.outcome.json",
       ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.outcome.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "Hosted provider timing and external adopter project performance are not proven locally; the installed template path is covered by source/template regression checks."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "Hosted provider timing and external adopter project performance are not proven locally; the installed template path is covered by source/template regression checks.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "Hosted provider timing and external adopter project performance are not proven locally; the installed template path is covered by source/template regression checks.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "ddbb3a73a5fe8bf920799c01bcfdc4d970fdd1d6729a6a27e3c0ab9db33a179d"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "0516c225b45063eb8f6c4d6fa7b128f306e09a67e27223bf890acbfaaa81c4d0"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "f104f7fcbc192bcba6e7942b75dc164303328235e69233b2eeca1ffbe1311bc9"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[3] quality failed",
+            "digest": "76bdd441fb6ce909b7e94e6367a53c69feff40ffcd969d116b9dcae6ac94b3b7"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "ddbb3a73a5fe8bf920799c01bcfdc4d970fdd1d6729a6a27e3c0ab9db33a179d"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "0516c225b45063eb8f6c4d6fa7b128f306e09a67e27223bf890acbfaaa81c4d0"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "f104f7fcbc192bcba6e7942b75dc164303328235e69233b2eeca1ffbe1311bc9"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verificationHistory[3] quality failed",
+            "digest": "76bdd441fb6ce909b7e94e6367a53c69feff40ffcd969d116b9dcae6ac94b3b7"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "adopter-runtime",
+        "severity": "medium",
+        "title": "adopter-runtime",
+        "detail": "Local tests prove the portable Makefile and installed script surfaces are aligned; provider-hosted performance is not measured in this Work Item.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "ddbb3a73a5fe8bf920799c01bcfdc4d970fdd1d6729a6a27e3c0ab9db33a179d"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+        "subject": "verificationHistory[1] quality failed",
+        "digest": "0516c225b45063eb8f6c4d6fa7b128f306e09a67e27223bf890acbfaaa81c4d0"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+        "subject": "verificationHistory[2] quality failed",
+        "digest": "f104f7fcbc192bcba6e7942b75dc164303328235e69233b2eeca1ffbe1311bc9"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
+        "subject": "verificationHistory[3] quality failed",
+        "digest": "76bdd441fb6ce909b7e94e6367a53c69feff40ffcd969d116b9dcae6ac94b3b7"
+      }
     ]
   },
-  "issues": {
-    "detected": 5,
-    "hardStops": 4,
-    "warnings": 1,
-    "resolved": 4,
-    "unresolved": 1
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "ddbb3a73a5fe8bf920799c01bcfdc4d970fdd1d6729a6a27e3c0ab9db33a179d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "0516c225b45063eb8f6c4d6fa7b128f306e09a67e27223bf890acbfaaa81c4d0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "f104f7fcbc192bcba6e7942b75dc164303328235e69233b2eeca1ffbe1311bc9"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[3] quality failed",
-          "digest": "76bdd441fb6ce909b7e94e6367a53c69feff40ffcd969d116b9dcae6ac94b3b7"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "ddbb3a73a5fe8bf920799c01bcfdc4d970fdd1d6729a6a27e3c0ab9db33a179d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "0516c225b45063eb8f6c4d6fa7b128f306e09a67e27223bf890acbfaaa81c4d0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "f104f7fcbc192bcba6e7942b75dc164303328235e69233b2eeca1ffbe1311bc9"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verificationHistory[3] quality failed",
-          "digest": "76bdd441fb6ce909b7e94e6367a53c69feff40ffcd969d116b9dcae6ac94b3b7"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "d06fdc4059d84e750e81a4bcf23be51e435d17c50fae1df2feaf35748de606fd"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
-  ],
-  "limitations": [
-    {
-      "sourceWarning": "Hosted provider timing and external adopter project performance are not proven locally; the installed template path is covered by source/template regression checks.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "Local tests prove the portable Makefile and installed script surfaces are aligned; provider-hosted performance is not measured in this Work Item.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -1097,6 +1170,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

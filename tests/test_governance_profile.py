@@ -273,6 +273,25 @@ def test_repository_policy_keeps_strict_and_release_precedence_over_lifecycle_ev
     assert release["verificationEscalations"] == ["release_preflight", "distribution"]
 
 
+def test_repository_policy_uses_targeted_strict_route_for_automatic_governance_code():
+    policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
+
+    result = routing.determine(["scripts/ai_check_reference_impact.py"], policy)
+
+    assert result["selectedProfile"] == "strict"
+    assert result["dispatchTarget"] == "quality-strict-targeted"
+    assert result["qualityRouting"]["reason"]
+    assert "quality-project-consistency-group" in result["requiredGroups"]
+
+
+def test_repository_policy_keeps_explicit_strict_route_full():
+    policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
+
+    result = routing.determine(["scripts/ai_check_reference_impact.py"], policy, requested="strict")
+
+    assert result["dispatchTarget"] == "quality-full"
+
+
 def test_repository_policy_keeps_unknown_and_evidence_only_diffs_conservative():
     policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
 

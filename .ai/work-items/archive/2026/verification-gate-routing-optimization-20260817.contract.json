@@ -1,0 +1,308 @@
+{
+  "contractVersion": 2,
+  "workItemId": "verification-gate-routing-optimization-20260817",
+  "mode": "code",
+  "title": "Conditional reference-impact and strict-quality routing for template adopters",
+  "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "reference-impact 属于全仓库级检查，strict quality 会并行执行多组治理检查；在没有必要的情况下不要触发这些耗时检查。不止优化当前清理残留记录 WI，要按情况优化未来 WI，并把能力同步到未来安装对象工程。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:conditional-reference-impact-and-strict-quality-routing-for-future-wis",
+    "capturedAt": "2026-08-17T00:00:00+09:00",
+    "digest": "sha256:user-authorized-conditional-routing-and-adopter-template-sync"
+  },
+  "scope": [
+    ".ai/work-items/active/verification-gate-routing-optimization-20260817.contract.json",
+    ".ai/work-items/active/verification-gate-routing-optimization-20260817.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/verification-gate-routing-optimization-20260817.outcome.json",
+    ".ai/work-items/active/verification-gate-routing-optimization-20260817.outcome.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_check_reference_impact.py",
+    "scripts/ai_verification_policy.py",
+    "scripts/determine_governance_profile.py",
+    ".ai/quality/governance-routing.yaml",
+    "docs/reference/capability-truth-matrix.json",
+    "tests/test_reference_impact.py",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_verification_policy.py",
+    "tests/test_governance_profile.py"
+  ],
+  "outOfScope": [
+    "Changing the evidence meaning or fail-closed decisions of reference-impact records.",
+    "Downgrading release, dependency, trust, workflow, installer, unknown, or explicit human-strict work.",
+    "Changing required-check authority, security gate semantics, provider CI scheduling, release behavior, or existing adopter repositories.",
+    "Implementing unrelated current Work Items or deleting historical evidence records."
+  ],
+  "sources": [
+    {
+      "path": "Makefile",
+      "reason": "Current repository quality ownership graph and unconditional reference-impact dispatch."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Portable adopter quality entrypoint that must receive the same conditional routing behavior."
+    },
+    {
+      "path": "scripts/ai_check_reference_impact.py",
+      "reason": "Authoritative coverage decision and record evaluation implementation."
+    },
+    {
+      "path": "scripts/ai_verification_policy.py",
+      "reason": "Finish quality route selection and policy monotonicity implementation."
+    },
+    {
+      "path": "scripts/determine_governance_profile.py",
+      "reason": "Changed-path governance profile and dispatch receipt generation."
+    },
+    {
+      "path": ".ai/quality/governance-routing.yaml",
+      "reason": "Declarative profile patterns, required groups, and release escalation policy."
+    },
+    {
+      "path": "tests/test_reference_impact.py",
+      "reason": "Reference-impact and Make dispatch regression surface."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Quality ownership graph and template architecture regression surface."
+    },
+    {
+      "path": "tests/test_verification_policy.py",
+      "reason": "Finish route monotonicity and command selection regression surface."
+    },
+    {
+      "path": "tests/test_governance_profile.py",
+      "reason": "Changed-path governance profile routing regression surface."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "verification_authority",
+      "performance_regression",
+      "template_parity",
+      "governance_routing"
+    ],
+    "reason": "The change controls whether repository-wide evidence and strict quality groups execute. It must reduce unnecessary cost without weakening mandatory controls, and the source/template behavior must remain aligned.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "The user explicitly authorized this governance-routing change and requires the capability to be synchronized to future installed adopter projects."
+    ],
+    "override": {
+      "approvalEvidence": "The current user conversation authorizes corrective execution and future WI/template behavior changes.",
+      "reason": "Routing optimization must preserve strictness for high-risk domains while making low-impact paths conditional.",
+      "risks": ["verification_authority", "performance_regression", "template_parity"],
+      "notRunChecks": ["Hosted provider verification is out of scope; local adopter fixture parity is required."],
+      "workItemOnly": true,
+      "workItemId": "verification-gate-routing-optimization-20260817"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the scoped conditional routing optimization, preservation of fail-closed high-risk routes, and synchronization to future adopter templates."
+  },
+  "preReviewWarnings": [
+    "Review that not-applicable reference-impact paths do not load or evaluate repository records, while impact-bearing paths remain enforced.",
+    "Review that targeted strict routing never lowers release, dependency, trust, workflow, installer, unknown, or explicit human-strict verification."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "For a changed scope with no reference-impact operation class, check-ai-reference-impact writes an auditable not_applicable decision and does not load or evaluate existing repository records.",
+    "For an impact-bearing changed scope, check-ai-reference-impact still requires covering records and fail-closes on missing, invalid, or non-continue record decisions; explicit record evaluation remains unchanged.",
+    "Strict quality routing selects a targeted required-group set for non-release, non-high-risk governance changes, while release, dependency, trust, workflow, installer, unknown, and explicit human-strict routes retain full quality.",
+    "Routing receipts expose the selected target, reason, and required groups sufficiently for reviewers to distinguish skipped work from completed work.",
+    "Makefile and templates/make/Makefile.ai implement equivalent conditional behavior, and an isolated future-adopter/template parity regression proves the portable entrypoint receives the capability.",
+    "Focused tests, repository AI checks, and declared project quality checks pass without changing the meaning of mandatory controls."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current Makefile dispatches every existing reference-impact record before it knows whether the current Contract and changed paths have an impact-bearing operation. Strict quality also fans out multiple governance groups for every strict-profile change, even when some groups are unrelated to the changed domains. Because Makefile.ai is the future adopter entrypoint, fixing only this repository would leave installed projects with the same cost behavior.",
+    "constraints": [
+      "Keep reference-impact evidence fail-closed whenever the current change requires it.",
+      "Never downgrade release, dependency, trust, workflow, installer, unknown, or explicit human-strict work.",
+      "Preserve existing public quality targets and installed-template behavior.",
+      "Keep routing deterministic, auditable, local, and testable without provider calls."
+    ],
+    "rationale": "Compute applicability before scanning expensive repository evidence, and route strict quality by changed-domain necessity while retaining full escalation for high-risk cases. Mirror the implementation in the portable Makefile template so future installed adopters inherit the optimization."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Conditionally execute repository-wide reference-impact and strict quality groups while preserving fail-closed high-risk governance and syncing the behavior to future adopter templates.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": ["current Makefile quality graph", "reference-impact coverage implementation", "governance routing policy", "template parity tests"],
+    "externalSystem": "none"
+  },
+  "implementationSurface": {
+    "production": ["Makefile", "templates/make/Makefile.ai", "scripts/ai_check_reference_impact.py", "scripts/ai_verification_policy.py", "scripts/determine_governance_profile.py", ".ai/quality/governance-routing.yaml"],
+    "tests": ["tests/test_reference_impact.py", "tests/test_quality_gate_architecture.py", "tests/test_verification_policy.py", "tests/test_governance_profile.py"],
+    "documentation": [],
+    "generated": []
+  },
+  "scenarioCoverage": [
+    {"id": "reference-not-applicable", "riskDomain": "performance_regression", "scenario": "A docs-only or evidence-only scope has no impact-bearing operation class.", "expected": "A coverage decision is written as not_applicable without loading or evaluating repository records.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add a coverage decision and Make dispatch regression with an invalid decoy record."},
+    {"id": "reference-impact-required", "riskDomain": "verification_authority", "scenario": "A delete, rename, signature, configuration, or public API change is present.", "expected": "Covering records are required and invalid or non-continue evidence blocks.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Exercise coverage and explicit record paths."},
+    {"id": "strict-targeted", "riskDomain": "governance_routing", "scenario": "A non-release strict governance/template change does not touch dependency, trust, workflow, installer, or unknown domains.", "expected": "Targeted strict groups run and unrelated full groups are not dispatched.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Assert route receipt and dry-run target ownership."},
+    {"id": "strict-full-escalation", "riskDomain": "verification_authority", "scenario": "A release, dependency, trust, workflow, installer, unknown, or explicit human-strict change is present.", "expected": "Full quality remains selected.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add monotonic route regressions."},
+    {"id": "adopter-template-parity", "riskDomain": "template_parity", "scenario": "A future installed adopter uses templates/make/Makefile.ai.", "expected": "The adopter entrypoint has the same conditional reference-impact and quality route behavior.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Compare source/template route blocks and run template architecture tests."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-current-thread",
+    "reason": "The user explicitly authorized the governance-routing optimization and its synchronization to future installed adopter projects."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 942
+    }
+  },
+  "concurrencyBoundary": {
+    "schemaVersion": 1,
+    "implementationPaths": [
+      "Makefile",
+      "templates/make/Makefile.ai",
+      "scripts/ai_check_reference_impact.py",
+      "scripts/ai_verification_policy.py",
+      "scripts/determine_governance_profile.py",
+      ".ai/quality/governance-routing.yaml",
+      "tests/test_reference_impact.py",
+      "tests/test_quality_gate_architecture.py",
+      "tests/test_verification_policy.py",
+      "tests/test_governance_profile.py"
+    ],
+    "generatedEvidencePaths": [
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/work-items/starts/verification-gate-routing-optimization-20260817.json",
+      ".ai/work-items/active/verification-gate-routing-optimization-20260817.contract.json",
+      ".ai/work-items/active/verification-gate-routing-optimization-20260817.summary.json",
+      ".ai/work-items/active/verification-gate-routing-optimization-20260817.outcome.json",
+      ".ai/work-items/active/verification-gate-routing-optimization-20260817.outcome.md"
+    ],
+    "verificationOutputPaths": [
+      "target/quality/verification-gate-routing-optimization-20260817/**"
+    ],
+    "serializedProjectionPaths": [
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/work-items/archive/index.json"
+    ],
+    "reason": "Own the routing implementation, mirrored adopter template, and isolated verification evidence while preserving serialized lifecycle projections."
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/verification-gate-routing-optimization-20260817.json",
+    "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+    "initialScopeDigest": "43cf82a2191c175e740516857de44630505d59aad8fe527ada5c8b75c683cd74",
+    "contractSkeletonDigest": "4881572835496682811c8287ceefa78a645dba7874cb743bde524b2bebf5a9b7",
+    "concurrencyBoundaryDigest": "84038ef896b4046779e74d04100b0aa3b425370dd785412d297450ebd999fe74"
+  }
+}

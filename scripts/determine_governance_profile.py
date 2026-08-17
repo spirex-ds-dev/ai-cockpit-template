@@ -12,6 +12,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 from ai_common import parse_yaml
+from ai_verification_policy import strict_quality_routing
 
 PROFILE_ORDER = ("light", "standard", "strict")
 PROFILE_DEPTHS = {"light": "focused", "standard": "project", "strict": "full"}
@@ -347,6 +348,25 @@ def determine(
         "optionalChecks": sorted(set(optional_checks)),
         "mandatoryControls": list(config["mandatoryControls"]),
     }
+    explicit_strict = requested == "strict" or (
+        isinstance(profile_record, dict)
+        and profile_record.get("source") == "human_override"
+        and selected == "strict"
+    )
+    if selected == "strict":
+        quality_routing = strict_quality_routing(
+            normalized, release=bool(release_reasons), explicit_strict=explicit_strict
+        )
+        required_groups = list(quality_routing["requiredGroups"])
+        dispatch_target = str(quality_routing["target"])
+    else:
+        quality_routing = {
+            "target": config["dispatchTarget"],
+            "requiredGroups": list(config["requiredGroups"]),
+            "reason": f"{selected} governance uses its profile dispatch target",
+        }
+        required_groups = list(config["requiredGroups"])
+        dispatch_target = config["dispatchTarget"]
     return {
         "schemaVersion": 1,
         "base": base,
@@ -357,8 +377,9 @@ def determine(
         "reasons": reasons,
         "changedPaths": normalized,
         "pathDecisions": decisions,
-        "requiredGroups": list(config["requiredGroups"]),
-        "dispatchTarget": config["dispatchTarget"],
+        "requiredGroups": required_groups,
+        "dispatchTarget": dispatch_target,
+        "qualityRouting": quality_routing,
         "operationClasses": ["release"] if release_reasons else [],
         "verificationEscalations": escalations,
         "releaseEscalationReasons": release_reasons,

@@ -32,6 +32,7 @@ QUALITY_SUMMARY_DIR ?= target/quality
 QUALITY_PROFILE ?= unknown
 QUALITY_ESCALATIONS ?=
 QUALITY_ESCALATION_REASONS ?=
+QUALITY_REQUIRED_GROUPS ?= quality-fast check-ai-reference-impact project-test quality-project-consistency-group
 PROJECT_TEST_GATE ?= project-test
 PROJECT_TEST_RECEIPT ?= target/quality/project-test-aggregate/receipt.json
 PROJECT_TEST_SHARDS ?= core governance installer lifecycle release
@@ -67,8 +68,8 @@ QUALITY_SESSION_LOCK_HELD ?= false
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	ai-assess-provider-merge-state-recovery \
-	quality-fast quality-standard quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
-	quality-fast-owned quality-standard-owned quality-full-owned quality-release-owned project-test-owned \
+	quality-fast quality-standard quality-full quality-strict-targeted quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
+	quality-fast-owned quality-standard-owned quality-full-owned quality-strict-targeted-owned quality-release-owned project-test-owned \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report ai-record-external-handoff ai-ingest-external-receipt \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
@@ -530,6 +531,13 @@ qg-check-ai-test-weakening:
 quality-full: ensure-locked-dev-environment
 	$(call RUN_QUALITY_SESSION,quality-full)
 
+quality-strict-targeted: ensure-locked-dev-environment
+	$(call RUN_QUALITY_SESSION,quality-strict-targeted)
+
+quality-strict-targeted-owned:
+	@test -n "$(QUALITY_REQUIRED_GROUPS)" || (echo 'QUALITY_REQUIRED_GROUPS is required for targeted strict quality' >&2; exit 2)
+	$(foreach group,$(QUALITY_REQUIRED_GROUPS),$(QUALITY_MAKE) --no-print-directory $(group) TEST_WEAKENING_FULL_OWNERSHIP=true;)
+
 quality-full-owned:
 	@set -eu; \
 		commit=$$(git rev-parse --short=12 HEAD 2>/dev/null || printf unknown); \
@@ -604,10 +612,11 @@ ai-cockpit-quality:
 			--output "$(GOVERNANCE_RECEIPT)"; \
 		target=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
 		profile=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("selectedProfile", "unknown"))' "$(GOVERNANCE_RECEIPT)"); \
+		required_groups=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(" ".join(json.load(open(sys.argv[1], encoding="utf-8")).get("requiredGroups", [])))' "$(GOVERNANCE_RECEIPT)"); \
 		escalations=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(" ".join("--escalation " + value for value in json.load(open(sys.argv[1], encoding="utf-8")).get("verificationEscalations", [])))' "$(GOVERNANCE_RECEIPT)"); \
 		escalation_reasons=$$($(PYTHON_EXECUTABLE) -c 'import json, shlex, sys; print(" ".join("--escalation-reason " + shlex.quote(value) for value in json.load(open(sys.argv[1], encoding="utf-8")).get("releaseEscalationReasons", [])))' "$(GOVERNANCE_RECEIPT)"); \
-		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
-		$(QUALITY_MAKE) --no-print-directory "$$target" QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"
+		case "$$target" in quality-fast|quality-standard|quality-full|quality-strict-targeted|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
+		$(QUALITY_MAKE) --no-print-directory "$$target" QUALITY_PROFILE="$$profile" QUALITY_REQUIRED_GROUPS="$$required_groups" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"
 
 ai-start:
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)" $(if $(AI_START_CONCURRENCY_BOUNDARY),--concurrency-boundary '$(AI_START_CONCURRENCY_BOUNDARY)',) $(if $(AI_START_CALIBRATION_CORRECTIVE),--calibration-corrective '$(AI_START_CALIBRATION_CORRECTIVE)',)
@@ -721,17 +730,21 @@ REFERENCE_IMPACT_OUTPUT_DIR ?= target/reference-impact
 
 check-ai-reference-impact:
 	@set -eu; \
-		dir="$(REFERENCE_IMPACT_DIR)"; output_dir="$(REFERENCE_IMPACT_OUTPUT_DIR)"; found=false; \
+		dir="$(REFERENCE_IMPACT_DIR)"; output_dir="$(REFERENCE_IMPACT_OUTPUT_DIR)"; found=false; coverage_decision=continue; \
 		mkdir -p "$$output_dir"; \
-		if test -d "$$dir"; then \
+		contract="$${CONTRACT:-$$(find .ai/work-items/active -name '*.contract.json' -type f | head -n 1)}"; \
+		if test -n "$$contract"; then \
+			$(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --coverage-contract "$$contract" --records-dir "$$dir" --output "$$output_dir/coverage.decision.json" --enforce; \
+			coverage_decision=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("decision", "error"))' "$$output_dir/coverage.decision.json"); \
+		fi; \
+		if test "$$coverage_decision" != not_applicable && test -d "$$dir"; then \
 			for record in "$$dir"/*.json; do \
 				test -f "$$record" || continue; found=true; name=$${record##*/}; \
 				$(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --record "$$record" --output "$$output_dir/$${name%.json}.decision.json" --enforce; \
 			done; \
 		fi; \
-		contract="$${CONTRACT:-$$(find .ai/work-items/active -name '*.contract.json' -type f | head -n 1)}"; \
-		if test -n "$$contract"; then $(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --coverage-contract "$$contract" --records-dir "$$dir" --output "$$output_dir/coverage.decision.json" --enforce; fi; \
-		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records; coverage decision enforced.'; fi
+		if test "$$coverage_decision" = not_applicable; then cat "$$output_dir/coverage.decision.json"; rm -f "$$output_dir/coverage.decision.json"; printf '%s\n' 'Reference impact: not applicable; repository records were not scanned.'; \
+		elif test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records; coverage decision enforced.'; fi
 
 check-ai-test-weakening-fast:
 	$(AI_PYTHON) scripts/ai_check_test_weakening.py --root . $(if $(AI_BASE_COMMIT),--base-ref "$(AI_BASE_COMMIT)",) --mode fast --policy .ai/guards/test_weakening_policy.yaml
