@@ -10,8 +10,8 @@ Task release-runner-allowlist-repair-20260818 generated an evidence-derived outc
 Governed Work Item: release-runner-allowlist-repair-20260818
 
 ## Delivered Changes
-- .ai/work-items/active/release-runner-allowlist-repair-20260818.contract.json
-- .ai/work-items/active/release-runner-allowlist-repair-20260818.summary.json
+- .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.contract.json
+- .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json
 - .ai/work-items/starts/release-runner-allowlist-repair-20260818.json
 - .ai/cockpit/current_status.md
 - .ai/cockpit/task_report.json
@@ -21,8 +21,8 @@ Governed Work Item: release-runner-allowlist-repair-20260818
 - docs/reference/capability-truth-matrix.json
 - docs/reference/pre-release-documentation-alignment.json
 - docs/reference/pre-release-documentation-alignment.md
-- .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.json
-- .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.md
+- .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.outcome.json
+- .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.outcome.md
 - .ai/cockpit/task_report.json
 - .ai/cockpit/task_report.md
 

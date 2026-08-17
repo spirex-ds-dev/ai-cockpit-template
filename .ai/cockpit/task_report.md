@@ -4,8 +4,8 @@ Task Result
 Status: Success
 
 What was completed
-- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.contract.json [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.contract.json]
-- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.summary.json [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.summary.json]
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.contract.json [evidence: .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.contract.json]
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.summary.json [evidence: .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.summary.json]
 - Changed .ai/work-items/starts/release-runner-allowlist-repair-20260818.json [evidence: .ai/work-items/starts/release-runner-allowlist-repair-20260818.json]
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
@@ -15,8 +15,8 @@ What was completed
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
 - Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
 - Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.json [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.json]
-- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.md [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.md]
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.json [evidence: .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.outcome.json]
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.md [evidence: .ai/work-items/archive/2026/release-runner-allowlist-repair-20260818.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 
