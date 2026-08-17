@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "release-post-publish-projection-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "5d6e863c9562edf576720cf9cc3b0e4dbc66357f2e7f0550b0339be2aa0faad5"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "release-post-publish-projection-20260818",
+    "contractDigest": "b6f0e28abfecf56b9f6b200ad492cf2ed9003ed6ca259af8344d47ce51b64126",
+    "summaryDigest": "953a85c22aa0e6d211e5e9d7e6dd09ec2ee6f6e76ca6d6d9431265e538957a55",
+    "verificationDigest": "33f7c04524c181f974c6501aa5e648e9be2d88d2350efe78a82a4a159edec969",
+    "baseCommit": "5c65e2c6ac6cb3bd5623393baeee822d75ec0248",
+    "headCommit": "5c65e2c6ac6cb3bd5623393baeee822d75ec0248",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "da42ae0fbe262f638da0105e14446ad224eedceeb392766d5c76f249faf6026c",
+      "binding": {
+        "baseCommit": "5c65e2c6ac6cb3bd5623393baeee822d75ec0248",
+        "candidateHead": "5c65e2c6ac6cb3bd5623393baeee822d75ec0248",
+        "candidateTreeDigest": "621e02b12d7e5d2a8c8852298c1ca8b3b856cee73f4d36a758df566d296e2016",
+        "candidateDiffDigest": "0a8d1dabc383005ae2da6de149459f02919c0c245cdace16e1831cef60748a9b"
+      }
+    }
   },
-  "task": {
-    "summary": "Task release-post-publish-projection-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task release-post-publish-projection-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: release-post-publish-projection-20260818",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/release-post-publish-projection-20260818.contract.json",
       ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
@@ -30,154 +53,300 @@
       "docs/reference/pre-release-documentation-alignment.md",
       "scripts/sync_published_release_projection.py",
       "tests/test_sync_published_release_projection.py"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiScenarioCoverage failed before the retry.",
+        "policyOrGuard": "required verification: aiScenarioCoverage",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verificationHistory[0] aiScenarioCoverage failed",
+            "digest": "67db23735af5adef30a0f7f39769965ee611356b6c13df6d2d8f4f7135a65703"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verification[aiScenarioCoverage] retry passed",
+            "digest": "0fe10da3b62fa71b9f5ff56e7baed3e44d86b416ee1f061d72bb7f940c742d89"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verificationHistory[1] aiGuidelines failed",
+            "digest": "274e1163650f234a0308d84fa72f853df985dd5cd16a7d66e64df8f246ffc74a"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "cf2e7763ecdaece52339cc70d822a80f87df7069e0c5df7c2d94dfd733e49b8a"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "61b137909df712d422a1a2d265bd3e221831032b9da1c2503913d2dabfcdf649"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "7d7b092fdd3313773451488be198dfd6667c662f0b241294742be531306964e6"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "The public v0.5.65 release succeeded, but repository release.json still described v0.5.64.",
+        "action": "Promoted verified public release assets and advanced the candidate to v0.5.66.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.65",
+            "subject": "provider-assets"
+          },
+          {
+            "source": "command://make-check-release-distribution",
+            "subject": "passed"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.65",
+            "subject": "provider-assets"
+          },
+          {
+            "source": "command://make-check-release-distribution",
+            "subject": "passed"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "The synchronizer could reserve a release tag without its required unavailable-status explanation.",
+        "action": "Added pre-write validation and regression coverage for the reservedTags/unavailableTags invariant.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "command://pytest-tests/test_sync_published_release_projection.py",
+            "subject": "focused-tests-passed"
+          },
+          {
+            "source": "command://make-check-release-state-consistency",
+            "subject": "passed"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "command://pytest-tests/test_sync_published_release_projection.py",
+            "subject": "focused-tests-passed"
+          },
+          {
+            "source": "command://make-check-release-state-consistency",
+            "subject": "passed"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "Changing install.sh left capability and pre-release alignment evidence stale.",
+        "action": "Reran all source-bound generators and checked the resulting evidence bytes.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "command://make-check-source-bound-evidence",
+            "subject": "passed"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "command://make-check-source-bound-evidence",
+            "subject": "passed"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "Committed SBOM/provenance baselines still described the prior release after public v0.5.65 publication.",
+        "action": "Ran refresh-candidate-release-evidence with exact source commit 5c65e2c6ac6cb3bd5623393baeee822d75ec0248 and reran supply-chain checks.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "command://make-refresh-candidate-release-evidence",
+            "subject": "passed"
+          },
+          {
+            "source": "command://make-check-provenance",
+            "subject": "passed"
+          },
+          {
+            "source": "command://make-check-sbom",
+            "subject": "passed"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "command://make-refresh-candidate-release-evidence",
+            "subject": "passed"
+          },
+          {
+            "source": "command://make-check-provenance",
+            "subject": "passed"
+          },
+          {
+            "source": "command://make-check-sbom",
+            "subject": "passed"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "aiScenarioCoverage failed before the retry.",
+        "action": "Re-ran aiScenarioCoverage after the correction; the latest attempt passed.",
+        "verification": "aiScenarioCoverage latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verificationHistory[0] aiScenarioCoverage failed",
+            "digest": "67db23735af5adef30a0f7f39769965ee611356b6c13df6d2d8f4f7135a65703"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verification[aiScenarioCoverage] retry passed",
+            "digest": "0fe10da3b62fa71b9f5ff56e7baed3e44d86b416ee1f061d72bb7f940c742d89"
+          }
+        ]
+      },
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verificationHistory[1] aiGuidelines failed",
+            "digest": "274e1163650f234a0308d84fa72f853df985dd5cd16a7d66e64df8f246ffc74a"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "cf2e7763ecdaece52339cc70d822a80f87df7069e0c5df7c2d94dfd733e49b8a"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "61b137909df712d422a1a2d265bd3e221831032b9da1c2503913d2dabfcdf649"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "7d7b092fdd3313773451488be198dfd6667c662f0b241294742be531306964e6"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [],
+    "humanDecisions": [
+      "Outcome must be independently and directly visible in the conversation with a traffic-light status; folded tool output is not sufficient.",
+      "A Work Item cannot end unless its Outcome is green; root causes must be fixed in the current Work Item where scope permits.",
+      "The release objective is to publish the new version after the existing objectives are complete, not to treat Outcome green as the release objective itself."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+        "subject": "verificationHistory[0] aiScenarioCoverage failed",
+        "digest": "67db23735af5adef30a0f7f39769965ee611356b6c13df6d2d8f4f7135a65703"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+        "subject": "verification[aiScenarioCoverage] retry passed",
+        "digest": "0fe10da3b62fa71b9f5ff56e7baed3e44d86b416ee1f061d72bb7f940c742d89"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+        "subject": "verificationHistory[1] aiGuidelines failed",
+        "digest": "274e1163650f234a0308d84fa72f853df985dd5cd16a7d66e64df8f246ffc74a"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "cf2e7763ecdaece52339cc70d822a80f87df7069e0c5df7c2d94dfd733e49b8a"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+        "subject": "verificationHistory[2] quality failed",
+        "digest": "61b137909df712d422a1a2d265bd3e221831032b9da1c2503913d2dabfcdf649"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "7d7b092fdd3313773451488be198dfd6667c662f0b241294742be531306964e6"
+      }
     ]
   },
-  "issues": {
-    "detected": 3,
-    "hardStops": 3,
-    "warnings": 0,
-    "resolved": 3,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiScenarioCoverage",
-      "action": "blocked",
-      "resolution": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "67db23735af5adef30a0f7f39769965ee611356b6c13df6d2d8f4f7135a65703"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "0fe10da3b62fa71b9f5ff56e7baed3e44d86b416ee1f061d72bb7f940c742d89"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "274e1163650f234a0308d84fa72f853df985dd5cd16a7d66e64df8f246ffc74a"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "cf2e7763ecdaece52339cc70d822a80f87df7069e0c5df7c2d94dfd733e49b8a"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "61b137909df712d422a1a2d265bd3e221831032b9da1c2503913d2dabfcdf649"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "7d7b092fdd3313773451488be198dfd6667c662f0b241294742be531306964e6"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiScenarioCoverage failed before the retry.",
-      "policyOrGuard": "required verification: aiScenarioCoverage",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "67db23735af5adef30a0f7f39769965ee611356b6c13df6d2d8f4f7135a65703"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "0fe10da3b62fa71b9f5ff56e7baed3e44d86b416ee1f061d72bb7f940c742d89"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "274e1163650f234a0308d84fa72f853df985dd5cd16a7d66e64df8f246ffc74a"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "cf2e7763ecdaece52339cc70d822a80f87df7069e0c5df7c2d94dfd733e49b8a"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "61b137909df712d422a1a2d265bd3e221831032b9da1c2503913d2dabfcdf649"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-post-publish-projection-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "7d7b092fdd3313773451488be198dfd6667c662f0b241294742be531306964e6"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "Outcome must be independently and directly visible in the conversation with a traffic-light status; folded tool output is not sufficient.",
-    "A Work Item cannot end unless its Outcome is green; root causes must be fixed in the current Work Item where scope permits.",
-    "The release objective is to publish the new version after the existing objectives are complete, not to treat Outcome green as the release objective itself."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -1141,6 +1310,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the pull request and provider checks before merge."
+  }
 }
