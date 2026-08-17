@@ -37,6 +37,7 @@ from ai_lifecycle_truth import (
     is_valid_superseded_transition,
     superseded_summary_validation_exception,
 )
+from ai_outcome_gate import validate_terminal_outcome
 from ai_post_archive_recovery import RECEIPT_DIRECTORY, validate_recovery_receipt
 from ai_start_receipt import validate_receipt, validate_resume_history_structure
 
@@ -625,6 +626,7 @@ def human_benefit_report_issues(contract_path: Path) -> list[str]:
     outcome_path = contract_path.with_name(
         contract_path.name.replace(".contract.json", ".outcome.json")
     )
+    outcome_markdown_path = outcome_path.with_suffix(".md")
     report_path = PROJECT_ROOT / HUMAN_REPORT_JSON
     markdown_path = PROJECT_ROOT / HUMAN_REPORT_MARKDOWN
     missing = [
@@ -635,16 +637,36 @@ def human_benefit_report_issues(contract_path: Path) -> list[str]:
     if missing:
         return ["Human Benefit Review Report evidence is missing: " + ", ".join(missing)]
     try:
+        contract = load_json(contract_path)
         outcome = load_json(outcome_path)
         report = load_json(report_path)
         markdown = markdown_path.read_text(encoding="utf-8")
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return [f"Human Benefit Review Report cannot be loaded: {exc}"]
     work_item_id = outcome.get("workItemId") if isinstance(outcome, dict) else None
-    if isinstance(work_item_id, str) and is_valid_superseded_transition(
+    superseded = isinstance(work_item_id, str) and is_valid_superseded_transition(
         contract_path=contract_path,
         work_item_id=work_item_id,
+    )
+    if (
+        isinstance(contract, dict)
+        and contract.get("contractVersion") == 2
+        and isinstance(work_item_id, str)
+        and not superseded
     ):
+        gate = validate_terminal_outcome(
+            outcome_path,
+            outcome_markdown_path,
+            expected_task_id=work_item_id,
+            contract_path=contract_path,
+            summary_path=contract_path.with_name(
+                contract_path.name.replace(".contract.json", ".summary.json")
+            ),
+            expected_base_commit=contract.get("baseCommit"),
+        )
+        if not gate.valid:
+            return [f"Task Outcome gate: {issue}" for issue in gate.issues]
+    if superseded and isinstance(work_item_id, str):
         outcome = archived_outcome_projection(
             outcome,
             root=PROJECT_ROOT,
@@ -868,6 +890,12 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             HUMAN_REPORT_JSON in entry[1].get("scope", [])
             for entry in archive_entries
             if isinstance(entry[1].get("scope"), list)
+        )
+        or any(
+            entry[1].get("contractVersion") == 2
+            and isinstance(entry[2].get("archiveSequence"), int)
+            and not isinstance(entry[2].get("archiveSequence"), bool)
+            for entry in archive_entries
         )
     )
     if report_required and archive_entries:

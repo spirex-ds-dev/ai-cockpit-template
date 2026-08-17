@@ -600,6 +600,35 @@ def test_create_adoption_owns_installed_critical_coverage_runtime(tmp_path):
     )
 
 
+def test_create_adoption_marks_out_of_scope_quality_gap_as_non_risk_evidence(tmp_path):
+    init_git_repo(tmp_path, "README.md", "# Project\n", "initial")
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+        create_adoption=True,
+    )
+
+    assert installer.install() == 0
+    summary = json.loads(
+        (tmp_path / ".ai/work-items/active/adopt_ai_cockpit.summary.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    explanation = summary["nonRiskExplanations"][0]
+    assert explanation["sourceWarning"] in summary["knownGaps"]
+    assert explanation["evidence"] == [
+        {
+            "source": ".ai/work-items/active/adopt_ai_cockpit.contract.json",
+            "subject": "outOfScope",
+        }
+    ]
+
+
 def test_fresh_install_rejects_all_conflicting_managed_files_before_writing(tmp_path, capsys):
     common = tmp_path / "scripts" / "ai_common.py"
     doctor = tmp_path / "scripts" / "ai_doctor.py"

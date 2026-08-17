@@ -21,7 +21,9 @@ import ai_start_receipt
 import pytest
 from ai_acceptance_policy import validate_acceptance_evidence
 from ai_external_handoff import build_handoff
+from ai_generate_task_outcome import generate_outcome
 from ai_observability import AiEventType
+from ai_render_task_outcome import render_task_outcome
 from ai_resume_work_item import ResumeError, resume_contract, synchronize_contract
 from ai_start_receipt import (
     build_receipt,
@@ -2202,6 +2204,41 @@ def archive_summary(*, verification_result: str = "passed") -> dict[str, object]
     }
 
 
+def write_valid_archive_outcome(
+    contract_path: Path,
+    summary_path: Path,
+    *,
+    sources: list[dict[str, str]] | None = None,
+) -> None:
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    verification = summary.get("verification", [])
+    verification_digest = hashlib.sha256(
+        json.dumps(verification, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    outcome = generate_outcome(
+        contract["workItemId"],
+        {
+            "taskId": contract["workItemId"],
+            "contractDigest": hashlib.sha256(contract_path.read_bytes()).hexdigest(),
+            "summaryDigest": hashlib.sha256(summary_path.read_bytes()).hexdigest(),
+            "verificationDigest": verification_digest,
+            "baseCommit": contract["baseCommit"],
+            "headCommit": "b" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.2",
+        },
+        evidence={"locale": "en", "sources": sources or []},
+    )
+    outcome_path = contract_path.with_name(
+        contract_path.name.replace(".contract.json", ".outcome.json")
+    )
+    outcome_path.write_text(json.dumps(outcome), encoding="utf-8")
+    outcome_path.with_suffix(".md").write_text(render_task_outcome(outcome), encoding="utf-8")
+
+
 def prepare_archive_transaction(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     archive = tmp_path / ".ai" / "work-items" / "archive"
@@ -2212,6 +2249,14 @@ def prepare_archive_transaction(tmp_path, monkeypatch):
     summary = active / "task.summary.json"
     contract.write_text(json.dumps(archive_contract("code")), encoding="utf-8")
     summary.write_text(json.dumps(archive_summary()), encoding="utf-8")
+    write_valid_archive_outcome(
+        contract,
+        summary,
+        sources=[
+            {"source": ".ai/work-items/active/task.contract.json", "subject": "Contract"},
+            {"source": ".ai/work-items/active/task.summary.json", "subject": "Summary"},
+        ],
+    )
     monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_archive_work_item, "ARCHIVE_BASE_DIR", archive)
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
@@ -2604,8 +2649,6 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     summary = active / "task.summary.json"
     review = active / "task.review.json"
     success = active / "task.success.json"
-    outcome = active / "task.outcome.json"
-    markdown = active / "task.outcome.md"
     events = active / "task.events.jsonl"
     contract_payload = archive_contract("code")
     contract_payload["acceptance"] = ["A1: Archived lifecycle evidence remains resolvable."]
@@ -2628,28 +2671,14 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    outcome.write_text(
-        json.dumps(
-            {
-                "workItemId": "task",
-                "sections": {
-                    "evidence": [
-                        {
-                            "source": ".ai/work-items/active/task.contract.json",
-                            "subject": "Contract",
-                        },
-                        {
-                            "source": ".ai/work-items/active/task.summary.json",
-                            "subject": "Summary",
-                        },
-                    ]
-                },
-            }
-        )
-        + "\n",
-        encoding="utf-8",
+    write_valid_archive_outcome(
+        contract,
+        summary,
+        sources=[
+            {"source": ".ai/work-items/active/task.contract.json", "subject": "Contract"},
+            {"source": ".ai/work-items/active/task.summary.json", "subject": "Summary"},
+        ],
     )
-    markdown.write_text("# Task Outcome: task\n", encoding="utf-8")
     events.write_text('{"eventType":"completed"}\n', encoding="utf-8")
     report_dir = tmp_path / ".ai" / "cockpit"
     report_dir.mkdir(parents=True)
@@ -2690,6 +2719,10 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     assert next(archive.glob("*/task.success.json")).exists()
     archived_outcome = json.loads(
         next(archive.glob("*/task.outcome.json")).read_text(encoding="utf-8")
+    )
+    assert (
+        archived_outcome["bindings"]["summaryDigest"]
+        == hashlib.sha256(archived_summary.read_bytes()).hexdigest()
     )
     outcome_sources = [item["source"] for item in archived_outcome["sections"]["evidence"]]
     assert outcome_sources == [

@@ -81,6 +81,43 @@ def test_archived_evidence_uses_strict_summary_validation() -> None:
     assert "legacy_archive=False" in source
 
 
+def test_archived_evidence_rejects_non_green_current_outcome(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    archive = tmp_path / ".ai/work-items/archive"
+    archive_year = archive / "2026"
+    archive_year.mkdir(parents=True)
+    task = "current-green-gate"
+    contract_path = archive_year / f"{task}.contract.json"
+    contract_path.write_text(
+        json.dumps({"contractVersion": 2, "workItemId": task, "baseCommit": "a" * 40}),
+        encoding="utf-8",
+    )
+    contract_path.with_name(f"{task}.summary.json").write_text(
+        json.dumps({"workItemId": task}), encoding="utf-8"
+    )
+    contract_path.with_name(f"{task}.outcome.json").write_text(
+        json.dumps(
+            {"workItemId": task, "status": "needs_human_confirmation", "humanStatusColor": "yellow"}
+        ),
+        encoding="utf-8",
+    )
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text("- State: `no_active_work_item`\n", encoding="utf-8")
+    monkeypatch.setattr(closure, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(closure, "ARCHIVE_DIR", archive)
+    monkeypatch.setattr(closure, "ACTIVE_DIR", active)
+    monkeypatch.setattr(closure, "STATUS_PATH", status)
+    monkeypatch.setattr(closure, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(closure, "validate_summary", lambda *_args, **_kwargs: [])
+
+    with pytest.raises(RuntimeError, match="completed|green"):
+        closure._verify_archived_evidence(task)
+
+
 def prepare_superseded_archive(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     archive = tmp_path / ".ai/work-items/archive"
     contract = archive / "2026/example.contract.json"

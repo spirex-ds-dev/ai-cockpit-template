@@ -30,6 +30,10 @@ Only `ready_on_base` means the invoking worktree can start the next Work Item. `
 
 The canonical order is: latest remote base → dedicated Work Item branch → implement → `ai-finish`/archive → push branch → PR → merge PR → `make ai-close-work-item` → synchronize and clean the local base. Do not merge the feature branch into local `main` before the PR; that creates local commits that are not on `origin/main`. Do not use a PR merge option or provider setting that deletes the Work Item branch before `ai-close-work-item` can identify it. Branch deletion belongs to lifecycle closure.
 
+Outcome is a terminality hard boundary: `ai-finish` must print a separate complete conversation result beginning with `Outcome: 🟢`, `Outcome: 🟡`, or `Outcome: 🔴`. Only `status=completed` together with `humanStatusColor=green`, current Contract/Summary/verification bindings, and direct human-visible delivery may authorize archive, PR readiness, closure, or release progression. Missing, folded-only, stale, yellow, red, or malformed Outcome evidence fails closed.
+
+When a problem is discovered, repair it in the current Work Item first and preserve the blocked/retry evidence. Create a new Work Item only when the scope, authority, or base genuinely differs; do not create a new Work Item merely to avoid resolving a defect found in the current one.
+
 One narrow exception exists when an active Contract explicitly requires hosted
 verification that cannot run from an unpublished commit. After implementation
 and local verification, create a local snapshot commit only with explicit human

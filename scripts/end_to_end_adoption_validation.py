@@ -678,6 +678,11 @@ def _run_fixture(
         "ai-finish",
         "TASK=adopt_ai_cockpit",
         "ARCHIVE=true",
+        "PROJECT_FORMAT_CHECK=true",
+        "PROJECT_TEST=true",
+        "PROJECT_LINT=true",
+        "AI_COCKPIT_PROJECT_FORMAT_CONFIGURED=true",
+        "AI_COCKPIT_PROJECT_LINT_CONFIGURED=true",
         f"PYTHON={sys.executable}",
         env=env,
     )

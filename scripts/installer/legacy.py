@@ -1018,6 +1018,21 @@ class Installer:
             "userCorrectionSolidification": [],
             "checkpointEvidence": [],
             "knownGaps": ["Project-specific quality commands are not configured by adoption."],
+            "nonRiskExplanations": [
+                {
+                    "sourceWarning": "Project-specific quality commands are not configured by adoption.",
+                    "reason": (
+                        "The adoption Contract explicitly excludes product-specific quality configuration; "
+                        "the follow-up remains a visible residual risk rather than an incomplete adoption result."
+                    ),
+                    "evidence": [
+                        {
+                            "source": ".ai/work-items/active/adopt_ai_cockpit.contract.json",
+                            "subject": "outOfScope",
+                        }
+                    ],
+                }
+            ],
             "overclaimPrevention": "This record covers governance adoption only, not product quality validation.",
             "documentationAlignment": documentation_alignment_skeleton(),
         }

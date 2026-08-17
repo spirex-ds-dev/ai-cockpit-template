@@ -1,3 +1,4 @@
+import hashlib
 import json
 import sys
 
@@ -630,6 +631,7 @@ def test_blocked_finish_failure_delivers_persisted_outcome_to_conversation(
     captured = capsys.readouterr()
     assert exit_code == 2
     assert "工单结果报告" in captured.out
+    assert "Outcome: 🟢 completed" in captured.out
     assert "归档必须显式执行" in captured.out
     assert "CLI output cannot authenticate human receipt or approval" in captured.out
     assert "Blocked Task Outcome persisted" in captured.err
@@ -1128,6 +1130,10 @@ def test_outcome_pipeline_without_opt_in_derives_a_pre_merge_report(tmp_path, mo
         "outcome.json",
         "outcome.md",
     }
+    assert (
+        outcome["bindings"]["summaryDigest"]
+        == hashlib.sha256(summary_path.read_bytes()).hexdigest()
+    )
 
 
 def test_outcome_pipeline_structures_legacy_known_gaps_as_limitations(tmp_path, monkeypatch):
@@ -1342,6 +1348,7 @@ def test_direct_outcome_report_contains_the_complete_conversation_surface():
     report = ai_finish.render_direct_outcome_report(outcome, "zh-CN")
 
     for marker in (
+        "Outcome: 🟢 completed",
         "状态: 🟢 `completed`",
         "## 结果摘要",
         "## 已完成",
@@ -1398,7 +1405,9 @@ def test_finish_prepares_candidate_coverage_for_separate_or_inline_archive(
     )
     summary_path.write_text(json.dumps(summary_data), encoding="utf-8")
     outcome_path = active / f"{task}.outcome.json"
-    outcome_path.write_text(json.dumps(_outcome(task)), encoding="utf-8")
+    outcome_value = _outcome(task)
+    outcome_path.write_text(json.dumps(outcome_value), encoding="utf-8")
+    outcome_path.with_suffix(".md").write_text(render_markdown(outcome_value), encoding="utf-8")
 
     class Observer:
         def lifecycle_phase_finished(self, *_args, **_kwargs):
@@ -1427,6 +1436,7 @@ def test_finish_prepares_candidate_coverage_for_separate_or_inline_archive(
         ai_check_agent_risk, "validate_checkpoint_bindings", lambda *_args, **_kwargs: []
     )
     monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
+    monkeypatch.setattr(ai_finish, "active_terminal_outcome_issues", lambda *_args: ())
     monkeypatch.setattr(
         ai_finish, "_outcome_paths", lambda _task: (outcome_path, active / f"{task}.outcome.md")
     )

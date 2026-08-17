@@ -12,6 +12,10 @@ Work Item completion is a lifecycle closure, not merely branch deletion. Run `ma
 
 Only `ready_on_base` means the invoking worktree can start the next Work Item. `closed_but_current_worktree_detached` means closure succeeded while another worktree owns the synchronized base; continue from the reported base worktree and do not treat the detached invoking worktree as ready.
 
+Outcome is a terminality hard boundary: `ai-finish` must print a separate complete conversation result beginning with `Outcome: 🟢`, `Outcome: 🟡`, or `Outcome: 🔴`. Only `status=completed` together with `humanStatusColor=green`, current Contract/Summary/verification bindings, and direct human-visible delivery may authorize archive, PR readiness, closure, or release progression. Missing, folded-only, stale, yellow, red, or malformed Outcome evidence fails closed.
+
+When a problem is discovered, repair it in the current Work Item first and preserve the blocked/retry evidence. Create a new Work Item only when the scope, authority, or base genuinely differs; do not create a new Work Item merely to avoid resolving a defect found in the current one.
+
 ### Required Workflow
 
 1. Create or identify a version 2 Work Item Contract in `.ai/work-items/active/`.
