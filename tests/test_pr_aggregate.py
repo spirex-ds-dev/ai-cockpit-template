@@ -861,6 +861,60 @@ def test_pr_accepts_frozen_archive_on_verified_ancestor_base(monkeypatch):
     assert ai_check_pr.archive_base_is_compatible(contract, "b" * 40)
 
 
+def test_pr_accepts_synchronized_archive_with_valid_history(monkeypatch):
+    contract = {
+        "baseCommit": "b" * 40,
+        "startReceipt": {
+            "baseCommit": "a" * 40,
+            "path": ".ai/work-items/starts/synchronized.json",
+        },
+        "synchronizationHistory": [
+            {
+                "synchronizationVersion": 1,
+                "fromBaseCommit": "a" * 40,
+                "toBaseCommit": "b" * 40,
+                "baseRemote": "origin",
+                "baseBranch": "main",
+                "workBranch": "codex/synchronized",
+                "recordedAt": "2026-08-17T09:07:24+00:00",
+                "priorContractDigest": "c" * 64,
+                "priorSummaryDigest": "d" * 64,
+                "rebaseHeadBefore": "e" * 40,
+                "rebaseHeadAfter": "f" * 40,
+            }
+        ],
+    }
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+    assert ai_check_pr.archive_base_is_compatible(contract, "b" * 40)
+
+
+def test_pr_rejects_synchronized_archive_with_invalid_history(monkeypatch):
+    contract = {
+        "baseCommit": "b" * 40,
+        "startReceipt": {
+            "baseCommit": "a" * 40,
+            "path": ".ai/work-items/starts/synchronized.json",
+        },
+        "synchronizationHistory": [
+            {
+                "synchronizationVersion": 1,
+                "fromBaseCommit": "a" * 40,
+                "toBaseCommit": "c" * 40,
+                "baseRemote": "origin",
+                "baseBranch": "main",
+                "workBranch": "codex/synchronized",
+                "recordedAt": "2026-08-17T09:07:24+00:00",
+                "priorContractDigest": "c" * 64,
+                "priorSummaryDigest": "d" * 64,
+                "rebaseHeadBefore": "e" * 40,
+                "rebaseHeadAfter": "f" * 40,
+            }
+        ],
+    }
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+    assert not ai_check_pr.archive_base_is_compatible(contract, "b" * 40)
+
+
 def test_pr_rejects_rebased_archive_without_receipt_binding(monkeypatch):
     contract = {"baseCommit": "a" * 40}
     monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))

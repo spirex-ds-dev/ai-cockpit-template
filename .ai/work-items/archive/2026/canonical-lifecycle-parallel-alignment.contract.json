@@ -26,6 +26,8 @@
     "docs/operations/work-item-lifecycle.ja.md",
     "docs/operations/work-item-lifecycle.zh-CN.md",
     "tests/test_parallel_lifecycle_contract.py",
+    "tests/test_pr_aggregate.py",
+    "scripts/ai_check_pr.py",
     "AGENTS.md",
     "templates/agents/AI_COCKPIT_RULES.md",
     ".ai/guards/governance_complexity_policy.yaml"
@@ -68,6 +70,14 @@
     {
       "path": "scripts/ai_check_work_item.py",
       "reason": "Executable concurrency-boundary validation used by the lifecycle."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR aggregate validation must accept the existing synchronizationHistory evidence when an archived Work Item is rebased onto the current PR base."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Regression coverage for archived base compatibility backed by synchronizationHistory."
     },
   {
     "path": "tests/test_projection_isolation.py",
@@ -138,7 +148,8 @@
     "A3: The canonical guidance states that a blocked Work Item does not block an independent compatible Work Item and that orchestration belongs to the Agent/Orchestrator, while governance gates remain fail-closed.",
     "A4: Regression coverage proves the contradictory prohibition is removed and the closed serialized projection inventory and concurrency boundary remain required.",
     "A5: Normal ai-finish emits the Work Item Outcome both to its persisted Outcome artifacts and directly to the conversation; this Work Item records the observed Outcome evidence without changing Outcome generation unless the focused observation finds a defect.",
-    "A6: The confirmed governance-complexity policy admits the measured second guarded-parallel Contract field with a bounded repayment record; no unrelated complexity ceiling is changed."
+    "A6: The confirmed governance-complexity policy admits the measured second guarded-parallel Contract field with a bounded repayment record; no unrelated complexity ceiling is changed.",
+    "A7: PR aggregate validation accepts a synchronized archived Contract when its synchronizationHistory proves the Start Receipt base advanced to the Contract base, and regression coverage rejects malformed synchronization evidence."
   ],
   "guidelines": [
     "Canonical documentation is a product behavior contract and must not contradict executable lifecycle behavior.",
@@ -172,9 +183,12 @@
     ]
   },
   "implementationSurface": {
-    "production": [],
+    "production": [
+      "scripts/ai_check_pr.py"
+    ],
     "tests": [
-      "tests/test_parallel_lifecycle_contract.py"
+      "tests/test_parallel_lifecycle_contract.py",
+      "tests/test_pr_aggregate.py"
     ],
     "documentation": [
       "docs/operations/work-item-lifecycle.md",

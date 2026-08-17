@@ -32,7 +32,11 @@ from ai_lifecycle_truth import (
     superseded_summary_validation_exception,
 )
 from ai_post_archive_recovery import RECEIPT_DIRECTORY, validate_recovery_receipt
-from ai_start_receipt import validate_receipt, validate_resume_history_structure
+from ai_start_receipt import (
+    validate_receipt,
+    validate_resume_history_structure,
+    validate_synchronization_history_structure,
+)
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
 OWNERSHIP_POLICY = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
@@ -231,12 +235,18 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
     receipt_base = receipt.get("baseCommit")
     if not isinstance(receipt_base, str) or not receipt_base:
         return False
-    if receipt_base != archived_base and validate_resume_history_structure(contract, receipt_base):
+    resume_history = contract.get("resumeHistory")
+    synchronization_history = contract.get("synchronizationHistory")
+    if resume_history is not None and validate_resume_history_structure(contract, receipt_base):
+        return False
+    if synchronization_history is not None and validate_synchronization_history_structure(
+        contract, receipt_base
+    ):
         return False
     if (
-        receipt_base == archived_base
-        and contract.get("resumeHistory") is not None
-        and validate_resume_history_structure(contract, receipt_base)
+        receipt_base != archived_base
+        and resume_history is None
+        and synchronization_history is None
     ):
         return False
     if archived_base == pr_base:
