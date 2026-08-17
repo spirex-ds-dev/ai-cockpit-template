@@ -24,7 +24,11 @@ from ai_common import (
     load_json,
     run_git,
 )
-from ai_lifecycle_truth import superseded_summary_validation_exception
+from ai_lifecycle_truth import (
+    is_valid_superseded_transition,
+    superseded_summary_validation_exception,
+)
+from ai_outcome_gate import validate_terminal_outcome
 from ai_projection_lease import release as release_projection_lease
 from ai_projection_lease import requires_lease
 from ai_work_item_intelligence import record_fact_once
@@ -311,6 +315,22 @@ def _verify_archived_evidence(task: str) -> Path:
         issues.extend(summary_issues)
     if issues:
         raise RuntimeError("archived Work Item evidence is invalid: " + "; ".join(issues))
+    if contract.get("contractVersion") == 2 and not is_valid_superseded_transition(
+        contract_path=contract_path,
+        work_item_id=task,
+    ):
+        outcome_path = _archived_outcome_path(contract_path)
+        outcome_markdown_path = outcome_path.with_suffix(".md")
+        gate = validate_terminal_outcome(
+            outcome_path,
+            outcome_markdown_path,
+            expected_task_id=task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            expected_base_commit=contract.get("baseCommit"),
+        )
+        if not gate.valid:
+            raise RuntimeError("archived Task Outcome gate failed: " + "; ".join(gate.issues))
     if "- State: `no_active_work_item`" not in STATUS_PATH.read_text(encoding="utf-8"):
         raise RuntimeError("Cockpit Status is not no_active_work_item")
     return contract_path

@@ -841,7 +841,7 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
 
     from ai_generate_human_report import generate_human_report, render_human_report
 
-    outcome_path, _ = _outcome_paths(task)
+    outcome_path, _outcome_markdown_path = _outcome_paths(task)
     json_path, markdown_path = _human_report_paths()
     try:
         outcome = load_json(outcome_path)
@@ -1084,7 +1084,10 @@ def _verification_evidence_ref(
 
 
 def _verification_retry_projection(
-    summary_path: Path, verification: Any, history: Any
+    summary_path: Path,
+    verification: Any,
+    history: Any,
+    required_checks: dict[str, bool] | None = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[str]]:
     """Build stop/resolution events from append-only failed verification attempts."""
     current = (
@@ -1175,6 +1178,8 @@ def _verification_retry_projection(
         check = failed.get("check")
         if not isinstance(check, str) or failed.get("result") != "failed":
             continue
+        if required_checks is not None and required_checks.get(check, True) is not True:
+            continue
         refs = [_verification_evidence_ref(summary_path, f"verification[{check}] failed", failed)]
         events.append(
             {
@@ -1221,6 +1226,45 @@ def _pre_merge_outcome_input(
     non_risk_explanations = [
         dict(item) for item in summary.get("nonRiskExplanations", []) if isinstance(item, dict)
     ]
+    verification = summary.get("verification", [])
+    declared_required = {
+        item["check"]: item.get("required", True) is True
+        for item in contract.get("verification", [])
+        if isinstance(item, dict) and isinstance(item.get("check"), str)
+    }
+
+    def is_required_check(item: dict[str, Any]) -> bool:
+        check = item.get("check")
+        return declared_required.get(check, True)
+
+    optional_failed_checks = [
+        item
+        for item in verification
+        if isinstance(item, dict)
+        and item.get("result") == "failed"
+        and item.get("check")
+        and not is_required_check(item)
+    ]
+    non_risk_explanations.extend(
+        {
+            "sourceWarning": f"{item['check']} failed on the latest attempt.",
+            "reason": (
+                "The Contract explicitly declares this verification check as optional; "
+                "the failure remains visible but does not block the required acceptance boundary."
+            ),
+            "evidence": [
+                {
+                    "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "subject": f"verification[{item['check']}] failed",
+                },
+                {
+                    "source": contract_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "subject": f"verification[{item['check']}].required=false",
+                },
+            ],
+        }
+        for item in optional_failed_checks
+    )
     evidenced_non_risk_warnings = {
         item["sourceWarning"]
         for item in non_risk_explanations
@@ -1264,7 +1308,6 @@ def _pre_merge_outcome_input(
         for item in summary.get("userCorrectionsCaptured", [])
         if isinstance(item, dict) and isinstance(item.get("instruction"), str)
     ]
-    verification = summary.get("verification", [])
     completed = [
         {
             "title": f"Changed {item.get('path')}",
@@ -1345,16 +1388,24 @@ def _pre_merge_outcome_input(
     failed_checks = [
         item.get("check")
         for item in verification
-        if isinstance(item, dict) and item.get("result") == "failed" and item.get("check")
+        if isinstance(item, dict)
+        and item.get("result") == "failed"
+        and item.get("check")
+        and is_required_check(item)
     ]
     retry_events, retry_resolved, retry_approach, historical_failed_checks = (
         _verification_retry_projection(
-            summary_path, verification, summary.get("verificationHistory", [])
+            summary_path,
+            verification,
+            summary.get("verificationHistory", []),
+            declared_required,
         )
     )
     failed_check_claims = []
     for item in verification if isinstance(verification, list) else []:
         if not isinstance(item, dict) or item.get("result") != "failed":
+            continue
+        if not is_required_check(item):
             continue
         check = item.get("check")
         if not isinstance(check, str) or not check:
@@ -1783,7 +1834,17 @@ def run_task_outcome_pipeline(
                 "evidenceCount": evidence_count,
             },
         )
-        return True, message
+        # Recording taskOutcome also declares the generated Outcome files in
+        # Summary.changedFiles.  Rebind once after that bookkeeping mutation;
+        # otherwise the freshly written Outcome can never satisfy the
+        # terminal Summary digest gate.
+        rebound_ok, rebound_message = _write_and_validate_pre_merge_outcome(
+            task, contract_path, summary_path, json_path, markdown_path, language
+        )
+        if not rebound_ok:
+            _record_outcome_state(summary_path, {"status": "failed", "error": rebound_message})
+            return False, rebound_message
+        return True, rebound_message
     input_path = PROJECT_ROOT / input_value
     json_path, markdown_path = _outcome_paths(task)
     if not input_path.exists():
@@ -1854,14 +1915,18 @@ def refresh_final_outcome_after_stabilization(
     task: str, contract_path: Path, summary_path: Path, language: str
 ) -> tuple[bool, str]:
     """Rebuild human projections from the final verification state before archive."""
+    # The Human Benefit Report pipeline records its own generated paths in the
+    # Summary.  Establish that final Summary shape before binding the Outcome
+    # digest; generating Outcome first would make the report path mutation
+    # immediately stale the terminal binding and trip the green gate.
+    report_ok, report_message = run_human_report_pipeline(task, summary_path)
+    if not report_ok:
+        return False, f"final Human Benefit Report regeneration failed: {report_message}"
     outcome_ok, outcome_message = run_task_outcome_pipeline(
         task, summary_path, contract_path, language
     )
     if not outcome_ok:
         return False, f"final Outcome regeneration failed: {outcome_message}"
-    report_ok, report_message = run_human_report_pipeline(task, summary_path)
-    if not report_ok:
-        return False, f"final Human Benefit Report regeneration failed: {report_message}"
     contract = contract_path.relative_to(PROJECT_ROOT).as_posix()
     summary = summary_path.relative_to(PROJECT_ROOT).as_posix()
     for command in (
@@ -1903,12 +1968,41 @@ def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
 
     locale = normalize_locale(language)
     heading, limitation, next_action = REPORT_BOUNDARY_TEXT[locale]
+    status_color = outcome.get("humanStatusColor")
+    traffic_light = {
+        "green": "🟢",
+        "yellow": "🟡",
+        "red": "🔴",
+    }.get(status_color if isinstance(status_color, str) else "", "🔴")
     # A conversation delivery is only valid when both the localized Outcome
     # and the complete human-benefit report are renderable.  Do not silently
     # downgrade to a status-only or localized-only surface: that would make a
     # missing report look like a successful human handoff.
     human_summary = render_human_report(generate_human_report(outcome))
-    return f"{heading}\n{render_localized_outcome(outcome, locale)}\n{human_summary}{limitation}\n{next_action}\n"
+    return (
+        f"Outcome: {traffic_light} {outcome.get('status', 'unknown')}\n"
+        f"{heading}\n{render_localized_outcome(outcome, locale)}\n"
+        f"{human_summary}{limitation}\n{next_action}\n"
+    )
+
+
+def active_terminal_outcome_issues(
+    task: str, contract_path: Path, summary_path: Path
+) -> tuple[str, ...]:
+    """Return terminal-gate issues for the current active candidate."""
+    from ai_outcome_gate import validate_terminal_outcome
+
+    outcome_path, outcome_markdown_path = _outcome_paths(task)
+    result = validate_terminal_outcome(
+        outcome_path,
+        outcome_markdown_path,
+        expected_task_id=task,
+        contract_path=contract_path,
+        summary_path=summary_path,
+        expected_base_commit=load_json(contract_path).get("baseCommit"),
+        expected_head_commit=current_head(),
+    )
+    return result.issues
 
 
 def deliver_direct_outcome_report(task: str, language: str) -> tuple[bool, str]:
@@ -2253,6 +2347,11 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
         outcome_ok = _outcome_paths(args.task)[0].is_file()
         outcome_message = "existing outcome is bound by same-state verification"
         human_report_ok, human_report_message = outcome_ok, outcome_message
+        if outcome_ok:
+            gate_issues = active_terminal_outcome_issues(args.task, contract_path, summary_path)
+            if gate_issues:
+                human_report_ok = False
+                human_report_message = "; ".join(gate_issues)
     else:
         outcome_ok, outcome_message = run_task_outcome_pipeline(
             contract_data["workItemId"], summary_path, contract_path, args.language
@@ -2560,18 +2659,6 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             code=1,
         )
 
-    print("Work Item finish checks passed")
-    record_fact_once(
-        args.task,
-        "finish_passed",
-        {"contractPath": contract, "summaryPath": summary, "commitSha": commit_sha},
-    )
-    outcome_json, _outcome_markdown = _outcome_paths(args.task)
-    try:
-        print(render_direct_outcome_report(load_json(outcome_json), args.language), end="")
-    except ValueError as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        return 1
     code, coverage_message = prepare_pre_archive_candidate_coverage(
         args.task, contract_data, obs=obs
     )
@@ -2585,6 +2672,36 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             failure_message=coverage_message,
             code=code,
         )
+    gate_issues = active_terminal_outcome_issues(args.task, contract_path, summary_path)
+    if gate_issues:
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="taskOutcomeGreenGate",
+            failure_message="; ".join(gate_issues),
+            code=1,
+        )
+    record_fact_once(
+        args.task,
+        "finish_passed",
+        {"contractPath": contract, "summaryPath": summary, "commitSha": commit_sha},
+    )
+    outcome_json, _outcome_markdown = _outcome_paths(args.task)
+    try:
+        print(render_direct_outcome_report(load_json(outcome_json), args.language), end="")
+    except (OSError, TypeError, ValueError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="taskOutcomeReport",
+            failure_message=str(exc),
+            code=1,
+        )
+    print("Work Item finish checks passed")
     if args.archive:
         archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
         cmd_str = " ".join(archive_command)

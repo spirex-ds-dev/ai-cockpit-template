@@ -44,6 +44,42 @@ def test_archive_growth_requires_projected_same_work_item_reservation():
     assert any("reservation is required" in issue for issue in issues)
 
 
+def test_archive_inputs_reject_non_green_outcome_before_mutation(tmp_path, monkeypatch):
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    contract_path = active / "task.contract.json"
+    summary_path = active / "task.summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": "task", "baseCommit": "a" * 40}), encoding="utf-8"
+    )
+    summary_path.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+    (active / "task.outcome.json").write_text(
+        json.dumps(
+            {
+                "workItemId": "task",
+                "status": "needs_human_confirmation",
+                "humanStatusColor": "yellow",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (active / "task.outcome.md").write_text("# Task Outcome\n", encoding="utf-8")
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_archive_work_item, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(ai_archive_work_item, "validate_summary", lambda *_args, **_kwargs: [])
+
+    issues = ai_archive_work_item._validate_archive_inputs(
+        contract_path,
+        json.loads(contract_path.read_text(encoding="utf-8")),
+        summary_path,
+        json.loads(summary_path.read_text(encoding="utf-8")),
+    )
+
+    assert any("completed" in issue for issue in issues)
+    assert any("green" in issue for issue in issues)
+
+
 def test_archive_growth_reservation_accepts_projected_count_and_repayment():
     contract = {
         "workItemId": "task",
@@ -956,7 +992,49 @@ def test_archive_failure_rolls_back_rewritten_traceability_bytes(tmp_path, monke
     contract.write_text('{"workItemId":"task"}\n', encoding="utf-8")
     summary.write_text('{"changedFiles":[]}\n', encoding="utf-8")
     review.write_text("{}\n", encoding="utf-8")
-    outcome.write_text("{}\n", encoding="utf-8")
+    outcome.write_text(
+        json.dumps(
+            {
+                "format": "ai-cockpit-task-outcome",
+                "schemaVersion": 1,
+                "workItemId": "task",
+                "status": "completed",
+                "humanStatusColor": "green",
+                "bindings": {
+                    "taskId": "task",
+                    "contractDigest": "a" * 64,
+                    "summaryDigest": "b" * 64,
+                    "verificationDigest": "c" * 64,
+                    "baseCommit": "d" * 40,
+                    "headCommit": "e" * 40,
+                    "lifecycleStage": "pre_merge",
+                    "pullRequest": {"state": "not_created"},
+                    "aiCockpitVersion": "repository-governance",
+                    "generatorVersion": "1.0",
+                },
+                "sections": {
+                    "outcomeSummary": "Completed.",
+                    "taskOverview": "Task.",
+                    "deliveredChanges": [],
+                    "findings": [],
+                    "risks": [],
+                    "warnings": [],
+                    "limitations": [],
+                    "nonRiskExplanations": [],
+                    "forbiddenClaims": [],
+                    "interventions": [],
+                    "forcedStops": [],
+                    "resolutions": [],
+                    "recurrencePrevention": [],
+                    "avoidedImpact": [],
+                    "residualRisks": [],
+                    "humanDecisions": [],
+                    "evidence": [{"source": "contract.json", "subject": "Contract"}],
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
     sources = (contract, summary, review, outcome)
     original_source_bytes = {path: path.read_bytes() for path in sources}
     traceability = tmp_path / "docs/reference/remediation-instruction-traceability.json"

@@ -1749,6 +1749,37 @@ def test_human_benefit_report_issues_rejects_stale_review_report(tmp_path, monke
     ]
 
 
+def test_human_benefit_report_issues_rejects_non_green_current_outcome(tmp_path, monkeypatch):
+    task = "current-green-gate"
+    archive_dir = tmp_path / ".ai/work-items/archive/2026"
+    archive_dir.mkdir(parents=True)
+    contract_path = archive_dir / f"{task}.contract.json"
+    summary_path = archive_dir / f"{task}.summary.json"
+    outcome_path = archive_dir / f"{task}.outcome.json"
+    contract_path.write_text(
+        json.dumps({"contractVersion": 2, "workItemId": task, "baseCommit": "a" * 40}),
+        encoding="utf-8",
+    )
+    summary_path.write_text(json.dumps({"workItemId": task}), encoding="utf-8")
+    outcome_path.write_text(
+        json.dumps(
+            {"workItemId": task, "status": "needs_human_confirmation", "humanStatusColor": "yellow"}
+        ),
+        encoding="utf-8",
+    )
+    outcome_path.with_suffix(".md").write_text("# Task Outcome\n", encoding="utf-8")
+    cockpit = tmp_path / ".ai/cockpit"
+    cockpit.mkdir(parents=True)
+    (cockpit / "task_report.json").write_text("{}", encoding="utf-8")
+    (cockpit / "task_report.md").write_text("", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    issues = ai_check_pr.human_benefit_report_issues(contract_path)
+
+    assert any("completed" in issue for issue in issues)
+    assert any("green" in issue for issue in issues)
+
+
 @pytest.mark.parametrize(
     ("superseded", "expected_issues"),
     [

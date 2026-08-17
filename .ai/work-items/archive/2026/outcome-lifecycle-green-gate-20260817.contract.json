@@ -1,0 +1,266 @@
+{
+  "contractVersion": 2,
+  "workItemId": "outcome-lifecycle-green-gate-20260817",
+  "mode": "code",
+  "title": "Enforce green Outcome lifecycle gate and direct conversation delivery",
+  "baseCommit": "a896715c0986d39e39068bd123c2a6a38dac6d65",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/outcome-lifecycle-green-gate-20260817.contract.json",
+    ".ai/work-items/active/outcome-lifecycle-green-gate-20260817.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/outcome-lifecycle-green-gate-20260817.outcome.json",
+    ".ai/work-items/active/outcome-lifecycle-green-gate-20260817.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/documentation-context-registry.json",
+    "scripts/ai_outcome_gate.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/end_to_end_adoption_validation.py",
+    "scripts/installer/legacy.py",
+    "tests/test_outcome_gate.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "tests/test_outcome_lifecycle_rules.py",
+    "tests/test_installer.py",
+    "tests/test_start_and_archive.py",
+    "AGENTS.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "docs/superpowers/specs/2026-08-18-outcome-lifecycle-green-gate-design.md"
+  ],
+  "outOfScope": [
+    "Changing unrelated evidence-reuse runtime behavior.",
+    "Mutating historical archived Outcome evidence.",
+    "Creating or publishing a release version before this Work Item and its existing prerequisite Work Items are complete."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Authoritative Finish and direct Outcome delivery paths."
+    },
+    {
+      "path": "scripts/ai_check_task_outcome.py",
+      "reason": "Existing fail-closed Outcome schema and binding validation."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive mutation boundary that currently does not require completed green Outcome."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR-level archive evidence and report validation boundary."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Lifecycle closure boundary for archived evidence."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Existing direct-output and blocked Outcome regression coverage."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository lifecycle rules inherited by the current project."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Installation rules inherited by future adopter projects."
+    },
+    {
+      "path": "scripts/end_to_end_adoption_validation.py",
+      "reason": "The adopter lifecycle matrix must exercise the same explicit project-quality override path as real installed projects."
+    },
+    {
+      "path": "scripts/installer/legacy.py",
+      "reason": "First-adoption Summary evidence must explicitly bind its out-of-scope quality limitation so the scoped adoption Outcome can be green without hiding the residual risk."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["lifecycle_gate", "operator_visibility", "evidence_integrity"],
+    "unknownsReviewComplete": true,
+    "reason": "The current Finish, archive, PR, and close boundaries were inspected; the change centralizes their shared green Outcome prerequisite."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Lifecycle terminality and human-visible evidence require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized automatic root-cause remediation and requires the Outcome hard boundary to be enforced in this Work Item."
+  },
+  "preReviewWarnings": [
+    "No terminal lifecycle operation may accept a missing, stale, yellow, red, or non-green Outcome."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A shared Outcome gate requires status=completed and humanStatusColor=green, validates the canonical Outcome Markdown, and verifies the Outcome is bound to the current Work Item Contract, Summary, verification evidence, base, and candidate Head.",
+    "ai-finish emits the complete persisted Outcome directly to stdout on every terminal path, including all failure paths; the report contains exactly the canonical traffic-light signal (🟢, 🟡, or 🔴) and retains the non-zero exit code on failure.",
+    "Archive, PR validation, and lifecycle close fail closed when the Outcome is missing, malformed, stale, cross-task, yellow, red, or not completed; no archive, merge-readiness, or close claim is produced from such evidence.",
+    "Regression tests capture stdout and exercise successful, blocked, malformed, stale, yellow, and green Outcome paths across Finish and lifecycle boundaries.",
+    "AGENTS.md and the distributed AI Cockpit rules contain an explicit current-Work-Item remediation rule, restrict successor creation to a genuinely different scope or authority/base, and require a directly visible green Outcome before terminality.",
+    "The design and implementation remain project-neutral so future installed adopter projects inherit the same hard gate."
+  ],
+  "guidelines": [
+    "Shared lifecycle gates must be documented and tested at every consumer boundary.",
+    "Generated status and Outcome artifacts remain derived; do not hand-edit them as a substitute for the authoritative lifecycle path.",
+    "Keep the implementation project-neutral so template adopters inherit the same behavior."
+  ],
+  "intent": {
+    "problem": "Outcome has repeatedly been persisted or summarized without being a complete, directly visible conversation result, and downstream lifecycle gates can still accept a yellow or stale Outcome. That breaks the human trust boundary and allows a Work Item to appear finished before its authoritative human-facing result is complete.",
+    "constraints": [
+      "The complete Outcome is delivered through the conversation-facing stdout stream; stored artifacts and folded tool logs are insufficient human handoff evidence."
+    ],
+    "rationale": "One shared, fail-closed gate prevents each lifecycle consumer from implementing a weaker interpretation, while direct stdout delivery makes the human decision surface explicit and testable."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "rawUserRequest": "必须根治 Outcome：Outcome 必须在对话框中完整、独立、明确显示，并带有🔴/🟡/🟢；Outcome 不通过 WI 不准结束。发现问题尽量在当前 WI 修复，只有真正不同范围或权限/基线时才新建 WI；本次目标还包括在既定目标完成后发布新版本。用户授权自动执行并要求将授权写入 Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-conversation: Outcome direct delivery and green lifecycle hard boundary",
+    "capturedAt": "2026-08-18T00:00:00+09:00",
+    "digest": "sha256:outcome-direct-green-gate-root-cause-20260818"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make complete directly visible green Outcome a fail-closed lifecycle terminality prerequisite.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "implementationSurface": {
+    "production": ["scripts/ai_outcome_gate.py", "scripts/ai_finish.py", "scripts/ai_archive_work_item.py", "scripts/ai_check_pr.py", "scripts/ai_close_work_item.py", "scripts/ai_installer_catalog.json"],
+    "tests": ["tests/test_outcome_gate.py", "tests/test_task_outcome_ai_finish_integration.py", "tests/test_finish_e2e.py", "tests/test_ai_archive_work_item.py", "tests/test_pr_aggregate.py", "tests/test_work_item_lifecycle_closure.py", "tests/test_outcome_lifecycle_rules.py", "tests/test_start_and_archive.py"],
+    "documentation": ["AGENTS.md", "templates/agents/AI_COCKPIT_RULES.md", "docs/superpowers/specs/2026-08-18-outcome-lifecycle-green-gate-design.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/documentation-context-registry.json"],
+    "generated": [".ai/cockpit/current_status.md", ".ai/work-items/active/outcome-lifecycle-green-gate-20260817.outcome.json", ".ai/work-items/active/outcome-lifecycle-green-gate-20260817.outcome.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md", "docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"]
+  },
+  "scenarioCoverage": [
+    {"id": "finish-failure-direct-output", "riskDomain": "operator_visibility", "scenario": "A required Finish check fails after a blocked Outcome is persisted.", "expected": "The full blocked Outcome is printed directly to stdout with 🔴 and the command remains non-zero.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Capture subprocess stdout and return code in Finish tests."},
+    {"id": "terminal-green-gate", "riskDomain": "lifecycle_gate", "scenario": "An Outcome is yellow, red, missing, malformed, or stale at archive/PR/close.", "expected": "The consumer fails closed and produces no terminal success claim.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Exercise shared gate and each lifecycle consumer with fixture evidence."},
+    {"id": "green-bound-current-state", "riskDomain": "evidence_integrity", "scenario": "A completed green Outcome is bound to the current Contract, Summary, verification evidence, base, and Head.", "expected": "The gate accepts it and downstream lifecycle checks can proceed.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Use digest- and commit-bound fixtures plus integration tests."}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-conversation",
+    "reason": "The user explicitly authorized automatic root-cause remediation, Contract updates, lifecycle enforcement, and inherited template rule changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 944
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/outcome-lifecycle-green-gate-20260817.json",
+    "baseCommit": "a896715c0986d39e39068bd123c2a6a38dac6d65",
+    "initialScopeDigest": "2357b21482b0d656ee82a8eb438a90438e66016ab113317cf85be2b792eaed99",
+    "contractSkeletonDigest": "b41d73a5e75f05a4c37aab3649a156f1134456a7a31fa20c7e68c634ca57bc5e"
+  }
+}

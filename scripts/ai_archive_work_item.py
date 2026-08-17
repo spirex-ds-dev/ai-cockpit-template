@@ -39,6 +39,7 @@ from ai_lifecycle_truth import (
     superseded_summary_validation_exception,
 )
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
+from ai_outcome_gate import validate_terminal_outcome
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
 from ai_work_item_intelligence import record_fact_once
@@ -702,7 +703,12 @@ def _write_archive_index(index: dict[str, object]) -> None:
 
 
 def _validate_archive_inputs(
-    contract_path: Path, contract: dict, summary_path: Path | None, summary: dict | None
+    contract_path: Path,
+    contract: dict,
+    summary_path: Path | None,
+    summary: dict | None,
+    *,
+    require_outcome: bool = True,
 ) -> list[str]:
     issues = validate_contract(contract)
     if summary_path is None or summary is None:
@@ -717,6 +723,10 @@ def _validate_archive_inputs(
         contract_path=contract_rel,
         summary_path=summary_rel,
     )
+    superseded = is_valid_superseded_transition(
+        contract_path=contract_path,
+        work_item_id=str(contract.get("workItemId", "")),
+    )
     if not issues and superseded_archive_validation_exception(
         contract_path=contract_path,
         work_item_id=str(contract.get("workItemId", "")),
@@ -724,6 +734,26 @@ def _validate_archive_inputs(
     ):
         return []
     issues.extend(summary_issues)
+    if require_outcome and not superseded:
+        outcome_path = contract_path.with_name(
+            contract_path.name.replace(".contract.json", ".outcome.json")
+        )
+        markdown_path = outcome_path.with_suffix(".md")
+        expected_head = None
+        if (PROJECT_ROOT / ".git").exists():
+            head_result = _run_git_metadata(["rev-parse", "HEAD"])
+            if head_result.returncode == 0 and head_result.stdout.strip():
+                expected_head = head_result.stdout.strip()
+        gate = validate_terminal_outcome(
+            outcome_path,
+            markdown_path,
+            expected_task_id=str(contract.get("workItemId", "")),
+            contract_path=contract_path,
+            summary_path=summary_path,
+            expected_base_commit=contract.get("baseCommit"),
+            expected_head_commit=expected_head,
+        )
+        issues.extend(f"Task Outcome gate: {issue}" for issue in gate.issues)
     return issues
 
 
@@ -942,6 +972,48 @@ def _execute_archive_transaction(
             save_json(summary_tmp, summary)
             summary_tmp.replace(summary_target)
 
+            # Archive path projection changes the Summary bytes. Refresh the
+            # current Outcome's content bindings only after the final archived
+            # Summary exists, then regenerate its Markdown and Human Benefit
+            # Report from that exact persisted state. Otherwise PR/close would
+            # correctly discover a stale summaryDigest after archive.
+            if not preserve_superseded_outcome:
+                from ai_generate_human_report import generate_human_report, render_human_report
+                from ai_render_task_outcome import render_task_outcome
+
+                for path in outcome_paths:
+                    if not path.name.endswith(".outcome.json"):
+                        continue
+                    outcome_target = target_dir / path.name
+                    outcome = load_json(outcome_target)
+                    bindings = outcome.get("bindings")
+                    if not isinstance(bindings, dict):
+                        raise TypeError("archived Outcome bindings are missing")
+                    bindings["contractDigest"] = hashlib.sha256(
+                        (target_dir / contract_path.name).read_bytes()
+                    ).hexdigest()
+                    bindings["summaryDigest"] = hashlib.sha256(
+                        summary_target.read_bytes()
+                    ).hexdigest()
+                    verification = summary.get("verification", [])
+                    bindings["verificationDigest"] = hashlib.sha256(
+                        json.dumps(
+                            verification,
+                            ensure_ascii=False,
+                            sort_keys=True,
+                            separators=(",", ":"),
+                        ).encode("utf-8")
+                    ).hexdigest()
+                    save_json(outcome_target, outcome)
+                    outcome_markdown_target = outcome_target.with_suffix(".md")
+                    outcome_markdown_target.write_text(
+                        render_task_outcome(outcome), encoding="utf-8"
+                    )
+                    report = generate_human_report(outcome, phase="review")
+                    save_json(report_paths[0], report)
+                    report_paths[1].write_text(render_human_report(report), encoding="utf-8")
+                    refreshed_report_paths = True
+
             save_json(
                 manifest_target,
                 _archive_manifest(
@@ -1080,7 +1152,11 @@ def main() -> int:
             return 1
 
     issues = _validate_archive_inputs(
-        contract_path, contract, summary_path if has_summary else None, summary
+        contract_path,
+        contract,
+        summary_path if has_summary else None,
+        summary,
+        require_outcome=not args.dry_run,
     )
     if issues:
         for issue in issues:
