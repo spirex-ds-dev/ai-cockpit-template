@@ -1,0 +1,272 @@
+{
+  "contractVersion": 2,
+  "workItemId": "canonical-lifecycle-parallel-successor-20260818",
+  "mode": "code",
+  "title": "Make guarded parallel Work Items canonical and enforce same-WI repair",
+  "rawUserRequest": "查收，全部修复。Outcome 必须在对话框直接完整输出并带 🔴🟢🟡；发现问题尽量在当前 WI 解决，必要时才开边界清晰的新 WI；reference-impact 与 strict quality 在非必要情况下不应被触发；canonical lifecycle 必须明确 guarded parallel Work Items、阻塞 WI 不阻塞兼容独立 WI、Agent/Orchestrator 负责编排，并同步未来安装对象工程。Outcome 是文件和对话框的双重交付，WI 不得在 Outcome 非绿色时结束。用户授权全部必要的 scoped corrective changes、并行 WI（边界独立时）和需要的仓库写入；发布/tag 不属于本 WI。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:initial-acceptance-blocker-1-and-outcome-hard-boundary",
+    "capturedAt": "2026-08-18T00:00:00+09:00",
+    "digest": "sha256:user-authorized-canonical-parallel-successor"
+  },
+  "baseCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.contract.json",
+    ".ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.json",
+    ".ai/work-items/active/canonical-lifecycle-parallel-successor-20260818.outcome.md",
+    "docs/operations/work-item-lifecycle.md",
+    "docs/operations/work-item-lifecycle.ja.md",
+    "docs/operations/work-item-lifecycle.zh-CN.md",
+    "docs/reference/agent-parallel-work-items.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "tests/test_parallel_lifecycle_contract.py",
+    "AGENTS.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "tests/test_installed_runtime_parity.py",
+    "scripts/ai_installer_catalog.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/guards/governance_complexity_policy.yaml"
+  ],
+  "outOfScope": [
+    "Changing Verification Planner, evidence binding, cache, scheduler, or required-check execution.",
+    "Changing the Work Item Status JSON schema or Outcome generator implementation unless a focused observation proves a defect.",
+    "Mutating the archived canonical-lifecycle-parallel-alignment predecessor or rewriting its yellow Outcome.",
+    "Mutating unrelated active Work Items or changing remote provider, release, tag, PR, merge, or closure behavior."
+  ],
+  "sources": [
+    {
+      "path": "user-provided:initial-acceptance-pasted-text",
+      "reason": "The initial acceptance identifies the contradiction between canonical lifecycle serialization and supported guarded parallel Work Items."
+    },
+    {
+      "path": "docs/operations/work-item-lifecycle.md",
+      "reason": "Canonical English operator guidance that must state conditional parallelism and same-WI repair."
+    },
+    {
+      "path": "docs/operations/work-item-lifecycle.ja.md",
+      "reason": "Japanese canonical projection requiring the same rule."
+    },
+    {
+      "path": "docs/operations/work-item-lifecycle.zh-CN.md",
+      "reason": "Simplified Chinese canonical projection requiring the same rule."
+    },
+    {
+      "path": "docs/reference/agent-parallel-work-items.md",
+      "reason": "Existing reference boundary for Agent-owned guarded parallel orchestration."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository operating rules and installed-adopter source rule."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Installer-injected rules must carry the same-WI repair and Outcome boundary."
+    },
+    {
+      "path": "tests/test_parallel_lifecycle_contract.py",
+      "reason": "Regression boundary for canonical language and guarded concurrency."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation_contract",
+      "concurrency_boundary",
+      "evidence_ownership",
+      "installed_adopter"
+    ],
+    "reason": "The canonical text controls operator behavior; it must permit only compatible parallelism and preserve fail-closed shared projection ownership.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "The user authorized the complete bounded correction and requires canonical/installed-adopter parity."
+    ],
+    "override": {
+      "approvalEvidence": "The user explicitly authorized all scoped corrective Work Items, parallel execution where boundaries are disjoint, and repository writes.",
+      "reason": "Documentation and regression correction with no provider or release operation.",
+      "risks": ["documentation_contract", "concurrency_boundary", "evidence_ownership"],
+      "notRunChecks": ["Hosted release verification is out of scope."],
+      "workItemOnly": true,
+      "workItemId": "canonical-lifecycle-parallel-successor-20260818"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized this bounded corrective successor, guarded parallel execution, installed-adopter synchronization, and required verification."
+  },
+  "preReviewWarnings": [
+    "Canonical text must state conditional compatibility, not unrestricted concurrency.",
+    "A blocked Work Item does not block an independent compatible Work Item, but shared generated projections remain serialized.",
+    "A Work Item that discovers a repairable issue resolves it in the current WI; a successor is opened only for changed base, invalidated scope, immutable failed delivery, or a genuinely new delivery."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The English canonical lifecycle allows independent Work Items concurrently only when branch, worktree, scope, evidence ownership, and shared serialized-projection constraints are compatible.",
+    "Japanese and Simplified Chinese canonical lifecycle pages express the same conditional rule and retain one Work Item = one Contract, one dedicated branch/worktree, and one PR.",
+    "Canonical and installed-adopter rules state that a blocked Work Item does not block a compatible independent Work Item, Agent/Orchestrator owns dispatch and aggregation, and governance gates remain fail-closed.",
+    "Canonical and installed-adopter rules contain a same-WI retry clause and a separate successor clause whose triggers are changed base, invalidated scope, immutable failed delivery, or a genuinely new delivery.",
+    "Regression coverage rejects the former unconditional serialization language and proves shared generated projections remain serialized and ownership-bound.",
+    "Regression coverage proves Outcome is a separate, directly visible conversation handoff with traffic-light marker and cannot finish/archive unless green; the existing generator is not changed unless a focused test finds a defect.",
+    "Installer parity tests assert that the generated adopter rules contain the conditional-parallel, same-WI retry, and green-Outcome closure clauses.",
+    "Capability truth and pre-release documentation-alignment projections are regenerated so evidenceSource digests match current bytes.",
+    "The governance-complexity repayment is bounded to this documentation correction and does not raise unrelated ceilings."
+  ],
+  "guidelines": [
+    "Canonical documentation is a product behavior contract and must not contradict executable lifecycle behavior.",
+    "Describe parallelism as conditional on explicit ownership and fail-closed shared projection constraints.",
+    "Keep one Work Item equal to one Contract, one dedicated branch/worktree, and one PR.",
+    "Preserve source-language parity across English, Japanese, and Simplified Chinese canonical pages.",
+    "Keep Outcome handoff visible, separate from progress/state updates, and traffic-light colored."
+  ],
+  "intent": {
+    "problem": "The repository already implements guarded parallel Work Items and direct green Outcome output, but the canonical lifecycle wording and installed rules can still be read as globally serial. The previous canonical correction was archived with a yellow Outcome and must remain immutable; a fresh successor is needed to deliver the rule from current main.",
+    "constraints": [
+      "Do not rewrite the archived predecessor or turn its yellow Outcome green retroactively.",
+      "Keep shared Cockpit status, task reports, archive indexes, and release/documentation projections serialized and fail closed.",
+      "Keep one Contract/branch/worktree/PR per WI and leave Agent/Orchestrator as the scheduler.",
+      "Prefer same-WI repair; use a successor only when the changed base or immutable predecessor requires independent delivery.",
+      "Synchronize rules into future installed adopter projects without changing unrelated runtime verification or release behavior."
+    ],
+    "rationale": "Making the guarded-parallel and same-WI-repair boundary canonical removes the operator contradiction while preserving evidence ownership, lifecycle identity, and the non-negotiable direct Outcome handoff."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make guarded parallel Work Items and same-WI issue resolution authoritative in current and installed rules.",
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+  },
+  "implementationSurface": {
+    "production": [],
+    "tests": ["tests/test_parallel_lifecycle_contract.py", "tests/test_installed_runtime_parity.py"],
+    "documentation": ["docs/operations/work-item-lifecycle.md", "docs/operations/work-item-lifecycle.ja.md", "docs/operations/work-item-lifecycle.zh-CN.md", "docs/reference/agent-parallel-work-items.md", "docs/reference/ai-cockpit-work-item-lifecycle.md", "AGENTS.md", "templates/agents/AI_COCKPIT_RULES.md"],
+    "generated": ["docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", ".ai/guards/governance_complexity_policy.yaml"]
+  },
+  "scenarioCoverage": [
+    {"id": "parallel-compatible", "riskDomain": "concurrency_boundary", "scenario": "Two independent WIs have disjoint implementation/evidence paths and complete serialized-projection declarations.", "expected": "Both remain active with separate Contracts, branches, worktrees, Start Receipts, PRs, and Outcomes while shared projections are serialized.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run canonical text, boundary validator, and two-start regression tests."},
+    {"id": "blocked-independent", "riskDomain": "lifecycle_contract", "scenario": "One WI is blocked while another compatible WI has no dependency on it.", "expected": "The blocked WI does not prevent the compatible WI from progressing.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Assert canonical text in all languages and existing start behavior."},
+    {"id": "same-wi-repair", "riskDomain": "evidence_ownership", "scenario": "A repairable issue is discovered during an active WI and does not invalidate its base, scope, or immutable evidence.", "expected": "The current WI owns and resolves the issue; no successor is opened just to avoid work.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add canonical rule assertions and validate the retry-versus-successor reference boundary."},
+    {"id": "shared-projection-conflict", "riskDomain": "evidence_ownership", "scenario": "A candidate omits or overlaps a shared generated projection boundary.", "expected": "The lifecycle rejects it fail closed rather than allowing ambiguous ownership.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run projection-isolation and lifecycle boundary tests."},
+    {"id": "visible-outcome", "riskDomain": "documentation_contract", "scenario": "A WI reaches finish with persisted Outcome evidence.", "expected": "The direct conversation handoff is a separate visible Outcome line with 🔴/🟡/🟢 and only green permits closure.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run Outcome direct-output and green-gate integration tests."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human-user",
+    "reason": "User explicitly authorized all scoped corrective changes, parallel WIs where boundaries are disjoint, and required repository writes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 949
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/canonical-lifecycle-parallel-successor-20260818.json",
+    "baseCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+    "initialScopeDigest": "4bd2ead789a502dadd842c1233cb4a1980996c9a79175604cbbdddbde3d6a925",
+    "contractSkeletonDigest": "f38a96bcd1e70f110995994484cb62bed53cacd638d33cbe04ccba8245d567d5"
+  }
+}
