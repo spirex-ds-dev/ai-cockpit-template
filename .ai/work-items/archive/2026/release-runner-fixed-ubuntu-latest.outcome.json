@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "release-runner-fixed-ubuntu-latest",
-  "phase": "review",
-  "result": "completed_with_warnings",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "f11e34a3350b3b9407c170fe8f86c286c7d9e1785b2afc8d331c3da548159809"
+  "status": "completed_with_warnings",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "release-runner-fixed-ubuntu-latest",
+    "contractDigest": "72c531be7231c5ea23029a92b63645598dfdf447d60cb9f053bb5f7bd085bdef",
+    "summaryDigest": "1bb98d23841e675e2ac4fcc201f3be09774e542bf13421755cd292952ae0c77d",
+    "verificationDigest": "ef44439a47e6fa64b0a53a43f452b2cc07fe4456b19be4d901a67f34a4dd917e",
+    "baseCommit": "d35ec3d7467e5ef4540e7a328c24bd8dc29dab33",
+    "headCommit": "d35ec3d7467e5ef4540e7a328c24bd8dc29dab33",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "bc2e4448046ab52672e2cb304a4c901ff0d4c9e60616e3c5d3a22ee1fbfc78bb",
+      "binding": {
+        "baseCommit": "d35ec3d7467e5ef4540e7a328c24bd8dc29dab33",
+        "candidateHead": "d35ec3d7467e5ef4540e7a328c24bd8dc29dab33",
+        "candidateTreeDigest": "44cdd3746c3ff1da965b3c893a6f44c25f5b97f7d8c400a4bf3607b92266639a",
+        "candidateDiffDigest": "9a11235f9d5d6e1fada9de683944292c2e3ec39f29c420ad1300bcb8f28204cc"
+      }
+    }
   },
-  "task": {
-    "summary": "Task release-runner-fixed-ubuntu-latest generated an evidence-derived outcome with status completed_with_warnings.",
+  "sections": {
+    "outcomeSummary": "Task release-runner-fixed-ubuntu-latest generated an evidence-derived outcome with status completed_with_warnings.",
+    "taskOverview": "Governed Work Item: release-runner-fixed-ubuntu-latest",
     "deliveredChanges": [
       ".github/workflows/release.yml",
       "tests/test_release_workflow.py",
@@ -25,51 +48,106 @@
       ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json",
       ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.outcome.json",
       ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.outcome.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "Provider billing savings are not claimed because no billing ledger evidence is in scope."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "Provider billing savings are not claimed because no billing ledger evidence is in scope.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "Provider billing savings are not claimed because no billing ledger evidence is in scope.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [
+      {
+        "problem": "The first finish retry stopped because the active Summary still contained the generated documentationAlignment skeleton.",
+        "action": "Declared the final workflow, test, documentation, generated metadata, and lifecycle evidence paths, then replaced the skeleton with the aligned evidence record before retrying finish.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json",
+            "subject": "observedIssues[0] documentationAlignment"
+          },
+          {
+            "source": "scripts/ai_check_summary.py",
+            "subject": "observedIssues[0] documentationAlignment"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json",
+            "subject": "observedIssues[0] documentationAlignment"
+          },
+          {
+            "source": "scripts/ai_check_summary.py",
+            "subject": "observedIssues[0] documentationAlignment"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [
+      {
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "GitHub-hosted runner image labels can change externally; this WI fixes the label but does not pin the underlying Ubuntu image revision.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "User clarified that the intended change is limited to Actions other than CodeQL and should use the free standard ubuntu-latest runner."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json",
+        "subject": "Summary"
+      }
     ]
   },
-  "issues": {
-    "detected": 1,
-    "hardStops": 0,
-    "warnings": 1,
-    "resolved": 0,
-    "unresolved": 1
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [
-    "User clarified that the intended change is limited to Actions other than CodeQL and should use the free standard ubuntu-latest runner."
-  ],
-  "limitations": [
-    {
-      "sourceWarning": "Provider billing savings are not claimed because no billing ledger evidence is in scope.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "GitHub-hosted runner image labels can change externally; this WI fixes the label but does not pin the underlying Ubuntu image revision.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -768,6 +846,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
