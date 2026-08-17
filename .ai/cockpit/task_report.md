@@ -1,48 +1,65 @@
 # AI Cockpit Task Report
 
 Task Result
-Status: Partial
+Status: Blocked
 
 What was completed
-- Changed .github/workflows/release.yml [evidence: .github/workflows/release.yml]
-- Changed tests/test_release_workflow.py [evidence: tests/test_release_workflow.py]
-- Changed docs/reference/distribution.md [evidence: docs/reference/distribution.md]
-- Changed docs/reference/distribution.ja.md [evidence: docs/reference/distribution.ja.md]
-- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
-- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
+- Changed .ai/work-items/active/verification-gate-routing-optimization-20260817.contract.json [evidence: .ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.contract.json]
+- Changed .ai/work-items/active/verification-gate-routing-optimization-20260817.summary.json [evidence: .ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.summary.json]
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/active/release-runner-fixed-ubuntu-latest.contract.json [evidence: .ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.contract.json]
-- Changed .ai/work-items/active/release-runner-fixed-ubuntu-latest.summary.json [evidence: .ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.summary.json]
-- Changed .ai/work-items/active/release-runner-fixed-ubuntu-latest.outcome.json [evidence: .ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.outcome.json]
-- Changed .ai/work-items/active/release-runner-fixed-ubuntu-latest.outcome.md [evidence: .ai/work-items/archive/2026/release-runner-fixed-ubuntu-latest.outcome.md]
+- Changed .ai/work-items/starts/verification-gate-routing-optimization-20260817.json [evidence: .ai/work-items/starts/verification-gate-routing-optimization-20260817.json]
+- Changed Makefile [evidence: Makefile]
+- Changed templates/make/Makefile.ai [evidence: templates/make/Makefile.ai]
+- Changed scripts/ai_check_reference_impact.py [evidence: scripts/ai_check_reference_impact.py]
+- Changed scripts/ai_verification_policy.py [evidence: scripts/ai_verification_policy.py]
+- Changed scripts/determine_governance_profile.py [evidence: scripts/determine_governance_profile.py]
+- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
+- Changed tests/test_reference_impact.py [evidence: tests/test_reference_impact.py]
+- Changed tests/test_verification_policy.py [evidence: tests/test_verification_policy.py]
+- Changed tests/test_governance_profile.py [evidence: tests/test_governance_profile.py]
+- Changed tests/test_quality_gate_architecture.py [evidence: tests/test_quality_gate_architecture.py]
+- Changed .ai/work-items/active/verification-gate-routing-optimization-20260817.outcome.json [evidence: .ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.outcome.json]
+- Changed .ai/work-items/active/verification-gate-routing-optimization-20260817.outcome.md [evidence: .ai/work-items/archive/2026/verification-gate-routing-optimization-20260817.outcome.md]
 
 Problems found
-- Total: 2
+- Total: 5
 - Blocking: 0
 - Warning: 1
 
 Stops triggered
-- None recorded.
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[3] quality failed, verification[quality] retry passed]
 
 Problems resolved
-- Problem: The first finish retry stopped because the active Summary still contained the generated documentationAlignment skeleton.
-  Solution: Declared the final workflow, test, documentation, generated metadata, and lifecycle evidence paths, then replaced the skeleton with the aligned evidence record before retrying finish.
-  Evidence: [evidence: observedIssues[0] documentationAlignment, observedIssues[0] documentationAlignment]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[3] quality failed, verification[quality] retry passed]
 
 Risks avoided
-- None recorded.
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- GitHub-hosted runner image labels can change externally; this WI fixes the label but does not pin the underlying Ubuntu image revision. [evidence: residualRisks]
+- Local tests prove the portable Makefile and installed script surfaces are aligned; provider-hosted performance is not measured in this Work Item. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- User clarified that the intended change is limited to Actions other than CodeQL and should use the free standard ubuntu-latest runner. (inference)
+- Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects. (inference)
 
 Verification
 - aiWorkItem [evidence: aiWorkItem]
@@ -63,9 +80,9 @@ Verification
 - aiSummary [evidence: aiSummary]
 
 Impact
-- Rework avoided: None recorded.
+- Rework avoided: If not detected, could have led to a stale completion claim. (inference)
 - Repeat correction prevented: unknown: no direct recurrence probability evidence was recorded. (inference)
-- Major risk prevented: None recorded.
+- Major risk prevented: If not detected, could have led to a stale completion claim. (inference)
 
 Next action
 - Bind conversation locale and preserve evidence details before the next Work Item starts. (inference)

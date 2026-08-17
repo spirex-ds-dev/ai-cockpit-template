@@ -80,6 +80,22 @@ def test_open_recovery_accepts_completed_with_warnings_outcome(tmp_path):
     assert receipt["workItemId"] == "example-task"
 
 
+def test_local_recovery_keeps_human_confirmation_outcome_fail_closed(tmp_path):
+    write_archive(tmp_path, outcome_status="needs_human_confirmation")
+
+    with pytest.raises(ValueError, match="completed archived Outcome"):
+        recovery.open_post_archive_recovery(
+            root=tmp_path,
+            task="example-task",
+            base_commit="a" * 40,
+            issue="https://github.com/example/repo/issues/1",
+            authority="user-authorized same Work Item recovery",
+            recovery_paths=["scripts/ai_finish.py"],
+            run_pr_audit=lambda _command: (1, "archive evidence failed: paired ownership"),
+            worktree_clean=lambda: True,
+        )
+
+
 def hosted_provider(endpoint: str) -> bytes:
     responses = {
         "/repos/spirex-ds-dev/ai-cockpit-template/actions/runs/42": {
@@ -476,7 +492,7 @@ def test_github_api_retries_without_terminal_flag_for_older_runners(monkeypatch)
 
 
 def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
-    write_archive(tmp_path)
+    write_archive(tmp_path, outcome_status="needs_human_confirmation")
 
     receipt = recovery.open_hosted_functional_failure_recovery(
         root=tmp_path,

@@ -30,9 +30,10 @@ AI_COCKPIT_STRICT_CHECK ?= printf '%s\n' 'Strict project-specific checks: not co
 AI_COCKPIT_RELEASE_CHECK ?= printf '%s\n' 'ERROR: Release verification is not configured. Set AI_COCKPIT_RELEASE_CHECK in Makefile.ai.stack.' >&2; false
 GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
+QUALITY_REQUIRED_GROUPS ?= quality-fast check-ai-reference-impact project-test
 
 .PHONY: ai-help ai-doctor ai-onboard cockpit-doctor cockpit-calibrate cockpit-calibrate-session cockpit-calibration-inventory cockpit-validate-calibration check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration check-ai-adoption-ready \
-	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality quality quality-fast quality-standard quality-full quality-release \
+	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality quality quality-fast quality-standard quality-full quality-strict-targeted quality-release \
 	ai-cockpit-validate-project-quality-configuration \
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-synchronize-work-item ai-transition-conflict-successor ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
@@ -151,6 +152,10 @@ quality-full:
 	$(AI_NESTED_MAKE) --no-print-directory quality-standard
 	@$(AI_COCKPIT_STRICT_CHECK)
 
+quality-strict-targeted:
+	$(AI_NESTED_MAKE) --no-print-directory quality-standard
+	@$(AI_COCKPIT_STRICT_CHECK)
+
 quality-release:
 	$(AI_NESTED_MAKE) --no-print-directory quality-full
 	@$(AI_COCKPIT_RELEASE_CHECK)
@@ -163,8 +168,9 @@ ai-cockpit-quality:
 			$(if $(GOVERNANCE_PROFILE),--profile "$(GOVERNANCE_PROFILE)",) \
 			--output "$(GOVERNANCE_RECEIPT)"; \
 		target=$$($(PYTHON) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
-		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
-		$(AI_NESTED_MAKE) --no-print-directory "$$target"
+		required_groups=$$($(PYTHON) -c 'import json, sys; print(" ".join(json.load(open(sys.argv[1], encoding="utf-8")).get("requiredGroups", [])))' "$(GOVERNANCE_RECEIPT)"); \
+		case "$$target" in quality-fast|quality-standard|quality-full|quality-strict-targeted|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
+		$(AI_NESTED_MAKE) --no-print-directory "$$target" QUALITY_REQUIRED_GROUPS="$$required_groups"
 
 # The portable adopter entrypoint. Makefile.ai.stack keeps the actual formatter,
 # linter, and test commands project-owned; their defaults fail closed above.
@@ -289,17 +295,21 @@ REFERENCE_IMPACT_OUTPUT_DIR ?= target/reference-impact
 
 check-ai-reference-impact:
 	@set -eu; \
-		dir="$(REFERENCE_IMPACT_DIR)"; output_dir="$(REFERENCE_IMPACT_OUTPUT_DIR)"; found=false; \
+		dir="$(REFERENCE_IMPACT_DIR)"; output_dir="$(REFERENCE_IMPACT_OUTPUT_DIR)"; found=false; coverage_decision=continue; \
 		mkdir -p "$$output_dir"; \
-		if test -d "$$dir"; then \
+		contract="$${CONTRACT:-$$(find .ai/work-items/active -name '*.contract.json' -type f | head -n 1)}"; \
+		if test -n "$$contract"; then \
+			$(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --coverage-contract "$$contract" --records-dir "$$dir" --output "$$output_dir/coverage.decision.json" --enforce; \
+			coverage_decision=$$($(PYTHON) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("decision", "error"))' "$$output_dir/coverage.decision.json"); \
+		fi; \
+		if test "$$coverage_decision" != not_applicable && test -d "$$dir"; then \
 			for record in "$$dir"/*.json; do \
 				test -f "$$record" || continue; found=true; name=$${record##*/}; \
 				$(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --record "$$record" --output "$$output_dir/$${name%.json}.decision.json" --enforce; \
 			done; \
 		fi; \
-		contract="$${CONTRACT:-$$(find .ai/work-items/active -name '*.contract.json' -type f | head -n 1)}"; \
-		if test -n "$$contract"; then $(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --coverage-contract "$$contract" --records-dir "$$dir" --output "$$output_dir/coverage.decision.json" --enforce; fi; \
-		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records; coverage decision enforced.'; fi
+		if test "$$coverage_decision" = not_applicable; then cat "$$output_dir/coverage.decision.json"; rm -f "$$output_dir/coverage.decision.json"; printf '%s\n' 'Reference impact: not applicable; repository records were not scanned.'; \
+		elif test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records; coverage decision enforced.'; fi
 
 check-ai-test-weakening-fast:
 	$(AI_PYTHON) scripts/ai_check_test_weakening.py --root . $(if $(AI_BASE_COMMIT),--base-ref "$(AI_BASE_COMMIT)",) --mode fast --policy .ai/guards/test_weakening_policy.yaml

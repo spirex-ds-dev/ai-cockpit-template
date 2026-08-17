@@ -27,6 +27,7 @@ ALLOWED_GATES = {
     "hostedFunctionalFailure",
 }
 RECOVERABLE_OUTCOME_STATUSES = {"completed", "completed_with_warnings"}
+HOSTED_RECOVERABLE_OUTCOME_STATUSES = RECOVERABLE_OUTCOME_STATUSES | {"needs_human_confirmation"}
 HOSTED_RECEIPT_VERSION = 2
 HOSTED_FUNCTIONAL_RECEIPT_VERSION = 3
 GITHUB_REPOSITORY = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
@@ -122,12 +123,20 @@ def archive_files(root: Path, task: str) -> dict[str, Path]:
     return {name: paths[0] for name, paths in found.items()}
 
 
-def _require_recoverable_outcome(artifacts: dict[str, Path], task: str) -> None:
+def _require_recoverable_outcome(
+    artifacts: dict[str, Path], task: str, *, allow_human_confirmation: bool = False
+) -> None:
     outcome = json.loads(artifacts["outcome"].read_text(encoding="utf-8"))
-    if (
-        outcome.get("workItemId") != task
-        or outcome.get("status") not in RECOVERABLE_OUTCOME_STATUSES
-    ):
+    allowed_statuses = (
+        HOSTED_RECOVERABLE_OUTCOME_STATUSES
+        if allow_human_confirmation
+        else RECOVERABLE_OUTCOME_STATUSES
+    )
+    if outcome.get("workItemId") != task or outcome.get("status") not in allowed_statuses:
+        if allow_human_confirmation:
+            raise ValueError(
+                "same-Work-Item hosted recovery requires a completed or explicitly human-confirmed archived Outcome"
+            )
         raise ValueError("same-Work-Item recovery requires a completed archived Outcome")
 
 
@@ -427,7 +436,7 @@ def open_hosted_post_archive_recovery(
     if not worktree_clean():
         raise ValueError("post-archive recovery must start from a clean committed worktree")
     artifacts = archive_files(root, task)
-    _require_recoverable_outcome(artifacts, task)
+    _require_recoverable_outcome(artifacts, task, allow_human_confirmation=True)
     provider = verified_hosted_coverage_failure(
         repository=repository,
         pull_request=pull_request,
@@ -571,7 +580,7 @@ def open_hosted_functional_failure_recovery(
     if not worktree_clean():
         raise ValueError("post-archive recovery must start from a clean committed worktree")
     artifacts = archive_files(root, task)
-    _require_recoverable_outcome(artifacts, task)
+    _require_recoverable_outcome(artifacts, task, allow_human_confirmation=True)
     provider = verified_hosted_functional_failure(
         repository=repository,
         pull_request=pull_request,

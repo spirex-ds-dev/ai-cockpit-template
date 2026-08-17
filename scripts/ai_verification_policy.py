@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import hashlib
 import json
 from typing import Any
@@ -25,6 +26,122 @@ DOMAIN_LEVELS = {
     "lifecycle": "strict",
     "release": "strict",
 }
+
+STRICT_TARGETED_PATTERNS = (
+    ".ai/quality/**",
+    "scripts/ai_*.py",
+    "templates/**",
+    "Makefile",
+    "Makefile.ai",
+    "AGENTS.md",
+    "GEMINI.md",
+    "CLAUDE.md",
+)
+STRICT_FULL_PATTERNS = (
+    ".ai/guards/**",
+    ".ai/policies/**",
+    ".ai/work-items/**",
+    ".github/workflows/**",
+    ".cursor/**",
+    "scripts/install*.py",
+    "scripts/uninstall*.py",
+    "install.sh",
+    "uninstall.sh",
+    "requirements*",
+    "pyproject.toml",
+    "poetry.lock",
+    "package.json",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "yarn.lock",
+    "Cargo.toml",
+    "Cargo.lock",
+    "go.mod",
+    "go.sum",
+    "migrations/**",
+    "db/migrations/**",
+    "release*",
+    "dist/**",
+    "signing/**",
+)
+PROJECT_TEST_PATTERNS = (
+    "scripts/**",
+    "templates/**",
+    "Makefile",
+    "Makefile.ai",
+    "tests/**",
+    "test/**",
+    "src/**",
+    "lib/**",
+    "app/**",
+)
+PROJECT_CONSISTENCY_PATTERNS = (
+    ".ai/quality/**",
+    "scripts/**",
+    "templates/**",
+    "Makefile",
+    "Makefile.ai",
+    "AGENTS.md",
+    "GEMINI.md",
+    "CLAUDE.md",
+)
+
+
+def strict_quality_routing(
+    changed_paths: list[str], *, release: bool = False, explicit_strict: bool = False
+) -> dict[str, Any]:
+    """Choose a strict target without lowering high-risk or explicit strict work."""
+    normalized = sorted(path.replace("\\", "/").removeprefix("./") for path in changed_paths)
+    if release:
+        return {
+            "target": "quality-full",
+            "requiredGroups": ["quality-full"],
+            "reason": "release escalation requires the complete quality graph",
+        }
+    if explicit_strict:
+        return {
+            "target": "quality-full",
+            "requiredGroups": ["quality-full"],
+            "reason": "explicit strict governance requires the complete quality graph",
+        }
+    high_risk = [
+        path
+        for path in normalized
+        if any(fnmatch.fnmatchcase(path, pattern) for pattern in STRICT_FULL_PATTERNS)
+    ]
+    if high_risk:
+        return {
+            "target": "quality-full",
+            "requiredGroups": ["quality-full"],
+            "reason": f"high-risk strict paths require full quality: {', '.join(high_risk)}",
+        }
+    unclassified = [
+        path
+        for path in normalized
+        if not any(fnmatch.fnmatchcase(path, pattern) for pattern in STRICT_TARGETED_PATTERNS)
+    ]
+    if unclassified:
+        return {
+            "target": "quality-full",
+            "requiredGroups": ["quality-full"],
+            "reason": f"strict paths without a targeted routing rule require full quality: {', '.join(unclassified)}",
+        }
+    groups = ["quality-fast", "check-ai-reference-impact"]
+    if any(
+        any(fnmatch.fnmatchcase(path, pattern) for pattern in PROJECT_TEST_PATTERNS)
+        for path in normalized
+    ):
+        groups.append("project-test")
+    if any(
+        any(fnmatch.fnmatchcase(path, pattern) for pattern in PROJECT_CONSISTENCY_PATTERNS)
+        for path in normalized
+    ):
+        groups.append("quality-project-consistency-group")
+    return {
+        "target": "quality-strict-targeted",
+        "requiredGroups": groups,
+        "reason": "automatic strict governance uses only groups matched by changed-path domains",
+    }
 
 
 def finish_quality_route(
@@ -74,6 +191,14 @@ def select_policy(
     domains = {classify_path(path) for path in changed_paths}
     levels = [DOMAIN_LEVELS.get(domain, "standard") for domain in domains]
     level = max(levels, key=POLICY_LEVELS.index) if levels else "standard"
+    if any(
+        any(
+            fnmatch.fnmatchcase(path.replace("\\", "/"), pattern)
+            for pattern in (*STRICT_TARGETED_PATTERNS, *STRICT_FULL_PATTERNS)
+        )
+        for path in changed_paths
+    ):
+        level = "strict"
     stage_floor = "strict" if stage == "release" else "standard" if stage == "pr" else "light"
     if POLICY_LEVELS.index(stage_floor) > POLICY_LEVELS.index(level):
         level = stage_floor
@@ -82,7 +207,28 @@ def select_policy(
             raise ValueError(f"requested policy {requested} cannot lower selected policy {level}")
         level = requested
     scope = "focused" if level == "light" else "full"
-    return {"level": level, "scope": scope, "stage": stage, "domains": sorted(domains)}
+    if level == "strict":
+        quality_routing = strict_quality_routing(
+            changed_paths,
+            release=stage == "release",
+            explicit_strict=requested == "strict",
+        )
+    else:
+        target = "quality-fast" if level == "light" else "quality-standard"
+        quality_routing = {
+            "target": target,
+            "requiredGroups": [target],
+            "reason": f"{level} governance uses its profile target",
+        }
+    return {
+        "level": level,
+        "scope": scope,
+        "stage": stage,
+        "domains": sorted(domains),
+        "qualityTarget": quality_routing["target"],
+        "requiredGroups": quality_routing["requiredGroups"],
+        "qualityRouting": quality_routing,
+    }
 
 
 def verification_cache_key(inputs: dict[str, Any]) -> str:

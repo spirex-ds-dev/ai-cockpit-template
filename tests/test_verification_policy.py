@@ -28,6 +28,26 @@ def test_finish_quality_route_cannot_lower_an_explicit_strict_contract_profile()
     assert route["command"] == "make ai-cockpit-quality GOVERNANCE_PROFILE=strict"
 
 
+def test_automatic_strict_governance_routes_to_targeted_groups_but_explicit_strict_is_full():
+    automatic = finish_quality_route(["scripts/ai_check_reference_impact.py"])
+    explicit = finish_quality_route(["scripts/ai_check_reference_impact.py"], requested="strict")
+
+    assert automatic["policy"]["qualityTarget"] == "quality-strict-targeted"
+    assert "quality-project-consistency-group" in automatic["policy"]["requiredGroups"]
+    assert explicit["policy"]["qualityTarget"] == "quality-full"
+
+
+def test_strict_routing_keeps_high_risk_domains_on_full_quality():
+    for path in (
+        ".ai/guards/policy.yaml",
+        "requirements-dev.lock",
+        ".github/workflows/release.yml",
+        "scripts/install_ai_cockpit.py",
+    ):
+        route = finish_quality_route([path])
+        assert route["policy"]["qualityTarget"] == "quality-full"
+
+
 def test_finish_route_reclassifies_automatic_profile_but_preserves_stricter_record():
     elevated = finish_quality_route_for_contract(
         [".ai/guards/policy.yaml"],
