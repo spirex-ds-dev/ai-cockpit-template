@@ -618,6 +618,14 @@ def prepare_pre_archive_candidate_coverage(
     outcome_ok, outcome_message = bind_pre_archive_candidate_coverage_to_outcome(task)
     if not outcome_ok:
         return 1, outcome_message
+    # Binding candidate coverage mutates the already-derived Outcome. Refresh
+    # its human report immediately so the report digest and next action remain
+    # bound to the exact persisted Outcome before either finish or archive
+    # returns control to a human.
+    summary_path = PROJECT_ROOT / task_paths(task)[1]
+    report_ok, report_message = run_human_report_pipeline(task, summary_path)
+    if not report_ok:
+        return 1, f"post-candidate Human Benefit Report refresh failed: {report_message}"
     return 0, ""
 
 

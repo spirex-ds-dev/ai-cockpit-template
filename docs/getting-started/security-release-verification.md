@@ -49,9 +49,12 @@ canonical tag, version, source/tag/metadata commit, and artifact-digest tuple
 in its validated lifecycle facts; disagreement fails before any installer
 write. Do not select the highest tag as a substitute.
 
-For a selected public tag, `release-digests.json` is a release asset generated
-after the source commit is fixed. The Quick Install script fetches that asset
-into its disposable tag clone, then validates its tag, source commit, and
+For a selected public tag, `release.json` and `release-digests.json` are release
+assets generated after the source commit is fixed. The manifest's
+`artifacts.release.json` must equal the SHA-256 of the final public `release.json`
+bytes. The mutable projections stay outside the source archive so the archive
+SHA and manifest cannot reference each other. Quick Install fetches both assets
+into its disposable tag clone, then validates their tag, source commit, and
 artifact digests before it can write to the adopter. A tag-tree copy may be a
 historical baseline and is not authority for a later release. If this fetch or
 validation fails, do not replace the file or bypass the failure: preserve the

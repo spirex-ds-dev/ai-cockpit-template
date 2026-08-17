@@ -603,7 +603,7 @@ def test_fetch_published_release_assets_downloads_all_required_assets(monkeypatc
             "draft": False,
             "assets": [
                 {"name": name, "browser_download_url": f"https://example.test/{name}"}
-                for name in ("sbom.json", "provenance.json", "release-digests.json")
+                for name in ("sbom.json", "provenance.json", "release-digests.json", "release.json")
             ],
         }
     ).encode()
@@ -621,6 +621,7 @@ def test_fetch_published_release_assets_downloads_all_required_assets(monkeypatc
         "sbom.json": b"sbom.json",
         "provenance.json": b"provenance.json",
         "release-digests.json": b"release-digests.json",
+        "release.json": b"release.json",
     }
 
 
@@ -675,7 +676,7 @@ def test_fetch_published_release_assets_rejects_non_object_or_non_list(monkeypat
 def test_fetch_published_release_assets_uses_github_api(monkeypatch):
     assets = [
         {"name": name, "browser_download_url": f"https://example.test/{name}"}
-        for name in ("sbom.json", "provenance.json", "release-digests.json")
+        for name in ("sbom.json", "provenance.json", "release-digests.json", "release.json")
     ]
     seen = []
 
@@ -873,6 +874,7 @@ def test_public_release_asset_integrity_binds_downloads_to_tag_tree(tmp_path):
         "sbom.json": files[".ai/cockpit/sbom.json"],
         "provenance.json": files[".ai/cockpit/provenance.json"],
         "release-digests.json": manifest_bytes,
+        "release.json": files["release.json"],
     }
 
     assert (
@@ -884,6 +886,56 @@ def test_public_release_asset_integrity_binds_downloads_to_tag_tree(tmp_path):
         )
         == []
     )
+
+
+def test_public_release_asset_integrity_rejects_release_json_digest_mismatch(tmp_path):
+    tree = tmp_path / "tree"
+    (tree / ".ai" / "cockpit").mkdir(parents=True)
+    release_payload = b'{"releaseTag":"v1.2.3"}\n'
+    files = {
+        "requirements-dev.lock": b"lock",
+        ".ai/cockpit/sbom.json": b"sbom",
+        ".ai/cockpit/provenance.json": b"provenance",
+        "install.sh": b"#!/bin/sh\nexit 0\n",
+        "release.json": release_payload,
+    }
+    for relative, payload in files.items():
+        path = tree / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(payload)
+    manifest = {
+        "format": "ai-cockpit-release-digests",
+        "version": 1,
+        "sourceCommit": "a" * 40,
+        "releaseTag": "v1.2.3",
+        "correlation": {
+            "workflowRunId": "123",
+            "workflowRunSha": "a" * 40,
+            "sourceCommit": "a" * 40,
+            "releaseTag": "v1.2.3",
+        },
+        "artifacts": {
+            relative: __import__("hashlib").sha256(payload).hexdigest()
+            for relative, payload in files.items()
+        },
+    }
+    manifest["artifacts"]["release.json"] = "0" * 64
+    manifest_bytes = (json.dumps(manifest, sort_keys=True) + "\n").encode()
+
+    issues = release_distribution.public_release_asset_integrity_issues(
+        tag="v1.2.3",
+        tag_target="a" * 40,
+        tag_root=tree,
+        assets={
+            "sbom.json": files[".ai/cockpit/sbom.json"],
+            "provenance.json": files[".ai/cockpit/provenance.json"],
+            "release-digests.json": manifest_bytes,
+            "release.json": release_payload,
+        },
+        source_bound_artifacts=release_distribution.SOURCE_BOUND_ARTIFACTS | {"release.json"},
+    )
+
+    assert "public asset digest mismatch for release.json" in " ".join(issues)
 
 
 def test_public_release_asset_integrity_rejects_missing_and_altered_assets(tmp_path):

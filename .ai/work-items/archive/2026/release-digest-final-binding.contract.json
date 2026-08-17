@@ -1,0 +1,203 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-digest-final-binding",
+  "mode": "code",
+  "title": "Correct final release metadata digest binding",
+  "baseCommit": "03177485ce2647f8c66a0697272c94d8e47d4221",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "修复 v0.5.63 官方 release-digests.json 中 release.json 的陈旧摘要；从根因修复生成流程和校验，并发布下一个修正版版本。",
+  "rawRequestSource": {"type": "human", "reference": "conversation", "capturedAt": "2026-08-17", "digest": "sha256:release-digest-final-binding-user-request"},
+  "declaredIntent": {"summary": "Make the final public release.json digest binding source-consistent and prevent recurrence in future releases.", "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+  "scope": [
+    ".github/workflows/release.yml",
+    "scripts/release_archive.py",
+    "scripts/check_release_distribution.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_generate_human_report.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_distribution.py",
+    "tests/test_release_workflow.py",
+    "tests/test_human_benefit_report.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/getting-started/security-release-verification.md",
+    "docs/getting-started/security-release-verification.ja.md",
+    "docs/getting-started/security-release-verification.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/release-digest-final-binding.contract.json",
+    ".ai/work-items/active/release-digest-final-binding.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-digest-final-binding.outcome.json",
+    ".ai/work-items/active/release-digest-final-binding.outcome.md"
+  ],
+  "outOfScope": [
+    "Do not modify, delete, move, or re-upload v0.5.63 tag or its immutable release assets.",
+    "Do not change installer behavior, archive source content, or unrelated Work Items.",
+    "Do not publish a tag or Draft Release before local and hosted release gates pass."
+  ],
+  "sources": [
+    {"path": ".github/workflows/release.yml", "reason": "The generator currently mutates release.json after generating its release-digests artifact."},
+    {"path": "scripts/check_supply_chain.py", "reason": "Defines the final release-digests artifact and its release.json digest field."},
+    {"path": "scripts/check_release_distribution.py", "reason": "Public verification currently does not require or compare the release.json asset."},
+    {"path": "scripts/release_archive.py", "reason": "Defines the export-ignore archive boundary and the prior runtime manifest projection."},
+    {"path": "tests/test_release_workflow.py", "reason": "Workflow ordering and publication-side regression coverage."},
+    {"path": "tests/test_release_distribution.py", "reason": "Public asset integrity and provider asset fixture coverage."},
+    {"path": "docs/reference/distribution.md", "reason": "Canonical release asset authority and archive boundary documentation."},
+    {"path": "docs/getting-started/security-release-verification.md", "reason": "Maintainer/adopter fail-closed release verification policy."},
+    {"path": ".ai/work-items/archive/2026/release-runtime-digest-archive-fix.summary.json", "reason": "Prior correction that introduced runtime digest archive projection and its current self-reference boundary."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.63", "reason": "Public immutable release evidence reported by the user and independently checked."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "evidence_integrity", "public_distribution"],
+    "reason": "A stale public digest can make an otherwise installable release fail evidence verification; the correction changes a release workflow and its public verifier.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {"selected": "strict", "source": "human_override", "reasons": ["Public release evidence and immutable publication boundary require strict verification."], "override": {"approvalEvidence": "User authorized the root-cause correction and subsequent new patch release in this conversation.", "reason": "Prevent recurrence of a public release digest mismatch.", "risks": ["release_identity", "evidence_integrity", "public_distribution"], "notRunChecks": ["Provider-side release execution is deferred until the merged source is available."], "workItemOnly": true, "workItemId": "release-digest-final-binding"}},
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the bounded root-cause correction and subsequent new patch release; the exact merged source identity remains deferred to release finalization."
+  },
+  "requestedOperation": {"target": "repository_release", "action": "publish", "environment": "public_provider", "effect": "create_immutable_release_tag_and_public_assets", "authorityRequired": true},
+  "authorityEvidence": {"type": "user_authorization", "authorizedBy": "user", "reference": "conversation", "scope": "Root-cause correction, governed merge, and publication of the next patch release only; preserve v0.5.63."},
+  "preReviewWarnings": ["Do not rewrite v0.5.63; prove the new version's public release.json and release-digests.json are mutually consistent."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release workflow generates the final archive before the final release.json digest manifest, and the final manifest records the exact public release.json bytes after archive SHA binding.",
+    "Mutable release projections are not embedded in the source archive, eliminating the release.json/archive/manifest self-reference cycle; the archive SHA still matches the published archive asset.",
+    "The archive builder has no runtime release-digest projection option, so a future workflow cannot reintroduce the self-reference through a convenience flag.",
+    "The public distribution checker requires release.json as a release asset and rejects any mismatch between its bytes and release-digests.json.artifacts.release.json before installer execution.",
+    "Human Benefit Reports remain digest-bound after pre-archive candidate coverage mutates the Outcome, and resolved historical stops do not replace the current next action.",
+    "Focused regression tests cover workflow ordering, missing or stale release.json public assets, digest mismatch, and a valid complete asset set; existing fail-closed gates remain enabled.",
+    "English, Japanese, and Simplified Chinese release verification documentation state the independent public asset binding and immutable historical-release correction rule.",
+    "After this Work Item is merged and closed, the next available patch release is published and its downloaded release.json, release-digests.json, archive, installer, tag, source commit, and provider evidence pass the post-publish checks."
+  ],
+  "guidelines": [
+    "Release evidence must be generated only after final runtime release metadata is complete.",
+    "The immutable historical v0.5.63 tag and assets are preserved; correction uses a new patch tag.",
+    "Every public release asset claim must be checked against downloaded bytes before publication or installer execution.",
+    "Do not weaken, skip, or xfail release, archive, installer, smoke, compatibility, or fail-closed checks.",
+    "Human Benefit Reports must be regenerated after any post-generation Outcome mutation, and resolved stops must not become current recovery actions.",
+    "Document the same release boundary and recovery semantics in English, Japanese, and Simplified Chinese."
+  ],
+  "intent": {
+    "problem": "The v0.5.63 public release manifest declares a stale SHA-256 for the public release.json asset because the workflow changes release.json after generating release-digests.json. The prior runtime archive projection couples the manifest to an archive hash that is itself stored in release.json, so the ordering cannot produce a stable final binding.",
+    "constraints": ["Preserve immutable v0.5.63 evidence.", "Keep release verification fail-closed.", "Do not broaden the Work Item beyond this release evidence path.", "Publish only a new patch release after exact-source hosted verification."],
+    "rationale": "Decoupling mutable release projections from the archive and regenerating the public digest manifest after the final release.json mutation removes the self-reference and makes the public asset digest checkable."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Final workflow output has release.json bytes equal to release-digests.json.artifacts.release.json", "riskDomain": "evidence_integrity", "required": true, "status": "unverified", "evidence": [], "expected": "exact SHA-256 equality after archive SHA binding", "verificationPlan": "Workflow regression and local release evidence check."},
+    {"scenario": "Archive generation cannot reintroduce mutable release projections or a stale embedded manifest", "riskDomain": "artifact_integrity", "required": true, "status": "unverified", "evidence": [], "expected": "archive remains reproducible without runtime release projections", "verificationPlan": "Archive boundary regression and release workflow inspection."},
+    {"scenario": "Public checker receives missing, altered, or mismatched release.json asset", "riskDomain": "public_distribution", "required": true, "status": "unverified", "evidence": [], "expected": "checker fails closed before installer execution", "verificationPlan": "Focused negative tests."},
+    {"scenario": "New correction release is downloaded by a clean adopter", "riskDomain": "public_distribution", "required": true, "status": "unverified", "evidence": [], "expected": "tag, metadata, manifest, archive, installer and source identity all agree", "verificationPlan": "Hosted release workflow and post-publish distribution check."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized the correction and new release; historical v0.5.63 mutation remains out of scope."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 940
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-digest-final-binding.json",
+    "baseCommit": "03177485ce2647f8c66a0697272c94d8e47d4221",
+    "initialScopeDigest": "bb35f4bd5457b637b7ba3c7f6f36c8743bb94f2105d71b7ed0a8861e8cd4b2c6",
+    "contractSkeletonDigest": "b7b5cd5c6c782d36f79e5212ef80a11f479fb3d0fb17527ba4e62a879e9167e9"
+  }
+}

@@ -38,7 +38,7 @@ keywords:
 
 正規の公開 projection または別途検証した private mirror だけを使います。stable provider Release、tag 固定 metadata、source、installer、archive Asset、digest のいずれかが一致しなければ停止します。最大の tag を代替にしてはいけません。
 
-選択した公開 tag の `release-digests.json` は、source commit を固定した後に生成される release Asset です。Quick Install はこの Asset を使い捨ての tag clone へ取得し、tag、source commit、artifact digest を検証してからでなければ導入先を書き換えません。tag tree 内のコピーは履歴上の baseline であり、後続 release の authority にはできません。取得または検証が失敗した場合、file の差し替えや失敗の回避はせず、error を保持し、正確な tag の公開 release Asset を検証します。不変の履歴 release に誤りがあれば、新しい修正 tag を公開します。
+選択した公開 tag の `release.json` と `release-digests.json` は、source commit を固定した後に生成される release Asset です。manifest の `artifacts.release.json` は、最終公開 `release.json` の実バイト列の SHA-256 と一致しなければなりません。可変な projection は source archive の外に置き、archive SHA と manifest の相互参照を避けます。Quick Install は両方の Asset を使い捨ての tag clone へ取得し、tag、source commit、artifact digest を検証してからでなければ導入先を書き換えません。tag tree 内のコピーは履歴上の baseline であり、後続 release の authority にはできません。取得または検証が失敗した場合、file の差し替えや失敗の回避はせず、error を保持し、正確な tag の公開 release Asset を検証します。不変の履歴 release に誤りがあれば、新しい修正 tag を公開します。
 
 ### Maintainer の経路
 

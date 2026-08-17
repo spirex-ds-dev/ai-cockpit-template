@@ -11,8 +11,6 @@ import subprocess
 import tarfile
 from pathlib import Path
 
-_RUNTIME_WORKTREE_MEMBERS = (".ai/cockpit/release-digests.json",)
-
 
 def _git_archive_members(root: Path, source_commit: str) -> list[tarfile.TarInfo]:
     result = subprocess.run(  # nosec B603 B607
@@ -44,18 +42,10 @@ def _worktree_file_bytes(root: Path, relative_path: str) -> bytes:
     return path.read_bytes()
 
 
-def _canonical_tar(
-    root: Path, source_commit: str, *, use_worktree: bool, include_runtime_digests: bool = False
-) -> bytes:
+def _canonical_tar(root: Path, source_commit: str, *, use_worktree: bool) -> bytes:
     """Serialize Git-selected paths using Python-owned stable tar metadata."""
     members = _git_archive_members(root, source_commit)
-    member_names = {member.name for member in members}
-    if use_worktree and include_runtime_digests:
-        for relative_path in _RUNTIME_WORKTREE_MEMBERS:
-            name = f"ai-cockpit/{relative_path}"
-            if name not in member_names and (root / relative_path).is_file():
-                members.append(tarfile.TarInfo(name))
-        members.sort(key=lambda member: member.name)
+    members.sort(key=lambda member: member.name)
     output = io.BytesIO()
     with tarfile.open(fileobj=output, mode="w", format=tarfile.USTAR_FORMAT) as archive:
         for member in members:
@@ -88,13 +78,9 @@ def canonical_tar(root: Path, source_commit: str) -> bytes:
     return _canonical_tar(root, source_commit, use_worktree=False)
 
 
-def canonical_tar_from_worktree(
-    root: Path, source_commit: str, *, include_runtime_digests: bool = False
-) -> bytes:
+def canonical_tar_from_worktree(root: Path, source_commit: str) -> bytes:
     """Serialize Git-selected paths using current, regular worktree bytes."""
-    return _canonical_tar(
-        root, source_commit, use_worktree=True, include_runtime_digests=include_runtime_digests
-    )
+    return _canonical_tar(root, source_commit, use_worktree=True)
 
 
 def canonical_archive_bytes(root: Path, source_commit: str) -> bytes:
@@ -104,16 +90,10 @@ def canonical_archive_bytes(root: Path, source_commit: str) -> bytes:
     return output.getvalue()
 
 
-def canonical_archive_bytes_from_worktree(
-    root: Path, source_commit: str, *, include_runtime_digests: bool = False
-) -> bytes:
+def canonical_archive_bytes_from_worktree(root: Path, source_commit: str) -> bytes:
     output = io.BytesIO()
     with gzip.GzipFile(fileobj=output, mode="wb", compresslevel=9, mtime=0) as compressor:
-        compressor.write(
-            canonical_tar_from_worktree(
-                root, source_commit, include_runtime_digests=include_runtime_digests
-            )
-        )
+        compressor.write(canonical_tar_from_worktree(root, source_commit))
     return output.getvalue()
 
 
@@ -143,13 +123,10 @@ def main() -> int:
         action="store_true",
         help="archive Git-selected paths with current regular worktree bytes",
     )
-    parser.add_argument("--include-runtime-release-digests", action="store_true")
     args = parser.parse_args()
     root = args.root.resolve()
     archive = (
-        canonical_archive_bytes_from_worktree(
-            root, args.source_commit, include_runtime_digests=args.include_runtime_release_digests
-        )
+        canonical_archive_bytes_from_worktree(root, args.source_commit)
         if args.use_worktree
         else canonical_archive_bytes(root, args.source_commit)
     )
