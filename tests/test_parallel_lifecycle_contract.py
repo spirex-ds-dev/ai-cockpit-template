@@ -20,6 +20,19 @@ AGENT_RULES = (
 )
 
 
+def _canonical_contract_path() -> Path:
+    """Read the Contract from its lifecycle-owned active or archived location."""
+    active = ROOT / ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json"
+    archived = sorted(
+        (ROOT / ".ai/work-items/archive").glob(
+            "*/canonical-lifecycle-parallel-alignment.contract.json"
+        )
+    )
+    candidates = [path for path in (active, *archived) if path.is_file()]
+    assert len(candidates) == 1, f"expected one canonical Contract, found: {candidates}"
+    return candidates[0]
+
+
 def test_canonical_pages_describe_guarded_parallel_work_items() -> None:
     """Break caught: canonical guidance globally serializes otherwise independent work."""
     pages = [path.read_text(encoding="utf-8") for path in CANONICAL_PAGES]
@@ -43,11 +56,7 @@ def test_canonical_pages_describe_guarded_parallel_work_items() -> None:
 
 def test_contract_preserves_closed_serialized_projection_boundary() -> None:
     """Break caught: parallel guidance permits ambiguous shared projection ownership."""
-    contract = json.loads(
-        (
-            ROOT / ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json"
-        ).read_text(encoding="utf-8")
-    )
+    contract = json.loads(_canonical_contract_path().read_text(encoding="utf-8"))
 
     assert validate_concurrency_boundary(contract) == []
     assert set(contract["concurrencyBoundary"]["serializedProjectionPaths"]) == set(
