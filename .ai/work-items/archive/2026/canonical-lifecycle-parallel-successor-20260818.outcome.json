@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "canonical-lifecycle-parallel-successor-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "c5388b9d31a4d180f84be29456718d721c06fae03b49d419d4f47558cd672a49"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "canonical-lifecycle-parallel-successor-20260818",
+    "contractDigest": "192d6c96ffc098c3539c511d2262933fe03deb5a4086542e0228dd17c1621ee6",
+    "summaryDigest": "872aba78da4f143c1ca3281531a7c7d367dcbb527ecf9bbdf3fc2d0f5270cf75",
+    "verificationDigest": "36a58f7cab0c0465a99c1dc85bf66e2c833c373af6345470d5263aa2335c6bad",
+    "baseCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+    "headCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "51f3a162b230c64300311c0f0d88d2c37498e3ad299f846f65e33cbb011bfbb7",
+      "binding": {
+        "baseCommit": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+        "candidateHead": "c58c9b99e74646149ac1b6f1b651738d2627b5d3",
+        "candidateTreeDigest": "41e1c3d2b3e9314c21a2a0241e0e6e98f17faea91fc45631da483d0c13119feb",
+        "candidateDiffDigest": "723aa8bd04da89969d2e399531aa53222a0f6e2228f280a8bf8e7a7be86fc578"
+      }
+    }
   },
-  "task": {
-    "summary": "Task canonical-lifecycle-parallel-successor-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task canonical-lifecycle-parallel-successor-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: canonical-lifecycle-parallel-successor-20260818",
     "deliveredChanges": [
       ".ai/cockpit/current_status.md",
       ".ai/cockpit/task_report.json",
@@ -28,92 +51,132 @@
       "docs/reference/pre-release-documentation-alignment.md",
       "templates/agents/AI_COCKPIT_RULES.md",
       "tests/test_parallel_lifecycle_contract.py"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "translation-review",
+        "severity": "low",
+        "title": "translation-review",
+        "detail": "Automated parity covers required lifecycle concepts; native-language editorial nuance still benefits from human review.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "shared-projections",
+        "severity": "low",
+        "title": "shared-projections",
+        "detail": "Shared status and documentation projections remain serialized and must be refreshed after any later base synchronization.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "Outcome must be independently visible in the conversation, separate from progress/state updates, and include 🔴, 🟡, or 🟢.",
+      "A Work Item cannot end or archive unless its Outcome is green; a blocked Work Item must not block a compatible independent Work Item.",
+      "Problems found during a WI must be repaired in that WI when in scope; a successor is reserved for changed base, invalidated scope, immutable failed delivery, or a genuinely new delivery.",
+      "The user authorized the scoped corrective changes, guarded parallel WIs, installed-adopter synchronization, and required repository writes; release/tag publication remains out of scope."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
+      }
     ]
   },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "cbe62b8347f254de3a0a505fe7e6b0e50b6ef8cdddd912b82a7f2ab2ac3f087b"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "c7e5d529f5ddd16fb8987cd8a7c3dc8943742236cdfc7230c4d823da1b3c4f21"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "Outcome must be independently visible in the conversation, separate from progress/state updates, and include 🔴, 🟡, or 🟢.",
-    "A Work Item cannot end or archive unless its Outcome is green; a blocked Work Item must not block a compatible independent Work Item.",
-    "Problems found during a WI must be repaired in that WI when in scope; a successor is reserved for changed base, invalidated scope, immutable failed delivery, or a genuinely new delivery.",
-    "The user authorized the scoped corrective changes, guarded parallel WIs, installed-adopter synchronization, and required repository writes; release/tag publication remains out of scope."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "low",
-      "detail": "Automated parity covers required lifecycle concepts; native-language editorial nuance still benefits from human review.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    },
-    {
-      "severity": "low",
-      "detail": "Shared status and documentation projections remain serialized and must be refreshed after any later base synchronization.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -932,6 +995,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

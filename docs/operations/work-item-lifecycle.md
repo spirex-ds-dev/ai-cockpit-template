@@ -30,10 +30,10 @@ Use this route for one change from a trusted base to merged cleanup.
 ## Decision
 `latest remote base → Contract → preflight → implementation → verification → Summary/Outcome → archive → commit/push → PR → merge → closure → cleanup`.
 
-Each Work Item has one dedicated branch and one PR. `ai-finish` archives evidence before the PR. Only after the provider reports the PR merged may `ai-close-work-item` verify archive ownership, merged Head SHA, synchronized base, clean worktrees, and remote branch absence.
+Each Work Item has one Contract, one dedicated branch/worktree, and one PR. Independent Work Items may be active concurrently only when their branch and worktree, declared scope, evidence ownership, and shared serialized-projection constraints are compatible. The Agent/Orchestrator owns dispatch, aggregation, and projection-lease coordination; governance gates remain fail-closed. A blocked Work Item does not block an independent compatible Work Item. When a problem is discovered during a Work Item, resolve it in that Work Item whenever it remains within the authorized scope; if resolution needs additional paths or authority, amend the current Contract and revalidate it before continuing. Create a new Work Item only for a genuinely independent change, when safe in-scope resolution is impossible, or when the user explicitly directs it. Parallel execution does not combine Work Item identities, and shared branch-integrated projections remain serialized against the closed projection inventory. `ai-finish` archives evidence before the PR. Only after the provider reports the PR merged may `ai-close-work-item` verify archive ownership, merged Head SHA, synchronized base, clean worktrees, and remote branch absence.
 
 ## Stop conditions
-Stop at any failed gate, unresolved Unknown, scope mismatch, or missing human decision. Do not guess that a green step means closure. Do not start the next Work Item while the current one is open; do not delete its checkout after a remote failure.
+Stop at any failed gate, unresolved Unknown, scope mismatch, incompatible parallel boundary, or missing human decision. Do not guess that a green step means closure. Do not delete a Work Item checkout after a remote failure. If a candidate omits or overlaps the closed serialized-projection inventory, reject it fail-closed and keep the affected Work Items separate.
 
 ## Next steps
 1. Interpret the state with [Decision States](../concepts/decision-states.md).
