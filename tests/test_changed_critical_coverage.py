@@ -250,6 +250,39 @@ def test_candidate_snapshot_rejects_contract_unowned_dirty_path(monkeypatch, tmp
         )
 
 
+def test_candidate_snapshot_accepts_v2_object_baseline_dirty_paths(monkeypatch, tmp_path):
+    path = "preexisting.txt"
+    target = tmp_path / path
+    target.write_text("already present\n", encoding="utf-8")
+    contract = tmp_path / "task.contract.json"
+    contract.write_text(
+        json.dumps(
+            {
+                "scope": [],
+                "baselineDirtyPaths": [{"path": path, "status": "D", "fingerprint": "fingerprint"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    outputs = {
+        ("git", "rev-parse", "HEAD"): "b" * 40 + "\n",
+        ("git", "diff", "--name-only", "a" * 40 + "...HEAD"): "",
+        ("git", "diff", "--name-only"): path + "\n",
+        ("git", "diff", "--cached", "--name-only"): "",
+        ("git", "ls-files", "--others", "--exclude-standard"): "",
+    }
+
+    def run(command, **_kwargs):
+        return SimpleNamespace(returncode=0, stdout=outputs[tuple(command)], stderr="")
+
+    monkeypatch.setattr(check_changed_critical_coverage.subprocess, "run", run)
+    snapshot = check_changed_critical_coverage.candidate_snapshot(
+        base="a" * 40, project_root=tmp_path, contract_path=contract
+    )
+
+    assert [item["path"] for item in snapshot["candidateFiles"]] == [path]
+
+
 def test_candidate_snapshot_allows_known_lifecycle_surfaces(monkeypatch, tmp_path):
     paths = [
         "fixture.txt",

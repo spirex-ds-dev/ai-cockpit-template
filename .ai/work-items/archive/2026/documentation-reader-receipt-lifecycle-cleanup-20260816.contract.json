@@ -1,0 +1,86 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-reader-receipt-lifecycle-cleanup-20260816",
+  "mode": "code",
+  "title": "Remove archived reader receipt duplicates from active records",
+  "baseCommit": "f836b99ae77128e25c52db6254f862f0b7d72f31",
+  "baselineDirtyPaths": [
+    {"path":".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json","status":"D","fingerprint":"03bf9e4f4a91b17debf2115265b71e66cc4ac5bcb2312070946eee2ab569c921"},
+    {"path":".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json","status":"D","fingerprint":"d65f4c2a70f5a12b239e0cb0ac96e62c4cc0e18e07199411c94692d63653ef46"}
+  ],
+  "intent": {
+    "problem": "The previous reader-validation Work Item is archived and its handoff and receipt are preserved in the immutable archive event record, but duplicate JSON files remain under active/ and block creation of the next Work Item.",
+    "constraints": [
+      "Do not alter the archived Contract, Summary, Outcome, Manifest, or event bytes.",
+      "Do not alter reader answers, timestamps, bindings, or the comprehension result.",
+      "Remove only the two verified active duplicates and retain archive-backed evidence."
+    ],
+    "rationale": "Restore the lifecycle invariant that active/ contains no records for a closed Work Item before starting the next governed Work Item."
+  },
+  "scope": [
+    ".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json",
+    ".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json",
+    ".ai/work-items/active/documentation-reader-receipt-lifecycle-cleanup-20260816.contract.json",
+    ".ai/work-items/active/documentation-reader-receipt-lifecycle-cleanup-20260816.summary.json",
+    ".ai/work-items/starts/**",
+    ".ai/decisions/**",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_check_backtrack.py",
+    "tests/test_ai_check_backtrack.py",
+    "scripts/check_changed_critical_coverage.py",
+    "tests/test_changed_critical_coverage.py",
+    ".ai/guards/changed_critical_coverage_policy.json"
+  ],
+  "outOfScope": [
+    ".ai/work-items/archive/**",
+    "docs/**",
+    "Other scripts and tests outside the backtrack authorization seam.",
+    "release/**"
+  ],
+  "sources": [
+    {"path": ".ai/work-items/archive/2026/documentation-current-revision-reader-validation.events.jsonl", "reason": "Contains the exact handoff and ingested receipt evidence retained after closure."},
+    {"path": ".ai/work-items/archive/2026/documentation-current-revision-reader-validation.archive-manifest.json", "reason": "Binds the immutable archived Work Item evidence."},
+    {"path": ".ai/cockpit/README.md", "reason": "Defines orphan active receipt and no-active lifecycle behavior."},
+    {"path": "scripts/ai_start.py", "reason": "Enforces active Work Item and lifecycle consistency before starting the next item."},
+    {"path": "scripts/ai_check_backtrack.py", "reason": "Current backtrack guard incorrectly blocks explicitly authorized Work Item evidence cleanup."},
+    {"path": "tests/test_ai_check_backtrack.py", "reason": "Regression surface for authorization-aware evidence-removal detection."},
+    {"path": "scripts/check_changed_critical_coverage.py", "reason": "Pre-archive changed-critical coverage currently reads v2 baselineDirtyPaths with the wrong value shape."},
+    {"path": "tests/test_changed_critical_coverage.py", "reason": "Regression surface for v2 baselineDirtyPaths object records in pre-archive coverage."},
+    {"path": ".ai/guards/changed_critical_coverage_policy.json", "reason": "Authoritative changed-critical test mapping for the backtrack guard regression."}
+  ],
+  "problemStatement": "Remove only active duplicate receipt records whose exact evidence is already preserved in the archived event log, so the next Work Item can start without weakening lifecycle guards.",
+  "rawUserRequest": "Reopen the governed work sequence, but complete the previous Work Item's cleanup before starting the next one.",
+  "rawRequestSource": {"type":"human","reference":"user-message:reopen-after-prior-work-item-cleanup","capturedAt":"2026-08-16","digest":"sha256:reopen-after-prior-work-item-cleanup"},
+  "declaredIntent": {"summary":"Clean only orphan active receipt duplicates left by the closed reader-validation Work Item before the next Work Item starts.","requestedCapabilities":["ai_governance","documentation","test_automation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "scenarioCoverage": [
+    {"scenario": "Both archived duplicate files are removed from active", "required": true, "status": "verified", "evidence": ["git diff --check", "make check-ai-status-consistency"]},
+    {"scenario": "Archived event evidence remains unchanged and readable", "required": true, "status": "verified", "evidence": ["make check-ai-pr AI_BASE_COMMIT=f836b99ae77128e25c52db6254f862f0b7d72f31"]},
+    {"scenario": "A subsequent Work Item can pass start-state discovery", "required": false, "status": "not_applicable", "evidence": [], "reason": "The next Work Item cannot be started until this cleanup is merged and closed; its start-state check is outside this Work Item's verification boundary."},
+    {"scenario": "An explicitly authorized active Work Item evidence deletion is checked by backtrack", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Backtrack regression proves an approved Summary/Contract deletion is accepted while an unapproved deletion remains blocking."},
+    {"scenario": "Changed-critical pre-archive coverage accepts v2 baselineDirtyPaths object records", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused regression proves object records are normalized to paths without weakening scope ownership checks."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["lifecycle", "evidence", "guard_authority"], "reason": "The cleanup removes duplicate active records and adjusts the backtrack guard so only Contract-authorized, Summary-recorded Work Item evidence removal is accepted; immutable archive evidence remains out of scope.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "standard", "source": "automatic", "reasons": ["Lifecycle-only cleanup with strict archive preservation."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The exact duplicates and their archive-backed evidence are identified."},
+  "preReviewWarnings": ["Confirm no archive bytes are changed."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Keep cleanup scope and immutable evidence boundary explicit."},
+  "acceptance": [
+    "The two closed Work Item receipt duplicates no longer exist under active/.",
+    "The archived event log and archive manifest remain byte-for-byte unchanged.",
+    "Status and lifecycle checks prove no active Work Item remains for the closed task and the repository is ready for the next Work Item.",
+    "No documentation, implementation, release, or historical archive claim is changed.",
+    "The backtrack guard accepts only deletions covered by an approved Contract policy and explicit Summary destructiveChanges evidence; all other Work Item-record deletion remains fail-closed.",
+    "Changed-critical pre-archive coverage accepts the repository's v2 object-shaped baselineDirtyPaths records while preserving fail-closed ownership checks."
+  ],
+  "verification": [
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}
+  ],
+  "destructiveChangePolicy": {"allowed": true, "requiresHumanApproval": true, "allowPatterns": [".ai/work-items/active/documentation-current-revision-reader-validation.*.json"],"approvalEvidence":{"approved":true,"approvedBy":"user","reason":"User requested lifecycle cleanup before reopening the next Work Item.","identityEvidence":{"schemaVersion":1,"approvalType":"destructive_change","identityLevel":"direct_user_authorized","actor":"user","provider":null,"evidence":{"directUserInstructionRef":"conversation:reopen-after-prior-work-item-cleanup","directUserInstructionDigest":"sha256:1a835a4af867c8d35a753a3a3b32d5fe0227c9a37957a42ed01d1855b3dfe96c","authorizedAt":"2026-08-16T08:20:00+09:00"},"scope":[".ai/work-items/active/documentation-current-revision-reader-validation.*.json"]}}},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "Ray", "reason": "User requested lifecycle cleanup before reopening the next Work Item."},
+  "rollbackNote": "Restore the two active duplicate files from the archived event-bound copies if verification disproves their duplicate status.",
+  "startReceipt": {"path":".ai/work-items/starts/documentation-reader-receipt-lifecycle-cleanup-20260816.json","baseCommit":"f836b99ae77128e25c52db6254f862f0b7d72f31","initialScopeDigest":"2f1b77ae24ba56456d2f1f34dfb08669436a43281ba9e05ba645516a85eead01","contractSkeletonDigest":"09bed1222bc24e42abab0d8f9b9ebc2b0767f0ea3868fa455265d42006f034d9"}
+}
