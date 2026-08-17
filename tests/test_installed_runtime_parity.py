@@ -26,6 +26,13 @@ RUNTIME_SCRIPTS = {
     "ai_uninstall_proposal.py",
     "ai_uninstall_facts.py",
     "ai_detached_uninstaller.py",
+    "ai_evidence_binding.py",
+    "ai_diff_bound_reuse.py",
+    "ai_environment_reuse.py",
+    "ai_verification_context.py",
+    "ai_verification_runtime.py",
+    "ai_check_registry.py",
+    "ai_verify.py",
 }
 EXPECTED_RUNTIME_TARGETS = (
     "ai-cockpit-version",
@@ -44,6 +51,9 @@ EXPECTED_RUNTIME_TARGETS = (
     "ai-synchronize-work-item",
     "ai-transition-conflict-successor",
     "ai-transition-to-successor",
+    "ai-verify",
+    "ai-verify-focused",
+    "ai-verify-full",
 )
 
 

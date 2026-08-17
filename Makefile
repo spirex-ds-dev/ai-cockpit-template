@@ -590,13 +590,13 @@ ai-cockpit-project-lint: project-lint
 ai-cockpit-diff-check: diff-check
 
 ai-verify:
-	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),task)" --mode "$(or $(MODE),unified)"
+	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),task)" --mode "$(or $(MODE),unified)" --receipts "$(or $(REUSE_RECEIPTS),target/quality/verification-receipts.json)"
 
 ai-verify-focused:
-	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),task)" --mode unified --scope focused
+	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),task)" --mode unified --scope focused --receipts "$(or $(REUSE_RECEIPTS),target/quality/verification-receipts.json)"
 
 ai-verify-full:
-	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),release)" --mode unified --scope full
+	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),release)" --mode unified --scope full --receipts "$(or $(REUSE_RECEIPTS),target/quality/verification-receipts.json)"
 
 ai-verify-policy:
 	PYTHONPATH=scripts $(AI_PYTHON) -c 'from ai_verification_policy import order_checks; print(order_checks({"scope": [], "tests": ["scope"], "trust": ["scope"]}))'
