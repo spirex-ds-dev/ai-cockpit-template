@@ -70,6 +70,9 @@ RUNTIME_TARGETS = (
     "ai-synchronize-work-item",
     "ai-transition-conflict-successor",
     "ai-transition-to-successor",
+    "ai-verify",
+    "ai-verify-focused",
+    "ai-verify-full",
 )
 
 RUNTIME_SURFACE_SCRIPTS = frozenset(

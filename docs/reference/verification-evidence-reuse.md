@@ -16,12 +16,18 @@ capabilityClaims:
 
 ## Decision
 
-No content-addressed verification receipt or reuse path is added by this Work
-Item. Every required verification check continues to execute normally.
+The pure evidence-binding classifiers decide whether a receipt is fresh, stale,
+or unknown. The runtime planner now consumes that decision. It may skip only an
+allowlisted non-protected node when the receipt is a passed, non-expired,
+content/diff/environment-bound result whose command, scope, governance,
+environment, toolchain, policy, stage, runner, and output identities match.
 
-This is a no-change decision, not a claim that reuse is impossible forever.
-It prevents a cost observation from being mistaken for evidence that a check
-may safely be skipped.
+The planner is not a cache telemetry layer: `ai_verify` passes the plan to the
+bounded execution adapter. A fresh reusable node is not called; an unknown or
+stale node is called again. Security, scope, governance, coverage, and
+source-bound gates are always called. The adapter reports planned, executed,
+skipped, stale-rerun, unknown-rerun, and protected-node metrics so a reduced
+execution count is observable rather than inferred.
 
 ## Evidence considered
 
@@ -33,10 +39,10 @@ single complete-quality observation, not two comparable executions of the
 same verification node with the same receipt bindings.
 
 `scripts/ai_verification_context.py` reads a current working-tree diff and
-policy inputs into an immutable in-memory context. It does not persist a
-receipt identity. `scripts/ai_verify.py` selects and executes declared stages;
-it contains no reuse cache or receipt-validation path. The present behavior is
-therefore normal execution, and this Work Item preserves it.
+policy inputs into an immutable in-memory context. `scripts/ai_verify.py`
+creates `VerificationNode` candidates, validates an explicit receipt map, and
+executes the resulting plan through the checker registry. Missing or malformed
+receipt files are treated as unknown evidence and do not authorize a skip.
 
 ## Binding requirements for a future reuse proposal
 
@@ -59,7 +65,8 @@ it must not infer safety from elapsed time, cache labels, or a provider result.
 
 ## Limits and next evidence threshold
 
-No cache hit, provider timing, human wait, reuse policy, or verification-cost
-budget is asserted here. Before this boundary can change, an independent Work
-Item needs comparable source-bound receipts with identical bindings, an
-explicit material-benefit criterion, and the invalidation coverage above.
+No provider timing or human-wait reduction is asserted here. The material
+benefit criterion for this runtime boundary is actual adapter call-count
+reduction for an unrelated documentation change while protected execution is
+unchanged. The installed `Makefile.ai`, catalog, runtime modules, and parity
+tests carry the same boundary into future adopter projects.

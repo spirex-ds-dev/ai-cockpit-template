@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "verification-evidence-execution-bridge-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "ed8e79ce20f54e29f74c381fe47b473488aa58c5285b703ee08aaeca0961b0bc"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "verification-evidence-execution-bridge-20260818",
+    "contractDigest": "576ff369b521c61762a6e0c9e74d3cd972a6f0d41ea11705b9f1165d305002fd",
+    "summaryDigest": "21263c340b6497a92b8045ba5f8f8df4e5af860aad7afff79e28f830e106fab1",
+    "verificationDigest": "f0ece36b72b78383c17741bf2401ccef7d46535135a7156ecd4be459f2b0ee26",
+    "baseCommit": "2aed620ca31b260b49401cd08538d70deff810da",
+    "headCommit": "2a53b6adeb9432d9914e62b17924baaa0d152887",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "7281fda36d1d68e2b1330d1c6b248536d49caae9267345509f25f8f06dcf8b53",
+      "binding": {
+        "baseCommit": "2aed620ca31b260b49401cd08538d70deff810da",
+        "candidateHead": "2a53b6adeb9432d9914e62b17924baaa0d152887",
+        "candidateTreeDigest": "bf1152ff1d3d9f0c4b33c8cb993769dd1421dabb61aef508019a48c77b0ffb61",
+        "candidateDiffDigest": "e9095af4b9950cdd9f310083ea675c191266154779745c0a4c93312b946c0147"
+      }
+    }
   },
-  "task": {
-    "summary": "Task verification-evidence-execution-bridge-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task verification-evidence-execution-bridge-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: verification-evidence-execution-bridge-20260818",
     "deliveredChanges": [
       ".ai/cockpit/current_status.md",
       ".ai/cockpit/task_report.json",
@@ -36,217 +59,274 @@
       "tests/test_ai_verification_runtime.py",
       "tests/test_ai_verify.py",
       "tests/test_installed_runtime_parity.py"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiCoverage failed before the retry.",
+        "policyOrGuard": "required verification: aiCoverage",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiCoverage after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[0] aiCoverage failed",
+            "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[aiCoverage] retry passed",
+            "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[3] quality failed",
+            "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiCoverage failed before the retry.",
+        "action": "Re-ran aiCoverage after the correction; the latest attempt passed.",
+        "verification": "aiCoverage latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[0] aiCoverage failed",
+            "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[aiCoverage] retry passed",
+            "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verificationHistory[3] quality failed",
+            "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "hosted-stage",
+        "severity": "low",
+        "title": "hosted-stage",
+        "detail": "Hosted/provider execution remains a separate stage and is not satisfied by local receipts; this is an explicit boundary, not an unresolved local failure.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "generated-projections",
+        "severity": "low",
+        "title": "generated-projections",
+        "detail": "Shared capability and documentation projections must be regenerated again if a later base synchronization changes their source bytes.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "Outcome must be independently visible in the conversation and carry 🔴, 🟡, or 🟢; this runtime Work Item does not claim to replace the lifecycle Outcome handoff.",
+      "When a verification problem is found during this Work Item, repair it here when it is within the authorized runtime scope; do not create a new WI for this seam.",
+      "The user authorized the scoped corrective changes, independent parallel WIs, and required repository writes; release/tag publication remains out of scope."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+        "subject": "verificationHistory[0] aiCoverage failed",
+        "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+        "subject": "verification[aiCoverage] retry passed",
+        "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+        "subject": "verificationHistory[1] quality failed",
+        "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+        "subject": "verificationHistory[2] quality failed",
+        "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
+        "subject": "verificationHistory[3] quality failed",
+        "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
+      }
     ]
   },
-  "issues": {
-    "detected": 4,
-    "hardStops": 4,
-    "warnings": 0,
-    "resolved": 4,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiCoverage",
-      "action": "blocked",
-      "resolution": "Retry aiCoverage after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[0] aiCoverage failed",
-          "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[aiCoverage] retry passed",
-          "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[3] quality failed",
-          "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiCoverage failed before the retry.",
-      "policyOrGuard": "required verification: aiCoverage",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiCoverage after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[0] aiCoverage failed",
-          "digest": "a4a00840186ee15e9d5d828a91cf8f9f7fbd5fddd243c63257fcdae6fa3bd176"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[aiCoverage] retry passed",
-          "digest": "f92c00d029ea48dbec71d0bce2e045db1599f73ef5d925a90d1eb1324fdace37"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "99ed317a55c54f9f4ab30b0d03e1fdc13eddb500de6b2f2cffdc3c9c9e80a1c4"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "60779fd5095613ab0a3849e0a89b6cb8d335d86ff1ab9255a371b149ba4a75eb"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verificationHistory[3] quality failed",
-          "digest": "b591e90fd219a7e7af4f7596a5e6b5772bf0e745ae3dd0c571801ee97d9f755d"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "395ef4c9fc1b81236e16139e742b116e75047c8d82179651a7989dc6e3136e3f"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "Outcome must be independently visible in the conversation and carry 🔴, 🟡, or 🟢; this runtime Work Item does not claim to replace the lifecycle Outcome handoff.",
-    "When a verification problem is found during this Work Item, repair it here when it is within the authorized runtime scope; do not create a new WI for this seam.",
-    "The user authorized the scoped corrective changes, independent parallel WIs, and required repository writes; release/tag publication remains out of scope."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "low",
-      "detail": "Hosted/provider execution remains a separate stage and is not satisfied by local receipts; this is an explicit boundary, not an unresolved local failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    },
-    {
-      "severity": "low",
-      "detail": "Shared capability and documentation projections must be regenerated again if a later base synchronization changes their source bytes.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/verification-evidence-execution-bridge-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -1315,6 +1395,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
