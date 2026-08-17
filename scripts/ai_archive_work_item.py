@@ -817,17 +817,31 @@ def _execute_archive_transaction(
                     )
                     if not preserve_superseded_outcome:
                         save_json(outcome_target, rewritten_outcome)
-                    if any(content is not None for content in report_backups.values()):
-                        if not all(path.is_file() for path in report_paths):
-                            raise ValueError(
-                                "Human Benefit Report archive refresh requires both report files"
-                            )
-                        from ai_generate_human_report import (
-                            generate_human_report,
-                            render_human_report,
-                        )
+                    from ai_generate_human_report import (
+                        generate_human_report,
+                        render_human_report,
+                    )
 
+                    has_prior_report = any(
+                        content is not None for content in report_backups.values()
+                    )
+                    if has_prior_report and not all(path.is_file() for path in report_paths):
+                        raise ValueError(
+                            "Human Benefit Report archive refresh requires both report files"
+                        )
+                    try:
                         report = generate_human_report(rewritten_outcome, phase="review")
+                    except ValueError:
+                        # A superseded predecessor may intentionally retain a
+                        # historical or fixture-only Outcome whose bytes are
+                        # bound by lifecycle evidence but cannot produce a new
+                        # Human Benefit Report. If a report already exists,
+                        # preserve the previous fail-closed behavior; when no
+                        # report exists, leave it absent and keep the archive
+                        # transaction focused on its canonical evidence.
+                        if has_prior_report:
+                            raise
+                    else:
                         save_json(report_paths[0], report)
                         report_paths[1].write_text(render_human_report(report), encoding="utf-8")
                         refreshed_report_paths = True

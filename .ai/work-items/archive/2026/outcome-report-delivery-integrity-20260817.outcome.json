@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "outcome-report-delivery-integrity-20260817",
-  "phase": "review",
-  "result": "needs_human_confirmation",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "52bc47db0cf59280fba9a2c5bcc1eeb2d983fc96c16de6e5e913ae8095f69ce6"
+  "status": "needs_human_confirmation",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "outcome-report-delivery-integrity-20260817",
+    "contractDigest": "75fc7721a865cc33957755204fc11a7811a79cbd4c5c107e139362563f72573a",
+    "summaryDigest": "ecdab536e46039dce87742274c7eb43df1ea2da09e512f562705422ef19ed7e3",
+    "verificationDigest": "57134f6a2e2e9d79c883c67642cd6d46738fd1c93bb2bef8fef431bf2dd66c5b",
+    "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+    "headCommit": "ac195a7abc01661e87bc819048414f776650c473",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "a978f345b4f09205a66994f79fe0e7f7a1d48b1dfdc1fe3dc3046787f4e0c057",
+      "binding": {
+        "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+        "candidateHead": "ac195a7abc01661e87bc819048414f776650c473",
+        "candidateTreeDigest": "1ca634747653c6489c8bcccd03ced35a1e4a26f9410ad285d2d22c744c62497b",
+        "candidateDiffDigest": "ce42441a04c3b018e99fc6581bf3fe63fd564063df363951dc65441d16ea3db9"
+      }
+    }
   },
-  "task": {
-    "summary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status needs_human_confirmation.",
+  "sections": {
+    "outcomeSummary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status needs_human_confirmation.",
+    "taskOverview": "Governed Work Item: outcome-report-delivery-integrity-20260817",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
@@ -36,96 +59,134 @@
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "adopter-runtime",
+        "severity": "medium",
+        "title": "adopter-runtime",
+        "detail": "Local source/template parity and failure-path behavior are covered; a provider-hosted adopter run is not measured by this Work Item.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
+      "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+      }
     ]
   },
-  "issues": {
-    "detected": 2,
-    "hardStops": 1,
-    "warnings": 1,
-    "resolved": 1,
-    "unresolved": 1
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
-    "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
-  ],
-  "limitations": [
-    {
-      "sourceWarning": "Provider-hosted adopter runtime timing is not measured locally; the portable Makefile behavior is covered by source/template regression tests.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "Local source/template parity and failure-path behavior are covered; a provider-hosted adopter run is not measured by this Work Item.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -1037,6 +1098,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

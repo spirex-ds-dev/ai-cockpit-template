@@ -6,6 +6,7 @@ SUMMARY_ARGS ?= $(if $(CONTRACT),--contract $(CONTRACT))
 STATUS_ARGS ?= $(if $(SUMMARY),--summary $(SUMMARY))
 ARGS ?=
 TASK ?=
+REPORT_LANGUAGE ?= en
 TITLE ?=
 MODE ?= investigate
 SKIP_QUALITY ?= false
@@ -125,7 +126,7 @@ help:
 	@printf '%s\n' '  make check-ai-status CONTRACT=<contract.json> SUMMARY=<summary.json>'
 	@printf '%s\n' '  make check-ai-status-consistency'
 	@printf '%s\n' '  make repair-ai-status'
-	@printf '%s\n' '  make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>'
+	@printf '%s\n' '  make ai-finish TASK=<task> REPORT_LANGUAGE=<conversation-locale>  # defaults to en'
 	@printf '%s\n' '  make check-ai'
 	@printf '%s\n' '  make quality'
 	@printf '%s\n' '  make test'
@@ -911,4 +912,4 @@ check-ai-pr:
 ai-finish:
 	@# ARCHIVE is a one-shot lifecycle request. Do not let Make propagate it into
 	@# nested project/test invocations, where it could archive an unrelated Work Item.
-	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(SKIP_QUALITY)),--skip-quality) $(if $(filter true,$(ARCHIVE)),--archive) --language "$(REPORT_LANGUAGE)"
+	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(SKIP_QUALITY)),--skip-quality) $(if $(filter true,$(ARCHIVE)),--archive) --language "$(or $(REPORT_LANGUAGE),en)"
