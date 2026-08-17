@@ -27,7 +27,9 @@
     "docs/operations/work-item-lifecycle.zh-CN.md",
     "tests/test_parallel_lifecycle_contract.py",
     "tests/test_pr_aggregate.py",
+    "tests/test_installed_runtime_parity.py",
     "scripts/ai_check_pr.py",
+    "scripts/ai_installer_catalog.json",
     "docs/reference/capability-truth-matrix.json",
     "docs/reference/pre-release-documentation-alignment.json",
     "docs/reference/pre-release-documentation-alignment.md",
@@ -81,6 +83,14 @@
     {
       "path": "tests/test_pr_aggregate.py",
       "reason": "Regression coverage for archived base compatibility backed by synchronizationHistory."
+    },
+    {
+      "path": "tests/test_installed_runtime_parity.py",
+      "reason": "Installed-adopter regression coverage for the PR guard's capability-truth import dependencies."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Installer catalog must carry every runtime dependency of the PR guard into adopter projects."
     },
     {
       "path": "docs/reference/capability-truth-matrix.json",
@@ -157,7 +167,8 @@
     "A5: Normal ai-finish emits the Work Item Outcome both to its persisted Outcome artifacts and directly to the conversation; this Work Item records the observed Outcome evidence without changing Outcome generation unless the focused observation finds a defect.",
     "A6: The confirmed governance-complexity policy admits the measured second guarded-parallel Contract field with a bounded repayment record; no unrelated complexity ceiling is changed.",
     "A7: PR aggregate validation accepts a synchronized archived Contract when its synchronizationHistory proves the Start Receipt base advanced to the Contract base, and regression coverage rejects malformed synchronization evidence.",
-    "A8: The canonical capability truth matrix and dependent pre-release documentation-alignment projections are regenerated after implementation evidence changes, and the human_benefit_report evidenceSource digest matches the current evidence bytes."
+    "A8: The canonical capability truth matrix and dependent pre-release documentation-alignment projections are regenerated after implementation evidence changes, and the human_benefit_report evidenceSource digest matches the current evidence bytes.",
+    "A9: An installed adopter can import ai_check_pr together with ai_capability_truth, and the installer catalog retains both capability-truth runtime dependencies."
   ],
   "guidelines": [
     "Canonical documentation is a product behavior contract and must not contradict executable lifecycle behavior.",
@@ -194,9 +205,10 @@
     "production": [
       "scripts/ai_check_pr.py"
     ],
-    "tests": [
+      "tests": [
       "tests/test_parallel_lifecycle_contract.py",
-      "tests/test_pr_aggregate.py"
+      "tests/test_pr_aggregate.py",
+      "tests/test_installed_runtime_parity.py"
     ],
     "documentation": [
       "docs/operations/work-item-lifecycle.md",

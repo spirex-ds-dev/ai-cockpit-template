@@ -105,6 +105,30 @@ def test_installed_capability_truth_target_reports_when_matrix_is_not_configured
     assert "not configured" in result.stdout
 
 
+def test_installed_pr_guard_can_import_capability_truth_dependency(tmp_path):
+    target = tmp_path / "adopter"
+    installer = Installer(
+        source=ROOT,
+        target=target,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+    result = subprocess.run(
+        [sys.executable, "-c", "import ai_check_pr; import ai_capability_truth"],
+        cwd=target / "scripts",
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
 def test_installer_fails_closed_when_runtime_script_is_not_available(monkeypatch, tmp_path):
     monkeypatch.setattr(
         install_ai_cockpit,

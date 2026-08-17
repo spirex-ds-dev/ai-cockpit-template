@@ -44,6 +44,14 @@
       "reason": "Added regression coverage for valid and invalid synchronized archive-base evidence."
     },
     {
+      "path": "tests/test_installed_runtime_parity.py",
+      "reason": "Added installed-adopter import coverage for the PR guard's capability-truth dependencies."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Added ai_capability_truth.py and ai_capability_freshness.py to the adopter runtime catalog."
+    },
+    {
       "path": "docs/reference/capability-truth-matrix.json",
       "reason": "Regenerated the source-bound capability evidence after the implementation evidence changed."
     },
@@ -104,6 +112,8 @@
     "tests/test_projection_isolation.py",
     "tests/test_parallel_lifecycle_contract.py",
     "tests/test_pr_aggregate.py",
+    "tests/test_installed_runtime_parity.py",
+    "scripts/ai_installer_catalog.json",
     "docs/reference/capability-truth-matrix.json",
     ".ai/guards/governance_complexity_policy.yaml",
     "AGENTS.md",
@@ -120,7 +130,7 @@
       "durationMs": 46,
       "outputDigest": "bb1db93a174e206ee953b63f4956db1b5382cfff62831dc8ccbb85b2b9dc0d60",
       "commandHash": "de74438fe6c8e86ba51db0ad4756210e52ad5fce1e1a2c9b7ae92e89bfb38150",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -139,7 +149,7 @@
       "durationMs": 149,
       "outputDigest": "37dd525c47a88bde48fbe458c4208831db6dba97f0161a758552d2626dbc4eeb",
       "commandHash": "ab6c2a531eb0b896842e2144f938ecadaf43276d70f1a80e69af803c93276b5e",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -158,7 +168,7 @@
       "durationMs": 178,
       "outputDigest": "a2478037cc48ef4f7edc72e845a896b89e839d27a2ff557172fe61a75804523c",
       "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -177,12 +187,12 @@
       "durationMs": 324,
       "outputDigest": "50af88f1c4f4690a8740b19e6ff456e686227dd61241e1286f11be8cc4b87ad7",
       "commandHash": "b2f4966633b1b6d684ecc0c785e1c05152234de09cb4a5d182677f0f1effd54f",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
       "worktreeDigest": "32d69c78809d84305c84eb6bcda02dbe7b47213eaadb2bb907cfc1b4a3c4bcbd",
-      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `canonical-lifecycle-parallel-alignment` - Contract Hash: `731de72af5069661` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json --summary .ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `canonical-lifecycle-parallel-alignment` - Contract Hash: `cd57ba2daed9b0b1` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance",
       "outputTail": "iDiffOwnership`: passed - `quality`: passed ## Review Focus - Confirm conditional parallelism does not weaken one-Contract/branch/PR ownership or serialized projection gates. - Confirm normal ai-finish produces both persisted Outcome artifacts and direct conversation output. ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/guards/governance_complexity_policy.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/canonical-lifecycle-parallel-alignment.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/canonical-lifecycle-parallel-alignment.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/canonical-lifecycle-parallel-alignment.json` — covered by Contract scope - [active_owned] `AGENTS.md` — covered by Contract scope - [active_owned] `docs/operations/work-item-lifecycle.ja.md` — covered by Contract scope - [active_owned] `docs/operations/work-item-lifecycle.md` — covered by Contract scope - [active_owned] `docs/operations/work-item-lifecycle.zh-CN.md` — covered by Contract scope - [active_owned] `templates/agents/AI_COCKPIT_RULES.md` — covered by Contract scope - [active_owned] `tests/test_parallel_lifecycle_contract.py` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
       "outputBytes": 6339
     },
@@ -196,7 +206,7 @@
       "durationMs": 156,
       "outputDigest": "1577d15161bf3f3a78fd219307d73d43914203ece2c982545541956d228724d1",
       "commandHash": "af773c0a73654ceea83f09b1fc30616b9c83da0e6a873965f5699075bd575629",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -215,7 +225,7 @@
       "durationMs": 141,
       "outputDigest": "cc3a9deecc86a67377c0f20b5514742b0f2dded6aa27f7c8b50a9b4ab1b9e15c",
       "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -234,7 +244,7 @@
       "durationMs": 142,
       "outputDigest": "cdfb755922c40f672a2ce3089402300beae5184f313c0e30c9ad4104c672ce8a",
       "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -253,7 +263,7 @@
       "durationMs": 53,
       "outputDigest": "0b3ca4b9518a18c9386578f086770c85d361403de4b14c51b8380995249c0ee1",
       "commandHash": "86bf566a5aba65bc619fa73180051d0abeb68597b82b85bdde7672367d093401",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -272,7 +282,7 @@
       "durationMs": 44,
       "outputDigest": "13eeaa8be24b6b32690be1187054872e624f9774c8f40ff9e4f5d593d56847dc",
       "commandHash": "a97b621397acb287b97556a2b6d61431b4d5c15ee6fb30e7c07a6e5de245e864",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -291,7 +301,7 @@
       "durationMs": 351,
       "outputDigest": "5c0b1592d93994fd5e8b8e79b44d3652d1d72c3181b15b25e67ddabaa9c146a8",
       "commandHash": "49df7aaf33b8aa01972c2987f080117a1287d4b6bb5be20be55482a772f9acf3",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -310,7 +320,7 @@
       "durationMs": 454426,
       "outputDigest": "c97bb35cdb839050bb3539fe20eab893d880915a117b1c7b6e69400080f97fdd",
       "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -329,7 +339,7 @@
       "durationMs": 525,
       "outputDigest": "37cee5143633a1e58e31d417984b0353e28f99dec9d93e931f3cad9282a1ac39",
       "commandHash": "6cbe2b6b100db9acf62cc186bff90c196d190ead8e3a99655883714a26e61e40",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -348,7 +358,7 @@
       "durationMs": 372,
       "outputDigest": "24521287c64ad04c05962b0ec519c79ad95d085675202745b3a421022ac4007c",
       "commandHash": "112f495d58d9cc2ff656ed7d5b4d720b6dfba640b50e0be51eb078bf9c84e703",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -367,7 +377,7 @@
       "durationMs": 44,
       "outputDigest": "6ad7b465d8141be2213905f0e80dcc2701f8dc877a69363f6dc78163eaf0a8e7",
       "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -386,7 +396,7 @@
       "durationMs": 58,
       "outputDigest": "84ba4c69107398ba3ba8b8481d263076ea0e1f102029e9fd68de0058f6895b33",
       "commandHash": "da41b6ddf55344db9375e077f3ba66b956d368c2490e051e06abac79c8cde5b5",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -405,7 +415,7 @@
       "durationMs": 322,
       "outputDigest": "af3441f0f85845fcb0262322a91471373a21b5b87373a348d21ab4c5d732892d",
       "commandHash": "2e318117e0a6edd55501778316c5549ad923fcea44f58e9aff61768876565430",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
@@ -451,6 +461,10 @@
   ],
   "destructiveChanges": [],
   "observedIssues": [
+    {
+      "issue": "Hosted installation and real-stack probes exposed that the new PR guard dependency chain was not present in the installer catalog.",
+      "resolution": "Added ai_capability_truth.py and ai_capability_freshness.py to scripts/ai_installer_catalog.json and added an installed-adopter import regression."
+    },
     {
       "issue": "Hosted project-test installer and release shards detected a stale capability-truth evidenceSource digest after this Work Item changed scripts/ai_check_pr.py and tests/test_pr_aggregate.py.",
       "resolution": "Regenerated docs/reference/capability-truth-matrix.json and the dependent pre-release alignment projections, then added PR-boundary dependency validation so future evidence changes fail before Hosted CI unless the matrix is included."
@@ -588,7 +602,7 @@
       "recorded": true,
       "originalBeforeEditContractHash": "87d92a107322681e",
       "previousContractHash": "00f052f31613be22",
-      "contractHash": "731de72af5069661",
+      "contractHash": "cd57ba2daed9b0b1",
       "acceptanceCount": 6,
       "unknownCount": 0,
       "requiredChecks": 16,
@@ -619,7 +633,7 @@
     {
       "stage": "before_finish",
       "recorded": true,
-      "contractHash": "731de72af5069661",
+      "contractHash": "cd57ba2daed9b0b1",
       "acceptanceCount": 6,
       "unknownCount": 0,
       "requiredChecks": 16,
@@ -766,6 +780,23 @@
           "verification": "quality"
         }
       ]
+    },
+    {
+      "acceptanceId": "A9",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_installed_runtime_parity.py",
+          "locator": "test_installed_pr_guard_can_import_capability_truth_dependency",
+          "verification": "quality"
+        },
+        {
+          "type": "configuration",
+          "path": "scripts/ai_installer_catalog.json",
+          "locator": "ai_capability_freshness.py and ai_capability_truth.py",
+          "verification": "quality"
+        }
+      ]
     }
   ],
   "scenarioCoverage": [
@@ -881,7 +912,7 @@
       "durationMs": 341,
       "outputDigest": "3d0847cafedea4f92b2d48c8f06e89bf2fab5c1a87e8dda73dbfa34778bfcf1a",
       "commandHash": "2e318117e0a6edd55501778316c5549ad923fcea44f58e9aff61768876565430",
-      "contractHash": "731de72af50696614ee2c885694c29c7af00c0d7cd8af76385a4d21cf029fd9e",
+      "contractHash": "cd57ba2daed9b0b1929cf29914e2bf75e2f994d696a362bab60b27b36896d240",
       "commitSha": "81e38b229e94c387820578e52a2f6e2bf09c3358",
       "executionContractPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.contract.json",
       "executionSummaryPath": ".ai/work-items/active/canonical-lifecycle-parallel-alignment.summary.json",
