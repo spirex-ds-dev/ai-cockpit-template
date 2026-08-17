@@ -28,6 +28,8 @@ Work Item completion is a lifecycle closure, not merely branch deletion. Run `ma
 
 Only `ready_on_base` means the invoking worktree can start the next Work Item. `closed_but_current_worktree_detached` means closure succeeded while another worktree owns the synchronized base; continue from the reported base worktree and do not treat the detached invoking worktree as ready.
 
+When a problem is discovered during a Work Item, resolve it in that Work Item whenever it remains within the authorized scope. If resolution needs additional paths or authority, amend the current Contract and revalidate it before continuing. Create a new Work Item only for a genuinely independent change, when safe in-scope resolution is impossible, or when the user explicitly directs it.
+
 The canonical order is: latest remote base → dedicated Work Item branch → implement → `ai-finish`/archive → push branch → PR → merge PR → `make ai-close-work-item` → synchronize and clean the local base. Do not merge the feature branch into local `main` before the PR; that creates local commits that are not on `origin/main`. Do not use a PR merge option or provider setting that deletes the Work Item branch before `ai-close-work-item` can identify it. Branch deletion belongs to lifecycle closure.
 
 One narrow exception exists when an active Contract explicitly requires hosted

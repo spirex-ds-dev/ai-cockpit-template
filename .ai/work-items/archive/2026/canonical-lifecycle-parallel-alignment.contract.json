@@ -3,7 +3,7 @@
   "workItemId": "canonical-lifecycle-parallel-alignment",
   "mode": "code",
   "title": "Align canonical lifecycle guidance with parallel Work Item governance",
-  "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+  "baseCommit": "9bd60f43478359619565de688f4da561f66f5822",
   "baselineDirtyPaths": [],
   "rawUserRequest": "查收，全部修复。需要我授权的，授权给你并写入Contract。WI对应途中遇到问题，不要轻易扩展，开新的WI，尽量在当前WI中解决。另外Outcome如果发现没有输出，要调查原因并修复。WI可以并行的，采用并行处理。Outcome按设计，不止是文件还应该是要输出到对话中的。Outcome是通过当前的两个WI对应来观察是否按照需求进行了实现。如果有问题再对应。",
   "rawRequestSource": {
@@ -25,7 +25,10 @@
     "docs/operations/work-item-lifecycle.md",
     "docs/operations/work-item-lifecycle.ja.md",
     "docs/operations/work-item-lifecycle.zh-CN.md",
-    "tests/test_parallel_lifecycle_contract.py"
+    "tests/test_parallel_lifecycle_contract.py",
+    "AGENTS.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    ".ai/guards/governance_complexity_policy.yaml"
   ],
   "outOfScope": [
     "Changing the Work Item Status JSON schema or status projection implementation.",
@@ -50,17 +53,29 @@
       "path": "docs/reference/agent-parallel-work-items.md",
       "reason": "Existing agent-owned orchestration and safe parallelism contract."
     },
-    {
-      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
-      "reason": "Reference lifecycle contract already describing compatible parallel Work Items."
+  {
+    "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "reason": "Reference lifecycle contract already describing compatible parallel Work Items."
+  },
+  {
+    "path": "AGENTS.md",
+    "reason": "Current repository operating rules must enforce same-Work-Item problem resolution before opening a successor."
+  },
+  {
+    "path": "templates/agents/AI_COCKPIT_RULES.md",
+    "reason": "Installer-injected AI Cockpit rules must carry the same-Work-Item problem-resolution rule into adopter projects."
     },
     {
       "path": "scripts/ai_check_work_item.py",
       "reason": "Executable concurrency-boundary validation used by the lifecycle."
     },
-    {
-      "path": "tests/test_projection_isolation.py",
-      "reason": "Existing regression coverage for the closed serialized projection inventory."
+  {
+    "path": "tests/test_projection_isolation.py",
+    "reason": "Existing regression coverage for the closed serialized projection inventory."
+  },
+  {
+    "path": ".ai/guards/governance_complexity_policy.yaml",
+    "reason": "Confirmed governance-complexity budget and repayment record required for the second explicit guarded-parallel Contract boundary."
     }
   ],
   "unknowns": [],
@@ -84,8 +99,14 @@
     "override": {
       "approvalEvidence": "The current user conversation authorizes all scoped corrective Work Items and asks for safe parallel execution.",
       "reason": "Documentation and regression-only correction with no provider or release operation.",
-      "risks": ["documentation_contract", "concurrency_boundary", "evidence_ownership"],
-      "notRunChecks": ["Hosted release verification is out of scope for this documentation correction."],
+      "risks": [
+        "documentation_contract",
+        "concurrency_boundary",
+        "evidence_ownership"
+      ],
+      "notRunChecks": [
+        "Hosted release verification is out of scope for this documentation correction."
+      ],
       "workItemOnly": true,
       "workItemId": "canonical-lifecycle-parallel-alignment"
     }
@@ -116,7 +137,8 @@
     "A2: The Japanese and Simplified Chinese canonical operations pages express the same conditional parallel rule and retain the one-Contract, one-branch, one-PR boundary.",
     "A3: The canonical guidance states that a blocked Work Item does not block an independent compatible Work Item and that orchestration belongs to the Agent/Orchestrator, while governance gates remain fail-closed.",
     "A4: Regression coverage proves the contradictory prohibition is removed and the closed serialized projection inventory and concurrency boundary remain required.",
-    "A5: Normal ai-finish emits the Work Item Outcome both to its persisted Outcome artifacts and directly to the conversation; this Work Item records the observed Outcome evidence without changing Outcome generation unless the focused observation finds a defect."
+    "A5: Normal ai-finish emits the Work Item Outcome both to its persisted Outcome artifacts and directly to the conversation; this Work Item records the observed Outcome evidence without changing Outcome generation unless the focused observation finds a defect.",
+    "A6: The confirmed governance-complexity policy admits the measured second guarded-parallel Contract field with a bounded repayment record; no unrelated complexity ceiling is changed."
   ],
   "guidelines": [
     "Canonical documentation is a product behavior contract and must not contradict executable lifecycle behavior.",
@@ -143,11 +165,17 @@
   },
   "declaredIntent": {
     "summary": "Make the canonical lifecycle guidance accurately describe guarded parallel Work Items.",
-    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
   },
   "implementationSurface": {
     "production": [],
-    "tests": ["tests/test_parallel_lifecycle_contract.py"],
+    "tests": [
+      "tests/test_parallel_lifecycle_contract.py"
+    ],
     "documentation": [
       "docs/operations/work-item-lifecycle.md",
       "docs/operations/work-item-lifecycle.ja.md",
@@ -263,9 +291,9 @@
     "allowPatterns": []
   },
   "restrictedWriteApproval": {
-    "approved": false,
-    "approvedBy": "",
-    "reason": "Set only when a human explicitly approves restricted governance paths."
+    "approved": true,
+    "approvedBy": "human-user",
+    "reason": "User explicitly authorized all scoped corrective Work Items and permission-requiring actions in the current task request."
   },
   "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
   "budgetImpact": {
@@ -310,5 +338,20 @@
     "initialScopeDigest": "66ac711e9524f10a1f01dc172cf4ec7eba0b64de76cd6428b4d828c89f7ae022",
     "contractSkeletonDigest": "ad41fabe138e36fdf80ed6fa22702aff670f34e2b04423f0734fce4776aec082",
     "concurrencyBoundaryDigest": "892d00bde11e9b89612fc03a8db5f97749b19340f3c61a8cbd07b36f0a65692b"
-  }
+  },
+  "synchronizationHistory": [
+    {
+      "synchronizationVersion": 1,
+      "fromBaseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+      "toBaseCommit": "9bd60f43478359619565de688f4da561f66f5822",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/canonical-lifecycle-parallel-alignment",
+      "recordedAt": "2026-08-17T09:07:24.008445+00:00",
+      "priorContractDigest": "87d92a107322681e84ffc28b2a86460655b82368cc1d9998294895dd337b6e1e",
+      "priorSummaryDigest": "021e4d60213f4c08656daeacb687e263a366a56bf23f3bc9519bb1ae8fd65359",
+      "rebaseHeadBefore": "81e38b229e94c387820578e52a2f6e2bf09c3358",
+      "rebaseHeadAfter": "81e38b229e94c387820578e52a2f6e2bf09c3358"
+    }
+  ]
 }

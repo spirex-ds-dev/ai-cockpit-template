@@ -30,6 +30,12 @@ Only `ready_on_base` means the invoking worktree can start the next Work Item. `
    successor or duplicate Issue merely for that correction. Use a governed
    successor/quarantine route only when the base changed, the Contract/scope is
    invalidated, or immutable failed-delivery evidence must be re-delivered.
+   When a problem is discovered during a Work Item, resolve it in that Work Item
+   whenever it remains within the authorized scope. If resolution needs
+   additional paths or authority, amend the current Contract and revalidate it
+   before continuing. Create a new Work Item only for a genuinely independent
+   change, when safe in-scope resolution is impossible, or when the user
+   explicitly directs it.
    For a missing `before_finish` checkpoint, run the canonical
    `make ai-checkpoint CONTRACT=<contract> SUMMARY=<summary> STAGE=before_finish`;
    use `make ai-revalidate-contract-amendment` only for a stale immutable

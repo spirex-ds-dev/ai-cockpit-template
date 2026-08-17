@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "canonical-lifecycle-parallel-alignment",
-  "phase": "review",
-  "result": "needs_human_confirmation",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "e781c9a8d210740850907a52827b2d4360ad13171784f0c53044e5938de5a9bc"
+  "status": "needs_human_confirmation",
+  "humanStatusColor": "yellow",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "canonical-lifecycle-parallel-alignment",
+    "contractDigest": "0ed11e34759d2a78acc1f9eacad0ef7a9dda2cbb8ec8cb9f449fb3f8303d3a7d",
+    "summaryDigest": "3d4b639ea1f5e6f1fea1d3a6f5c4ca9214f98c1c6cf65b42d5123470738d6d81",
+    "verificationDigest": "6d5800e14521577abe01c68388c3b02a6f3b826aee19fe715e500a420989d16f",
+    "baseCommit": "9bd60f43478359619565de688f4da561f66f5822",
+    "headCommit": "81e38b229e94c387820578e52a2f6e2bf09c3358",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "9ac30611205eac8946dca74e4598beda587d251cf2389f51c1780e2be79e0b1a",
+      "binding": {
+        "baseCommit": "9bd60f43478359619565de688f4da561f66f5822",
+        "candidateHead": "81e38b229e94c387820578e52a2f6e2bf09c3358",
+        "candidateTreeDigest": "9ad44ff16fa92664a6945d675c17422cdbad8a786024f1ffcb70db0375560637",
+        "candidateDiffDigest": "67f721b3f2d134f403139f055e8d2bf1d01cb2187b3d134799040daac3af3471"
+      }
+    }
   },
-  "task": {
-    "summary": "Task canonical-lifecycle-parallel-alignment generated an evidence-derived outcome with status needs_human_confirmation.",
+  "sections": {
+    "outcomeSummary": "Task canonical-lifecycle-parallel-alignment generated an evidence-derived outcome with status needs_human_confirmation.",
+    "taskOverview": "Governed Work Item: canonical-lifecycle-parallel-alignment",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.contract.json",
       ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
@@ -26,93 +49,131 @@
       ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "The first full quality attempt found the measured repeatedProtocolFields count at 51; the current Contract now records the bounded policy calibration and repayment evidence before retrying."
+    ],
+    "limitations": [
+      {
+        "sourceWarning": "The first full quality attempt found the measured repeatedProtocolFields count at 51; the current Contract now records the bounded policy calibration and repayment evidence before retrying.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
+        ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "The first full quality attempt found the measured repeatedProtocolFields count at 51; the current Contract now records the bounded policy calibration and repayment evidence before retrying.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+            "subject": "verificationHistory[0] aiSummary failed",
+            "digest": "3d0847cafedea4f92b2d48c8f06e89bf2fab5c1a87e8dda73dbfa34778bfcf1a"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "af3441f0f85845fcb0262322a91471373a21b5b87373a348d21ab4c5d732892d"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+            "subject": "verificationHistory[0] aiSummary failed",
+            "digest": "3d0847cafedea4f92b2d48c8f06e89bf2fab5c1a87e8dda73dbfa34778bfcf1a"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "af3441f0f85845fcb0262322a91471373a21b5b87373a348d21ab4c5d732892d"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "documentation-parity",
+        "severity": "low",
+        "title": "documentation-parity",
+        "detail": "Future lifecycle behavior changes must update all three canonical language projections and this regression contract together.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+        "subject": "verificationHistory[0] aiSummary failed",
+        "digest": "3d0847cafedea4f92b2d48c8f06e89bf2fab5c1a87e8dda73dbfa34778bfcf1a"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
+        "subject": "verification[aiSummary] retry passed",
+        "digest": "af3441f0f85845fcb0262322a91471373a21b5b87373a348d21ab4c5d732892d"
+      }
     ]
   },
-  "issues": {
-    "detected": 2,
-    "hardStops": 1,
-    "warnings": 1,
-    "resolved": 1,
-    "unresolved": 1
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
-          "subject": "verificationHistory[0] aiSummary failed",
-          "digest": "3d0847cafedea4f92b2d48c8f06e89bf2fab5c1a87e8dda73dbfa34778bfcf1a"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "af3441f0f85845fcb0262322a91471373a21b5b87373a348d21ab4c5d732892d"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
-          "subject": "verificationHistory[0] aiSummary failed",
-          "digest": "3d0847cafedea4f92b2d48c8f06e89bf2fab5c1a87e8dda73dbfa34778bfcf1a"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "af3441f0f85845fcb0262322a91471373a21b5b87373a348d21ab4c5d732892d"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [
-    {
-      "sourceWarning": "The first full quality attempt found the measured repeatedProtocolFields count at 51; the current Contract now records the bounded policy calibration and repayment evidence before retrying.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [
-    {
-      "severity": "low",
-      "detail": "Future lifecycle behavior changes must update all three canonical language projections and this regression contract together.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-alignment.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -847,6 +908,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
