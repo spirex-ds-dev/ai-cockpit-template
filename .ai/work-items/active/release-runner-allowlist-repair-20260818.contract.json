@@ -1,0 +1,259 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-runner-allowlist-repair-20260818",
+  "mode": "code",
+  "title": "Route release API calls through the configured allow-listed runner",
+  "baseCommit": "a034378c8863ca45b8b75586c551201003700fb4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-runner-allowlist-repair-20260818.contract.json",
+    ".ai/work-items/active/release-runner-allowlist-repair-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.json",
+    ".ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Do not modify organization IP allow-list entries, runner groups, repository variables, provider values, permissions, or billing.",
+    "Do not change release metadata, tags, GitHub Releases, public assets, or publication behavior in this Work Item.",
+    "Do not weaken, reorder, or bypass exact-source, rehearsal, smoke, compatibility, integrity, or public-install gates.",
+    "Do not alter or reopen the already closed release-workflow-token-allowlist-20260817 Work Item."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The release job currently references the repository configuration through the wrong namespace, leaving GH_TOKEN empty during the hosted rehearsal; the job must select the configured runner variable instead."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Focused regression coverage must lock the runner-variable expression and the existing github.token API boundary."
+    },
+    {
+      "path": "GitHub repository Actions variable AI_COCKPIT_RELEASE_RUNNER",
+      "reason": "Provider metadata shows this name is a repository variable with value code-scanning; it is the configured allow-listed runner label, not an auth value."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32056061770",
+      "reason": "Prior exact-source rehearsal failed because github.token API access from ubuntu-latest was rejected by the organization IP allow list."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32058710571",
+      "reason": "Post-merge rehearsal proved the attempted protected-namespace binding was empty and failed at exact-source checkout before any release side effect."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-runner-ip-allow-list-625-current-main.contract.json",
+      "reason": "Archived predecessor records the intended repository-variable runner routing and the requirement for a post-merge same-SHA rehearsal."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_workflow_configuration",
+      "hosted_runner_network_boundary"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The repository variable and failed rehearsal logs identify a concrete configuration-type mismatch. The selected runner is external provider state, so hosted same-SHA rehearsal remains the decisive proof."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The provider metadata and rehearsal logs identify the root cause; the user authorized root-cause correction before publication."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.yml selects the repository Actions variable AI_COCKPIT_RELEASE_RUNNER with the template-safe ubuntu-latest fallback and keeps GH_TOKEN bound to github.token.",
+    "Focused tests assert the variable-based runner expression, reject the protected-namespace binding mistake, preserve the existing workflow inputs, and preserve exact-source release gates.",
+    "No provider value, organization setting, runner registration, release metadata, tag, GitHub Release, or public asset is changed by this Work Item.",
+    "After merge, the v0.5.65 exact-source rehearsal on the merged main SHA succeeds through the allow-listed runner without creating a tag, Release, or public asset.",
+    "The Work Item finishes only with a complete direct conversation-visible Outcome carrying the canonical traffic-light marker and a green terminal gate."
+  ],
+  "guidelines": [
+    "Use the existing repository Actions variable by name only as a non-sensitive runner label; never treat it as auth material or introduce a protected binding.",
+    "Keep the release workflow change limited to runner selection and its focused regression test.",
+    "Preserve exact-source release identity and fail closed when provider API verification cannot be performed.",
+    "Do not create a tag or public Release before the candidate and same-SHA rehearsal gates pass."
+  ],
+  "intent": {
+    "problem": "The previous root-cause attempt assumed AI_COCKPIT_RELEASE_RUNNER was a protected repository value. Provider metadata shows it is a repository Actions variable with the allow-listed runner label code-scanning. As a result, the protected-namespace reference expanded to empty and the rehearsal failed at exact-source checkout; the earlier default-provider access failure from ubuntu-latest remains the underlying IP allow-list symptom.",
+    "constraints": [
+      "Use vars.AI_COCKPIT_RELEASE_RUNNER for the release job runner with ubuntu-latest as the portable fallback.",
+      "Keep the existing GitHub API access binding because the selected runner, not a nonexistent auth value, is the authorized network boundary.",
+      "Do not change the repository variable value, organization allow list, runner registration, permissions, release metadata, or public release state.",
+      "Do not publish v0.5.65 until the merged-main exact-source rehearsal succeeds."
+    ],
+    "rationale": "The durable correction is to route the whole release job through the already configured allow-listed runner. Binding a runner label through the protected namespace was a type error and cannot provide API access; restoring the variable-based runner expression fixes the actual boundary while retaining the existing API access binding and fail-closed release gates."
+  },
+  "rawUserRequest": "必须根治当前问题；Outcome必须在对话框中独立直出并带有🔴、🟡、🟢中的规范标记；现有目标完成后发布新版本，不能绕过任何门禁。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-root-cause-release-runner-variable",
+    "capturedAt": "2026-08-18T00:00:00+09:00",
+    "digest": "sha256:release-runner-variable-root-cause-20260818"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Route release workflow execution through the configured allow-listed runner variable while preserving github.token and all exact-source publication gates.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "configured-allowlisted-runner",
+      "riskDomain": "hosted_runner_network_boundary",
+      "scenario": "The repository Actions variable AI_COCKPIT_RELEASE_RUNNER is configured to an allow-listed runner label.",
+      "expected": "The release job runs on vars.AI_COCKPIT_RELEASE_RUNNER and its github.token Actions API calls are authorized.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused workflow assertions and post-merge exact-source rehearsal."
+    },
+    {
+      "id": "portable-fallback",
+      "riskDomain": "release_workflow_configuration",
+      "scenario": "The repository Actions variable is unset in an adopter repository.",
+      "expected": "The release job falls back to ubuntu-latest without changing release gates.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Static workflow regression assertion for the explicit fallback expression."
+    },
+    {
+      "id": "exact-source-no-public-mutation",
+      "riskDomain": "release_integrity",
+      "scenario": "The runner routing correction is used for the v0.5.65 candidate.",
+      "expected": "The merged-main rehearsal verifies the exact source and all dependency gates without creating a tag, Release, or public asset.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Post-merge hosted rehearsal inspection and public-state checks."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-current-thread",
+    "reason": "The user explicitly requires the release rehearsal root cause to be fixed before publication and authorizes the narrow repository workflow correction."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 947
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-runner-allowlist-repair-20260818.json",
+    "baseCommit": "a034378c8863ca45b8b75586c551201003700fb4",
+    "initialScopeDigest": "9fcf51e41710170584009798822d1068b3458f94d50eaabfd7aa7ccf2fe6120b",
+    "contractSkeletonDigest": "65c8ad38254811bdc21940e4cb3c31397ba4dd9b75b7f847f5349a98ca1ca753"
+  }
+}

@@ -4,42 +4,46 @@ Task Result
 Status: Success
 
 What was completed
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.contract.json [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.contract.json]
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.summary.json [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.summary.json]
+- Changed .ai/work-items/starts/release-runner-allowlist-repair-20260818.json [evidence: .ai/work-items/starts/release-runner-allowlist-repair-20260818.json]
+- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
+- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
+- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 - Changed .github/workflows/release.yml [evidence: .github/workflows/release.yml]
 - Changed tests/test_release_workflow.py [evidence: tests/test_release_workflow.py]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
 - Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
 - Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.contract.json [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.contract.json]
-- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.summary.json [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.summary.json]
-- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.outcome.json [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.outcome.json]
-- Changed .ai/work-items/active/release-workflow-token-allowlist-20260817.outcome.md [evidence: .ai/work-items/archive/2026/release-workflow-token-allowlist-20260817.outcome.md]
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.json [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.json]
+- Changed .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.md [evidence: .ai/work-items/active/release-runner-allowlist-repair-20260818.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 
 Problems found
-- Total: 1
+- Total: 3
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
 
 Problems resolved
-- Problem: aiGuidelines failed before the retry.
-  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- The provider secret/configuration is external state and its value is intentionally not inspectable in repository evidence; hosted rehearsal remains required. [evidence: residualRisks]
+- Provider-side runner label and IP allow-list state cannot be proven from repository files; hosted same-SHA rehearsal is the required external verification. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- The hosted rehearsal failure must be fixed at its provider-access root cause; no workaround or gate bypass is acceptable. (inference)
+- The provider-access failure must be fixed at root cause; Outcome must be independently visible in the conversation with its traffic-light marker; no gate bypass is acceptable. (inference)
 
 Verification
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
