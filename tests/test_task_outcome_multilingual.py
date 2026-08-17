@@ -110,6 +110,27 @@ def test_three_languages_have_localized_chrome_and_shared_facts() -> None:
     assert rendered["ja"] != rendered["en"] != rendered["zh-CN"]
 
 
+@pytest.mark.parametrize(
+    ("status", "marker"),
+    [
+        ("completed", "🟢"),
+        ("completed_with_warnings", "🟡"),
+        ("needs_human_confirmation", "🟡"),
+        ("blocked", "🔴"),
+        ("cancelled", "🔴"),
+    ],
+)
+def test_conversation_outcome_status_always_has_canonical_traffic_light(
+    status: str, marker: str
+) -> None:
+    candidate = outcome()
+    candidate["status"] = status
+
+    rendered = render_localized_outcome(candidate, "zh-CN")
+
+    assert f"状态: {marker} `{status}`" in rendered
+
+
 def test_file_generation_is_exact_and_does_not_mutate_source(tmp_path) -> None:
     source = outcome()
     before = json.dumps(source, sort_keys=True)

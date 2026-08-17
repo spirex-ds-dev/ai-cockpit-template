@@ -399,7 +399,11 @@ def _status(
         return "cancelled"
     if "external_handoff_timeout" in types:
         return "blocked"
-    if "stop" in types:
+    if any(
+        event.get("eventType") == "stop"
+        and _state(event) not in {"resolved", "mitigated", "accepted", "not_applicable"}
+        for event in events
+    ):
         return "needs_human_confirmation"
     return "completed_with_warnings" if warnings else "completed"
 

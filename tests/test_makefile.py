@@ -614,6 +614,21 @@ def test_ai_finish_forwards_explicit_report_language_without_implicit_archive():
     assert "env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES" in result.stdout
 
 
+def test_ai_finish_defaults_report_language_when_not_supplied_and_template_matches():
+    result = subprocess.run(
+        ["make", "-n", "ai-finish", "TASK=example", "REPORT_LANGUAGE="],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert '--language "en"' in result.stdout
+    for path in (ROOT / "Makefile", ROOT / "templates" / "make" / "Makefile.ai"):
+        text = path.read_text(encoding="utf-8")
+        assert "$(or $(REPORT_LANGUAGE),en)" in text
+
+
 def test_ai_finish_keeps_archive_one_shot_in_both_make_entrypoints():
     for path in (ROOT / "Makefile", ROOT / "templates" / "make" / "Makefile.ai"):
         text = path.read_text(encoding="utf-8")

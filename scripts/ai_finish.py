@@ -37,6 +37,11 @@ from ai_common import (
     save_json,
     verification_key,
 )
+from ai_evidence_dependencies import (
+    EvidenceDependencyError,
+    load_capability_evidence_dependencies,
+    source_bound_evidence_is_affected,
+)
 from ai_observability import create_observability, elapsed_ms
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
@@ -711,14 +716,34 @@ def console_output(output: str) -> str:
     )
 
 
+def source_bound_check_required(contract_data: dict[str, Any]) -> bool:
+    """Require source-bound evidence validation only for affected Work Items."""
+    try:
+        dependencies = load_capability_evidence_dependencies(PROJECT_ROOT)
+    except EvidenceDependencyError:
+        # A malformed dependency graph must fail through the registered gate,
+        # rather than silently bypassing it and paying for quality first.
+        return True
+    if dependencies is None:
+        return False
+    return source_bound_evidence_is_affected(changed_paths(contract_data), dependencies)
+
+
 def inject_mandatory_verification_checks(
     declared_items: list[dict[str, Any]],
+    *,
+    contract_data: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
-    """Normalize explicitly declared checks without adding release-only gates."""
+    """Normalize checks and add the bounded source gate for affected changes."""
     normalized: dict[str, dict[str, Any]] = {
         check_id: {"check": check_id, "required": True}
         for check_id in MANDATORY_VERIFICATION_CHECKS
     }
+    if contract_data is not None and source_bound_check_required(contract_data):
+        normalized["sourceBoundEvidence"] = {
+            "check": "sourceBoundEvidence",
+            "required": True,
+        }
     for item in declared_items:
         check_id = verification_key(item)
         if not check_id:
@@ -1193,9 +1218,28 @@ def _pre_merge_outcome_input(
         for item in changed
         if isinstance(item, dict) and isinstance(item.get("path"), str)
     ]
-    warnings = [item for item in summary.get("knownGaps", []) if isinstance(item, str)]
     non_risk_explanations = [
         dict(item) for item in summary.get("nonRiskExplanations", []) if isinstance(item, dict)
+    ]
+    evidenced_non_risk_warnings = {
+        item["sourceWarning"]
+        for item in non_risk_explanations
+        if isinstance(item.get("sourceWarning"), str)
+        and isinstance(item.get("evidence"), list)
+        and item["evidence"]
+        and all(
+            isinstance(reference, dict)
+            and isinstance(reference.get("source"), str)
+            and reference["source"].strip()
+            and isinstance(reference.get("subject"), str)
+            and reference["subject"].strip()
+            for reference in item["evidence"]
+        )
+    }
+    warnings = [
+        item
+        for item in summary.get("knownGaps", [])
+        if isinstance(item, str) and item not in evidenced_non_risk_warnings
     ]
     limitations = [
         {
@@ -1859,12 +1903,11 @@ def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
 
     locale = normalize_locale(language)
     heading, limitation, next_action = REPORT_BOUNDARY_TEXT[locale]
-    try:
-        human_summary = render_human_report(generate_human_report(outcome))
-    except (KeyError, TypeError, ValueError):
-        # Legacy/test fixtures may contain only the localized Outcome surface;
-        # the governed finish path always supplies and validates the full report.
-        human_summary = ""
+    # A conversation delivery is only valid when both the localized Outcome
+    # and the complete human-benefit report are renderable.  Do not silently
+    # downgrade to a status-only or localized-only surface: that would make a
+    # missing report look like a successful human handoff.
+    human_summary = render_human_report(generate_human_report(outcome))
     return f"{heading}\n{render_localized_outcome(outcome, locale)}\n{human_summary}{limitation}\n{next_action}\n"
 
 
@@ -2108,7 +2151,8 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
     obs = create_observability(work_item_id=args.task)
     total_start = time.time()
     declared_items = inject_mandatory_verification_checks(
-        [item for item in declared if isinstance(item, dict)]
+        [item for item in declared if isinstance(item, dict)],
+        contract_data=contract_data,
     )
     summary_requests_outcome = True
     declared_items.sort(

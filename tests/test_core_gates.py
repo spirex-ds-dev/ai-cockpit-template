@@ -1569,6 +1569,58 @@ def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, mo
     ]
 
 
+def test_finish_injects_source_bound_check_only_for_affected_evidence(monkeypatch):
+    dependencies = type(
+        "Dependencies",
+        (),
+        {
+            "matrix_path": "docs/reference/capability-truth-matrix.json",
+            "capability_ids_by_path": {
+                "Makefile": ("human_benefit_report",),
+                "tests/test_finish.py": ("human_benefit_report",),
+            },
+        },
+    )()
+    monkeypatch.setattr(
+        ai_finish, "load_capability_evidence_dependencies", lambda _root: dependencies
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "changed_paths",
+        lambda _contract: ["Makefile", "scripts/ai_finish.py"],
+    )
+
+    checks = ai_finish.inject_mandatory_verification_checks(
+        [{"check": "quality", "required": True}],
+        contract_data={"workItemId": "task"},
+    )
+
+    assert [item["check"] for item in checks] == ["sourceBoundEvidence", "quality"]
+    assert checks[-1]["required"] is True
+
+
+def test_finish_does_not_inject_source_bound_check_for_unrelated_change(monkeypatch):
+    dependencies = type(
+        "Dependencies",
+        (),
+        {
+            "matrix_path": "docs/reference/capability-truth-matrix.json",
+            "capability_ids_by_path": {"Makefile": ("human_benefit_report",)},
+        },
+    )()
+    monkeypatch.setattr(
+        ai_finish, "load_capability_evidence_dependencies", lambda _root: dependencies
+    )
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: ["scripts/ai_finish.py"])
+
+    checks = ai_finish.inject_mandatory_verification_checks(
+        [{"check": "quality", "required": True}],
+        contract_data={"workItemId": "task"},
+    )
+
+    assert [item["check"] for item in checks] == ["quality"]
+
+
 def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)

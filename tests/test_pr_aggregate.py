@@ -8,6 +8,32 @@ import pytest
 from ai_start_receipt import build_receipt, receipt_binding, validate_receipt
 
 
+def test_pr_requires_capability_matrix_when_bound_evidence_changes():
+    issues = ai_check_pr.capability_truth_dependency_issues(["scripts/ai_finish.py"])
+
+    assert issues == [
+        (
+            "Capability Truth evidence dependency requires a changed "
+            "docs/reference/capability-truth-matrix.json: scripts/ai_finish.py is bound to "
+            "capabilities [human_benefit_report, repository_governance_layer]"
+        )
+    ]
+
+
+def test_pr_rejects_stale_capability_matrix(monkeypatch):
+    monkeypatch.setattr(
+        ai_check_pr,
+        "validate_matrix",
+        lambda *_args, **_kwargs: [
+            "capabilities[3].evidenceSource does not match current evidence bytes"
+        ],
+    )
+
+    assert ai_check_pr.capability_truth_dependency_issues(
+        ["docs/reference/capability-truth-matrix.json"]
+    ) == ["capabilities[3].evidenceSource does not match current evidence bytes"]
+
+
 def write_pair(root, name, scope, changed, *, approved=False):
     archive = root / ".ai" / "work-items" / "archive" / "2026"
     archive.mkdir(parents=True, exist_ok=True)

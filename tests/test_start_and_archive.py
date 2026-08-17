@@ -2655,8 +2655,6 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     report_dir.mkdir(parents=True)
     report_json = report_dir / "task_report.json"
     report_markdown = report_dir / "task_report.md"
-    report_json.write_text('{"stale":true}\n', encoding="utf-8")
-    report_markdown.write_text("stale report\n", encoding="utf-8")
     monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_archive_work_item, "ARCHIVE_BASE_DIR", archive)
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)

@@ -413,6 +413,43 @@ def test_statuses_and_output_are_deterministic() -> None:
     assert "score" not in repr(first).lower()
 
 
+def test_resolved_stop_does_not_keep_current_outcome_yellow() -> None:
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        events=[
+            event(
+                "resolved-stop",
+                "stop",
+                reason="quality failed before the retry",
+                state="resolved",
+            ),
+            event(
+                "resolution",
+                "resolution",
+                problem="quality failed before the retry",
+                action="The retry passed",
+                state="resolved",
+            ),
+        ],
+    )
+
+    assert outcome["status"] == "completed"
+    assert outcome["humanStatusColor"] == "green"
+    assert outcome["sections"]["forcedStops"][0]["result"] == "resolved"
+
+
+def test_unresolved_stop_keeps_current_outcome_yellow() -> None:
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        events=[event("unresolved-stop", "stop", result="unresolved")],
+    )
+
+    assert outcome["status"] == "needs_human_confirmation"
+    assert outcome["humanStatusColor"] == "yellow"
+
+
 def test_external_handoff_timeout_is_a_red_blocked_outcome() -> None:
     outcome = generate_outcome(
         "task-outcome-generator",

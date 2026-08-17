@@ -1,1277 +1,29 @@
 {
-  "forbiddenClaims": [],
-  "forcedStops": [
-    {
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "evidence": [
-        {
-          "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verificationHistory[0] quality failed"
-        },
-        {
-          "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verification[quality] retry passed"
-        }
-      ],
-      "handoff": "",
-      "humanDecision": "",
-      "policyOrGuard": "required verification: quality",
-      "reason": "quality failed before the retry.",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "stage": "verification"
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
+  "workItemId": "outcome-report-delivery-integrity-20260817",
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "outcome-report-delivery-integrity-20260817",
+    "contractDigest": "7997fbd62959db13aad99827822c46b463747bfad0bf44d56597b163f35b8982",
+    "summaryDigest": "421a047cf465fb2473b54a93ca81d300da9990bb44992fe84430e78c2d8c21a4",
+    "verificationDigest": "134e15a13984d326a8b35b09eb297b55cf94e6d49dc26a44b6ce52ea9208206f",
+    "baseCommit": "ac195a7abc01661e87bc819048414f776650c473",
+    "headCommit": "499778fd3116b06655c5d7ed02ff0b574d6506e8",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
     },
-    {
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "evidence": [
-        {
-          "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verificationHistory[1] sourceBoundEvidence failed"
-        },
-        {
-          "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verification[sourceBoundEvidence] retry passed"
-        }
-      ],
-      "handoff": "",
-      "humanDecision": "",
-      "policyOrGuard": "required verification: sourceBoundEvidence",
-      "reason": "sourceBoundEvidence failed before the retry.",
-      "recovery": "Retry sourceBoundEvidence after correcting the recorded failure.",
-      "result": "resolved",
-      "stage": "verification"
-    }
-  ],
-  "humanDecisions": [
-    "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
-    "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
-  ],
-  "humanHandoff": {
-    "completed": [
-      {
-        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
-        "detail": "Governed scope, authorization, acceptance, and evidence boundaries for Outcome delivery and report binding.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-        "detail": "AI Change Summary and verification handoff for this Work Item.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json"
-      },
-      {
-        "claim": "Changed .ai/cockpit/current_status.md",
-        "detail": "Generated lifecycle projection.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/cockpit/current_status.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/cockpit/current_status.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/cockpit/current_status.md"
-      },
-      {
-        "claim": "Changed .ai/work-items/starts/outcome-report-delivery-integrity-20260817.json",
-        "detail": "Generated Work Item start receipt.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/starts/outcome-report-delivery-integrity-20260817.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/starts/outcome-report-delivery-integrity-20260817.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/starts/outcome-report-delivery-integrity-20260817.json"
-      },
-      {
-        "claim": "Changed Makefile",
-        "detail": "Default report-language binding and direct Outcome delivery entrypoint for this repository.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "Makefile"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "Makefile"
-          }
-        ],
-        "inference": false,
-        "title": "Changed Makefile"
-      },
-      {
-        "claim": "Changed templates/make/Makefile.ai",
-        "detail": "Mirrored default report-language behavior for future installed adopter projects.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "templates/make/Makefile.ai"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "templates/make/Makefile.ai"
-          }
-        ],
-        "inference": false,
-        "title": "Changed templates/make/Makefile.ai"
-      },
-      {
-        "claim": "Changed scripts/ai_finish.py",
-        "detail": "Direct conversation delivery now requires the complete localized Outcome and Human Benefit Report.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_finish.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_finish.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_finish.py"
-      },
-      {
-        "claim": "Changed scripts/ai_evidence_dependencies.py",
-        "detail": "Conditional source-bound gate routing based on actual affected evidence paths.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_evidence_dependencies.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_evidence_dependencies.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_evidence_dependencies.py"
-      },
-      {
-        "claim": "Changed scripts/ai_check_pr.py",
-        "detail": "PR aggregate stale Capability Truth evidence gate.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_check_pr.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_check_pr.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_check_pr.py"
-      },
-      {
-        "claim": "Changed scripts/ai_capability_freshness.py",
-        "detail": "Installed runtime dependency of the source-bound Capability Truth validator.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_capability_freshness.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_capability_freshness.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_capability_freshness.py"
-      },
-      {
-        "claim": "Changed scripts/ai_capability_truth.py",
-        "detail": "Installed runtime dependency used by the PR stale-evidence gate.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_capability_truth.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_capability_truth.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_capability_truth.py"
-      },
-      {
-        "claim": "Changed scripts/ai_installer_catalog.json",
-        "detail": "Installer catalog now distributes the complete PR stale-evidence dependency chain.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_installer_catalog.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_installer_catalog.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_installer_catalog.json"
-      },
-      {
-        "claim": "Changed docs/reference/capability-truth-matrix.json",
-        "detail": "Regenerated capability evidence bindings after the Makefile entrypoint change.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/capability-truth-matrix.json"
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.json",
-        "detail": "Regenerated source-bound Japanese capability evidence after the Makefile entrypoint change.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/japanese-capability-assessment.json"
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.md",
-        "detail": "Regenerated human-readable Japanese capability assessment projection.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/japanese-capability-assessment.md"
-      },
-      {
-        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "detail": "Regenerated pre-release alignment evidence after bound source refresh.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/pre-release-documentation-alignment.json"
-      },
-      {
-        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "detail": "Regenerated human-readable pre-release alignment projection.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/pre-release-documentation-alignment.md"
-      },
-      {
-        "claim": "Changed scripts/ai_archive_work_item.py",
-        "detail": "Deterministic singleton human-benefit report refresh from the archived Outcome.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_archive_work_item.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_archive_work_item.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_archive_work_item.py"
-      },
-      {
-        "claim": "Changed scripts/ai_generate_task_outcome.py",
-        "detail": "Resolved verification stops remain visible without blocking the current Outcome.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_generate_task_outcome.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_generate_task_outcome.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_generate_task_outcome.py"
-      },
-      {
-        "claim": "Changed scripts/ai_render_task_outcome_multilingual.py",
-        "detail": "Conversation-facing localized Outcome status line with canonical traffic-light markers.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_render_task_outcome_multilingual.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "scripts/ai_render_task_outcome_multilingual.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_render_task_outcome_multilingual.py"
-      },
-      {
-        "claim": "Changed tests/test_makefile.py",
-        "detail": "Regression coverage for default and explicit report-language forwarding across entrypoints.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_makefile.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_makefile.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_makefile.py"
-      },
-      {
-        "claim": "Changed tests/test_start_and_archive.py",
-        "detail": "Regression coverage proving the archive creates the singleton report when no prior report exists.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_start_and_archive.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_start_and_archive.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_start_and_archive.py"
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_ai_finish_integration.py",
-        "detail": "Regression coverage for persisted and direct Outcome delivery failure paths.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_task_outcome_ai_finish_integration.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_task_outcome_ai_finish_integration.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_task_outcome_ai_finish_integration.py"
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_generator.py",
-        "detail": "Regression coverage for resolved versus unresolved verification stops.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_task_outcome_generator.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_task_outcome_generator.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_task_outcome_generator.py"
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_multilingual.py",
-        "detail": "Regression coverage for 🟢, 🟡, and 🔴 markers across all supported Outcome statuses.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_task_outcome_multilingual.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_task_outcome_multilingual.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_task_outcome_multilingual.py"
-      },
-      {
-        "claim": "Changed tests/test_core_gates.py",
-        "detail": "Regression coverage for conditional source-bound gate injection before quality.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_core_gates.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_core_gates.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_core_gates.py"
-      },
-      {
-        "claim": "Changed tests/test_pr_aggregate.py",
-        "detail": "Regression coverage for PR rejection of missing or stale Capability Truth evidence.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_pr_aggregate.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_pr_aggregate.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_pr_aggregate.py"
-      },
-      {
-        "claim": "Changed tests/test_installed_runtime_parity.py",
-        "detail": "Regression coverage for future installed-adopter runtime parity.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_installed_runtime_parity.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": "tests/test_installed_runtime_parity.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_installed_runtime_parity.py"
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
-        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md",
-        "detail": "Mandatory localized Task Outcome evidence generated by ai-finish.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.json",
-        "detail": "Regenerated from the rewritten archived Task Outcome during the archive transaction.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/cockpit/task_report.json"
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.md",
-        "detail": "Regenerated from the rewritten archived Task Outcome during the archive transaction.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/cockpit/task_report.md"
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/index.json",
-        "detail": "Generated archive discovery index.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/index.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/index.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/index.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json",
-        "detail": "Immutable archive evidence root.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
-        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md",
-        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
-      }
-    ],
-    "locale": "en",
-    "passed": [
-      {
-        "claim": "aiWorkItem",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json work item contract check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-        "evidence": [
-          {
-            "digest": "46167a916c5b4375a428818f95a8fe353b8d5931543b9471d88957a2607f0b7f",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiWorkItem"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "46167a916c5b4375a428818f95a8fe353b8d5931543b9471d88957a2607f0b7f",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiWorkItem"
-          }
-        ],
-        "inference": false,
-        "title": "aiWorkItem"
-      },
-      {
-        "claim": "aiScope",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json scope guard passed: 20 changed path(s) covered",
-        "evidence": [
-          {
-            "digest": "2c34fa8a818387f3e0eda2d9fb6a340d55e030716fa41e8ed40a4cf32fde363c",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiScope"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "2c34fa8a818387f3e0eda2d9fb6a340d55e030716fa41e8ed40a4cf32fde363c",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiScope"
-          }
-        ],
-        "inference": false,
-        "title": "aiScope"
-      },
-      {
-        "claim": "aiGuards",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
-        "evidence": [
-          {
-            "digest": "207d0ad338218c744ba4e70d3fe6e003f1883f56065185579b770bc9510b1cb7",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiGuards"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "207d0ad338218c744ba4e70d3fe6e003f1883f56065185579b770bc9510b1cb7",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiGuards"
-          }
-        ],
-        "inference": false,
-        "title": "aiGuards"
-      },
-      {
-        "claim": "aiCheckpoint",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `outcome-report-delivery-integrity-20260817` - Contract Hash: `75fc7721a865cc33` - Mode: `code` - notCodable: `False` - Execution Decision: `continue`",
-        "evidence": [
-          {
-            "digest": "852252384c6d79dcfe66f6e3c3e49aad7f7ed7034caeb2efce56d65fde3f7d72",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiCheckpoint"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "852252384c6d79dcfe66f6e3c3e49aad7f7ed7034caeb2efce56d65fde3f7d72",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiCheckpoint"
-          }
-        ],
-        "inference": false,
-        "title": "aiCheckpoint"
-      },
-      {
-        "claim": "aiReviewPolicy",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json review policy matched 11 path(s) [review] .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json [review] .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.json [review] .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.md [review] .ai/work-items/sta",
-        "evidence": [
-          {
-            "digest": "0394b1c9d3ea4caa7d4019cc72efe0e10ed791d96ea117b02a3ea5780b28dd22",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiReviewPolicy"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "0394b1c9d3ea4caa7d4019cc72efe0e10ed791d96ea117b02a3ea5780b28dd22",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiReviewPolicy"
-          }
-        ],
-        "inference": false,
-        "title": "aiReviewPolicy"
-      },
-      {
-        "claim": "aiBacktrack",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
-        "evidence": [
-          {
-            "digest": "64a9b66ae30b1ed6956baf9db75830e22c79953d6a9ff0e7f326c8cff0d6df5d",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiBacktrack"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "64a9b66ae30b1ed6956baf9db75830e22c79953d6a9ff0e7f326c8cff0d6df5d",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiBacktrack"
-          }
-        ],
-        "inference": false,
-        "title": "aiBacktrack"
-      },
-      {
-        "claim": "aiCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
-        "evidence": [
-          {
-            "digest": "3a6f2484a8e4c533e5d6744e1178eab52244490bdfd89e7c958a34bcf2832cb2",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiCoverage"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "3a6f2484a8e4c533e5d6744e1178eab52244490bdfd89e7c958a34bcf2832cb2",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiCoverage"
-          }
-        ],
-        "inference": false,
-        "title": "aiCoverage"
-      },
-      {
-        "claim": "aiScenarioCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
-        "evidence": [
-          {
-            "digest": "ffdb3f837ca32424c4bf0697e4d55bbc498bf0445d22ce7eca5b0d2950b0aa49",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiScenarioCoverage"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "ffdb3f837ca32424c4bf0697e4d55bbc498bf0445d22ce7eca5b0d2950b0aa49",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiScenarioCoverage"
-          }
-        ],
-        "inference": false,
-        "title": "aiScenarioCoverage"
-      },
-      {
-        "claim": "aiGuidelines",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json guidelines compliance check passed: 2 guideline(s) verified",
-        "evidence": [
-          {
-            "digest": "eb018dad297222900434570e82ff0c85fe2b14929098bcc07fd38d40a7558389",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiGuidelines"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "eb018dad297222900434570e82ff0c85fe2b14929098bcc07fd38d40a7558389",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiGuidelines"
-          }
-        ],
-        "inference": false,
-        "title": "aiGuidelines"
-      },
-      {
-        "claim": "aiDiffOwnership",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ## Diff Ownership Preview - active_owned: `20`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validat",
-        "evidence": [
-          {
-            "digest": "5048319a7f5f9e47898fb075280a4a0addfdda8dd9e0b501a62367c29d4f97c6",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiDiffOwnership"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "5048319a7f5f9e47898fb075280a4a0addfdda8dd9e0b501a62367c29d4f97c6",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiDiffOwnership"
-          }
-        ],
-        "inference": false,
-        "title": "aiDiffOwnership"
-      },
-      {
-        "claim": "quality",
-        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"ac195a7abc01661e87bc819048414f776650c473\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json\", \"",
-        "evidence": [
-          {
-            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "quality"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "quality"
-          }
-        ],
-        "inference": false,
-        "title": "quality"
-      },
-      {
-        "claim": "aiStatus",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
-        "evidence": [
-          {
-            "digest": "1944983d461766cb01457189d525a544ffe7745c9ad3ff924096ca7d9ae3dc3e",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiStatus"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "1944983d461766cb01457189d525a544ffe7745c9ad3ff924096ca7d9ae3dc3e",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiStatus"
-          }
-        ],
-        "inference": false,
-        "title": "aiStatus"
-      },
-      {
-        "claim": "aiStatusCheck",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
-        "evidence": [
-          {
-            "digest": "cee15b9e8402b4add9c500064247e9f5444269e730828fa5aefc91e3dfb90c5b",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiStatusCheck"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "cee15b9e8402b4add9c500064247e9f5444269e730828fa5aefc91e3dfb90c5b",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiStatusCheck"
-          }
-        ],
-        "inference": false,
-        "title": "aiStatusCheck"
-      },
-      {
-        "claim": "aiStatusConsistency",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
-        "evidence": [
-          {
-            "digest": "a9e77a20d533b9dc3dcb6dac41f10c27735f38ba7c182a78c57e4ad4042fb442",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiStatusConsistency"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "a9e77a20d533b9dc3dcb6dac41f10c27735f38ba7c182a78c57e4ad4042fb442",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiStatusConsistency"
-          }
-        ],
-        "inference": false,
-        "title": "aiStatusConsistency"
-      },
-      {
-        "claim": "aiAgentRisk",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
-        "evidence": [
-          {
-            "digest": "87bd31234d9c879b74e0ad5d59532f430aa4547aed97b0f909db7b5600a25d00",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiAgentRisk"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "87bd31234d9c879b74e0ad5d59532f430aa4547aed97b0f909db7b5600a25d00",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiAgentRisk"
-          }
-        ],
-        "inference": false,
-        "title": "aiAgentRisk"
-      },
-      {
-        "claim": "sourceBoundEvidence",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"cl",
-        "evidence": [
-          {
-            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "sourceBoundEvidence"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "sourceBoundEvidence"
-          }
-        ],
-        "inference": false,
-        "title": "sourceBoundEvidence"
-      },
-      {
-        "claim": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json",
-        "evidence": [
-          {
-            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiSummary"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8",
-            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
-            "subject": "aiSummary"
-          }
-        ],
-        "inference": false,
-        "title": "aiSummary"
-      }
-    ],
-    "questions": {
-      "agentUnknowns": [],
-      "avoidedRisks": [
-        {
-          "claim": "If not detected, could have led to a stale completion claim.",
-          "evidenceRefs": [],
-          "inference": true
-        },
-        {
-          "claim": "If not detected, could have led to a stale completion claim.",
-          "evidenceRefs": [],
-          "inference": true
-        }
-      ],
-      "blockedProblems": [],
-      "humanConfirmations": [
-        {
-          "claim": "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
-          "evidenceRefs": [],
-          "inference": true
-        },
-        {
-          "claim": "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.",
-          "evidenceRefs": [],
-          "inference": true
-        }
-      ],
-      "nextTime": {
-        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
-        "evidenceRefs": [],
-        "inference": true
-      },
-      "problemCount": 3,
-      "problemCountEvidenceRefs": [
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "observedIssues"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verification and verificationHistory"
-        }
-      ],
-      "recurrenceLikelihood": {
-        "claim": "unknown: no direct recurrence probability evidence was recorded.",
-        "evidenceRefs": [],
-        "inference": true
-      },
-      "remainingRisks": [],
-      "resolutionApproach": [
-        {
-          "claim": "Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.",
-          "evidenceRefs": [
-            {
-              "source": "hosted-run:32032966957",
-              "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "source-bound remediation"
-            },
-            {
-              "source": "hosted-run:32036310755",
-              "subject": "fresh smoke pass on corrected commit"
-            },
-            {
-              "source": "hosted-run:32036310634",
-              "subject": "fresh compatibility pass on corrected commit"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran quality after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verificationHistory[0] quality failed"
-            },
-            {
-              "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verification[quality] retry passed"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran sourceBoundEvidence after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verificationHistory[1] sourceBoundEvidence failed"
-            },
-            {
-              "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verification[sourceBoundEvidence] retry passed"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "resolvedProblems": [
-        {
-          "claim": "Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.",
-          "evidenceRefs": [
-            {
-              "source": "hosted-run:32032966957",
-              "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "source-bound remediation"
-            },
-            {
-              "source": "hosted-run:32036310755",
-              "subject": "fresh smoke pass on corrected commit"
-            },
-            {
-              "source": "hosted-run:32036310634",
-              "subject": "fresh compatibility pass on corrected commit"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "quality failed before the retry.",
-          "evidenceRefs": [
-            {
-              "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verificationHistory[0] quality failed"
-            },
-            {
-              "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verification[quality] retry passed"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "sourceBoundEvidence failed before the retry.",
-          "evidenceRefs": [
-            {
-              "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verificationHistory[1] sourceBoundEvidence failed"
-            },
-            {
-              "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf",
-              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-              "subject": "verification[sourceBoundEvidence] retry passed"
-            }
-          ],
-          "inference": false
-        }
-      ]
-    },
-    "redReasons": [],
-    "retained": [],
-    "risks": []
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en"
   },
-  "interventions": [],
-  "issues": {
-    "detected": 2,
-    "hardStops": 2,
-    "resolved": 2,
-    "unresolved": 0,
-    "warnings": 0
-  },
-  "limitations": [],
-  "nextSafeAction": "Review the pull request and provider checks before merge.",
-  "phase": "review",
-  "preventedRisks": [
-    {
-      "action": "blocked",
-      "detectedBy": "required verification: quality",
-      "evidence": [
-        {
-          "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verificationHistory[0] quality failed"
-        },
-        {
-          "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verification[quality] retry passed"
-        }
-      ],
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium"
-    },
-    {
-      "action": "blocked",
-      "detectedBy": "required verification: sourceBoundEvidence",
-      "evidence": [
-        {
-          "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verificationHistory[1] sourceBoundEvidence failed"
-        },
-        {
-          "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf",
-          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
-          "subject": "verification[sourceBoundEvidence] retry passed"
-        }
-      ],
-      "resolution": "Retry sourceBoundEvidence after correcting the recorded failure.",
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium"
-    }
-  ],
-  "remainingRisks": [],
-  "reportVersion": 1,
-  "result": "completed",
-  "sourceOutcome": {
-    "digest": "66558518fbc5a96963bc4cc8b39ae6bd1fe14ff204623d5f945d6d991c89ac74",
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1
-  },
-  "task": {
+  "sections": {
+    "outcomeSummary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: outcome-report-delivery-integrity-20260817",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
@@ -1310,7 +62,1340 @@
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
       ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
     ],
-    "summary": "Task outcome-report-delivery-integrity-20260817 generated an evidence-derived outcome with status completed."
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "sourceBoundEvidence failed before the retry.",
+        "policyOrGuard": "required verification: sourceBoundEvidence",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry sourceBoundEvidence after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[1] sourceBoundEvidence failed",
+            "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[sourceBoundEvidence] retry passed",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.",
+        "action": "Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "hosted-run:32032966957",
+            "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "source-bound remediation"
+          },
+          {
+            "source": "hosted-run:32036310755",
+            "subject": "fresh smoke pass on corrected commit"
+          },
+          {
+            "source": "hosted-run:32036310634",
+            "subject": "fresh compatibility pass on corrected commit"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "hosted-run:32032966957",
+            "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "source-bound remediation"
+          },
+          {
+            "source": "hosted-run:32036310755",
+            "subject": "fresh smoke pass on corrected commit"
+          },
+          {
+            "source": "hosted-run:32036310634",
+            "subject": "fresh compatibility pass on corrected commit"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+          }
+        ]
+      },
+      {
+        "problem": "sourceBoundEvidence failed before the retry.",
+        "action": "Re-ran sourceBoundEvidence after the correction; the latest attempt passed.",
+        "verification": "sourceBoundEvidence latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verificationHistory[1] sourceBoundEvidence failed",
+            "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "verification[sourceBoundEvidence] retry passed",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [],
+    "humanDecisions": [
+      "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
+      "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verificationHistory[1] sourceBoundEvidence failed",
+        "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "subject": "verification[sourceBoundEvidence] retry passed",
+        "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+      }
+    ]
   },
-  "workItemId": "outcome-report-delivery-integrity-20260817"
+  "humanHandoff": {
+    "locale": "en",
+    "completed": [
+      {
+        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
+        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json",
+        "detail": "Governed scope, authorization, acceptance, and evidence boundaries for Outcome delivery and report binding.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.contract.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+        "detail": "AI Change Summary and verification handoff for this Work Item.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/current_status.md",
+        "title": "Changed .ai/cockpit/current_status.md",
+        "detail": "Generated lifecycle projection.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/cockpit/current_status.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/cockpit/current_status.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/starts/outcome-report-delivery-integrity-20260817.json",
+        "title": "Changed .ai/work-items/starts/outcome-report-delivery-integrity-20260817.json",
+        "detail": "Generated Work Item start receipt.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/starts/outcome-report-delivery-integrity-20260817.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/starts/outcome-report-delivery-integrity-20260817.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed Makefile",
+        "title": "Changed Makefile",
+        "detail": "Default report-language binding and direct Outcome delivery entrypoint for this repository.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "Makefile"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "Makefile"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed templates/make/Makefile.ai",
+        "title": "Changed templates/make/Makefile.ai",
+        "detail": "Mirrored default report-language behavior for future installed adopter projects.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "templates/make/Makefile.ai"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "templates/make/Makefile.ai"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_finish.py",
+        "title": "Changed scripts/ai_finish.py",
+        "detail": "Direct conversation delivery now requires the complete localized Outcome and Human Benefit Report.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_finish.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_finish.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_evidence_dependencies.py",
+        "title": "Changed scripts/ai_evidence_dependencies.py",
+        "detail": "Conditional source-bound gate routing based on actual affected evidence paths.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_evidence_dependencies.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_evidence_dependencies.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_check_pr.py",
+        "title": "Changed scripts/ai_check_pr.py",
+        "detail": "PR aggregate stale Capability Truth evidence gate.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_check_pr.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_check_pr.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_capability_freshness.py",
+        "title": "Changed scripts/ai_capability_freshness.py",
+        "detail": "Installed runtime dependency of the source-bound Capability Truth validator.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_freshness.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_freshness.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_capability_truth.py",
+        "title": "Changed scripts/ai_capability_truth.py",
+        "detail": "Installed runtime dependency used by the PR stale-evidence gate.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_truth.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_capability_truth.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_installer_catalog.json",
+        "title": "Changed scripts/ai_installer_catalog.json",
+        "detail": "Installer catalog now distributes the complete PR stale-evidence dependency chain.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.json",
+        "title": "Changed docs/reference/capability-truth-matrix.json",
+        "detail": "Regenerated capability evidence bindings after the Makefile entrypoint change.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.json",
+        "title": "Changed docs/reference/japanese-capability-assessment.json",
+        "detail": "Regenerated source-bound Japanese capability evidence after the Makefile entrypoint change.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.md",
+        "title": "Changed docs/reference/japanese-capability-assessment.md",
+        "detail": "Regenerated human-readable Japanese capability assessment projection.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "detail": "Regenerated pre-release alignment evidence after bound source refresh.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "detail": "Regenerated human-readable pre-release alignment projection.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_archive_work_item.py",
+        "title": "Changed scripts/ai_archive_work_item.py",
+        "detail": "Deterministic singleton human-benefit report refresh from the archived Outcome.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_archive_work_item.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_archive_work_item.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_generate_task_outcome.py",
+        "title": "Changed scripts/ai_generate_task_outcome.py",
+        "detail": "Resolved verification stops remain visible without blocking the current Outcome.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_generate_task_outcome.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_generate_task_outcome.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed scripts/ai_render_task_outcome_multilingual.py",
+        "title": "Changed scripts/ai_render_task_outcome_multilingual.py",
+        "detail": "Conversation-facing localized Outcome status line with canonical traffic-light markers.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_render_task_outcome_multilingual.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "scripts/ai_render_task_outcome_multilingual.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_makefile.py",
+        "title": "Changed tests/test_makefile.py",
+        "detail": "Regression coverage for default and explicit report-language forwarding across entrypoints.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_makefile.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_makefile.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_start_and_archive.py",
+        "title": "Changed tests/test_start_and_archive.py",
+        "detail": "Regression coverage proving the archive creates the singleton report when no prior report exists.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_start_and_archive.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_start_and_archive.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_task_outcome_ai_finish_integration.py",
+        "title": "Changed tests/test_task_outcome_ai_finish_integration.py",
+        "detail": "Regression coverage for persisted and direct Outcome delivery failure paths.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_task_outcome_ai_finish_integration.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_task_outcome_ai_finish_integration.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_task_outcome_generator.py",
+        "title": "Changed tests/test_task_outcome_generator.py",
+        "detail": "Regression coverage for resolved versus unresolved verification stops.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_task_outcome_generator.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_task_outcome_generator.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_task_outcome_multilingual.py",
+        "title": "Changed tests/test_task_outcome_multilingual.py",
+        "detail": "Regression coverage for 🟢, 🟡, and 🔴 markers across all supported Outcome statuses.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_task_outcome_multilingual.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_task_outcome_multilingual.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_core_gates.py",
+        "title": "Changed tests/test_core_gates.py",
+        "detail": "Regression coverage for conditional source-bound gate injection before quality.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_core_gates.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_core_gates.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_pr_aggregate.py",
+        "title": "Changed tests/test_pr_aggregate.py",
+        "detail": "Regression coverage for PR rejection of missing or stale Capability Truth evidence.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_pr_aggregate.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_pr_aggregate.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_installed_runtime_parity.py",
+        "title": "Changed tests/test_installed_runtime_parity.py",
+        "detail": "Regression coverage for future installed-adopter runtime parity.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_installed_runtime_parity.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": "tests/test_installed_runtime_parity.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
+        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md",
+        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md",
+        "detail": "Mandatory localized Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.json",
+        "title": "Changed .ai/cockpit/task_report.json",
+        "detail": "Regenerated from the rewritten archived Task Outcome during the archive transaction.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.md",
+        "title": "Changed .ai/cockpit/task_report.md",
+        "detail": "Regenerated from the rewritten archived Task Outcome during the archive transaction.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/archive/index.json",
+        "title": "Changed .ai/work-items/archive/index.json",
+        "detail": "Generated archive discovery index.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/index.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/index.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json",
+        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json",
+        "detail": "Immutable archive evidence root.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.archive-manifest.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
+        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md",
+        "title": "Changed .ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+            "subject": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.outcome.md"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "passed": [
+      {
+        "claim": "aiWorkItem",
+        "title": "aiWorkItem",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json work item contract check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "46167a916c5b4375a428818f95a8fe353b8d5931543b9471d88957a2607f0b7f"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "46167a916c5b4375a428818f95a8fe353b8d5931543b9471d88957a2607f0b7f"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScope",
+        "title": "aiScope",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json scope guard passed: 20 changed path(s) covered",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiScope",
+            "digest": "2c34fa8a818387f3e0eda2d9fb6a340d55e030716fa41e8ed40a4cf32fde363c"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiScope",
+            "digest": "2c34fa8a818387f3e0eda2d9fb6a340d55e030716fa41e8ed40a4cf32fde363c"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuards",
+        "title": "aiGuards",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiGuards",
+            "digest": "207d0ad338218c744ba4e70d3fe6e003f1883f56065185579b770bc9510b1cb7"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiGuards",
+            "digest": "207d0ad338218c744ba4e70d3fe6e003f1883f56065185579b770bc9510b1cb7"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCheckpoint",
+        "title": "aiCheckpoint",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `outcome-report-delivery-integrity-20260817` - Contract Hash: `75fc7721a865cc33` - Mode: `code` - notCodable: `False` - Execution Decision: `continue`",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "852252384c6d79dcfe66f6e3c3e49aad7f7ed7034caeb2efce56d65fde3f7d72"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "852252384c6d79dcfe66f6e3c3e49aad7f7ed7034caeb2efce56d65fde3f7d72"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiReviewPolicy",
+        "title": "aiReviewPolicy",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json review policy matched 11 path(s) [review] .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json [review] .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.json [review] .ai/work-items/active/outcome-report-delivery-integrity-20260817.outcome.md [review] .ai/work-items/sta",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "0394b1c9d3ea4caa7d4019cc72efe0e10ed791d96ea117b02a3ea5780b28dd22"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "0394b1c9d3ea4caa7d4019cc72efe0e10ed791d96ea117b02a3ea5780b28dd22"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiBacktrack",
+        "title": "aiBacktrack",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "64a9b66ae30b1ed6956baf9db75830e22c79953d6a9ff0e7f326c8cff0d6df5d"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "64a9b66ae30b1ed6956baf9db75830e22c79953d6a9ff0e7f326c8cff0d6df5d"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCoverage",
+        "title": "aiCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiCoverage",
+            "digest": "3a6f2484a8e4c533e5d6744e1178eab52244490bdfd89e7c958a34bcf2832cb2"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiCoverage",
+            "digest": "3a6f2484a8e4c533e5d6744e1178eab52244490bdfd89e7c958a34bcf2832cb2"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScenarioCoverage",
+        "title": "aiScenarioCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "ffdb3f837ca32424c4bf0697e4d55bbc498bf0445d22ce7eca5b0d2950b0aa49"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "ffdb3f837ca32424c4bf0697e4d55bbc498bf0445d22ce7eca5b0d2950b0aa49"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuidelines",
+        "title": "aiGuidelines",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "eb018dad297222900434570e82ff0c85fe2b14929098bcc07fd38d40a7558389"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "eb018dad297222900434570e82ff0c85fe2b14929098bcc07fd38d40a7558389"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiDiffOwnership",
+        "title": "aiDiffOwnership",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ## Diff Ownership Preview - active_owned: `20`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validat",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "5048319a7f5f9e47898fb075280a4a0addfdda8dd9e0b501a62367c29d4f97c6"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "5048319a7f5f9e47898fb075280a4a0addfdda8dd9e0b501a62367c29d4f97c6"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "quality",
+        "title": "quality",
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"ac195a7abc01661e87bc819048414f776650c473\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json\", \"",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "quality",
+            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "quality",
+            "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatus",
+        "title": "aiStatus",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiStatus",
+            "digest": "1944983d461766cb01457189d525a544ffe7745c9ad3ff924096ca7d9ae3dc3e"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiStatus",
+            "digest": "1944983d461766cb01457189d525a544ffe7745c9ad3ff924096ca7d9ae3dc3e"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusCheck",
+        "title": "aiStatusCheck",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "cee15b9e8402b4add9c500064247e9f5444269e730828fa5aefc91e3dfb90c5b"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "cee15b9e8402b4add9c500064247e9f5444269e730828fa5aefc91e3dfb90c5b"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusConsistency",
+        "title": "aiStatusConsistency",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "a9e77a20d533b9dc3dcb6dac41f10c27735f38ba7c182a78c57e4ad4042fb442"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "a9e77a20d533b9dc3dcb6dac41f10c27735f38ba7c182a78c57e4ad4042fb442"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiAgentRisk",
+        "title": "aiAgentRisk",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json --summary .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "87bd31234d9c879b74e0ad5d59532f430aa4547aed97b0f909db7b5600a25d00"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "87bd31234d9c879b74e0ad5d59532f430aa4547aed97b0f909db7b5600a25d00"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "sourceBoundEvidence",
+        "title": "sourceBoundEvidence",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"cl",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiSummary",
+        "title": "aiSummary",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json --contract .ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json ai summary check passed: .ai/work-items/active/outcome-report-delivery-integrity-20260817.summary.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiSummary",
+            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/outcome-report-delivery-integrity-20260817.contract.json",
+            "subject": "aiSummary",
+            "digest": "9f42e4ecb409ea4bc5a58d9f941e84628f20f7bfd25a7677c34981b2e7cdfef8"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "retained": [],
+    "risks": [],
+    "redReasons": [],
+    "questions": {
+      "problemCount": 3,
+      "problemCountEvidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+          "subject": "observedIssues"
+        },
+        {
+          "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+          "subject": "verification and verificationHistory"
+        }
+      ],
+      "blockedProblems": [],
+      "resolvedProblems": [
+        {
+          "claim": "Hosted smoke run 32032966957 exposed the root cause: capabilities[3].evidenceSource and other bound summaries were stale after evidence-bound source changes because ai-finish did not conditionally run sourceBoundEvidence before quality and the PR aggregate had no stale-matrix gate.",
+          "evidenceRefs": [
+            {
+              "source": "hosted-run:32032966957",
+              "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "source-bound remediation"
+            },
+            {
+              "source": "hosted-run:32036310755",
+              "subject": "fresh smoke pass on corrected commit"
+            },
+            {
+              "source": "hosted-run:32036310634",
+              "subject": "fresh compatibility pass on corrected commit"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "quality failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verificationHistory[0] quality failed",
+              "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "sourceBoundEvidence failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verificationHistory[1] sourceBoundEvidence failed",
+              "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verification[sourceBoundEvidence] retry passed",
+              "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolutionApproach": [
+        {
+          "claim": "Connected the shared evidence dependency graph to ai-finish and ai_check_pr; added conditional pre-quality validation, stale-matrix rejection, and installer catalog dependencies.",
+          "evidenceRefs": [
+            {
+              "source": "hosted-run:32032966957",
+              "subject": "project-test lifecycle/governance/installer stale evidenceSource failure"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "source-bound remediation"
+            },
+            {
+              "source": "hosted-run:32036310755",
+              "subject": "fresh smoke pass on corrected commit"
+            },
+            {
+              "source": "hosted-run:32036310634",
+              "subject": "fresh compatibility pass on corrected commit"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran quality after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verificationHistory[0] quality failed",
+              "digest": "0a2427982c84bcdcad88216c7ab47f66405f2da585566c8caeefc6b003fc9c65"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "798caae28ad7410469e7fd79e595a12feff205bdcfa30617f38c5b5a73ccca84"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran sourceBoundEvidence after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verificationHistory[1] sourceBoundEvidence failed",
+              "digest": "7300c785ed9489cf1b2fa05ea5c8376bd4b1a6ebfa509e66a1642778bf27bc2c"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/outcome-report-delivery-integrity-20260817.summary.json",
+              "subject": "verification[sourceBoundEvidence] retry passed",
+              "digest": "34f785f954f2bccc3433330857b444cdb2a217b4664627c5bc576d082af0e7cf"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "avoidedRisks": [
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        },
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        }
+      ],
+      "remainingRisks": [],
+      "agentUnknowns": [],
+      "humanConfirmations": [
+        {
+          "claim": "Outcome must be output to the conversation as well as written to files; use the two current WIs to observe implementation and handle problems against the corresponding WI.",
+          "evidenceRefs": [],
+          "inference": true
+        },
+        {
+          "claim": "Optimize future Work Items by situation, not only the current residual-record cleanup WI, and synchronize the capability to future installed adopter projects.",
+          "evidenceRefs": [],
+          "inference": true
+        }
+      ],
+      "recurrenceLikelihood": {
+        "claim": "unknown: no direct recurrence probability evidence was recorded.",
+        "evidenceRefs": [],
+        "inference": true
+      },
+      "nextTime": {
+        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+        "evidenceRefs": [],
+        "inference": true
+      }
+    }
+  }
 }
