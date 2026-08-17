@@ -108,7 +108,15 @@ def synchronize_projection(
     reserved = state.get("reservedTags")
     if not isinstance(reserved, list) or any(not isinstance(item, str) for item in reserved):
         raise ProjectionSyncError("release-state reservedTags is invalid")
+    unavailable = state.get("unavailableTags")
+    if not isinstance(unavailable, list):
+        raise ProjectionSyncError("release-state unavailableTags is invalid")
     state["reservedTags"] = sorted({*reserved, release_tag})
+    existing_unavailable_tags = {item.get("tag") for item in unavailable if isinstance(item, dict)}
+    if release_tag not in existing_unavailable_tags and unavailable_entry is None:
+        raise ProjectionSyncError(
+            "unavailable release entry is required for every reserved release tag"
+        )
     if unavailable_entry is not None:
         allowed_kinds = {
             "stable_release_invalid_public_distribution",
@@ -120,14 +128,18 @@ def synchronize_projection(
             for key in ("reason", "evidence")
         ):
             raise ProjectionSyncError("unavailable release entry is invalid")
-        unavailable = state.get("unavailableTags")
-        if not isinstance(unavailable, list):
-            raise ProjectionSyncError("release-state unavailableTags is invalid")
         state["unavailableTags"] = [
             item
             for item in unavailable
             if not isinstance(item, dict) or item.get("tag") != release_tag
         ] + [{"tag": release_tag, **unavailable_entry}]
+    final_unavailable_tags = {
+        item.get("tag") for item in state["unavailableTags"] if isinstance(item, dict)
+    }
+    if final_unavailable_tags != set(state["reservedTags"]):
+        raise ProjectionSyncError(
+            "release-state unavailableTags must explain every reserved release tag"
+        )
     metadata_digests = state.get("metadataDigests")
     if not isinstance(metadata_digests, dict):
         raise ProjectionSyncError("release-state metadataDigests is invalid")

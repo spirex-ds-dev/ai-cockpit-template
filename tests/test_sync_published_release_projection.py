@@ -31,7 +31,14 @@ def write_projection_root(tmp_path: Path) -> Path:
                 "releaseTag": "v0.5.56",
                 "previousRelease": "v0.5.55",
                 "reservedTags": ["v0.5.55"],
-                "unavailableTags": [],
+                "unavailableTags": [
+                    {
+                        "tag": "v0.5.55",
+                        "kind": "stable_release_unverified",
+                        "reason": "provider release remains the authoritative public evidence",
+                        "evidence": "https://example.test/releases/tag/v0.5.55",
+                    }
+                ],
                 "metadataDigests": {"published": "0" * 64, "candidate": "1" * 64},
             }
         ),
@@ -74,6 +81,11 @@ def test_sync_promotes_verified_public_projection_and_advances_candidate(tmp_pat
         source_commit=SOURCE_COMMIT,
         release_json_bytes=release_bytes,
         release_digests_bytes=digest_bytes,
+        unavailable_entry={
+            "kind": "stable_release_unverified",
+            "reason": "provider release remains the authoritative public evidence",
+            "evidence": "https://example.test/releases/tag/v0.5.56",
+        },
     )
 
     assert (root / "release.json").read_bytes() == release_bytes
@@ -101,11 +113,38 @@ def test_sync_advances_installer_default_with_the_candidate_projection(tmp_path)
         source_commit=SOURCE_COMMIT,
         release_json_bytes=release_bytes,
         release_digests_bytes=digest_bytes,
+        unavailable_entry={
+            "kind": "stable_release_unverified",
+            "reason": "provider release remains the authoritative public evidence",
+            "evidence": "https://example.test/releases/tag/v0.5.56",
+        },
     )
 
     installer = (root / "install.sh").read_text(encoding="utf-8")
     assert 'REF="${AI_COCKPIT_TEMPLATE_REF:-v0.5.57}"' in installer
     assert "AI_COCKPIT_TEMPLATE_REF=v0.5.57" in installer
+
+
+def test_sync_rejects_missing_historical_status_before_writing_reserved_tag(tmp_path):
+    root = write_projection_root(tmp_path)
+    release_bytes, digest_bytes = published_assets()
+    before_release = (root / "release.json").read_bytes()
+    before_state = (root / "release-state.json").read_bytes()
+
+    with pytest.raises(
+        projection.ProjectionSyncError,
+        match="unavailable release entry is required",
+    ):
+        projection.synchronize_projection(
+            root,
+            release_tag="v0.5.56",
+            source_commit=SOURCE_COMMIT,
+            release_json_bytes=release_bytes,
+            release_digests_bytes=digest_bytes,
+        )
+
+    assert (root / "release.json").read_bytes() == before_release
+    assert (root / "release-state.json").read_bytes() == before_state
 
 
 def test_sync_records_the_verified_historical_release_status(tmp_path):

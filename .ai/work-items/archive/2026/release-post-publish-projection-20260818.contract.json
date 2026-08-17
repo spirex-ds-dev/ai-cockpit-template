@@ -1,0 +1,295 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-post-publish-projection-20260818",
+  "mode": "code",
+  "title": "Synchronize the published v0.5.65 release projection",
+  "baseCommit": "5c65e2c6ac6cb3bd5623393baeee822d75ec0248",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-post-publish-projection-20260818.contract.json",
+    ".ai/work-items/active/release-post-publish-projection-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-post-publish-projection-20260818.outcome.json",
+    ".ai/work-items/active/release-post-publish-projection-20260818.outcome.md",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "install.sh",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/sync_published_release_projection.py",
+    "tests/test_sync_published_release_projection.py",
+    "target/release-post-publish-projection-20260818/**",
+    "target/task-closure-receipts/**"
+  ],
+  "outOfScope": [
+    ".github/workflows/**",
+    "templates/**",
+    "examples/**",
+    "Any change to the immutable v0.5.65 tag, GitHub Release, assets, or source archive",
+    "Any direct write to protected main or provider-side branch deletion"
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.65",
+      "reason": "Provider Release is the authoritative published projection source to be promoted into the repository."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32064931444",
+      "reason": "Successful exact-source publication run binds v0.5.65 to source commit 5c65e2c6ac6cb3bd5623393baeee822d75ec0248."
+    },
+    {
+      "path": "scripts/sync_published_release_projection.py",
+      "reason": "Canonical fail-closed synchronizer for promoting verified provider assets and advancing the next candidate."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Executable check that detected the stale repository projection and verifies the public distribution contract."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Release truth boundary and post-publication projection rules."
+    },
+    {
+      "path": "release.json",
+      "reason": "Repository published projection currently stale at v0.5.64 and must be promoted only from provider-verified bytes."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate projection that must advance exactly one patch after the highest immutable reserved release."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_distribution",
+      "evidence_integrity"
+    ],
+    "reason": "The Work Item updates generated repository release projections after a verified immutable public release; mismatched provider facts or candidate sequencing must fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "The Work Item reconciles public release evidence with repository projections and must preserve exact source/tag/digest identity."
+    ],
+    "override": {
+      "approvalEvidence": "conversation:2026-08-18-root-cause-release-projection-repair",
+      "reason": "The user explicitly required the stale post-publication state to be fixed to root cause and authorized continuation until the release and repository truths agree.",
+      "risks": ["release_distribution", "evidence_integrity"],
+      "notRunChecks": ["No provider publication mutation is authorized in this Work Item; publication evidence was completed and is consumed read-only."],
+      "workItemOnly": true,
+      "workItemId": "release-post-publish-projection-20260818"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Provider publication and exact source identity are already verified; the remaining governed action is the repository projection synchronization."
+  },
+  "preReviewWarnings": [
+    "Verify provider asset bytes, source commit, tag target, metadata digest, candidate advancement, and no immutable provider mutation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The exact v0.5.65 release.json and release-digests.json assets are downloaded from the provider, their SHA-256 values are verified, and both bind source commit 5c65e2c6ac6cb3bd5623393baeee822d75ec0248.",
+    "scripts/sync_published_release_projection.py promotes only those verified provider bytes, sets repository release.json and release-digests.json to v0.5.65, records release-state.json as candidate_prepared with previousRelease v0.5.65, and advances next-release.json and .ai/cockpit/version.json exactly to v0.5.66.",
+    "install.sh is advanced to the v0.5.66 candidate through the synchronizer, while the immutable v0.5.65 tag, Release, assets, and source archive remain unchanged.",
+    "check-release-distribution, check-release-distribution-post-publish, check-release-state-consistency, check-release-evidence, and the declared release preflight/quality checks pass on the synchronized branch.",
+    "After install.sh changes, the canonical source-bound capability, Japanese capability, and pre-release documentation alignment generators are rerun so every evidenceSource digest matches the current bytes.",
+    "The canonical supply-chain evidence refresh regenerates the committed SBOM and provenance projection from the exact published v0.5.65 source identity, and check-sbom/check-provenance pass without hand-editing generated evidence.",
+    "The Work Item is archived only with a direct green Outcome in the conversation, then its PR is merged and ai-close-work-item proves clean base synchronization and branch cleanup."
+  ],
+  "guidelines": [
+    "Use the canonical synchronizer; do not hand-edit generated release projections or invent provider evidence.",
+    "Keep immutable provider facts separate from the unpublished candidate and preserve fail-closed source/tag/digest checks.",
+    "Do not treat the successful publication run as evidence that the repository projection is synchronized until the post-publish checks pass."
+  ],
+  "intent": {
+    "problem": "The public v0.5.65 release was published successfully from the merged source commit, but the repository release.json projection remained at v0.5.64. This makes check-release-distribution fail and leaves the repository, installer, and provider release truths out of sync.",
+    "constraints": [
+      "Use only provider-verified v0.5.65 release.json and release-digests.json bytes bound to source commit 5c65e2c6ac6cb3bd5623393baeee822d75ec0248.",
+      "Do not change or delete the immutable v0.5.65 tag, GitHub Release, assets, or source archive.",
+      "Use the existing synchronizer and governed PR lifecycle; do not bypass generated evidence or protected-main controls."
+    ],
+    "rationale": "The root fix is to complete the intentionally separate post-publication promotion boundary. Synchronizing the provider-verified public projection and advancing the next candidate restores a single coherent release state without mutating immutable evidence."
+  },
+  "rawUserRequest": "完成既定目标并发布新版本；发现问题必须找到根因解决，Outcome 未达到绿色不得结束，必须把发布后的仓库与 provider release 真值同步完整。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-root-cause-release-projection-repair",
+    "capturedAt": "2026-08-18",
+    "digest": "user-authorized-root-cause-repair-and-release-completion"
+  },
+  "declaredIntent": {
+    "summary": "Complete the post-publication projection boundary for v0.5.65 so repository release truth, installer candidate, and provider release evidence are consistent.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-18-root-cause-release-projection-repair",
+    "scope": "Complete the already-published v0.5.65 delivery, repair the detected stale repository projection at root cause, and do not bypass any gate or mutate immutable provider evidence."
+  },
+  "requiredEvidenceContext": {
+    "externalSystem": "GitHub Releases and GitHub Actions",
+    "destructiveLevel": "none",
+    "availableEvidence": [
+      "tag",
+      "commit",
+      "digest",
+      "sbom",
+      "provenance",
+      "provider_release_receipt",
+      "asset_availability"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Provider release assets are from a different tag or source commit.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The synchronizer rejects mismatched releaseTag, sourceCommit, tagTarget, metadataCommit, or asset digest before writing any projection.",
+      "verificationPlan": "Run the synchronizer with the downloaded v0.5.65 assets and execute its existing regression plus release evidence checks."
+    },
+    {
+      "scenario": "Repository projection remains stale after provider publication.",
+      "required": true,
+      "riskDomain": "release_distribution",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The published projection becomes v0.5.65, the candidate becomes v0.5.66, and post-publish distribution checks pass.",
+      "verificationPlan": "Run check-release-distribution and check-release-distribution-post-publish against the public v0.5.65 release after synchronization."
+    },
+    {
+      "scenario": "Projection synchronization mutates immutable provider evidence.",
+      "required": true,
+      "riskDomain": "release_distribution",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The tag target, Release metadata, assets, and source archive remain byte/source-identical after the repository PR.",
+      "verificationPlan": "Compare provider tag/release identity before and after the PR and verify the merged branch contains only declared repository projection changes."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized completion of the published-version delivery and required the root-cause projection and evidence synchronization to finish before this Work Item ends."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 948
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-post-publish-projection-20260818.json",
+    "baseCommit": "5c65e2c6ac6cb3bd5623393baeee822d75ec0248",
+    "initialScopeDigest": "653872a3212a3ab43b386122262c7702260515fa63d5d37e857777e616d419b6",
+    "contractSkeletonDigest": "a09de973297d08f5831d2edfb7822c16d8c12ca337c4b37e095e61a34a164d75"
+  }
+}
