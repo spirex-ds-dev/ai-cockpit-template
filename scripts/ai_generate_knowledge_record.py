@@ -7,11 +7,14 @@ import hashlib
 import json
 import os
 import tempfile
+from datetime import date
 from pathlib import Path
 from typing import Any
 
 STATUSES = {"verified", "unknown", "incomplete"}
 KNOWLEDGE_STATES = {"verified", "partial", "unknown", "superseded"}
+EFFECTIVE_STATES = {"current", "superseded", "unknown", "historical_or_current_unknown"}
+DATE_PATTERN = "%Y-%m-%d"
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -139,6 +142,52 @@ def _changes(summary: dict[str, Any]) -> list[str]:
     return result
 
 
+def _explicit_field(
+    name: str,
+    sources: list[tuple[str, Any]],
+    issues: list[str],
+) -> tuple[Any, bool]:
+    """Read a field only when an authoritative source explicitly supplies it."""
+    values: list[tuple[str, Any]] = []
+    for label, source in sources:
+        if isinstance(source, dict) and name in source and source[name] is not None:
+            values.append((label, source[name]))
+    if not values:
+        return None, False
+    first = values[0][1]
+    if any(_canonical(value) != _canonical(first) for _, value in values[1:]):
+        labels = ", ".join(label for label, _ in values)
+        issues.append(f"explicit {name} values disagree across sources: {labels}")
+    return first, True
+
+
+def _explicit_date(value: Any, issues: list[str]) -> str | None:
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        issues.append("explicit date must be a YYYY-MM-DD string")
+        return None
+    try:
+        parsed = date.fromisoformat(value)
+    except ValueError:
+        issues.append("explicit date must be a calendar date in YYYY-MM-DD format")
+        return None
+    normalized = parsed.strftime(DATE_PATTERN)
+    if value != normalized:
+        issues.append("explicit date must be normalized as YYYY-MM-DD")
+        return None
+    return value
+
+
+def _explicit_supersedes(value: Any, issues: list[str]) -> list[str]:
+    if value is None:
+        return []
+    if not isinstance(value, list) or any(not isinstance(item, str) or not item for item in value):
+        issues.append("supersedes must be an array of non-empty Work Item IDs")
+        return []
+    return list(dict.fromkeys(value))
+
+
 def build_record(
     contract_path: Path,
     summary_path: Path,
@@ -213,6 +262,27 @@ def build_record(
             }
         )
 
+    source_values = [
+        ("Summary", summary),
+        ("Outcome", outcome),
+        ("Outcome sections", outcome_sections),
+        ("Contract", contract),
+    ]
+    explicit_date_value, has_date = _explicit_field("date", source_values, issues)
+    explicit_date = _explicit_date(explicit_date_value, issues)
+    explicit_effective_state, has_effective_state = _explicit_field(
+        "effectiveState", source_values, issues
+    )
+    if not has_effective_state:
+        effective_state = "historical_or_current_unknown"
+    elif explicit_effective_state not in EFFECTIVE_STATES:
+        issues.append("effectiveState is not a supported explicit state")
+        effective_state = "historical_or_current_unknown"
+    else:
+        effective_state = explicit_effective_state
+    explicit_supersedes, _ = _explicit_field("supersedes", source_values, issues)
+    supersedes = _explicit_supersedes(explicit_supersedes, issues)
+
     generated_from = {
         "contractPath": _relative(contract_path, repo_root),
         "contractDigest": _digest(contract_path),
@@ -232,7 +302,7 @@ def build_record(
     # incomplete, while ``unknown`` is reserved for an unusable/undetermined
     # knowledge state supplied by a future source adapter.
     state = "verified" if approach_verified else "partial"
-    return {
+    record = {
         "schemaVersion": 1,
         "workItemId": work_item_id,
         "title": contract.get("title", work_item_id),
@@ -247,14 +317,16 @@ def build_record(
         "effects": summary.get("effects", []) if isinstance(summary.get("effects"), list) else [],
         "evidence": evidence,
         "mergedCommit": merged_commit,
+        "effectiveState": effective_state,
         "currentValidity": "unknown",
-        "supersedes": summary.get("supersedes", [])
-        if isinstance(summary.get("supersedes"), list)
-        else [],
+        "supersedes": supersedes,
         "generatedFrom": generated_from,
         "knowledgeState": state,
         "unknowns": unknowns,
     }
+    if has_date and explicit_date is not None:
+        record["date"] = explicit_date
+    return record
 
 
 def _atomic_write(path: Path, payload: dict[str, Any]) -> None:

@@ -58,12 +58,16 @@ Generate or rebuild a record and index after the source Summary and Outcome are
 complete:
 
 ```sh
-make ai-generate-knowledge-record \
+make ai-generate-knowledge \
   TASK=<work-item-id> \
   CONTRACT=.ai/work-items/active/<work-item-id>.contract.json \
   SUMMARY=.ai/work-items/active/<work-item-id>.summary.json \
   OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
 ```
+
+`ai-generate-knowledge-record` remains a compatible explicit target. The
+short `ai-generate-knowledge` target is the adopter-facing name used by the
+design and both targets execute the same evidence-bound projection.
 
 Validate all records and the deterministic index:
 
@@ -74,25 +78,39 @@ make ai-check-knowledge-index
 Query the validated records with exact, conjunctive filters:
 
 ```sh
-make ai-knowledge-query ARGS='--topic orders --component OrderService --status verified'
-make ai-knowledge-query ARGS='--date-from 2026-01-01 --date-to 2026-01-31'
+make ai-knowledge-query TOPIC=orders COMPONENT=OrderService STATUS=verified
+make ai-knowledge-query DATE_FROM=2026-01-01 DATE_TO=2026-01-31
 ```
 
+The equivalent script interface is `--work-item` (also accepted as
+`--work-item-id`), `--topic`, `--component`, `--commit`, `--date`,
+`--date-from`, `--date-to`, and `--status`. Existing `ARGS='...'` invocations
+remain supported.
+
 The query result is JSON with a schema version, the normalized query, a match
-count, and the complete matching records. Results are sorted by Work Item ID
-and knowledge path, so the same validated inputs produce the same output.
+count, and `results`. Each result exposes `workItemId`, `knowledgePath`,
+`state`, `latestKnownRecord`, `supersessionStatus`, and the complete `record`.
+`matches` is retained as an identical compatibility alias. Results are sorted
+by Work Item ID and knowledge path, so the same validated inputs produce the
+same output.
 Supported filters are Work Item ID, topic, component, merged commit, exact
 date, inclusive date range, and knowledge state. The filters are exact and
 combine with AND semantics. All four knowledge states remain queryable;
 supersession is returned from the explicit `supersedes` relationship and is
-never inferred.
+never inferred. A single explicit descendant produces `latestKnownRecord`; a
+conflicting set of explicit descendants produces `null` with
+`supersessionStatus: conflict`.
 
 Dates are filterable only when a record contains an explicit `date` field. The
-interface never guesses a date from file timestamps, commit history, or other
-metadata. Invalid or missing index/record evidence fails closed, and the
-interface is read-only: it does not write records, indexes, or reports. It is
-intentionally a deterministic structured lookup, not a natural-language,
-semantic, vector, or RAG query layer.
+generator preserves a valid date only when Contract, Summary, or Outcome
+explicitly supplies it; it never guesses a date from file timestamps, commit
+history, or other metadata. `effectiveState` is likewise explicit and
+defaults to `historical_or_current_unknown`; `currentValidity` remains
+`unknown` unless a separate evidence-backed lifecycle rule establishes it.
+Invalid or missing index/record evidence, missing supersession targets, and
+supersession cycles fail closed. The interface is read-only: it does not write
+records, indexes, or reports. It is intentionally a deterministic structured
+lookup, not a natural-language, semantic, vector, or RAG query layer.
 
 Validate the installed query surface as well as the knowledge index:
 

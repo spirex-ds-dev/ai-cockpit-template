@@ -122,6 +122,49 @@ def _validate_authoritative_inputs(*, index_path: Path, records_dir: Path, repo_
         raise KnowledgeQueryError("knowledge index is invalid: " + "; ".join(issues))
 
 
+def _supersession_projection(
+    records: dict[str, dict[str, Any]],
+) -> dict[str, tuple[str | None, str]]:
+    """Resolve only explicit supersession edges; never infer recency."""
+    superseded_by: dict[str, list[str]] = {work_item_id: [] for work_item_id in records}
+    for work_item_id, record in records.items():
+        targets = record.get("supersedes", [])
+        if not isinstance(targets, list):
+            raise KnowledgeQueryError(f"supersedes must be an array: {work_item_id}")
+        for target in targets:
+            if not isinstance(target, str) or target not in records:
+                raise KnowledgeQueryError(
+                    f"supersession target is missing: {work_item_id} -> {target}"
+                )
+            superseded_by[target].append(work_item_id)
+
+    result: dict[str, tuple[str | None, str]] = {}
+
+    def latest(work_item_id: str, trail: tuple[str, ...]) -> tuple[set[str], bool]:
+        if work_item_id in trail:
+            raise KnowledgeQueryError("supersession cycle: " + " -> ".join((*trail, work_item_id)))
+        children = superseded_by[work_item_id]
+        if not children:
+            return {work_item_id}, False
+        leaves: set[str] = set()
+        for child in children:
+            child_leaves, _ = latest(child, (*trail, work_item_id))
+            leaves.update(child_leaves)
+        return leaves, False
+
+    for work_item_id in sorted(records):
+        leaves, _ = latest(work_item_id, ())
+        if len(leaves) == 1:
+            latest_id = next(iter(leaves))
+            result[work_item_id] = (
+                latest_id,
+                "current" if latest_id == work_item_id else "superseded",
+            )
+        else:
+            result[work_item_id] = (None, "conflict")
+    return result
+
+
 def query_knowledge(
     *,
     repo_root: Path,
@@ -142,7 +185,8 @@ def query_knowledge(
     if not isinstance(entries, list):
         raise KnowledgeQueryError("knowledge index workItems must be an array")
 
-    matches: list[dict[str, Any]] = []
+    records: dict[str, dict[str, Any]] = {}
+    knowledge_paths: dict[str, str] = {}
     for entry in entries:
         if not isinstance(entry, dict):
             raise KnowledgeQueryError("knowledge index contains a non-object entry")
@@ -155,14 +199,36 @@ def query_knowledge(
         record = _load_object(record_path)
         if record.get("workItemId") != entry.get("workItemId"):
             raise KnowledgeQueryError(f"record identity mismatch: {knowledge_path}")
+        work_item_id = record.get("workItemId")
+        if not isinstance(work_item_id, str) or work_item_id in records:
+            raise KnowledgeQueryError(f"duplicate or missing Work Item identity: {knowledge_path}")
+        records[work_item_id] = record
+        knowledge_paths[work_item_id] = knowledge_path
+
+    supersession = _supersession_projection(records)
+    matches: list[dict[str, Any]] = []
+    for work_item_id, record in records.items():
         if _matches(record, filters):
-            matches.append({"knowledgePath": knowledge_path, "record": record})
+            latest_id, supersession_status = supersession[work_item_id]
+            matches.append(
+                {
+                    "workItemId": work_item_id,
+                    "knowledgePath": knowledge_paths[work_item_id],
+                    "state": record.get("knowledgeState", "unknown"),
+                    "latestKnownRecord": latest_id,
+                    "supersessionStatus": supersession_status,
+                    "record": record,
+                }
+            )
 
     matches.sort(key=lambda item: (item["record"]["workItemId"], item["knowledgePath"]))
     return {
         "schemaVersion": 1,
         "query": asdict(filters),
         "matchedCount": len(matches),
+        "results": matches,
+        # ``matches`` remains a compatibility alias for callers of the first
+        # query projection.  It is deliberately the same deterministic list.
         "matches": matches,
     }
 
@@ -172,7 +238,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--index", type=Path)
     parser.add_argument("--records-dir", type=Path)
-    parser.add_argument("--work-item-id")
+    parser.add_argument("--work-item-id", "--work-item", dest="work_item_id")
     parser.add_argument("--topic")
     parser.add_argument("--component")
     parser.add_argument("--commit")

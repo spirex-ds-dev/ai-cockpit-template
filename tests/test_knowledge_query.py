@@ -187,6 +187,88 @@ def test_query_preserves_all_states_and_explicit_supersession(tmp_path: Path) ->
     assert superseded["supersedes"] == ["verified-item"]
 
 
+def test_query_exposes_design_results_and_latest_known_record(tmp_path: Path) -> None:
+    write_fixture(
+        tmp_path,
+        task="old-validation",
+        state="verified",
+        topic="validation",
+        component="ValidationService",
+        date="2026-01-01",
+        commit=None,
+    )
+    write_fixture(
+        tmp_path,
+        task="new-validation",
+        state="verified",
+        topic="validation",
+        component="ValidationService",
+        date="2026-02-01",
+        commit=None,
+        supersedes=["old-validation"],
+    )
+    index = write_index(
+        tmp_path,
+        [
+            ("old-validation", "verified", "validation", "ValidationService"),
+            ("new-validation", "verified", "validation", "ValidationService"),
+        ],
+    )
+
+    result = query_knowledge(
+        repo_root=tmp_path,
+        index_path=index,
+        records_dir=tmp_path / ".ai" / "knowledge" / "work-items",
+        filters=QueryFilters(component="ValidationService"),
+    )
+
+    assert result["results"] == result["matches"]
+    by_id = {item["record"]["workItemId"]: item for item in result["results"]}
+    assert by_id["old-validation"]["state"] == "verified"
+    assert by_id["old-validation"]["latestKnownRecord"] == "new-validation"
+    assert by_id["new-validation"]["latestKnownRecord"] == "new-validation"
+
+
+def test_query_keeps_conflicting_explicit_supersession_unknown(tmp_path: Path) -> None:
+    tasks = [
+        ("old-validation", "verified", "validation", "ValidationService"),
+        ("new-validation-a", "verified", "validation", "ValidationService"),
+        ("new-validation-b", "verified", "validation", "ValidationService"),
+    ]
+    write_fixture(
+        tmp_path,
+        task="old-validation",
+        state="verified",
+        topic="validation",
+        component="ValidationService",
+        date="2026-01-01",
+        commit=None,
+    )
+    for task in ("new-validation-a", "new-validation-b"):
+        write_fixture(
+            tmp_path,
+            task=task,
+            state="verified",
+            topic="validation",
+            component="ValidationService",
+            date="2026-02-01",
+            commit=None,
+            supersedes=["old-validation"],
+        )
+    index = write_index(tmp_path, tasks)
+
+    result = query_knowledge(
+        repo_root=tmp_path,
+        index_path=index,
+        records_dir=tmp_path / ".ai" / "knowledge" / "work-items",
+        filters=QueryFilters(work_item_id="old-validation"),
+    )
+
+    item = result["results"][0]
+    assert item["latestKnownRecord"] is None
+    assert item["supersessionStatus"] == "conflict"
+
+
 def test_query_is_stable_empty_and_read_only(tmp_path: Path) -> None:
     write_fixture(
         tmp_path,
@@ -225,6 +307,68 @@ def test_query_fails_closed_for_missing_record(tmp_path: Path) -> None:
     index = write_index(tmp_path, [("missing-item", "unknown", "missing", "Missing")])
 
     with pytest.raises(KnowledgeQueryError, match="missing record"):
+        query_knowledge(
+            repo_root=tmp_path,
+            index_path=index,
+            records_dir=tmp_path / ".ai" / "knowledge" / "work-items",
+            filters=QueryFilters(),
+        )
+
+
+def test_query_fails_closed_for_missing_supersession_target(tmp_path: Path) -> None:
+    write_fixture(
+        tmp_path,
+        task="new-validation",
+        state="verified",
+        topic="validation",
+        component="ValidationService",
+        date="2026-02-01",
+        commit=None,
+        supersedes=["missing-validation"],
+    )
+    index = write_index(
+        tmp_path, [("new-validation", "verified", "validation", "ValidationService")]
+    )
+
+    with pytest.raises(KnowledgeQueryError, match="invalid|missing record"):
+        query_knowledge(
+            repo_root=tmp_path,
+            index_path=index,
+            records_dir=tmp_path / ".ai" / "knowledge" / "work-items",
+            filters=QueryFilters(),
+        )
+
+
+def test_query_fails_closed_for_supersession_cycle(tmp_path: Path) -> None:
+    write_fixture(
+        tmp_path,
+        task="validation-a",
+        state="verified",
+        topic="validation",
+        component="ValidationService",
+        date="2026-01-01",
+        commit=None,
+        supersedes=["validation-b"],
+    )
+    write_fixture(
+        tmp_path,
+        task="validation-b",
+        state="verified",
+        topic="validation",
+        component="ValidationService",
+        date="2026-02-01",
+        commit=None,
+        supersedes=["validation-a"],
+    )
+    index = write_index(
+        tmp_path,
+        [
+            ("validation-a", "verified", "validation", "ValidationService"),
+            ("validation-b", "verified", "validation", "ValidationService"),
+        ],
+    )
+
+    with pytest.raises(KnowledgeQueryError, match="invalid|cycle"):
         query_knowledge(
             repo_root=tmp_path,
             index_path=index,

@@ -74,8 +74,8 @@ QUALITY_SESSION_LOCK_HELD ?= false
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report ai-record-external-handoff ai-ingest-external-receipt \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
-	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
-	ai-work-item-status ai-work-item-intelligence-rebuild check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis ai-generate-knowledge-record ai-check-knowledge-index ai-knowledge-query check-ai-knowledge
+	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute \
+	ai-work-item-status ai-work-item-intelligence-rebuild check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis ai-generate-knowledge-record ai-generate-knowledge ai-check-knowledge-index ai-knowledge-query check-ai-knowledge
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
@@ -657,11 +657,21 @@ ai-generate-knowledge-record:
 	@test -n "$(TASK)" -o -n "$(OUTPUT)" || (echo 'TASK or OUTPUT is required' >&2; exit 2)
 	$(AI_PYTHON) scripts/ai_generate_knowledge_record.py --contract "$(CONTRACT)" --summary "$(SUMMARY)" --outcome "$(OUTCOME)" --output "$(or $(OUTPUT),.ai/knowledge/work-items/$(TASK).json)" --index "$(or $(INDEX),.ai/knowledge/index.json)" --repo-root .
 
+ai-generate-knowledge: ai-generate-knowledge-record
+
 ai-check-knowledge-index:
 	$(AI_PYTHON) scripts/ai_check_knowledge_index.py --index "$(or $(INDEX),.ai/knowledge/index.json)" --records "$(or $(RECORDS),.ai/knowledge/work-items)" --repo-root .
 
 ai-knowledge-query:
-	$(AI_PYTHON) scripts/ai_knowledge_query.py $(ARGS)
+	$(AI_PYTHON) scripts/ai_knowledge_query.py $(ARGS) \
+		$(if $(WORK_ITEM),--work-item "$(WORK_ITEM)",) \
+		$(if $(TOPIC),--topic "$(TOPIC)",) \
+		$(if $(COMPONENT),--component "$(COMPONENT)",) \
+		$(if $(COMMIT),--commit "$(COMMIT)",) \
+		$(if $(DATE),--date "$(DATE)",) \
+		$(if $(STATUS),--status "$(STATUS)",) \
+		$(if $(DATE_FROM),--date-from "$(DATE_FROM)",) \
+		$(if $(DATE_TO),--date-to "$(DATE_TO)",)
 
 check-ai-knowledge:
 	$(AI_NESTED_MAKE) ai-check-knowledge-index

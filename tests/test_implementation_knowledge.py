@@ -129,6 +129,30 @@ def test_verified_work_item_projects_approach_decisions_evidence_and_digests(tmp
     assert record["mergedCommit"] is None
 
 
+def test_projection_preserves_only_explicit_date_and_effective_state(tmp_path) -> None:
+    contract, summary, outcome = write_fixture(tmp_path)
+    summary_payload = json.loads(summary.read_text(encoding="utf-8"))
+    summary_payload["date"] = "2026-08-18"
+    summary_payload["effectiveState"] = "unknown"
+    summary.write_text(json.dumps(summary_payload), encoding="utf-8")
+
+    record = build_record(contract, summary, outcome, repo_root=tmp_path)
+
+    assert record["date"] == "2026-08-18"
+    assert record["effectiveState"] == "unknown"
+    assert record["currentValidity"] == "unknown"
+
+
+def test_projection_does_not_infer_date_or_current_validity(tmp_path) -> None:
+    contract, summary, outcome = write_fixture(tmp_path)
+
+    record = build_record(contract, summary, outcome, repo_root=tmp_path)
+
+    assert "date" not in record
+    assert record["effectiveState"] == "historical_or_current_unknown"
+    assert record["currentValidity"] == "unknown"
+
+
 def test_legacy_work_item_remains_partial_and_does_not_infer_approach(tmp_path) -> None:
     contract, summary, outcome = write_fixture(tmp_path, include_approach=False)
 
