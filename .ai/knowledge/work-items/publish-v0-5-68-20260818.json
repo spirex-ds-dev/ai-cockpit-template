@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "publish-v0-5-68-20260818",
+  "title": "Publish v0.5.68 after Implementation Knowledge acceptance",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "本次保留 Work Item 的同步/恢复历史作为生命周期证据，同时将其从 repeatedProtocolFields 复杂度指标中排除；普通 Contract 字段仍按原规则计数。这样不会通过提高上限掩盖真实协议复杂度，也不会因合法的生命周期 lineage 记录阻断发布。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/publish-v0-5-68-20260818.contract.json",
+    ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+    "tests/test_work_item_intelligence.py",
+    "scripts/check_governance_complexity.py",
+    "tests/test_governance_complexity.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/index.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/work-items/archive/2026/publish-v0-5-68-20260818.outcome.json",
+    ".ai/work-items/archive/2026/publish-v0-5-68-20260818.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/publish-v0-5-68-20260818.archive-manifest.json",
+    ".ai/knowledge/work-items/publish-v0-5-68-20260818.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Exclude lifecycle lineage fields instead of raising the repeatedProtocolFields limit.",
+      "reason": "The failure was caused by evidence-preserving synchronization history, not by a new protocol concept; raising the limit would hide the classification error.",
+      "status": "verified"
+    },
+    {
+      "decision": "Keep the existing policy limit unchanged.",
+      "reason": "The corrected metric remains below the existing limit without a budget-only relaxation.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "scripts/check_governance_complexity.py",
+      "digest": "da3dfb08c85b02286f4b6a44183b14ec06e849520ed1a7ad69ff7bed1ebe665d"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_governance_complexity.py",
+      "digest": "af500c411cbe7cac8108c458a60ba73b9ac600adafe1242fe44dbf6fd9a7e7f9"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_start_receipt.py",
+      "digest": "58e2ea6e60e85827107432ac499965ca902cc0eb8126ed8d2812e8f760fd58f2"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_resume_work_item.py",
+      "digest": "f84de75fd9fda31a09e03cb8d9f0ca5977c249159d1fbb0d7fd48f10ecfdab20"
+    },
+    {
+      "type": "code",
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "digest": "3363c5732ea24b992d8d8fb50f385a5f6a167db1ddc1b729d0de6b48d5558d5f"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_check_work_item.py",
+      "digest": "852fb75d1c8abc969eb886ea37876c5b14029a835cabd9eb3b8c0b7c84927421"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.contract.json",
+    "contractDigest": "239e5dc961fd43d535039c6518c1d87d60557a9a329688b541daa87b12d84d87",
+    "summaryPath": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+    "summaryDigest": "322540f933967720f3aaa4eab2a8a36be647af0f87f28a7f7ab57e82afb29cf8",
+    "outcomePath": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.outcome.json",
+    "outcomeDigest": "675cfb31db9c27528217d5510b65451b31367de287a62a3c91a2a6793691628e"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

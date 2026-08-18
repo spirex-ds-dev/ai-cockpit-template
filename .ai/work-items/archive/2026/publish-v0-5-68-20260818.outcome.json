@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "publish-v0-5-68-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "e21b0065af83443d8464bf1b4159186963eb2b07349cdb5c98d5bb7fc454bcf1"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "publish-v0-5-68-20260818",
+    "contractDigest": "239e5dc961fd43d535039c6518c1d87d60557a9a329688b541daa87b12d84d87",
+    "summaryDigest": "322540f933967720f3aaa4eab2a8a36be647af0f87f28a7f7ab57e82afb29cf8",
+    "verificationDigest": "89eeb09bf551748698ee1279c487b313b827d2a7d52521d06b3c211cab9cf0c0",
+    "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+    "headCommit": "1bc952716d03b7bd85d34f204e57d9b3006ed68b",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "4411bd354c7e89695f22f8b88f1960705938a9d5b0decdc3f16a235da3e2523f",
+      "binding": {
+        "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+        "candidateHead": "1bc952716d03b7bd85d34f204e57d9b3006ed68b",
+        "candidateTreeDigest": "dd91aa45489deacc8c93157749e3155805db22aac60b4842169de63c805751cc",
+        "candidateDiffDigest": "76edda32f91c6ec919e22f8623104102a88de27488e9e24926ac790600877ad8"
+      }
+    }
   },
-  "task": {
-    "summary": "Task publish-v0-5-68-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task publish-v0-5-68-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: publish-v0-5-68-20260818",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/publish-v0-5-68-20260818.contract.json",
       ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
@@ -28,204 +51,246 @@
       ".ai/work-items/archive/2026/publish-v0-5-68-20260818.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
-    ]
-  },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "0974f399239bd47f6c945743ac5c3be0d4e478274d59bf3d4663db7e2a0b85b8"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "df0ce86b2e0d510ac28c1922dafc15fac42dbec33fdc5f85a14933a379fda391"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "0974f399239bd47f6c945743ac5c3be0d4e478274d59bf3d4663db7e2a0b85b8"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "df0ce86b2e0d510ac28c1922dafc15fac42dbec33fdc5f85a14933a379fda391"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The source SHA, rehearsal receipt, provider run, and public assets are external facts and must be independently verified at their respective boundaries.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "本次保留 Work Item 的同步/恢复历史作为生命周期证据，同时将其从 repeatedProtocolFields 复杂度指标中排除；普通 Contract 字段仍按原规则计数。这样不会通过提高上限掩盖真实协议复杂度，也不会因合法的生命周期 lineage 记录阻断发布。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/check_governance_complexity.py",
-          "subject": "Lifecycle lineage fields are excluded only from repeated protocol-field counting"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "复杂度检查器在聚合 Contract 顶层字段前过滤 resumeHistory 和 synchronizationHistory；ai_check_work_item 及生命周期检查仍保留并验证这些字段。回归测试构造包含同步历史的两个 Contract，确认 lineage 不增加指标，同时普通 workItemId 重复字段仍被计数。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/check_governance_complexity.py",
-          "subject": "LIFECYCLE_LINEAGE_FIELDS filter"
-        },
-        {
-          "source": "tests/test_governance_complexity.py",
-          "subject": "lifecycle synchronization history regression"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
       {
-        "component": "Governance complexity report",
-        "detail": "Only repeatedProtocolFields aggregation changes; policy limit, archive integrity, and all other metrics remain unchanged.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "scripts/check_governance_complexity.py",
-            "subject": "repository shape metric calculation"
-          }
-        ]
-      },
-      {
-        "component": "Work Item lifecycle lineage",
-        "detail": "Synchronization and resume history remain in Contracts and continue to be validated as lifecycle evidence.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_start_receipt.py",
-            "subject": "synchronizationHistory validation"
+            "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "0974f399239bd47f6c945743ac5c3be0d4e478274d59bf3d4663db7e2a0b85b8"
           },
           {
-            "source": "scripts/ai_resume_work_item.py",
-            "subject": "lifecycle transition preservation"
-          }
-        ]
-      },
-      {
-        "component": "Complexity regression coverage",
-        "detail": "A focused test prevents a future lifecycle-history record from reintroducing this false blocker.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_governance_complexity.py",
-            "subject": "test_lifecycle_synchronization_history_is_not_protocol_complexity"
+            "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "df0ce86b2e0d510ac28c1922dafc15fac42dbec33fdc5f85a14933a379fda391"
           }
         ]
       }
     ],
-    "designDecisions": [
+    "resolutions": [
       {
-        "decision": "Exclude lifecycle lineage fields instead of raising the repeatedProtocolFields limit.",
-        "reason": "The failure was caused by evidence-preserving synchronization history, not by a new protocol concept; raising the limit would hide the classification error.",
-        "status": "verified",
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "scripts/check_governance_complexity.py",
-            "subject": "explicit lifecycle lineage classification"
+            "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "0974f399239bd47f6c945743ac5c3be0d4e478274d59bf3d4663db7e2a0b85b8"
           },
           {
-            "source": "tests/test_governance_complexity.py",
-            "subject": "boundary regression"
-          }
-        ]
-      },
-      {
-        "decision": "Keep the existing policy limit unchanged.",
-        "reason": "The corrected metric remains below the existing limit without a budget-only relaxation.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".ai/guards/governance_complexity_policy.yaml",
-            "subject": "repeatedProtocolFields policy remains 50"
+            "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "df0ce86b2e0d510ac28c1922dafc15fac42dbec33fdc5f85a14933a379fda391"
           }
         ]
       }
     ],
-    "technicalDetails": [
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
       {
-        "topic": "Failure handling",
-        "detail": "A malformed or structurally invalid Contract is still handled by the existing Contract and lifecycle validators; this change only affects the separate complexity aggregation metric.",
-        "status": "verified",
+        "claim": "provider_evidence",
+        "severity": "medium",
+        "title": "provider_evidence",
+        "detail": "The source SHA, rehearsal receipt, provider run, and public assets are external facts and must be independently verified at their respective boundaries.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
         "evidence": [
           {
-            "source": "scripts/ai_check_work_item.py",
-            "subject": "Contract field and lifecycle validation"
+            "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+            "subject": "residualRisks"
           }
-        ]
+        ],
+        "inference": false
       }
     ],
+    "humanDecisions": [],
     "evidence": [
       {
-        "claim": "The release finish no longer counts synchronization history as repeated protocol complexity.",
-        "status": "verified",
+        "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": "scripts/check_governance_complexity.py",
         "subject": "LIFECYCLE_LINEAGE_FIELDS"
       },
       {
-        "claim": "The boundary is regression-tested while ordinary repeated fields remain counted.",
-        "status": "verified",
         "source": "tests/test_governance_complexity.py",
         "subject": "lifecycle synchronization history test"
       },
       {
-        "claim": "The corrected repository metric passes without increasing the policy limit.",
-        "status": "verified",
         "source": "tests/test_governance_complexity.py",
         "subject": "repeatedProtocolFields boundary regression and ordinary-field preservation"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "0974f399239bd47f6c945743ac5c3be0d4e478274d59bf3d4663db7e2a0b85b8"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "df0ce86b2e0d510ac28c1922dafc15fac42dbec33fdc5f85a14933a379fda391"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "本次保留 Work Item 的同步/恢复历史作为生命周期证据，同时将其从 repeatedProtocolFields 复杂度指标中排除；普通 Contract 字段仍按原规则计数。这样不会通过提高上限掩盖真实协议复杂度，也不会因合法的生命周期 lineage 记录阻断发布。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/check_governance_complexity.py",
+            "subject": "Lifecycle lineage fields are excluded only from repeated protocol-field counting"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "复杂度检查器在聚合 Contract 顶层字段前过滤 resumeHistory 和 synchronizationHistory；ai_check_work_item 及生命周期检查仍保留并验证这些字段。回归测试构造包含同步历史的两个 Contract，确认 lineage 不增加指标，同时普通 workItemId 重复字段仍被计数。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/check_governance_complexity.py",
+            "subject": "LIFECYCLE_LINEAGE_FIELDS filter"
+          },
+          {
+            "source": "tests/test_governance_complexity.py",
+            "subject": "lifecycle synchronization history regression"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Governance complexity report",
+          "detail": "Only repeatedProtocolFields aggregation changes; policy limit, archive integrity, and all other metrics remain unchanged.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/check_governance_complexity.py",
+              "subject": "repository shape metric calculation"
+            }
+          ]
+        },
+        {
+          "component": "Work Item lifecycle lineage",
+          "detail": "Synchronization and resume history remain in Contracts and continue to be validated as lifecycle evidence.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_start_receipt.py",
+              "subject": "synchronizationHistory validation"
+            },
+            {
+              "source": "scripts/ai_resume_work_item.py",
+              "subject": "lifecycle transition preservation"
+            }
+          ]
+        },
+        {
+          "component": "Complexity regression coverage",
+          "detail": "A focused test prevents a future lifecycle-history record from reintroducing this false blocker.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_governance_complexity.py",
+              "subject": "test_lifecycle_synchronization_history_is_not_protocol_complexity"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Exclude lifecycle lineage fields instead of raising the repeatedProtocolFields limit.",
+          "reason": "The failure was caused by evidence-preserving synchronization history, not by a new protocol concept; raising the limit would hide the classification error.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/check_governance_complexity.py",
+              "subject": "explicit lifecycle lineage classification"
+            },
+            {
+              "source": "tests/test_governance_complexity.py",
+              "subject": "boundary regression"
+            }
+          ]
+        },
+        {
+          "decision": "Keep the existing policy limit unchanged.",
+          "reason": "The corrected metric remains below the existing limit without a budget-only relaxation.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/guards/governance_complexity_policy.yaml",
+              "subject": "repeatedProtocolFields policy remains 50"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Failure handling",
+          "detail": "A malformed or structurally invalid Contract is still handled by the existing Contract and lifecycle validators; this change only affects the separate complexity aggregation metric.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_check_work_item.py",
+              "subject": "Contract field and lifecycle validation"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The release finish no longer counts synchronization history as repeated protocol complexity.",
+          "status": "verified",
+          "source": "scripts/check_governance_complexity.py",
+          "subject": "LIFECYCLE_LINEAGE_FIELDS"
+        },
+        {
+          "claim": "The boundary is regression-tested while ordinary repeated fields remain counted.",
+          "status": "verified",
+          "source": "tests/test_governance_complexity.py",
+          "subject": "lifecycle synchronization history test"
+        },
+        {
+          "claim": "The corrected repository metric passes without increasing the policy limit.",
+          "status": "verified",
+          "source": "tests/test_governance_complexity.py",
+          "subject": "repeatedProtocolFields boundary regression and ordinary-field preservation"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "en",
@@ -1006,6 +1071,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

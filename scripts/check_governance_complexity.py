@@ -22,6 +22,9 @@ DEFAULT_OUTPUT = ROOT / "target" / "governance_complexity_report.json"
 # Archive migration is anchored to the immutable commit that introduced
 # digest validation. A mutable archive-count threshold must not decide trust.
 ARCHIVE_INDEX_INTEGRITY_INTRODUCED_AT = "3dc234a"
+# These fields preserve Work Item lineage across base synchronization/resume
+# events. They are lifecycle evidence, not duplicated protocol concepts.
+LIFECYCLE_LINEAGE_FIELDS = frozenset({"resumeHistory", "synchronizationHistory"})
 
 
 def strict_archive_entry(root: Path, entry: dict[str, Any], contract_path: Path) -> bool:
@@ -292,7 +295,7 @@ def repository_shape_metrics(
         except (OSError, UnicodeDecodeError, json.JSONDecodeError):
             continue
         if isinstance(value, dict):
-            field_counts.update(value.keys())
+            field_counts.update(key for key in value if key not in LIFECYCLE_LINEAGE_FIELDS)
     repeated_fields = sum(1 for count in field_counts.values() if count > 1)
     graph: dict[str, set[str]] = defaultdict(set)
     script_names = {

@@ -3,7 +3,7 @@
   "workItemId": "publish-v0-5-68-20260818",
   "mode": "code",
   "title": "Publish v0.5.68 after Implementation Knowledge acceptance",
-  "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+  "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
   "baselineDirtyPaths": [],
   "scope": [
     ".ai/work-items/active/publish-v0-5-68-20260818.contract.json",
@@ -17,12 +17,14 @@
     ".ai/work-items/active/publish-v0-5-68-20260818.outcome.json",
     ".ai/work-items/active/publish-v0-5-68-20260818.outcome.md",
     "tests/test_work_item_intelligence.py",
+    "scripts/check_governance_complexity.py",
+    "tests/test_governance_complexity.py",
     "docs/reference/capability-truth-matrix.json",
     "docs/reference/pre-release-documentation-alignment.json",
     "docs/reference/pre-release-documentation-alignment.md"
   ],
   "outOfScope": [
-    "Changing product source, installer behavior, release workflow behavior, candidate projections, or historical Release assets; the scoped deterministic regression test is the only allowed source-tree change.",
+    "Changing product source, installer behavior, release workflow behavior, candidate projections, or historical Release assets; only the scoped deterministic regression and governance-complexity boundary fixes are allowed source-tree changes.",
     "Creating, moving, deleting, or publishing any tag or Release other than v0.5.68 through the authoritative release.yml workflow.",
     "Bypassing readiness, a missing or mismatched rehearsal receipt, provider checks, public asset verification, or Work Item cleanup requirements."
   ],
@@ -74,6 +76,14 @@
     {
       "path": "tests/test_work_item_intelligence.py",
       "reason": "Scoped deterministic regression coverage for malformed lock metadata removes the concurrent timing dependency."
+    },
+    {
+      "path": "scripts/check_governance_complexity.py",
+      "reason": "The release finish exposed that lifecycle synchronization history was incorrectly counted as repeated protocol complexity."
+    },
+    {
+      "path": "tests/test_governance_complexity.py",
+      "reason": "Regression coverage proves lifecycle lineage remains valid evidence without consuming the repeated protocol-field budget."
     },
     {
       "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32146066890",
@@ -161,6 +171,7 @@
     "After Work Item archive and pre-merge freeze, a same-SHA release.yml rehearsal succeeds for v0.5.68; its private receipt binds the exact source SHA, tree, strict smoke evidence, required jobs, coverage, and artifact digests, and no v0.5.68 tag or Release exists before publication.",
     "The actual release.yml run consumes that exact successful rehearsal receipt and publishes v0.5.68 only after exact-source preflight, dependency/CI evidence, source-bound SBOM/provenance/digest evidence, tagged Quick Install, and Draft Release validation pass.",
     "Independent post-publication checks verify the immutable tag target, stable provider Release, public release.json/sbom.json/provenance.json/release-digests.json assets, archive checksum, installer identity, release-state consistency, and adopter Quick Install for v0.5.68.",
+    "Lifecycle synchronization and resume history remain preserved as evidence but do not inflate the repeatedProtocolFields complexity metric; the regression test and full quality gate pass without increasing its policy limit.",
     "The Release Work Item is archived, its PR is merged, ai-close-work-item verifies merged identity and cleanup, and no release work branch or active Work Item remains."
   ],
   "scenarioCoverage": [
@@ -300,5 +311,33 @@
     "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
     "initialScopeDigest": "bedfaa5451bcdb53d3d8242053bd095cbff4514765f65f57fb886a576eec0e08",
     "contractSkeletonDigest": "248b399d49c95307786253bf66e9189292fec2bb05e787689e673c9ce8bfe1ef"
-  }
+  },
+  "synchronizationHistory": [
+    {
+      "synchronizationVersion": 1,
+      "fromBaseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "toBaseCommit": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/release-v0.5.68-20260818",
+      "recordedAt": "2026-08-18T20:17:53.586849+00:00",
+      "priorContractDigest": "d20f4d46c93bafda40abf822875d27fb754341af24afd012ba071b76261cd0c0",
+      "priorSummaryDigest": "c2107f46bcc752c4becee393d6e53b941a09c44e5fba5152718f1fd763e8c360",
+      "rebaseHeadBefore": "92de448152e7682ce5de530d7d15b4fc6ed1779a",
+      "rebaseHeadAfter": "92de448152e7682ce5de530d7d15b4fc6ed1779a"
+    },
+    {
+      "synchronizationVersion": 1,
+      "fromBaseCommit": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+      "toBaseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/release-v0.5.68-20260818",
+      "recordedAt": "2026-08-18T21:38:53.997503+00:00",
+      "priorContractDigest": "f22596223e1fb166f029bb2eba318010401b135120193707f6832eb462352a22",
+      "priorSummaryDigest": "acfc7c2a2559b8c37c9f0cc12218f27626a3ee6864448b20607498829168fdfb",
+      "rebaseHeadBefore": "1bc952716d03b7bd85d34f204e57d9b3006ed68b",
+      "rebaseHeadAfter": "1bc952716d03b7bd85d34f204e57d9b3006ed68b"
+    }
+  ]
 }

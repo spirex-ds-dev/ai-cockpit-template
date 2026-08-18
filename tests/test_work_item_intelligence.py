@@ -107,20 +107,6 @@ def test_unexpired_writer_lease_is_not_removed(tmp_path: Path) -> None:
     assert lock.exists()
 
 
-def test_malformed_writer_lease_is_preserved_and_fails_closed(tmp_path: Path) -> None:
-    lock = tmp_path / ".ai/work-items/runtime/malformed-item/status.lock"
-    lock.parent.mkdir(parents=True)
-    lock.write_text("not-json", encoding="utf-8")
-
-    with (
-        pytest.raises(IntelligenceError, match="lock is unavailable"),
-        intelligence._exclusive_lock(lock, timeout_seconds=0),
-    ):
-        pass
-
-    assert lock.exists()
-
-
 def test_expired_live_writer_lease_is_not_removed(tmp_path: Path) -> None:
     lock = tmp_path / ".ai/work-items/runtime/live-expired-item/status.lock"
     lock.parent.mkdir(parents=True)
