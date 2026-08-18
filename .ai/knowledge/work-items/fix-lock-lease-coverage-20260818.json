@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-lock-lease-coverage-20260818",
+  "title": "Make release coverage deterministic for malformed lock metadata",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在不改变生产锁逻辑的前提下，直接增加 malformed writer-lease metadata 的确定性回归测试，使原本依赖并发时序才能触达的 fail-closed 分支在每次质量汇总中稳定被覆盖；随后用官方生成器刷新 Capability Truth 与 pre-release documentation alignment 投影。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+    ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+    "tests/test_work_item_intelligence.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json",
+    ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Add a direct malformed-lock fixture instead of changing production code or relying on a concurrent race.",
+      "reason": "The observed failure was coverage nondeterminism, while the defensive production behavior was already correct.",
+      "status": "verified"
+    },
+    {
+      "decision": "Keep hosted exact-source aggregate verification in the Release WI.",
+      "reason": "This corrective WI proves the deterministic local evidence path; the authoritative hosted Python 3.12 result belongs to the release source after merge.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_work_item_intelligence.py",
+      "digest": "54068c2171835e95c9d2b947eae217903d58e0ea059930db21ccd483963de394"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/capability-truth-matrix.json",
+      "digest": "7e222cddbba5781a162d2ad16612c487eefa5875c1217a5320c43b241ec57b20"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_capability_truth.py",
+      "digest": "5cda977775e5b4fa6531886f963f1c8a4a976344ed974e34bcf39b58b1a3500e"
+    },
+    {
+      "type": "code",
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "digest": "46440f36622c8597298ca5f8b84a99db408cd39bc74639bd301c77977680bd71"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_work_item_intelligence.py",
+      "digest": "58e803e48e742b4e126d73102cae8b5d8d010f863511fc0ec15a156f3d0be003"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "digest": "70ad5e70cc095a781322e53e3ab4ca01bb223941521ca9fc126ef2fe909e96d7"
+    },
+    {
+      "type": "code",
+      "path": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+      "digest": "7fce65147b4ccb22b56d5efb6eae4001d8f3b22d736afc6f308699f61c27a053"
+    },
+    {
+      "type": "code",
+      "path": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+      "digest": "df2c240f2c0b2f5a12d5370507c4181dafa24f31bbae07c014b74221341d04ba"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+    "contractDigest": "df2c240f2c0b2f5a12d5370507c4181dafa24f31bbae07c014b74221341d04ba",
+    "summaryPath": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+    "summaryDigest": "7fce65147b4ccb22b56d5efb6eae4001d8f3b22d736afc6f308699f61c27a053",
+    "outcomePath": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json",
+    "outcomeDigest": "000afc7173fdb39bb7be8a96ac9dc1ec0dbe901e045bc292f1b0bc590dccbb4a"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}
