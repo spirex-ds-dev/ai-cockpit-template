@@ -490,6 +490,21 @@ def test_installer_reuses_pruned_immutable_source_inventory(tmp_path, monkeypatc
     )
 
 
+def test_installer_does_not_copy_template_reference_impact_records(tmp_path):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+    assert not (tmp_path / ".ai" / "evidence" / "reference-impact").exists()
+
+
 def test_installed_cursor_rule_defaults_to_opt_in_apply(tmp_path):
     installer = Installer(
         source=ROOT,

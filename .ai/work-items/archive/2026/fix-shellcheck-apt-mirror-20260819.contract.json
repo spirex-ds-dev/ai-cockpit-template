@@ -1,0 +1,254 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-shellcheck-apt-mirror-20260819",
+  "mode": "code",
+  "title": "Fix hosted shellcheck apt mirror timeout",
+  "baseCommit": "fd81251f7cecb53ac062e2ed8763c541e785be56",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json",
+    ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json",
+    ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md",
+    ".github/workflows/compatibility.yml",
+    "tests/test_workflows.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/evidence/reference-impact/**",
+    "scripts/installer/legacy.py",
+    "tests/test_installer.py",
+    "Makefile",
+    "tests/test_makefile.py"
+  ],
+  "outOfScope": [
+    "Changing shellcheck rules or install.sh behavior.",
+    "Changing other compatibility lanes, compatibility-gate semantics, release workflow behavior, release tags, or public Releases.",
+    "Relying on a successful local shellcheck run as a substitute for hosted compatibility evidence."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "The shellcheck lane currently performs a network-dependent apt update and install before invoking shellcheck."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Existing workflow contract tests; add a regression assertion that the blocking shellcheck lane uses the runner-provided tool without apt installation."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32159490437/job/95796800391",
+      "reason": "Hosted shellcheck job log: apt update stalls on azure.archive.ubuntu.com until the 20-minute job timeout; shellcheck never starts."
+    },
+    {
+      "path": "https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md",
+      "reason": "Authoritative runner-image manifest lists shellcheck 0.9.0 among installed apt packages on the Ubuntu 24.04 image used by the failed job."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+      "riskTypes": [
+        "ci_reliability",
+        "release_quality_gate",
+        "hosted_verification"
+      ],
+    "reason": "The blocking compatibility lane cannot reach its actual shellcheck assertion because its package-manager bootstrap depends on an unavailable Azure Ubuntu mirror. The corrective change removes that network dependency and does not alter shellcheck rules or production behavior.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Hosted logs and the pinned runner-image manifest identify a bounded workflow defect with a deterministic repository-side correction; implementation can proceed within the declared CI scope."
+  },
+  "preReviewWarnings": [
+    "Confirm the selected Ubuntu image provides shellcheck before removing apt installation, and retain a fail-closed version probe."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The blocking shellcheck lane no longer depends on apt update or an Ubuntu package mirror.",
+    "The lane uses the runner-provided shellcheck executable on a pinned Ubuntu 24.04 image and fails closed when the executable is absent or unusable.",
+    "A repository workflow test prevents reintroducing the network-dependent apt bootstrap and preserves the shellcheck invocation.",
+    "Local shellcheck and the declared AI/project checks pass; the hosted compatibility gate reaches and passes the actual shellcheck step.",
+    "A clean committed Work Item snapshot can execute project-test shards without failing on an empty git diff.",
+    "No shellcheck rule, install.sh behavior, other compatibility lane, release workflow, tag, or public Release is changed by this Work Item."
+  ],
+  "guidelines": [
+    "Do not use a network-dependent package-manager bootstrap for a tool already supplied by the pinned hosted runner image.",
+    "Keep the blocking compatibility gate fail closed and preserve the actual shellcheck invocation.",
+    "Do not change production behavior or shellcheck policy while repairing CI bootstrap reliability."
+  ],
+  "intent": {
+    "problem": "The release-blocking compatibility workflow repeatedly times out before running shellcheck because apt update contacts an unavailable azure.archive.ubuntu.com mirror. The runner image already includes shellcheck, so the package bootstrap is an unnecessary network dependency.",
+    "constraints": [
+      "Keep the Work Item scoped to the compatibility workflow, its executable workflow regression test, the installer boundary required to prevent source-only reference-impact evidence from breaking fresh adopters, and the project-test shard no-op needed for clean committed snapshots.",
+      "Preserve shellcheck as a blocking compatibility lane and do not weaken its failure semantics.",
+      "Do not modify production code, release behavior, tags, or public Releases."
+    ],
+    "rationale": "Using the pinned Ubuntu 24.04 runner's installed shellcheck and probing it before execution removes the failing Azure apt mirror path while retaining the same static analysis gate."
+  },
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-release-after-shellcheck-blocker",
+    "capturedAt": "2026-08-19T00:00:00+09:00",
+    "digest": "sha256:hosted-shellcheck-apt-mirror-root-cause"
+  },
+  "rawUserRequest": "Continue the release-blocking investigation, fix the root cause of the hosted shellcheck timeout, and resume the Work Item and release lifecycle only after hosted verification passes.",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Remove the network-dependent apt bootstrap that prevents the hosted blocking shellcheck lane from reaching its assertion.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Runner-provided shellcheck is available",
+      "required": true,
+      "expected": "The shellcheck version probe succeeds and the workflow invokes shellcheck install.sh.",
+      "verificationPlan": "Run the workflow contract test and local shellcheck; verify the hosted job reaches the shellcheck step.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Runner-provided shellcheck is unavailable",
+      "required": true,
+      "expected": "The shellcheck lane fails closed at the executable probe rather than silently skipping analysis.",
+      "verificationPlan": "Verify the workflow contains a direct shellcheck version probe and no apt fallback that can mask an unavailable executable.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Compatibility gate consumes shellcheck result",
+      "required": true,
+      "expected": "The existing compatibility-gate continues to require a successful shellcheck lane.",
+      "verificationPlan": "Run the workflow contract tests and inspect the hosted compatibility-gate result after the corrected shellcheck job completes.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user continuation authorization in current thread",
+    "reason": "The user asked to continue resolving the release-blocking root cause; the declared change is limited to the CI workflow and its regression test."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 963
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json",
+    "baseCommit": "fd81251f7cecb53ac062e2ed8763c541e785be56",
+    "initialScopeDigest": "4f868fb5723665ac4a44f9ad8c34fdc9ba5268eb764ca46f8a311f638b01d6ff",
+    "contractSkeletonDigest": "b5d568a0fb06ee815ea923fb5787d1f11cf759ef58705679dc6d328e5dbbed91"
+  }
+}

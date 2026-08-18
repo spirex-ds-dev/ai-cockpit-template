@@ -10,6 +10,17 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
     assert "  workflow_dispatch:" in workflow
 
 
+def test_shellcheck_uses_pinned_runner_tool_without_network_bootstrap():
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    shellcheck = workflow.split("  shellcheck:", 1)[1].split("  python-platform-matrix:", 1)[0]
+
+    assert "runs-on: ubuntu-24.04" in shellcheck
+    assert "sudo apt-get" not in shellcheck
+    assert "apt-get update" not in shellcheck
+    assert "shellcheck --version" in shellcheck
+    assert "shellcheck install.sh" in shellcheck
+
+
 def test_smoke_hosted_measurement_dispatch_returns_a_non_authorizing_exact_commit_receipt():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
     builder = (ROOT / "scripts" / "quality_measurements.py").read_text(encoding="utf-8")

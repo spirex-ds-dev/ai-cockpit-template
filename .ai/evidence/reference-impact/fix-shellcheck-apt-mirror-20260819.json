@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "requestedText": "Replace the hosted shellcheck_job_apt_bootstrap with the pinned runner-provided executable while preserving the blocking compatibility lane.",
+  "target": {
+    "type": "workflow_job",
+    "name": "shellcheck_job_apt_bootstrap",
+    "path": ".github/workflows/compatibility.yml",
+    "operation": "change_signature"
+  },
+  "referenceAnalysis": {
+    "staticReferences": [],
+    "testReferences": [
+      "tests/test_workflows.py"
+    ],
+    "configurationReferences": [],
+    "documentationReferences": [],
+    "workflowReferences": [
+      ".github/workflows/compatibility.yml"
+    ],
+    "buildReferences": [],
+    "dynamicReferences": {
+      "status": "proven_absent",
+      "evidence": [
+        ".github/workflows/compatibility.yml",
+        "tests/test_workflows.py"
+      ],
+      "stale": false
+    },
+    "externalConsumers": {
+      "status": "proven_absent",
+      "evidence": [
+        ".github/workflows/compatibility.yml",
+        "tests/test_workflows.py"
+      ],
+      "stale": false
+    },
+    "monitoringReferences": {
+      "status": "proven_absent",
+      "evidence": [
+        ".github/workflows/compatibility.yml"
+      ],
+      "stale": false
+    }
+  },
+  "governanceEvidence": {
+    "contractDeclared": true,
+    "acceptanceDeclared": true,
+    "destructiveChangeAllowed": true,
+    "evidence": [
+      ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json",
+      ".github/workflows/compatibility.yml",
+      "tests/test_workflows.py"
+    ]
+  }
+}

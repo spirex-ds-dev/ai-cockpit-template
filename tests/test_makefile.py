@@ -79,6 +79,14 @@ def test_source_and_installed_makefiles_expose_the_same_post_archive_recovery_ta
         assert "HOSTED_JOB_ID" in text
 
 
+def test_project_test_shards_skip_empty_git_diff_before_applying_changes():
+    text = (ROOT / "Makefile").read_text(encoding="utf-8")
+
+    assert (
+        'if git diff --quiet; then :; else git diff --binary | git -C "$$workspace" apply' in text
+    )
+
+
 def test_source_and_installed_makefiles_expose_the_same_conflict_successor_target():
     source = (ROOT / "Makefile").read_text(encoding="utf-8")
     installed = (ROOT / "templates/make/Makefile.ai").read_text(encoding="utf-8")
