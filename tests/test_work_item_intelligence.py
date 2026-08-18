@@ -721,3 +721,17 @@ def test_publication_cursor_advances_only_when_facts_change(tmp_path: Path) -> N
     append_fact("cursor-item", "implementation_started", {}, root=tmp_path)
     advanced = read_snapshot("cursor-item", schema_version=2, root=tmp_path)
     assert advanced["publicationCursor"] > first["publicationCursor"]
+
+
+def test_malformed_writer_lease_is_preserved_and_fails_closed(tmp_path: Path) -> None:
+    lock = tmp_path / ".ai/work-items/runtime/malformed-item/status.lock"
+    lock.parent.mkdir(parents=True)
+    lock.write_text("not-json", encoding="utf-8")
+
+    with (
+        pytest.raises(IntelligenceError, match="lock is unavailable"),
+        intelligence._exclusive_lock(lock, timeout_seconds=0),
+    ):
+        pass
+
+    assert lock.exists()
