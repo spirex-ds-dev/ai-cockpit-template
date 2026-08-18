@@ -54,10 +54,11 @@
   "notCodable": false,
   "riskAssessment": {
     "level": "medium",
-    "riskTypes": [
-      "ci_reliability",
-      "release_quality_gate"
-    ],
+      "riskTypes": [
+        "ci_reliability",
+        "release_quality_gate",
+        "hosted_verification"
+      ],
     "reason": "The blocking compatibility lane cannot reach its actual shellcheck assertion because its package-manager bootstrap depends on an unavailable Azure Ubuntu mirror. The corrective change removes that network dependency and does not alter shellcheck rules or production behavior.",
     "unknownsReviewComplete": true
   },
