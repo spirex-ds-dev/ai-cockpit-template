@@ -83,6 +83,37 @@ def test_human_handoff_claims_require_evidence_refs_or_inference() -> None:
     assert "human_handoff" in {error.code for error in report.errors}
 
 
+def test_verified_implementation_claim_requires_an_existing_repository_path() -> None:
+    candidate = outcome()
+    candidate["sections"]["implementationApproach"] = {
+        "approachType": "implementation",
+        "status": "complete",
+        "summary": {
+            "text": "Unsupported fact.",
+            "status": "verified",
+            "evidence": [{"source": "scripts/does_not_exist.py", "subject": "missing"}],
+        },
+        "mechanism": {
+            "text": "Known mechanism.",
+            "status": "unknown",
+            "evidence": [],
+        },
+        "affectedComponents": [],
+        "designDecisions": [],
+        "technicalDetails": [],
+        "evidence": [],
+    }
+
+    report = validate_outcome(
+        candidate,
+        render_markdown(candidate),
+        expected_task_id="task-outcome-validator",
+    )
+
+    assert not report.valid
+    assert any(error.code == "implementation_approach_evidence" for error in report.errors)
+
+
 def test_historical_generator_version_remains_readable_without_diagnostics() -> None:
     candidate = generate_outcome("task-outcome-validator", bindings())
     candidate["bindings"]["generatorVersion"] = "1.0"

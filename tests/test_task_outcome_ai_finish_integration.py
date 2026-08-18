@@ -1,3 +1,4 @@
+import argparse
 import hashlib
 import json
 import sys
@@ -10,6 +11,259 @@ import pytest
 from ai_check_task_outcome import validate_outcome
 from ai_generate_task_outcome import generate_outcome, render_markdown
 from ai_governance_compression import render_active_status
+
+
+class _FinishObservation:
+    def __init__(self):
+        self.started = []
+        self.passed = []
+        self.failed = []
+
+    def check_started(self, **kwargs):
+        self.started.append(kwargs)
+
+    def check_passed(self, **kwargs):
+        self.passed.append(kwargs)
+
+    def check_failed(self, **kwargs):
+        self.failed.append(kwargs)
+
+
+def test_finish_refreshes_capability_truth_before_source_bound_evidence(tmp_path, monkeypatch):
+    matrix_path = tmp_path / "docs" / "reference" / "capability-truth-matrix.json"
+    generator_path = tmp_path / "scripts" / "ai_capability_truth.py"
+    summary_path = tmp_path / "summary.json"
+    contract_path = tmp_path / "contract.json"
+    matrix_path.parent.mkdir(parents=True)
+    generator_path.parent.mkdir(parents=True)
+    matrix_path.write_text(
+        json.dumps({"capabilities": [{"evidenceSource": "stale", "digest": "stale"}]}),
+        encoding="utf-8",
+    )
+    generator_path.write_text("# test generator\n", encoding="utf-8")
+    summary_path.write_text(
+        json.dumps({"changedFiles": [], "generatedFiles": [], "verification": []}),
+        encoding="utf-8",
+    )
+    contract_path.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_finish,
+        "changed_paths",
+        lambda _contract_data: ["docs/reference/capability-truth-matrix.json"],
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "render_check_command",
+        lambda *_args, **_kwargs: (
+            "make check-source-bound-evidence",
+            ["make", "check-source-bound-evidence"],
+        ),
+    )
+    calls = []
+
+    def fake_run(command, **_kwargs):
+        calls.append(command)
+        if "--write" in command:
+            matrix_path.write_text(
+                json.dumps(
+                    {
+                        "capabilities": [
+                            {
+                                "evidenceSource": {"digest": "fresh-evidence"},
+                                "digest": "fresh-row",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            return 0, 11, "capability truth matrix refreshed"
+        assert command == ["make", "check-source-bound-evidence"]
+        assert calls[0][-1] == "--write"
+        return 0, 19, "source-bound evidence passed"
+
+    monkeypatch.setattr(ai_finish, "run", fake_run)
+    observation = _FinishObservation()
+
+    result = ai_finish.run_declared_checks(
+        [{"check": "sourceBoundEvidence", "required": True}],
+        args=argparse.Namespace(skip_quality=False),
+        contract="contract.json",
+        summary="summary.json",
+        contract_data={},
+        contract_path=contract_path,
+        summary_path=summary_path,
+        contract_hash="contract-hash",
+        commit_sha="commit-sha",
+        obs=observation,
+    )
+
+    assert result == 0
+    assert calls[0][0] == sys.executable
+    assert calls[0][1:] == ["scripts/ai_capability_truth.py", "--write"]
+    assert json.loads(matrix_path.read_text(encoding="utf-8"))["capabilities"][0] == {
+        "evidenceSource": {"digest": "fresh-evidence"},
+        "digest": "fresh-row",
+    }
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert any(
+        item.get("path") == "docs/reference/capability-truth-matrix.json"
+        for item in summary["changedFiles"]
+    )
+    assert "docs/reference/capability-truth-matrix.json" in summary["generatedFiles"]
+    evidence = summary["verification"][0]
+    assert evidence["check"] == "sourceBoundEvidence"
+    assert evidence["result"] == "passed"
+    assert "capability truth matrix refreshed" in evidence["outputTail"]
+    assert observation.failed == []
+
+
+def test_finish_fails_closed_when_source_bound_refresh_fails(tmp_path, monkeypatch):
+    summary_path = tmp_path / "summary.json"
+    contract_path = tmp_path / "contract.json"
+    summary_path.write_text(
+        json.dumps({"changedFiles": [], "generatedFiles": [], "verification": []}),
+        encoding="utf-8",
+    )
+    contract_path.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_finish,
+        "render_check_command",
+        lambda *_args, **_kwargs: (
+            "make check-source-bound-evidence",
+            ["make", "check-source-bound-evidence"],
+        ),
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "refresh_source_bound_evidence",
+        lambda *, summary_path: (7, 13, "capability truth refresh failed"),
+    )
+    check_calls = []
+    monkeypatch.setattr(ai_finish, "run", lambda command, **_kwargs: check_calls.append(command))
+    observation = _FinishObservation()
+
+    result = ai_finish.run_declared_checks(
+        [{"check": "sourceBoundEvidence", "required": True}],
+        args=argparse.Namespace(skip_quality=False),
+        contract="contract.json",
+        summary="summary.json",
+        contract_data={},
+        contract_path=contract_path,
+        summary_path=summary_path,
+        contract_hash="contract-hash",
+        commit_sha="commit-sha",
+        obs=observation,
+    )
+
+    assert result == 7
+    assert check_calls == []
+    evidence = json.loads(summary_path.read_text(encoding="utf-8"))["verification"][0]
+    assert evidence["check"] == "sourceBoundEvidence"
+    assert evidence["result"] == "failed"
+    assert "capability truth refresh failed" in evidence["outputTail"]
+    assert observation.failed[0]["check_id"] == "sourceBoundEvidence"
+
+
+def test_adoption_finish_projects_bootstrap_as_not_applicable_approach(tmp_path, monkeypatch):
+    contract_path = tmp_path / "task.contract.json"
+    summary_path = tmp_path / "task.summary.json"
+    contract_path.write_text(
+        json.dumps(
+            {
+                "workItemId": "adopt_ai_cockpit",
+                "baseCommit": "a" * 40,
+                "adoptionBootstrapPaths": ["scripts/ai_*.py"],
+                "scope": ["scripts/ai_*.py"],
+                "verification": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary_path.write_text(
+        json.dumps({"changedFiles": [], "verification": [], "unknownsRemaining": []}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+    monkeypatch.chdir(tmp_path)
+
+    payload = ai_finish._pre_merge_outcome_input(
+        "adopt_ai_cockpit", contract_path, summary_path, "en"
+    )
+
+    assert payload["evidence"]["implementationApproach"]["status"] == "not_applicable"
+
+
+def test_source_bound_refresh_registers_all_declared_generated_documents(tmp_path, monkeypatch):
+    generated = (
+        "docs/reference/capability-truth-matrix.json",
+        "docs/reference/capability-truth-matrix.md",
+        "docs/reference/pre-release-documentation-alignment.json",
+        "docs/reference/pre-release-documentation-alignment.md",
+        "docs/reference/japanese-capability-assessment.json",
+        "docs/reference/japanese-capability-assessment.md",
+    )
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "generatedFiles": [],
+                "verification": [],
+                "documentationAlignment": {
+                    "checks": [{"area": "documentationCommandsCapability", "evidence": []}]
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    for relative in generated:
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"old:{relative}\n", encoding="utf-8")
+    for relative in (
+        "scripts/ai_capability_truth.py",
+        "scripts/ai_japanese_capability.py",
+        "scripts/check_pre_release_documentation_alignment.py",
+    ):
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("# test generator\n", encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    calls = []
+
+    def fake_run(command, **_kwargs):
+        calls.append(command)
+        script = command[1]
+        if script == "scripts/ai_capability_truth.py":
+            (tmp_path / generated[0]).write_text("fresh:capability\n", encoding="utf-8")
+        elif script == "scripts/ai_japanese_capability.py":
+            (tmp_path / generated[4]).write_text("fresh:japanese-json\n", encoding="utf-8")
+            (tmp_path / generated[5]).write_text("fresh:japanese-md\n", encoding="utf-8")
+        elif script == "scripts/check_pre_release_documentation_alignment.py":
+            (tmp_path / generated[2]).write_text("fresh:alignment-json\n", encoding="utf-8")
+            (tmp_path / generated[3]).write_text("fresh:alignment-md\n", encoding="utf-8")
+        else:
+            raise AssertionError(command)
+        return 0, 3, f"{script} refreshed"
+
+    monkeypatch.setattr(ai_finish, "run", fake_run)
+
+    code, _duration, _detail = ai_finish.refresh_source_bound_evidence(summary_path=summary_path)
+
+    assert code == 0
+    assert [command[1] for command in calls] == [
+        "scripts/ai_capability_truth.py",
+        "scripts/ai_japanese_capability.py",
+        "scripts/check_pre_release_documentation_alignment.py",
+    ]
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert {item["path"] for item in summary["changedFiles"]} == set(generated)
+    assert set(summary["generatedFiles"]) == set(generated)
+    assert set(summary["documentationAlignment"]["checks"][0]["evidence"]) == set(generated)
 
 
 def test_finish_digest_excludes_derived_lifecycle_projections(monkeypatch):
@@ -945,6 +1199,74 @@ def test_prepare_documentation_alignment_binds_existing_human_report_before_fini
     assert summary["documentationAlignment"]["checks"][0]["evidence"] == [
         ".ai/cockpit/task_report.md"
     ]
+
+
+def test_prepare_documentation_alignment_binds_source_bound_generated_reports(
+    tmp_path, monkeypatch
+):
+    task = "source-bound-alignment"
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [
+                    {
+                        "path": "docs/reference/pre-release-documentation-alignment.json",
+                        "reason": "generated",
+                    },
+                    {
+                        "path": "docs/reference/pre-release-documentation-alignment.md",
+                        "reason": "generated",
+                    },
+                ],
+                "documentationAlignment": {
+                    "checks": [{"area": "documentationCommandsCapability", "evidence": []}]
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    contract_path = tmp_path / ".ai/work-items/active" / f"{task}.contract.json"
+    contract_path.parent.mkdir(parents=True)
+    contract_path.write_text(
+        json.dumps(
+            {
+                "scope": [
+                    "docs/reference/pre-release-documentation-alignment.json",
+                    "docs/reference/pre-release-documentation-alignment.md",
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "_outcome_paths",
+        lambda _: (
+            tmp_path / ".ai/work-items/active/source-bound-alignment.outcome.json",
+            tmp_path / ".ai/work-items/active/source-bound-alignment.outcome.md",
+        ),
+    )
+    monkeypatch.setattr(
+        ai_finish,
+        "_human_report_paths",
+        lambda: (
+            tmp_path / ".ai/cockpit/task_report.json",
+            tmp_path / ".ai/cockpit/task_report.md",
+        ),
+    )
+    for relative in ai_finish.SOURCE_BOUND_ALIGNMENT_RELATIVES:
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("generated\n", encoding="utf-8")
+
+    ai_finish.prepare_documentation_alignment_evidence(task, summary_path)
+
+    evidence = json.loads(summary_path.read_text(encoding="utf-8"))["documentationAlignment"][
+        "checks"
+    ][0]["evidence"]
+    assert evidence == list(ai_finish.SOURCE_BOUND_ALIGNMENT_RELATIVES)
 
 
 def test_human_report_pipeline_binds_generated_outcome_markdown_before_finish_recheck(

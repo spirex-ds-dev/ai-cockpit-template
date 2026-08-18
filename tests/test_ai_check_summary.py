@@ -967,3 +967,142 @@ def test_summary_validator_requires_v2_acceptance_evidence_mapping():
     issues = ai_check_summary.validate_summary(summary, contract)
 
     assert "summary.acceptanceEvidence must be a list" in issues
+
+
+def implementation_approach_fixture(*, approach_type: str = "implementation") -> dict:
+    evidence = [{"source": "scripts/ai_check_summary.py", "subject": "implementation path"}]
+    return {
+        "approachType": approach_type,
+        "status": "complete",
+        "summary": {
+            "text": "The change records the governed path for producing the review result.",
+            "status": "verified",
+            "evidence": evidence,
+        },
+        "mechanism": {
+            "text": "The Summary record is projected into Outcome and Human Report views.",
+            "status": "verified",
+            "evidence": evidence,
+        },
+        "affectedComponents": [
+            {
+                "component": "Summary to Outcome projection",
+                "detail": "The approach is carried as structured evidence.",
+                "status": "verified",
+                "evidence": evidence,
+            }
+        ],
+        "designDecisions": [
+            {
+                "decision": "Keep Summary as the source of truth.",
+                "reason": "Projections stay deterministic and reviewable.",
+                "status": "verified",
+                "evidence": evidence,
+            }
+        ],
+        "technicalDetails": [
+            {
+                "topic": "Evidence binding",
+                "detail": "Each verified statement points to an existing repository reference.",
+                "status": "verified",
+                "evidence": evidence,
+            }
+        ],
+        "evidence": [
+            {
+                "claim": "The projection path is represented in repository code.",
+                "status": "verified",
+                "source": "scripts/ai_check_summary.py",
+                "subject": "implementation path",
+            }
+        ],
+    }
+
+
+def test_summary_structure_accepts_implementation_approach_as_a_known_field():
+    summary = {
+        "summaryVersion": 2,
+        "workItemId": "task",
+        "contractPath": ".ai/work-items/active/task.contract.json",
+        "changedFiles": [{"path": "scripts/example.py", "reason": "fixture"}],
+        "sourcesUsed": ["scripts/example.py"],
+        "verification": [],
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "generatedFiles": [],
+        "destructiveChanges": [],
+        "observedIssues": [],
+        "implementationApproach": implementation_approach_fixture(),
+    }
+    contract = {"contractVersion": 2, "workItemId": "task"}
+
+    issues = ai_check_summary._validate_summary_structure(
+        summary,
+        contract,
+        contract_path=".ai/work-items/active/task.contract.json",
+        summary_path=".ai/work-items/active/task.summary.json",
+        legacy_archive=False,
+    )
+
+    assert not any("implementationApproach" in issue for issue in issues)
+
+
+def test_implementation_approach_assessment_requires_code_and_keeps_missing_data_yellow():
+    assessor = getattr(ai_check_summary, "assess_implementation_approach", None)
+    assert callable(assessor)
+
+    assessment = assessor(
+        {"changedFiles": [{"path": "scripts/example.py", "reason": "fixture"}]},
+        {"scope": ["scripts/example.py"]},
+    )
+
+    assert assessment["status"] == "incomplete"
+    assert assessment["humanStatusColor"] == "yellow"
+    assert assessment["warnings"]
+
+
+def test_configuration_scope_accepts_configuration_approach_without_security_red():
+    assessor = getattr(ai_check_summary, "assess_implementation_approach", None)
+    assert callable(assessor)
+
+    assessment = assessor(
+        {
+            "changedFiles": [{"path": "config/settings.yaml", "reason": "fixture"}],
+            "configurationApproach": implementation_approach_fixture(approach_type="configuration"),
+        },
+        {"scope": ["config/settings.yaml"]},
+    )
+
+    assert assessment["status"] == "complete"
+    assert assessment["requiredField"] == "configurationApproach"
+
+
+def test_adoption_bootstrap_does_not_require_product_implementation_approach():
+    assessor = getattr(ai_check_summary, "assess_implementation_approach", None)
+    assert callable(assessor)
+
+    assessment = assessor(
+        {"changedFiles": [{"path": "scripts/ai_finish.py", "reason": "installer bootstrap"}]},
+        {
+            "workItemId": "adopt_ai_cockpit",
+            "scope": ["scripts/ai_*.py", "scripts/bootstrap_*.py"],
+            "adoptionBootstrapPaths": ["scripts/ai_*.py", "scripts/bootstrap_*.py"],
+        },
+    )
+
+    assert assessment["status"] == "not_applicable"
+    assert assessment["humanStatusColor"] == "unknown"
+
+
+def test_verified_approach_requires_an_existing_repository_evidence_path():
+    approach = implementation_approach_fixture()
+    approach["summary"]["evidence"] = [
+        {"source": "scripts/does_not_exist.py", "subject": "missing implementation"}
+    ]
+
+    issues = ai_check_summary.validate_implementation_approach(
+        approach, {"scope": ["scripts/ai_check_summary.py"]}
+    )
+
+    assert any("does not exist" in issue for issue in issues)
+    assert any("verified claims require" in issue for issue in issues)

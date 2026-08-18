@@ -1,5 +1,7 @@
 """Focused tests for evidence-derived Task Outcome generation."""
 
+import json
+
 from scripts.ai_check_task_outcome import validate_outcome
 from scripts.ai_generate_task_outcome import generate_outcome, render_markdown
 
@@ -30,6 +32,143 @@ def event(event_id: str, event_type: str, **extra: object) -> dict[str, object]:
     }
 
 
+def implementation_approach() -> dict[str, object]:
+    refs = [{"source": "scripts/ai_generate_task_outcome.py", "subject": "projection"}]
+    return {
+        "approachType": "implementation",
+        "status": "complete",
+        "summary": {
+            "text": "Customers can see how the governed result is produced.",
+            "status": "verified",
+            "evidence": refs,
+        },
+        "mechanism": {
+            "text": "Summary approach data is projected into the Outcome sections.",
+            "status": "verified",
+            "evidence": refs,
+        },
+        "affectedComponents": [
+            {
+                "component": "Task Outcome",
+                "detail": "Carries the structured approach.",
+                "status": "verified",
+                "evidence": refs,
+            }
+        ],
+        "designDecisions": [
+            {
+                "decision": "Use evidence references for factual claims.",
+                "reason": "Reviewers can inspect the source.",
+                "status": "verified",
+                "evidence": refs,
+            }
+        ],
+        "technicalDetails": [],
+        "evidence": [
+            {
+                "claim": "The projection has a deterministic code path.",
+                "status": "verified",
+                "source": "scripts/ai_generate_task_outcome.py",
+                "subject": "projection",
+            }
+        ],
+    }
+
+
+def test_generator_projects_summary_implementation_approach_and_evidence():
+    approach = implementation_approach()
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={"implementationApproach": approach},
+    )
+
+    assert outcome["sections"]["implementationApproach"] == approach
+    assert "Customers can see how the governed result is produced." in render_markdown(outcome)
+
+
+def test_ai_finish_summary_source_is_projected_without_manual_approach_input(tmp_path, monkeypatch):
+    import ai_finish
+
+    contract_path = tmp_path / "task.contract.json"
+    summary_path = tmp_path / "task.summary.json"
+    contract_path.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "verification": [],
+                "implementationApproach": implementation_approach(),
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+    monkeypatch.chdir(tmp_path)
+
+    payload = ai_finish._pre_merge_outcome_input(
+        "task-outcome-generator", contract_path, summary_path, "en"
+    )
+    outcome = generate_outcome(
+        "task-outcome-generator", payload["bindings"], evidence=payload["evidence"]
+    )
+
+    assert outcome["sections"]["implementationApproach"] == implementation_approach()
+
+
+def test_missing_implementation_approach_becomes_a_yellow_incomplete_warning():
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={"sources": [{"source": "task.summary.json", "subject": "Summary"}]},
+    )
+
+    assert outcome["sections"]["implementationApproach"]["status"] == "incomplete"
+    assert outcome["status"] == "completed_with_warnings"
+    assert outcome["humanStatusColor"] == "yellow"
+    assert any("Implementation Approach" in warning for warning in outcome["sections"]["warnings"])
+
+
+def test_legacy_contract_without_approach_signal_remains_not_applicable(tmp_path):
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    contract.write_text(json.dumps({"workItemId": "task-outcome-generator"}), encoding="utf-8")
+    summary.write_text(json.dumps({}), encoding="utf-8")
+
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "sources": [
+                {"source": str(contract), "subject": "Contract"},
+                {"source": str(summary), "subject": "Summary"},
+            ]
+        },
+    )
+
+    assert outcome["sections"]["implementationApproach"]["status"] == "not_applicable"
+    assert outcome["status"] == "completed"
+
+
+def test_unverified_approach_does_not_claim_benchmark_performance():
+    approach = implementation_approach()
+    approach["summary"] = {
+        "text": "The path changed; no benchmark was run.",
+        "status": "unverified",
+        "evidence": [],
+    }
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={"implementationApproach": approach},
+    )
+
+    rendered = render_markdown(outcome)
+    assert "performance improved" not in rendered.lower()
+    assert "no benchmark was run" in rendered
+
+
 def test_empty_evidence_has_all_sections_and_none_markdown() -> None:
     outcome = generate_outcome("task-outcome-generator", bindings(), events=[])
     assert outcome["status"] == "completed"
@@ -51,6 +190,7 @@ def test_empty_evidence_has_all_sections_and_none_markdown() -> None:
         "residualRisks",
         "humanDecisions",
         "evidence",
+        "implementationApproach",
     }
     markdown = render_markdown(outcome)
     assert "## Findings\nNone" in markdown
