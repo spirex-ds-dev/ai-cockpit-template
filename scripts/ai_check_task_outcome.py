@@ -365,10 +365,15 @@ def _validate_severities(sections: Mapping[str, Any], errors: list[ValidationErr
                 _error(errors, "severity", f"{section}[{index}].severity is invalid")
 
 
-def _validate_claims(sections: Mapping[str, Any], errors: list[ValidationError]) -> None:
+def _validate_claims(
+    sections: Mapping[str, Any],
+    errors: list[ValidationError],
+    contract: Mapping[str, Any] | None = None,
+) -> None:
     approach = sections.get("implementationApproach")
     if isinstance(approach, Mapping):
-        for issue in validate_implementation_approach(approach):
+        approach_contract = dict(contract) if contract else None
+        for issue in validate_implementation_approach(approach, approach_contract):
             _error(errors, "implementation_approach_evidence", issue)
     warnings = sections.get("warnings", [])
     limitations = sections.get("limitations", [])
@@ -526,6 +531,7 @@ def validate_outcome(
     *,
     events: Sequence[Mapping[str, Any]] = (),
     expected_task_id: str | None = None,
+    contract: Mapping[str, Any] | None = None,
 ) -> ValidationReport:
     """Validate one Outcome and return structured errors without mutating input."""
 
@@ -543,7 +549,7 @@ def validate_outcome(
     _validate_human_handoff_projection(outcome, errors)
     _validate_sections(outcome.get("sections"), errors)
     if isinstance(outcome.get("sections"), dict):
-        _validate_claims(outcome["sections"], errors)
+        _validate_claims(outcome["sections"], errors, contract)
         _validate_severities(outcome["sections"], errors)
         _validate_markdown(markdown, outcome, outcome["sections"], errors)
     _validate_events(events, errors)

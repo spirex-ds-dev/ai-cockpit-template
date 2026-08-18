@@ -676,6 +676,32 @@ def human_benefit_report_issues(contract_path: Path) -> list[str]:
     return validate_human_report(report, outcome, phase="review", markdown=markdown)
 
 
+def archive_owns_knowledge_projection(
+    path: str,
+    archive_entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
+    all_paths: list[str],
+) -> bool:
+    """Accept archive-generated knowledge files named by a frozen Summary.
+
+    The projection is generated during archive, after the active Contract has
+    moved. A legacy Contract may predate the default knowledge scope, so the
+    archived Summary's exact generated paths are the durable ownership evidence
+    for this derived surface.
+    """
+    if path != ".ai/knowledge/index.json" and not path.startswith(".ai/knowledge/work-items/"):
+        return False
+    for _contract_path, _contract, summary, _rank in archive_entries:
+        changed = set(changed_file_paths(summary))
+        if path not in changed or path not in all_paths:
+            continue
+        required = {".ai/knowledge/index.json"}
+        if path.startswith(".ai/knowledge/work-items/"):
+            required.add(path)
+        if required.issubset(changed) and required.issubset(all_paths):
+            return True
+    return False
+
+
 def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     issues: list[str] = []
     evidence_changes = archive_evidence_changes(base)
@@ -958,6 +984,8 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         """Accept generated archive metadata only when archived evidence names it."""
         if path in report_paths:
             return current_archive_owns_report_pair()
+        if path == ".ai/knowledge/index.json" or path.startswith(".ai/knowledge/work-items/"):
+            return archive_owns_knowledge_projection(path, archive_entries, all_paths)
         if path in current_archive_generated_paths():
             return True
         return path == generated_archive_index and any(

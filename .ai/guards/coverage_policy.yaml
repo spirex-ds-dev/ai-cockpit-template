@@ -79,6 +79,15 @@ tests:
 # test path must match a test pattern after placeholders are expanded from that
 # production path. Supported placeholders: {stem}, {module}, {name}, and {dir}.
 associations:
+  implementationKnowledgeProjection:
+    production:
+      - "scripts/ai_generate_knowledge_record.py"
+      - "scripts/ai_check_knowledge_index.py"
+      - "scripts/ai_archive_work_item.py"
+      - "scripts/ai_close_work_item.py"
+    tests:
+      - "tests/test_implementation_knowledge.py"
+      - "tests/test_knowledge_installer_parity.py"
   lifecycleTruthCore:
     production:
       - "scripts/ai_lifecycle_truth.py"
@@ -98,6 +107,7 @@ associations:
       - "tests/test_work_item_intelligence.py"
       - "tests/test_work_item_intelligence_integration.py"
       - "tests/test_projection_isolation.py"
+      - "tests/test_start_and_archive.py"
   workItemStatusInterface:
     production:
       - "scripts/ai_generate_work_item_status.py"
@@ -162,6 +172,7 @@ associations:
       - "scripts/ai_generate_human_report.py"
     tests:
       - "tests/test_human_benefit_report.py"
+      - "tests/test_task_outcome_validator.py"
   onboardingGuidance:
     production:
       - "scripts/ai_onboard.py"
@@ -188,8 +199,10 @@ associations:
       - "scripts/ai_finish.py"
       - "scripts/ai_generate_status.py"
       - "scripts/ai_governance_compression.py"
+      - "scripts/ai_outcome_gate.py"
     tests:
       - "tests/test_task_outcome_ai_finish_integration.py"
+      - "tests/test_task_outcome_validator.py"
   coverageGuard:
     production:
       - "scripts/ai_check_coverage_guard.py"
@@ -280,6 +293,7 @@ associations:
       - "scripts/ai_check_pr.py"
     tests:
       - "tests/test_pr_aggregate.py"
+      - "tests/test_start_and_archive.py"
   adoptionReadiness:
     production:
       - "scripts/ai_check_adoption_ready.py"

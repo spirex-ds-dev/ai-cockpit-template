@@ -209,6 +209,62 @@
       "verifyInstalledSurface": true
     },
     {
+      "id": "implementation_knowledge_projection",
+      "title": "Evidence-bound Implementation Knowledge projection",
+      "adopterFacing": true,
+      "status": "adopter_installed",
+      "truth": "adopter_installed",
+      "ownership": "template_and_installer",
+      "summary": "Projects Summary, Outcome, and repository evidence into deterministic Work Item implementation knowledge records and a lightweight index.",
+      "templateFiles": [
+        "scripts/ai_generate_knowledge_record.py",
+        "scripts/ai_check_knowledge_index.py",
+        ".ai/schemas/implementation-knowledge-record.schema.json",
+        ".ai/schemas/implementation-knowledge-index.schema.json",
+        "templates/make/Makefile.ai",
+        "docs/reference/implementation-knowledge.md"
+      ],
+      "installedFiles": [
+        "scripts/ai_generate_knowledge_record.py",
+        "scripts/ai_check_knowledge_index.py",
+        ".ai/schemas/implementation-knowledge-record.schema.json",
+        ".ai/schemas/implementation-knowledge-index.schema.json",
+        "Makefile.ai"
+      ],
+      "catalogScripts": [
+        "ai_generate_knowledge_record.py",
+        "ai_check_knowledge_index.py"
+      ],
+      "makeTargets": [
+        "ai-generate-knowledge-record",
+        "ai-check-knowledge-index"
+      ],
+      "schemas": [
+        ".ai/schemas/implementation-knowledge-record.schema.json",
+        ".ai/schemas/implementation-knowledge-index.schema.json"
+      ],
+      "entrypoints": [
+        {
+          "path": "scripts/ai_generate_knowledge_record.py",
+          "args": [
+            "--help"
+          ],
+          "sideEffect": "none"
+        },
+        {
+          "path": "scripts/ai_check_knowledge_index.py",
+          "args": [
+            "--help"
+          ],
+          "sideEffect": "none"
+        }
+      ],
+      "docs": [
+        "docs/reference/implementation-knowledge.md"
+      ],
+      "verifyInstalledSurface": true
+    },
+    {
       "id": "implementation_knowledge_reports",
       "title": "Summary, Task Outcome, and Human Report implementation knowledge",
       "adopterFacing": true,

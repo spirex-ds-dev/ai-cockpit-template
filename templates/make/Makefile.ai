@@ -39,7 +39,7 @@ QUALITY_REQUIRED_GROUPS ?= quality-fast check-ai-reference-impact project-test
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-synchronize-work-item ai-transition-conflict-successor ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy check-changed-critical-coverage \
-	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis check-ai-task-outcome repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact generate-human-benefit-report check-human-benefit-report ai-lifecycle-facts ai-work-item-status ai-work-item-intelligence-rebuild ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
+	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis ai-generate-knowledge-record ai-check-knowledge-index check-ai-task-outcome repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact generate-human-benefit-report check-human-benefit-report ai-lifecycle-facts ai-work-item-status ai-work-item-intelligence-rebuild ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 	check-ai-lifecycle-truth
 
 ai-help:
@@ -97,6 +97,14 @@ check-adopter-capability-manifest:
 
 ai-generate-work-item-status:
 	$(AI_PYTHON) scripts/ai_generate_work_item_status.py --root . $(ARGS)
+
+ai-generate-knowledge-record:
+	@test -n "$(CONTRACT)" -a -n "$(SUMMARY)" -a -n "$(OUTCOME)" || (echo 'CONTRACT, SUMMARY, and OUTCOME are required' >&2; exit 2)
+	@test -n "$(TASK)" -o -n "$(OUTPUT)" || (echo 'TASK or OUTPUT is required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_generate_knowledge_record.py --contract "$(CONTRACT)" --summary "$(SUMMARY)" --outcome "$(OUTCOME)" --output "$(or $(OUTPUT),.ai/knowledge/work-items/$(TASK).json)" --index "$(or $(INDEX),.ai/knowledge/index.json)" --repo-root .
+
+ai-check-knowledge-index:
+	$(AI_PYTHON) scripts/ai_check_knowledge_index.py --index "$(or $(INDEX),.ai/knowledge/index.json)" --records "$(or $(RECORDS),.ai/knowledge/work-items)" --repo-root .
 
 ai-governance-cost:
 	@if test "$(ARGS)" != "--help" && { test -z "$(WORK_ITEM)" -o -z "$(JSON_OUTPUT)" -o -z "$(MARKDOWN_OUTPUT)"; }; then echo 'WORK_ITEM, JSON_OUTPUT, and MARKDOWN_OUTPUT are required'; exit 2; fi

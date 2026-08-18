@@ -75,7 +75,7 @@ QUALITY_SESSION_LOCK_HELD ?= false
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report ai-record-external-handoff ai-ingest-external-receipt \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
 	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
-	ai-work-item-status ai-work-item-intelligence-rebuild check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis
+	ai-work-item-status ai-work-item-intelligence-rebuild check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis ai-generate-knowledge-record ai-check-knowledge-index
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
@@ -651,6 +651,14 @@ check-adopter-capability-manifest:
 
 ai-generate-work-item-status:
 	$(AI_PYTHON) scripts/ai_generate_work_item_status.py --root . $(ARGS)
+
+ai-generate-knowledge-record:
+	@test -n "$(CONTRACT)" -a -n "$(SUMMARY)" -a -n "$(OUTCOME)" || (echo 'CONTRACT, SUMMARY, and OUTCOME are required' >&2; exit 2)
+	@test -n "$(TASK)" -o -n "$(OUTPUT)" || (echo 'TASK or OUTPUT is required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_generate_knowledge_record.py --contract "$(CONTRACT)" --summary "$(SUMMARY)" --outcome "$(OUTCOME)" --output "$(or $(OUTPUT),.ai/knowledge/work-items/$(TASK).json)" --index "$(or $(INDEX),.ai/knowledge/index.json)" --repo-root .
+
+ai-check-knowledge-index:
+	$(AI_PYTHON) scripts/ai_check_knowledge_index.py --index "$(or $(INDEX),.ai/knowledge/index.json)" --records "$(or $(RECORDS),.ai/knowledge/work-items)" --repo-root .
 
 ai-governance-cost:
 	@if test "$(ARGS)" != "--help" && { test -z "$(WORK_ITEM)" -o -z "$(JSON_OUTPUT)" -o -z "$(MARKDOWN_OUTPUT)"; }; then echo 'WORK_ITEM, JSON_OUTPUT, and MARKDOWN_OUTPUT are required'; exit 2; fi

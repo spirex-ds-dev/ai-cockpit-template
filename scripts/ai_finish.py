@@ -69,6 +69,9 @@ REPORT_BOUNDARY_TEXT = {
 }
 
 CURRENT_REPORT_LANGUAGE = "en"
+PRE_MERGE_MERGE_IDENTITY_GAP_PREFIX = (
+    "Merged commit identity is intentionally null until a post-merge binding exists;"
+)
 
 
 def checkpoint_recovery_guidance(issues: list[str], *, contract: str, summary: str) -> str:
@@ -644,6 +647,8 @@ def bind_pre_archive_candidate_coverage_to_outcome(task: str) -> tuple[bool, str
     try:
         report_bytes = report_path.read_bytes()
         report = json.loads(report_bytes)
+        contract_path = PROJECT_ROOT / ".ai" / "work-items" / "active" / f"{task}.contract.json"
+        contract = load_json(contract_path) if contract_path.is_file() else None
         outcome = load_json(json_path)
         binding = report.get("binding") if isinstance(report, dict) else None
         if not isinstance(binding, dict):
@@ -659,7 +664,7 @@ def bind_pre_archive_candidate_coverage_to_outcome(task: str) -> tuple[bool, str
             "binding": {key: binding[key] for key in required},
         }
         markdown = render_task_outcome(outcome)
-        validation = validate_outcome(outcome, markdown, expected_task_id=task)
+        validation = validate_outcome(outcome, markdown, expected_task_id=task, contract=contract)
         if not validation.valid:
             return False, "; ".join(f"{item.code}: {item.message}" for item in validation.errors)
         save_json(json_path, outcome)
@@ -1023,7 +1028,9 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
     json_path, markdown_path = _human_report_paths()
     try:
         outcome = load_json(outcome_path)
-        report = generate_human_report(outcome, phase="review")
+        contract_path = PROJECT_ROOT / ".ai" / "work-items" / "active" / f"{task}.contract.json"
+        contract = load_json(contract_path) if contract_path.is_file() else None
+        report = generate_human_report(outcome, phase="review", contract=contract)
         save_json(json_path, report)
         markdown_path.write_text(render_human_report(report), encoding="utf-8")
         summary = load_json(summary_path)
@@ -1093,7 +1100,15 @@ def refresh_archived_human_report(task: str) -> tuple[bool, str]:
         return False, f"expected exactly one archived Task Outcome for {task}, found {len(matches)}"
     json_path, markdown_path = _human_report_paths()
     try:
-        report = generate_human_report(load_json(matches[0]), phase="review")
+        contract_path = matches[0].with_name(
+            matches[0].name.replace(".outcome.json", ".contract.json")
+        )
+        contract = load_json(contract_path) if contract_path.is_file() else None
+        report = generate_human_report(
+            load_json(matches[0]),
+            phase="review",
+            contract=contract,
+        )
         save_json(json_path, report)
         markdown_path.write_text(render_human_report(report), encoding="utf-8")
     except (OSError, KeyError, TypeError, ValueError) as exc:
@@ -1458,10 +1473,18 @@ def _pre_merge_outcome_input(
             for reference in item["evidence"]
         )
     }
+    residual_risks = summary.get("residualRisks", [])
+    merge_identity_risk_is_explicit = isinstance(residual_risks, list) and any(
+        isinstance(item, dict) and item.get("area") == "merge_identity" for item in residual_risks
+    )
     warnings = [
         item
         for item in summary.get("knownGaps", [])
-        if isinstance(item, str) and item not in evidenced_non_risk_warnings
+        if isinstance(item, str)
+        and item not in evidenced_non_risk_warnings
+        and not (
+            merge_identity_risk_is_explicit and item.startswith(PRE_MERGE_MERGE_IDENTITY_GAP_PREFIX)
+        )
     ]
     limitations = [
         {
@@ -1792,7 +1815,12 @@ def _write_and_validate_pre_merge_outcome(
             evidence=payload["evidence"],
         )
         markdown = render_task_outcome(outcome)
-        report = validate_outcome(outcome, markdown, expected_task_id=task)
+        report = validate_outcome(
+            outcome,
+            markdown,
+            expected_task_id=task,
+            contract=load_json(contract_path),
+        )
         if not report.valid:
             return False, "; ".join(f"{item.code}: {item.message}" for item in report.errors)
         save_json(json_path, outcome)
@@ -1876,7 +1904,12 @@ def write_blocked_outcome(
             evidence=evidence,
         )
         markdown = render_task_outcome(outcome)
-        report = validate_outcome(outcome, markdown, expected_task_id=task)
+        report = validate_outcome(
+            outcome,
+            markdown,
+            expected_task_id=task,
+            contract=load_json(contract_path),
+        )
         if not report.valid:
             return False, "; ".join(f"{item.code}: {item.message}" for item in report.errors)
         save_json(json_path, outcome)
@@ -2050,6 +2083,9 @@ def run_task_outcome_pipeline(
         return False, message
 
     python = sys.executable
+    contract_argument = (
+        str(contract_path.relative_to(PROJECT_ROOT)) if contract_path is not None else ""
+    )
     commands = [
         [
             python,
@@ -2061,10 +2097,11 @@ def run_task_outcome_pipeline(
         [
             python,
             "-c",
-            "from pathlib import Path; import sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; import json; outcome=json.loads(Path(sys.argv[1]).read_text()); report=validate_outcome(outcome, expected_task_id=sys.argv[3]); print('valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)",
+            "from pathlib import Path; import sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; import json; outcome=json.loads(Path(sys.argv[1]).read_text()); contract=json.loads(Path(sys.argv[4]).read_text()) if sys.argv[4] else None; report=validate_outcome(outcome, expected_task_id=sys.argv[3], contract=contract); print('valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)",
             str(json_path.relative_to(PROJECT_ROOT)),
             str(markdown_path.relative_to(PROJECT_ROOT)),
             task,
+            contract_argument,
         ],
         [
             python,
@@ -2075,10 +2112,11 @@ def run_task_outcome_pipeline(
         [
             python,
             "-c",
-            "from pathlib import Path; import sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; import json; outcome=json.loads(Path(sys.argv[1]).read_text()); report=validate_outcome(outcome, Path(sys.argv[2]).read_text(), expected_task_id=sys.argv[3]); print('valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)",
+            "from pathlib import Path; import sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; import json; outcome=json.loads(Path(sys.argv[1]).read_text()); contract=json.loads(Path(sys.argv[4]).read_text()) if sys.argv[4] else None; report=validate_outcome(outcome, Path(sys.argv[2]).read_text(), expected_task_id=sys.argv[3], contract=contract); print('valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)",
             str(json_path.relative_to(PROJECT_ROOT)),
             str(markdown_path.relative_to(PROJECT_ROOT)),
             task,
+            contract_argument,
         ],
     ]
     for command in commands:
@@ -2173,7 +2211,15 @@ def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
     # and the complete human-benefit report are renderable.  Do not silently
     # downgrade to a status-only or localized-only surface: that would make a
     # missing report look like a successful human handoff.
-    human_summary = render_human_report(generate_human_report(outcome))
+    contract = None
+    work_item_id = outcome.get("workItemId")
+    if isinstance(work_item_id, str):
+        contract_path = (
+            PROJECT_ROOT / ".ai" / "work-items" / "active" / f"{work_item_id}.contract.json"
+        )
+        if contract_path.is_file():
+            contract = load_json(contract_path)
+    human_summary = render_human_report(generate_human_report(outcome, contract=contract))
     return (
         f"Outcome: {traffic_light} {outcome.get('status', 'unknown')}\n"
         f"{heading}\n{render_localized_outcome(outcome, locale)}\n"

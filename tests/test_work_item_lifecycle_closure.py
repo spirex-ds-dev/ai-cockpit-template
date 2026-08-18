@@ -173,6 +173,42 @@ def test_superseded_archived_evidence_accepts_bound_failed_verification_summary(
     assert closure._verify_archived_evidence("example") == contract
 
 
+def test_declared_knowledge_projection_missing_blocks_close(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    task = "declared-knowledge"
+    contract_path = archive / f"{task}.contract.json"
+    contract_path.write_text(
+        json.dumps(
+            {
+                "contractVersion": 1,
+                "workItemId": task,
+                "scope": [".ai/knowledge/**"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    contract_path.with_name(f"{task}.summary.json").write_text(
+        json.dumps({"workItemId": task}), encoding="utf-8"
+    )
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text("- State: `no_active_work_item`\n", encoding="utf-8")
+    monkeypatch.setattr(closure, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(closure, "ARCHIVE_DIR", tmp_path / ".ai/work-items/archive")
+    monkeypatch.setattr(closure, "ACTIVE_DIR", active)
+    monkeypatch.setattr(closure, "STATUS_PATH", status)
+    monkeypatch.setattr(closure, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(closure, "validate_summary", lambda *_args, **_kwargs: [])
+
+    with pytest.raises(RuntimeError, match="Implementation Knowledge Record is missing"):
+        closure._verify_archived_evidence(task)
+
+
 def test_superseded_archived_evidence_rejects_unrelated_summary_error(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

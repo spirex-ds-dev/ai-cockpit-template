@@ -394,6 +394,7 @@ class Installer:
         pairs: list[tuple[Path, Path]] = []
         pruned_roots = (
             {
+                Path("knowledge"),
                 Path("work-items/active"),
                 Path("work-items/archive"),
                 Path("work-items/starts"),

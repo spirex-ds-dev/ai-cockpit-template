@@ -232,8 +232,12 @@ def _implementation_approach_lines(approach: Mapping[str, Any]) -> list[str]:
     return lines
 
 
-def _validate_source(outcome: Mapping[str, Any]) -> None:
-    report = validate_outcome(outcome, expected_task_id=str(outcome.get("workItemId", "")))
+def _validate_source(outcome: Mapping[str, Any], contract: Mapping[str, Any] | None = None) -> None:
+    report = validate_outcome(
+        outcome,
+        expected_task_id=str(outcome.get("workItemId", "")),
+        contract=contract,
+    )
     if not report.valid:
         detail = "; ".join(f"{item.code}: {item.message}" for item in report.errors)
         raise ValueError(f"Task Outcome is invalid: {detail}")
@@ -265,12 +269,13 @@ def generate_human_report(
     *,
     phase: str = "review",
     closure_facts: Mapping[str, Any] | None = None,
+    contract: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Project one validated Task Outcome into a concise human decision view."""
 
     if phase not in PHASES:
         raise ValueError(f"unsupported Human Benefit Report phase: {phase}")
-    _validate_source(outcome)
+    _validate_source(outcome, contract)
     sections = outcome["sections"]
     handoff = outcome.get("humanHandoff")
     findings = _mapping_list(sections.get("findings"))

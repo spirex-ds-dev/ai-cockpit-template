@@ -10,7 +10,7 @@ import shutil
 import subprocess
 import sys
 import time
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -37,6 +37,63 @@ ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 STATUS_PATH = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
 CLOSURE_RECEIPTS_DIR = PROJECT_ROOT / "target" / "task-closure-receipts"
+
+
+def _verify_knowledge_projection(task: str) -> None:
+    """Prevent closure when the current archived projection is absent or stale."""
+    record_path = PROJECT_ROOT / ".ai" / "knowledge" / "work-items" / f"{task}.json"
+    index_path = PROJECT_ROOT / ".ai" / "knowledge" / "index.json"
+    if not record_path.is_file():
+        raise RuntimeError(
+            "archived Implementation Knowledge Record is missing: "
+            f"{record_path.relative_to(PROJECT_ROOT)}"
+        )
+    from ai_check_knowledge_index import check_record
+
+    issues = check_record(record_path, repo_root=PROJECT_ROOT)
+    if issues:
+        raise RuntimeError(
+            "archived Implementation Knowledge Record is stale or invalid: " + "; ".join(issues)
+        )
+    try:
+        index = load_json(index_path)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"Implementation Knowledge index is unreadable: {index_path}") from exc
+    entries = index.get("workItems") if isinstance(index, dict) else None
+    if not isinstance(entries, list) or not any(
+        isinstance(item, dict) and item.get("workItemId") == task for item in entries
+    ):
+        raise RuntimeError(f"Implementation Knowledge index is missing Work Item: {task}")
+
+
+def _knowledge_projection_is_required(
+    task: str, contract: Mapping[str, object], summary: Mapping[str, object]
+) -> bool:
+    """Require projection verification only for WIs that own the new surface.
+
+    Archived Work Items predate Implementation Knowledge and must remain closable
+    from their historical evidence.  New Contracts declare the projection scope,
+    while an archived Summary can bind the generated record/index explicitly.
+    """
+    record_path = PROJECT_ROOT / ".ai" / "knowledge" / "work-items" / f"{task}.json"
+    if record_path.is_file():
+        return True
+
+    scope = contract.get("scope")
+    if isinstance(scope, list) and ".ai/knowledge/**" in scope:
+        return True
+
+    changed_files = summary.get("changedFiles")
+    if not isinstance(changed_files, list):
+        return False
+    for item in changed_files:
+        path = item.get("path") if isinstance(item, dict) else None
+        if path in {
+            ".ai/knowledge/index.json",
+            f".ai/knowledge/work-items/{task}.json",
+        }:
+            return True
+    return False
 
 
 @dataclass(frozen=True)
@@ -134,7 +191,12 @@ def generate_final_human_report(
 
     outcome_path = _archived_outcome_path(contract_path)
     outcome = load_json(outcome_path)
-    report = generate_human_report(outcome, phase="final", closure_facts=closure_facts)
+    report = generate_human_report(
+        outcome,
+        phase="final",
+        closure_facts=closure_facts,
+        contract=load_json(contract_path),
+    )
     markdown = render_human_report(report)
     issues = validate_human_report(
         report,
@@ -331,6 +393,8 @@ def _verify_archived_evidence(task: str) -> Path:
         )
         if not gate.valid:
             raise RuntimeError("archived Task Outcome gate failed: " + "; ".join(gate.issues))
+    if _knowledge_projection_is_required(task, contract, summary):
+        _verify_knowledge_projection(task)
     if "- State: `no_active_work_item`" not in STATUS_PATH.read_text(encoding="utf-8"):
         raise RuntimeError("Cockpit Status is not no_active_work_item")
     return contract_path
