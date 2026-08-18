@@ -77,6 +77,23 @@ None
 - verification[aiCoverage] retry passed
 - verificationHistory[1] aiCoverage failed
 
+## Implementation Approach
+Status: `incomplete`
+Customer summary (unknown): None recorded.
+Mechanism (unknown): None recorded.
+
+Affected components
+- None recorded.
+
+Design decisions
+- None recorded.
+
+### Technical details
+- None recorded.
+
+### Evidence
+- None recorded.
+
 ## Human Handoff
 Locale: `en`
 
