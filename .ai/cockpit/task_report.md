@@ -17,28 +17,6 @@ What was completed
 - Changed .ai/work-items/active/verification-reuse-checker-bindings.outcome.md [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed .ai/schemas/task_outcome.schema.json [evidence: .ai/schemas/task_outcome.schema.json]
-- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
-- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
-- Changed scripts/ai_check_summary.py [evidence: scripts/ai_check_summary.py]
-- Changed scripts/ai_check_task_outcome.py [evidence: scripts/ai_check_task_outcome.py]
-- Changed scripts/ai_generate_task_outcome.py [evidence: scripts/ai_generate_task_outcome.py]
-- Changed scripts/ai_render_task_outcome.py [evidence: scripts/ai_render_task_outcome.py]
-- Changed scripts/ai_generate_human_report.py [evidence: scripts/ai_generate_human_report.py]
-- Changed scripts/ai_finish.py [evidence: scripts/ai_finish.py]
-- Changed tests/test_ai_check_summary.py [evidence: tests/test_ai_check_summary.py]
-- Changed tests/test_task_outcome_schema.py [evidence: tests/test_task_outcome_schema.py]
-- Changed tests/test_task_outcome_validator.py [evidence: tests/test_task_outcome_validator.py]
-- Changed tests/test_task_outcome_generator.py [evidence: tests/test_task_outcome_generator.py]
-- Changed tests/test_task_outcome_markdown_renderer.py [evidence: tests/test_task_outcome_markdown_renderer.py]
-- Changed tests/test_human_benefit_report.py [evidence: tests/test_human_benefit_report.py]
-- Changed tests/test_task_outcome_ai_finish_integration.py [evidence: tests/test_task_outcome_ai_finish_integration.py]
-- Changed .ai/work-items/active/implementation-approach-evidence.outcome.json [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.outcome.json]
-- Changed .ai/work-items/active/implementation-approach-evidence.outcome.md [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.outcome.md]
 
 Problems found
 - Total: 7
@@ -86,7 +64,6 @@ Human decisions
 - User review rejected test-only diff/environment checker ids because ai_verify.main starts with an empty registry; mapping must use existing checker ids and preserve verify_stage/release protected semantics. (inference)
 
 Verification
-- sourceBoundEvidence [evidence: sourceBoundEvidence]
 - aiWorkItem [evidence: aiWorkItem]
 - aiScope [evidence: aiScope]
 - aiGuards [evidence: aiGuards]
