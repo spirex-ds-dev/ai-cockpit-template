@@ -774,8 +774,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
                 f"{contract_rel}, {summary_rel}"
             )
 
-    if not contract_paths:
-        contract_paths = recovery_only_contract_paths(base)
+    contract_paths = contract_paths or recovery_only_contract_paths(base)
     if not contract_paths:
         return ["PR diff must contain at least one archived Work Item Contract"]
 
