@@ -4,66 +4,81 @@ Task Result
 Status: Success
 
 What was completed
-- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/active/verification-reuse-checker-bindings.contract.json [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.contract.json]
-- Changed .ai/work-items/active/verification-reuse-checker-bindings.summary.json [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.summary.json]
-- Changed .ai/work-items/starts/verification-reuse-checker-bindings.json [evidence: .ai/work-items/starts/verification-reuse-checker-bindings.json]
-- Changed docs/reference/verification-evidence-reuse-runtime.md [evidence: docs/reference/verification-evidence-reuse-runtime.md]
-- Changed scripts/ai_verification_runtime.py [evidence: scripts/ai_verification_runtime.py]
-- Changed scripts/ai_verify.py [evidence: scripts/ai_verify.py]
-- Changed tests/test_ai_verify.py [evidence: tests/test_ai_verify.py]
-- Changed tests/test_ai_verification_runtime.py [evidence: tests/test_ai_verification_runtime.py]
-- Changed .ai/work-items/active/verification-reuse-checker-bindings.outcome.json [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.outcome.json]
-- Changed .ai/work-items/active/verification-reuse-checker-bindings.outcome.md [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.outcome.md]
-- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
-- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
+
+Implementation Approach
+Status: `complete`
+Customer summary (verified): The repository now treats the already published v0.5.66 provider assets as the published projection and prepares v0.5.67 as the next candidate without reusing an immutable tag.
+Mechanism (verified): Verified v0.5.66 release assets are downloaded with provider-reported SHA-256 digests, passed through the atomic synchronizer, and followed by candidate-only SBOM and provenance refresh against the merged source HEAD.
+
+Affected components
+- Published release projection: release.json and release-digests.json now bind v0.5.66 provider evidence. (verified)
+- Candidate release projection: release-state.json, next-release.json, version.json, and install.sh identify v0.5.67 as the unpublished candidate. (verified)
+- Candidate supply-chain evidence: SBOM and provenance are regenerated from the merged source HEAD and their digests are bound into next-release.json. (verified)
+
+Design decisions
+- Do not rewrite or reuse v0.5.66.: The provider tag and stable Release are immutable historical evidence; the next candidate must be v0.5.67. (verified)
+- Keep published and candidate projections separate.: Quick Install must remain bound to published release evidence while candidate metadata remains explicitly unpublished. (verified)
+
+### Technical details
+- Atomic synchronization: The synchronizer validates release and manifest tags, source identity, asset digests, reserved-tag evidence, and all writes before replacing projections. (verified)
+- Candidate evidence: Candidate SBOM/provenance are regenerated from HEAD; public v0.5.66 release digests remain the historical published projection. (verified)
+
+### Evidence
+- The stable v0.5.66 release is validated against public assets.: scripts/check_release_distribution.py#release distribution check (verified)
+- The next candidate is v0.5.67 and is not published.: next-release.json#candidate metadata (verified)
+- Candidate supply-chain files match their declared digests.: scripts/check_supply_chain.py#provenance and release checks (verified)
+
+- Changed .ai/work-items/active/release-v067-preparation.contract.json [evidence: .ai/work-items/archive/2026/release-v067-preparation.contract.json]
+- Changed .ai/work-items/active/release-v067-preparation.summary.json [evidence: .ai/work-items/archive/2026/release-v067-preparation.summary.json]
+- Changed .ai/work-items/starts/release-v067-preparation.json [evidence: .ai/work-items/starts/release-v067-preparation.json]
+- Changed release.json [evidence: release.json]
+- Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
+- Changed release-state.json [evidence: release-state.json]
+- Changed next-release.json [evidence: next-release.json]
+- Changed .ai/cockpit/version.json [evidence: .ai/cockpit/version.json]
+- Changed install.sh [evidence: install.sh]
+- Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
+- Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
+- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
+- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
+- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
+- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
+- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
+- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
+- Changed .ai/work-items/active/release-v067-preparation.outcome.json [evidence: .ai/work-items/archive/2026/release-v067-preparation.outcome.json]
+- Changed .ai/work-items/active/release-v067-preparation.outcome.md [evidence: .ai/work-items/archive/2026/release-v067-preparation.outcome.md]
 
 Problems found
-- Total: 7
+- Total: 2
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- Reason: aiCoverage failed before the retry. | Stage: verification | Resolution: Retry aiCoverage after correcting the recorded failure. [evidence: verificationHistory[0] aiCoverage failed, verification[aiCoverage] retry passed]
-- Reason: aiCoverage failed before the retry. | Stage: verification | Resolution: Retry aiCoverage after correcting the recorded failure. [evidence: verificationHistory[1] aiCoverage failed, verification[aiCoverage] retry passed]
+- None recorded.
 
 Problems resolved
-- Problem: The existing tests registry id, rather than invented diff or environment ids, executes on changed diff/environment bindings and is skipped only for a complete unchanged receipt.
-  Solution: Resolution status: resolved
-  Evidence: [evidence: changed diff, changed environment, unchanged receipt, protected release, and verify_stage registry tests, Concrete checker mapping and empty-default-registry CLI limitation]
-- Problem: The complete quality graph exited 0; five isolated test shards aggregated and the coverage floor was validated.
-  Solution: Resolution status: resolved
-  Evidence: [evidence: Aggregated project-test receipt]
-- Problem: The declared four scenarios are covered by the focused ai_verify/runtime tests, including real existing-id registry callbacks and protected receipt rejection.
-  Solution: Resolution status: resolved
-  Evidence: [evidence: Scenario coverage check passed, Concrete mapping scenario tests]
-- Problem: All three Contract guidelines passed their compliance check.
-  Solution: Resolution status: resolved
-  Evidence: [evidence: Guidelines compliance check passed]
-- Problem: The runtime production change is now associated with its changed tests/test_ai_verification_runtime.py binding_classes regression; the coverage guard reports no issues.
-  Solution: Resolution status: resolved
-  Evidence: [evidence: Coverage guard passed with the runtime regression test path, Concrete multi-binding rerun, fresh skip, and protected execution regression]
-- Problem: aiCoverage failed before the retry.
-  Solution: Re-ran aiCoverage after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] aiCoverage failed, verification[aiCoverage] retry passed]
-- Problem: aiCoverage failed before the retry.
-  Solution: Re-ran aiCoverage after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[1] aiCoverage failed, verification[aiCoverage] retry passed]
+- Problem: observed issue
+  Solution: Supplied the real GitHub Release evidence URL and stable_release_unverified classification; synchronization then completed atomically.
+  Evidence: [evidence: observedIssues[0] observed issue, observedIssues[0] observed issue]
+- Problem: observed issue
+  Solution: Ran refresh-candidate-release-evidence SOURCE_COMMIT=HEAD and verified provenance, release, and candidate digest checks.
+  Evidence: [evidence: observedIssues[1] observed issue, observedIssues[1] observed issue, observedIssues[1] observed issue]
 
 Risks avoided
-- If not detected, could have led to a stale completion claim. (inference)
-- If not detected, could have led to a stale completion claim. (inference)
+- None recorded.
 
 Remaining risks
-- The template CLI constructs an empty CheckerRegistry, so direct CLI output can prove existing runtime node ids but cannot prove callback execution without a host-provided registry. The injected existing-id registry path is covered by focused tests. This branch also intentionally retains the bce5d484 Summary schema: implementationApproach schema/projection is not present here, belongs to the separate implementation-approach-evidence Work Item, and should apply to later code/config Work Items only after that capability lands. [evidence: residualRisks]
+- This preparation WI intentionally stops at the evidence-bound v0.5.67 candidate; formal publication remains a separate exact-source release operation and is not claimed here. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- User review rejected test-only diff/environment checker ids because ai_verify.main starts with an empty registry; mapping must use existing checker ids and preserve verify_stage/release protected semantics. (inference)
+- Complete the existing WI goals before publishing a new version; Outcome green is not itself the release goal. (inference)
+- Do not allow a stale or reused release candidate to enter a future publication workflow. (inference)
 
 Verification
+- sourceBoundEvidence [evidence: sourceBoundEvidence]
 - aiWorkItem [evidence: aiWorkItem]
 - aiScope [evidence: aiScope]
 - aiGuards [evidence: aiGuards]
@@ -82,9 +97,9 @@ Verification
 - aiSummary [evidence: aiSummary]
 
 Impact
-- Rework avoided: If not detected, could have led to a stale completion claim. (inference)
+- Rework avoided: None recorded.
 - Repeat correction prevented: unknown: no direct recurrence probability evidence was recorded. (inference)
-- Major risk prevented: If not detected, could have led to a stale completion claim. (inference)
+- Major risk prevented: None recorded.
 
 Next action
 - Bind conversation locale and preserve evidence details before the next Work Item starts. (inference)

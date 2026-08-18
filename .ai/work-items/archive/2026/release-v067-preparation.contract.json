@@ -1,0 +1,240 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v067-preparation",
+  "mode": "code",
+  "title": "Prepare v0.5.67 after verified v0.5.66 publication",
+  "rawUserRequest": "完成现有既定目标以后发布新版本；发布前同步已发布版本的真实公开证据，不能复用已存在或失败保留的版本号，并按完整 Work Item、PR、合并、关闭流程完成。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-merge-release-close",
+    "capturedAt": "2026-08-18",
+    "digest": "sha256:publish-next-version-after-current-work-items"
+  },
+  "declaredIntent": {
+    "summary": "将公开发布的 v0.5.66 证据安全同步为仓库当前的 published projection，并推进不可复用的下一个候选 v0.5.67，确保正式发布从准确且可验证的 candidate metadata 开始。",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "baseCommit": "48198a3fa6c4a175808ba61e904be02bfa6c4abe",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v067-preparation.contract.json",
+    ".ai/work-items/active/release-v067-preparation.summary.json",
+    ".ai/cockpit/current_status.md",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "install.sh",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v067-preparation.outcome.json",
+    ".ai/work-items/active/release-v067-preparation.outcome.md"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.66",
+      "reason": "Published provider Release and immutable tag to be synchronized as repository evidence."
+    },
+    {
+      "path": "scripts/sync_published_release_projection.py",
+      "reason": "Canonical atomic synchronizer that promotes verified release assets and advances the candidate patch."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Executable validation of reserved tags, stable releases, projections, and candidate sequencing."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Release identity, candidate, source binding, and immutable tag policy."
+    },
+    {
+      "path": "origin/main@48198a3fa6c4a175808ba61e904be02bfa6c4abe",
+      "reason": "Exact merged base from which this preparation is performed."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["release_identity", "source_binding", "external_provider_evidence"],
+    "reason": "Release metadata is an adopter-facing identity boundary; a stale or reused tag would invalidate installation authority."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized merge, release, and close; this WI only prepares the evidence-bound next candidate."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Public v0.5.66 release.json and release-digests.json assets are downloaded and their SHA-256 digests are verified before synchronization.",
+    "The canonical synchronizer advances release.json, version.json, install.sh, release-state.json, and next-release.json so v0.5.66 is the published projection and v0.5.67 is the sole unpublished candidate.",
+    "The candidate does not reuse any immutable reserved tag, all reserved tags have explanatory unavailable evidence, and candidate supply-chain digests match the repository evidence.",
+    "Release state consistency, release readiness/distribution preparation, Work Item governance checks, and required project tests pass; no public tag or Release is created by this preparation WI."
+  ],
+  "guidelines": [
+    "Use the canonical source-bound projection synchronizer; do not hand-edit release identity or digest fields.",
+    "Do not reuse an immutable tag, delete historical release evidence, or claim publication before the provider workflow succeeds.",
+    "Keep the preparation limited to release projections and their evidence-bound Work Item records."
+  ],
+  "intent": {
+    "problem": "origin/main still projects v0.5.65 even though GitHub has a stable immutable v0.5.66 Release, while next-release.json still proposes the already reserved v0.5.66 tag.",
+    "constraints": [
+      "Do not mutate the existing v0.5.66 tag or public Release.",
+      "Do not publish from a moving work branch; the later release workflow must use the exact merged main SHA.",
+      "Preserve all historical unavailable-tag evidence and keep public release.json distinct from the next candidate projection."
+    ],
+    "rationale": "A canonical projection sync is required before a new release can be prepared; otherwise release preflight would bind the next publication to stale or reused identity facts."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The provider has stable v0.5.66 and immutable reserved v0.5.66, while source projections still reference v0.5.65.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The published projection becomes v0.5.66 and the next candidate becomes v0.5.67 without changing the provider release.",
+      "verificationPlan": "Run the canonical synchronizer with verified provider asset digests, then run release state and distribution checks."
+    },
+    {
+      "scenario": "The next candidate equals an immutable reserved tag.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Candidate preparation fails closed or advances past the reserved tag; it never claims the reserved version is publishable.",
+      "verificationPlan": "Run candidate sequencing validation against the real provider tag and release lists."
+    },
+    {
+      "scenario": "Release assets have a digest or source identity mismatch.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Synchronization makes no partial projection update and reports the mismatch.",
+      "verificationPlan": "Run the synchronizer's digest-bound CLI validation and its regression tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the release preparation and publication sequence; restricted release projections are updated only through the canonical synchronizer and evidence refresh."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 956
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v067-preparation.json",
+    "baseCommit": "48198a3fa6c4a175808ba61e904be02bfa6c4abe",
+    "initialScopeDigest": "46504b2eb6a4886477565a5d46b748c781653b359969795206a196b67b9c7e77",
+    "contractSkeletonDigest": "3a39e41c0d9f530634e747819b08a211202803745abfb54bce8fbb79d44a0e86"
+  }
+}
