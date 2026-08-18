@@ -1,0 +1,351 @@
+{
+  "contractVersion": 2,
+  "workItemId": "knowledge-query-interface-20260818",
+  "mode": "code",
+  "title": "Implement deterministic Implementation Knowledge Query Interface",
+  "rawUserRequest": "在已完成的 Implementation Knowledge Projection 之上，增加一个只读、确定性的 Knowledge Query Interface，支持按 workItemId、topic、component、commit、date、status 和日期范围检索；保留 verified、partial、unknown、superseded 等证据状态，不做 RAG、向量检索、LLM 排序、客户问答、历史回填或当前代码语义校验；同时纳入 installer/adopter parity，并在现有既定目标完成后再发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-request-2026-08-18-knowledge-query-interface",
+    "capturedAt": "2026-08-18T11:35:43Z",
+    "digest": "sha256:43efc7ef0ff3fee05c0920c96ee269fc7579a75250894f8a5c661b00d26c0dd2"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "477a2bff0562338c4ae403cec62da449356fcb7c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/knowledge-query-interface-20260818.contract.json",
+    ".ai/work-items/active/knowledge-query-interface-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/knowledge-query-interface-20260818.outcome.json",
+    ".ai/work-items/active/knowledge-query-interface-20260818.outcome.md",
+    ".ai/schemas/implementation-knowledge-query.schema.json",
+    ".ai/schemas/implementation-knowledge-record.schema.json",
+    ".ai/project/adopter-capability-manifest.json",
+    "scripts/ai_knowledge_query.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/installer/legacy.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_knowledge_query.py",
+    "tests/test_knowledge_installer_parity.py",
+    "tests/test_installed_runtime_parity.py",
+    "docs/reference/implementation-knowledge.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "RAG, vector or embedding search, semantic relevance ranking, LLM query interpretation, or customer-facing natural-language answer generation.",
+    "Backfilling missing historical Implementation Approach, Design Decision, or Evidence facts by inference.",
+    "Current-code semantic validation of archived records or changing Contract, Summary, Outcome, Evidence, or the projection records into a new fact source.",
+    "Mutation of knowledge records or authoritative Work Item archives by a query operation; the interface is read-only.",
+    "Changes to external adopter CI, GitHub settings, branch protection, hosted providers, production systems, or release publication."
+  ],
+  "sources": [
+    {
+      "path": "user-request:implementation-knowledge-query-interface-20260818",
+      "reason": "User-provided serial WI-2 requirements for deterministic filters, evidence states, read-only behavior, and adopter parity."
+    },
+    {
+      "path": ".ai/knowledge/index.json",
+      "reason": "Existing lightweight Implementation Knowledge index and its authoritative record paths."
+    },
+    {
+      "path": ".ai/schemas/implementation-knowledge-record.schema.json",
+      "reason": "Existing evidence-bound record shape, source digests, knowledge states, and supersession fields."
+    },
+    {
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "reason": "Existing deterministic projection producer and source-authority boundary."
+    },
+    {
+      "path": "scripts/ai_check_knowledge_index.py",
+      "reason": "Existing fail-closed index and record validation behavior."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Existing installer delivery catalog for adopter-facing runtime capabilities."
+    },
+    {
+      "path": ".ai/project/adopter-capability-manifest.json",
+      "reason": "Existing adopter-facing capability truth and installed parity declaration."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and authority boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "knowledge_integrity",
+      "interface_contract",
+      "determinism",
+      "installer_parity"
+    ],
+    "reason": "A query surface that loses evidence state, returns unstable results, mutates records, or is absent from adopter installation would damage calibrated trust; the interface must remain deterministic, read-only, evidence-preserving, and parity-tested.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The interface is read-only and local, while evidence integrity and adopter parity require complete standard governance verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The scope, sources, acceptance, scenarios, and read-only boundary are explicit; implementation and verification remain local and reversible."
+  },
+  "declaredIntent": {
+    "summary": "Add a deterministic, read-only query surface over evidence-bound Implementation Knowledge records and deliver it to fresh adopters.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic read-only query entrypoint reads the existing Implementation Knowledge index and records and supports exact filters for workItemId, topic, component, commit, date, status, and inclusive date ranges; supplied filters are combined deterministically.",
+    "The query result has a versioned machine-readable schema, stable ordering, explicit matched-record metadata, and a schema-defined empty-result shape; repeated queries over unchanged inputs are byte-stable.",
+    "Querying never writes, rebuilds, backfills, promotes, or edits knowledge records, the index, or authoritative Work Item archives; verified claims remain evidence-bound and partial, unknown, and superseded states remain visible as recorded.",
+    "Superseded handling is provenance-preserving: the query exposes only explicit supersession fields and never infers a successor, replaces a predecessor, or treats partial/unknown evidence as verified.",
+    "The query interface, schema, Make target, documentation, installer catalog, adopter capability manifest, and fresh-adopter parity test are aligned; a fresh adopter can invoke the installed read-only entrypoint against installed knowledge fixtures.",
+    "Focused tests cover exact filtering, combined filters, date boundaries, stable ordering, empty results, all knowledge states, malformed/missing records, read-only filesystem behavior, and fresh-adopter installed parity.",
+    "ai-finish produces a standalone direct green Outcome only after all declared local governance checks and project tests pass; no natural-language customer answer generation or release publication is included."
+  ],
+  "guidelines": [
+    "Keep the query implementation deterministic, read-only, provider-neutral, and independent of LLM or semantic-search services.",
+    "Preserve evidence state and provenance; never turn missing, partial, unknown, or superseded knowledge into a verified claim.",
+    "Document the public query contract and installed adopter surface.",
+    "Use the existing projection/index as the source and keep generated artifacts rebuildable from repository evidence.",
+    "Add focused regression tests before implementation changes and avoid weakening existing projection or installer parity tests."
+  ],
+  "intent": {
+    "problem": "The completed Implementation Knowledge projection provides evidence-bound records and a lightweight index, but an Agent still has no bounded way to retrieve relevant records without scanning the archive manually. The next capability must answer structured repository questions while preserving evidence state and provenance.",
+    "constraints": [
+      "Use only the existing projection/index as the source of truth; the query is a read-only projection consumer, not a new fact source.",
+      "Support deterministic structured filters only: workItemId, topic, component, commit, date, status, and date range.",
+      "Do not add RAG, embeddings, vector search, LLM ranking, customer-answer generation, historical backfill, or current-code semantic validation.",
+      "Fresh adopter installation and parity must prove the capability is inherited; template catalog text alone is insufficient.",
+      "Resolve defects found during this Work Item here when they remain within this Contract; amend and revalidate the Contract before adding paths or authority."
+    ],
+    "rationale": "A small deterministic query surface turns the evidence-bound projection into a usable engineering knowledge interface without weakening the authority chain or overclaiming what historical records prove."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Exact and combined structured filters",
+      "status": "unverified",
+      "reason": "Focused tests will establish deterministic matching for each supported filter and their conjunction.",
+      "expected": "Only records matching every supplied workItemId/topic/component/commit/date/status/date-range filter are returned.",
+      "verificationPlan": "Run the query fixture tests in tests/test_knowledge_query.py with records covering overlapping and non-overlapping fields.",
+      "required": true,
+      "evidence": [
+        "tests/test_knowledge_query.py"
+      ]
+    },
+    {
+      "scenario": "Stable ordering and empty result",
+      "status": "unverified",
+      "reason": "The interface must be predictable for agents and scripts without semantic ranking.",
+      "expected": "Repeated unchanged queries are byte-stable, results have documented ordering, and no match returns a valid empty result without mutation.",
+      "verificationPlan": "Run repeated query and no-match assertions and compare serialized output bytes in tests/test_knowledge_query.py.",
+      "required": true,
+      "evidence": [
+        "tests/test_knowledge_query.py",
+        ".ai/schemas/implementation-knowledge-query.schema.json"
+      ]
+    },
+    {
+      "scenario": "Evidence states and explicit supersession",
+      "status": "unverified",
+      "reason": "Trust depends on preserving recorded state rather than upgrading it during retrieval.",
+      "expected": "verified, partial, unknown, and superseded records are returned with their recorded provenance; only explicit supersededBy data is exposed.",
+      "verificationPlan": "Run state-preservation, malformed-record, and explicit-supersession assertions in tests/test_knowledge_query.py.",
+      "required": true,
+      "evidence": [
+        "tests/test_knowledge_query.py",
+        ".ai/schemas/implementation-knowledge-record.schema.json"
+      ]
+    },
+    {
+      "scenario": "Read-only and fail-closed input handling",
+      "status": "unverified",
+      "reason": "A query must not silently invent or repair knowledge when its index or record inputs are invalid.",
+      "expected": "The query performs no writes and reports malformed or missing authoritative inputs as an explicit failure rather than returning fabricated verified results.",
+      "verificationPlan": "Run filesystem snapshot and malformed/missing input assertions in tests/test_knowledge_query.py.",
+      "required": true,
+      "evidence": [
+        "tests/test_knowledge_query.py",
+        "scripts/ai_check_knowledge_index.py"
+      ]
+    },
+    {
+      "scenario": "Fresh adopter installed parity",
+      "status": "unverified",
+      "reason": "Adopter-facing delivery must be proven by a real fresh installation.",
+      "expected": "The installed query script, schema, Make target, and documented entrypoint exist and execute against an installed fixture without relying on template-only history.",
+      "verificationPlan": "Run the fresh adopter parity scenario in tests/test_knowledge_installer_parity.py and the installed runtime parity suite.",
+      "required": true,
+      "evidence": [
+        "tests/test_knowledge_installer_parity.py",
+        "tests/test_installed_runtime_parity.py"
+      ]
+    }
+  ],
+  "implementationSurface": {
+    "production": [
+      "scripts/ai_knowledge_query.py",
+      ".ai/schemas/implementation-knowledge-query.schema.json",
+      "scripts/ai_installer_catalog.json",
+      "scripts/installer/legacy.py",
+      "Makefile",
+      "templates/make/Makefile.ai",
+      ".ai/project/adopter-capability-manifest.json"
+    ],
+    "tests": [
+      "tests/test_knowledge_query.py",
+      "tests/test_knowledge_installer_parity.py",
+      "tests/test_installed_runtime_parity.py"
+    ],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ],
+    "documentation": [
+      "docs/reference/implementation-knowledge.md",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-request-2026-08-18-knowledge-query-interface",
+    "reason": "The user explicitly authorized implementation of the deterministic query capability and its adopter installer/parity surface in this Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 960
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/knowledge-query-interface-20260818.json",
+    "baseCommit": "477a2bff0562338c4ae403cec62da449356fcb7c",
+    "initialScopeDigest": "489618ff59f295b73f0b8b875f1a1e08cead4042654162142fbb106452e5f14c",
+    "contractSkeletonDigest": "b7f7d1869c6820731ad4b561c5436999b139b2aa8a9551c2cd7e238c1d6f1476"
+  }
+}

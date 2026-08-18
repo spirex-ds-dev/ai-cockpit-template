@@ -75,7 +75,7 @@ QUALITY_SESSION_LOCK_HELD ?= false
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report ai-record-external-handoff ai-ingest-external-receipt \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
 	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
-	ai-work-item-status ai-work-item-intelligence-rebuild check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis ai-generate-knowledge-record ai-check-knowledge-index
+	ai-work-item-status ai-work-item-intelligence-rebuild check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis ai-generate-knowledge-record ai-check-knowledge-index ai-knowledge-query check-ai-knowledge
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
@@ -659,6 +659,13 @@ ai-generate-knowledge-record:
 
 ai-check-knowledge-index:
 	$(AI_PYTHON) scripts/ai_check_knowledge_index.py --index "$(or $(INDEX),.ai/knowledge/index.json)" --records "$(or $(RECORDS),.ai/knowledge/work-items)" --repo-root .
+
+ai-knowledge-query:
+	$(AI_PYTHON) scripts/ai_knowledge_query.py $(ARGS)
+
+check-ai-knowledge:
+	$(AI_NESTED_MAKE) ai-check-knowledge-index
+	$(AI_PYTHON) scripts/ai_knowledge_query.py --help
 
 ai-governance-cost:
 	@if test "$(ARGS)" != "--help" && { test -z "$(WORK_ITEM)" -o -z "$(JSON_OUTPUT)" -o -z "$(MARKDOWN_OUTPUT)"; }; then echo 'WORK_ITEM, JSON_OUTPUT, and MARKDOWN_OUTPUT are required'; exit 2; fi

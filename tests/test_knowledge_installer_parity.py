@@ -25,12 +25,18 @@ def test_fresh_adopter_receives_and_can_call_knowledge_projection_surface(tmp_pa
     for relative in (
         "scripts/ai_generate_knowledge_record.py",
         "scripts/ai_check_knowledge_index.py",
+        "scripts/ai_knowledge_query.py",
         ".ai/schemas/implementation-knowledge-record.schema.json",
         ".ai/schemas/implementation-knowledge-index.schema.json",
+        ".ai/schemas/implementation-knowledge-query.schema.json",
     ):
         assert (target / relative).is_file(), relative
 
-    for script in ("ai_generate_knowledge_record.py", "ai_check_knowledge_index.py"):
+    for script in (
+        "ai_generate_knowledge_record.py",
+        "ai_check_knowledge_index.py",
+        "ai_knowledge_query.py",
+    ):
         result = subprocess.run(
             [sys.executable, str(target / "scripts" / script), "--help"],
             cwd=target,
@@ -41,7 +47,7 @@ def test_fresh_adopter_receives_and_can_call_knowledge_projection_surface(tmp_pa
         assert result.returncode == 0, result.stderr
 
     result = subprocess.run(
-        ["make", "-f", "Makefile.ai", "-n", "ai-check-knowledge-index"],
+        ["make", "-f", "Makefile.ai", "-n", "ai-check-knowledge-index", "ai-knowledge-query"],
         cwd=target,
         text=True,
         capture_output=True,
