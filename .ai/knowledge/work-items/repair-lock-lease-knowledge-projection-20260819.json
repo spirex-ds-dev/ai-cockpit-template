@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "repair-lock-lease-knowledge-projection-20260819",
+  "title": "Repair merged lock-lease knowledge projection freshness",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "从已经合并且不可变的 #906 归档 Contract、Summary、Outcome 和 manifest 重新生成对应的 Implementation Knowledge record，再重建 knowledge index；不改写任何历史证据。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.contract.json",
+    ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/index.json",
+    ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.json",
+    ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Regenerate projections instead of editing their JSON fields manually.",
+      "reason": "Generated bindings must remain evidence-derived and reproducible.",
+      "status": "verified"
+    },
+    {
+      "decision": "Leave archived Contract, Summary, Outcome, manifest, and archive index untouched.",
+      "reason": "The accepted #906 evidence is immutable; only its stale derived projection is repairable.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
+      "digest": "cd20635e2e36fe3833e5e21742fffa116ba065886b7eb5e225bde05236f1783e"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "digest": "27fc3c16be4f8da2393b5c4a6f185833d16b0c0c94737a490b619dce4b7bb48f"
+    },
+    {
+      "type": "code",
+      "path": "Makefile",
+      "digest": "460b9f6131e6d65a95d26e9cadc816ae96b0519e07ecb180db8742e1ead1b903"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_check_knowledge_index.py",
+      "digest": "947e1fc99c177e239f4d4d326340671bb46ae3b779e826b96eb451ef0df7f4de"
+    },
+    {
+      "type": "code",
+      "path": ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+      "digest": "03b6fa2271e745b0c6262808548eeecfc69eb9119bc6f1c8a8967238fcd542d4"
+    },
+    {
+      "type": "code",
+      "path": ".ai/knowledge/index.json",
+      "digest": "6a8afc9474db25ec0ef4459381c4a86bcac10e2b44e1a2af85b4200761f25c67"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.contract.json",
+    "contractDigest": "6d62e8ccb611f7d8d7bdb42caacad0a7dad2a1f85ba415a2529e7f2b37314372",
+    "summaryPath": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+    "summaryDigest": "9eef47437255a4645a35ee00512a9216355c8ac905457092f573c544193363f0",
+    "outcomePath": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.json",
+    "outcomeDigest": "1d99c5ee4db6026acd0b1a7679897f2c03c22306517d57b035910b766e0be9cb"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

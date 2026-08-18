@@ -1,0 +1,230 @@
+{
+  "contractVersion": 2,
+  "workItemId": "repair-lock-lease-knowledge-projection-20260819",
+  "mode": "code",
+  "title": "Repair merged lock-lease knowledge projection freshness",
+  "baseCommit": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.contract.json",
+    ".ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.outcome.json",
+    ".ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.outcome.md"
+  ],
+  "outOfScope": [
+    "Modifying archived Contract, Summary, Outcome, archive manifest, archive index, or any historical release evidence.",
+    "Changing production behavior, installer behavior, release workflow behavior, tags, Releases, or public assets.",
+    "Changing any knowledge record other than the lock-lease record and deterministic index named by this Work Item."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+      "reason": "Authoritative archived Contract whose digest is consumed by the generated knowledge record."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+      "reason": "Authoritative archived Summary whose evidence and digest are currently stale in the generated projection."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json",
+      "reason": "Authoritative archived Outcome bound by the knowledge record."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
+      "reason": "Immutable archive manifest used to verify the archived evidence root."
+    },
+    {
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "reason": "Canonical generator for the Work Item Implementation Knowledge projection."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Canonical ai-generate-knowledge and ai-check-knowledge-index Make targets for the deterministic knowledge index."
+    },
+    {
+      "path": "scripts/ai_check_knowledge_index.py",
+      "reason": "Checker that proves record and index freshness and digest consistency."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "evidence_integrity"
+    ],
+    "reason": "The repair changes generated governance projections only; stale or mismatched digests must fail closed."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["Generated governance projection repair with bounded evidence scope."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The repair scope and evidence sources are deterministic and bounded."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The archived lock-lease Work Item knowledge record is regenerated from the archived Contract, Summary, Outcome, and manifest, and all recorded evidence digests are current.",
+    "The deterministic knowledge index is regenerated and `make ai-check-knowledge-index` passes without modifying archived evidence.",
+    "The generated record and index are reproducible from the same archived inputs; the merged #906 Work Item closure is a subsequent dependent verification, not a pre-merge completion claim.",
+    "The repair Work Item is archived, its PR is merged, and its own lifecycle closes without an active Work Item or branch residue."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The generated lock-lease knowledge projection is rebound to the immutable archived evidence.",
+      "expected": "The record and index resolve the archived Contract, Summary, Outcome, and manifest with current SHA-256 bindings, while archived bytes remain unchanged.",
+      "verificationPlan": "Run the canonical record/index generators, compare the generated projection to the source-bound checker, and hash the archived inputs before and after.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "guidelines": [
+    "Generated knowledge projections must be produced by repository commands, not hand-edited.",
+    "Archived Contract, Summary, Outcome, and manifest files are immutable evidence and must not be rewritten.",
+    "Only the declared lock-lease knowledge record and deterministic index may change in this repair."
+  ],
+  "intent": {
+    "problem": "PR #906 merged the lock-lease archive with rebound Summary and Outcome digests, but ai-close-work-item now rejects the merged result because its generated Implementation Knowledge record and index still carry stale evidence digests.",
+    "constraints": [
+      "Repair only the generated knowledge record and index from the existing archived evidence.",
+      "Do not rewrite archived Contract, Summary, Outcome, archive manifest, or archive index bytes.",
+      "Do not publish, tag, or modify v0.5.68 release assets in this repair.",
+      "Use the canonical knowledge generators and record every verification result in the Summary."
+    ],
+    "rationale": "The stale projection is a post-merge lifecycle defect that blocks clean closure of the already merged #906 Work Item. Rebuilding the projection from immutable archived evidence restores the closure invariant without changing the accepted feature or historical facts."
+  },
+  "rawUserRequest": "Repair the stale generated knowledge projection discovered while closing the merged lock-lease Work Item, then verify that the projection is fresh and closure can proceed.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:merged-lock-lease-knowledge-projection-stale",
+    "capturedAt": "2026-08-19",
+    "digest": "sha256:repair-merged-lock-lease-knowledge-projection"
+  },
+  "declaredIntent": {
+    "summary": "Repair the stale generated knowledge projection that blocks closure of the merged lock-lease Work Item.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization",
+    "reason": "The user instructed continuation and requires the merged Work Item closure defect to be corrected through a governed Work Item rather than a temporary patch."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 965
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/repair-lock-lease-knowledge-projection-20260819.json",
+    "baseCommit": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+    "initialScopeDigest": "448ab6d1c03760cb14033bc36ef547a650a70d85c3bfa6420cecaa24c6e47169",
+    "contractSkeletonDigest": "9af8ff84ffe88e009d01e731686f45d511cb214f093d068e90ac12c25b1a35fb"
+  }
+}
