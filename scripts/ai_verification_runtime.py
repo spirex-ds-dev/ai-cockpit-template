@@ -34,6 +34,7 @@ class VerificationNode:
     scope: tuple[str, ...]
     depends_on: tuple[str, ...] = ()
     reuse_class: str = "none"
+    binding_classes: tuple[str, ...] = ()
     reuse_allowed: bool = False
     protected: bool = False
 
@@ -105,6 +106,27 @@ def _binding_digest(reuse_class: str, current_inputs: Mapping[str, object]) -> t
     raise ValueError(f"unsupported reusable class: {reuse_class}")
 
 
+def _binding_classes(node: VerificationNode) -> tuple[str, ...]:
+    """Return the unique binding dimensions for one concrete checker node."""
+    return tuple(
+        dict.fromkeys(
+            reuse_class
+            for reuse_class in (node.reuse_class, *node.binding_classes)
+            if reuse_class != "none"
+        )
+    )
+
+
+def _binding_digests(
+    node: VerificationNode, current_inputs: Mapping[str, object]
+) -> dict[str, str]:
+    """Compute every identity dimension that must remain equal to reuse a node."""
+    classes = _binding_classes(node)
+    if not classes:
+        raise ValueError(f"unsupported reusable class: {node.reuse_class}")
+    return dict(_binding_digest(reuse_class, current_inputs) for reuse_class in classes)
+
+
 def _receipt_state(
     node: VerificationNode,
     receipt: Mapping[str, object] | None,
@@ -153,11 +175,13 @@ def _receipt_state(
     ) != current_inputs.get("runner"):
         return "stale", "evidence_execution_context_mismatch", receipt_id
     try:
-        binding_key, binding_value = _binding_digest(node.reuse_class, current_inputs)
+        expected_bindings = _binding_digests(node, current_inputs)
     except (KeyError, ValueError):
         return "unknown", "evidence_reuse_unknown", receipt_id
     binding = receipt.get("binding")
-    if not isinstance(binding, Mapping) or binding.get(binding_key) != binding_value:
+    if not isinstance(binding, Mapping) or any(
+        binding.get(key) != value for key, value in expected_bindings.items()
+    ):
         return "stale", "evidence_binding_mismatch", receipt_id
     return "fresh", "evidence_reuse_fresh", receipt_id
 
@@ -176,7 +200,7 @@ def create_receipt(
 
     if not _valid_digest(output_digest):
         raise ValueError("output_digest must be a lowercase SHA-256 digest")
-    binding_key, binding_value = _binding_digest(node.reuse_class, current_inputs)
+    computed_bindings = _binding_digests(node, current_inputs)
     receipt: dict[str, object] = {
         "checkerId": node.node_id,
         "result": result,
@@ -187,7 +211,7 @@ def create_receipt(
         "toolchainDigest": _digest(current_inputs["toolchain"]),
         "policyDigest": _digest(current_inputs["policy"]),
         "outputDigest": output_digest,
-        "binding": {**dict(binding or {}), binding_key: binding_value},
+        "binding": {**dict(binding or {}), **computed_bindings},
         "stage": current_inputs.get("stage"),
         "runner": current_inputs.get("runner"),
         "createdAt": created_at.isoformat(),
@@ -249,7 +273,9 @@ def plan_verification(
     }
     started = time.monotonic()
     for node in ordered:
-        if node.reuse_class not in REUSE_CLASSES:
+        if node.reuse_class not in REUSE_CLASSES or any(
+            reuse_class not in REUSE_CLASSES for reuse_class in node.binding_classes
+        ):
             raise ValueError(f"unsupported reuse class: {node.reuse_class}")
         action: Literal["execute", "skip_reused"]
         state: Literal["fresh", "stale", "unknown", "not_applicable"]

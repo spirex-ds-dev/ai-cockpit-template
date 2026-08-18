@@ -19,6 +19,7 @@ def node(
     *,
     gate_class: str = "project",
     reuse_class: str = "content-bound",
+    binding_classes: tuple[str, ...] = (),
     reuse_allowed: bool = True,
     protected: bool = False,
     depends_on: tuple[str, ...] = (),
@@ -31,6 +32,7 @@ def node(
         scope=("src/a.py",),
         depends_on=depends_on,
         reuse_class=reuse_class,
+        binding_classes=binding_classes,
         reuse_allowed=reuse_allowed,
         protected=protected,
     )
@@ -105,6 +107,60 @@ def test_stale_diff_and_unknown_receipts_execute_again():
     assert unknown_plan.checks[0].action == "execute"
     assert unknown_plan.checks[0].decision_state == "unknown"
     assert unknown_plan.metrics["rerunUnknown"] == 1
+
+
+def test_multi_binding_tests_node_reruns_on_any_binding_change_and_skips_when_all_match():
+    check = node(
+        "tests",
+        binding_classes=("diff-bound", "environment-bound"),
+    )
+    current = inputs()
+    receipt = receipt_for(check, current)
+
+    assert set(receipt["binding"]) == {
+        "contentDigest",
+        "diffDigest",
+        "environmentDigest",
+    }
+
+    for changed in (
+        inputs(content={"src/a.py": "digest-b"}),
+        inputs(diff={"base": "base-b", "head": "head-a"}),
+        inputs(environment={"python": "3.12"}),
+    ):
+        plan = plan_verification(
+            (check,),
+            current_inputs=changed,
+            receipts={check.node_id: receipt},
+            now=NOW,
+        )
+        assert plan.checks[0].action == "execute"
+        assert plan.checks[0].decision_state == "stale"
+
+    fresh_plan = plan_verification(
+        (check,),
+        current_inputs=current,
+        receipts={check.node_id: receipt},
+        now=NOW,
+    )
+    assert fresh_plan.checks[0].action == "skip_reused"
+    assert fresh_plan.checks[0].decision_state == "fresh"
+
+    protected = node(
+        "tests_protected",
+        gate_class="security",
+        binding_classes=("diff-bound", "environment-bound"),
+        protected=True,
+    )
+    protected_receipt = receipt_for(protected, current)
+    protected_plan = plan_verification(
+        (protected,),
+        current_inputs=current,
+        receipts={protected.node_id: protected_receipt},
+        now=NOW,
+    )
+    assert protected_plan.checks[0].action == "execute"
+    assert protected_plan.metrics["protectedNodesSkipped"] == 0
 
 
 def test_unrelated_documentation_change_reuses_content_bound_check_only():

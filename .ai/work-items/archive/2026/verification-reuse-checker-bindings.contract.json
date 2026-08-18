@@ -1,0 +1,277 @@
+{
+  "contractVersion": 2,
+  "workItemId": "verification-reuse-checker-bindings",
+  "mode": "code",
+  "title": "Bind ai_verify reuse classes to real checkers",
+  "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_verify.py",
+    "scripts/ai_verification_runtime.py",
+    "tests/test_ai_verify.py",
+    "tests/test_ai_verification_runtime.py",
+    "docs/reference/verification-evidence-reuse-runtime.md",
+    ".ai/work-items/active/verification-reuse-checker-bindings.contract.json",
+    ".ai/work-items/active/verification-reuse-checker-bindings.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/verification-reuse-checker-bindings.outcome.json",
+    ".ai/work-items/active/verification-reuse-checker-bindings.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "scripts/ai_diff_bound_reuse.py",
+    "scripts/ai_environment_reuse.py",
+    "scripts/ai_evidence_binding.py",
+    "scripts/ai_check_registry.py",
+    "scripts/ai_verification_context.py",
+    "scripts/ai_verification_policy.py",
+    "scripts/ai_installer_catalog.json",
+    "installer catalog and manifest implementation",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "Summary/Outcome/Report generation and validation implementation",
+    "GitHub Issue or other provider write operations",
+    "release, merge, and Work Item closure"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_verify.py",
+      "reason": "Authoritative ai_verify stage-to-checker construction and runtime mapping."
+    },
+    {
+      "path": "scripts/ai_verification_runtime.py",
+      "reason": "Authoritative reusable-class, receipt-binding, and protected-gate planner behavior."
+    },
+    {
+      "path": "tests/test_ai_verify.py",
+      "reason": "Existing ai_verify integration seam and focused real-checker regression target."
+    },
+    {
+      "path": "tests/test_ai_verification_runtime.py",
+      "reason": "Existing runtime evidence for diff/environment binding, unchanged reuse, and protected execution."
+    },
+    {
+      "path": "docs/reference/verification-evidence-reuse-runtime.md",
+      "reason": "Runtime design boundary that must document the concrete mapping and evidence paths."
+    },
+    {
+      "path": "docs/reference/diff-bound-evidence-reuse.md",
+      "reason": "Defines diff identity changes and fail-closed rerun semantics."
+    },
+    {
+      "path": "docs/reference/environment-bound-reuse.md",
+      "reason": "Defines environment fingerprint changes and fail-closed rerun semantics."
+    },
+    {
+      "path": "docs/reference/evidence-binding-foundation.md",
+      "reason": "Defines shared scope/governance binding and allowed reuse classes."
+    }
+  ],
+  "problemStatement": "The Evidence Reuse Runtime planner supports diff-bound and environment-bound decisions, but ai_verify currently exposes only a content-bound tests mapping and does not prove actual checker behavior for the other reusable classes. The gap can make engine support look complete while the real checker path remains unverified.",
+  "rawUserRequest": "修复原始验收中 Evidence Reuse Runtime 引擎支持 diff-bound/environment-bound，但 ai_verify 的实际 checker 映射仍未证明的根因；从 origin/main@bce5d48422c77695d8fd86ddb2019de1e77f1194 创建独立工作树/分支，遵循 AGENTS.md、agent-parallel-work-items 和 TDD，先写证明当前映射失败的测试，再修复 verification runtime/ai_verify 映射、专项测试和必要设计说明；证明 diff 变化、environment fingerprint 变化、unchanged 复用和 security/scope/trust/identity/supply-chain/受保护治理检查的真实 checker 行为；更新 Summary，运行相关测试和 AI checks，不 merge/release/close WI。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:verification-reuse-checker-bindings",
+    "capturedAt": "2026-08-18",
+    "digest": "sha256:verification-reuse-checker-bindings-request"
+  },
+  "intent": {
+    "problem": "ai_verify does not currently bind concrete checker IDs to diff-bound and environment-bound reuse classes, and its tests do not exercise changed-binding or unchanged-reuse behavior through the registry adapter.",
+    "constraints": [
+      "Use only the dedicated Work Item worktree based on bce5d48422c77695d8fd86ddb2019de1e77f1194.",
+      "Use TDD and observe each missing mapping test fail before changing runtime implementation.",
+      "Keep security, scope, trust, identity, supply-chain, governance, coverage, and source-bound gates protected and always executed.",
+      "Do not change installer catalog/manifest, Makefile/templates, lifecycle generator/checker implementations, or provider writes."
+    ],
+    "rationale": "A concrete mapping plus real CheckerRegistry call-count tests closes the evidence gap at the ai_verify boundary while preserving the runtime planner's fail-closed protected-gate rules."
+  },
+  "declaredIntent": {
+    "summary": "Prove and repair ai_verify's concrete diff-bound and environment-bound checker mappings without weakening protected checks.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Diff fingerprint changes for the concrete diff-bound checker.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The diff-bound receipt is stale, the mapped checker executes, and the result retains the concrete checker ID.",
+      "verificationPlan": "Use runtime_nodes, create_receipt, plan_verification, consume_runtime_plan, and a real CheckerRegistry callback; change only diff inputs and assert plan action, decision state, call list, and checker_id."
+    },
+    {
+      "scenario": "Environment fingerprint changes for the concrete environment-bound checker.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The environment-bound receipt is stale, the mapped checker executes, and the result retains the concrete checker ID.",
+      "verificationPlan": "Use runtime_nodes, create_receipt, plan_verification, consume_runtime_plan, and a real CheckerRegistry callback; change only environment inputs and assert plan action, decision state, call list, and checker_id."
+    },
+    {
+      "scenario": "Unchanged allowed evidence reuses the mapped non-protected checker.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "A complete unexpired receipt skips the mapped checker, performs zero calls for it, and returns a passed reused result.",
+      "verificationPlan": "Use an unchanged valid receipt and callback counter through consume_runtime_plan; assert skip_reused, zero callback calls, and passed result detail."
+    },
+    {
+      "scenario": "Protected security/scope/trust/identity/supply-chain and governance/coverage/source-bound checks do not reuse.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Fresh receipts never produce skip_reused for protected nodes; each concrete protected callback executes and protectedNodesSkipped remains zero.",
+      "verificationPlan": "Run stage mapping tests with fresh receipts and real CheckerRegistry callbacks; assert every protected node action is execute, every callback is called, and the protected skip metric is zero."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "data_integrity",
+      "verification",
+      "security"
+    ],
+    "reason": "An incorrect class-to-checker mapping could reuse evidence for the wrong operation or suppress a required protected check; real registry call assertions and fail-closed planner rules bound the risk.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The declared implementation paths are verification scripts and tests, so strict targeted governance applies."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, exclusions, sources, planned scenarios, acceptance, and verification are explicit; the implementation remains local and reversible."
+  },
+  "preReviewWarnings": [
+    "Review that every reusable class is tied to a concrete ai_verify checker ID in behavior tests and protected IDs cannot reuse fresh receipts."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai_verify exposes a concrete code-backed mapping for diff-bound and environment-bound reusable checker IDs while retaining an explicit content-bound mapping.",
+    "Focused tests drive the actual ai_verify plan through CheckerRegistry callbacks and prove diff changes execute the diff-bound checker and environment fingerprint changes execute the environment-bound checker.",
+    "A valid unchanged receipt skips only the mapped non-protected checker; missing, stale, malformed, or mismatched evidence executes again.",
+    "Fresh receipts never skip security, scope, trust, identity, supply-chain, governance, coverage, or source-bound protected gates, and real callback evidence proves those checkers execute.",
+    "The runtime design reference documents the concrete mapping with code/test evidence, while installer/catalog, Makefile/template, lifecycle implementation, and provider-write paths remain unchanged."
+  ],
+  "guidelines": [
+    "Document every changed checker mapping boundary in docs/reference/verification-evidence-reuse-runtime.md.",
+    "Do not import internal modules from unrelated features; use the existing ai_verify and ai_verification_runtime interfaces.",
+    "Do not weaken or delete existing tests; add red-first regressions for the missing mapping behavior."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 953
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/verification-reuse-checker-bindings.json",
+    "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+    "initialScopeDigest": "ef1392e9fc11d4982feb513fdb33d15df4f3e26e0771199fedafbb5c9a28d5d1",
+    "contractSkeletonDigest": "fe81843b5948bf523ad84db85c916e602e3105a4871b9550f0898d2a9418a090"
+  }
+}

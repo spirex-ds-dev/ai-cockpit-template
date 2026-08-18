@@ -4,38 +4,17 @@ Task Result
 Status: Success
 
 What was completed
-
-Implementation Approach
-Status: `complete`
-Customer summary (verified): Customers can see what changed, how the governed result is produced, and which repository evidence supports it.
-Mechanism (verified): Summary implementationApproach is read from the ai_finish Summary evidence source, validated against real repository paths, and projected into Outcome and Human Report JSON/Markdown views.
-
-Affected components
-- Summary: Stores the canonical structured approach and evidence references. (verified)
-- Task Outcome: Carries the same approach with customer-facing and progressive technical rendering. (verified)
-- Human Report: Carries the same approach in direct JSON and Markdown output. (verified)
-
-Design decisions
-- Keep Summary as the source of truth and make Outcome/Human Report projections deterministic.: The existing ai_finish evidence source carries the Summary path; ai_finish now refreshes the capability truth projection before its source-bound gate without changing verification runtime semantics. (verified)
-- Require real repository-relative evidence for verified approach claims.: A non-empty source/subject pair cannot prove a factual implementation claim by itself. (verified)
-- Do not infer performance improvement without benchmark evidence.: The record describes observable path and mechanism changes and retains no benchmark claim. (verified)
-
-### Technical details
-- Completeness states: Code scope requires implementationApproach; configuration scope requires configurationApproach; missing Summary input becomes yellow incomplete/warning, while standalone legacy projection remains not_applicable. (verified)
-- Progressive disclosure: Customer summary and mechanism render before affected components, design decisions, technical details, and evidence. (verified)
-- Source-bound evidence refresh: When the capability truth matrix and generator are present, ai_finish runs the existing generator with --write before check-source-bound-evidence, records matrix before/after digests, and blocks without running the original gate if refresh fails. (verified)
-
-### Evidence
-- Verified approach references are checked against real repository files.: scripts/ai_check_summary.py#validate_implementation_approach (verified)
-- The ai_finish Summary source reaches Outcome without manual approach injection.: tests/test_task_outcome_generator.py#ai_finish Summary source projection (verified)
-- Human Report JSON and Markdown expose the approach directly.: tests/test_human_benefit_report.py#direct report projection (verified)
-- sourceBoundEvidence consumes refreshed capability evidence and records its generated file binding.: tests/test_task_outcome_ai_finish_integration.py#refresh before source-bound check (verified)
-
-- Changed .ai/work-items/active/implementation-approach-evidence.contract.json [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.contract.json]
-- Changed .ai/work-items/active/implementation-approach-evidence.summary.json [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.summary.json]
-- Changed .ai/work-items/starts/implementation-approach-evidence.json [evidence: .ai/work-items/starts/implementation-approach-evidence.json]
-- Changed .ai/cockpit/README.md [evidence: .ai/cockpit/README.md]
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
+- Changed .ai/work-items/active/verification-reuse-checker-bindings.contract.json [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.contract.json]
+- Changed .ai/work-items/active/verification-reuse-checker-bindings.summary.json [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.summary.json]
+- Changed .ai/work-items/starts/verification-reuse-checker-bindings.json [evidence: .ai/work-items/starts/verification-reuse-checker-bindings.json]
+- Changed docs/reference/verification-evidence-reuse-runtime.md [evidence: docs/reference/verification-evidence-reuse-runtime.md]
+- Changed scripts/ai_verification_runtime.py [evidence: scripts/ai_verification_runtime.py]
+- Changed scripts/ai_verify.py [evidence: scripts/ai_verify.py]
+- Changed tests/test_ai_verify.py [evidence: tests/test_ai_verify.py]
+- Changed tests/test_ai_verification_runtime.py [evidence: tests/test_ai_verification_runtime.py]
+- Changed .ai/work-items/active/verification-reuse-checker-bindings.outcome.json [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.outcome.json]
+- Changed .ai/work-items/active/verification-reuse-checker-bindings.outcome.md [evidence: .ai/work-items/archive/2026/verification-reuse-checker-bindings.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 - Changed .ai/schemas/task_outcome.schema.json [evidence: .ai/schemas/task_outcome.schema.json]
@@ -62,34 +41,49 @@ Design decisions
 - Changed .ai/work-items/active/implementation-approach-evidence.outcome.md [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.outcome.md]
 
 Problems found
-- Total: 2
+- Total: 7
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Reason: aiCoverage failed before the retry. | Stage: verification | Resolution: Retry aiCoverage after correcting the recorded failure. [evidence: verificationHistory[0] aiCoverage failed, verification[aiCoverage] retry passed]
+- Reason: aiCoverage failed before the retry. | Stage: verification | Resolution: Retry aiCoverage after correcting the recorded failure. [evidence: verificationHistory[1] aiCoverage failed, verification[aiCoverage] retry passed]
 
 Problems resolved
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Problem: The existing tests registry id, rather than invented diff or environment ids, executes on changed diff/environment bindings and is skipped only for a complete unchanged receipt.
+  Solution: Resolution status: resolved
+  Evidence: [evidence: changed diff, changed environment, unchanged receipt, protected release, and verify_stage registry tests, Concrete checker mapping and empty-default-registry CLI limitation]
+- Problem: The complete quality graph exited 0; five isolated test shards aggregated and the coverage floor was validated.
+  Solution: Resolution status: resolved
+  Evidence: [evidence: Aggregated project-test receipt]
+- Problem: The declared four scenarios are covered by the focused ai_verify/runtime tests, including real existing-id registry callbacks and protected receipt rejection.
+  Solution: Resolution status: resolved
+  Evidence: [evidence: Scenario coverage check passed, Concrete mapping scenario tests]
+- Problem: All three Contract guidelines passed their compliance check.
+  Solution: Resolution status: resolved
+  Evidence: [evidence: Guidelines compliance check passed]
+- Problem: The runtime production change is now associated with its changed tests/test_ai_verification_runtime.py binding_classes regression; the coverage guard reports no issues.
+  Solution: Resolution status: resolved
+  Evidence: [evidence: Coverage guard passed with the runtime regression test path, Concrete multi-binding rerun, fresh skip, and protected execution regression]
+- Problem: aiCoverage failed before the retry.
+  Solution: Re-ran aiCoverage after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiCoverage failed, verification[aiCoverage] retry passed]
+- Problem: aiCoverage failed before the retry.
+  Solution: Re-ran aiCoverage after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] aiCoverage failed, verification[aiCoverage] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
 - If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- No benchmark or hosted environment evidence was run; the implementation record makes no performance-improvement claim and remains bounded to repository code and tests. [evidence: residualRisks]
+- The template CLI constructs an empty CheckerRegistry, so direct CLI output can prove existing runtime node ids but cannot prove callback execution without a host-provided registry. The injected existing-id registry path is covered by focused tests. This branch also intentionally retains the bce5d484 Summary schema: implementationApproach schema/projection is not present here, belongs to the separate implementation-approach-evidence Work Item, and should apply to later code/config Work Items only after that capability lands. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- None recorded.
+- User review rejected test-only diff/environment checker ids because ai_verify.main starts with an empty registry; mapping must use existing checker ids and preserve verify_stage/release protected semantics. (inference)
 
 Verification
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
