@@ -1,0 +1,325 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stale-branch-worktree-cleanup-20260818",
+  "mode": "code",
+  "title": "Clean stale branches and worktree registrations",
+  "rawUserRequest": "还有，我发现分支没有清理干净。看看什么原因，处理掉",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-branch-cleanup",
+    "capturedAt": "2026-08-18",
+    "digest": "sha256:user-authorized-stale-branch-cleanup"
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-18-branch-cleanup",
+    "scope": "Investigate and remove only the exact residual local/remote branches and linked worktrees confirmed clean and inactive by the pre-cleanup and final re-audits."
+  },
+  "declaredIntent": {
+    "summary": "Restore clean branch and linked-worktree lifecycle state without deleting user changes or rewriting historical Work Item evidence.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": true
+  },
+  "baseCommit": "574bb9690239809b11bd16188e5e2044c242323b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/stale-branch-worktree-cleanup-20260818.contract.json",
+    ".ai/work-items/active/stale-branch-worktree-cleanup-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stale-branch-worktree-cleanup-20260818.outcome.json",
+    ".ai/work-items/active/stale-branch-worktree-cleanup-20260818.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/decisions/**"
+  ],
+  "outOfScope": [
+    "Provider configuration, branch protection, tags, releases, and GitHub Issues.",
+    "Any branch or worktree not listed in the pre-cleanup inventory below.",
+    "The user's dirty parent worktree and its Makefile/template changes.",
+    "Rewriting or deleting archived Work Item Contract, Summary, Outcome, or evidence records.",
+    "Declaring the incomplete canonical-lifecycle-parallel-alignment Work Item completed; this WI only removes its obsolete branch identity after preserving its archive evidence."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines one Work Item per branch, closure ownership, and branch cleanup lifecycle."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines Archived Work Item, Repository Governance Layer, and Evidence over Self-Declaration boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/**",
+      "reason": "Confirms the exact historical Work Item identities and preserves their Contract/Summary/Outcome evidence."
+    },
+    {
+      "path": ".git/worktrees/**",
+      "reason": "Git's authoritative linked-worktree registry for the three branch-owned worktrees."
+    },
+    {
+      "path": "remote refs and PR records",
+      "reason": "Read-only provider audit identifies the three exact remote branches, closed PR #879/#883, and no PR for the verification branch."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "destructive_cleanup",
+      "user_data_protection",
+      "branch_lifecycle"
+    ],
+    "reason": "Branch and linked-worktree deletion is destructive; only the exact clean identities inventoried before removal may be deleted, while all archive evidence and the dirty parent worktree are protected.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Destructive branch cleanup requires strict governance and explicit authorization evidence."
+    ],
+    "operationClasses": [
+      "repository_governance"
+    ],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "The user explicitly instructed investigation and cleanup of residual branches in this conversation.",
+      "reason": "Strict review is required for exact local/remote branch and linked-worktree deletion.",
+      "risks": [
+        "destructive_cleanup",
+        "user_data_protection",
+        "branch_lifecycle"
+      ],
+      "notRunChecks": [
+        "Release-preflight and distribution checks are not applicable because this Work Item does not touch release-owned resources."
+      ],
+      "workItemOnly": true,
+      "workItemId": "stale-branch-worktree-cleanup-20260818"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized investigation and cleanup; the exact deletion set is bounded by the pre-cleanup audit and final re-audit."
+  },
+  "preReviewWarnings": [
+    "Re-audit every target immediately before removal and fail closed if it becomes dirty, is checked out elsewhere, or gains an active PR/Work Item."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The pre-cleanup inventory records the exact three remote branches and their clean linked worktrees: codex/canonical-lifecycle-parallel-alignment at .worktrees/canonical-lifecycle-parallel-alignment-20260817, codex/documentation-reader-receipt-lifecycle-cleanup-20260816 at .worktrees/pre-release-deprecated-assets-cleanup-current-main-20260816, and codex/verification-evidence-reuse-runtime-integration-20260817 at .worktrees/verification-evidence-reuse-runtime-integration-20260817.",
+    "The local-only backup/wi08-pre-base-reconcile branch is independently verified to have no worktree, no remote ref, no open PR, and preserved archive evidence before deletion.",
+    "Immediately before removal, all four exact target branch identities and the three linked worktrees are still clean, inactive, and unchanged; any mismatch fails closed.",
+    "The three exact linked worktrees are removed with Git worktree lifecycle commands, then their exact local branches and remote branches are deleted; no other branch, tag, release, or worktree is removed.",
+    "The user's detached parent worktree changes in Makefile and templates/make/Makefile.ai remain byte-for-byte untouched.",
+    "The target branch identities remain auditable through their recorded head commits and closed PR/provider records; current main retains the replacement archive for each target (PR #879 -> stale-work-item-delivery-reconciliation, PR #883 -> canonical-lifecycle-parallel-successor, verification runtime -> verification-evidence-reuse and later merged runtime commits), and the canonical predecessor's yellow needs_human_confirmation state is not reclassified as completed.",
+    "Post-cleanup checks return empty for the three target remote refs and four target local refs, `git worktree list --porcelain` contains none of the three target paths, the synchronized main worktree reports `main...origin/main` with no changes, `gh pr list --state open` returns no cleanup PR, and `gh issue list --state open` remains 0; the cleanup Work Item then completes its own archive/PR/merge/ai-close-work-item lifecycle."
+  ],
+  "guidelines": [
+    "Do not modify Provider configuration or branch-protection settings.",
+    "Do not remove a worktree with uncommitted changes or an active Work Item Contract.",
+    "Use Git worktree commands so Git metadata and filesystem state are removed together.",
+    "Delete a non-merged branch only when its closed PR or archived Work Item is documented as obsolete and the exact replacement/retention evidence is preserved."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A clean branch-owned historical worktree is removed and its exact local/remote branch identities disappear.",
+      "required": true,
+      "riskDomain": "destructive_cleanup",
+      "status": "unverified",
+      "evidence": [
+        "pre-cleanup branch/worktree inventory",
+        "post-cleanup git worktree list, local branch list, and remote-head audit"
+      ],
+      "expected": "The three inventoried branch-owned worktrees and their exact local/remote branch refs are absent after cleanup.",
+      "verificationPlan": "Re-audit each exact path and ref immediately before removal, remove via Git commands, then compare before/after inventories."
+    },
+    {
+      "scenario": "A local-only backup branch with no worktree, remote ref, or open PR is removed while its commits remain recoverable in repository history/archive evidence.",
+      "required": true,
+      "riskDomain": "branch_lifecycle",
+      "status": "unverified",
+      "evidence": [
+        "backup/wi08-pre-base-reconcile branch audit",
+        "archived WI evidence and commit history"
+      ],
+      "expected": "The exact local backup ref is absent, while archived Work Item records remain present and no unrelated ref is changed.",
+      "verificationPlan": "Verify no worktree/remote/PR ownership, preserve archive paths, delete only the exact local ref, and audit all remaining local refs."
+    },
+    {
+      "scenario": "The user's dirty parent worktree is protected from cleanup.",
+      "required": true,
+      "riskDomain": "user_data_protection",
+      "status": "unverified",
+      "evidence": [
+        "parent worktree status and diff digest before cleanup",
+        "parent worktree status and diff digest after cleanup"
+      ],
+      "expected": "Makefile and templates/make/Makefile.ai remain present with the same user-owned diff before and after cleanup.",
+      "verificationPlan": "Capture exact path/status/digest before removal and compare after all cleanup commands."
+    },
+    {
+      "scenario": "An archived yellow/incomplete Work Item is not falsely promoted to completed by branch deletion.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "unverified",
+      "evidence": [
+        "canonical-lifecycle-parallel-alignment archived Outcome",
+        "post-cleanup archive audit"
+      ],
+      "expected": "The historical Outcome remains needs_human_confirmation/yellow and is not rewritten or treated as a successful delivery.",
+      "verificationPlan": "Read the archived Outcome before and after cleanup and compare status, color, and failure/recovery fields."
+    }
+  ],
+  "intent": {
+    "problem": "The repository still retains branch identities and linked worktrees for historical Work Items after their delivery paths ended, so branch/worktree state no longer reflects the active governed work.",
+    "constraints": [
+      "Delete only the exact clean and inactive identities inventoried before removal.",
+      "Preserve every archived Work Item evidence bundle, including incomplete or yellow historical Outcomes.",
+      "Protect the user's dirty parent worktree and do not alter provider configuration, tags, releases, or branch protection.",
+      "Use Git lifecycle commands and complete this cleanup as a normal Work Item through archive, PR, merge, and ai-close-work-item."
+    ],
+    "rationale": "A bounded, evidence-first cleanup restores the invariant that obsolete branch/worktree identities are removed without confusing cleanup with successful delivery or discarding recoverable Work Item evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "git worktree remove for the three exact clean branch-owned worktrees listed in acceptance",
+      "git branch -D for the four exact local stale branches listed in acceptance after final re-audit",
+      "git push origin --delete for the three exact remote stale branches listed in acceptance after final re-audit",
+      "git worktree prune only if a final audit identifies an exact stale Git worktree metadata record"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "The user explicitly instructed investigation and cleanup of residual branches in this conversation.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "user",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "conversation:2026-08-18-branch-cleanup",
+          "directUserInstructionDigest": "sha256:d1d0dccff9735ab1a30d41dfa1063f6fc791ea7763c66dea14e9ed1dc06b234e",
+          "authorizedAt": "2026-08-18T00:00:00+09:00"
+        },
+        "scope": [
+          "git worktree remove for the three exact clean branch-owned worktrees listed in acceptance",
+          "git branch -D for the four exact local stale branches listed in acceptance after final re-audit",
+          "git push origin --delete for the three exact remote stale branches listed in acceptance after final re-audit",
+          "git worktree prune only if a final audit identifies an exact stale Git worktree metadata record"
+        ]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized investigation and cleanup of residual branches; deletion remains bounded by the Contract inventory and final re-audit."
+  },
+  "rollbackNote": "The removed branch refs are recoverable from their preserved commit IDs/archive evidence; do not rewrite archived evidence. If a wrong exact ref is identified before closure, stop and restore it from the recorded commit rather than deleting another ref.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 958
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/stale-branch-worktree-cleanup-20260818.json",
+    "baseCommit": "574bb9690239809b11bd16188e5e2044c242323b",
+    "initialScopeDigest": "4142d1be1d1c81d11591d28e1c795ce8c05292e473f82b28ebf97c39a82e382f",
+    "contractSkeletonDigest": "283dcb42d61e145ccc5754fbbebd4ce4d64e1df7626c8e6e4c98ab44001c177b"
+  }
+}

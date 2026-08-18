@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "stale-branch-worktree-cleanup-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "14d64f0e011c39803658b62f1f8591dfab4f778c0fa365fc6fc713ab0f72b88f"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "stale-branch-worktree-cleanup-20260818",
+    "contractDigest": "43f82dc5a3c4c0e29348dd94aa9f63a5cfee2d9a2b190c4403bae45943787ccf",
+    "summaryDigest": "e0b25e01cd769fa1c0f70cdc0836e96e3c2a55a4caf1437a43dca209356211c1",
+    "verificationDigest": "18be9c986becdd77f8cf2cf0997bd0559714f616d173296586e4d91f1f4e6d12",
+    "baseCommit": "574bb9690239809b11bd16188e5e2044c242323b",
+    "headCommit": "574bb9690239809b11bd16188e5e2044c242323b",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "1ac7212eef9a4d0146f081e26c66ca1894905276e7c511cb6ed3eff8c6f9ecbd",
+      "binding": {
+        "baseCommit": "574bb9690239809b11bd16188e5e2044c242323b",
+        "candidateHead": "574bb9690239809b11bd16188e5e2044c242323b",
+        "candidateTreeDigest": "44c5c5ad5c212a8f78b57e34429a16124794cd730382363b675e79bcf7dae44c",
+        "candidateDiffDigest": "619713b106e27d648bec2cd0e87fdfc81eaa77e75626eca5e3255efa678093db"
+      }
+    }
   },
-  "task": {
-    "summary": "Task stale-branch-worktree-cleanup-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task stale-branch-worktree-cleanup-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: stale-branch-worktree-cleanup-20260818",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.contract.json",
       ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
@@ -19,216 +42,264 @@
       ".ai/cockpit/task_report.md",
       ".ai/decisions/HDR-a84fbb11d586a0b9-adb58f8f.evidence.json",
       ".ai/decisions/HDR-a84fbb11d586a0b9-adb58f8f.request.json"
-    ]
-  },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
-          "subject": "verificationHistory[0] aiSummary failed",
-          "digest": "425b19542fdce5a13d2fc4014c274555c8bb6de40f5abad0e974274016279cd4"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "df40902ccb9eaff9c938fd5f16b7a44e0ef48d55f15dfc99a7f6dcfdaea40f79"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
-          "subject": "verificationHistory[0] aiSummary failed",
-          "digest": "425b19542fdce5a13d2fc4014c274555c8bb6de40f5abad0e974274016279cd4"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "df40902ccb9eaff9c938fd5f16b7a44e0ef48d55f15dfc99a7f6dcfdaea40f79"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "low",
-      "detail": "Deleted refs remain recoverable from the recorded commit IDs and archived Work Item evidence; deletion does not rewrite commit objects or archive records.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    },
-    {
-      "severity": "low",
-      "detail": "The canonical parallel predecessor remains historically yellow and was not delivered; this cleanup does not resolve or reinterpret that Outcome.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "先以精确清单锁定已确认无活动 Work Item 且无未提交变更的分支和工作树，再按 Git 生命周期顺序移除工作树、删除对应本地分支和远程分支；清理后用远程引用、工作树清单、主工作树和父目录哈希进行复核。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "AGENTS.md",
-          "subject": "governed Work Item branch and worktree lifecycle"
-        },
-        {
-          "source": "scripts/ai_close_work_item.py",
-          "subject": "lifecycle closure and cleanup verification implementation"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "清理仅作用于合同列出的三个关联工作树、四个本地分支引用和三个远程分支引用；删除后确认目标引用为空、目标工作树不存在、主工作树保持同步，并确认父工作树的用户修改字节未变化。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "AGENTS.md",
-          "subject": "protected Work Item boundaries and lifecycle rules"
-        },
-        {
-          "source": "scripts/ai_close_work_item.py",
-          "subject": "post-close branch, worktree, and base synchronization checks"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
       {
-        "component": "Git worktree and branch identities",
-        "detail": "The three exact linked worktrees, their three remote branches, and the four exact local branch identities were removed.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "AGENTS.md",
-            "subject": "destructiveChanges"
-          }
-        ]
-      },
-      {
-        "component": "Historical Work Item traceability",
-        "detail": "Replacement archives, recorded head commits, closed PR records, and the predecessor's yellow state remain explicit; cleanup does not convert historical evidence into delivery success.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json",
-            "subject": "replacement archive"
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "verificationHistory[0] aiSummary failed",
+            "digest": "425b19542fdce5a13d2fc4014c274555c8bb6de40f5abad0e974274016279cd4"
           },
           {
-            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.outcome.json",
-            "subject": "replacement archive"
-          },
-          {
-            "source": ".ai/work-items/archive/2026/verification-evidence-reuse.outcome.json",
-            "subject": "replacement archive"
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "df40902ccb9eaff9c938fd5f16b7a44e0ef48d55f15dfc99a7f6dcfdaea40f79"
           }
         ]
       }
     ],
-    "designDecisions": [
+    "resolutions": [
       {
-        "decision": "Delete only the inventoried exact identities.",
-        "reason": "This prevents unrelated or active work from being removed while resolving the reported residual branch state.",
-        "status": "verified",
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "AGENTS.md",
-            "subject": "one Work Item and dedicated branch boundary"
-          }
-        ]
-      },
-      {
-        "decision": "Preserve historical evidence through replacement archives and recorded identities.",
-        "reason": "The superseded branches must not be mistaken for successful delivery, and the canonical predecessor's yellow Outcome must remain unchanged.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json",
-            "subject": "canonical replacement archive"
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "verificationHistory[0] aiSummary failed",
+            "digest": "425b19542fdce5a13d2fc4014c274555c8bb6de40f5abad0e974274016279cd4"
           },
           {
-            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.outcome.json",
-            "subject": "stale delivery replacement archive"
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "df40902ccb9eaff9c938fd5f16b7a44e0ef48d55f15dfc99a7f6dcfdaea40f79"
           }
         ]
       }
     ],
-    "technicalDetails": [
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
       {
-        "topic": "Deletion order",
-        "detail": "Each linked worktree was removed with Git worktree lifecycle commands before its local and remote branch identities were deleted.",
-        "status": "verified",
+        "claim": "historical branch recovery",
+        "severity": "low",
+        "title": "historical branch recovery",
+        "detail": "Deleted refs remain recoverable from the recorded commit IDs and archived Work Item evidence; deletion does not rewrite commit objects or archive records.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
         "evidence": [
           {
-            "source": "scripts/ai_close_work_item.py",
-            "subject": "worktree and branch closure ordering checks"
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "residualRisks"
           }
-        ]
+        ],
+        "inference": false
       },
       {
-        "topic": "Protected state",
-        "detail": "The detached parent worktree's Makefile and templates/make/Makefile.ai remained unchanged, and unrelated detached worktrees were outside the cleanup boundary.",
-        "status": "verified",
+        "claim": "historical incomplete Outcome",
+        "severity": "low",
+        "title": "historical incomplete Outcome",
+        "detail": "The canonical parallel predecessor remains historically yellow and was not delivered; this cleanup does not resolve or reinterpret that Outcome.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
         "evidence": [
           {
-            "source": "AGENTS.md",
-            "subject": "parent worktree protection and cleanup lifecycle"
+            "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+            "subject": "residualRisks"
           }
-        ]
+        ],
+        "inference": false
       }
     ],
+    "humanDecisions": [],
     "evidence": [
       {
-        "claim": "The exact stale branch/worktree target set was bounded before mutation and absent after mutation.",
-        "status": "verified",
+        "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": "scripts/ai_close_work_item.py",
         "subject": "post-cleanup lifecycle audit implementation"
       },
       {
-        "claim": "Historical replacement evidence is present without reclassifying the yellow predecessor.",
-        "status": "verified",
         "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json",
         "subject": "replacement outcome"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+        "subject": "verificationHistory[0] aiSummary failed",
+        "digest": "425b19542fdce5a13d2fc4014c274555c8bb6de40f5abad0e974274016279cd4"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json",
+        "subject": "verification[aiSummary] retry passed",
+        "digest": "df40902ccb9eaff9c938fd5f16b7a44e0ef48d55f15dfc99a7f6dcfdaea40f79"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "先以精确清单锁定已确认无活动 Work Item 且无未提交变更的分支和工作树，再按 Git 生命周期顺序移除工作树、删除对应本地分支和远程分支；清理后用远程引用、工作树清单、主工作树和父目录哈希进行复核。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "AGENTS.md",
+            "subject": "governed Work Item branch and worktree lifecycle"
+          },
+          {
+            "source": "scripts/ai_close_work_item.py",
+            "subject": "lifecycle closure and cleanup verification implementation"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "清理仅作用于合同列出的三个关联工作树、四个本地分支引用和三个远程分支引用；删除后确认目标引用为空、目标工作树不存在、主工作树保持同步，并确认父工作树的用户修改字节未变化。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "AGENTS.md",
+            "subject": "protected Work Item boundaries and lifecycle rules"
+          },
+          {
+            "source": "scripts/ai_close_work_item.py",
+            "subject": "post-close branch, worktree, and base synchronization checks"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Git worktree and branch identities",
+          "detail": "The three exact linked worktrees, their three remote branches, and the four exact local branch identities were removed.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "AGENTS.md",
+              "subject": "destructiveChanges"
+            }
+          ]
+        },
+        {
+          "component": "Historical Work Item traceability",
+          "detail": "Replacement archives, recorded head commits, closed PR records, and the predecessor's yellow state remain explicit; cleanup does not convert historical evidence into delivery success.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json",
+              "subject": "replacement archive"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.outcome.json",
+              "subject": "replacement archive"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/verification-evidence-reuse.outcome.json",
+              "subject": "replacement archive"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Delete only the inventoried exact identities.",
+          "reason": "This prevents unrelated or active work from being removed while resolving the reported residual branch state.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "AGENTS.md",
+              "subject": "one Work Item and dedicated branch boundary"
+            }
+          ]
+        },
+        {
+          "decision": "Preserve historical evidence through replacement archives and recorded identities.",
+          "reason": "The superseded branches must not be mistaken for successful delivery, and the canonical predecessor's yellow Outcome must remain unchanged.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json",
+              "subject": "canonical replacement archive"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.outcome.json",
+              "subject": "stale delivery replacement archive"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Deletion order",
+          "detail": "Each linked worktree was removed with Git worktree lifecycle commands before its local and remote branch identities were deleted.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_close_work_item.py",
+              "subject": "worktree and branch closure ordering checks"
+            }
+          ]
+        },
+        {
+          "topic": "Protected state",
+          "detail": "The detached parent worktree's Makefile and templates/make/Makefile.ai remained unchanged, and unrelated detached worktrees were outside the cleanup boundary.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "AGENTS.md",
+              "subject": "parent worktree protection and cleanup lifecycle"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The exact stale branch/worktree target set was bounded before mutation and absent after mutation.",
+          "status": "verified",
+          "source": "scripts/ai_close_work_item.py",
+          "subject": "post-cleanup lifecycle audit implementation"
+        },
+        {
+          "claim": "Historical replacement evidence is present without reclassifying the yellow predecessor.",
+          "status": "verified",
+          "source": ".ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json",
+          "subject": "replacement outcome"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "zh-CN",
@@ -860,6 +931,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
