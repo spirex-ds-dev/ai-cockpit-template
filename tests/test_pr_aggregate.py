@@ -1036,6 +1036,92 @@ def test_pr_accepts_only_canonical_resumed_lineage(monkeypatch):
     assert not ai_check_pr.archive_base_is_compatible(contract, resumed)
 
 
+def test_pr_accepts_only_canonical_synchronized_lineage(monkeypatch):
+    original = "a" * 40
+    synchronized = "b" * 40
+    contract = {
+        "baseCommit": synchronized,
+        "startReceipt": {
+            "baseCommit": original,
+            "path": ".ai/work-items/starts/synchronized.json",
+        },
+        "synchronizationHistory": [
+            {
+                "synchronizationVersion": 1,
+                "fromBaseCommit": original,
+                "toBaseCommit": synchronized,
+                "baseRemote": "origin",
+                "baseBranch": "main",
+                "workBranch": "codex/synchronized",
+                "recordedAt": "2026-08-19T00:00:00+00:00",
+                "priorContractDigest": "c" * 64,
+                "priorSummaryDigest": "d" * 64,
+                "rebaseHeadBefore": "e" * 40,
+                "rebaseHeadAfter": "f" * 40,
+            }
+        ],
+    }
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+
+    assert ai_check_pr.archive_base_is_compatible(contract, synchronized)
+    contract["synchronizationHistory"][0]["fromBaseCommit"] = "f" * 40
+    assert not ai_check_pr.archive_base_is_compatible(contract, synchronized)
+
+
+def test_pr_accepts_transitive_knowledge_projection_owned_by_dependency(tmp_path, monkeypatch):
+    archive = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    archive.mkdir(parents=True)
+    dependency = ".ai/knowledge/work-items/direct.json"
+    derived = ".ai/knowledge/work-items/derived.json"
+    index = ".ai/knowledge/index.json"
+    for path in (dependency, index):
+        target = tmp_path / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("{}", encoding="utf-8")
+    generated_paths = {
+        "contractPath": ".ai/work-items/archive/2026/derived.contract.json",
+        "summaryPath": ".ai/work-items/archive/2026/derived.summary.json",
+        "outcomePath": ".ai/work-items/archive/2026/derived.outcome.json",
+    }
+    generated_digests = {}
+    for key, path in generated_paths.items():
+        target = tmp_path / path
+        target.write_text("{}", encoding="utf-8")
+        generated_digests[key.replace("Path", "Digest")] = hashlib.sha256(
+            target.read_bytes()
+        ).hexdigest()
+    derived_path = tmp_path / derived
+    derived_path.parent.mkdir(parents=True, exist_ok=True)
+    dependency_digest = hashlib.sha256((tmp_path / dependency).read_bytes()).hexdigest()
+    derived_path.write_text(
+        json.dumps(
+            {
+                "workItemId": "derived",
+                "generatedFrom": {**generated_paths, **generated_digests},
+                "knowledgeState": "partial",
+                "evidence": [{"path": dependency, "digest": dependency_digest}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    contract_path = archive / "current.contract.json"
+    summary = {"changedFiles": [{"path": dependency}, {"path": index}]}
+    entry = (
+        contract_path,
+        {"scope": [".ai/knowledge/**"]},
+        summary,
+        (75, "current", "current"),
+    )
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.archive_owns_knowledge_projection(
+        derived, [entry], [dependency, derived, index]
+    )
+    assert not ai_check_pr.archive_owns_knowledge_projection(
+        ".ai/knowledge/work-items/arbitrary.json", [entry], [dependency, derived, index]
+    )
+
+
 def test_aggregate_pr_reports_missing_summary_and_invalid_json(tmp_path, monkeypatch):
     archive = tmp_path / ".ai" / "work-items" / "archive" / "2026"
     archive.mkdir(parents=True)
