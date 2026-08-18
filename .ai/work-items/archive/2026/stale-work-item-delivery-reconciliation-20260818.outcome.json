@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "stale-work-item-delivery-reconciliation-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "9bd945384f4ac4374f8f3cc86949726b4655f4630d76497bc7f4b272b275d02c"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "stale-work-item-delivery-reconciliation-20260818",
+    "contractDigest": "77ca44c051a8680a4e59191586b269b1370f6bb506560856200e03457fdca1a8",
+    "summaryDigest": "5a608f6919abe385a8f58f597f952890ae313ca16d766003c3fbaccd09cc562e",
+    "verificationDigest": "4f0abc9ca549e9f1bb10d1ef6d3d191e5dc9e8ea7f1226f155685a6938d03146",
+    "baseCommit": "3ca0cb1424f8628b23377ea3973ac2e647cad7fb",
+    "headCommit": "3ca0cb1424f8628b23377ea3973ac2e647cad7fb",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "47350506e516a02f37a272e114d2555ef851e80aa8d3114a55eda58ec6e13491",
+      "binding": {
+        "baseCommit": "3ca0cb1424f8628b23377ea3973ac2e647cad7fb",
+        "candidateHead": "3ca0cb1424f8628b23377ea3973ac2e647cad7fb",
+        "candidateTreeDigest": "e68fd3bc91b8d76ca529b6fd455ca9a244ecfdb5b39a448340a92b66a34d9edd",
+        "candidateDiffDigest": "59fcd0776c70ab44377fa096c9eaca6ee1eb49fc65078d8809d1180f3e2c4e9e"
+      }
+    }
   },
-  "task": {
-    "summary": "Task stale-work-item-delivery-reconciliation-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task stale-work-item-delivery-reconciliation-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: stale-work-item-delivery-reconciliation-20260818",
     "deliveredChanges": [
       ".ai/work-items/active/documentation-current-revision-reader-validation.handoff.json",
       ".ai/work-items/active/documentation-current-revision-reader-validation.receipt.json",
@@ -24,129 +47,243 @@
       ".ai/cockpit/current_status.md",
       ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.outcome.json",
       ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.outcome.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "0fe7d90992dcf92b6a89ccda0ec8f043152af1317e622d9c4e9389fbc2fb78bc"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "6ea8ed77212a832801849495a65cfd5f206480746f0c9a67f1d964de2c85a084"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "b4c7d8eb44b19e19528b0ec12efe9c271b8c93c9053874b166253b7be170fcb3"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "e494c9ecafa9b128a6f52a244c000ab636a4f455272c4bf55b853ebb3bf9f7f0"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "observed issue",
+        "action": "Resolution status: resolved",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "make check-ai-status-consistency",
+            "subject": "observedIssues[0] observed issue"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/documentation-current-revision-reader-validation.archive-manifest.json",
+            "subject": "observedIssues[0] observed issue"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "make check-ai-status-consistency",
+            "subject": "observedIssues[0] observed issue"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/documentation-current-revision-reader-validation.archive-manifest.json",
+            "subject": "observedIssues[0] observed issue"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "observed issue",
+        "action": "Resolution status: resolved",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/879",
+            "subject": "observedIssues[1] observed issue"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/879",
+            "subject": "observedIssues[1] observed issue"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "observed issue",
+        "action": "Resolution status: resolved",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/883",
+            "subject": "observedIssues[2] observed issue"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/883",
+            "subject": "observedIssues[2] observed issue"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "0fe7d90992dcf92b6a89ccda0ec8f043152af1317e622d9c4e9389fbc2fb78bc"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "6ea8ed77212a832801849495a65cfd5f206480746f0c9a67f1d964de2c85a084"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "b4c7d8eb44b19e19528b0ec12efe9c271b8c93c9053874b166253b7be170fcb3"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "e494c9ecafa9b128a6f52a244c000ab636a4f455272c4bf55b853ebb3bf9f7f0"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "historical branches",
+        "severity": "low",
+        "title": "historical branches",
+        "detail": "Superseded PR branches may be retained as immutable historical evidence after provider closure; they must not be treated as active delivery identities.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "governance guard",
+        "severity": "medium",
+        "title": "governance guard",
+        "detail": "The deletion exception must remain fail-closed and require both Contract approval and Summary path declaration.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "0fe7d90992dcf92b6a89ccda0ec8f043152af1317e622d9c4e9389fbc2fb78bc"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "6ea8ed77212a832801849495a65cfd5f206480746f0c9a67f1d964de2c85a084"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+        "subject": "verificationHistory[1] quality failed",
+        "digest": "b4c7d8eb44b19e19528b0ec12efe9c271b8c93c9053874b166253b7be170fcb3"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "e494c9ecafa9b128a6f52a244c000ab636a4f455272c4bf55b853ebb3bf9f7f0"
+      }
     ]
   },
-  "issues": {
-    "detected": 2,
-    "hardStops": 2,
-    "warnings": 0,
-    "resolved": 2,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "0fe7d90992dcf92b6a89ccda0ec8f043152af1317e622d9c4e9389fbc2fb78bc"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "6ea8ed77212a832801849495a65cfd5f206480746f0c9a67f1d964de2c85a084"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "b4c7d8eb44b19e19528b0ec12efe9c271b8c93c9053874b166253b7be170fcb3"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "e494c9ecafa9b128a6f52a244c000ab636a4f455272c4bf55b853ebb3bf9f7f0"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "0fe7d90992dcf92b6a89ccda0ec8f043152af1317e622d9c4e9389fbc2fb78bc"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "6ea8ed77212a832801849495a65cfd5f206480746f0c9a67f1d964de2c85a084"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "b4c7d8eb44b19e19528b0ec12efe9c271b8c93c9053874b166253b7be170fcb3"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "e494c9ecafa9b128a6f52a244c000ab636a4f455272c4bf55b853ebb3bf9f7f0"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "low",
-      "detail": "Superseded PR branches may be retained as immutable historical evidence after provider closure; they must not be treated as active delivery identities.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    },
-    {
-      "severity": "medium",
-      "detail": "The deletion exception must remain fail-closed and require both Contract approval and Summary path declaration.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/stale-work-item-delivery-reconciliation-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -947,6 +1084,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
