@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "adopter-feature-parity-gate",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "a9ad983a81d73df70dac64dd99c1531a78877aea2a0ee3981b064f51eafffd62"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "adopter-feature-parity-gate",
+    "contractDigest": "cae2c52ba4f8872449ea5189aa2fc061684f2559552a770d82de3b3380a210be",
+    "summaryDigest": "8512eb953a009dedcfeae67ea0389513cc932a39608aa97ea5110038178fc008",
+    "verificationDigest": "46748bfb2adee70a55bd40323f7b11eeef300796dbb9855989ee56b75b8d7835",
+    "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+    "headCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "350b33c229810130a3c283791efe135bb8474d42d657bb518f8446083a9937e7",
+      "binding": {
+        "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+        "candidateHead": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+        "candidateTreeDigest": "ef807130bb57a73efad85d023cc32c7b03b3bf2ddc22be7dbc1b42616447c442",
+        "candidateDiffDigest": "eb9a1713b772a5501b9e3f4ca87b313185e9bfe074b48273837534f41122f2c2"
+      }
+    }
   },
-  "task": {
-    "summary": "Task adopter-feature-parity-gate generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task adopter-feature-parity-gate generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: adopter-feature-parity-gate",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
       ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
@@ -33,260 +56,346 @@
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md",
       ".ai/work-items/starts/adopter-feature-parity-gate.json"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "The repository archive-growth warning remains at 953 archived records versus the configured 200-record advisory threshold; this is lifecycle maintenance evidence, not adopter capability parity evidence.",
+        "reason": "This repository-maintenance warning is explicitly bounded to archive growth and does not weaken the adopter manifest, installer, or fresh-adopter parity evidence.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "knownGaps"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "riskAssessment.archiveGrowth"
+          }
+        ]
+      }
+    ],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiScenarioCoverage failed before the retry.",
+        "policyOrGuard": "required verification: aiScenarioCoverage",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[0] aiScenarioCoverage failed",
+            "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiScenarioCoverage] retry passed",
+            "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[1] aiGuidelines failed",
+            "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[3] aiSummary failed",
+            "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[4] aiSummary failed",
+            "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiScenarioCoverage failed before the retry.",
+        "action": "Re-ran aiScenarioCoverage after the correction; the latest attempt passed.",
+        "verification": "aiScenarioCoverage latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[0] aiScenarioCoverage failed",
+            "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiScenarioCoverage] retry passed",
+            "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192"
+          }
+        ]
+      },
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[1] aiGuidelines failed",
+            "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd"
+          }
+        ]
+      },
+      {
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[3] aiSummary failed",
+            "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
+          }
+        ]
+      },
+      {
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verificationHistory[4] aiSummary failed",
+            "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "external-capability-boundary",
+        "severity": "medium",
+        "title": "external-capability-boundary",
+        "detail": "Hosted CI, CodeQL, SBOM, Provenance, Digital Signing, Enterprise IAM, Production Sandbox, External Audit, and Calibration completion remain excluded because local installation evidence cannot prove them.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "implementation-approach-ownership",
+        "severity": "medium",
+        "title": "implementation-approach-ownership",
+        "detail": "Implementation Approach is adopter_installed only as the existing lifecycle Summary/Task Outcome/Human Report surface; no separate future report implementation is claimed.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "Contract scope/outOfScope was corrected to explicitly cover the adopter manifest, installer catalog/copy map, Makefiles, fresh-adopter parity, Capability Truth, and lifecycle evidence while excluding verification runtime, report implementations/checkers, and GitHub Issue writes.",
+      "Implementation Approach was changed from planned to adopter_installed because its semantics are carried by the existing lifecycle Summary/Task Outcome/Human Report installed surface; no new helper dependency was introduced."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verificationHistory[0] aiScenarioCoverage failed",
+        "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verification[aiScenarioCoverage] retry passed",
+        "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verificationHistory[1] aiGuidelines failed",
+        "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verificationHistory[2] quality failed",
+        "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verificationHistory[3] aiSummary failed",
+        "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verification[aiSummary] retry passed",
+        "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+        "subject": "verificationHistory[4] aiSummary failed",
+        "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
+      }
     ]
   },
-  "issues": {
-    "detected": 5,
-    "hardStops": 5,
-    "warnings": 0,
-    "resolved": 5,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiScenarioCoverage",
-      "action": "blocked",
-      "resolution": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[3] aiSummary failed",
-          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[4] aiSummary failed",
-          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiScenarioCoverage failed before the retry.",
-      "policyOrGuard": "required verification: aiScenarioCoverage",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[1] aiGuidelines failed",
-          "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[3] aiSummary failed",
-          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verificationHistory[4] aiSummary failed",
-          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "Contract scope/outOfScope was corrected to explicitly cover the adopter manifest, installer catalog/copy map, Makefiles, fresh-adopter parity, Capability Truth, and lifecycle evidence while excluding verification runtime, report implementations/checkers, and GitHub Issue writes.",
-    "Implementation Approach was changed from planned to adopter_installed because its semantics are carried by the existing lifecycle Summary/Task Outcome/Human Report installed surface; no new helper dependency was introduced."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "Hosted CI, CodeQL, SBOM, Provenance, Digital Signing, Enterprise IAM, Production Sandbox, External Audit, and Calibration completion remain excluded because local installation evidence cannot prove them.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    },
-    {
-      "severity": "medium",
-      "detail": "Implementation Approach is adopter_installed only as the existing lifecycle Summary/Task Outcome/Human Report surface; no separate future report implementation is claimed.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
   "humanHandoff": {
-    "locale": "en",
+    "locale": "zh-CN",
     "completed": [
       {
         "claim": "Changed .ai/work-items/active/adopter-feature-parity-gate.contract.json",
@@ -1317,6 +1426,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

@@ -226,6 +226,32 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
         assert (tmp_path / "scripts" / script).is_file()
 
 
+def test_installed_distribution_validates_adopter_capability_manifest_surface(tmp_path):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+    checker = tmp_path / "scripts" / "ai_installer_adopter_capability_manifest.py"
+    result = run(
+        tmp_path,
+        sys.executable,
+        str(checker),
+        "--root",
+        str(tmp_path),
+        "--installed",
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert "adopter capability manifest valid" in result.stdout
+
+
 def test_installed_distribution_runs_input_trust_external_instruction_block(tmp_path):
     """An adopter must receive the existing injection policy runtime, not only its documentation."""
     installer = Installer(

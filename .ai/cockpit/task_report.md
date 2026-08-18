@@ -4,92 +4,75 @@ Task Result
 Status: Success
 
 What was completed
-
-Implementation Approach
-Status: `complete`
-Customer summary (verified): Customers can see what changed, how the governed result is produced, and which repository evidence supports it.
-Mechanism (verified): Summary implementationApproach is read from the ai_finish Summary evidence source, validated against real repository paths, and projected into Outcome and Human Report JSON/Markdown views.
-
-Affected components
-- Summary: Stores the canonical structured approach and evidence references. (verified)
-- Task Outcome: Carries the same approach with customer-facing and progressive technical rendering. (verified)
-- Human Report: Carries the same approach in direct JSON and Markdown output. (verified)
-
-Design decisions
-- Keep Summary as the source of truth and make Outcome/Human Report projections deterministic.: The existing ai_finish evidence source carries the Summary path; ai_finish now refreshes the capability truth projection before its source-bound gate without changing verification runtime semantics. (verified)
-- Require real repository-relative evidence for verified approach claims.: A non-empty source/subject pair cannot prove a factual implementation claim by itself. (verified)
-- Do not infer performance improvement without benchmark evidence.: The record describes observable path and mechanism changes and retains no benchmark claim. (verified)
-
-### Technical details
-- Completeness states: Code scope requires implementationApproach; configuration scope requires configurationApproach; missing Summary input becomes yellow incomplete/warning, while standalone legacy projection remains not_applicable. (verified)
-- Progressive disclosure: Customer summary and mechanism render before affected components, design decisions, technical details, and evidence. (verified)
-- Source-bound evidence refresh: When the capability truth matrix and generator are present, ai_finish runs the existing generator with --write before check-source-bound-evidence, records matrix before/after digests, and blocks without running the original gate if refresh fails. (verified)
-
-### Evidence
-- Verified approach references are checked against real repository files.: scripts/ai_check_summary.py#validate_implementation_approach (verified)
-- The ai_finish Summary source reaches Outcome without manual approach injection.: tests/test_task_outcome_generator.py#ai_finish Summary source projection (verified)
-- Human Report JSON and Markdown expose the approach directly.: tests/test_human_benefit_report.py#direct report projection (verified)
-- sourceBoundEvidence consumes refreshed capability evidence and records its generated file binding.: tests/test_task_outcome_ai_finish_integration.py#refresh before source-bound check (verified)
-
-- Changed .ai/work-items/active/implementation-approach-evidence.contract.json [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.contract.json]
-- Changed .ai/work-items/active/implementation-approach-evidence.summary.json [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.summary.json]
-- Changed .ai/work-items/starts/implementation-approach-evidence.json [evidence: .ai/work-items/starts/implementation-approach-evidence.json]
-- Changed .ai/cockpit/README.md [evidence: .ai/cockpit/README.md]
+- Changed .ai/work-items/active/adopter-feature-parity-gate.contract.json [evidence: .ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json]
+- Changed .ai/work-items/active/adopter-feature-parity-gate.summary.json [evidence: .ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json]
+- Changed .ai/work-items/active/adopter-feature-parity-gate.outcome.json [evidence: .ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.json]
+- Changed .ai/work-items/active/adopter-feature-parity-gate.outcome.md [evidence: .ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.md]
+- Changed .ai/project/adopter-capability-manifest.json [evidence: .ai/project/adopter-capability-manifest.json]
+- Changed .ai/schemas/adopter-capability-manifest.schema.json [evidence: .ai/schemas/adopter-capability-manifest.schema.json]
+- Changed scripts/ai_installer_adopter_capability_manifest.py [evidence: scripts/ai_installer_adopter_capability_manifest.py]
+- Changed scripts/ai_installer_catalog.json [evidence: scripts/ai_installer_catalog.json]
+- Changed scripts/installer/legacy.py [evidence: scripts/installer/legacy.py]
+- Changed Makefile [evidence: Makefile]
+- Changed templates/make/Makefile.ai [evidence: templates/make/Makefile.ai]
+- Changed tests/test_adopter_feature_parity.py [evidence: tests/test_adopter_feature_parity.py]
+- Changed tests/test_installer.py [evidence: tests/test_installer.py]
+- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
+- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
+- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
+- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
+- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed .ai/schemas/task_outcome.schema.json [evidence: .ai/schemas/task_outcome.schema.json]
-- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
-- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
-- Changed scripts/ai_check_summary.py [evidence: scripts/ai_check_summary.py]
-- Changed scripts/ai_check_task_outcome.py [evidence: scripts/ai_check_task_outcome.py]
-- Changed scripts/ai_generate_task_outcome.py [evidence: scripts/ai_generate_task_outcome.py]
-- Changed scripts/ai_render_task_outcome.py [evidence: scripts/ai_render_task_outcome.py]
-- Changed scripts/ai_generate_human_report.py [evidence: scripts/ai_generate_human_report.py]
-- Changed scripts/ai_finish.py [evidence: scripts/ai_finish.py]
-- Changed tests/test_ai_check_summary.py [evidence: tests/test_ai_check_summary.py]
-- Changed tests/test_task_outcome_schema.py [evidence: tests/test_task_outcome_schema.py]
-- Changed tests/test_task_outcome_validator.py [evidence: tests/test_task_outcome_validator.py]
-- Changed tests/test_task_outcome_generator.py [evidence: tests/test_task_outcome_generator.py]
-- Changed tests/test_task_outcome_markdown_renderer.py [evidence: tests/test_task_outcome_markdown_renderer.py]
-- Changed tests/test_human_benefit_report.py [evidence: tests/test_human_benefit_report.py]
-- Changed tests/test_task_outcome_ai_finish_integration.py [evidence: tests/test_task_outcome_ai_finish_integration.py]
-- Changed .ai/work-items/active/implementation-approach-evidence.outcome.json [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.outcome.json]
-- Changed .ai/work-items/active/implementation-approach-evidence.outcome.md [evidence: .ai/work-items/archive/2026/implementation-approach-evidence.outcome.md]
+- Changed .ai/work-items/starts/adopter-feature-parity-gate.json [evidence: .ai/work-items/starts/adopter-feature-parity-gate.json]
 
 Problems found
-- Total: 2
+- Total: 5
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Reason: aiScenarioCoverage failed before the retry. | Stage: verification | Resolution: Retry aiScenarioCoverage after correcting the recorded failure. [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
+- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
+- Reason: aiSummary failed before the retry. | Stage: verification | Resolution: Retry aiSummary after correcting the recorded failure. [evidence: verificationHistory[3] aiSummary failed, verification[aiSummary] retry passed]
+- Reason: aiSummary failed before the retry. | Stage: verification | Resolution: Retry aiSummary after correcting the recorded failure. [evidence: verificationHistory[4] aiSummary failed, verification[aiSummary] retry passed]
 
 Problems resolved
+- Problem: aiScenarioCoverage failed before the retry.
+  Solution: Re-ran aiScenarioCoverage after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
+- Problem: aiGuidelines failed before the retry.
+  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
 - Problem: quality failed before the retry.
   Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+  Evidence: [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
+- Problem: aiSummary failed before the retry.
+  Solution: Re-ran aiSummary after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[3] aiSummary failed, verification[aiSummary] retry passed]
+- Problem: aiSummary failed before the retry.
+  Solution: Re-ran aiSummary after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[4] aiSummary failed, verification[aiSummary] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
 - If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- No benchmark or hosted environment evidence was run; the implementation record makes no performance-improvement claim and remains bounded to repository code and tests. [evidence: residualRisks]
+- Hosted CI, CodeQL, SBOM, Provenance, Digital Signing, Enterprise IAM, Production Sandbox, External Audit, and Calibration completion remain excluded because local installation evidence cannot prove them. [evidence: residualRisks]
+- Implementation Approach is adopter_installed only as the existing lifecycle Summary/Task Outcome/Human Report surface; no separate future report implementation is claimed. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- None recorded.
+- Contract scope/outOfScope was corrected to explicitly cover the adopter manifest, installer catalog/copy map, Makefiles, fresh-adopter parity, Capability Truth, and lifecycle evidence while excluding verification runtime, report implementations/checkers, and GitHub Issue writes. (inference)
+- Implementation Approach was changed from planned to adopter_installed because its semantics are carried by the existing lifecycle Summary/Task Outcome/Human Report installed surface; no new helper dependency was introduced. (inference)
 
 Verification
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
