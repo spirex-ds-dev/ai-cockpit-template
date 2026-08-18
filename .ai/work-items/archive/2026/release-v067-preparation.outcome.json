@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "release-v067-preparation",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "35e9a0f3a50dd8336a8355f7e29a987fb8076efa559512e9eadea2933a40c1da"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "release-v067-preparation",
+    "contractDigest": "8763e35616c70fa7c0309c31fea44fe1b9062b5bae50dbd5050a42090a7521bd",
+    "summaryDigest": "2b2e83f6cb8566e6390176571ced439ecb3a4128d0f2d14e1a795c11e6653117",
+    "verificationDigest": "00e2246d3aa6fd6960f439d86e96d8524c6364856e6ce7364a2708e5f005c899",
+    "baseCommit": "48198a3fa6c4a175808ba61e904be02bfa6c4abe",
+    "headCommit": "48198a3fa6c4a175808ba61e904be02bfa6c4abe",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "8c1d4b0ffcdc3b72f0775edbc87c599ce1249f44a875e2f45982ed76ffb66b6f",
+      "binding": {
+        "baseCommit": "48198a3fa6c4a175808ba61e904be02bfa6c4abe",
+        "candidateHead": "48198a3fa6c4a175808ba61e904be02bfa6c4abe",
+        "candidateTreeDigest": "b3745782d82618eaa43544c20bd789bd48773fd67557f4a45021412e9801a346",
+        "candidateDiffDigest": "bbef7b38afc84f531568121a2d3766499509cbb043bd90b93b36e731c56dfefd"
+      }
+    }
   },
-  "task": {
-    "summary": "Task release-v067-preparation generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task release-v067-preparation generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: release-v067-preparation",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/release-v067-preparation.contract.json",
       ".ai/work-items/archive/2026/release-v067-preparation.summary.json",
@@ -30,194 +53,288 @@
       "docs/reference/pre-release-documentation-alignment.md",
       ".ai/work-items/archive/2026/release-v067-preparation.outcome.json",
       ".ai/work-items/archive/2026/release-v067-preparation.outcome.md"
-    ]
-  },
-  "issues": {
-    "detected": 0,
-    "hardStops": 0,
-    "warnings": 0,
-    "resolved": 0,
-    "unresolved": 0
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [
-    "Complete the existing WI goals before publishing a new version; Outcome green is not itself the release goal.",
-    "Do not allow a stale or reused release candidate to enter a future publication workflow."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "low",
-      "detail": "This preparation WI intentionally stops at the evidence-bound v0.5.67 candidate; formal publication remains a separate exact-source release operation and is not claimed here.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-v067-preparation.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "The repository now treats the already published v0.5.66 provider assets as the published projection and prepares v0.5.67 as the next candidate without reusing an immutable tag.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/sync_published_release_projection.py",
-          "subject": "canonical projection synchronizer"
-        },
-        {
-          "source": "release-state.json",
-          "subject": "published and candidate identity"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "Verified v0.5.66 release assets are downloaded with provider-reported SHA-256 digests, passed through the atomic synchronizer, and followed by candidate-only SBOM and provenance refresh against the merged source HEAD.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/sync_published_release_projection.py",
-          "subject": "asset digest and identity validation"
-        },
-        {
-          "source": "scripts/check_supply_chain.py",
-          "subject": "candidate evidence refresh"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [
       {
-        "component": "Published release projection",
-        "detail": "release.json and release-digests.json now bind v0.5.66 provider evidence.",
-        "status": "verified",
-        "evidence": [
+        "problem": "observed issue",
+        "action": "Supplied the real GitHub Release evidence URL and stable_release_unverified classification; synchronization then completed atomically.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
           {
-            "source": "release.json",
-            "subject": "v0.5.66 release contract"
+            "source": "scripts/sync_published_release_projection.py",
+            "subject": "observedIssues[0] observed issue"
           },
-          {
-            "source": ".ai/cockpit/release-digests.json",
-            "subject": "v0.5.66 artifact manifest"
-          }
-        ]
-      },
-      {
-        "component": "Candidate release projection",
-        "detail": "release-state.json, next-release.json, version.json, and install.sh identify v0.5.67 as the unpublished candidate.",
-        "status": "verified",
-        "evidence": [
           {
             "source": "release-state.json",
-            "subject": "candidate_prepared state"
-          },
-          {
-            "source": "next-release.json",
-            "subject": "v0.5.67 candidate"
-          },
-          {
-            "source": ".ai/cockpit/version.json",
-            "subject": "candidate source version"
-          },
-          {
-            "source": "install.sh",
-            "subject": "candidate default reference"
+            "subject": "observedIssues[0] observed issue"
           }
-        ]
-      },
-      {
-        "component": "Candidate supply-chain evidence",
-        "detail": "SBOM and provenance are regenerated from the merged source HEAD and their digests are bound into next-release.json.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".ai/cockpit/sbom.json",
-            "subject": "merged HEAD SBOM"
-          },
-          {
-            "source": ".ai/cockpit/provenance.json",
-            "subject": "merged HEAD provenance"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Do not rewrite or reuse v0.5.66.",
-        "reason": "The provider tag and stable Release are immutable historical evidence; the next candidate must be v0.5.67.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/check_release_distribution.py",
-            "subject": "reserved tag sequencing"
-          }
-        ]
-      },
-      {
-        "decision": "Keep published and candidate projections separate.",
-        "reason": "Quick Install must remain bound to published release evidence while candidate metadata remains explicitly unpublished.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "docs/reference/distribution.md",
-            "subject": "projection boundary"
-          },
-          {
-            "source": "next-release.json",
-            "subject": "candidate state"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Atomic synchronization",
-        "detail": "The synchronizer validates release and manifest tags, source identity, asset digests, reserved-tag evidence, and all writes before replacing projections.",
-        "status": "verified",
+        ],
         "evidence": [
           {
             "source": "scripts/sync_published_release_projection.py",
-            "subject": "synchronize_projection"
+            "subject": "observedIssues[0] observed issue"
+          },
+          {
+            "source": "release-state.json",
+            "subject": "observedIssues[0] observed issue"
           }
-        ]
+        ],
+        "inference": false
       },
       {
-        "topic": "Candidate evidence",
-        "detail": "Candidate SBOM/provenance are regenerated from HEAD; public v0.5.66 release digests remain the historical published projection.",
-        "status": "verified",
+        "problem": "observed issue",
+        "action": "Ran refresh-candidate-release-evidence SOURCE_COMMIT=HEAD and verified provenance, release, and candidate digest checks.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "scripts/check_supply_chain.py",
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": ".ai/cockpit/sbom.json",
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": ".ai/cockpit/provenance.json",
+            "subject": "observedIssues[1] observed issue"
+          }
+        ],
         "evidence": [
           {
             "source": "scripts/check_supply_chain.py",
-            "subject": "refresh_candidate_evidence"
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": ".ai/cockpit/sbom.json",
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": ".ai/cockpit/provenance.json",
+            "subject": "observedIssues[1] observed issue"
           }
-        ]
+        ],
+        "inference": false
       }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [
+      {
+        "claim": "publication",
+        "severity": "low",
+        "title": "publication",
+        "detail": "This preparation WI intentionally stops at the evidence-bound v0.5.67 candidate; formal publication remains a separate exact-source release operation and is not claimed here.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/release-v067-preparation.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-v067-preparation.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "Complete the existing WI goals before publishing a new version; Outcome green is not itself the release goal.",
+      "Do not allow a stale or reused release candidate to enter a future publication workflow."
     ],
     "evidence": [
       {
-        "claim": "The stable v0.5.66 release is validated against public assets.",
-        "status": "verified",
+        "source": ".ai/work-items/archive/2026/release-v067-preparation.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-v067-preparation.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": "scripts/check_release_distribution.py",
         "subject": "release distribution check"
       },
       {
-        "claim": "The next candidate is v0.5.67 and is not published.",
-        "status": "verified",
         "source": "next-release.json",
         "subject": "candidate metadata"
       },
       {
-        "claim": "Candidate supply-chain files match their declared digests.",
-        "status": "verified",
         "source": "scripts/check_supply_chain.py",
         "subject": "provenance and release checks"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "The repository now treats the already published v0.5.66 provider assets as the published projection and prepares v0.5.67 as the next candidate without reusing an immutable tag.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/sync_published_release_projection.py",
+            "subject": "canonical projection synchronizer"
+          },
+          {
+            "source": "release-state.json",
+            "subject": "published and candidate identity"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "Verified v0.5.66 release assets are downloaded with provider-reported SHA-256 digests, passed through the atomic synchronizer, and followed by candidate-only SBOM and provenance refresh against the merged source HEAD.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/sync_published_release_projection.py",
+            "subject": "asset digest and identity validation"
+          },
+          {
+            "source": "scripts/check_supply_chain.py",
+            "subject": "candidate evidence refresh"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Published release projection",
+          "detail": "release.json and release-digests.json now bind v0.5.66 provider evidence.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "release.json",
+              "subject": "v0.5.66 release contract"
+            },
+            {
+              "source": ".ai/cockpit/release-digests.json",
+              "subject": "v0.5.66 artifact manifest"
+            }
+          ]
+        },
+        {
+          "component": "Candidate release projection",
+          "detail": "release-state.json, next-release.json, version.json, and install.sh identify v0.5.67 as the unpublished candidate.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "release-state.json",
+              "subject": "candidate_prepared state"
+            },
+            {
+              "source": "next-release.json",
+              "subject": "v0.5.67 candidate"
+            },
+            {
+              "source": ".ai/cockpit/version.json",
+              "subject": "candidate source version"
+            },
+            {
+              "source": "install.sh",
+              "subject": "candidate default reference"
+            }
+          ]
+        },
+        {
+          "component": "Candidate supply-chain evidence",
+          "detail": "SBOM and provenance are regenerated from the merged source HEAD and their digests are bound into next-release.json.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/cockpit/sbom.json",
+              "subject": "merged HEAD SBOM"
+            },
+            {
+              "source": ".ai/cockpit/provenance.json",
+              "subject": "merged HEAD provenance"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Do not rewrite or reuse v0.5.66.",
+          "reason": "The provider tag and stable Release are immutable historical evidence; the next candidate must be v0.5.67.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/check_release_distribution.py",
+              "subject": "reserved tag sequencing"
+            }
+          ]
+        },
+        {
+          "decision": "Keep published and candidate projections separate.",
+          "reason": "Quick Install must remain bound to published release evidence while candidate metadata remains explicitly unpublished.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "docs/reference/distribution.md",
+              "subject": "projection boundary"
+            },
+            {
+              "source": "next-release.json",
+              "subject": "candidate state"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Atomic synchronization",
+          "detail": "The synchronizer validates release and manifest tags, source identity, asset digests, reserved-tag evidence, and all writes before replacing projections.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/sync_published_release_projection.py",
+              "subject": "synchronize_projection"
+            }
+          ]
+        },
+        {
+          "topic": "Candidate evidence",
+          "detail": "Candidate SBOM/provenance are regenerated from HEAD; public v0.5.66 release digests remain the historical published projection.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/check_supply_chain.py",
+              "subject": "refresh_candidate_evidence"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The stable v0.5.66 release is validated against public assets.",
+          "status": "verified",
+          "source": "scripts/check_release_distribution.py",
+          "subject": "release distribution check"
+        },
+        {
+          "claim": "The next candidate is v0.5.67 and is not published.",
+          "status": "verified",
+          "source": "next-release.json",
+          "subject": "candidate metadata"
+        },
+        {
+          "claim": "Candidate supply-chain files match their declared digests.",
+          "status": "verified",
+          "source": "scripts/check_supply_chain.py",
+          "subject": "provenance and release checks"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "en",
@@ -1045,6 +1162,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
