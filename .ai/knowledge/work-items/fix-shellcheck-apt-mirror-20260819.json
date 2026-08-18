@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-shellcheck-apt-mirror-20260819",
+  "title": "Fix hosted shellcheck apt mirror timeout",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "本次将兼容性检查从网络安装 ShellCheck 改为使用固定 Ubuntu 24.04 runner 已提供的 ShellCheck，并在实际检查前执行版本探测；同时将模板仓库专属的 reference-impact 证据限定为 source-only，并修复 clean snapshot 的 project-test shard 空 diff 收尾，避免干净提交在 quality 中被错误阻断。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
+    ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json",
+    ".github/workflows/compatibility.yml",
+    "tests/test_workflows.py",
+    ".ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json",
+    "scripts/installer/legacy.py",
+    "tests/test_installer.py",
+    "Makefile",
+    "tests/test_makefile.py",
+    ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.json",
+    ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-shellcheck-apt-mirror-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Use the runner-provided ShellCheck instead of installing it through apt.",
+      "reason": "Hosted evidence shows the job repeatedly timed out at azure.archive.ubuntu.com before ShellCheck started, while the pinned runner image provides ShellCheck.",
+      "status": "verified"
+    },
+    {
+      "decision": "Pin the ShellCheck lane to Ubuntu 24.04.",
+      "reason": "The tool availability assumption is kept stable at the workflow boundary instead of depending on a moving ubuntu-latest image.",
+      "status": "verified"
+    },
+    {
+      "decision": "Do not distribute template repository reference-impact records to adopters.",
+      "reason": "Those records bind to template-local target paths; copying them into an adopter makes the adopter's full-repository reference-impact check fail when the target workflow is absent.",
+      "status": "verified"
+    },
+    {
+      "decision": "Treat an empty tracked git diff as a valid isolated-shard input.",
+      "reason": "Hosted verification uses a clean committed snapshot; piping an empty diff to git apply returns 128 even though there are no changes to apply.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": ".github/workflows/compatibility.yml",
+      "digest": "e701447766cd9fb80c509edd8d4cbb7538646d82b79433bf7329ca805ae15cc3"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_workflows.py",
+      "digest": "8d192e39952bda76b0fd9b960af59fc72ad6a01672630de1d812857a7a323074"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_installer.py",
+      "digest": "f21dfc5f1e8ec676972756563d0f64b22e05e7bf324cd48db7aaee6976f114e1"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_makefile.py",
+      "digest": "5e6a74c143d236617f3372089d57a67ba4b0ce3474deb40a1501ab8ba1fc80a2"
+    },
+    {
+      "type": "code",
+      "path": "scripts/installer/legacy.py",
+      "digest": "1fc029e748ba730856df7772127b83c6ce73ef2fa7c461afa8df4933690c5abd"
+    },
+    {
+      "type": "code",
+      "path": "Makefile",
+      "digest": "460b9f6131e6d65a95d26e9cadc816ae96b0519e07ecb180db8742e1ead1b903"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
+    "contractDigest": "070b05551e9688615454e2211b5ad82644cd1d943717641ea1936ccffdefbd68",
+    "summaryPath": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
+    "summaryDigest": "a48e4d34aa848c274f380e3f0f925fc0046414583a373a0f042ab5e845ecafb3",
+    "outcomePath": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.json",
+    "outcomeDigest": "d50c93051acd506993473cb36243b66945ffa098d2863908eee50b554cebc3db"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

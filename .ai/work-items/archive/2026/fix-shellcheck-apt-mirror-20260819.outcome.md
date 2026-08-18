@@ -10,8 +10,8 @@ Task fix-shellcheck-apt-mirror-20260819 generated an evidence-derived outcome wi
 Governed Work Item: fix-shellcheck-apt-mirror-20260819
 
 ## Delivered Changes
-- .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json
-- .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json
+- .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json
+- .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json
 - .ai/cockpit/current_status.md
 - .ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json
 - .github/workflows/compatibility.yml
@@ -21,8 +21,8 @@ Governed Work Item: fix-shellcheck-apt-mirror-20260819
 - tests/test_installer.py
 - Makefile
 - tests/test_makefile.py
-- .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json
-- .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md
+- .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.json
+- .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.md
 - .ai/cockpit/task_report.json
 - .ai/cockpit/task_report.md
 - docs/reference/capability-truth-matrix.json
@@ -142,12 +142,12 @@ Locale: `en`
 - Changed docs/reference/pre-release-documentation-alignment.md: Generated source-bound evidence during ai_finish; sha256 before=8e81262f8d93910b53465e6d0427f33b6df49298de3439f31c4eab20643988e1, after=4ca6bdc4b669d7c63af929fc9094e6d0eb9643f85af306ac4e3688d7b2dd56ef.
 
 ### What passed
-- sourceBoundEvidence: capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=c35a4db246cd1f846d167245b43ff63b9756469bb9fee44d85000234624d5b4e, after=db93c0eb585d86b2588a57c22883b094c71d075b37100a4daf86f4899e59f2ea; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut
+- sourceBoundEvidence: capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=db93c0eb585d86b2588a57c22883b094c71d075b37100a4daf86f4899e59f2ea, after=200470bf37fe469ac8680dc0f42f08f2242edd67e14ba5720a02615932a19a31; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut
 - aiWorkItem: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json work item contract check passed: .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json
 - aiScope: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json scope guard passed: 20 changed path(s) covered
 - aiGuards: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json [warning] restricted_write: .ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard ch
 - aiCheckpoint: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json --stage "before_finish" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-shellcheck-apt-mirror-20260819` - Contract Hash: `070b05551e968861` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0
-- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json review policy matched 10 path(s) [review] .ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json [review] .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json [review] .ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review
+- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json review policy matched 10 path(s) [review] .ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json [review] .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json [review] .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json [review] .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md
 - aiBacktrack: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json
 - aiCoverage: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json
 - aiScenarioCoverage: PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json

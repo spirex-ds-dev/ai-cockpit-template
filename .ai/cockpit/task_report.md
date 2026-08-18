@@ -31,8 +31,8 @@ Design decisions
 - Fresh adopters do not inherit template-local reference-impact records that point to absent workflow paths.: tests/test_installer.py#installer boundary and installed quality regression (verified)
 - Clean committed snapshots no longer fail isolated project-test shard preparation because of an empty git diff.: tests/test_makefile.py#clean snapshot project-test shard regression (verified)
 
-- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json [evidence: .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json]
-- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json [evidence: .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json]
+- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json [evidence: .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json]
+- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json [evidence: .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json]
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
 - Changed .ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json [evidence: .ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json]
 - Changed .github/workflows/compatibility.yml [evidence: .github/workflows/compatibility.yml]
@@ -42,8 +42,8 @@ Design decisions
 - Changed tests/test_installer.py [evidence: tests/test_installer.py]
 - Changed Makefile [evidence: Makefile]
 - Changed tests/test_makefile.py [evidence: tests/test_makefile.py]
-- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json [evidence: .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json]
-- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md [evidence: .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md]
+- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json [evidence: .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.json]
+- Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md [evidence: .ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
