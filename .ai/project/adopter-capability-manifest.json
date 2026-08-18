@@ -209,6 +209,49 @@
       "verifyInstalledSurface": true
     },
     {
+      "id": "implementation_knowledge_query",
+      "title": "Deterministic Implementation Knowledge query interface",
+      "adopterFacing": true,
+      "status": "adopter_installed",
+      "truth": "adopter_installed",
+      "ownership": "template_and_installer",
+      "summary": "Provides a read-only, evidence-bound query over Implementation Knowledge records with exact filters, stable ordering, explicit lifecycle states, and fail-closed validation.",
+      "templateFiles": [
+        "scripts/ai_knowledge_query.py",
+        ".ai/schemas/implementation-knowledge-query.schema.json",
+        "templates/make/Makefile.ai",
+        "docs/reference/implementation-knowledge.md"
+      ],
+      "installedFiles": [
+        "scripts/ai_knowledge_query.py",
+        ".ai/schemas/implementation-knowledge-query.schema.json",
+        "Makefile.ai"
+      ],
+      "catalogScripts": [
+        "ai_knowledge_query.py"
+      ],
+      "makeTargets": [
+        "ai-knowledge-query",
+        "check-ai-knowledge"
+      ],
+      "schemas": [
+        ".ai/schemas/implementation-knowledge-query.schema.json"
+      ],
+      "entrypoints": [
+        {
+          "path": "scripts/ai_knowledge_query.py",
+          "args": [
+            "--help"
+          ],
+          "sideEffect": "none"
+        }
+      ],
+      "docs": [
+        "docs/reference/implementation-knowledge.md"
+      ],
+      "verifyInstalledSurface": true
+    },
+    {
       "id": "implementation_knowledge_projection",
       "title": "Evidence-bound Implementation Knowledge projection",
       "adopterFacing": true,

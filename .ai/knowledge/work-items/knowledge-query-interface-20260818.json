@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "knowledge-query-interface-20260818",
+  "title": "Implement deterministic Implementation Knowledge Query Interface",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在既有 Implementation Knowledge index 校验之上增加结构化、只读查询入口，使用显式字段进行精确组合过滤，并以稳定顺序返回完整记录。安装清单、Make targets、Schema 与 fresh adopter parity test 同步交付，未引入语义检索或自然语言回答层。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/knowledge-query-interface-20260818.contract.json",
+    ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/knowledge/index.json",
+    ".ai/knowledge/work-items/implementation-knowledge-projection-20260818.json",
+    ".ai/project/adopter-capability-manifest.json",
+    ".ai/schemas/implementation-knowledge-record.schema.json",
+    ".ai/schemas/implementation-knowledge-query.schema.json",
+    ".ai/work-items/starts/knowledge-query-interface-20260818.json",
+    "Makefile",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/implementation-knowledge.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_knowledge_query.py",
+    "templates/make/Makefile.ai",
+    "tests/test_knowledge_installer_parity.py",
+    "tests/test_knowledge_query.py",
+    ".ai/work-items/archive/2026/knowledge-query-interface-20260818.outcome.json",
+    ".ai/work-items/archive/2026/knowledge-query-interface-20260818.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/knowledge-query-interface-20260818.archive-manifest.json",
+    ".ai/knowledge/work-items/knowledge-query-interface-20260818.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Use exact conjunctive filters and explicit record dates only.",
+      "reason": "Prevents hidden relevance ranking and prevents timestamps from becoming unbound facts.",
+      "status": "verified"
+    },
+    {
+      "decision": "Keep superseded records queryable and return only explicit supersession relationships.",
+      "reason": "Historical knowledge remains inspectable without inferring replacement from similarity.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_knowledge_query.py",
+      "digest": "01d9c2972a03a525046e43d592528fb66edec9ed9eeee73b9ce0b92a9e4954d3"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_knowledge_installer_parity.py",
+      "digest": "ce12d5b74905b156bd0e3a3fdf320d09a5ef23dd3604643647747fa1415b928f"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_knowledge_query.py",
+      "digest": "4e1e324a24a17cf288bd95047431ae0317521482de0a33b598a7e0be5743f6bc"
+    },
+    {
+      "type": "code",
+      "path": ".ai/schemas/implementation-knowledge-query.schema.json",
+      "digest": "cf28096eb37dc603522e1c9156199a7f558ef7ebd39d0b777d5b3ef43e7b1b19"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_installer_catalog.json",
+      "digest": "0f4ce5fe48a2473ddda09aafec9607c430a326147cbb592af4e6e0879ca64236"
+    }
+  ],
+  "mergedCommit": null,
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.contract.json",
+    "contractDigest": "8a65eb89b5f6a3cfdd28dece17606dac0a4005d90f6558b5371b0aa3773f0eb2",
+    "summaryPath": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+    "summaryDigest": "d872c24524b9028292845ee0e0d0ab609298a029acd1176bb730a55e29849b64",
+    "outcomePath": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.outcome.json",
+    "outcomeDigest": "168274504c9ae58ef3d78beafe06a1fb4b8005a218de0a9690fcd0c69a6141ca"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

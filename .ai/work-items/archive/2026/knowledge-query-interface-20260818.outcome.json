@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "knowledge-query-interface-20260818",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "db26b22b357868ba58755a4dee3a7cf5891699bd7dada3cdffb3bd71e53f95c0"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "knowledge-query-interface-20260818",
+    "contractDigest": "8a65eb89b5f6a3cfdd28dece17606dac0a4005d90f6558b5371b0aa3773f0eb2",
+    "summaryDigest": "d872c24524b9028292845ee0e0d0ab609298a029acd1176bb730a55e29849b64",
+    "verificationDigest": "216f445a96e5e3af6a1b924d075f19a3f7afb6b907994705893a0ad1d4913601",
+    "baseCommit": "477a2bff0562338c4ae403cec62da449356fcb7c",
+    "headCommit": "477a2bff0562338c4ae403cec62da449356fcb7c",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "7377e97372bd40b5d1b4030ef68118d00b09f7879c8f679dfe45a3f716b449e6",
+      "binding": {
+        "baseCommit": "477a2bff0562338c4ae403cec62da449356fcb7c",
+        "candidateHead": "477a2bff0562338c4ae403cec62da449356fcb7c",
+        "candidateTreeDigest": "8c14c5d7fe9323bb3cd2f6e31f899885c83ec3f79ddbe0cd0cc7c7e89305ea2f",
+        "candidateDiffDigest": "f6816b00b3178c1e7d9a001d3378e1d667d4e9195cb79c9790ff16f96f5ec1f0"
+      }
+    }
   },
-  "task": {
-    "summary": "Task knowledge-query-interface-20260818 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task knowledge-query-interface-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: knowledge-query-interface-20260818",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/knowledge-query-interface-20260818.contract.json",
       ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
@@ -37,279 +60,330 @@
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md",
       "docs/reference/capability-truth-matrix.md"
-    ]
-  },
-  "issues": {
-    "detected": 3,
-    "hardStops": 3,
-    "warnings": 0,
-    "resolved": 3,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "4316b22eeeff0c06f1bf6756834b6f716fa26c55d7c32386a0d721da658a3b78"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "7b3f35940292f23d0b2b81c89b89425d62dbfb5173a20fd37b4aeee219eed2b5"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "0ee6808a69a8b141481ac77291a4965b18dee56cd00fc911e78925c8d139d3c6"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "e8e155fffaf58c903d4a184f9c8caf4800b3fc337bcd7517169c9ca9387a0b75"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "4316b22eeeff0c06f1bf6756834b6f716fa26c55d7c32386a0d721da658a3b78"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "7b3f35940292f23d0b2b81c89b89425d62dbfb5173a20fd37b4aeee219eed2b5"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "0ee6808a69a8b141481ac77291a4965b18dee56cd00fc911e78925c8d139d3c6"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verificationHistory[2] quality failed",
-          "digest": "e8e155fffaf58c903d4a184f9c8caf4800b3fc337bcd7517169c9ca9387a0b75"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The interface returns only explicit structured matches; customer-facing natural-language synthesis and semantic relevance ranking remain a later capability.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "在既有 Implementation Knowledge index 校验之上增加结构化、只读查询入口，使用显式字段进行精确组合过滤，并以稳定顺序返回完整记录。安装清单、Make targets、Schema 与 fresh adopter parity test 同步交付，未引入语义检索或自然语言回答层。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_knowledge_query.py",
-          "subject": "Deterministic query implementation and fail-closed validation"
-        },
-        {
-          "source": "tests/test_knowledge_query.py",
-          "subject": "Exact filters, states, stability, read-only, and missing-record behavior"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "先调用现有 knowledge index checker 验证权威输入，再按 Work Item ID、topic、component、merged commit、显式 date、status 和 inclusive date range 做 AND 过滤；结果按 Work Item ID 与 knowledge path 排序并输出固定 JSON 结构。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_knowledge_query.py",
-          "subject": "QueryFilters, authoritative input validation, exact matching, and stable sorting"
-        },
-        {
-          "source": ".ai/schemas/implementation-knowledge-query.schema.json",
-          "subject": "Machine-readable result contract"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
       {
-        "component": "Implementation Knowledge query CLI",
-        "detail": "Provides deterministic structured lookup without writing source records or indexes.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "scripts/ai_knowledge_query.py",
-            "subject": "Read-only query entrypoint"
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "4316b22eeeff0c06f1bf6756834b6f716fa26c55d7c32386a0d721da658a3b78"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "7b3f35940292f23d0b2b81c89b89425d62dbfb5173a20fd37b4aeee219eed2b5"
           }
         ]
       },
       {
-        "component": "Installer and adopter capability surface",
-        "detail": "Copies the query script and schema and exposes the Make targets in fresh adopter projects.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "scripts/ai_installer_catalog.json",
-            "subject": "Installed script catalog"
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "0ee6808a69a8b141481ac77291a4965b18dee56cd00fc911e78925c8d139d3c6"
           },
           {
-            "source": "tests/test_knowledge_installer_parity.py",
-            "subject": "Fresh adopter artifact and entrypoint parity"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Use exact conjunctive filters and explicit record dates only.",
-        "reason": "Prevents hidden relevance ranking and prevents timestamps from becoming unbound facts.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_knowledge_query.py",
-            "subject": "Exact filter and explicit-date implementation"
-          },
-          {
-            "source": "tests/test_knowledge_query.py",
-            "subject": "Combined filter and date-range regression coverage"
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
           }
         ]
       },
       {
-        "decision": "Keep superseded records queryable and return only explicit supersession relationships.",
-        "reason": "Historical knowledge remains inspectable without inferring replacement from similarity.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "tests/test_knowledge_query.py",
-            "subject": "All knowledge states and explicit supersedes coverage"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Validation",
-        "detail": "Invalid index, missing record, identity mismatch, unsafe path, status, commit, or date input fails closed.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_knowledge_query.py",
-            "subject": "KnowledgeQueryError validation boundary"
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "e8e155fffaf58c903d4a184f9c8caf4800b3fc337bcd7517169c9ca9387a0b75"
           },
           {
-            "source": "tests/test_knowledge_query.py",
-            "subject": "Missing-record fail-closed test"
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
           }
         ]
       }
     ],
+    "resolutions": [
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "4316b22eeeff0c06f1bf6756834b6f716fa26c55d7c32386a0d721da658a3b78"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "7b3f35940292f23d0b2b81c89b89425d62dbfb5173a20fd37b4aeee219eed2b5"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "0ee6808a69a8b141481ac77291a4965b18dee56cd00fc911e78925c8d139d3c6"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verificationHistory[2] quality failed",
+            "digest": "e8e155fffaf58c903d4a184f9c8caf4800b3fc337bcd7517169c9ca9387a0b75"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "knowledge-retrieval",
+        "severity": "medium",
+        "title": "knowledge-retrieval",
+        "detail": "The interface returns only explicit structured matches; customer-facing natural-language synthesis and semantic relevance ranking remain a later capability.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
     "evidence": [
       {
-        "claim": "Query results are deterministic and read-only.",
-        "status": "verified",
+        "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": "tests/test_knowledge_query.py",
         "subject": "Stable repeated output and unchanged input bytes"
       },
       {
-        "claim": "The adopter receives the same query surface.",
-        "status": "verified",
         "source": "tests/test_knowledge_installer_parity.py",
         "subject": "Fresh adopter installation and invocation"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "4316b22eeeff0c06f1bf6756834b6f716fa26c55d7c32386a0d721da658a3b78"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "7b3f35940292f23d0b2b81c89b89425d62dbfb5173a20fd37b4aeee219eed2b5"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+        "subject": "verificationHistory[1] quality failed",
+        "digest": "0ee6808a69a8b141481ac77291a4965b18dee56cd00fc911e78925c8d139d3c6"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "4faff6c5ea43b017bda1ed97e54f590261cb3e1b10f500357217f41778c3c34e"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-query-interface-20260818.summary.json",
+        "subject": "verificationHistory[2] quality failed",
+        "digest": "e8e155fffaf58c903d4a184f9c8caf4800b3fc337bcd7517169c9ca9387a0b75"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "在既有 Implementation Knowledge index 校验之上增加结构化、只读查询入口，使用显式字段进行精确组合过滤，并以稳定顺序返回完整记录。安装清单、Make targets、Schema 与 fresh adopter parity test 同步交付，未引入语义检索或自然语言回答层。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_knowledge_query.py",
+            "subject": "Deterministic query implementation and fail-closed validation"
+          },
+          {
+            "source": "tests/test_knowledge_query.py",
+            "subject": "Exact filters, states, stability, read-only, and missing-record behavior"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "先调用现有 knowledge index checker 验证权威输入，再按 Work Item ID、topic、component、merged commit、显式 date、status 和 inclusive date range 做 AND 过滤；结果按 Work Item ID 与 knowledge path 排序并输出固定 JSON 结构。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_knowledge_query.py",
+            "subject": "QueryFilters, authoritative input validation, exact matching, and stable sorting"
+          },
+          {
+            "source": ".ai/schemas/implementation-knowledge-query.schema.json",
+            "subject": "Machine-readable result contract"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Implementation Knowledge query CLI",
+          "detail": "Provides deterministic structured lookup without writing source records or indexes.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_knowledge_query.py",
+              "subject": "Read-only query entrypoint"
+            }
+          ]
+        },
+        {
+          "component": "Installer and adopter capability surface",
+          "detail": "Copies the query script and schema and exposes the Make targets in fresh adopter projects.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_installer_catalog.json",
+              "subject": "Installed script catalog"
+            },
+            {
+              "source": "tests/test_knowledge_installer_parity.py",
+              "subject": "Fresh adopter artifact and entrypoint parity"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Use exact conjunctive filters and explicit record dates only.",
+          "reason": "Prevents hidden relevance ranking and prevents timestamps from becoming unbound facts.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_knowledge_query.py",
+              "subject": "Exact filter and explicit-date implementation"
+            },
+            {
+              "source": "tests/test_knowledge_query.py",
+              "subject": "Combined filter and date-range regression coverage"
+            }
+          ]
+        },
+        {
+          "decision": "Keep superseded records queryable and return only explicit supersession relationships.",
+          "reason": "Historical knowledge remains inspectable without inferring replacement from similarity.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_knowledge_query.py",
+              "subject": "All knowledge states and explicit supersedes coverage"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Validation",
+          "detail": "Invalid index, missing record, identity mismatch, unsafe path, status, commit, or date input fails closed.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_knowledge_query.py",
+              "subject": "KnowledgeQueryError validation boundary"
+            },
+            {
+              "source": "tests/test_knowledge_query.py",
+              "subject": "Missing-record fail-closed test"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "Query results are deterministic and read-only.",
+          "status": "verified",
+          "source": "tests/test_knowledge_query.py",
+          "subject": "Stable repeated output and unchanged input bytes"
+        },
+        {
+          "claim": "The adopter receives the same query surface.",
+          "status": "verified",
+          "source": "tests/test_knowledge_installer_parity.py",
+          "subject": "Fresh adopter installation and invocation"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "zh-CN",
@@ -1300,6 +1374,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

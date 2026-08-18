@@ -71,6 +71,31 @@ Validate all records and the deterministic index:
 make ai-check-knowledge-index
 ```
 
-This Work Item deliberately does not add a natural-language or semantic query
-layer. A future read-only query interface may filter these records by explicit
-Work Item fields, topic, component, commit, date, status, or supersession.
+Query the validated records with exact, conjunctive filters:
+
+```sh
+make ai-knowledge-query ARGS='--topic orders --component OrderService --status verified'
+make ai-knowledge-query ARGS='--date-from 2026-01-01 --date-to 2026-01-31'
+```
+
+The query result is JSON with a schema version, the normalized query, a match
+count, and the complete matching records. Results are sorted by Work Item ID
+and knowledge path, so the same validated inputs produce the same output.
+Supported filters are Work Item ID, topic, component, merged commit, exact
+date, inclusive date range, and knowledge state. The filters are exact and
+combine with AND semantics. All four knowledge states remain queryable;
+supersession is returned from the explicit `supersedes` relationship and is
+never inferred.
+
+Dates are filterable only when a record contains an explicit `date` field. The
+interface never guesses a date from file timestamps, commit history, or other
+metadata. Invalid or missing index/record evidence fails closed, and the
+interface is read-only: it does not write records, indexes, or reports. It is
+intentionally a deterministic structured lookup, not a natural-language,
+semantic, vector, or RAG query layer.
+
+Validate the installed query surface as well as the knowledge index:
+
+```sh
+make check-ai-knowledge
+```
