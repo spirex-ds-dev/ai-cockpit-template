@@ -1053,7 +1053,16 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         )
 
     for path in all_paths:
-        if path in audit_paths or included(path, exempt) or path in no_op_restore_paths:
+        receipt_bound_recovery = any(
+            path in permitted_paths for permitted_paths in same_item_recovery_paths.values()
+        )
+        if (
+            path in audit_paths
+            or included(path, exempt)
+            or path in no_op_restore_paths
+            or is_archived_generated_evidence(path)
+            or receipt_bound_recovery
+        ):
             continue
         owners = [
             entry

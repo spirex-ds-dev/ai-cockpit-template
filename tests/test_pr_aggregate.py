@@ -138,6 +138,38 @@ def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     assert not any("scripts/ai_finish.py" in issue for issue in issues)
 
 
+def test_pr_bundle_skips_summary_bound_generated_knowledge_before_restricted_validation(
+    tmp_path, monkeypatch
+):
+    task = "generated-knowledge-recovery"
+    knowledge_paths = [
+        ".ai/knowledge/index.json",
+        f".ai/knowledge/work-items/{task}.json",
+    ]
+    pair = write_pair(tmp_path, task, [".ai/knowledge/**"], knowledge_paths)
+    contract_rel = pair.relative_to(tmp_path).as_posix()
+    summary_rel = contract_rel.replace(".contract", ".summary")
+    receipt_path = f".ai/work-items/recovery-receipts/{task}.json"
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "same_work_item_recovery_paths",
+        lambda _base, _entries: ({task: set(knowledge_paths)}, {receipt_path}, []),
+    )
+    scope = tmp_path / "scope.yaml"
+    scope.write_text("allowAlways:\n", encoding="utf-8")
+    ownership = tmp_path / "ownership.yaml"
+    ownership.write_text(".ai/**:\n  aiWrite: restricted\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", scope)
+    monkeypatch.setattr(ai_check_pr, "OWNERSHIP_POLICY", ownership)
+    patch_changes(monkeypatch, [contract_rel, summary_rel, receipt_path, *knowledge_paths])
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
+
+    assert not any("restricted path lacks approval" in issue for issue in issues)
+    assert not any(path in issue for path in knowledge_paths for issue in issues)
+
+
 def test_recovery_only_pr_discovers_archived_owner_from_valid_receipt(tmp_path, monkeypatch):
     contract_path = write_pair(tmp_path, "recovered-only", [], [])
     archive = contract_path.parent

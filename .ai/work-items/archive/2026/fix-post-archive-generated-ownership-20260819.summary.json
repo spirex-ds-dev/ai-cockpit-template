@@ -1,0 +1,669 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "fix-post-archive-generated-ownership-20260819",
+  "contractPath": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
+  "implementationApproach": {
+    "approachType": "implementation",
+    "status": "complete",
+    "summary": {
+      "text": "在 PR 审计的 ownership 决策入口，先确认归档生成证据或已验证的同一 WI 恢复凭证，再进入普通 Contract scope 与 restricted-write 判定。这样只对有明确证据绑定的路径放行，未绑定的受限路径仍然 fail closed。",
+      "status": "verified",
+      "evidence": [
+        {
+          "source": "scripts/ai_check_pr.py",
+          "subject": "PR ownership decision ordering"
+        },
+        {
+          "source": "tests/test_pr_aggregate.py",
+          "subject": "Generated knowledge recovery regression"
+        }
+      ]
+    },
+    "mechanism": {
+      "text": "在 generic ownership loop 之前复用既有的 exact generated-evidence validator 与 receipt-bound recovery paths；验证通过的路径直接结束本轮 ownership 判定，其他路径继续执行原有 scope、forbidden、restricted approval 检查。",
+      "status": "verified",
+      "evidence": [
+        {
+          "source": "scripts/ai_check_pr.py",
+          "subject": "is_archived_generated_evidence and same_work_item_recovery_paths"
+        }
+      ]
+    },
+    "affectedComponents": [
+      {
+        "component": "PR aggregate ownership audit",
+        "detail": "Generated archive evidence and valid same-Work-Item recovery bindings are honored before generic restricted-path validation.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_pr.py",
+            "subject": "validate_pr_bundle"
+          }
+        ]
+      },
+      {
+        "component": "PR audit regression tests",
+        "detail": "Adds the previously missing shape where Summary-declared knowledge paths also match a restricted Contract scope.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "tests/test_pr_aggregate.py",
+            "subject": "Generated knowledge ownership regression"
+          }
+        ]
+      }
+    ],
+    "designDecisions": [
+      {
+        "decision": "Keep the restricted ownership policy unchanged and fix only decision ordering.",
+        "reason": "The existing exact-path evidence validators already establish the necessary authority boundary.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_pr.py",
+            "subject": "Existing generated-evidence and recovery validators"
+          }
+        ]
+      },
+      {
+        "decision": "Do not rewrite the archived Contract, Summary, Outcome, or recovery receipt.",
+        "reason": "Archive evidence is immutable; the fix must make the normal PR audit consume its existing bindings correctly.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "AGENTS.md",
+            "subject": "Lifecycle rule requiring immutable archived evidence"
+          }
+        ]
+      }
+    ],
+    "technicalDetails": [
+      {
+        "topic": "Fail-closed behavior",
+        "detail": "Only generated paths named by the frozen Summary or paths named by a validated same-Work-Item receipt are skipped; unrelated restricted paths retain the existing error path.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "tests/test_pr_aggregate.py",
+            "subject": "Existing restricted recovery test and new generated knowledge test"
+          }
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "claim": "The current failure is caused by ordinary restricted ownership being evaluated before the exact generated/recovery binding.",
+        "status": "verified",
+        "source": "scripts/ai_check_pr.py",
+        "subject": "validate_pr_bundle decision order"
+      }
+    ]
+  },
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Honor validated generated-evidence and same-Work-Item recovery bindings before generic restricted ownership validation."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Regression coverage for Summary-declared generated knowledge paths under restricted scope."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerated source-bound capability evidence after governance checker change."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "Generated human-readable capability projection."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerated source-bound documentation alignment projection."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Generated human-readable documentation alignment projection."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated machine-readable Human Benefit Review Report."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated human-readable Human Benefit Review Report."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Generated source-bound evidence during ai_finish; sha256 before=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55, after=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Generated source-bound evidence during ai_finish; sha256 before=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94, after=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    },
+    {
+      "path": ".ai/knowledge/work-items/fix-post-archive-generated-ownership-20260819.json",
+      "reason": "Generated evidence-bound Implementation Knowledge Record."
+    },
+    {
+      "path": ".ai/knowledge/index.json",
+      "reason": "Rebuilt deterministic Implementation Knowledge index."
+    }
+  ],
+  "sourcesUsed": [
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "scripts/ai_capability_truth.py",
+    "scripts/check_pre_release_documentation_alignment.py",
+    "AGENTS.md",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/901",
+    "docs/reference/pre-release-documentation-alignment.json"
+  ],
+  "verification": [
+    {
+      "check": "sourceBoundEvidence",
+      "command": "make check-source-bound-evidence",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:14.672974+00:00",
+      "exitCode": 0,
+      "durationMs": 333,
+      "outputDigest": "f506b1db700c45c8b44ef653866ba1661940822ecda954cc6584c92548960c84",
+      "commandHash": "d86740d1d67217b831acef07cf8c7dfdf9a5216b5917b64f95de6e72269f5dc3",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "e9917d7d3ebd86083323a3ee7551cc98ea17167e22cf4e8a67883a63e3f4610c",
+      "outputSummary": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=406604a1657656f84f5601e5c154399a24163faa4653e69a09a1086ca1bee1e1, after=bcce1b91e7439a6494630125d0356fffe8913837160724bdef97e85a100010a6; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
+      "outputTail": "tadata.py\", \"sha256\": \"cd903bb0db29dc389698ccd519947859085d093ea26ab55a04b96ef5268cd154\" }, { \"path\": \"tests/test_guards_and_status.py\", \"sha256\": \"e7b96c338468de33bf4b7f2cb87989fd79003e11e4a6934c1728bc7567a98d72\" }, { \"path\": \"tests/test_input_trust.py\", \"sha256\": \"6228386f8b4b9667791d27adb527b4837fd4b42ad160c5ac1b7be728beb47fb9\" }, { \"path\": \"tests/test_input_trust_corpus.py\", \"sha256\": \"a5196c1965c10dc84bb8641cef0128c928d67d506ec2be10a40c5df3f5265dde\" }, { \"path\": \"tests/test_install_wizard.py\", \"sha256\": \"2683e49865bc52083587eb282778c41d276c8263a4e8f5bc27b75199b56169e5\" }, { \"path\": \"tests/test_japanese_adopter_lifecycle.py\", \"sha256\": \"153c9a5a169605f5a42c4cd0dc2c7a6f6918c678bc1b9dc838141948229adeb7\" }, { \"path\": \"tests/test_japanese_capability.py\", \"sha256\": \"848a4820e76f007d29e005c684d874b19a904bb3690fcfca6295f6c6ba6b0ba7\" }, { \"path\": \"tests/test_makefile.py\", \"sha256\": \"bcdf7657f674bfe4e4a33b2c8545a72ec68c97c74ad9cd7832b9f883efc7c753\" }, { \"path\": \"tests/test_task_outcome_multilingual.py\", \"sha256\": \"3f04b876fd84ae3362c274766cf5aa5430ff2bd8686c469a3ed776d9973f4cca\" }, { \"path\": \"tests/test_task_outcome_pr_summary.py\", \"sha256\": \"407c8cb2717cb1fc1664d5f706d4a5187720329137f235277d3e7fed87ced239\" }, { \"path\": \"tests/test_trust_layer_docs.py\", \"sha256\": \"8230686f3332b7b670efe8e0cbdb60eac8653618fa80ddf244f79b21f5005ac7\" }, { \"path\": \"tests/test_wizard_localization.py\", \"sha256\": \"a7161e9d05d8bd5a2d7116aff553cf36880776a1b870f7aea241529f65f28d38\" } ] }, \"limitations\": [ \"This assessment does not claim general model fluency, translation quality, or provider behavior.\", \"Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking.\" ], \"scope\": \"bounded repository-governance Japanese handling\", \"workItemId\": \"final-japanese-reassessment-replacement-20260731\", \"workItemRole\": \"final_reassessment\" } PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/check_pre_release_documentation_alignment.py pre-release documentation alignment passed",
+      "outputBytes": 51190
+    },
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:14.831609+00:00",
+      "exitCode": 0,
+      "durationMs": 67,
+      "outputDigest": "f2d265645dc899eff7aa38fbf5c55413498894be525125891e7ec1c01c5a2f4a",
+      "commandHash": "74290032951bbb4ec12184f85db32cf10b5dd63cfb7037b6c34faad5999b03ec",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "8b70cbdb492f8b87b3492573e1d59ae0c513d26b86d71189d022f6680cd6fe08",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json work item contract check passed: .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json work item contract check passed: .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "outputBytes": 363
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:15.068111+00:00",
+      "exitCode": 0,
+      "durationMs": 146,
+      "outputDigest": "fbff25bfe0311c6827aea59a94bc15b9bb17bb4da1e2ec4f852f90c1e28a0f70",
+      "commandHash": "01a4b8160390f22407edb74e47602a7fe7c58d5a23eeb4ba5fbbbae2660047f2",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "32d551fcb267788cd32652eb666ff6b3b0458e9ab83411cb179cf27833ebf485",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json scope guard passed: 13 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json scope guard passed: 13 changed path(s) covered",
+      "outputBytes": 291
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:15.324037+00:00",
+      "exitCode": 0,
+      "durationMs": 155,
+      "outputDigest": "f49cde21491cbd9604f1ce220cdd260df583e6529e075a688cdf66340fe9154f",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "c9c65edf629562ee4f7a882a342157647df2213d2c551bbac53b1a8f98dd0215",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 328
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:16.168639+00:00",
+      "exitCode": 0,
+      "durationMs": 754,
+      "outputDigest": "896dd32a506b45d0b46246a5355b0aff4e9de17242897b173e898de610cb462a",
+      "commandHash": "a100635f0c082d028c5fb810d8f25f805b3853e773d9369a6e3ba51a4b02ea81",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "d37842d93e9f838f0f126356e18e78c439cef3a3120c79f802b788018700269b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-post-archive-generated-ownership-20260819` - Contract Hash: `fc778c874f635447` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptan",
+      "outputTail": "nes`: not_recorded - `aiSummary`: not_recorded - `aiStatus`: not_recorded - `aiStatusCheck`: not_recorded - `aiStatusConsistency`: not_recorded - `aiDiffOwnership`: not_recorded - `quality`: not_recorded ## Review Focus - Decision ordering must preserve fail-closed restricted ownership for unrelated paths. - The release Work Item must consume the merged fix before hosted verification. ## Diff Ownership Preview - active_owned: `13`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/fix-post-archive-generated-ownership-20260819.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_pr.py` — covered by Contract scope - [active_owned] `tests/test_pr_aggregate.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 5437
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:16.412652+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "13459fbb3262a4dc989634e0b431d7d1d826286d9de2829f86842ddbf6cd0e10",
+      "commandHash": "eb8026557a4107664df74fc13f09a363291f8d5cdbb2e2c24c41752e2a73fbf5",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "669b8849ccf69de622074ce90cd6c61b48571e32c08da2c459640aea01ce1464",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json [review] .ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.json [review] .ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.md [review] .ai/work-items/starts/fix-",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json [review] .ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.json [review] .ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.md [review] .ai/work-items/starts/fix-post-archive-generated-ownership-20260819.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] scripts/ai_check_pr.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 866
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:16.648044+00:00",
+      "exitCode": 0,
+      "durationMs": 139,
+      "outputDigest": "7949708c3577f42cfd2762cc25f3763957f791fdd38a1659498cfeab783fbc14",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "a71a39973178563abeecdf2423ee36656c005a650e510a40f3e8d3e8f23f24c5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 233
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:17.174154+00:00",
+      "exitCode": 0,
+      "durationMs": 264,
+      "outputDigest": "c82215fddfea8bda4d1cc28af722a2761572c960fb9dec419146c59fb08c2d5e",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "923ed3bc9f6a8465be1733ec5637163f2d961153d6da54eeadfb7c880c0ee30d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 242
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:17.316694+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "4028f69234900e6d18a858283d75587a8303300e6a0e092a2a9e5261c33a1835",
+      "commandHash": "2796d71ede917555284381e23a7551a118df9dbd2ad4de3801438b364faf9d52",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "b3f64736e0df39180d2b6358908abdb441b9b29c052da8936b8348d72efc84ea",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 406
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:17.690178+00:00",
+      "exitCode": 0,
+      "durationMs": 244,
+      "outputDigest": "9b492d2ddf36c1292c35b343f051dd64270e9f59d1f30e727fdf3339a0cea827",
+      "commandHash": "959cea87becc9f801314140629896a4eddbe9a840edd0b99760063cdec6402b3",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "9e8d5be6e6749222b6a9874bb4e17627e70f61f07e483158600f520710723363",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputBytes": 411
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:15:18.518672+00:00",
+      "exitCode": 0,
+      "durationMs": 724,
+      "outputDigest": "e239189a7749cf9ad5defc8485b2d972ef7a0a84ee8fc5a249aee70fa7e175ef",
+      "commandHash": "e2e8ca8923ccb9aa070a8bd1f6f5ebcb943fe7a680d17c58f632b3737abaf0b7",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "1ad5fd4fa68bc59878474e1f226b12cc14464cd30c808d53a60cb41c2d7d53f4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json ## Diff Ownership Preview - active_owned: `13`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against activ",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json ## Diff Ownership Preview - active_owned: `13`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/cockpit/task_report.md` — exact generated Human Benefit Report pair validates against active Task Outcome - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/fix-post-archive-generated-ownership-20260819.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_pr.py` — covered by Contract scope - [active_owned] `tests/test_pr_aggregate.py` — covered by Contract scope",
+      "outputBytes": 1837
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:22:07.656200+00:00",
+      "exitCode": 0,
+      "durationMs": 408861,
+      "outputDigest": "124d819c1402c2e879e6e7d8088bf18ef8cebfa13b67fe0970f5273a06586402",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "0259dca44a346d2dab6e067ccd764b61dd1ea6947bdc587a44ae8babd6544a5d",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json, docs/reference/pre-release-documentation-alignment.md, tests/test_pr_a",
+      "outputTail": "sessions/b56d514e0c78-local-20260818T151532Z-8933-0/timing/check-ai-test-weakening.json\" --log \"target/quality/sessions/b56d514e0c78-local-20260818T151532Z-8933-0/logs/check-ai-test-weakening.log\" -- \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory check-ai-test-weakening PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_test_weakening.py --root . --mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"b56d514e0c78b0ec32b855da67effd5d2e9ca728\", \"decision\": \"continue\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"No recovery action is required for the analyzed diff.\", \"requiredExplanation\": false, \"signals\": [], \"version\": 1} \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-aggregate PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-receipt PROJECT_TEST_RECEIPT=target/quality/project-test-aggregate/receipt.json PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt \"target/quality/project-test-aggregate/receipt.json\" quality gate summary written: target/quality/sessions/b56d514e0c78-local-20260818T151532Z-8933-0/summary.json",
+      "outputBytes": 82121
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:22:09.993593+00:00",
+      "exitCode": 0,
+      "durationMs": 1151,
+      "outputDigest": "8c950ca359cea3b0713b4e0b0675e88f1b528fe5a5097c6ddeab39ebd18d34c7",
+      "commandHash": "9d8b3a76e9afb2dc613e394bb55d5b9062c1898e20e03f446045d7aedc28b868",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "079f7b345426d77c4cfcef3f683ae532553579e5f5b7573435889e30f5a8fd47",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 510
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:22:11.848949+00:00",
+      "exitCode": 0,
+      "durationMs": 888,
+      "outputDigest": "240496e3f542b416bd51951630cbaac157e568e40b5a4600a59d89d470e6e984",
+      "commandHash": "06f53633f592f2d9ef7c5e986a6eae68bde4899cadf9e9e0a4f4aec46a620d46",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "9cb22450a49d69ea5e9e44c238f017ed6faf7ec8eef8baeda39117cad17fbd9b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 436
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:22:12.880955+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "378ec445c37bffbf3a6bcb0678ed1827d1e4aba343837383817651d09730c1ad",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "6fddbc20059cbb5f6e3e2b6b357728777de2787a8c2fef1d7e20bb2885b64d3f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 210
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:22:13.035064+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "db472acd3536025c831b781d4ea92a26a503ae4a33f2cfdb313148731bdecc7b",
+      "commandHash": "2fc3edbd2d8004790ba08b29f425432462c5d40174273444221f063e2c535149",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "65003e240f9bbac915cd062e6c64f2c8a24dd408553f7fd06829143199714557",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json --summary .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 416
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json CONTRACT=.ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T15:22:16.278970+00:00",
+      "exitCode": 0,
+      "durationMs": 552,
+      "outputDigest": "dfa0da04898e72ad65684528d22d52ecb1b4fb947f8eb49f2c15f1fcc92cd30d",
+      "commandHash": "55f3e6d572c5cb5995271d714202f2ff81ffa8531a75c2a8139f91d299002829",
+      "contractHash": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+      "commitSha": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+      "executionContractPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "worktreeDigest": "08044318bf9869b1fd516249ce9302e18d7c2170fe4a2374ad2361b7d1294b92",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json ai summary check passed: .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json --contract .ai/work-items/active/fix-post-archive-generated-ownership-20260819.contract.json ai summary check passed: .ai/work-items/active/fix-post-archive-generated-ownership-20260819.summary.json",
+      "outputBytes": 445,
+      "outcomeInputDigest": "3ff8be9d724e1d6bf05b5a17c2d7103d8bcc935a2a8ba794e41c230020ac2acc"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve fail-closed ownership validation for paths that are not explicitly generated evidence or receipt-bound recovery paths.",
+      "compliant": true,
+      "evidence": "The change is guarded by exact generated-evidence and recovery-path bindings; the existing restricted-path regression remains in the test suite."
+    },
+    {
+      "guideline": "Keep the fix minimal and add a regression test for the exact previously failing shape.",
+      "compliant": true,
+      "evidence": "One decision-order guard and one focused PR aggregate regression test were added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Low-risk governance checker change; dependent release verification remains outside this Work Item."
+  },
+  "generatedFiles": [
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required verification passed and no residual risk remains.",
+    "expectedReviewFocus": [
+      "Decision ordering must preserve fail-closed restricted ownership for unrelated paths.",
+      "The release Work Item must consume the merged fix before hosted verification."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "84f78c5d094f3e24",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "84f78c5d094f3e24",
+      "previousContractHash": "84f78c5d094f3e24",
+      "contractHash": "fc778c874f635447",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Add the generated pre-release documentation alignment projections required by the source-bound repository checks after the governance audit fix changed their inputs.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-18T15:13:07.847284+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "fc778c874f635447",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-19T00:14:31+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json"
+        ],
+        "reason": "The Contract identifies the ownership-order defect, its fail-closed constraints, and the focused regression scenarios."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
+          ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.summary.json",
+          "scripts/ai_check_pr.py",
+          "tests/test_pr_aggregate.py"
+        ],
+        "reason": "The implementation, regression test, and Summary describe the same generated-evidence ownership ordering correction."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/capability-truth-matrix.json",
+          "docs/reference/capability-truth-matrix.md",
+          "docs/reference/pre-release-documentation-alignment.json",
+          "docs/reference/pre-release-documentation-alignment.md",
+          "scripts/ai_capability_truth.py",
+          "scripts/check_pre_release_documentation_alignment.py",
+          ".ai/cockpit/task_report.md",
+          ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.outcome.md",
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "Both official source-bound generators were run after the governance checker change and their projections pass."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "The change is limited to repository governance audit ordering and adds no user-facing or multilingual content."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
+          ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.summary.json",
+          "AGENTS.md"
+        ],
+        "reason": "No unknowns remain; the separate release verification boundary and immutable archive rule remain explicit."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.json",
+    "markdownPath": ".ai/work-items/active/fix-post-archive-generated-ownership-20260819.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 3,
+    "humanStatusColor": "green",
+    "completionFact": "All declared finish checks passed.",
+    "recoveryCondition": ""
+  },
+  "archiveSequence": 959
+}

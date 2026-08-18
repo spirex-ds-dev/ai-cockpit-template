@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-post-archive-generated-ownership-20260819",
+  "title": "Fix generated knowledge ownership in post-archive PR audit",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在 PR 审计的 ownership 决策入口，先确认归档生成证据或已验证的同一 WI 恢复凭证，再进入普通 Contract scope 与 restricted-write 判定。这样只对有明确证据绑定的路径放行，未绑定的受限路径仍然 fail closed。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
+    ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.summary.json",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.outcome.json",
+    ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-post-archive-generated-ownership-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Keep the restricted ownership policy unchanged and fix only decision ordering.",
+      "reason": "The existing exact-path evidence validators already establish the necessary authority boundary.",
+      "status": "verified"
+    },
+    {
+      "decision": "Do not rewrite the archived Contract, Summary, Outcome, or recovery receipt.",
+      "reason": "Archive evidence is immutable; the fix must make the normal PR audit consume its existing bindings correctly.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "scripts/ai_check_pr.py",
+      "digest": "723a51e94fd0f86a715d6de753ed029969b0d8def7db4f128f9d13df7090ec79"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_pr_aggregate.py",
+      "digest": "3fe81c4dae5e705a407bcc6695f3975b89f2403937ffafbf111df85796fcc9f7"
+    },
+    {
+      "type": "code",
+      "path": "AGENTS.md",
+      "digest": "225d201f781cbbe6d3b3cc361e25df6828c7b6ac958baa6a680be94d25d32b31"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
+    "contractDigest": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+    "summaryPath": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.summary.json",
+    "summaryDigest": "9c71f67d6a878ebfbb023c9fd3d5436d341c01bd754f5dd4ea58ce6fb8ea8694",
+    "outcomePath": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.outcome.json",
+    "outcomeDigest": "19c326207ece035ad90910c378170c7bf82c9e6cdabf63e6dd15d70e5c5df31f"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

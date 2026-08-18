@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "fix-post-archive-generated-ownership-20260819",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "4409c46c2dbfd27b8bf6707177b3c5f872997a8b558a544a4a9ea05028612dff"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "fix-post-archive-generated-ownership-20260819",
+    "contractDigest": "fc778c874f635447db26382396f159113c9ab0c6bb3b8bb881ad0d171c38ed2b",
+    "summaryDigest": "9c71f67d6a878ebfbb023c9fd3d5436d341c01bd754f5dd4ea58ce6fb8ea8694",
+    "verificationDigest": "29c434a22dddd20c08e25e463ce95476c8ebb0e390420cd5e57284b0dcb1bfd7",
+    "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+    "headCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "e140e99e716737da8ba984690cbdd64abb9c0231d0eb8804de6c053ddc00a8ca",
+      "binding": {
+        "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+        "candidateHead": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+        "candidateTreeDigest": "f566159616b469c578cd9dbc0fe17a668f1851112ee6c302c52ffaead7f1651e",
+        "candidateDiffDigest": "b30a8c6d2772a058abbd6550c46d9b68a1ae90e78f89fa656470c1802ebdfab0"
+      }
+    }
   },
-  "task": {
-    "summary": "Task fix-post-archive-generated-ownership-20260819 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task fix-post-archive-generated-ownership-20260819 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: fix-post-archive-generated-ownership-20260819",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
       ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.summary.json",
@@ -25,118 +48,131 @@
       ".ai/cockpit/task_report.md",
       "docs/reference/japanese-capability-assessment.json",
       "docs/reference/japanese-capability-assessment.md"
-    ]
-  },
-  "issues": {
-    "detected": 0,
-    "hardStops": 0,
-    "warnings": 0,
-    "resolved": 0,
-    "unresolved": 0
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "在 PR 审计的 ownership 决策入口，先确认归档生成证据或已验证的同一 WI 恢复凭证，再进入普通 Contract scope 与 restricted-write 判定。这样只对有明确证据绑定的路径放行，未绑定的受限路径仍然 fail closed。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_check_pr.py",
-          "subject": "PR ownership decision ordering"
-        },
-        {
-          "source": "tests/test_pr_aggregate.py",
-          "subject": "Generated knowledge recovery regression"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "在 generic ownership loop 之前复用既有的 exact generated-evidence validator 与 receipt-bound recovery paths；验证通过的路径直接结束本轮 ownership 判定，其他路径继续执行原有 scope、forbidden、restricted approval 检查。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_check_pr.py",
-          "subject": "is_archived_generated_evidence and same_work_item_recovery_paths"
-        }
-      ]
-    },
-    "affectedComponents": [
-      {
-        "component": "PR aggregate ownership audit",
-        "detail": "Generated archive evidence and valid same-Work-Item recovery bindings are honored before generic restricted-path validation.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_check_pr.py",
-            "subject": "validate_pr_bundle"
-          }
-        ]
-      },
-      {
-        "component": "PR audit regression tests",
-        "detail": "Adds the previously missing shape where Summary-declared knowledge paths also match a restricted Contract scope.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_pr_aggregate.py",
-            "subject": "Generated knowledge ownership regression"
-          }
-        ]
-      }
     ],
-    "designDecisions": [
-      {
-        "decision": "Keep the restricted ownership policy unchanged and fix only decision ordering.",
-        "reason": "The existing exact-path evidence validators already establish the necessary authority boundary.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_check_pr.py",
-            "subject": "Existing generated-evidence and recovery validators"
-          }
-        ]
-      },
-      {
-        "decision": "Do not rewrite the archived Contract, Summary, Outcome, or recovery receipt.",
-        "reason": "Archive evidence is immutable; the fix must make the normal PR audit consume its existing bindings correctly.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "AGENTS.md",
-            "subject": "Lifecycle rule requiring immutable archived evidence"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Fail-closed behavior",
-        "detail": "Only generated paths named by the frozen Summary or paths named by a validated same-Work-Item receipt are skipped; unrelated restricted paths retain the existing error path.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_pr_aggregate.py",
-            "subject": "Existing restricted recovery test and new generated knowledge test"
-          }
-        ]
-      }
-    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [],
+    "humanDecisions": [],
     "evidence": [
       {
-        "claim": "The current failure is caused by ordinary restricted ownership being evaluated before the exact generated/recovery binding.",
-        "status": "verified",
+        "source": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-post-archive-generated-ownership-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": "scripts/ai_check_pr.py",
         "subject": "validate_pr_bundle decision order"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "在 PR 审计的 ownership 决策入口，先确认归档生成证据或已验证的同一 WI 恢复凭证，再进入普通 Contract scope 与 restricted-write 判定。这样只对有明确证据绑定的路径放行，未绑定的受限路径仍然 fail closed。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_pr.py",
+            "subject": "PR ownership decision ordering"
+          },
+          {
+            "source": "tests/test_pr_aggregate.py",
+            "subject": "Generated knowledge recovery regression"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "在 generic ownership loop 之前复用既有的 exact generated-evidence validator 与 receipt-bound recovery paths；验证通过的路径直接结束本轮 ownership 判定，其他路径继续执行原有 scope、forbidden、restricted approval 检查。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_pr.py",
+            "subject": "is_archived_generated_evidence and same_work_item_recovery_paths"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "PR aggregate ownership audit",
+          "detail": "Generated archive evidence and valid same-Work-Item recovery bindings are honored before generic restricted-path validation.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_check_pr.py",
+              "subject": "validate_pr_bundle"
+            }
+          ]
+        },
+        {
+          "component": "PR audit regression tests",
+          "detail": "Adds the previously missing shape where Summary-declared knowledge paths also match a restricted Contract scope.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "Generated knowledge ownership regression"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Keep the restricted ownership policy unchanged and fix only decision ordering.",
+          "reason": "The existing exact-path evidence validators already establish the necessary authority boundary.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_check_pr.py",
+              "subject": "Existing generated-evidence and recovery validators"
+            }
+          ]
+        },
+        {
+          "decision": "Do not rewrite the archived Contract, Summary, Outcome, or recovery receipt.",
+          "reason": "Archive evidence is immutable; the fix must make the normal PR audit consume its existing bindings correctly.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "AGENTS.md",
+              "subject": "Lifecycle rule requiring immutable archived evidence"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Fail-closed behavior",
+          "detail": "Only generated paths named by the frozen Summary or paths named by a validated same-Work-Item receipt are skipped; unrelated restricted paths retain the existing error path.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "Existing restricted recovery test and new generated knowledge test"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The current failure is caused by ordinary restricted ownership being evaluated before the exact generated/recovery binding.",
+          "status": "verified",
+          "source": "scripts/ai_check_pr.py",
+          "subject": "validate_pr_bundle decision order"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "zh-CN",
@@ -760,6 +796,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the pull request and provider checks before merge."
+  }
 }
