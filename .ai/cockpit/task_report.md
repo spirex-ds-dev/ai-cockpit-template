@@ -7,56 +7,55 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): 在不改变生产锁逻辑的前提下，直接增加 malformed writer-lease metadata 的确定性回归测试，使原本依赖并发时序才能触达的 fail-closed 分支在每次质量汇总中稳定被覆盖；随后用官方生成器刷新 Capability Truth 与 pre-release documentation alignment 投影。
-Mechanism (verified): 在临时运行目录中写入不可解析的 status.lock，调用现有 exclusive-lock 入口并断言立即以 IntelligenceError fail closed 且保留锁文件；该测试覆盖 JSONDecodeError 防御路径，不依赖并发调度。
+Customer summary (verified): 从已经合并且不可变的 #906 归档 Contract、Summary、Outcome 和 manifest 重新生成对应的 Implementation Knowledge record，再重建 knowledge index；不改写任何历史证据。
+Mechanism (verified): 生成器读取归档证据的当前字节和 digest，将 record 的 generatedFrom、evidence 与 archive binding 重新绑定，再由 index generator 生成确定性索引；ai-check-knowledge-index 负责验证所有绑定。
 
 Affected components
-- Work Item intelligence lock-lease test surface: Adds deterministic coverage for the existing malformed-metadata fail-closed branch; production implementation is unchanged. (verified)
-- Capability Truth and pre-release alignment projections: Regenerates source-bound digests and documentation-alignment projections from the changed evidence. (verified)
+- Merged #906 Implementation Knowledge record: Refreshes only the generated projection whose source digest bindings became stale after archive reindexing. (verified)
+- Deterministic knowledge index: Rebuilds the index from the refreshed record without changing archived evidence. (verified)
 
 Design decisions
-- Add a direct malformed-lock fixture instead of changing production code or relying on a concurrent race.: The observed failure was coverage nondeterminism, while the defensive production behavior was already correct. (verified)
-- Keep hosted exact-source aggregate verification in the Release WI.: This corrective WI proves the deterministic local evidence path; the authoritative hosted Python 3.12 result belongs to the release source after merge. (verified)
+- Regenerate projections instead of editing their JSON fields manually.: Generated bindings must remain evidence-derived and reproducible. (verified)
+- Leave archived Contract, Summary, Outcome, manifest, and archive index untouched.: The accepted #906 evidence is immutable; only its stale derived projection is repairable. (verified)
 
 ### Technical details
-- Coverage behavior: The targeted intelligence module passes 35 tests; hosted aggregate threshold verification remains a separate exact-source release check. (verified)
+- Failure handling: The knowledge index checker fails closed when any generated record digest, source path, or index binding is stale or missing. (verified)
 
 ### Evidence
-- The fix removes the concurrent timing dependency from the malformed-lock coverage path.: tests/test_work_item_intelligence.py#Direct malformed metadata regression (verified)
-- Generated capability and pre-release alignment evidence matches the changed test surface.: docs/reference/capability-truth-matrix.json#Official generator output (verified)
+- The repaired record is derived from the immutable #906 archive rather than self-declared text.: .ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json#Archive digest binding (verified)
 
-- Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json [evidence: .ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json]
-- Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json [evidence: .ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json]
-- Changed tests/test_work_item_intelligence.py [evidence: tests/test_work_item_intelligence.py]
-- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json [evidence: .ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json]
-- Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md [evidence: .ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md]
+- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.contract.json [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.contract.json]
+- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.summary.json [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json]
+- Changed .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json [evidence: .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json]
+- Changed .ai/knowledge/index.json [evidence: .ai/knowledge/index.json]
+- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.outcome.json [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.json]
+- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.outcome.md [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
-- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
-- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
 
 Problems found
-- Total: 1
+- Total: 2
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- None recorded.
+- Reason: aiScenarioCoverage failed before the retry. | Stage: verification | Resolution: Retry aiScenarioCoverage after correcting the recorded failure. [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
+- Reason: aiSummary failed before the retry. | Stage: verification | Resolution: Retry aiSummary after correcting the recorded failure. [evidence: verificationHistory[1] aiSummary failed, verification[aiSummary] retry passed]
 
 Problems resolved
-- Problem: observed issue
-  Solution: Added a deterministic malformed-lock test that preserves the lock and asserts the fail-closed IntelligenceError path.
-  Evidence: [evidence: observedIssues[0] observed issue, observedIssues[0] observed issue]
+- Problem: aiScenarioCoverage failed before the retry.
+  Solution: Re-ran aiScenarioCoverage after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
+- Problem: aiSummary failed before the retry.
+  Solution: Re-ran aiSummary after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] aiSummary failed, verification[aiSummary] retry passed]
 
 Risks avoided
-- None recorded.
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- None recorded.
+- The merged #906 Work Item cannot be closed until this repair is merged into origin/main and its exact merged knowledge projection is revalidated by ai-close-work-item; this repair changes only generated knowledge projections and does not alter production runtime behavior. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
@@ -65,7 +64,6 @@ Human decisions
 - None recorded.
 
 Verification
-- sourceBoundEvidence [evidence: sourceBoundEvidence]
 - aiWorkItem [evidence: aiWorkItem]
 - aiScope [evidence: aiScope]
 - aiGuards [evidence: aiGuards]
@@ -84,9 +82,9 @@ Verification
 - aiSummary [evidence: aiSummary]
 
 Impact
-- Rework avoided: None recorded.
+- Rework avoided: If not detected, could have led to a stale completion claim. (inference)
 - Repeat correction prevented: unknown: no direct recurrence probability evidence was recorded. (inference)
-- Major risk prevented: None recorded.
+- Major risk prevented: If not detected, could have led to a stale completion claim. (inference)
 
 Next action
 - Bind conversation locale and preserve evidence details before the next Work Item starts. (inference)

@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "repair-lock-lease-knowledge-projection-20260819",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "886c6d9060c094b14dcda44b109ce06ac979a5bd5e1dc23802242f2317fd748b"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "repair-lock-lease-knowledge-projection-20260819",
+    "contractDigest": "6d62e8ccb611f7d8d7bdb42caacad0a7dad2a1f85ba415a2529e7f2b37314372",
+    "summaryDigest": "9eef47437255a4645a35ee00512a9216355c8ac905457092f573c544193363f0",
+    "verificationDigest": "c6d3717d08b3506e08978b04b2804a455305d8e64d48d7d90cef06be02690820",
+    "baseCommit": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+    "headCommit": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "4f7245d0e27763eb809fd1601039f148ba168a201670cdf244b1d9964ffee395",
+      "binding": {
+        "baseCommit": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+        "candidateHead": "4aff94a28216c3c5c1b7d91f2f802d557defdfe2",
+        "candidateTreeDigest": "0875605a8801c522ee44f9b2a5c17e3304e71d6eaeed3369c8152dafbf5169b4",
+        "candidateDiffDigest": "3c943fa0cf44ed714f590da23d9735391b3cf04b7d7119533ecc70a8143438d5"
+      }
+    }
   },
-  "task": {
-    "summary": "Task repair-lock-lease-knowledge-projection-20260819 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task repair-lock-lease-knowledge-projection-20260819 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: repair-lock-lease-knowledge-projection-20260819",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.contract.json",
       ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
@@ -19,219 +42,262 @@
       ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
-    ]
-  },
-  "issues": {
-    "detected": 2,
-    "hardStops": 2,
-    "warnings": 0,
-    "resolved": 2,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiScenarioCoverage",
-      "action": "blocked",
-      "resolution": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "7e727321fbbd61a76c4fa3f8445bfd16826774729f03af8bf2edfe9134e63869"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "6c22a4ecb7f54c0ae41460f2888cd49d2def854f7d2772ace9f85a6cd520e1f6"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verificationHistory[1] aiSummary failed",
-          "digest": "f08bdc175320f82aa4a93b8e55d52f5a64a846862aacfc2f64f291966c0c832a"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "206ab48975477b0e883559a61fe9ccbaa8cd31595c35272621cd0a464e0b523c"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiScenarioCoverage failed before the retry.",
-      "policyOrGuard": "required verification: aiScenarioCoverage",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verificationHistory[0] aiScenarioCoverage failed",
-          "digest": "7e727321fbbd61a76c4fa3f8445bfd16826774729f03af8bf2edfe9134e63869"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verification[aiScenarioCoverage] retry passed",
-          "digest": "6c22a4ecb7f54c0ae41460f2888cd49d2def854f7d2772ace9f85a6cd520e1f6"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verificationHistory[1] aiSummary failed",
-          "digest": "f08bdc175320f82aa4a93b8e55d52f5a64a846862aacfc2f64f291966c0c832a"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "206ab48975477b0e883559a61fe9ccbaa8cd31595c35272621cd0a464e0b523c"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The merged #906 Work Item cannot be closed until this repair is merged into origin/main and its exact merged knowledge projection is revalidated by ai-close-work-item; this repair changes only generated knowledge projections and does not alter production runtime behavior.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "从已经合并且不可变的 #906 归档 Contract、Summary、Outcome 和 manifest 重新生成对应的 Implementation Knowledge record，再重建 knowledge index；不改写任何历史证据。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_generate_knowledge_record.py",
-          "subject": "Canonical archived Work Item knowledge record generator"
-        },
-        {
-          "source": "Makefile",
-          "subject": "Canonical ai-generate-knowledge and ai-check-knowledge-index targets"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "生成器读取归档证据的当前字节和 digest，将 record 的 generatedFrom、evidence 与 archive binding 重新绑定，再由 index generator 生成确定性索引；ai-check-knowledge-index 负责验证所有绑定。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
-          "subject": "Immutable archive binding"
-        },
-        {
-          "source": "scripts/ai_check_knowledge_index.py",
-          "subject": "Freshness and digest validation"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
       {
-        "component": "Merged #906 Implementation Knowledge record",
-        "detail": "Refreshes only the generated projection whose source digest bindings became stale after archive reindexing.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "aiScenarioCoverage failed before the retry.",
+        "policyOrGuard": "required verification: aiScenarioCoverage",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
-            "subject": "Generated record"
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verificationHistory[0] aiScenarioCoverage failed",
+            "digest": "7e727321fbbd61a76c4fa3f8445bfd16826774729f03af8bf2edfe9134e63869"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verification[aiScenarioCoverage] retry passed",
+            "digest": "6c22a4ecb7f54c0ae41460f2888cd49d2def854f7d2772ace9f85a6cd520e1f6"
           }
         ]
       },
       {
-        "component": "Deterministic knowledge index",
-        "detail": "Rebuilds the index from the refreshed record without changing archived evidence.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": ".ai/knowledge/index.json",
-            "subject": "Generated index"
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verificationHistory[1] aiSummary failed",
+            "digest": "f08bdc175320f82aa4a93b8e55d52f5a64a846862aacfc2f64f291966c0c832a"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "206ab48975477b0e883559a61fe9ccbaa8cd31595c35272621cd0a464e0b523c"
           }
         ]
       }
     ],
-    "designDecisions": [
+    "resolutions": [
       {
-        "decision": "Regenerate projections instead of editing their JSON fields manually.",
-        "reason": "Generated bindings must remain evidence-derived and reproducible.",
+        "problem": "aiScenarioCoverage failed before the retry.",
+        "action": "Re-ran aiScenarioCoverage after the correction; the latest attempt passed.",
+        "verification": "aiScenarioCoverage latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verificationHistory[0] aiScenarioCoverage failed",
+            "digest": "7e727321fbbd61a76c4fa3f8445bfd16826774729f03af8bf2edfe9134e63869"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verification[aiScenarioCoverage] retry passed",
+            "digest": "6c22a4ecb7f54c0ae41460f2888cd49d2def854f7d2772ace9f85a6cd520e1f6"
+          }
+        ]
+      },
+      {
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verificationHistory[1] aiSummary failed",
+            "digest": "f08bdc175320f82aa4a93b8e55d52f5a64a846862aacfc2f64f291966c0c832a"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "206ab48975477b0e883559a61fe9ccbaa8cd31595c35272621cd0a464e0b523c"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "lifecycle closure",
+        "severity": "medium",
+        "title": "lifecycle closure",
+        "detail": "The merged #906 Work Item cannot be closed until this repair is merged into origin/main and its exact merged knowledge projection is revalidated by ai-close-work-item; this repair changes only generated knowledge projections and does not alter production runtime behavior.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
+        "subject": "Archive digest binding"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+        "subject": "verificationHistory[0] aiScenarioCoverage failed",
+        "digest": "7e727321fbbd61a76c4fa3f8445bfd16826774729f03af8bf2edfe9134e63869"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+        "subject": "verification[aiScenarioCoverage] retry passed",
+        "digest": "6c22a4ecb7f54c0ae41460f2888cd49d2def854f7d2772ace9f85a6cd520e1f6"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+        "subject": "verificationHistory[1] aiSummary failed",
+        "digest": "f08bdc175320f82aa4a93b8e55d52f5a64a846862aacfc2f64f291966c0c832a"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json",
+        "subject": "verification[aiSummary] retry passed",
+        "digest": "206ab48975477b0e883559a61fe9ccbaa8cd31595c35272621cd0a464e0b523c"
+      }
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "从已经合并且不可变的 #906 归档 Contract、Summary、Outcome 和 manifest 重新生成对应的 Implementation Knowledge record，再重建 knowledge index；不改写任何历史证据。",
         "status": "verified",
         "evidence": [
           {
             "source": "scripts/ai_generate_knowledge_record.py",
-            "subject": "Canonical generator"
+            "subject": "Canonical archived Work Item knowledge record generator"
+          },
+          {
+            "source": "Makefile",
+            "subject": "Canonical ai-generate-knowledge and ai-check-knowledge-index targets"
           }
         ]
       },
-      {
-        "decision": "Leave archived Contract, Summary, Outcome, manifest, and archive index untouched.",
-        "reason": "The accepted #906 evidence is immutable; only its stale derived projection is repairable.",
+      "mechanism": {
+        "text": "生成器读取归档证据的当前字节和 digest，将 record 的 generatedFrom、evidence 与 archive binding 重新绑定，再由 index generator 生成确定性索引；ai-check-knowledge-index 负责验证所有绑定。",
         "status": "verified",
         "evidence": [
           {
             "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
-            "subject": "Archive evidence root"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Failure handling",
-        "detail": "The knowledge index checker fails closed when any generated record digest, source path, or index binding is stale or missing.",
-        "status": "verified",
-        "evidence": [
+            "subject": "Immutable archive binding"
+          },
           {
             "source": "scripts/ai_check_knowledge_index.py",
-            "subject": "Fail-closed projection checker"
+            "subject": "Freshness and digest validation"
           }
         ]
-      }
-    ],
-    "evidence": [
-      {
-        "claim": "The repaired record is derived from the immutable #906 archive rather than self-declared text.",
-        "status": "verified",
-        "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
-        "subject": "Archive digest binding"
-      }
-    ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Merged #906 Implementation Knowledge record",
+          "detail": "Refreshes only the generated projection whose source digest bindings became stale after archive reindexing.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+              "subject": "Generated record"
+            }
+          ]
+        },
+        {
+          "component": "Deterministic knowledge index",
+          "detail": "Rebuilds the index from the refreshed record without changing archived evidence.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/knowledge/index.json",
+              "subject": "Generated index"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Regenerate projections instead of editing their JSON fields manually.",
+          "reason": "Generated bindings must remain evidence-derived and reproducible.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_generate_knowledge_record.py",
+              "subject": "Canonical generator"
+            }
+          ]
+        },
+        {
+          "decision": "Leave archived Contract, Summary, Outcome, manifest, and archive index untouched.",
+          "reason": "The accepted #906 evidence is immutable; only its stale derived projection is repairable.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
+              "subject": "Archive evidence root"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Failure handling",
+          "detail": "The knowledge index checker fails closed when any generated record digest, source path, or index binding is stale or missing.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_check_knowledge_index.py",
+              "subject": "Fail-closed projection checker"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The repaired record is derived from the immutable #906 archive rather than self-declared text.",
+          "status": "verified",
+          "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json",
+          "subject": "Archive digest binding"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "en",
@@ -841,6 +907,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
