@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "knowledge-query-design-alignment-20260818",
+  "title": "Align Implementation Knowledge with deterministic query design",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在现有证据绑定 Projection / Query 主链路上补齐轻量化设计契约：只保留显式日期和状态，按显式 supersedes 关系解析 latestKnownRecord，并把同一命令与结果表面同步到 fresh adopter。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    "scripts/ai_generate_knowledge_record.py",
+    "scripts/ai_check_knowledge_index.py",
+    "scripts/ai_knowledge_query.py",
+    ".ai/schemas/implementation-knowledge-record.schema.json",
+    ".ai/schemas/implementation-knowledge-query.schema.json",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    ".ai/project/adopter-capability-manifest.json",
+    "docs/reference/implementation-knowledge.md",
+    "docs/reference/capability-truth-matrix.json",
+    ".ai/knowledge/index.json",
+    ".ai/knowledge/work-items/implementation-knowledge-projection-20260818.json",
+    ".ai/knowledge/work-items/knowledge-query-interface-20260818.json",
+    "tests/test_implementation_knowledge.py",
+    "tests/test_knowledge_query.py",
+    "tests/test_knowledge_installer_parity.py",
+    ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.contract.json",
+    ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.summary.json",
+    ".ai/work-items/starts/knowledge-query-design-alignment-20260818.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.outcome.json",
+    ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.archive-manifest.json",
+    ".ai/knowledge/work-items/knowledge-query-design-alignment-20260818.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Do not infer dates, current validity, or supersession from timestamps, similarity, or code inspection.",
+      "reason": "The Knowledge Record is a rebuildable evidence projection and current-code semantic validation is explicitly out of scope.",
+      "status": "verified"
+    },
+    {
+      "decision": "Keep matches as a compatibility alias while making results the design-facing output.",
+      "reason": "Existing callers remain stable while new external Agents can consume the declared results contract.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_knowledge_installer_parity.py",
+      "digest": "7ae675390ca988ad50688b6ca9a2bf02c399ddf695bef5b1845b80d83497e846"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/implementation-knowledge.md",
+      "digest": "171af8c038634a351e2db2fa46a1d6b5d6c697f6124d854c3fd2b673fe6c32b5"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "digest": "27fc3c16be4f8da2393b5c4a6f185833d16b0c0c94737a490b619dce4b7bb48f"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_knowledge_query.py",
+      "digest": "8909aa7d32385befb55e1d25d8367a97b7f239a384cffd61690eda07c0883149"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_check_knowledge_index.py",
+      "digest": "947e1fc99c177e239f4d4d326340671bb46ae3b779e826b96eb451ef0df7f4de"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_knowledge_query.py",
+      "digest": "035826a0369c7100c52bec114027f8739d3ef2c24661e8466e951a763a90b5e1"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_implementation_knowledge.py",
+      "digest": "bc82f08171c091d029835b2f97b6bad8cedd09ce8fbe69d07d1fe566fd5647f6"
+    },
+    {
+      "type": "code",
+      "path": ".ai/schemas/implementation-knowledge-query.schema.json",
+      "digest": "ab032095bb71bc686ca9e6b2aeefe0aa8265e0e9447ab8005e605ea840381361"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.contract.json",
+    "contractDigest": "0d77d0935b39b49ca32488f5794866710ac724b4a4070dd12cbe95407baa36fb",
+    "summaryPath": ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.summary.json",
+    "summaryDigest": "325273d56a37c8d488f1b8863d5537ac4ec7a49229b16f9a91b4e604d2df26b4",
+    "outcomePath": ".ai/work-items/archive/2026/knowledge-query-design-alignment-20260818.outcome.json",
+    "outcomeDigest": "95a138de9fd6bcc16947d69b71dd3496a0504bfcdec95326003acc879d2f1b91"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

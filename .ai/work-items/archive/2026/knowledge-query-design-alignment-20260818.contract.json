@@ -1,0 +1,252 @@
+{
+  "contractVersion": 2,
+  "workItemId": "knowledge-query-design-alignment-20260818",
+  "mode": "code",
+  "title": "Align Implementation Knowledge with deterministic query design",
+  "rawUserRequest": "查收《AI Cockpit 轻量化实现知识查询设计》，开始对应。保持 AI Cockpit 为可信工程事实层，仅实现 Implementation Knowledge Record 与 Knowledge Query Interface，并补齐对象安装工程继承和可验证的边界。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-implementation-knowledge-query-design",
+    "capturedAt": "2026-08-18",
+    "digest": "sha256:implementation-knowledge-record-and-query-boundary"
+  },
+  "declaredIntent": {
+    "summary": "把当前已有的 Implementation Knowledge Projection / Query 实现与最新轻量化设计逐项对齐：事实仍来自 Contract、Summary、Outcome 和 Evidence，Record 仍是可重建 Projection，Query 仍是确定性 read-only 接口；补齐显式日期、supersession latestKnownRecord、命令兼容别名、结果契约和安装 parity。",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "290aaecfc11e5cfcc4637cc0617610ec15bd30fd",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_generate_knowledge_record.py",
+    "scripts/ai_check_knowledge_index.py",
+    "scripts/ai_knowledge_query.py",
+    ".ai/schemas/implementation-knowledge-record.schema.json",
+    ".ai/schemas/implementation-knowledge-index.schema.json",
+    ".ai/schemas/implementation-knowledge-query.schema.json",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_installer_catalog.json",
+    ".ai/project/adopter-capability-manifest.json",
+    "docs/reference/implementation-knowledge.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "tests/test_implementation_knowledge.py",
+    "tests/test_knowledge_query.py",
+    "tests/test_knowledge_installer_parity.py",
+    ".ai/knowledge/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/knowledge-query-design-alignment-20260818.contract.json",
+    ".ai/work-items/active/knowledge-query-design-alignment-20260818.summary.json",
+    ".ai/work-items/active/knowledge-query-design-alignment-20260818.outcome.json",
+    ".ai/work-items/active/knowledge-query-design-alignment-20260818.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Vector DB, embeddings, RAG, LLM query engine, prompt routing, or semantic similarity",
+    "Chat UI, customer-support bot, Agent Runtime, Workflow Engine, or external Wiki/Backlog indexing",
+    "Automatic current-code semantic validation or inferred Design Reason",
+    "Automatic historical backfill for missing Implementation Approach",
+    "Changing the Outcome/Human Report customer-facing generation boundary",
+    "Publishing a release or changing immutable release tags"
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/implementation-knowledge.md",
+      "reason": "Current repository authority for the evidence-bound projection and query surface."
+    },
+    {
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "reason": "Existing projection generator and deterministic index builder whose fact-preserving behavior this Work Item extends."
+    },
+    {
+      "path": "scripts/ai_check_knowledge_index.py",
+      "reason": "Existing fail-closed stale source/evidence/index checker."
+    },
+    {
+      "path": "scripts/ai_knowledge_query.py",
+      "reason": "Existing deterministic read-only query implementation."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Existing lifecycle point that generates the projection from final archive paths."
+    },
+    {
+      "path": ".ai/project/adopter-capability-manifest.json",
+      "reason": "Adopter-facing capability ownership and installed-surface truth."
+    },
+    {
+      "path": "origin/main@290aaecfc11e5cfcc4637cc0617610ec15bd30fd",
+      "reason": "Exact current merged base after the preceding query implementation Work Item."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["scope_unclear", "evidence_integrity", "adopter_parity"],
+    "reason": "The correction changes a trusted machine-readable interface and installed capability contract; it must remain deterministic, evidence-bound, read-only, and fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item changes governance scripts, schemas, installer delivery, and an adopter-facing interface.",
+      "Strict quality is required to prove source and installed parity without weakening trust boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The design is concrete, the current implementation exposes auditable deltas, and the requested corrections are local and testable without introducing an Agent-layer feature."
+  },
+  "preReviewWarnings": [
+    "Preserve backward-compatible record fields where possible; do not weaken existing stale-evidence checks.",
+    "Do not make query output depend on timestamps or semantic inference."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Record before-edit and before-finish checkpoints because the interface and installer surface are governed artifacts."
+  },
+  "acceptance": [
+    "Implementation Knowledge Record remains a rebuildable Projection sourced only from Contract, Summary, Outcome, Evidence, and Git identity; no Agent memory or inferred historical reason is added.",
+    "Verified claims require existing repository-relative evidence with current digest; missing/conflicting evidence produces partial/unknown and never verified.",
+    "Legacy Work Items remain queryable as partial with missing Implementation Approach represented as unknown; no automatic backfill is performed.",
+    "Record preserves Implementation Approach, Design Decisions, Changes, Effects, Evidence, generatedFrom source digests, mergedCommit, explicit date when supplied, and effective/current validity without breaking existing records.",
+    "Explicit supersedes relationships are validated and deterministic query output identifies the latest known record only when the relationship is explicit; no similarity inference is performed.",
+    "Query supports exact conjunctive work-item, topic, component, commit, exact/range date, and optional status filters; it is machine-readable, stable, read-only, and fail-closed.",
+    "Query offers the design command/result compatibility surface while retaining the declared structured output contract; no natural-language, semantic, embedding, RAG, or current-code validation capability is added.",
+    "Fresh adopter installation receives the projection/query scripts, schemas, Make targets, and documentation surface; parity tests execute the installed entrypoints and query path.",
+    "Knowledge index is deterministic, lightweight, rebuildable, and rejects stale/missing record or source bindings.",
+    "Direct Outcome remains independently visible in the conversation with exactly one traffic-light status line; this Work Item cannot finish without a complete green Outcome."
+  ],
+  "guidelines": [
+    "Evidence over Self-Declaration: never upgrade unknown or incomplete historical knowledge from inference.",
+    "Keep AI Cockpit Core as a Repository Governance Layer; natural-language understanding and answer composition remain external Agent responsibilities.",
+    "Use deterministic exact filters and stable ordering; do not introduce semantic ranking or confidence scores.",
+    "Treat Contract, Summary, Outcome, and Evidence as authoritative; Knowledge Record and Index are projections that may be rebuilt.",
+    "Adopter-facing capability claims require Installer Catalog, installed artifact, and Fresh Adopter parity evidence."
+  ],
+  "intent": {
+    "problem": "The current projection/query implementation covers the core feature but does not fully match the newly received lightweight design contract for command compatibility, explicit dates, supersession resolution, and state projection.",
+    "constraints": [
+      "Implement exactly two Core capabilities: Implementation Knowledge Record and Knowledge Query Interface.",
+      "Preserve fail-closed evidence behavior and the existing archive integration.",
+      "Do not create a search engine or Agent answer-generation layer.",
+      "Keep the capability installable and verifiable in a fresh adopter repository."
+    ],
+    "rationale": "A small, deterministic, evidence-bound interface gives external Agents trusted facts without expanding AI Cockpit into an LLM or semantic search platform."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "New code Work Item with verified Implementation Approach and Design Decision",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Record projects verified implementation, decision, effects, evidence paths/digests, and source digests.",
+      "verificationPlan": "Run projection unit tests and validate the generated record against its schema and checker."
+    },
+    {
+      "scenario": "Legacy Work Item without Implementation Approach",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Record remains partial and implementation/design reason is unknown; no guessed text appears.",
+      "verificationPlan": "Run legacy projection regression and inspect the machine-readable record."
+    },
+    {
+      "scenario": "WI-B explicitly supersedes WI-A",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Query exposes the explicit relationship and latestKnownRecord=WI-B; absent relationship does not infer recency.",
+      "verificationPlan": "Run supersession graph tests including conflicting and missing references."
+    },
+    {
+      "scenario": "Query with exact topic/component/date/status filters",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "All filters combine with AND, dates use explicit record fields, result order is stable, and query writes nothing.",
+      "verificationPlan": "Run CLI/Make contract tests, repeated read-only queries, date boundary tests, and schema validation."
+    },
+    {
+      "scenario": "Missing/stale evidence, identity mismatch, or invalid index",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Query/generator fails closed or returns partial/unknown; verified is never emitted.",
+      "verificationPlan": "Run stale digest, missing path, identity mismatch, and invalid index regressions."
+    },
+    {
+      "scenario": "Fresh adopter install",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Installed projection and query entrypoints, schemas, aliases, and Make targets work without copying template knowledge history.",
+      "verificationPlan": "Run fresh adopter parity test and installed help/query dry-run checks."
+    }
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly instructed the agent to receive the design and begin corresponding implementation; the scope excludes destructive operations and external publication."
+  },
+  "rollbackNote": "Revert this Work Item diff while preserving archived historical records; rebuild the Knowledge Record/Index from authoritative archive sources if a projection change must be rolled back.",
+  "budgetImpact": {
+    "expectedMetrics": {"archiveGrowth": 962},
+    "actualMetrics": {}
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/knowledge-query-design-alignment-20260818.json",
+    "baseCommit": "290aaecfc11e5cfcc4637cc0617610ec15bd30fd",
+    "initialScopeDigest": "11e6f78befb3fc7ad36f3abe6d51cdcfbdf36e0bd50e4fe35d0d07fda5bd2cda",
+    "contractSkeletonDigest": "df54e7684ab41d360d3ba31f92218a368f79065149ef866b643a2627cc0e83df"
+  }
+}

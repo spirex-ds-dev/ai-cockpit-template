@@ -9,6 +9,8 @@ from typing import Any
 
 from ai_generate_knowledge_record import _digest, _load, _safe_evidence, build_index
 
+EFFECTIVE_STATES = {"current", "superseded", "unknown", "historical_or_current_unknown"}
+
 
 def _digest_issue(path: Path, expected: Any, label: str) -> str | None:
     if not isinstance(expected, str):
@@ -31,6 +33,15 @@ def check_record(record_path: Path, *, repo_root: Path) -> list[str]:
         issues.append("record workItemId is missing")
     elif record_path.stem != work_item_id:
         issues.append("record filename does not match workItemId")
+
+    effective_state = record.get("effectiveState")
+    if effective_state is not None and effective_state not in EFFECTIVE_STATES:
+        issues.append("effectiveState is not a supported state")
+    supersedes = record.get("supersedes", [])
+    if not isinstance(supersedes, list) or any(
+        not isinstance(item, str) or not item for item in supersedes
+    ):
+        issues.append("supersedes must be an array of non-empty Work Item IDs")
 
     generated = record.get("generatedFrom")
     if not isinstance(generated, dict):
@@ -99,6 +110,7 @@ def check_index(index_path: Path, *, records_dir: Path, repo_root: Path) -> list
         issues.append("index does not match deterministic rebuild")
 
     seen: set[str] = set()
+    records_by_id: dict[str, dict[str, Any]] = {}
     for record_path in sorted(records_dir.glob("*.json")):
         record_issues = check_record(record_path, repo_root=repo_root)
         issues.extend(f"{record_path.name}: {issue}" for issue in record_issues)
@@ -111,6 +123,35 @@ def check_index(index_path: Path, *, records_dir: Path, repo_root: Path) -> list
             if work_item_id in seen:
                 issues.append(f"duplicate workItemId: {work_item_id}")
             seen.add(work_item_id)
+            records_by_id[work_item_id] = record
+
+    for work_item_id, record in records_by_id.items():
+        supersedes = record.get("supersedes", [])
+        if not isinstance(supersedes, list):
+            continue
+        for target in supersedes:
+            if isinstance(target, str) and target not in records_by_id:
+                issues.append(f"{work_item_id}: supersedes missing record: {target}")
+
+    visit_state: dict[str, int] = {}
+
+    def visit(work_item_id: str) -> None:
+        state = visit_state.get(work_item_id, 0)
+        if state == 1:
+            issues.append(f"supersession cycle includes: {work_item_id}")
+            return
+        if state == 2:
+            return
+        visit_state[work_item_id] = 1
+        supersedes = records_by_id[work_item_id].get("supersedes", [])
+        if isinstance(supersedes, list):
+            for target in supersedes:
+                if isinstance(target, str) and target in records_by_id:
+                    visit(target)
+        visit_state[work_item_id] = 2
+
+    for work_item_id in sorted(records_by_id):
+        visit(work_item_id)
 
     indexed_paths = {
         item.get("knowledgePath") for item in actual.get("workItems", []) if isinstance(item, dict)

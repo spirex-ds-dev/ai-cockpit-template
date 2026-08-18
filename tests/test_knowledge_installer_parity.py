@@ -47,13 +47,31 @@ def test_fresh_adopter_receives_and_can_call_knowledge_projection_surface(tmp_pa
         assert result.returncode == 0, result.stderr
 
     result = subprocess.run(
-        ["make", "-f", "Makefile.ai", "-n", "ai-check-knowledge-index", "ai-knowledge-query"],
+        [
+            "make",
+            "-f",
+            "Makefile.ai",
+            "-n",
+            "ai-check-knowledge-index",
+            "ai-knowledge-query",
+            "ai-generate-knowledge",
+            "TOPIC=orders",
+            "COMPONENT=OrderService",
+            "WORK_ITEM=order-cancel-validation",
+            "DATE_FROM=2026-01-01",
+            "DATE_TO=2026-01-31",
+        ],
         cwd=target,
         text=True,
         capture_output=True,
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+    assert '--topic "orders"' in result.stdout
+    assert '--component "OrderService"' in result.stdout
+    assert '--work-item "order-cancel-validation"' in result.stdout
+    assert '--date-from "2026-01-01"' in result.stdout
+    assert '--date-to "2026-01-31"' in result.stdout
 
 
 def test_fresh_adopter_does_not_receive_template_repository_knowledge_records(
