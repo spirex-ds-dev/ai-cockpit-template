@@ -1,1266 +1,803 @@
 {
-  "reportVersion": 1,
-  "workItemId": "fix-shellcheck-apt-mirror-20260819",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "b5daa74181202dfa5a5589b23e90196825162f174c939beb21af96808ef79ccf"
-  },
-  "task": {
-    "summary": "Task fix-shellcheck-apt-mirror-20260819 generated an evidence-derived outcome with status completed.",
-    "deliveredChanges": [
-      ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-      ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-      ".ai/cockpit/current_status.md",
-      ".ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json",
-      ".github/workflows/compatibility.yml",
-      "tests/test_workflows.py",
-      ".ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json",
-      "scripts/installer/legacy.py",
-      "tests/test_installer.py",
-      "Makefile",
-      "tests/test_makefile.py",
-      ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.json",
-      ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.md",
-      ".ai/cockpit/task_report.json",
-      ".ai/cockpit/task_report.md",
-      "docs/reference/capability-truth-matrix.json",
-      "docs/reference/capability-truth-matrix.md",
-      "docs/reference/japanese-capability-assessment.json",
-      "docs/reference/japanese-capability-assessment.md",
-      "docs/reference/pre-release-documentation-alignment.json",
-      "docs/reference/pre-release-documentation-alignment.md"
-    ]
-  },
-  "issues": {
-    "detected": 3,
-    "hardStops": 3,
-    "warnings": 0,
-    "resolved": 3,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3ec136322093b5102ac219b8208feb7f5c7c9c6404e4addb0938d3980ab76d6e"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[2] aiSummary failed",
-          "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "3ec136322093b5102ac219b8208feb7f5c7c9c6404e4addb0938d3980ab76d6e"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[2] aiSummary failed",
-          "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
   "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The workflow fix removes the observed apt mirror dependency, but PR #906 must be revalidated on hosted CI after this corrective change merges.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "本次将兼容性检查从网络安装 ShellCheck 改为使用固定 Ubuntu 24.04 runner 已提供的 ShellCheck，并在实际检查前执行版本探测；同时将模板仓库专属的 reference-impact 证据限定为 source-only，并修复 clean snapshot 的 project-test shard 空 diff 收尾，避免干净提交在 quality 中被错误阻断。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": ".github/workflows/compatibility.yml",
-          "subject": "pinned runner, runner-provided ShellCheck probe, and blocking invocation"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "ShellCheck job 固定运行在 ubuntu-24.04；先执行 shellcheck --version，runner 未提供可用命令时立即失败，随后执行既有的 shellcheck install.sh。安装器在复制 .ai 树时跳过模板仓库专属的 reference-impact 记录；project-test shard 仅在存在实际 git diff 时调用 git apply；回归测试覆盖 workflow、fresh adopter 与 clean snapshot 边界。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": ".github/workflows/compatibility.yml",
-          "subject": "shellcheck job steps"
-        },
-        {
-          "source": "tests/test_workflows.py",
-          "subject": "network bootstrap regression guard"
-        }
-      ]
-    },
-    "affectedComponents": [
-      {
-        "component": "Hosted compatibility ShellCheck lane",
-        "detail": "Only the runner image selection and tool bootstrap steps change; compatibility-gate dependency and ShellCheck policy remain unchanged.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "shellcheck and compatibility-gate workflow definition"
-          }
-        ]
-      },
-      {
-        "component": "Workflow regression tests",
-        "detail": "The test rejects apt-get update/package installation and requires the version probe plus install.sh invocation.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_workflows.py",
-            "subject": "test_shellcheck_uses_pinned_runner_tool_without_network_bootstrap"
-          }
-        ]
-      },
-      {
-        "component": "Adopter installer evidence boundary",
-        "detail": "Template repository reference-impact records are source-only repository evidence and are not copied into a fresh adopter; adopters can create their own records for their own targets.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/installer/legacy.py",
-            "subject": "pruned .ai/evidence/reference-impact source-only boundary"
-          },
-          {
-            "source": "tests/test_installer.py",
-            "subject": "reference-impact pruning and installed quality regression coverage"
-          }
-        ]
-      },
-      {
-        "component": "Isolated project-test shard preparation",
-        "detail": "A clean committed snapshot skips the git apply step when there is no tracked diff; non-empty tracked diffs continue to be applied before shard execution.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "Makefile",
-            "subject": "empty-diff guard before isolated shard apply"
-          },
-          {
-            "source": "tests/test_makefile.py",
-            "subject": "clean snapshot project-test shard regression"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Use the runner-provided ShellCheck instead of installing it through apt.",
-        "reason": "Hosted evidence shows the job repeatedly timed out at azure.archive.ubuntu.com before ShellCheck started, while the pinned runner image provides ShellCheck.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "no apt bootstrap and explicit runner tool probe"
-          }
-        ]
-      },
-      {
-        "decision": "Pin the ShellCheck lane to Ubuntu 24.04.",
-        "reason": "The tool availability assumption is kept stable at the workflow boundary instead of depending on a moving ubuntu-latest image.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "runs-on: ubuntu-24.04"
-          }
-        ]
-      },
-      {
-        "decision": "Do not distribute template repository reference-impact records to adopters.",
-        "reason": "Those records bind to template-local target paths; copying them into an adopter makes the adopter's full-repository reference-impact check fail when the target workflow is absent.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/installer/legacy.py",
-            "subject": "reference-impact evidence pruning boundary"
-          },
-          {
-            "source": "tests/test_installer.py",
-            "subject": "fresh adopter regression test"
-          }
-        ]
-      },
-      {
-        "decision": "Treat an empty tracked git diff as a valid isolated-shard input.",
-        "reason": "Hosted verification uses a clean committed snapshot; piping an empty diff to git apply returns 128 even though there are no changes to apply.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "Makefile",
-            "subject": "conditional git apply for project-test shards"
-          },
-          {
-            "source": "tests/test_makefile.py",
-            "subject": "regression assertion for empty-diff handling"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Failure handling",
-        "detail": "shellcheck --version is a fail-closed availability probe; a missing or unusable executable stops the job before the analysis command.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "Verify runner-provided ShellCheck step"
-          }
-        ]
-      }
-    ],
-    "evidence": [
-      {
-        "claim": "The workflow no longer depends on the failing apt mirror path.",
-        "status": "verified",
-        "source": ".github/workflows/compatibility.yml",
-        "subject": "ShellCheck job definition"
-      },
-      {
-        "claim": "The regression guard prevents reintroducing the network bootstrap and preserves the actual ShellCheck invocation.",
-        "status": "verified",
-        "source": "tests/test_workflows.py",
-        "subject": "workflow source regression test"
-      },
-      {
-        "claim": "Fresh adopters do not inherit template-local reference-impact records that point to absent workflow paths.",
-        "status": "verified",
-        "source": "tests/test_installer.py",
-        "subject": "installer boundary and installed quality regression"
-      },
-      {
-        "claim": "Clean committed snapshots no longer fail isolated project-test shard preparation because of an empty git diff.",
-        "status": "verified",
-        "source": "tests/test_makefile.py",
-        "subject": "clean snapshot project-test shard regression"
-      }
-    ]
-  },
+  "forcedStops": [],
+  "humanDecisions": [],
   "humanHandoff": {
-    "locale": "en",
     "completed": [
       {
-        "claim": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json",
-        "title": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json",
-        "detail": "Records the hosted CI failure evidence, scope, acceptance, and corrective boundaries.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json",
+        "detail": "Created the Work Item Contract skeleton.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json"
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json"
       },
       {
-        "claim": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-        "title": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-        "detail": "Records the evidence-bound implementation approach and verification handoff.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json",
+        "detail": "Created the AI Change Summary skeleton.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json"
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json"
       },
       {
-        "claim": "Changed .ai/cockpit/current_status.md",
-        "title": "Changed .ai/cockpit/current_status.md",
-        "detail": "Generated status projection for this governed Work Item.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/cockpit/current_status.md"
-          }
-        ],
+        "claim": "Changed tests/test_work_item_intelligence.py",
+        "detail": "Added deterministic malformed writer-lease metadata regression coverage.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/cockpit/current_status.md"
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "tests/test_work_item_intelligence.py"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json",
-        "title": "Changed .ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json",
-        "detail": "Generated lifecycle start evidence.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json"
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "tests/test_work_item_intelligence.py"
           }
         ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/starts/fix-shellcheck-apt-mirror-20260819.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .github/workflows/compatibility.yml",
-        "title": "Changed .github/workflows/compatibility.yml",
-        "detail": "Uses the pinned Ubuntu 24.04 runner's ShellCheck and removes the failing apt mirror bootstrap.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".github/workflows/compatibility.yml"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".github/workflows/compatibility.yml"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_workflows.py",
-        "title": "Changed tests/test_workflows.py",
-        "detail": "Prevents reintroducing network-dependent ShellCheck installation while preserving the blocking invocation.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "tests/test_workflows.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "tests/test_workflows.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json",
-        "title": "Changed .ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json",
-        "detail": "Binds the workflow change to the repository-local reference-impact analysis required by the PR gate.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed scripts/installer/legacy.py",
-        "title": "Changed scripts/installer/legacy.py",
-        "detail": "Prevents source-only template reference-impact records from being copied into adopters where their target workflow paths do not exist.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "scripts/installer/legacy.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "scripts/installer/legacy.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_installer.py",
-        "title": "Changed tests/test_installer.py",
-        "detail": "Verifies the installer pruning boundary and fresh-adopter quality behavior for source-only reference-impact evidence.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "tests/test_installer.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "tests/test_installer.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed Makefile",
-        "title": "Changed Makefile",
-        "detail": "Skips empty git-diff application in isolated project-test shards so clean committed snapshots remain executable.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "Makefile"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "Makefile"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_makefile.py",
-        "title": "Changed tests/test_makefile.py",
-        "detail": "Prevents regression of the clean-snapshot project-test shard no-op boundary.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "tests/test_makefile.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "tests/test_makefile.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json",
-        "title": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json",
-        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md",
-        "title": "Changed .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md",
-        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.outcome.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.json",
-        "title": "Changed .ai/cockpit/task_report.json",
-        "detail": "Generated machine-readable Human Benefit Review Report.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.md",
-        "title": "Changed .ai/cockpit/task_report.md",
-        "detail": "Generated human-readable Human Benefit Review Report.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed tests/test_work_item_intelligence.py"
       },
       {
         "claim": "Changed docs/reference/capability-truth-matrix.json",
-        "title": "Changed docs/reference/capability-truth-matrix.json",
-        "detail": "Generated source-bound evidence during ai_finish; sha256 before=d474eee55a3a7c8448134e2ea87e1352c640fa9e4d184771c811ed3d2218108b, after=7eb7861a7db6ec64fa8ef4bdd723275deef1ad4744fd3ca2e12acd0870bdc58e.",
-        "evidenceRefs": [
+        "detail": "Regenerated source-bound capability evidence after the test addition.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/capability-truth-matrix.md",
-        "title": "Changed docs/reference/capability-truth-matrix.md",
-        "detail": "Generated source-bound evidence during ai_finish; sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.json",
-        "title": "Changed docs/reference/japanese-capability-assessment.json",
-        "detail": "Generated source-bound evidence during ai_finish; sha256 before=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55, after=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.md",
-        "title": "Changed docs/reference/japanese-capability-assessment.md",
-        "detail": "Generated source-bound evidence during ai_finish; sha256 before=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94, after=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed docs/reference/capability-truth-matrix.json"
       },
       {
         "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "title": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "detail": "Generated source-bound evidence during ai_finish; sha256 before=061359b8c663129664dcaa3803a7e61e93217d9a761a21f200eb3a9620e700f0, after=97ff42091a0c811384865c7c45fd77804a922ce8d86eb7e66ef06870df5308a5.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
+        "detail": "Regenerated the official documentation-alignment projection.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/pre-release-documentation-alignment.json"
       },
       {
         "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "title": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "detail": "Generated source-bound evidence during ai_finish; sha256 before=8e81262f8d93910b53465e6d0427f33b6df49298de3439f31c4eab20643988e1, after=4ca6bdc4b669d7c63af929fc9094e6d0eb9643f85af306ac4e3688d7b2dd56ef.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
+        "detail": "Regenerated the human-readable documentation-alignment projection.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
             "subject": "docs/reference/pre-release-documentation-alignment.md"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/pre-release-documentation-alignment.md"
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json"
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md"
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.json",
+        "detail": "Generated machine-readable Human Benefit Review Report.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/cockpit/task_report.json"
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.md",
+        "detail": "Generated human-readable Human Benefit Review Report.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/cockpit/task_report.md"
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/capability-truth-matrix.md"
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.json",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55, after=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/japanese-capability-assessment.json"
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94, after=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/japanese-capability-assessment.md"
       }
     ],
+    "locale": "zh-CN",
     "passed": [
       {
         "claim": "sourceBoundEvidence",
-        "title": "sourceBoundEvidence",
-        "detail": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=db93c0eb585d86b2588a57c22883b094c71d075b37100a4daf86f4899e59f2ea, after=200470bf37fe469ac8680dc0f42f08f2242edd67e14ba5720a02615932a19a31; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "sourceBoundEvidence",
-            "digest": "fb5983bfc5c33638e9c0f74e19992c54b4d3137ec07a23965b42d760be079c7e"
-          }
-        ],
+        "detail": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=deb83a9f6071af4cc0c6ae9f032eaa00711ffd59a18e3fdd9d5525da392ac915, after=7e222cddbba5781a162d2ad16612c487eefa5875c1217a5320c43b241ec57b20; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "sourceBoundEvidence",
-            "digest": "fb5983bfc5c33638e9c0f74e19992c54b4d3137ec07a23965b42d760be079c7e"
+            "digest": "a0a5127aabcafc286140a68c8e5485cd6a403b8af142efe1aa132507b0dd23a7",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "sourceBoundEvidence"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "a0a5127aabcafc286140a68c8e5485cd6a403b8af142efe1aa132507b0dd23a7",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "sourceBoundEvidence"
+          }
+        ],
+        "inference": false,
+        "title": "sourceBoundEvidence"
       },
       {
         "claim": "aiWorkItem",
-        "title": "aiWorkItem",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json work item contract check passed: .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiWorkItem",
-            "digest": "076124bf45719dbedac81bd68515865e88ede380a5a59b1f47ee3d563fc2e358"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json work item contract check passed: .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiWorkItem",
-            "digest": "076124bf45719dbedac81bd68515865e88ede380a5a59b1f47ee3d563fc2e358"
+            "digest": "52450d8e56a9eb81048e5d89407c82b9c5a611b0a1df0f19ebd81a8dcdfbe184",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiWorkItem"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "52450d8e56a9eb81048e5d89407c82b9c5a611b0a1df0f19ebd81a8dcdfbe184",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiWorkItem"
+          }
+        ],
+        "inference": false,
+        "title": "aiWorkItem"
       },
       {
         "claim": "aiScope",
-        "title": "aiScope",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json scope guard passed: 20 changed path(s) covered",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiScope",
-            "digest": "d6488610dade3e293240b11c03d657111e528e4f8c873258b188859e306e7a53"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json scope guard passed: 12 changed path(s) covered",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiScope",
-            "digest": "d6488610dade3e293240b11c03d657111e528e4f8c873258b188859e306e7a53"
+            "digest": "d76b475372409b2c9b7a228563016afa684efe036490f9f59fe845a469ba2e33",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScope"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "d76b475372409b2c9b7a228563016afa684efe036490f9f59fe845a469ba2e33",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScope"
+          }
+        ],
+        "inference": false,
+        "title": "aiScope"
       },
       {
         "claim": "aiGuards",
-        "title": "aiGuards",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json [warning] restricted_write: .ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard ch",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiGuards",
-            "digest": "03e3a7128cc95b5f42d69146d44c0aea53a7e9840355226ccf0574bd34042d64"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiGuards",
-            "digest": "03e3a7128cc95b5f42d69146d44c0aea53a7e9840355226ccf0574bd34042d64"
+            "digest": "e323d7ad082e2935f07905894103fc9b217310f64444404e4fdd8cfc8ee5557c",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuards"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "e323d7ad082e2935f07905894103fc9b217310f64444404e4fdd8cfc8ee5557c",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuards"
+          }
+        ],
+        "inference": false,
+        "title": "aiGuards"
       },
       {
         "claim": "aiCheckpoint",
-        "title": "aiCheckpoint",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-shellcheck-apt-mirror-20260819` - Contract Hash: `070b05551e968861` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiCheckpoint",
-            "digest": "8e7e7df582aa69df9ce302eba86683dcd56fb980664f907ebca91b1b95c5d983"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-lock-lease-coverage-20260818` - Contract Hash: `df2c240f2c0b2f5a` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Re",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiCheckpoint",
-            "digest": "8e7e7df582aa69df9ce302eba86683dcd56fb980664f907ebca91b1b95c5d983"
+            "digest": "280214f2a45799d51542bbf2b5fa62ac52a003866fdb37fb134083dabdfbbe65",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCheckpoint"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "280214f2a45799d51542bbf2b5fa62ac52a003866fdb37fb134083dabdfbbe65",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCheckpoint"
+          }
+        ],
+        "inference": false,
+        "title": "aiCheckpoint"
       },
       {
         "claim": "aiReviewPolicy",
-        "title": "aiReviewPolicy",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json review policy matched 10 path(s) [review] .ai/evidence/reference-impact/fix-shellcheck-apt-mirror-20260819.json [review] .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json [review] .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.json [review] .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.outcome.md",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiReviewPolicy",
-            "digest": "6824791784beec92a18bfec1aff0302d15d6dedc8c63f31f7fc19dca7c06ebe2"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json review policy matched 7 path(s) [review] .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json [review] .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json [review] .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md [review] .ai/work-items/starts/fix-lock-lease-coverage-20260818.json [review] .ai/cockp",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiReviewPolicy",
-            "digest": "6824791784beec92a18bfec1aff0302d15d6dedc8c63f31f7fc19dca7c06ebe2"
+            "digest": "fc3e3e181066fcec8c9e4723236b4f87c35e7a99dced75a2b2559c1207f052f2",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiReviewPolicy"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "fc3e3e181066fcec8c9e4723236b4f87c35e7a99dced75a2b2559c1207f052f2",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiReviewPolicy"
+          }
+        ],
+        "inference": false,
+        "title": "aiReviewPolicy"
       },
       {
         "claim": "aiBacktrack",
-        "title": "aiBacktrack",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiBacktrack",
-            "digest": "470f5fb6f6e2bd7a8461008724d0dd9532731afaa7087c10a452e024987897d1"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiBacktrack",
-            "digest": "470f5fb6f6e2bd7a8461008724d0dd9532731afaa7087c10a452e024987897d1"
+            "digest": "7949708c3577f42cfd2762cc25f3763957f791fdd38a1659498cfeab783fbc14",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiBacktrack"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "7949708c3577f42cfd2762cc25f3763957f791fdd38a1659498cfeab783fbc14",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiBacktrack"
+          }
+        ],
+        "inference": false,
+        "title": "aiBacktrack"
       },
       {
         "claim": "aiCoverage",
-        "title": "aiCoverage",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiCoverage",
-            "digest": "bf0eeab5d1f9c6e35a2d4a984d1cacedcdb4fd6c3bfa6d43d0ddcd1c4e00b2d5"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiCoverage",
-            "digest": "bf0eeab5d1f9c6e35a2d4a984d1cacedcdb4fd6c3bfa6d43d0ddcd1c4e00b2d5"
+            "digest": "c82215fddfea8bda4d1cc28af722a2761572c960fb9dec419146c59fb08c2d5e",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCoverage"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "c82215fddfea8bda4d1cc28af722a2761572c960fb9dec419146c59fb08c2d5e",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCoverage"
+          }
+        ],
+        "inference": false,
+        "title": "aiCoverage"
       },
       {
         "claim": "aiScenarioCoverage",
-        "title": "aiScenarioCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiScenarioCoverage",
-            "digest": "f5c0112fde5fc9eebcb08c4efa6d1d4dabf6b25f065a449da59b765eadbfe8d5"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json report: target/ai_scenario_coverage_report.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiScenarioCoverage",
-            "digest": "f5c0112fde5fc9eebcb08c4efa6d1d4dabf6b25f065a449da59b765eadbfe8d5"
+            "digest": "d7f285636815a6c15e37d4024015982314bed40b3dfa60c247846d5e33de112c",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScenarioCoverage"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "d7f285636815a6c15e37d4024015982314bed40b3dfa60c247846d5e33de112c",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScenarioCoverage"
+          }
+        ],
+        "inference": false,
+        "title": "aiScenarioCoverage"
       },
       {
         "claim": "aiGuidelines",
-        "title": "aiGuidelines",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json guidelines compliance check passed: 3 guideline(s) verified",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiGuidelines",
-            "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json guidelines compliance check passed: 2 guideline(s) verified",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiGuidelines",
-            "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
+            "digest": "3c5e1e40f0811a2369842cf3158162606db1ea149ba5eb5fb1ed9a97401e6d84",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuidelines"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "3c5e1e40f0811a2369842cf3158162606db1ea149ba5eb5fb1ed9a97401e6d84",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuidelines"
+          }
+        ],
+        "inference": false,
+        "title": "aiGuidelines"
       },
       {
         "claim": "aiDiffOwnership",
-        "title": "aiDiffOwnership",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json ## Diff Ownership Preview - active_owned: `20`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outc",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiDiffOwnership",
-            "digest": "eb7ba958675d5b878d7caa7b548eba36b87672340778cd85045f29a61604fde9"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json ## Diff Ownership Preview - active_owned: `12`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.md` — cove",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiDiffOwnership",
-            "digest": "eb7ba958675d5b878d7caa7b548eba36b87672340778cd85045f29a61604fde9"
+            "digest": "61146802e1f753f5a61465f8b21c9daa49e2f87c6ea5f0fd93fbd8f366b67771",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiDiffOwnership"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "61146802e1f753f5a61465f8b21c9daa49e2f87c6ea5f0fd93fbd8f366b67771",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiDiffOwnership"
+          }
+        ],
+        "inference": false,
+        "title": "aiDiffOwnership"
       },
       {
         "claim": "quality",
-        "title": "quality",
-        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"installer\", \"tests\", \"trust\", \"unknown\", \"workflow\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"high-risk strict paths require full quality: .github/workflows/compatibility.yml, scripts/installer/legacy.py\", \"requiredGroups\": [\"quality-full\"], \"target\": \"quality-full\"}, \"qualityTarget\": \"quality-full\", \"requiredGroups\": [\"quality-full\"], \"scope\": \"full\", \"stage\": \"task\"}",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "quality",
-            "digest": "3ec136322093b5102ac219b8208feb7f5c7c9c6404e4addb0938d3980ab76d6e"
-          }
-        ],
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"tests\", \"trust\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json, docs/reference/pre-release-documentation-alignment.md, tests/test_work_item_intelligen",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "quality",
-            "digest": "3ec136322093b5102ac219b8208feb7f5c7c9c6404e4addb0938d3980ab76d6e"
+            "digest": "0fb76826e10300f4b612eac25e3172d35739dc68718a6ebd67d3d1773e63f43e",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "quality"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "0fb76826e10300f4b612eac25e3172d35739dc68718a6ebd67d3d1773e63f43e",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "quality"
+          }
+        ],
+        "inference": false,
+        "title": "quality"
       },
       {
         "claim": "aiStatus",
-        "title": "aiStatus",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiStatus",
-            "digest": "7b34f861f072783cc1863bb8739ffd6541569b1464125f55f8bede66a5492429"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiStatus",
-            "digest": "7b34f861f072783cc1863bb8739ffd6541569b1464125f55f8bede66a5492429"
+            "digest": "4594b88f03a62564c0cf429dbc741b25ee95903c8d0675d16cae3967301cd10c",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatus"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "4594b88f03a62564c0cf429dbc741b25ee95903c8d0675d16cae3967301cd10c",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatus"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatus"
       },
       {
         "claim": "aiStatusCheck",
-        "title": "aiStatusCheck",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiStatusCheck",
-            "digest": "cc2b5a5fcc382c640b4c3e7e144f6d95ba6d33e578f51a70f37af95720423672"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiStatusCheck",
-            "digest": "cc2b5a5fcc382c640b4c3e7e144f6d95ba6d33e578f51a70f37af95720423672"
+            "digest": "8b348430d5582d135f603784ee6490cd82e8f03c4de874443f03228123b3ca82",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusCheck"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "8b348430d5582d135f603784ee6490cd82e8f03c4de874443f03228123b3ca82",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusCheck"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatusCheck"
       },
       {
         "claim": "aiStatusConsistency",
-        "title": "aiStatusConsistency",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiStatusConsistency",
-            "digest": "b187d28fe830a2b09f5c02be6f1905679b26cfaced00e9e8422e60d2d6c20ec5"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiStatusConsistency",
-            "digest": "b187d28fe830a2b09f5c02be6f1905679b26cfaced00e9e8422e60d2d6c20ec5"
+            "digest": "378ec445c37bffbf3a6bcb0678ed1827d1e4aba343837383817651d09730c1ad",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusConsistency"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "378ec445c37bffbf3a6bcb0678ed1827d1e4aba343837383817651d09730c1ad",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusConsistency"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatusConsistency"
       },
       {
         "claim": "aiAgentRisk",
-        "title": "aiAgentRisk",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json --summary .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiAgentRisk",
-            "digest": "7cc602ebc480d908c42f13cc9ca53ee0abfca1a088c029a19f1b45c518299f16"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiAgentRisk",
-            "digest": "7cc602ebc480d908c42f13cc9ca53ee0abfca1a088c029a19f1b45c518299f16"
+            "digest": "4a62232c5ece90378aa51c953be49a5072839b39e08d9bb2be8959b6c51ed457",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiAgentRisk"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "4a62232c5ece90378aa51c953be49a5072839b39e08d9bb2be8959b6c51ed457",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiAgentRisk"
+          }
+        ],
+        "inference": false,
+        "title": "aiAgentRisk"
       },
       {
         "claim": "aiSummary",
-        "title": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json --contract .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json ai summary check passed: .ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiSummary",
-            "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json ai summary check passed: .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.contract.json",
-            "subject": "aiSummary",
-            "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
+            "digest": "86232c15b98edf059507782579e6e5bbf7c27da0d5a05720748cf0bd6554f34e",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiSummary"
           }
         ],
-        "inference": false
-      }
-    ],
-    "retained": [],
-    "risks": [
-      {
-        "claim": "hosted_verification",
-        "severity": "medium",
-        "title": "hosted_verification",
-        "detail": "The workflow fix removes the observed apt mirror dependency, but PR #906 must be revalidated on hosted CI after this corrective change merges.",
-        "state": "unresolved",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "residualRisks"
+            "digest": "86232c15b98edf059507782579e6e5bbf7c27da0d5a05720748cf0bd6554f34e",
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiSummary"
           }
         ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "aiSummary"
       }
     ],
-    "redReasons": [],
     "questions": {
-      "problemCount": 3,
+      "agentUnknowns": [],
+      "avoidedRisks": [],
+      "blockedProblems": [],
+      "humanConfirmations": [],
+      "nextTime": {
+        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+        "evidenceRefs": [],
+        "inference": true
+      },
+      "problemCount": 1,
       "problemCountEvidenceRefs": [
         {
-          "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification and verificationHistory"
+          "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+          "subject": "observedIssues"
         }
       ],
-      "blockedProblems": [],
-      "resolvedProblems": [
-        {
-          "claim": "aiGuidelines failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verificationHistory[0] aiGuidelines failed",
-              "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verification[aiGuidelines] retry passed",
-              "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "quality failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verificationHistory[1] quality failed",
-              "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verification[quality] retry passed",
-              "digest": "3ec136322093b5102ac219b8208feb7f5c7c9c6404e4addb0938d3980ab76d6e"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "aiSummary failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verificationHistory[2] aiSummary failed",
-              "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verification[aiSummary] retry passed",
-              "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "resolutionApproach": [
-        {
-          "claim": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verificationHistory[0] aiGuidelines failed",
-              "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verification[aiGuidelines] retry passed",
-              "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran quality after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verificationHistory[1] quality failed",
-              "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verification[quality] retry passed",
-              "digest": "3ec136322093b5102ac219b8208feb7f5c7c9c6404e4addb0938d3980ab76d6e"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran aiSummary after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verificationHistory[2] aiSummary failed",
-              "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "verification[aiSummary] retry passed",
-              "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "avoidedRisks": [
-        {
-          "claim": "If not detected, could have led to a stale completion claim.",
-          "evidenceRefs": [],
-          "inference": true
-        },
-        {
-          "claim": "If not detected, could have led to a stale completion claim.",
-          "evidenceRefs": [],
-          "inference": true
-        },
-        {
-          "claim": "If not detected, could have led to a stale completion claim.",
-          "evidenceRefs": [],
-          "inference": true
-        }
-      ],
-      "remainingRisks": [
-        {
-          "claim": "The workflow fix removes the observed apt mirror dependency, but PR #906 must be revalidated on hosted CI after this corrective change merges.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/fix-shellcheck-apt-mirror-20260819.summary.json",
-              "subject": "residualRisks"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "agentUnknowns": [],
-      "humanConfirmations": [],
       "recurrenceLikelihood": {
         "claim": "unknown: no direct recurrence probability evidence was recorded.",
         "evidenceRefs": [],
         "inference": true
       },
-      "nextTime": {
-        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
-        "evidenceRefs": [],
-        "inference": true
-      }
-    }
+      "remainingRisks": [],
+      "resolutionApproach": [
+        {
+          "claim": "Added a deterministic malformed-lock test that preserves the lock and asserts the fail-closed IntelligenceError path.",
+          "evidenceRefs": [
+            {
+              "source": "tests/test_work_item_intelligence.py::test_malformed_writer_lease_is_preserved_and_fails_closed",
+              "subject": "observedIssues[0] observed issue"
+            },
+            {
+              "source": "tests/test_work_item_intelligence.py",
+              "subject": "observedIssues[0] observed issue"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolvedProblems": [
+        {
+          "claim": "observed issue",
+          "evidenceRefs": [
+            {
+              "source": "tests/test_work_item_intelligence.py::test_malformed_writer_lease_is_preserved_and_fails_closed",
+              "subject": "observedIssues[0] observed issue"
+            },
+            {
+              "source": "tests/test_work_item_intelligence.py",
+              "subject": "observedIssues[0] observed issue"
+            }
+          ],
+          "inference": false
+        }
+      ]
+    },
+    "redReasons": [],
+    "retained": [],
+    "risks": []
   },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  "implementationApproach": {
+    "affectedComponents": [
+      {
+        "component": "Work Item intelligence lock-lease test surface",
+        "detail": "Adds deterministic coverage for the existing malformed-metadata fail-closed branch; production implementation is unchanged.",
+        "evidence": [
+          {
+            "source": "tests/test_work_item_intelligence.py",
+            "subject": "Focused regression test"
+          }
+        ],
+        "status": "verified"
+      },
+      {
+        "component": "Capability Truth and pre-release alignment projections",
+        "detail": "Regenerates source-bound digests and documentation-alignment projections from the changed evidence.",
+        "evidence": [
+          {
+            "source": "docs/reference/capability-truth-matrix.json",
+            "subject": "Generated capability matrix"
+          },
+          {
+            "source": "docs/reference/pre-release-documentation-alignment.md",
+            "subject": "Generated alignment projection"
+          }
+        ],
+        "status": "verified"
+      }
+    ],
+    "approachType": "implementation",
+    "designDecisions": [
+      {
+        "decision": "Add a direct malformed-lock fixture instead of changing production code or relying on a concurrent race.",
+        "evidence": [
+          {
+            "source": "tests/test_work_item_intelligence.py",
+            "subject": "Non-racy fixture and fail-closed assertion"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "Root-cause record"
+          }
+        ],
+        "reason": "The observed failure was coverage nondeterminism, while the defensive production behavior was already correct.",
+        "status": "verified"
+      },
+      {
+        "decision": "Keep hosted exact-source aggregate verification in the Release WI.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "Out-of-scope publication and acceptance boundary"
+          }
+        ],
+        "reason": "This corrective WI proves the deterministic local evidence path; the authoritative hosted Python 3.12 result belongs to the release source after merge.",
+        "status": "verified"
+      }
+    ],
+    "evidence": [
+      {
+        "claim": "The fix removes the concurrent timing dependency from the malformed-lock coverage path.",
+        "source": "tests/test_work_item_intelligence.py",
+        "status": "verified",
+        "subject": "Direct malformed metadata regression"
+      },
+      {
+        "claim": "Generated capability and pre-release alignment evidence matches the changed test surface.",
+        "source": "docs/reference/capability-truth-matrix.json",
+        "status": "verified",
+        "subject": "Official generator output"
+      }
+    ],
+    "mechanism": {
+      "evidence": [
+        {
+          "source": "tests/test_work_item_intelligence.py",
+          "subject": "test_malformed_writer_lease_is_preserved_and_fails_closed"
+        },
+        {
+          "source": "scripts/ai_work_item_intelligence.py",
+          "subject": "Existing exclusive-lock malformed-metadata handling"
+        }
+      ],
+      "status": "verified",
+      "text": "在临时运行目录中写入不可解析的 status.lock，调用现有 exclusive-lock 入口并断言立即以 IntelligenceError fail closed 且保留锁文件；该测试覆盖 JSONDecodeError 防御路径，不依赖并发调度。"
+    },
+    "status": "complete",
+    "summary": {
+      "evidence": [
+        {
+          "source": "tests/test_work_item_intelligence.py",
+          "subject": "Deterministic malformed writer-lease regression"
+        },
+        {
+          "source": "scripts/ai_capability_truth.py",
+          "subject": "Generated capability evidence refresh"
+        },
+        {
+          "source": "scripts/check_pre_release_documentation_alignment.py",
+          "subject": "Generated documentation-alignment refresh"
+        }
+      ],
+      "status": "verified",
+      "text": "在不改变生产锁逻辑的前提下，直接增加 malformed writer-lease metadata 的确定性回归测试，使原本依赖并发时序才能触达的 fail-closed 分支在每次质量汇总中稳定被覆盖；随后用官方生成器刷新 Capability Truth 与 pre-release documentation alignment 投影。"
+    },
+    "technicalDetails": [
+      {
+        "detail": "The targeted intelligence module passes 35 tests; hosted aggregate threshold verification remains a separate exact-source release check.",
+        "evidence": [
+          {
+            "source": "tests/test_work_item_intelligence.py",
+            "subject": "35 passing focused tests"
+          }
+        ],
+        "status": "verified",
+        "topic": "Coverage behavior"
+      }
+    ]
+  },
+  "interventions": [],
+  "issues": {
+    "detected": 0,
+    "hardStops": 0,
+    "resolved": 0,
+    "unresolved": 0,
+    "warnings": 0
+  },
+  "limitations": [],
+  "nextSafeAction": "Review the pull request and provider checks before merge.",
+  "phase": "review",
+  "preventedRisks": [],
+  "remainingRisks": [],
+  "reportVersion": 1,
+  "result": "completed",
+  "sourceOutcome": {
+    "digest": "c84a089fb6d6e1ee2a21738dfcba1d70f16c2130c3d960fbe40fe7a3e4e62cba",
+    "format": "ai-cockpit-task-outcome",
+    "schemaVersion": 1
+  },
+  "task": {
+    "deliveredChanges": [
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+      "tests/test_work_item_intelligence.py",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md",
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json",
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md"
+    ],
+    "summary": "Task fix-lock-lease-coverage-20260818 generated an evidence-derived outcome with status completed."
+  },
+  "workItemId": "fix-lock-lease-coverage-20260818"
 }
