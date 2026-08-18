@@ -1,0 +1,198 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-66-publication",
+  "mode": "code",
+  "title": "Publish candidate release v0.5.66",
+  "baseCommit": "44b87df25fc20ce53254c177aa63ff959afb2ca2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-66-publication.contract.json",
+    ".ai/work-items/active/release-v0-5-66-publication.summary.json",
+    ".ai/work-items/active/release-v0-5-66-publication.outcome.json",
+    ".ai/work-items/active/release-v0-5-66-publication.outcome.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/task-event-log.events.jsonl",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "target/release-v0-5-66-publication/**",
+    "target/task-closure-receipts/**"
+  ],
+  "outOfScope": [
+    "Changing, deleting, moving, or republishing any existing immutable tag or public Release.",
+    "Changing product/runtime source, installer behavior, release workflow logic, security gates, or coverage policy.",
+    "Manually creating or moving a tag, GitHub Release, or public release asset outside .github/workflows/release.yml.",
+    "Claiming publication or adopter delivery without provider-bound release assets and a fresh full-HTTPS installation.",
+    "Changing unrelated Work Item evidence or user-owned worktree changes."
+  ],
+  "rawUserRequest": "完成现有既定目标以后发布新版本。不要把 Outcome 达到绿色当作发布目标本身；必须先完成既定目标，再通过正式发布流程发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-instruction: complete-existing-goals-then-publish-new-version",
+    "capturedAt": "2026-08-18",
+    "digest": "sha256:publish-new-version-after-existing-goals"
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-18-publish-new-version-after-existing-goals",
+    "scope": "Publish candidate v0.5.66 only after exact-source rehearsal and all provider/adopter evidence pass; no gate bypass."
+  },
+  "sources": [
+    {"path": "release.json", "reason": "Current published release projection and previous tag."},
+    {"path": "next-release.json", "reason": "Current unpublished v0.5.66 candidate projection."},
+    {"path": "release-state.json", "reason": "Canonical release progression and identity state."},
+    {"path": ".ai/cockpit/version.json", "reason": "Source releaseVersion binding."},
+    {"path": ".github/workflows/release.yml", "reason": "Authoritative exact-source rehearsal/publication workflow."},
+    {"path": "docs/reference/distribution.md", "reason": "Release ordering, identity, and adopter distribution contract."},
+    {"path": "scripts/check_release_preflight.py", "reason": "Release preflight gate."},
+    {"path": "scripts/check_release_distribution.py", "reason": "Public distribution verification."},
+    {"path": "scripts/verify_quick_install_release.py", "reason": "Fresh adopter install validation."}
+  ],
+  "declaredIntent": {
+    "summary": "Publish the v0.5.66 candidate through the authoritative exact-source release workflow after the existing corrective goals are complete.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["immutable_release", "provider_workflow", "release_identity", "adopter_installation"],
+    "reason": "Publication creates an immutable provider tag and public assets; exact-source rehearsal, provider evidence, and a fresh public installation are required.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["repository_release.publish requires exact-source strict release verification"],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized the new-version publication after the existing corrective goals are complete, with all release confirmations recorded here."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Release evidence must be checkpointed before final Outcome and provider action."
+  },
+  "acceptance": [
+    "Synchronized origin/main readiness proves v0.5.66 is the only eligible next candidate and the candidate metadata is internally consistent.",
+    "A successful same-SHA release.yml rehearsal exists before publication and creates no tag, Release, or public asset.",
+    "The actual release.yml workflow publishes immutable v0.5.66 from the final origin/main SHA only after consuming the matching rehearsal receipt and all exact-source gates pass.",
+    "Provider-bound release assets include release.json, release-digests.json, SBOM, provenance, CI release evidence, and the source archive with matching digests.",
+    "A fresh temporary repository installs from the public full HTTPS template URL at v0.5.66 and verifies version, canonical asset hydration, and distribution consistency.",
+    "The Work Item emits a complete direct Outcome beginning with the canonical traffic-light marker, archives only after green completion, and completes PR/merge/ai-close-work-item lifecycle."
+  ],
+  "scenarioCoverage": [
+    {
+      "id": "release-readiness",
+      "scenario": "Readiness rejects stale, inconsistent, or non-next candidate metadata.",
+      "expected": "Only v0.5.66 on synchronized origin/main is eligible.",
+      "verificationPlan": "Run check-release-readiness and check-release-state-consistency on the synchronized base.",
+      "required": true,
+      "riskDomain": "release_identity",
+      "status": "unverified",
+      "evidence": ["release.json", "next-release.json", "release-state.json", "Makefile"]
+    },
+    {
+      "id": "same-sha-rehearsal",
+      "scenario": "The release workflow rehearsal succeeds without public or immutable release mutation.",
+      "expected": "The receipt binds v0.5.66 to one source SHA and records required smoke/compatibility evidence.",
+      "verificationPlan": "Dispatch release.yml with rehearsal=true and inspect the provider run and receipt.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "unverified",
+      "evidence": [".github/workflows/release.yml", "release-state.json"]
+    },
+    {
+      "id": "exact-publication",
+      "scenario": "Publication rejects stale source, missing rehearsal, missing assets, or mismatched evidence.",
+      "expected": "Only the matching exact-source v0.5.66 Release is published.",
+      "verificationPlan": "Dispatch actual release.yml with the matching rehearsal run ID and inspect provider identity/assets.",
+      "required": true,
+      "riskDomain": "immutable_release",
+      "status": "unverified",
+      "evidence": [".github/workflows/release.yml", "scripts/check_release_distribution.py", "scripts/check_ci_release_evidence.sh"]
+    },
+    {
+      "id": "fresh-adopter-install",
+      "scenario": "A clean temporary repository installs from the full HTTPS v0.5.66 release URL.",
+      "expected": "Installation succeeds and validates public release assets and version identity.",
+      "verificationPlan": "Run verify_quick_install_release.py against downloaded public assets and a fresh temporary repository.",
+      "required": true,
+      "riskDomain": "adopter_installation",
+      "status": "unverified",
+      "evidence": ["install.sh", "scripts/verify_quick_install_release.py", "scripts/check_release_distribution.py"]
+    }
+  ],
+  "guidelines": [
+    "Use only the authoritative release workflow for immutable provider mutations; do not create tags or Releases manually.",
+    "Preserve strict readiness → same-SHA rehearsal → actual publication → post-publication distribution verification ordering.",
+    "Do not weaken coverage, test collection, security, smoke, compatibility, release, or evidence gates.",
+    "Treat Outcome as the user-facing operation interface and deliver the complete traffic-light report directly in the conversation before archive."
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized publishing a new version after the existing goals are complete; external publication remains limited to the authoritative release workflow and its exact-source gates."
+  },
+  "rollbackNote": "If any release gate fails, do not publish or alter an immutable tag; retain the failure evidence and repair through a corrective Work Item.",
+  "budgetImpact": {
+    "expectedMetrics": {"archiveGrowth": 952}
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-66-publication.json",
+    "baseCommit": "44b87df25fc20ce53254c177aa63ff959afb2ca2",
+    "initialScopeDigest": "6c90176c8aeeff0d0a8a375b5ae44401eefac19e0d160b29492413c0430d7837",
+    "contractSkeletonDigest": "728710fe3216d6b570e1061ae265168909e086998e16eb341575f47779645d67"
+  },
+  "intent": {
+    "problem": "The corrective Work Item is complete and merged, while the repository's v0.5.66 candidate remains unpublished; future adopter projects cannot receive the completed release until exact-source provider publication and fresh public installation verification succeed.",
+    "constraints": [
+      "Start from the synchronized origin/main merge commit 44b87df25fc20ce53254c177aa63ff959afb2ca2.",
+      "Publish only v0.5.66 through .github/workflows/release.yml after a matching same-SHA rehearsal; never manually create, move, delete, or republish tags or Releases.",
+      "Do not claim publication, adopter delivery, or release readiness from local files or chat; require provider-bound assets and fresh HTTPS installation evidence.",
+      "If publication fails, preserve the failure evidence and do not mutate the immutable tag or conceal the failure with a green Outcome."
+    ],
+    "rationale": "A new version is only useful to future adopters when the immutable provider tag, source commit, assets, evidence, and real public installation all agree. The authoritative workflow provides the required fail-closed identity boundary."
+  }
+}
