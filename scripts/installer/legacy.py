@@ -571,6 +571,28 @@ class Installer:
                 + ", ".join(missing_targets)
             )
 
+        manifest_checker = self.target / "scripts" / "ai_installer_adopter_capability_manifest.py"
+        # Trusted fixed-argv validator; no shell or external argv is accepted.
+        manifest_result = subprocess.run(  # nosec B603
+            [
+                sys.executable,
+                str(manifest_checker),
+                "--root",
+                str(self.target),
+                "--installed",
+            ],
+            cwd=self.target,
+            text=True,
+            capture_output=True,
+            check=False,
+            env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
+        )
+        if manifest_result.returncode != 0:
+            raise ValueError(
+                "installed adopter capability parity validation failed: "
+                + manifest_result.stderr.strip()
+            )
+
     def capture_git_head(self) -> GitHeadSnapshot | None:
         """現在の HEAD をブランチ名または detached commit として記録する。"""
         commit = run_git(self.target, ["rev-parse", "--verify", "HEAD"])

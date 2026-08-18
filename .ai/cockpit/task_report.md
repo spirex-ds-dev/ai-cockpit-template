@@ -53,6 +53,9 @@ Problems resolved
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
 - If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
 - The template CLI constructs an empty CheckerRegistry, so direct CLI output can prove existing runtime node ids but cannot prove callback execution without a host-provided registry. The injected existing-id registry path is covered by focused tests. This branch also intentionally retains the bce5d484 Summary schema: implementationApproach schema/projection is not present here, belongs to the separate implementation-approach-evidence Work Item, and should apply to later code/config Work Items only after that capability lands. [evidence: residualRisks]

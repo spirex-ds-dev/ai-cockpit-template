@@ -1,0 +1,334 @@
+{
+  "contractVersion": 2,
+  "workItemId": "adopter-feature-parity-gate",
+  "mode": "code",
+  "title": "Adopter-facing capability manifest and installed parity gate",
+  "rawUserRequest": "建立 adopter-facing capability manifest 和 fail-closed installed parity，修复 Machine-readable Work Item Status Interface、Governance Cost/Metrics、Performance Diagnosis 未进入 installer catalog/parity 的继承缺口；将现有 Summary、Task Outcome、Human Report 作为可验证实现知识能力纳入表面，并为尚未合并的 Implementation Approach 报告能力预留 planned 状态。必须从 origin/main@bce5d48422c77695d8fd86ddb2019de1e77f1194 的独立分支/工作树执行，不修改 verification runtime 或 Summary/Outcome/Report 实现文件，不 merge、release、close Work Item。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request: adopter-feature-parity-gate execution authorization and Contract scope correction",
+    "capturedAt": "2026-08-18T00:00:00+09:00",
+    "digest": "sha256:adopter-feature-parity-gate-authorized-scope"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Bind the existing adopter-facing capability implementations to one fail-closed installation manifest and a real fresh-adopter parity fixture.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+  "baselineDirtyPaths": [],
+  "intent": {
+    "problem": "The template already contains several adopter-facing capability implementations, schemas, and Make entrypoints, but the installer catalog and parity evidence do not bind the complete inherited surface. A fresh adopter can therefore receive an incomplete runtime while source-tree text still appears present.",
+    "constraints": [
+      "Use one auditable adopter-facing manifest as the capability surface of truth, with fail-closed checks for files, catalog membership, Make targets, schemas, and executable entrypoints.",
+      "Keep the Status Interface, Governance Cost/Metrics, Performance Diagnosis, Summary, Task Outcome, and Human Report implementation files unchanged; only bind their existing interfaces into installation evidence.",
+      "Keep template engineering, adopter installation evidence, planned work, and explicitly excluded external capabilities distinct; never infer hosted, security, identity, sandbox, audit, or calibration completion from local template files.",
+      "Do not modify the parent worktree, verification runtime, reports, release state, or Work Item merge/closure state."
+    ],
+    "rationale": "A manifest-driven parity fixture makes installer inheritance reviewable and prevents catalog-only or source-only checks from becoming adopter capability claims."
+  },
+  "scope": [
+    ".ai/project/adopter-capability-manifest.json",
+    ".ai/schemas/adopter-capability-manifest.schema.json",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_installer_adopter_capability_manifest.py",
+    "scripts/installer/legacy.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_adopter_feature_parity.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_installer.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/adopter-feature-parity-gate.contract.json",
+    ".ai/work-items/active/adopter-feature-parity-gate.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/adopter-feature-parity-gate.outcome.json",
+    ".ai/work-items/active/adopter-feature-parity-gate.outcome.md"
+  ],
+  "outOfScope": [
+    "scripts/ai_generate_work_item_status.py, scripts/ai_work_item_status.py, scripts/ai_governance_cost.py, scripts/ai_performance_diagnosis.py, and all Summary/Task Outcome/Human Report implementation files.",
+    "scripts/ai_verification_runtime.py and other verification-runtime implementation files and validation logic.",
+    "Summary/Outcome/Report implementation and validation logic, including their existing generators, renderers, and checkers.",
+    "Changing existing capability schemas or reference documentation content; the only additional reference writes allowed are generator-refreshed source-bound Japanese assessment records required because this Work Item changes Makefile source bytes.",
+    "Hosted CI, CodeQL, SBOM, Provenance, Digital Signing, Enterprise IAM, Production Sandbox, External Audit, and Calibration completion; these are explicitly excluded from inherited capability truth.",
+    "Implementation Approach report implementation details not present at the recorded base; only existing Summary/Task Outcome/Human Report entrypoints may be referenced as a reserved verification surface.",
+    "GitHub Issue writing, release publication, PR merge, Work Item archive/close, or parent-worktree changes."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Current installer script catalog and script copy surface."
+    },
+    {
+      "path": "scripts/installer/legacy.py",
+      "reason": "Current installer managed-copy behavior, .ai tree copying, script catalog consumption, and installed Makefile validation."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Canonical Makefile surface inherited by a fresh adopter."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Template repository Make entrypoint that must remain aligned with the installed Makefile surface."
+    },
+    {
+      "path": ".ai/schemas/work-item-status-interface.schema.json",
+      "reason": "Existing machine-readable Work Item status schema."
+    },
+    {
+      "path": ".ai/schemas/governance-cost-report.schema.json",
+      "reason": "Existing governance cost report schema."
+    },
+    {
+      "path": ".ai/schemas/performance-diagnosis-report.schema.json",
+      "reason": "Existing performance diagnosis report schema."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Existing Task Outcome schema consumed by the report surface."
+    },
+    {
+      "path": "docs/reference/work-item-status-interface.md",
+      "reason": "Existing Status Interface entrypoints and limitations."
+    },
+    {
+      "path": "docs/reference/governance-cost-metrics.md",
+      "reason": "Existing Governance Cost/Metrics entrypoint and advisory boundary."
+    },
+    {
+      "path": "docs/reference/performance-diagnosis.md",
+      "reason": "Existing Performance Diagnosis entrypoint and evidence boundary."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Canonical status vocabulary and evidence-bound capability truth."
+    }
+  ],
+  "problemStatement": "Fresh adopters must receive and execute the declared capability surface; source presence or catalog text alone is insufficient evidence.",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "installer",
+      "verification",
+      "scope"
+    ],
+    "reason": "The parity gate spans installer distribution, two Makefile surfaces, machine schemas, and evidence-bound capability truth; a false green would overclaim adopter inheritance.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Medium-risk installer and evidence-boundary change requires deterministic focused tests and full repository quality checks."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The scope, evidence sources, acceptance, scenarios, and fail-closed verification plan are explicit; no external authority is required for local implementation."
+  },
+  "preReviewWarnings": [
+    "Review that every adopter_installed claim is backed by a fresh empty-adopter installation and executable entrypoint evidence.",
+    "Review that planned Implementation Approach and excluded external capabilities cannot be interpreted as inherited."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record before-edit and before-finish checkpoints so the shared manifest, installer scope, and evidence claims remain traceable."
+  },
+  "acceptance": [
+    "A single .ai/project/adopter-capability-manifest.json and its strict schema declare every in-scope capability's adopterFacing, status, ownership, templateFiles, installedFiles, makeTargets, schemas, and required docs/entrypoints; missing or null declaration fields fail closed.",
+    "The installer catalog and copy surface include the Status Interface, Governance Cost/Metrics, Performance Diagnosis, and all existing Summary/Task Outcome/Human Report entrypoint dependencies without modifying those implementations.",
+    "Makefile and templates/make/Makefile.ai expose equivalent Status Interface, Governance Cost/Metrics, Performance Diagnosis, Summary, Task Outcome, and Human Report verification targets.",
+    "A fresh empty adopter fixture runs the real Installer, verifies every declared installed file, catalog member, target, and schema, and invokes each declared entrypoint with --help or an equivalent side-effect-free command; catalog-text-only evidence is insufficient.",
+    "Capability Truth row states use exactly the four vocabulary values, the adopter_installed Implementation Approach surface is explicitly grounded in existing Summary/Task Outcome/Human Report entrypoints and schema with reservedSurfaceFrom/ownership semantics, and external/template-only exclusions are explicit and absent from inherited claims.",
+    "Verification evidence is captured by tests/test_adopter_feature_parity.py, the installer/runtime parity tests, and the required make check-ai-* targets; the active Summary records exact evidence, known limitations, and the requested no-merge/no-close outcome."
+  ],
+  "guidelines": [
+    "Keep the adopter manifest as the only capability-surface SSOT; catalog and Makefile entries are distribution projections verified against it.",
+    "Do not modify existing Status Interface, Governance Cost/Metrics, Performance Diagnosis, Summary, Task Outcome, Human Report, or verification-runtime implementations.",
+    "Use evidence-derived capability statuses and preserve unknown/planned/excluded boundaries; do not infer external assurance from local files.",
+    "Keep the source Makefile and installed templates/make/Makefile.ai command surface aligned.",
+    "Use a real empty-adopter installation fixture and side-effect-free entrypoint invocation for parity evidence."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A fresh empty adopter receives all installed files declared by the manifest.",
+      "expected": "Real Installer execution succeeds and every declared installed file exists at the destination with no source-only-only claim.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused pytest creates an empty adopter, invokes Installer, and checks manifest installedFiles and schemas."
+    },
+    {
+      "scenario": "A capability is absent from the installer catalog, copy surface, Make targets, schemas, or executable entrypoint.",
+      "expected": "Parity fails closed with an explicit missing-surface diagnostic.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused tests mutate an in-memory manifest/catalog or installed fixture and assert a non-empty failure result."
+    },
+    {
+      "scenario": "Implemented and adopter_installed capabilities are distinguished from template_only, planned, and excluded external capabilities.",
+      "expected": "Only declared local evidence supports inherited claims; planned and excluded entries remain non-inherited.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Manifest and Capability Truth assertions cover closed status vocabulary, planned Implementation Approach, and external exclusion list."
+    },
+    {
+      "scenario": "Existing Summary, Task Outcome, and Human Report implementation knowledge is installed without changing its implementation files.",
+      "expected": "Current entrypoints/schemas/targets are present and help/validation calls succeed in the fresh adopter.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Parity fixture invokes existing validators/generators in no-write help mode and checks only declared current schemas/entrypoints."
+    }
+  ],
+  "implementationSurface": {
+    "production": [
+      ".ai/project/adopter-capability-manifest.json",
+      ".ai/schemas/adopter-capability-manifest.schema.json",
+      "scripts/ai_installer_catalog.json",
+      "scripts/ai_installer_adopter_capability_manifest.py",
+      "scripts/installer/legacy.py",
+      "Makefile",
+      "templates/make/Makefile.ai"
+    ],
+    "tests": [
+      "tests/test_adopter_feature_parity.py",
+      "tests/test_installed_runtime_parity.py"
+    ],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ],
+    "documentation": [
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the adopter-feature-parity-gate design and implementation, including the scoped Makefile and manifest writes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 953
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/adopter-feature-parity-gate.json",
+    "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+    "initialScopeDigest": "d6e5abcb2504ce07e63f931d9ab0fbc3523e809c6a5172d1a33dfe5f94526a23",
+    "contractSkeletonDigest": "33fe14d5c3b7dbcdb0bddf893e706e8008b0c44920c68c9ae38a2eafe901c593"
+  }
+}

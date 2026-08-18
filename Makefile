@@ -75,7 +75,7 @@ QUALITY_SESSION_LOCK_HELD ?= false
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report ai-record-external-handoff ai-ingest-external-receipt \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
 	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
-	ai-work-item-status ai-work-item-intelligence-rebuild
+	ai-work-item-status ai-work-item-intelligence-rebuild check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
@@ -645,6 +645,20 @@ ai-lifecycle-facts:
 
 ai-work-item-status:
 	$(AI_PYTHON) scripts/ai_work_item_status.py $(ARGS)
+
+check-adopter-capability-manifest:
+	$(AI_PYTHON) scripts/ai_installer_adopter_capability_manifest.py --root . --installed $(ARGS)
+
+ai-generate-work-item-status:
+	$(AI_PYTHON) scripts/ai_generate_work_item_status.py --root . $(ARGS)
+
+ai-governance-cost:
+	@if test "$(ARGS)" != "--help" && { test -z "$(WORK_ITEM)" -o -z "$(JSON_OUTPUT)" -o -z "$(MARKDOWN_OUTPUT)"; }; then echo 'WORK_ITEM, JSON_OUTPUT, and MARKDOWN_OUTPUT are required'; exit 2; fi
+	$(if $(filter --help,$(ARGS)),$(AI_PYTHON) scripts/ai_governance_cost.py $(ARGS),$(AI_PYTHON) scripts/ai_governance_cost.py --work-item "$(WORK_ITEM)" --events "$(or $(EVENTS),target/ai_observability.jsonl)" --json-output "$(JSON_OUTPUT)" --markdown-output "$(MARKDOWN_OUTPUT)")
+
+ai-performance-diagnosis:
+	@if test "$(ARGS)" != "--help" && { test -z "$(WORK_ITEM)" -o -z "$(JSON_OUTPUT)" -o -z "$(MARKDOWN_OUTPUT)"; }; then echo 'WORK_ITEM, JSON_OUTPUT, and MARKDOWN_OUTPUT are required'; exit 2; fi
+	$(if $(filter --help,$(ARGS)),$(AI_PYTHON) scripts/ai_performance_diagnosis.py $(ARGS),$(AI_PYTHON) scripts/ai_performance_diagnosis.py --work-item "$(WORK_ITEM)" --events "$(or $(EVENTS),target/ai_observability.jsonl)" --json-output "$(JSON_OUTPUT)" --markdown-output "$(MARKDOWN_OUTPUT)" $(if $(BASELINE_REPORT),--baseline-report "$(BASELINE_REPORT)",))
 
 ai-work-item-intelligence-rebuild:
 	$(AI_PYTHON) scripts/ai_work_item_status.py --rebuild $(ARGS)
