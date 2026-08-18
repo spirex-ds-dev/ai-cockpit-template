@@ -1,1310 +1,870 @@
 {
-  "reportVersion": 1,
-  "workItemId": "implementation-approach-evidence",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "f114f63ca5a6047b13b07d4fa0696740849c60a11891272ca65047718faf7f4c"
-  },
-  "task": {
-    "summary": "Task implementation-approach-evidence generated an evidence-derived outcome with status completed.",
-    "deliveredChanges": [
-      ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-      ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-      ".ai/work-items/starts/implementation-approach-evidence.json",
-      ".ai/cockpit/README.md",
-      ".ai/cockpit/current_status.md",
-      ".ai/cockpit/task_report.json",
-      ".ai/cockpit/task_report.md",
-      ".ai/schemas/task_outcome.schema.json",
-      "docs/reference/capability-truth-matrix.json",
-      "docs/reference/capability-truth-matrix.md",
-      "docs/reference/pre-release-documentation-alignment.json",
-      "docs/reference/pre-release-documentation-alignment.md",
-      "docs/reference/japanese-capability-assessment.json",
-      "docs/reference/japanese-capability-assessment.md",
-      "scripts/ai_check_summary.py",
-      "scripts/ai_check_task_outcome.py",
-      "scripts/ai_generate_task_outcome.py",
-      "scripts/ai_render_task_outcome.py",
-      "scripts/ai_generate_human_report.py",
-      "scripts/ai_finish.py",
-      "tests/test_ai_check_summary.py",
-      "tests/test_task_outcome_schema.py",
-      "tests/test_task_outcome_validator.py",
-      "tests/test_task_outcome_generator.py",
-      "tests/test_task_outcome_markdown_renderer.py",
-      "tests/test_human_benefit_report.py",
-      "tests/test_task_outcome_ai_finish_integration.py",
-      ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.json",
-      ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.md"
-    ]
-  },
-  "issues": {
-    "detected": 2,
-    "hardStops": 2,
-    "warnings": 0,
-    "resolved": 2,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "db52958031dc43faba71ffcd650e771fa8d5ba017bd3b668550333f0f34e06cf"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "1e0fee671bdf728073ffd7a80c49cdd586bee8be1d2a10c7a5eed85cbd8a37fd"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
+  "forbiddenClaims": [],
   "forcedStops": [
     {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
       "attemptedAction": "complete the Work Item",
       "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "db52958031dc43faba71ffcd650e771fa8d5ba017bd3b668550333f0f34e06cf"
+          "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[0] aiScenarioCoverage failed"
         },
         {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
+          "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiScenarioCoverage] retry passed"
         }
-      ]
+      ],
+      "handoff": "",
+      "humanDecision": "",
+      "policyOrGuard": "required verification: aiScenarioCoverage",
+      "reason": "aiScenarioCoverage failed before the retry.",
+      "recovery": "Retry aiScenarioCoverage after correcting the recorded failure.",
+      "result": "resolved",
+      "stage": "verification"
     },
     {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
       "attemptedAction": "complete the Work Item",
       "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+      "evidence": [
+        {
+          "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[1] aiGuidelines failed"
+        },
+        {
+          "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiGuidelines] retry passed"
+        }
+      ],
       "handoff": "",
       "humanDecision": "",
+      "policyOrGuard": "required verification: aiGuidelines",
+      "reason": "aiGuidelines failed before the retry.",
+      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+      "result": "resolved",
+      "stage": "verification"
+    },
+    {
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+      "evidence": [
+        {
+          "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[2] quality failed"
+        },
+        {
+          "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[quality] retry passed"
+        }
+      ],
+      "handoff": "",
+      "humanDecision": "",
+      "policyOrGuard": "required verification: quality",
+      "reason": "quality failed before the retry.",
       "recovery": "Retry quality after correcting the recorded failure.",
       "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "1e0fee671bdf728073ffd7a80c49cdd586bee8be1d2a10c7a5eed85cbd8a37fd"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
+      "stage": "verification"
+    },
     {
-      "severity": "medium",
-      "detail": "No benchmark or hosted environment evidence was run; the implementation record makes no performance-improvement claim and remains bounded to repository code and tests.",
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
       "evidence": [
         {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "residualRisks"
+          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[3] aiSummary failed"
+        },
+        {
+          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiSummary] retry passed"
         }
-      ]
+      ],
+      "handoff": "",
+      "humanDecision": "",
+      "policyOrGuard": "required verification: aiSummary",
+      "reason": "aiSummary failed before the retry.",
+      "recovery": "Retry aiSummary after correcting the recorded failure.",
+      "result": "resolved",
+      "stage": "verification"
+    },
+    {
+      "attemptedAction": "complete the Work Item",
+      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+      "evidence": [
+        {
+          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[4] aiSummary failed"
+        },
+        {
+          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiSummary] retry passed"
+        }
+      ],
+      "handoff": "",
+      "humanDecision": "",
+      "policyOrGuard": "required verification: aiSummary",
+      "reason": "aiSummary failed before the retry.",
+      "recovery": "Retry aiSummary after correcting the recorded failure.",
+      "result": "resolved",
+      "stage": "verification"
     }
   ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "Customers can see what changed, how the governed result is produced, and which repository evidence supports it.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_generate_task_outcome.py",
-          "subject": "Outcome projection"
-        },
-        {
-          "source": "scripts/ai_generate_human_report.py",
-          "subject": "Human Report projection"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "Summary implementationApproach is read from the ai_finish Summary evidence source, validated against real repository paths, and projected into Outcome and Human Report JSON/Markdown views.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_check_summary.py",
-          "subject": "root-aware evidence validation"
-        },
-        {
-          "source": "scripts/ai_generate_task_outcome.py",
-          "subject": "Summary evidence source loading"
-        },
-        {
-          "source": "tests/test_task_outcome_generator.py",
-          "subject": "ai_finish Summary source projection"
-        }
-      ]
-    },
-    "affectedComponents": [
-      {
-        "component": "Summary",
-        "detail": "Stores the canonical structured approach and evidence references.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_check_summary.py",
-            "subject": "Summary approach validator"
-          }
-        ]
-      },
-      {
-        "component": "Task Outcome",
-        "detail": "Carries the same approach with customer-facing and progressive technical rendering.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_generate_task_outcome.py",
-            "subject": "implementationApproach section"
-          }
-        ]
-      },
-      {
-        "component": "Human Report",
-        "detail": "Carries the same approach in direct JSON and Markdown output.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_generate_human_report.py",
-            "subject": "implementationApproach report projection"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Keep Summary as the source of truth and make Outcome/Human Report projections deterministic.",
-        "reason": "The existing ai_finish evidence source carries the Summary path; ai_finish now refreshes the capability truth projection before its source-bound gate without changing verification runtime semantics.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_finish.py",
-            "subject": "sourceBoundEvidence lifecycle synchronization"
-          },
-          {
-            "source": "tests/test_task_outcome_ai_finish_integration.py",
-            "subject": "refresh ordering and fail-closed behavior"
-          }
-        ]
-      },
-      {
-        "decision": "Require real repository-relative evidence for verified approach claims.",
-        "reason": "A non-empty source/subject pair cannot prove a factual implementation claim by itself.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_check_summary.py",
-            "subject": "_valid_repository_evidence_path"
-          },
-          {
-            "source": "tests/test_ai_check_summary.py",
-            "subject": "missing repository evidence path"
-          }
-        ]
-      },
-      {
-        "decision": "Do not infer performance improvement without benchmark evidence.",
-        "reason": "The record describes observable path and mechanism changes and retains no benchmark claim.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_task_outcome_generator.py",
-            "subject": "no benchmark performance guard"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Completeness states",
-        "detail": "Code scope requires implementationApproach; configuration scope requires configurationApproach; missing Summary input becomes yellow incomplete/warning, while standalone legacy projection remains not_applicable.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_ai_check_summary.py",
-            "subject": "code/config applicability"
-          },
-          {
-            "source": "tests/test_task_outcome_generator.py",
-            "subject": "missing approach warning"
-          }
-        ]
-      },
-      {
-        "topic": "Progressive disclosure",
-        "detail": "Customer summary and mechanism render before affected components, design decisions, technical details, and evidence.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_human_benefit_report.py",
-            "subject": "summary before technical details"
-          }
-        ]
-      },
-      {
-        "topic": "Source-bound evidence refresh",
-        "detail": "When the capability truth matrix and generator are present, ai_finish runs the existing generator with --write before check-source-bound-evidence, records matrix before/after digests, and blocks without running the original gate if refresh fails.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_finish.py",
-            "subject": "refresh_source_bound_evidence"
-          },
-          {
-            "source": "tests/test_task_outcome_ai_finish_integration.py",
-            "subject": "matrix refresh and failed refresh tests"
-          }
-        ]
-      }
-    ],
-    "evidence": [
-      {
-        "claim": "Verified approach references are checked against real repository files.",
-        "status": "verified",
-        "source": "scripts/ai_check_summary.py",
-        "subject": "validate_implementation_approach"
-      },
-      {
-        "claim": "The ai_finish Summary source reaches Outcome without manual approach injection.",
-        "status": "verified",
-        "source": "tests/test_task_outcome_generator.py",
-        "subject": "ai_finish Summary source projection"
-      },
-      {
-        "claim": "Human Report JSON and Markdown expose the approach directly.",
-        "status": "verified",
-        "source": "tests/test_human_benefit_report.py",
-        "subject": "direct report projection"
-      },
-      {
-        "claim": "sourceBoundEvidence consumes refreshed capability evidence and records its generated file binding.",
-        "status": "verified",
-        "source": "tests/test_task_outcome_ai_finish_integration.py",
-        "subject": "refresh before source-bound check"
-      }
-    ]
-  },
+  "humanDecisions": [
+    "Contract scope/outOfScope was corrected to explicitly cover the adopter manifest, installer catalog/copy map, Makefiles, fresh-adopter parity, Capability Truth, and lifecycle evidence while excluding verification runtime, report implementations/checkers, and GitHub Issue writes.",
+    "Implementation Approach was changed from planned to adopter_installed because its semantics are carried by the existing lifecycle Summary/Task Outcome/Human Report installed surface; no new helper dependency was introduced."
+  ],
   "humanHandoff": {
-    "locale": "en",
     "completed": [
       {
-        "claim": "Changed .ai/work-items/active/implementation-approach-evidence.contract.json",
-        "title": "Changed .ai/work-items/active/implementation-approach-evidence.contract.json",
-        "detail": "Defines the v2 scope, acceptance, scenarios, and verification boundary.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/adopter-feature-parity-gate.contract.json",
+        "detail": "Active Contract v2 records the adopter parity scope, exclusions, acceptance, and verification boundary.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/adopter-feature-parity-gate.contract.json"
       },
       {
-        "claim": "Changed .ai/work-items/active/implementation-approach-evidence.summary.json",
-        "title": "Changed .ai/work-items/active/implementation-approach-evidence.summary.json",
-        "detail": "Records the canonical evidence-bound Implementation Approach and verification handoff.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/adopter-feature-parity-gate.summary.json",
+        "detail": "Active Summary records implementation, verification, limitations, and lifecycle evidence.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/adopter-feature-parity-gate.summary.json"
       },
       {
-        "claim": "Changed .ai/work-items/starts/implementation-approach-evidence.json",
-        "title": "Changed .ai/work-items/starts/implementation-approach-evidence.json",
-        "detail": "Binds the Work Item start to the dedicated branch and base commit.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/starts/implementation-approach-evidence.json"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/adopter-feature-parity-gate.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/starts/implementation-approach-evidence.json"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/adopter-feature-parity-gate.outcome.json"
       },
       {
-        "claim": "Changed .ai/cockpit/README.md",
-        "title": "Changed .ai/cockpit/README.md",
-        "detail": "Documents the Changes, Implementation Approach, and Evidence separation.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/README.md"
-          }
-        ],
+        "claim": "Changed .ai/work-items/active/adopter-feature-parity-gate.outcome.md",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/README.md"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.md"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/work-items/active/adopter-feature-parity-gate.outcome.md"
       },
       {
-        "claim": "Changed .ai/cockpit/current_status.md",
-        "title": "Changed .ai/cockpit/current_status.md",
-        "detail": "Generated cockpit status for the active Work Item.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/current_status.md"
-          }
-        ],
+        "claim": "Changed .ai/project/adopter-capability-manifest.json",
+        "detail": "Single adopter-facing capability SSOT with explicit status, ownership, exclusions, and installed parity surface.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/current_status.md"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/project/adopter-capability-manifest.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/project/adopter-capability-manifest.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/project/adopter-capability-manifest.json"
       },
       {
-        "claim": "Changed .ai/cockpit/task_report.json",
-        "title": "Changed .ai/cockpit/task_report.json",
-        "detail": "Generated Human Report JSON projection for the active Work Item.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
+        "claim": "Changed .ai/schemas/adopter-capability-manifest.schema.json",
+        "detail": "Strict manifest schema requires non-null capability surface fields and explicit exclusion shape.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/schemas/adopter-capability-manifest.schema.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/schemas/adopter-capability-manifest.schema.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/schemas/adopter-capability-manifest.schema.json"
       },
       {
-        "claim": "Changed .ai/cockpit/task_report.md",
-        "title": "Changed .ai/cockpit/task_report.md",
-        "detail": "Generated Human Report Markdown projection for the active Work Item.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
+        "claim": "Changed scripts/ai_installer_adopter_capability_manifest.py",
+        "detail": "Fail-closed source/installed manifest surface validator used by Installer and parity checks.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "scripts/ai_installer_adopter_capability_manifest.py"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "scripts/ai_installer_adopter_capability_manifest.py"
+          }
+        ],
+        "inference": false,
+        "title": "Changed scripts/ai_installer_adopter_capability_manifest.py"
       },
       {
-        "claim": "Changed .ai/schemas/task_outcome.schema.json",
-        "title": "Changed .ai/schemas/task_outcome.schema.json",
-        "detail": "Adds the structured Outcome Implementation Approach projection without making it mandatory for historic records.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/schemas/task_outcome.schema.json"
-          }
-        ],
+        "claim": "Changed scripts/ai_installer_catalog.json",
+        "detail": "Catalog now includes Status generator, Governance Cost, Performance Diagnosis, and manifest validator dependencies.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/schemas/task_outcome.schema.json"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "scripts/ai_installer_catalog.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed scripts/ai_installer_catalog.json"
+      },
+      {
+        "claim": "Changed scripts/installer/legacy.py",
+        "detail": "Installer validates the installed adopter manifest surface before reporting installation success.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "scripts/installer/legacy.py"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "scripts/installer/legacy.py"
+          }
+        ],
+        "inference": false,
+        "title": "Changed scripts/installer/legacy.py"
+      },
+      {
+        "claim": "Changed Makefile",
+        "detail": "Source Makefile exposes manifest, Status, Governance Cost, and Performance Diagnosis targets.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "Makefile"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "Makefile"
+          }
+        ],
+        "inference": false,
+        "title": "Changed Makefile"
+      },
+      {
+        "claim": "Changed templates/make/Makefile.ai",
+        "detail": "Installed Makefile exposes the same declared targets, including side-effect-free help routes.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "templates/make/Makefile.ai"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "templates/make/Makefile.ai"
+          }
+        ],
+        "inference": false,
+        "title": "Changed templates/make/Makefile.ai"
+      },
+      {
+        "claim": "Changed tests/test_adopter_feature_parity.py",
+        "detail": "TDD parity tests validate manifest schema, closed status/ownership, independent Performance Diagnosis, fresh installation, schemas, targets, and entrypoints.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "tests/test_adopter_feature_parity.py"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "tests/test_adopter_feature_parity.py"
+          }
+        ],
+        "inference": false,
+        "title": "Changed tests/test_adopter_feature_parity.py"
+      },
+      {
+        "claim": "Changed tests/test_installer.py",
+        "detail": "Installer regression coverage validates the renamed installer-facing capability manifest validator on the real installed surface.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "tests/test_installer.py"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "tests/test_installer.py"
+          }
+        ],
+        "inference": false,
+        "title": "Changed tests/test_installer.py"
       },
       {
         "claim": "Changed docs/reference/capability-truth-matrix.json",
-        "title": "Changed docs/reference/capability-truth-matrix.json",
-        "detail": "Generated capability evidence identities refreshed before sourceBoundEvidence.",
-        "evidenceRefs": [
+        "detail": "Capability Truth rows bind fresh-adopter evidence for manifest, Status, Governance Cost, Performance Diagnosis, and Implementation Approach surface.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
             "subject": "docs/reference/capability-truth-matrix.json"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/capability-truth-matrix.md",
-        "title": "Changed docs/reference/capability-truth-matrix.md",
-        "detail": "Declared capability truth Markdown projection registered with source-bound evidence.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.md"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "title": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "detail": "Generated documentation alignment evidence refreshed after the capability matrix changed.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "title": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "detail": "Generated documentation alignment Markdown refreshed after the capability matrix changed.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed docs/reference/capability-truth-matrix.json"
       },
       {
         "claim": "Changed docs/reference/japanese-capability-assessment.json",
-        "title": "Changed docs/reference/japanese-capability-assessment.json",
-        "detail": "Generated Japanese capability assessment JSON refreshed with source-bound evidence.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
+        "detail": "Generator-refreshed source-bound assessment after the Makefile source identity changed.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
             "subject": "docs/reference/japanese-capability-assessment.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/japanese-capability-assessment.json"
       },
       {
         "claim": "Changed docs/reference/japanese-capability-assessment.md",
-        "title": "Changed docs/reference/japanese-capability-assessment.md",
-        "detail": "Generated Japanese capability assessment Markdown refreshed with source-bound evidence.",
-        "evidenceRefs": [
+        "detail": "Generator-refreshed human-readable source-bound assessment after the Makefile source identity changed.",
+        "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
             "subject": "docs/reference/japanese-capability-assessment.md"
           }
         ],
-        "evidence": [
+        "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
             "subject": "docs/reference/japanese-capability-assessment.md"
           }
         ],
-        "inference": false
+        "inference": false,
+        "title": "Changed docs/reference/japanese-capability-assessment.md"
       },
       {
-        "claim": "Changed scripts/ai_check_summary.py",
-        "title": "Changed scripts/ai_check_summary.py",
-        "detail": "Owns the cataloged root-aware Implementation Approach validator and code/config completeness assessment.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_check_summary.py"
-          }
-        ],
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "detail": "Generator-refreshed source-bound documentation alignment after the Makefile source identity changed.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_check_summary.py"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/pre-release-documentation-alignment.json"
       },
       {
-        "claim": "Changed scripts/ai_check_task_outcome.py",
-        "title": "Changed scripts/ai_check_task_outcome.py",
-        "detail": "Validates Outcome approach claims and preserves historic section sets.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_check_task_outcome.py"
-          }
-        ],
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "detail": "Generator-refreshed human-readable documentation alignment after the Makefile source identity changed.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_check_task_outcome.py"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed docs/reference/pre-release-documentation-alignment.md"
       },
       {
-        "claim": "Changed scripts/ai_generate_task_outcome.py",
-        "title": "Changed scripts/ai_generate_task_outcome.py",
-        "detail": "Projects the Summary approach through the ai_finish evidence source into Outcome JSON/Markdown.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_generate_task_outcome.py"
-          }
-        ],
+        "claim": "Changed .ai/cockpit/current_status.md",
+        "detail": "Generated lifecycle status projection refreshed by ai-finish.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_generate_task_outcome.py"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/cockpit/current_status.md"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/cockpit/current_status.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/cockpit/current_status.md"
       },
       {
-        "claim": "Changed scripts/ai_render_task_outcome.py",
-        "title": "Changed scripts/ai_render_task_outcome.py",
-        "detail": "Renders the structured approach with customer summary before technical detail.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_render_task_outcome.py"
-          }
-        ],
+        "claim": "Changed .ai/cockpit/task_report.json",
+        "detail": "Generated Human Benefit Report bound to the active Outcome.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_render_task_outcome.py"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/cockpit/task_report.json"
       },
       {
-        "claim": "Changed scripts/ai_generate_human_report.py",
-        "title": "Changed scripts/ai_generate_human_report.py",
-        "detail": "Projects the Outcome approach into Human Report JSON/Markdown.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_generate_human_report.py"
-          }
-        ],
+        "claim": "Changed .ai/cockpit/task_report.md",
+        "detail": "Generated human-readable Human Benefit Report bound to the active Outcome.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_generate_human_report.py"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "inference": false,
+        "title": "Changed .ai/cockpit/task_report.md"
       },
       {
-        "claim": "Changed scripts/ai_finish.py",
-        "title": "Changed scripts/ai_finish.py",
-        "detail": "Refreshes capability truth evidence before sourceBoundEvidence and records the generation binding.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_finish.py"
-          }
-        ],
+        "claim": "Changed .ai/work-items/starts/adopter-feature-parity-gate.json",
+        "detail": "Lifecycle start receipt records the dedicated branch and Contract start evidence.",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "scripts/ai_finish.py"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/starts/adopter-feature-parity-gate.json"
           }
         ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_ai_check_summary.py",
-        "title": "Changed tests/test_ai_check_summary.py",
-        "detail": "Covers scope applicability, yellow missing data, and real repository evidence paths.",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_ai_check_summary.py"
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": ".ai/work-items/starts/adopter-feature-parity-gate.json"
           }
         ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_ai_check_summary.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_schema.py",
-        "title": "Changed tests/test_task_outcome_schema.py",
-        "detail": "Covers the machine-readable approach schema projection.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_schema.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_schema.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_validator.py",
-        "title": "Changed tests/test_task_outcome_validator.py",
-        "detail": "Covers verified evidence requirements and unknown claim handling.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_validator.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_validator.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_generator.py",
-        "title": "Changed tests/test_task_outcome_generator.py",
-        "detail": "Covers Summary projection, ai_finish input shape, incomplete warning, and no-benchmark language.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_generator.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_generator.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_markdown_renderer.py",
-        "title": "Changed tests/test_task_outcome_markdown_renderer.py",
-        "detail": "Keeps the Outcome Markdown projection covered.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_markdown_renderer.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_markdown_renderer.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_human_benefit_report.py",
-        "title": "Changed tests/test_human_benefit_report.py",
-        "detail": "Covers direct Human Report JSON/Markdown projection and progressive disclosure.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_human_benefit_report.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_human_benefit_report.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed tests/test_task_outcome_ai_finish_integration.py",
-        "title": "Changed tests/test_task_outcome_ai_finish_integration.py",
-        "detail": "Covers source-bound evidence refresh ordering and fail-closed refresh failure.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_ai_finish_integration.py"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "tests/test_task_outcome_ai_finish_integration.py"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/active/implementation-approach-evidence.outcome.json",
-        "title": "Changed .ai/work-items/active/implementation-approach-evidence.outcome.json",
-        "detail": "Generated Task Outcome projection.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.json"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.json"
-          }
-        ],
-        "inference": false
-      },
-      {
-        "claim": "Changed .ai/work-items/active/implementation-approach-evidence.outcome.md",
-        "title": "Changed .ai/work-items/active/implementation-approach-evidence.outcome.md",
-        "detail": "Generated Task Outcome Markdown projection.",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.md"
-          }
-        ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.md"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "Changed .ai/work-items/starts/adopter-feature-parity-gate.json"
       }
     ],
+    "locale": "zh-CN",
     "passed": [
       {
         "claim": "sourceBoundEvidence",
-        "title": "sourceBoundEvidence",
-        "detail": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=5bc7dd470805d0c6e8d71fc15307100d2ad40d7a117e16f3ecc0f7c64d5504d4, after=e227898f8997ff54773a48eef99595ea5a5bdbb4d2067477abb067b7d319ee4a; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "sourceBoundEvidence",
-            "digest": "e51c15d673da9344fb3b52494d1e1dadc5efc897ced397d5417b3a196feafdb1"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"cl",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "sourceBoundEvidence",
-            "digest": "e51c15d673da9344fb3b52494d1e1dadc5efc897ced397d5417b3a196feafdb1"
+            "digest": "c70b0a5e799e0e52c38abada4718f32befc7af3ec876ba4f4dc58b5e4cf494ca",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "sourceBoundEvidence"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "c70b0a5e799e0e52c38abada4718f32befc7af3ec876ba4f4dc58b5e4cf494ca",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "sourceBoundEvidence"
+          }
+        ],
+        "inference": false,
+        "title": "sourceBoundEvidence"
       },
       {
         "claim": "aiWorkItem",
-        "title": "aiWorkItem",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/implementation-approach-evidence.contract.json work item contract check passed: .ai/work-items/active/implementation-approach-evidence.contract.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiWorkItem",
-            "digest": "eb2f1f7f07c32a2ddab32d176c548fd465cc5ac2faf0cb568f068e025b1fbca0"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/adopter-feature-parity-gate.contract.json work item contract check passed: .ai/work-items/active/adopter-feature-parity-gate.contract.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiWorkItem",
-            "digest": "eb2f1f7f07c32a2ddab32d176c548fd465cc5ac2faf0cb568f068e025b1fbca0"
+            "digest": "95633508c289283717a2488b159794eb5d64dac459730fc978a3cc18680666ef",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiWorkItem"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "95633508c289283717a2488b159794eb5d64dac459730fc978a3cc18680666ef",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiWorkItem"
+          }
+        ],
+        "inference": false,
+        "title": "aiWorkItem"
       },
       {
         "claim": "aiScope",
-        "title": "aiScope",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/implementation-approach-evidence.contract.json scope guard passed: 26 changed path(s) covered",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiScope",
-            "digest": "f3dc4d1bddad2e9d217874f9e11b51ad0f7c875fc374767bf23cba5962fe488e"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/adopter-feature-parity-gate.contract.json scope guard passed: 22 changed path(s) covered",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiScope",
-            "digest": "f3dc4d1bddad2e9d217874f9e11b51ad0f7c875fc374767bf23cba5962fe488e"
+            "digest": "21190a73c46e498087c7dc95fee3b5faa7a113fefc6a4a8cbbf3b863aee3d783",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiScope"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "21190a73c46e498087c7dc95fee3b5faa7a113fefc6a4a8cbbf3b863aee3d783",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiScope"
+          }
+        ],
+        "inference": false,
+        "title": "aiScope"
       },
       {
         "claim": "aiGuards",
-        "title": "aiGuards",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/schemas/task_outcome.schema.json (.ai/**) - AI governance configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiGuards",
-            "digest": "2d486bbf6ac356f1abfd34729b8aabc2df63ce7f5dfeef4114f15b77c9309f4d"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json [warning] restricted_write: .ai/project/adopter-capability-manifest.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/schemas/adopter-capability-manifest.schema.json (.ai/**) - AI governance configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check compl",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiGuards",
-            "digest": "2d486bbf6ac356f1abfd34729b8aabc2df63ce7f5dfeef4114f15b77c9309f4d"
+            "digest": "324196f55e884a8518cfcccb245141dda1b0c76932975a299973bc6e5e32575f",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiGuards"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "324196f55e884a8518cfcccb245141dda1b0c76932975a299973bc6e5e32575f",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiGuards"
+          }
+        ],
+        "inference": false,
+        "title": "aiGuards"
       },
       {
         "claim": "aiCheckpoint",
-        "title": "aiCheckpoint",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `implementation-approach-evidence` - Contract Hash: `51a4e8504358512b` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unkn",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiCheckpoint",
-            "digest": "adb5cb17dfb6cf0bcef8537efb76ab87c86ab1c5ff709620954ac503907dd090"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json --summary .ai/work-items/active/adopter-feature-parity-gate.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `adopter-feature-parity-gate` - Contract Hash: `cae2c52ba4f88724` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0`",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiCheckpoint",
-            "digest": "adb5cb17dfb6cf0bcef8537efb76ab87c86ab1c5ff709620954ac503907dd090"
+            "digest": "03a76019b0d76dfadd302f44930fafe5505b974a5ad2026620e46160fa3cb7dd",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiCheckpoint"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "03a76019b0d76dfadd302f44930fafe5505b974a5ad2026620e46160fa3cb7dd",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiCheckpoint"
+          }
+        ],
+        "inference": false,
+        "title": "aiCheckpoint"
       },
       {
         "claim": "aiReviewPolicy",
-        "title": "aiReviewPolicy",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/implementation-approach-evidence.summary.json review policy matched 15 path(s) [review] .ai/work-items/active/implementation-approach-evidence.contract.json [review] .ai/work-items/active/implementation-approach-evidence.outcome.json [review] .ai/work-items/active/implementation-approach-evidence.outcome.md [review] .ai/work-items/starts/implementation-approach-evidence.jso",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiReviewPolicy",
-            "digest": "bfe3c585f0c8605a5af0de9b365a40605e98df501df41cab93e063c2bdc99f63"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/adopter-feature-parity-gate.summary.json review policy matched 12 path(s) [review] .ai/project/adopter-capability-manifest.json [review] .ai/schemas/adopter-capability-manifest.schema.json [review] .ai/work-items/active/adopter-feature-parity-gate.contract.json [review] .ai/work-items/active/adopter-feature-parity-gate.outcome.json [review] .ai/work-items/active/adopter-fea",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiReviewPolicy",
-            "digest": "bfe3c585f0c8605a5af0de9b365a40605e98df501df41cab93e063c2bdc99f63"
+            "digest": "c12bb616105de778c86a191f54c34e7d644bc884b5fb1a8902eb2290e44ab3d3",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiReviewPolicy"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "c12bb616105de778c86a191f54c34e7d644bc884b5fb1a8902eb2290e44ab3d3",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiReviewPolicy"
+          }
+        ],
+        "inference": false,
+        "title": "aiReviewPolicy"
       },
       {
         "claim": "aiBacktrack",
-        "title": "aiBacktrack",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiBacktrack",
-            "digest": "47d2b454ba473f6cb464d3376d1b7514add034dff0397695bcfbcf461cd74c07"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiBacktrack",
-            "digest": "47d2b454ba473f6cb464d3376d1b7514add034dff0397695bcfbcf461cd74c07"
+            "digest": "f5a410810ea89550c0f5b57219f3cff89852b383574d9c13b8f3f4a593f77822",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiBacktrack"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "f5a410810ea89550c0f5b57219f3cff89852b383574d9c13b8f3f4a593f77822",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiBacktrack"
+          }
+        ],
+        "inference": false,
+        "title": "aiBacktrack"
       },
       {
         "claim": "aiCoverage",
-        "title": "aiCoverage",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiCoverage",
-            "digest": "6c0a636e57f967a17b91d7d8fdf061a50bfabe9368f5138a14f55d49356893fe"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiCoverage",
-            "digest": "6c0a636e57f967a17b91d7d8fdf061a50bfabe9368f5138a14f55d49356893fe"
+            "digest": "53ce23cc8a249db7a8c183fc178aceedd813522bc1698bd2e23dfd7e2dee8ab3",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiCoverage"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "53ce23cc8a249db7a8c183fc178aceedd813522bc1698bd2e23dfd7e2dee8ab3",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiCoverage"
+          }
+        ],
+        "inference": false,
+        "title": "aiCoverage"
       },
       {
         "claim": "aiScenarioCoverage",
-        "title": "aiScenarioCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiScenarioCoverage",
-            "digest": "5e7f7fdbcc57c8d60e5ff7356b40a1fb26b9612615503cd8ca22f1ce0d932b4c"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json --summary .ai/work-items/active/adopter-feature-parity-gate.summary.json report: target/ai_scenario_coverage_report.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiScenarioCoverage",
-            "digest": "5e7f7fdbcc57c8d60e5ff7356b40a1fb26b9612615503cd8ca22f1ce0d932b4c"
+            "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiScenarioCoverage"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiScenarioCoverage"
+          }
+        ],
+        "inference": false,
+        "title": "aiScenarioCoverage"
       },
       {
         "claim": "aiGuidelines",
-        "title": "aiGuidelines",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json guidelines compliance check passed: 2 guideline(s) verified",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiGuidelines",
-            "digest": "e63126fe8ad4fc071c7fb6e08b7d9ed5a6ff16063fc34200c6164536f9c8ed14"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json --summary .ai/work-items/active/adopter-feature-parity-gate.summary.json guidelines compliance check passed: 5 guideline(s) verified",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiGuidelines",
-            "digest": "e63126fe8ad4fc071c7fb6e08b7d9ed5a6ff16063fc34200c6164536f9c8ed14"
+            "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiGuidelines"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiGuidelines"
+          }
+        ],
+        "inference": false,
+        "title": "aiGuidelines"
       },
       {
         "claim": "aiDiffOwnership",
-        "title": "aiDiffOwnership",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json ## Diff Ownership Preview - active_owned: `26`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_repor",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiDiffOwnership",
-            "digest": "7afa3251fc88b9cb027593e160e8923ceba8a75025de3dd52048167a6628b7d9"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json ## Diff Ownership Preview - active_owned: `22`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against acti",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiDiffOwnership",
-            "digest": "7afa3251fc88b9cb027593e160e8923ceba8a75025de3dd52048167a6628b7d9"
+            "digest": "65ac6380cff9e831bfb352536d0ece7239362040c84f9a452ab79fc771b7d741",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiDiffOwnership"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "65ac6380cff9e831bfb352536d0ece7239362040c84f9a452ab79fc771b7d741",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiDiffOwnership"
+          }
+        ],
+        "inference": false,
+        "title": "aiDiffOwnership"
       },
       {
         "claim": "quality",
-        "title": "quality",
-        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/README.md, .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, .ai/schemas/task_outcome.schema.json, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "quality",
-            "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-          }
-        ],
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"installer\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"high-risk strict paths require full quality: scripts/installer/legacy.py\", \"requiredGroups\": [\"quality-full\"], \"target\": \"quality-full\"}, \"qualityTarget\": \"quality-full\", \"requiredGroups\": [\"quality-full\"], \"scope\": \"full\", \"stage\": \"task\"}}} { \"automaticProfile\": \"strict\", \"base\": \"bce5d",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "quality",
-            "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
+            "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "quality"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "quality"
+          }
+        ],
+        "inference": false,
+        "title": "quality"
       },
       {
         "claim": "aiStatus",
-        "title": "aiStatus",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiStatus",
-            "digest": "94bfd6739a92e9681ff9c2b4ec7628273d9dbc386b1cf9c5ba7ac90702acd5c1"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/adopter-feature-parity-gate.contract.json --summary .ai/work-items/active/adopter-feature-parity-gate.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiStatus",
-            "digest": "94bfd6739a92e9681ff9c2b4ec7628273d9dbc386b1cf9c5ba7ac90702acd5c1"
+            "digest": "189229234d113379d475ce01f8300451514b45c0bdc1eb441fc3e29016746585",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiStatus"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "189229234d113379d475ce01f8300451514b45c0bdc1eb441fc3e29016746585",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiStatus"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatus"
       },
       {
         "claim": "aiStatusCheck",
-        "title": "aiStatusCheck",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiStatusCheck",
-            "digest": "96813d5bbe1ec8082f9b3e4330bf1195d0a640c0585efd3397c5ba9ac44692b0"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json --summary .ai/work-items/active/adopter-feature-parity-gate.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiStatusCheck",
-            "digest": "96813d5bbe1ec8082f9b3e4330bf1195d0a640c0585efd3397c5ba9ac44692b0"
+            "digest": "c5ce5160c4693be12233d2261ea2d9048d7364fb31faadeec6806f4cd153692c",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiStatusCheck"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "c5ce5160c4693be12233d2261ea2d9048d7364fb31faadeec6806f4cd153692c",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiStatusCheck"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatusCheck"
       },
       {
         "claim": "aiStatusConsistency",
-        "title": "aiStatusConsistency",
         "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiStatusConsistency",
-            "digest": "f0cd92f86c60b3428a0c7c77e50b16de88bbd5789cb770e5c910657fb5306b8e"
-          }
-        ],
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiStatusConsistency",
-            "digest": "f0cd92f86c60b3428a0c7c77e50b16de88bbd5789cb770e5c910657fb5306b8e"
+            "digest": "4288b6366854da5b5fc7d2562dabaf25f84f9cc7d42888ae485b31ba4eec8ea1",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiStatusConsistency"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "4288b6366854da5b5fc7d2562dabaf25f84f9cc7d42888ae485b31ba4eec8ea1",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiStatusConsistency"
+          }
+        ],
+        "inference": false,
+        "title": "aiStatusConsistency"
       },
       {
         "claim": "aiAgentRisk",
-        "title": "aiAgentRisk",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiAgentRisk",
-            "digest": "e3b4db7c8a34eb580d54ea4e3af0767b25eb1194e4399ff2ff478737b9a8c6f4"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json --summary .ai/work-items/active/adopter-feature-parity-gate.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiAgentRisk",
-            "digest": "e3b4db7c8a34eb580d54ea4e3af0767b25eb1194e4399ff2ff478737b9a8c6f4"
+            "digest": "2f00efaebf1467a16c4e9ce976162bc5e3a2896e09435c2e4778374c2915e79a",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiAgentRisk"
           }
         ],
-        "inference": false
+        "evidenceRefs": [
+          {
+            "digest": "2f00efaebf1467a16c4e9ce976162bc5e3a2896e09435c2e4778374c2915e79a",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiAgentRisk"
+          }
+        ],
+        "inference": false,
+        "title": "aiAgentRisk"
       },
       {
         "claim": "aiSummary",
-        "title": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/implementation-approach-evidence.summary.json --contract .ai/work-items/active/implementation-approach-evidence.contract.json ai summary check passed: .ai/work-items/active/implementation-approach-evidence.summary.json",
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiSummary",
-            "digest": "7e00231a7c9ebc428c7e797434a74357bf06faae3bc4f0c1f4aa321a1bc04d68"
-          }
-        ],
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/adopter-feature-parity-gate.summary.json --contract .ai/work-items/active/adopter-feature-parity-gate.contract.json ai summary check passed: .ai/work-items/active/adopter-feature-parity-gate.summary.json",
         "evidence": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
-            "subject": "aiSummary",
-            "digest": "7e00231a7c9ebc428c7e797434a74357bf06faae3bc4f0c1f4aa321a1bc04d68"
+            "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiSummary"
           }
         ],
-        "inference": false
-      }
-    ],
-    "retained": [],
-    "risks": [
-      {
-        "claim": "benchmark and hosted evidence",
-        "severity": "medium",
-        "title": "benchmark and hosted evidence",
-        "detail": "No benchmark or hosted environment evidence was run; the implementation record makes no performance-improvement claim and remains bounded to repository code and tests.",
-        "state": "unresolved",
         "evidenceRefs": [
           {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "residualRisks"
+            "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+            "subject": "aiSummary"
           }
         ],
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-            "subject": "residualRisks"
-          }
-        ],
-        "inference": false
+        "inference": false,
+        "title": "aiSummary"
       }
     ],
-    "redReasons": [],
     "questions": {
-      "problemCount": 2,
-      "problemCountEvidenceRefs": [
-        {
-          "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-          "subject": "verification and verificationHistory"
-        }
-      ],
-      "blockedProblems": [],
-      "resolvedProblems": [
-        {
-          "claim": "quality failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verificationHistory[0] quality failed",
-              "digest": "db52958031dc43faba71ffcd650e771fa8d5ba017bd3b668550333f0f34e06cf"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verification[quality] retry passed",
-              "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "quality failed before the retry.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verificationHistory[1] quality failed",
-              "digest": "1e0fee671bdf728073ffd7a80c49cdd586bee8be1d2a10c7a5eed85cbd8a37fd"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verification[quality] retry passed",
-              "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "resolutionApproach": [
-        {
-          "claim": "Re-ran quality after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verificationHistory[0] quality failed",
-              "digest": "db52958031dc43faba71ffcd650e771fa8d5ba017bd3b668550333f0f34e06cf"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verification[quality] retry passed",
-              "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-            }
-          ],
-          "inference": false
-        },
-        {
-          "claim": "Re-ran quality after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verificationHistory[1] quality failed",
-              "digest": "1e0fee671bdf728073ffd7a80c49cdd586bee8be1d2a10c7a5eed85cbd8a37fd"
-            },
-            {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
-              "subject": "verification[quality] retry passed",
-              "digest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275"
-            }
-          ],
-          "inference": false
-        }
-      ],
+      "agentUnknowns": [],
       "avoidedRisks": [
         {
           "claim": "If not detected, could have led to a stale completion claim.",
@@ -1315,33 +875,448 @@
           "claim": "If not detected, could have led to a stale completion claim.",
           "evidenceRefs": [],
           "inference": true
+        },
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        },
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        },
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
         }
       ],
+      "blockedProblems": [],
+      "humanConfirmations": [
+        {
+          "claim": "Contract scope/outOfScope was corrected to explicitly cover the adopter manifest, installer catalog/copy map, Makefiles, fresh-adopter parity, Capability Truth, and lifecycle evidence while excluding verification runtime, report implementations/checkers, and GitHub Issue writes.",
+          "evidenceRefs": [],
+          "inference": true
+        },
+        {
+          "claim": "Implementation Approach was changed from planned to adopter_installed because its semantics are carried by the existing lifecycle Summary/Task Outcome/Human Report installed surface; no new helper dependency was introduced.",
+          "evidenceRefs": [],
+          "inference": true
+        }
+      ],
+      "nextTime": {
+        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+        "evidenceRefs": [],
+        "inference": true
+      },
+      "problemCount": 5,
+      "problemCountEvidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification and verificationHistory"
+        }
+      ],
+      "recurrenceLikelihood": {
+        "claim": "unknown: no direct recurrence probability evidence was recorded.",
+        "evidenceRefs": [],
+        "inference": true
+      },
       "remainingRisks": [
         {
-          "claim": "No benchmark or hosted environment evidence was run; the implementation record makes no performance-improvement claim and remains bounded to repository code and tests.",
+          "claim": "Hosted CI, CodeQL, SBOM, Provenance, Digital Signing, Enterprise IAM, Production Sandbox, External Audit, and Calibration completion remain excluded because local installation evidence cannot prove them.",
           "evidenceRefs": [
             {
-              "source": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "residualRisks"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Implementation Approach is adopter_installed only as the existing lifecycle Summary/Task Outcome/Human Report surface; no separate future report implementation is claimed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
               "subject": "residualRisks"
             }
           ],
           "inference": false
         }
       ],
-      "agentUnknowns": [],
-      "humanConfirmations": [],
-      "recurrenceLikelihood": {
-        "claim": "unknown: no direct recurrence probability evidence was recorded.",
-        "evidenceRefs": [],
-        "inference": true
+      "resolutionApproach": [
+        {
+          "claim": "Re-ran aiScenarioCoverage after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[0] aiScenarioCoverage failed"
+            },
+            {
+              "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiScenarioCoverage] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[1] aiGuidelines failed"
+            },
+            {
+              "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiGuidelines] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran quality after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[2] quality failed"
+            },
+            {
+              "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[quality] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran aiSummary after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[3] aiSummary failed"
+            },
+            {
+              "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiSummary] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "Re-ran aiSummary after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[4] aiSummary failed"
+            },
+            {
+              "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiSummary] retry passed"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolvedProblems": [
+        {
+          "claim": "aiScenarioCoverage failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[0] aiScenarioCoverage failed"
+            },
+            {
+              "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiScenarioCoverage] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "aiGuidelines failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[1] aiGuidelines failed"
+            },
+            {
+              "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiGuidelines] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "quality failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[2] quality failed"
+            },
+            {
+              "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[quality] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "aiSummary failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[3] aiSummary failed"
+            },
+            {
+              "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiSummary] retry passed"
+            }
+          ],
+          "inference": false
+        },
+        {
+          "claim": "aiSummary failed before the retry.",
+          "evidenceRefs": [
+            {
+              "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verificationHistory[4] aiSummary failed"
+            },
+            {
+              "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+              "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+              "subject": "verification[aiSummary] retry passed"
+            }
+          ],
+          "inference": false
+        }
+      ]
+    },
+    "redReasons": [],
+    "retained": [],
+    "risks": [
+      {
+        "claim": "external-capability-boundary",
+        "detail": "Hosted CI, CodeQL, SBOM, Provenance, Digital Signing, Enterprise IAM, Production Sandbox, External Audit, and Calibration completion remain excluded because local installation evidence cannot prove them.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false,
+        "severity": "medium",
+        "state": "unresolved",
+        "title": "external-capability-boundary"
       },
-      "nextTime": {
-        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
-        "evidenceRefs": [],
-        "inference": true
+      {
+        "claim": "implementation-approach-ownership",
+        "detail": "Implementation Approach is adopter_installed only as the existing lifecycle Summary/Task Outcome/Human Report surface; no separate future report implementation is claimed.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false,
+        "severity": "medium",
+        "state": "unresolved",
+        "title": "implementation-approach-ownership"
       }
-    }
+    ]
   },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  "interventions": [],
+  "issues": {
+    "detected": 5,
+    "hardStops": 5,
+    "resolved": 5,
+    "unresolved": 0,
+    "warnings": 0
+  },
+  "limitations": [],
+  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding.",
+  "phase": "review",
+  "preventedRisks": [
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: aiScenarioCoverage",
+      "evidence": [
+        {
+          "digest": "86f7c89ca6044c5be4b87cebd440d7a6aff99cf8d670ae57ec854c488f8dc7d2",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[0] aiScenarioCoverage failed"
+        },
+        {
+          "digest": "5c1b255d766f92a5acd3e6510dd37cdb0b3b97e12788d9a68c5daaf6c8639192",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiScenarioCoverage] retry passed"
+        }
+      ],
+      "resolution": "Retry aiScenarioCoverage after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    },
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: aiGuidelines",
+      "evidence": [
+        {
+          "digest": "18a5d6f0f04ca4f26a49e06ff8e4bee4621a8de8dbc4ca65c91ffa04747913e5",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[1] aiGuidelines failed"
+        },
+        {
+          "digest": "029d0a453a54c12ec27cb2744ef4433d9da606016aa74a86b799650ddf8a3a67",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiGuidelines] retry passed"
+        }
+      ],
+      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    },
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: quality",
+      "evidence": [
+        {
+          "digest": "5c88b487c24d2bb4977db0777358784678a52b270a2015ce3c7b0a5025b964be",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[2] quality failed"
+        },
+        {
+          "digest": "4971153355dd3c3ff7def6980a27d59f0265a01526f43ed237b1c826931a32dd",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[quality] retry passed"
+        }
+      ],
+      "resolution": "Retry quality after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    },
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: aiSummary",
+      "evidence": [
+        {
+          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[3] aiSummary failed"
+        },
+        {
+          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiSummary] retry passed"
+        }
+      ],
+      "resolution": "Retry aiSummary after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    },
+    {
+      "action": "blocked",
+      "detectedBy": "required verification: aiSummary",
+      "evidence": [
+        {
+          "digest": "b0e39eda1024b7b14af95a7d998d5e7fc99b7f3b9b871a40f573cf538ed7b875",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verificationHistory[4] aiSummary failed"
+        },
+        {
+          "digest": "e1510c9a770d72497dd2c875a98e7af9d4b5aab98a31c68aa8437d95a902b1e9",
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "verification[aiSummary] retry passed"
+        }
+      ],
+      "resolution": "Retry aiSummary after correcting the recorded failure.",
+      "risk": "If not detected, could have led to a stale completion claim.",
+      "severity": "medium"
+    }
+  ],
+  "remainingRisks": [
+    {
+      "detail": "Hosted CI, CodeQL, SBOM, Provenance, Digital Signing, Enterprise IAM, Production Sandbox, External Audit, and Calibration completion remain excluded because local installation evidence cannot prove them.",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "residualRisks"
+        }
+      ],
+      "severity": "medium"
+    },
+    {
+      "detail": "Implementation Approach is adopter_installed only as the existing lifecycle Summary/Task Outcome/Human Report surface; no separate future report implementation is claimed.",
+      "evidence": [
+        {
+          "source": ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+          "subject": "residualRisks"
+        }
+      ],
+      "severity": "medium"
+    }
+  ],
+  "reportVersion": 1,
+  "result": "completed",
+  "sourceOutcome": {
+    "digest": "d0fafeb64bae92058bd8e9ee4ea711cdde2fe8c4ab2aa727c6b8fce2a9a09a0d",
+    "format": "ai-cockpit-task-outcome",
+    "schemaVersion": 1
+  },
+  "task": {
+    "deliveredChanges": [
+      ".ai/work-items/archive/2026/adopter-feature-parity-gate.contract.json",
+      ".ai/work-items/archive/2026/adopter-feature-parity-gate.summary.json",
+      ".ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.json",
+      ".ai/work-items/archive/2026/adopter-feature-parity-gate.outcome.md",
+      ".ai/project/adopter-capability-manifest.json",
+      ".ai/schemas/adopter-capability-manifest.schema.json",
+      "scripts/ai_installer_adopter_capability_manifest.py",
+      "scripts/ai_installer_catalog.json",
+      "scripts/installer/legacy.py",
+      "Makefile",
+      "templates/make/Makefile.ai",
+      "tests/test_adopter_feature_parity.py",
+      "tests/test_installer.py",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md",
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/work-items/starts/adopter-feature-parity-gate.json"
+    ],
+    "summary": "Task adopter-feature-parity-gate generated an evidence-derived outcome with status completed."
+  },
+  "workItemId": "adopter-feature-parity-gate"
 }
