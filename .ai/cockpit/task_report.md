@@ -7,73 +7,58 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): The repository now binds its published projection to the immutable public v0.5.67 Release and advances the next unpublished candidate to v0.5.68.
-Mechanism (verified): GitHub asset digests were verified against downloaded bytes, the canonical atomic synchronizer promoted the public assets, candidate SBOM/provenance were refreshed, and all source-bound documentation evidence was regenerated before readiness checks.
+Customer summary (verified): 先以精确清单锁定已确认无活动 Work Item 且无未提交变更的分支和工作树，再按 Git 生命周期顺序移除工作树、删除对应本地分支和远程分支；清理后用远程引用、工作树清单、主工作树和父目录哈希进行复核。
+Mechanism (verified): 清理仅作用于合同列出的三个关联工作树、四个本地分支引用和三个远程分支引用；删除后确认目标引用为空、目标工作树不存在、主工作树保持同步，并确认父工作树的用户修改字节未变化。
 
 Affected components
-- Published release projection: release.json and .ai/cockpit/release-digests.json now represent v0.5.67 provider evidence. (verified)
-- Candidate release projection: release-state.json, next-release.json, version.json, and install.sh identify v0.5.68 as the unpublished candidate. (verified)
-- Source-bound governance evidence: Capability Truth, Japanese assessment, and pre-release alignment evidence were regenerated after projection writes so evidenceSource digests match current bytes. (verified)
+- Git worktree and branch identities: The three exact linked worktrees, their three remote branches, and the four exact local branch identities were removed. (verified)
+- Historical Work Item traceability: Replacement archives, recorded head commits, closed PR records, and the predecessor's yellow state remain explicit; cleanup does not convert historical evidence into delivery success. (verified)
 
 Design decisions
-- Use provider assets as the published source of truth.: The v0.5.67 tag and Release are immutable and the workflow verified exact source identity; local candidate metadata cannot replace public evidence. (verified)
-- Advance to v0.5.68 rather than reuse v0.5.67.: v0.5.67 is now reserved historical provider evidence and cannot be a future candidate. (verified)
-- Refresh evidence-bound summaries after projection changes.: Capability evidenceSource values are hashes of current source/test bytes; stale summaries must block readiness and be regenerated before completion. (verified)
+- Delete only the inventoried exact identities.: This prevents unrelated or active work from being removed while resolving the reported residual branch state. (verified)
+- Preserve historical evidence through replacement archives and recorded identities.: The superseded branches must not be mistaken for successful delivery, and the canonical predecessor's yellow Outcome must remain unchanged. (verified)
 
 ### Technical details
-- Provider asset verification: GitHub reported release.json SHA-256 980d7143ebf6affac6f4aeb5b7341b28813bb35b0064e9c570f03948652396c5 and release-digests.json SHA-256 41a69d563ceac38693dc10648068d1d55cc6328b48b211251b48b9fe0e0a1763; downloaded bytes matched both. (verified)
-- Known evidence-binding root cause: Initial readiness correctly detected capabilities[8] and capabilities[15] evidenceSource summaries were stale after current WI bytes changed. Canonical generators refreshed the summaries and the same readiness gate then passed its source-bound checks. (verified)
+- Deletion order: Each linked worktree was removed with Git worktree lifecycle commands before its local and remote branch identities were deleted. (verified)
+- Protected state: The detached parent worktree's Makefile and templates/make/Makefile.ai remained unchanged, and unrelated detached worktrees were outside the cleanup boundary. (verified)
 
 ### Evidence
-- The published projection is bound to v0.5.67 provider evidence.: release.json#published release projection (verified)
-- The next unpublished candidate is v0.5.68.: next-release.json#candidate release projection (verified)
+- The exact stale branch/worktree target set was bounded before mutation and absent after mutation.: scripts/ai_close_work_item.py#post-cleanup lifecycle audit implementation (verified)
+- Historical replacement evidence is present without reclassifying the yellow predecessor.: .ai/work-items/archive/2026/canonical-lifecycle-parallel-successor-20260818.outcome.json#replacement outcome (verified)
 
-- Changed .ai/work-items/active/release-v067-projection-sync.contract.json [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.contract.json]
-- Changed .ai/work-items/active/release-v067-projection-sync.summary.json [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.summary.json]
-- Changed .ai/work-items/starts/release-v067-projection-sync.json [evidence: .ai/work-items/starts/release-v067-projection-sync.json]
-- Changed release.json [evidence: release.json]
-- Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
-- Changed release-state.json [evidence: release-state.json]
-- Changed next-release.json [evidence: next-release.json]
-- Changed .ai/cockpit/version.json [evidence: .ai/cockpit/version.json]
-- Changed install.sh [evidence: install.sh]
-- Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
-- Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
-- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
-- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/work-items/active/release-v067-projection-sync.outcome.json [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.outcome.json]
-- Changed .ai/work-items/active/release-v067-projection-sync.outcome.md [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.outcome.md]
-- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
+- Changed .ai/work-items/active/stale-branch-worktree-cleanup-20260818.contract.json [evidence: .ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.contract.json]
+- Changed .ai/work-items/active/stale-branch-worktree-cleanup-20260818.summary.json [evidence: .ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.summary.json]
+- Changed .ai/work-items/active/stale-branch-worktree-cleanup-20260818.outcome.json [evidence: .ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.outcome.json]
+- Changed .ai/work-items/active/stale-branch-worktree-cleanup-20260818.outcome.md [evidence: .ai/work-items/archive/2026/stale-branch-worktree-cleanup-20260818.outcome.md]
+- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
+- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
+- Changed .ai/decisions/HDR-a84fbb11d586a0b9-adb58f8f.evidence.json [evidence: .ai/decisions/HDR-a84fbb11d586a0b9-adb58f8f.evidence.json]
+- Changed .ai/decisions/HDR-a84fbb11d586a0b9-adb58f8f.request.json [evidence: .ai/decisions/HDR-a84fbb11d586a0b9-adb58f8f.request.json]
 
 Problems found
-- Total: 3
+- Total: 6
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
-- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Reason: aiSummary failed before the retry. | Stage: verification | Resolution: Retry aiSummary after correcting the recorded failure. [evidence: verificationHistory[0] aiSummary failed, verification[aiSummary] retry passed]
 
 Problems resolved
-- Problem: observed issue
-  Solution: Ran the canonical --write generators for Capability Truth, Japanese capability assessment, and pre-release documentation alignment before rerunning readiness.
-  Evidence: [evidence: regenerated current byte hashes, repository readiness source-bound checks]
-- Problem: aiGuidelines failed before the retry.
-  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
-- Problem: aiGuidelines failed before the retry.
-  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Problem: aiSummary failed before the retry.
+  Solution: Re-ran aiSummary after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiSummary failed, verification[aiSummary] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
-- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- None recorded.
+- Three remote branches remained after their PR paths ended: the closed predecessors #879/#883 and an unsubmitted verification runtime branch; each also retained a local linked worktree. (inference)
+- A local-only backup/wi08-pre-base-reconcile branch remained without a remote ref, PR, or worktree. (inference)
+- The old branch worktrees inherited stale reader handoff/receipt files, but current main already archives that Work Item and has no active Contract/Summary pair; they are not evidence of an active current Work Item. (inference)
+- The canonical parallel predecessor retains a historical yellow needs_human_confirmation Outcome; cleanup did not reclassify it as completed. Its replacement archive is canonical-lifecycle-parallel-successor-20260818 on main. (inference)
+- The target branches' original archive bundles were not part of main because their PRs were superseded; current main retains the replacement archives and the deleted branch head SHAs plus closed PR records remain the historical audit trail. (inference)
+- Deleted refs remain recoverable from the recorded commit IDs and archived Work Item evidence; deletion does not rewrite commit objects or archive records. [evidence: residualRisks]
+- The canonical parallel predecessor remains historically yellow and was not delivered; this cleanup does not resolve or reinterpret that Outcome. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
@@ -82,7 +67,6 @@ Human decisions
 - None recorded.
 
 Verification
-- sourceBoundEvidence [evidence: sourceBoundEvidence]
 - aiWorkItem [evidence: aiWorkItem]
 - aiScope [evidence: aiScope]
 - aiGuards [evidence: aiGuards]
