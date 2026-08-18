@@ -48,3 +48,26 @@ def test_fresh_adopter_receives_and_can_call_knowledge_projection_surface(tmp_pa
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_fresh_adopter_does_not_receive_template_repository_knowledge_records(
+    tmp_path: Path,
+) -> None:
+    """Installation delivers the projection runtime, not this template's history."""
+    target = tmp_path / "adopter"
+    installer = Installer(
+        source=ROOT,
+        target=target,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+
+    knowledge_root = target / ".ai" / "knowledge"
+    assert not (knowledge_root / "index.json").exists()
+    if knowledge_root.is_dir():
+        assert not list(knowledge_root.rglob("*.json"))
