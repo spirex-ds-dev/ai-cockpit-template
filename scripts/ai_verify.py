@@ -29,6 +29,11 @@ STAGES = ("task", "pr", "release")
 MODES = ("legacy", "unified", "compare")
 
 
+REUSE_CLASSES_BY_CHECKER: dict[str, tuple[str, ...]] = {
+    "tests": ("content-bound", "diff-bound", "environment-bound"),
+}
+
+
 def _runtime_gate_class(check_id: str) -> str:
     if check_id == "scope":
         return "scope"
@@ -47,17 +52,18 @@ def runtime_nodes(stage: str, changed_paths: list[str]) -> tuple[VerificationNod
     scope = tuple(sorted(set(changed_paths))) or ("<clean-worktree>",)
     nodes: list[VerificationNode] = []
     for check_id in requested:
-        reusable = check_id == "tests"
+        reuse_classes = REUSE_CLASSES_BY_CHECKER.get(check_id, ())
         nodes.append(
             VerificationNode(
                 node_id=check_id,
                 command=("make", f"check-{check_id.replace('_', '-')}"),
                 gate_class=_runtime_gate_class(check_id),
                 required=True,
-                scope=("project-content",) if reusable else scope,
-                reuse_class="content-bound" if reusable else "none",
-                reuse_allowed=reusable,
-                protected=not reusable,
+                scope=("project-content",) if reuse_classes else scope,
+                reuse_class=reuse_classes[0] if reuse_classes else "none",
+                binding_classes=reuse_classes[1:],
+                reuse_allowed=bool(reuse_classes),
+                protected=not reuse_classes,
             )
         )
     return tuple(nodes)
