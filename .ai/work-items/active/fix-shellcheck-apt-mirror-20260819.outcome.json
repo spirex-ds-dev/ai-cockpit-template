@@ -1,15 +1,29 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "fix-shellcheck-apt-mirror-20260819",
-  "phase": "review",
-  "result": "blocked",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "eb421b75f999d3b80fc86ceea5aff689d4f15607dce63c157647810c07601298"
+  "status": "blocked",
+  "humanStatusColor": "red",
+  "failedGate": "taskOutcomeGreenGate",
+  "recoveryCondition": "Run a passing taskOutcomeGreenGate retry.",
+  "bindings": {
+    "taskId": "fix-shellcheck-apt-mirror-20260819",
+    "contractDigest": "1b7190c216b70d3cea114383e72b6e1e2111b59797abe06901ca271cf0a2d3de",
+    "summaryDigest": "83167cd75989c251ce35b93e65fb04fa93d4a6ffd426cd857f7d512cd9786b54",
+    "verificationDigest": "63ed215599b58b9abab36d7c63d749d4952a388247f14cbb3d5895cff2364725",
+    "baseCommit": "fd81251f7cecb53ac062e2ed8763c541e785be56",
+    "headCommit": "fd81251f7cecb53ac062e2ed8763c541e785be56",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en"
   },
-  "task": {
-    "summary": "Task fix-shellcheck-apt-mirror-20260819 generated an evidence-derived outcome with status blocked.",
+  "sections": {
+    "outcomeSummary": "Task fix-shellcheck-apt-mirror-20260819 generated an evidence-derived outcome with status blocked.",
+    "taskOverview": "Governed Work Item: fix-shellcheck-apt-mirror-20260819",
     "deliveredChanges": [
       ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json",
       ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
@@ -30,330 +44,404 @@
       "docs/reference/japanese-capability-assessment.md",
       "docs/reference/pre-release-documentation-alignment.json",
       "docs/reference/pre-release-documentation-alignment.md"
-    ]
-  },
-  "issues": {
-    "detected": 5,
-    "hardStops": 3,
-    "warnings": 2,
-    "resolved": 3,
-    "unresolved": 2
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
-        },
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
-        },
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "e93167c69b6fe085c8752552229eed342e82e66b829b20c7e75c42ce3c2b3018"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[2] aiSummary failed",
-          "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
-        },
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
-        },
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[1] quality failed",
-          "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
-        },
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "e93167c69b6fe085c8752552229eed342e82e66b829b20c7e75c42ce3c2b3018"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verificationHistory[2] aiSummary failed",
-          "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
-        },
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [
-    {
-      "sourceWarning": "Hosted compatibility verification must be rerun on the corrective PR and then on PR #906 after the corrective merge.",
-      "title": "Unresolved evidence is explicitly limited",
-      "affectedClaims": [
-        "completion_claim"
-      ],
-      "requiredEvidence": [
-        "fresh verification evidence"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this warning was verified or resolved."
-      ]
-    },
-    {
-      "sourceWarning": "Finish blocked at taskOutcomeGreenGate: terminal Outcome requires status=completed; terminal Outcome requires humanStatusColor=green",
-      "title": "Finish verification is blocked",
-      "affectedClaims": [
-        "completion_claim",
-        "archive_readiness"
-      ],
-      "requiredEvidence": [
-        "a passing taskOutcomeGreenGate retry"
-      ],
-      "forbiddenClaims": [
-        "Do not claim this Work Item is complete or archive-ready."
-      ]
-    }
-  ],
-  "forbiddenClaims": [
-    "Do not claim a blocked Work Item has completed verification or may be archived.",
-    "Do not claim an unresolved warning was verified or resolved."
-  ],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The workflow fix removes the observed apt mirror dependency, but PR #906 must be revalidated on hosted CI after this corrective change merges.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "本次将兼容性检查从网络安装 ShellCheck 改为使用固定 Ubuntu 24.04 runner 已提供的 ShellCheck，并在实际检查前执行版本探测；同时将模板仓库专属的 reference-impact 证据限定为 source-only，避免它被安装到缺少该工作流的 adopter 中。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": ".github/workflows/compatibility.yml",
-          "subject": "pinned runner, runner-provided ShellCheck probe, and blocking invocation"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "ShellCheck job 固定运行在 ubuntu-24.04；先执行 shellcheck --version，runner 未提供可用命令时立即失败，随后执行既有的 shellcheck install.sh。安装器在复制 .ai 树时跳过模板仓库专属的 reference-impact 记录；回归测试覆盖 workflow 约束与 fresh adopter 质量边界。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": ".github/workflows/compatibility.yml",
-          "subject": "shellcheck job steps"
-        },
-        {
-          "source": "tests/test_workflows.py",
-          "subject": "network bootstrap regression guard"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [
+      "Finish blocked at taskOutcomeGreenGate: terminal Outcome requires status=completed; terminal Outcome requires humanStatusColor=green",
+      "Hosted compatibility verification must be rerun on the corrective PR and then on PR #906 after the corrective merge."
+    ],
+    "limitations": [
       {
-        "component": "Hosted compatibility ShellCheck lane",
-        "detail": "Only the runner image selection and tool bootstrap steps change; compatibility-gate dependency and ShellCheck policy remain unchanged.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "shellcheck and compatibility-gate workflow definition"
-          }
+        "sourceWarning": "Hosted compatibility verification must be rerun on the corrective PR and then on PR #906 after the corrective merge.",
+        "title": "Unresolved evidence is explicitly limited",
+        "affectedClaims": [
+          "completion_claim"
+        ],
+        "requiredEvidence": [
+          "fresh verification evidence"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this warning was verified or resolved."
         ]
       },
       {
-        "component": "Workflow regression tests",
-        "detail": "The test rejects apt-get update/package installation and requires the version probe plus install.sh invocation.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_workflows.py",
-            "subject": "test_shellcheck_uses_pinned_runner_tool_without_network_bootstrap"
-          }
+        "sourceWarning": "Finish blocked at taskOutcomeGreenGate: terminal Outcome requires status=completed; terminal Outcome requires humanStatusColor=green",
+        "title": "Finish verification is blocked",
+        "affectedClaims": [
+          "completion_claim",
+          "archive_readiness"
+        ],
+        "requiredEvidence": [
+          "a passing taskOutcomeGreenGate retry"
+        ],
+        "forbiddenClaims": [
+          "Do not claim this Work Item is complete or archive-ready."
         ]
+      }
+    ],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "Hosted compatibility verification must be rerun on the corrective PR and then on PR #906 after the corrective merge.",
+        "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+        "evidence": []
       },
       {
-        "component": "Adopter installer evidence boundary",
-        "detail": "Template repository reference-impact records are source-only repository evidence and are not copied into a fresh adopter; adopters can create their own records for their own targets.",
-        "status": "verified",
+        "sourceWarning": "Finish blocked at taskOutcomeGreenGate: terminal Outcome requires status=completed; terminal Outcome requires humanStatusColor=green",
+        "reason": "The failed Finish gate is recorded as a recovery condition, not a completed result.",
+        "evidence": []
+      }
+    ],
+    "forbiddenClaims": [
+      "Do not claim a blocked Work Item has completed verification or may be archived.",
+      "Do not claim an unresolved warning was verified or resolved."
+    ],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": "scripts/installer/legacy.py",
-            "subject": "pruned .ai/evidence/reference-impact source-only boundary"
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
           },
           {
-            "source": "tests/test_installer.py",
-            "subject": "reference-impact pruning and installed quality regression coverage"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Use the runner-provided ShellCheck instead of installing it through apt.",
-        "reason": "Hosted evidence shows the job repeatedly timed out at azure.archive.ubuntu.com before ShellCheck started, while the pinned runner image provides ShellCheck.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "no apt bootstrap and explicit runner tool probe"
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
           }
         ]
       },
       {
-        "decision": "Pin the ShellCheck lane to Ubuntu 24.04.",
-        "reason": "The tool availability assumption is kept stable at the workflow boundary instead of depending on a moving ubuntu-latest image.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "runs-on: ubuntu-24.04"
-          }
-        ]
-      },
-      {
-        "decision": "Do not distribute template repository reference-impact records to adopters.",
-        "reason": "Those records bind to template-local target paths; copying them into an adopter makes the adopter's full-repository reference-impact check fail when the target workflow is absent.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/installer/legacy.py",
-            "subject": "reference-impact evidence pruning boundary"
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
           },
           {
-            "source": "tests/test_installer.py",
-            "subject": "fresh adopter regression test"
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "e93167c69b6fe085c8752552229eed342e82e66b829b20c7e75c42ce3c2b3018"
           }
         ]
-      }
-    ],
-    "technicalDetails": [
+      },
       {
-        "topic": "Failure handling",
-        "detail": "shellcheck --version is a fail-closed availability probe; a missing or unusable executable stops the job before the analysis command.",
-        "status": "verified",
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
         "evidence": [
           {
-            "source": ".github/workflows/compatibility.yml",
-            "subject": "Verify runner-provided ShellCheck step"
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verificationHistory[2] aiSummary failed",
+            "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
+          },
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
           }
         ]
       }
     ],
+    "resolutions": [
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
+          },
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
+          }
+        ]
+      },
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verificationHistory[1] quality failed",
+            "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
+          },
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "e93167c69b6fe085c8752552229eed342e82e66b829b20c7e75c42ce3c2b3018"
+          }
+        ]
+      },
+      {
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verificationHistory[2] aiSummary failed",
+            "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
+          },
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "hosted_verification",
+        "severity": "medium",
+        "title": "hosted_verification",
+        "detail": "The workflow fix removes the observed apt mirror dependency, but PR #906 must be revalidated on hosted CI after this corrective change merges.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
     "evidence": [
       {
-        "claim": "The workflow no longer depends on the failing apt mirror path.",
-        "status": "verified",
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": ".github/workflows/compatibility.yml",
         "subject": "ShellCheck job definition"
       },
       {
-        "claim": "The regression guard prevents reintroducing the network bootstrap and preserves the actual ShellCheck invocation.",
-        "status": "verified",
         "source": "tests/test_workflows.py",
         "subject": "workflow source regression test"
       },
       {
-        "claim": "Fresh adopters do not inherit template-local reference-impact records that point to absent workflow paths.",
-        "status": "verified",
         "source": "tests/test_installer.py",
         "subject": "installer boundary and installed quality regression"
+      },
+      {
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "c3d9c980ee3b7ed192e7ed5fdfae7b9856a094d8b151e74f77fee8fe74f6b8c0"
+      },
+      {
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "d27947453bd1f3966359e8993074932e6fec27e9ec91f66a6145fbefa2440c43"
+      },
+      {
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+        "subject": "verificationHistory[1] quality failed",
+        "digest": "1968cc27157021dda2fd306a4ebe8f8c0a5e3d39228ac8aa8ff2104d8cdf34f8"
+      },
+      {
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "e93167c69b6fe085c8752552229eed342e82e66b829b20c7e75c42ce3c2b3018"
+      },
+      {
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+        "subject": "verificationHistory[2] aiSummary failed",
+        "digest": "07cc77b716eb051c2cb22a6c3c58aa107d39c0b1db6b5183b52473d2b63f5ee0"
+      },
+      {
+        "source": ".ai/work-items/active/fix-shellcheck-apt-mirror-20260819.summary.json",
+        "subject": "verification[aiSummary] retry passed",
+        "digest": "f8d721d7f9a7092d418cc4a3a62e2c69a89fca35db3d3ff62d389a69cf428df3"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "本次将兼容性检查从网络安装 ShellCheck 改为使用固定 Ubuntu 24.04 runner 已提供的 ShellCheck，并在实际检查前执行版本探测；同时将模板仓库专属的 reference-impact 证据限定为 source-only，避免它被安装到缺少该工作流的 adopter 中。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": ".github/workflows/compatibility.yml",
+            "subject": "pinned runner, runner-provided ShellCheck probe, and blocking invocation"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "ShellCheck job 固定运行在 ubuntu-24.04；先执行 shellcheck --version，runner 未提供可用命令时立即失败，随后执行既有的 shellcheck install.sh。安装器在复制 .ai 树时跳过模板仓库专属的 reference-impact 记录；回归测试覆盖 workflow 约束与 fresh adopter 质量边界。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": ".github/workflows/compatibility.yml",
+            "subject": "shellcheck job steps"
+          },
+          {
+            "source": "tests/test_workflows.py",
+            "subject": "network bootstrap regression guard"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Hosted compatibility ShellCheck lane",
+          "detail": "Only the runner image selection and tool bootstrap steps change; compatibility-gate dependency and ShellCheck policy remain unchanged.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".github/workflows/compatibility.yml",
+              "subject": "shellcheck and compatibility-gate workflow definition"
+            }
+          ]
+        },
+        {
+          "component": "Workflow regression tests",
+          "detail": "The test rejects apt-get update/package installation and requires the version probe plus install.sh invocation.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_workflows.py",
+              "subject": "test_shellcheck_uses_pinned_runner_tool_without_network_bootstrap"
+            }
+          ]
+        },
+        {
+          "component": "Adopter installer evidence boundary",
+          "detail": "Template repository reference-impact records are source-only repository evidence and are not copied into a fresh adopter; adopters can create their own records for their own targets.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/installer/legacy.py",
+              "subject": "pruned .ai/evidence/reference-impact source-only boundary"
+            },
+            {
+              "source": "tests/test_installer.py",
+              "subject": "reference-impact pruning and installed quality regression coverage"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Use the runner-provided ShellCheck instead of installing it through apt.",
+          "reason": "Hosted evidence shows the job repeatedly timed out at azure.archive.ubuntu.com before ShellCheck started, while the pinned runner image provides ShellCheck.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".github/workflows/compatibility.yml",
+              "subject": "no apt bootstrap and explicit runner tool probe"
+            }
+          ]
+        },
+        {
+          "decision": "Pin the ShellCheck lane to Ubuntu 24.04.",
+          "reason": "The tool availability assumption is kept stable at the workflow boundary instead of depending on a moving ubuntu-latest image.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".github/workflows/compatibility.yml",
+              "subject": "runs-on: ubuntu-24.04"
+            }
+          ]
+        },
+        {
+          "decision": "Do not distribute template repository reference-impact records to adopters.",
+          "reason": "Those records bind to template-local target paths; copying them into an adopter makes the adopter's full-repository reference-impact check fail when the target workflow is absent.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/installer/legacy.py",
+              "subject": "reference-impact evidence pruning boundary"
+            },
+            {
+              "source": "tests/test_installer.py",
+              "subject": "fresh adopter regression test"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Failure handling",
+          "detail": "shellcheck --version is a fail-closed availability probe; a missing or unusable executable stops the job before the analysis command.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".github/workflows/compatibility.yml",
+              "subject": "Verify runner-provided ShellCheck step"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The workflow no longer depends on the failing apt mirror path.",
+          "status": "verified",
+          "source": ".github/workflows/compatibility.yml",
+          "subject": "ShellCheck job definition"
+        },
+        {
+          "claim": "The regression guard prevents reintroducing the network bootstrap and preserves the actual ShellCheck invocation.",
+          "status": "verified",
+          "source": "tests/test_workflows.py",
+          "subject": "workflow source regression test"
+        },
+        {
+          "claim": "Fresh adopters do not inherit template-local reference-impact records that point to absent workflow paths.",
+          "status": "verified",
+          "source": "tests/test_installer.py",
+          "subject": "installer boundary and installed quality regression"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "en",
@@ -1268,6 +1356,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

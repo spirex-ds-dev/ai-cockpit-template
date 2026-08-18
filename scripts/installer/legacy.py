@@ -395,6 +395,7 @@ class Installer:
         pruned_roots = (
             {
                 Path("knowledge"),
+                Path("evidence/reference-impact"),
                 Path("work-items/active"),
                 Path("work-items/archive"),
                 Path("work-items/starts"),
