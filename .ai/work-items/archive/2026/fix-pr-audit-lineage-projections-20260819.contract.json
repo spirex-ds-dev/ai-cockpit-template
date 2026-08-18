@@ -1,0 +1,203 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-pr-audit-lineage-projections-20260819",
+  "mode": "code",
+  "title": "Fix PR audit for synchronized archive lineage and derived knowledge projections",
+  "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json",
+    ".ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.json",
+    ".ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.md",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing archived Contract, Summary, Outcome, manifest, or Start Receipt evidence.",
+    "Weakening append-only archive, one-Work-Item-per-PR, or fail-closed ownership policy.",
+    "Changing release workflow behavior, release tags, public Releases, or production behavior.",
+    "Allowing arbitrary unowned knowledge projection files to pass the PR audit."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The current PR audit rejects a valid archive whose base transition is recorded in synchronizationHistory and requires direct Summary ownership for transitive generated knowledge updates."
+    },
+    {
+      "path": "scripts/ai_start_receipt.py",
+      "reason": "The lifecycle validator defines synchronizationHistory as the canonical evidence for active Work Item baseline synchronization."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Existing PR audit regression fixtures cover resume lineage and provide the bounded test surface for synchronization and projection ownership."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/912",
+      "reason": "Release WI PR #912 exposes the two concrete fail-closed audit errors that this corrective WI must resolve."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "archive_integrity",
+      "release_governance",
+      "knowledge_projection"
+    ],
+    "reason": "The change alters PR evidence classification; it must preserve fail-closed behavior while accepting only validated lifecycle lineage and evidence-derived projection dependencies.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The change is governance and test code with no production behavior or external operation."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The PR failure is reproducible locally and the repository already defines canonical synchronization and knowledge evidence structures for a bounded corrective implementation."
+  },
+  "preReviewWarnings": [
+    "Review that transitive knowledge ownership is limited to generated records whose evidence dependency closure reaches a currently owned changed projection."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record the implementation boundary before editing and rerun all PR-audit checks before finish."
+  },
+  "acceptance": [
+    "archive_base_is_compatible accepts an archived Contract whose Start Receipt base differs from the Contract base when synchronizationHistory is structurally valid, continuous, and ends at the Contract base; malformed or discontinuous history remains rejected.",
+    "The PR audit accepts a generated knowledge projection changed by a current owned projection dependency only when the dependency closure is evidence-derived and the current knowledge index remains valid.",
+    "The PR audit continues to reject arbitrary knowledge paths that are absent from the current Summary and have no owned generated dependency.",
+    "Regression tests cover both valid and invalid synchronization lineage and both accepted and rejected knowledge projection ownership cases.",
+    "No archived evidence is rewritten, and append-only archive, fail-closed, and one-new-Work-Item PR policies remain unchanged.",
+    "All required AI checks, focused tests, and the repository quality gate pass."
+  ],
+  "guidelines": [
+    "Use the repository's canonical synchronizationHistory schema rather than introducing a second lifecycle representation.",
+    "Keep generated knowledge ownership evidence-derived and bounded to a dependency closure; do not use a broad .ai/knowledge exemption.",
+    "Add regression tests before changing the PR audit behavior and preserve rejection tests for malformed or unowned evidence."
+  ],
+  "intent": {
+    "problem": "The release closure PR is blocked by two PR-audit classification defects. The audit recognizes resumeHistory but not the synchronizationHistory that the canonical synchronization command writes, and it treats a transitive generated knowledge record as unowned when a directly owned knowledge projection changes its evidence digest.",
+    "constraints": [
+      "Keep archived release evidence immutable.",
+      "Accept only the canonical synchronizationHistory structure validated by ai_start_receipt.",
+      "Preserve fail-closed rejection for malformed lineage and arbitrary unowned generated files.",
+      "Do not change release publication or production behavior."
+    ],
+    "rationale": "The PR audit must recognize the lifecycle evidence and generated dependency model already used by the repository; otherwise valid Work Item closure is blocked or operators are pushed toward unsafe archive edits."
+  },
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-release-after-pr-audit-blocker",
+    "capturedAt": "2026-08-19T00:00:00+09:00",
+    "digest": "sha256:pr-audit-lineage-and-knowledge-root-causes"
+  },
+  "rawUserRequest": "Continue the release lifecycle. Resolve the PR audit root causes without rewriting archived evidence, then revalidate and close the release Work Item.",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make PR audit ownership and base compatibility correctly follow canonical lifecycle and generated knowledge evidence.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Valid synchronized archive",
+      "required": true,
+      "expected": "A continuous synchronizationHistory ending at the Contract base is accepted on the exact or descendant PR merge-base.",
+      "verificationPlan": "Unit test archive_base_is_compatible with valid and discontinuous transitions.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Transitive generated knowledge refresh",
+      "required": true,
+      "expected": "A knowledge record whose generated evidence depends on a current owned projection is accepted only after the knowledge index validates.",
+      "verificationPlan": "Exercise the PR ownership helper with an owned dependency closure and run the knowledge index checker.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Malformed or unowned evidence",
+      "required": true,
+      "expected": "Malformed synchronization history and arbitrary knowledge paths remain rejected.",
+      "verificationPlan": "Retain negative regression tests and run the complete PR aggregate suite.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user continuation authorization in current thread",
+    "reason": "The user authorized continuation after the PR audit root causes were identified; this WI is limited to the repository governance checker and its regression tests."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore the PR audit tests and generated governance evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 966
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-pr-audit-lineage-projections-20260819.json",
+    "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+    "initialScopeDigest": "cb7487fa85eca3caf18aca180e5f3d2cfbbad3584ecec3aa2a807c9dcb8ba02e",
+    "contractSkeletonDigest": "2e3a40cf1363aec78a96268c8134604a81f9eee3306401698d7aefea0bcdaf8c"
+  }
+}

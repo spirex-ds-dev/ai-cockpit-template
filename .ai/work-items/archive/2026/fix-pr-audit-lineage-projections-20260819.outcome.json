@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "fix-pr-audit-lineage-projections-20260819",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "7cd27a28ea3cc493daf14b45c43cf5e8107c29cf9ee690832c4839e36fdfc0f6"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "fix-pr-audit-lineage-projections-20260819",
+    "contractDigest": "65aee753c37b59f673f3ba344315132826c2ed08b6a40655595064aa6a0f1ecf",
+    "summaryDigest": "2872f8e476f59a77853ef73caf4248e3b349015d6662224082f05c74ba998923",
+    "verificationDigest": "ad41a3b68153fc5c4b9ec3d2727f7c5c028a4f4969379c87d4c493a68a46e0e0",
+    "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+    "headCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "82a1598cf0f8a65173d2c34d9f9cb4625facc4b47a128ac1a17a23ccb0d1f5df",
+      "binding": {
+        "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+        "candidateHead": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+        "candidateTreeDigest": "986f7bd0a2c46d39fb5568533a52e0aa1b8da5ffef4b5834504bc068678c84b0",
+        "candidateDiffDigest": "0b887220543de110bbf3d728f127798d22346922cc83908925761591a9eeddf3"
+      }
+    }
   },
-  "task": {
-    "summary": "Task fix-pr-audit-lineage-projections-20260819 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task fix-pr-audit-lineage-projections-20260819 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: fix-pr-audit-lineage-projections-20260819",
     "deliveredChanges": [
       "scripts/ai_check_pr.py",
       "tests/test_pr_aggregate.py",
@@ -25,179 +48,217 @@
       "docs/reference/japanese-capability-assessment.md",
       "docs/reference/pre-release-documentation-alignment.json",
       "docs/reference/pre-release-documentation-alignment.md"
-    ]
-  },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: quality",
-      "action": "blocked",
-      "resolution": "Retry quality after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "quality failed before the retry.",
-      "policyOrGuard": "required verification: quality",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry quality after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
-          "subject": "verificationHistory[0] quality failed",
-          "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
-          "subject": "verification[quality] retry passed",
-          "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The exact provider-side cause of the historical Hosted apt mirror stall remains unproven from one run; the release workflow fix removes that external apt dependency.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "PR evidence aggregation now follows the repository's canonical synchronization history and recognizes generated knowledge records only when their validated evidence dependency closure reaches a directly owned projection. Existing malformed-lineage and unowned-path rejection behavior remains fail closed.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_check_pr.py",
-          "subject": "PR archive compatibility and knowledge projection ownership"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "Validate synchronizationHistory with the lifecycle module before accepting a Contract base transition, then validate each generated knowledge record and traverse only its repository-relative evidence dependencies to find direct Summary ownership.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_check_pr.py",
-          "subject": "archive_base_is_compatible and archive_owns_knowledge_projection"
-        },
-        {
-          "source": "scripts/ai_check_knowledge_index.py",
-          "subject": "check_record"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
       {
-        "component": "scripts/ai_check_pr.py",
-        "detail": "Archive base compatibility and generated knowledge ownership checks.",
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "The exact provider-side cause of the historical Hosted apt mirror stall remains unproven from one run; the release workflow fix removes that external apt dependency.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": "scripts/ai_check_pr.py",
+        "subject": "implementation"
+      },
+      {
+        "source": "tests/test_pr_aggregate.py",
+        "subject": "verification"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+      }
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "PR evidence aggregation now follows the repository's canonical synchronization history and recognizes generated knowledge records only when their validated evidence dependency closure reaches a directly owned projection. Existing malformed-lineage and unowned-path rejection behavior remains fail closed.",
         "status": "verified",
         "evidence": [
           {
             "source": "scripts/ai_check_pr.py",
-            "subject": "PR aggregate audit"
+            "subject": "PR archive compatibility and knowledge projection ownership"
           }
         ]
       },
-      {
-        "component": "tests/test_pr_aggregate.py",
-        "detail": "Regression coverage for canonical lineage and dependency ownership.",
+      "mechanism": {
+        "text": "Validate synchronizationHistory with the lifecycle module before accepting a Contract base transition, then validate each generated knowledge record and traverse only its repository-relative evidence dependencies to find direct Summary ownership.",
         "status": "verified",
         "evidence": [
           {
-            "source": "tests/test_pr_aggregate.py",
-            "subject": "PR aggregate regression suite"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Reuse existing lifecycle and knowledge validators.",
-        "reason": "The audit must enforce the same evidence schemas used by lifecycle commands and knowledge index checks.",
-        "status": "verified",
-        "evidence": [
+            "source": "scripts/ai_check_pr.py",
+            "subject": "archive_base_is_compatible and archive_owns_knowledge_projection"
+          },
           {
-            "source": "scripts/ai_start_receipt.py",
-            "subject": "canonical synchronization history validator"
+            "source": "scripts/ai_check_knowledge_index.py",
+            "subject": "check_record"
           }
         ]
       },
-      {
-        "decision": "Do not grant broad ownership to all knowledge files.",
-        "reason": "Only a validated generated record whose dependency closure reaches a directly changed owned projection may pass.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_pr_aggregate.py",
-            "subject": "unowned knowledge projection rejection"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Compatibility",
-        "detail": "Existing resumeHistory handling and exact-base contracts remain supported; synchronizationHistory is selected when present.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_pr_aggregate.py",
-            "subject": "lineage compatibility regression coverage"
-          }
-        ]
-      }
-    ],
-    "evidence": [
-      {
-        "source": "scripts/ai_check_pr.py",
-        "subject": "implementation",
-        "claim": "The audit logic implements the bounded lineage and projection rules.",
-        "status": "verified"
-      },
-      {
-        "source": "tests/test_pr_aggregate.py",
-        "subject": "verification",
-        "claim": "The focused and full PR aggregate test suites pass.",
-        "status": "verified"
-      }
-    ]
+      "affectedComponents": [
+        {
+          "component": "scripts/ai_check_pr.py",
+          "detail": "Archive base compatibility and generated knowledge ownership checks.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_check_pr.py",
+              "subject": "PR aggregate audit"
+            }
+          ]
+        },
+        {
+          "component": "tests/test_pr_aggregate.py",
+          "detail": "Regression coverage for canonical lineage and dependency ownership.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "PR aggregate regression suite"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Reuse existing lifecycle and knowledge validators.",
+          "reason": "The audit must enforce the same evidence schemas used by lifecycle commands and knowledge index checks.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_start_receipt.py",
+              "subject": "canonical synchronization history validator"
+            }
+          ]
+        },
+        {
+          "decision": "Do not grant broad ownership to all knowledge files.",
+          "reason": "Only a validated generated record whose dependency closure reaches a directly changed owned projection may pass.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "unowned knowledge projection rejection"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Compatibility",
+          "detail": "Existing resumeHistory handling and exact-base contracts remain supported; synchronizationHistory is selected when present.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "lineage compatibility regression coverage"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "source": "scripts/ai_check_pr.py",
+          "subject": "implementation",
+          "claim": "The audit logic implements the bounded lineage and projection rules.",
+          "status": "verified"
+        },
+        {
+          "source": "tests/test_pr_aggregate.py",
+          "subject": "verification",
+          "claim": "The focused and full PR aggregate test suites pass.",
+          "status": "verified"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "en",
@@ -898,6 +959,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

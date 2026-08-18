@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-pr-audit-lineage-projections-20260819",
+  "title": "Fix PR audit for synchronized archive lineage and derived knowledge projections",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "PR evidence aggregation now follows the repository's canonical synchronization history and recognizes generated knowledge records only when their validated evidence dependency closure reaches a directly owned projection. Existing malformed-lineage and unowned-path rejection behavior remains fail closed.",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+    ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+    ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.json",
+    ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-pr-audit-lineage-projections-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Reuse existing lifecycle and knowledge validators.",
+      "reason": "The audit must enforce the same evidence schemas used by lifecycle commands and knowledge index checks.",
+      "status": "verified"
+    },
+    {
+      "decision": "Do not grant broad ownership to all knowledge files.",
+      "reason": "Only a validated generated record whose dependency closure reaches a directly changed owned projection may pass.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "scripts/ai_check_pr.py",
+      "digest": "a08efc07cba6a85aff308ff2db901c1eb257466df521592e2919780656fea744"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_pr_aggregate.py",
+      "digest": "c111136de55f40e9766bfc3d235d4c6d8d689f123a817fcdcd7abc24c831fb76"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_check_knowledge_index.py",
+      "digest": "947e1fc99c177e239f4d4d326340671bb46ae3b779e826b96eb451ef0df7f4de"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_start_receipt.py",
+      "digest": "58e2ea6e60e85827107432ac499965ca902cc0eb8126ed8d2812e8f760fd58f2"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+    "contractDigest": "65aee753c37b59f673f3ba344315132826c2ed08b6a40655595064aa6a0f1ecf",
+    "summaryPath": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+    "summaryDigest": "2872f8e476f59a77853ef73caf4248e3b349015d6662224082f05c74ba998923",
+    "outcomePath": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.json",
+    "outcomeDigest": "00190db58a78b61b20389a8ae497d5e31daaafde3c1076b6ed42476308e015d4"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

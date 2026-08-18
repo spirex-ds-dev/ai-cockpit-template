@@ -7,55 +7,57 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): 从已经合并且不可变的 #906 归档 Contract、Summary、Outcome 和 manifest 重新生成对应的 Implementation Knowledge record，再重建 knowledge index；不改写任何历史证据。
-Mechanism (verified): 生成器读取归档证据的当前字节和 digest，将 record 的 generatedFrom、evidence 与 archive binding 重新绑定，再由 index generator 生成确定性索引；ai-check-knowledge-index 负责验证所有绑定。
+Customer summary (verified): PR evidence aggregation now follows the repository's canonical synchronization history and recognizes generated knowledge records only when their validated evidence dependency closure reaches a directly owned projection. Existing malformed-lineage and unowned-path rejection behavior remains fail closed.
+Mechanism (verified): Validate synchronizationHistory with the lifecycle module before accepting a Contract base transition, then validate each generated knowledge record and traverse only its repository-relative evidence dependencies to find direct Summary ownership.
 
 Affected components
-- Merged #906 Implementation Knowledge record: Refreshes only the generated projection whose source digest bindings became stale after archive reindexing. (verified)
-- Deterministic knowledge index: Rebuilds the index from the refreshed record without changing archived evidence. (verified)
+- scripts/ai_check_pr.py: Archive base compatibility and generated knowledge ownership checks. (verified)
+- tests/test_pr_aggregate.py: Regression coverage for canonical lineage and dependency ownership. (verified)
 
 Design decisions
-- Regenerate projections instead of editing their JSON fields manually.: Generated bindings must remain evidence-derived and reproducible. (verified)
-- Leave archived Contract, Summary, Outcome, manifest, and archive index untouched.: The accepted #906 evidence is immutable; only its stale derived projection is repairable. (verified)
+- Reuse existing lifecycle and knowledge validators.: The audit must enforce the same evidence schemas used by lifecycle commands and knowledge index checks. (verified)
+- Do not grant broad ownership to all knowledge files.: Only a validated generated record whose dependency closure reaches a directly changed owned projection may pass. (verified)
 
 ### Technical details
-- Failure handling: The knowledge index checker fails closed when any generated record digest, source path, or index binding is stale or missing. (verified)
+- Compatibility: Existing resumeHistory handling and exact-base contracts remain supported; synchronizationHistory is selected when present. (verified)
 
 ### Evidence
-- The repaired record is derived from the immutable #906 archive rather than self-declared text.: .ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.archive-manifest.json#Archive digest binding (verified)
+- The audit logic implements the bounded lineage and projection rules.: scripts/ai_check_pr.py#implementation (verified)
+- The focused and full PR aggregate test suites pass.: tests/test_pr_aggregate.py#verification (verified)
 
-- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.contract.json [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.contract.json]
-- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.summary.json [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.summary.json]
-- Changed .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json [evidence: .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json]
-- Changed .ai/knowledge/index.json [evidence: .ai/knowledge/index.json]
-- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.outcome.json [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.json]
-- Changed .ai/work-items/active/repair-lock-lease-knowledge-projection-20260819.outcome.md [evidence: .ai/work-items/archive/2026/repair-lock-lease-knowledge-projection-20260819.outcome.md]
+- Changed scripts/ai_check_pr.py [evidence: scripts/ai_check_pr.py]
+- Changed tests/test_pr_aggregate.py [evidence: tests/test_pr_aggregate.py]
+- Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json [evidence: .ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json]
+- Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json [evidence: .ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json]
+- Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.json [evidence: .ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.json]
+- Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.md [evidence: .ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
+- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
+- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
+- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
+- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
+- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
+- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
 
 Problems found
-- Total: 2
+- Total: 1
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- Reason: aiScenarioCoverage failed before the retry. | Stage: verification | Resolution: Retry aiScenarioCoverage after correcting the recorded failure. [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
-- Reason: aiSummary failed before the retry. | Stage: verification | Resolution: Retry aiSummary after correcting the recorded failure. [evidence: verificationHistory[1] aiSummary failed, verification[aiSummary] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
 
 Problems resolved
-- Problem: aiScenarioCoverage failed before the retry.
-  Solution: Re-ran aiScenarioCoverage after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] aiScenarioCoverage failed, verification[aiScenarioCoverage] retry passed]
-- Problem: aiSummary failed before the retry.
-  Solution: Re-ran aiSummary after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[1] aiSummary failed, verification[aiSummary] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
-- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- The merged #906 Work Item cannot be closed until this repair is merged into origin/main and its exact merged knowledge projection is revalidated by ai-close-work-item; this repair changes only generated knowledge projections and does not alter production runtime behavior. [evidence: residualRisks]
+- The exact provider-side cause of the historical Hosted apt mirror stall remains unproven from one run; the release workflow fix removes that external apt dependency. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
@@ -64,6 +66,7 @@ Human decisions
 - None recorded.
 
 Verification
+- sourceBoundEvidence [evidence: sourceBoundEvidence]
 - aiWorkItem [evidence: aiWorkItem]
 - aiScope [evidence: aiScope]
 - aiGuards [evidence: aiGuards]
