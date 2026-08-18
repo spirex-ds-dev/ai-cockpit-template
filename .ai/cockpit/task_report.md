@@ -7,30 +7,30 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): The repository now treats the already published v0.5.66 provider assets as the published projection and prepares v0.5.67 as the next candidate without reusing an immutable tag.
-Mechanism (verified): Verified v0.5.66 release assets are downloaded with provider-reported SHA-256 digests, passed through the atomic synchronizer, and followed by candidate-only SBOM and provenance refresh against the merged source HEAD.
+Customer summary (verified): The repository now binds its published projection to the immutable public v0.5.67 Release and advances the next unpublished candidate to v0.5.68.
+Mechanism (verified): GitHub asset digests were verified against downloaded bytes, the canonical atomic synchronizer promoted the public assets, candidate SBOM/provenance were refreshed, and all source-bound documentation evidence was regenerated before readiness checks.
 
 Affected components
-- Published release projection: release.json and release-digests.json now bind v0.5.66 provider evidence. (verified)
-- Candidate release projection: release-state.json, next-release.json, version.json, and install.sh identify v0.5.67 as the unpublished candidate. (verified)
-- Candidate supply-chain evidence: SBOM and provenance are regenerated from the merged source HEAD and their digests are bound into next-release.json. (verified)
+- Published release projection: release.json and .ai/cockpit/release-digests.json now represent v0.5.67 provider evidence. (verified)
+- Candidate release projection: release-state.json, next-release.json, version.json, and install.sh identify v0.5.68 as the unpublished candidate. (verified)
+- Source-bound governance evidence: Capability Truth, Japanese assessment, and pre-release alignment evidence were regenerated after projection writes so evidenceSource digests match current bytes. (verified)
 
 Design decisions
-- Do not rewrite or reuse v0.5.66.: The provider tag and stable Release are immutable historical evidence; the next candidate must be v0.5.67. (verified)
-- Keep published and candidate projections separate.: Quick Install must remain bound to published release evidence while candidate metadata remains explicitly unpublished. (verified)
+- Use provider assets as the published source of truth.: The v0.5.67 tag and Release are immutable and the workflow verified exact source identity; local candidate metadata cannot replace public evidence. (verified)
+- Advance to v0.5.68 rather than reuse v0.5.67.: v0.5.67 is now reserved historical provider evidence and cannot be a future candidate. (verified)
+- Refresh evidence-bound summaries after projection changes.: Capability evidenceSource values are hashes of current source/test bytes; stale summaries must block readiness and be regenerated before completion. (verified)
 
 ### Technical details
-- Atomic synchronization: The synchronizer validates release and manifest tags, source identity, asset digests, reserved-tag evidence, and all writes before replacing projections. (verified)
-- Candidate evidence: Candidate SBOM/provenance are regenerated from HEAD; public v0.5.66 release digests remain the historical published projection. (verified)
+- Provider asset verification: GitHub reported release.json SHA-256 980d7143ebf6affac6f4aeb5b7341b28813bb35b0064e9c570f03948652396c5 and release-digests.json SHA-256 41a69d563ceac38693dc10648068d1d55cc6328b48b211251b48b9fe0e0a1763; downloaded bytes matched both. (verified)
+- Known evidence-binding root cause: Initial readiness correctly detected capabilities[8] and capabilities[15] evidenceSource summaries were stale after current WI bytes changed. Canonical generators refreshed the summaries and the same readiness gate then passed its source-bound checks. (verified)
 
 ### Evidence
-- The stable v0.5.66 release is validated against public assets.: scripts/check_release_distribution.py#release distribution check (verified)
-- The next candidate is v0.5.67 and is not published.: next-release.json#candidate metadata (verified)
-- Candidate supply-chain files match their declared digests.: scripts/check_supply_chain.py#provenance and release checks (verified)
+- The published projection is bound to v0.5.67 provider evidence.: release.json#published release projection (verified)
+- The next unpublished candidate is v0.5.68.: next-release.json#candidate release projection (verified)
 
-- Changed .ai/work-items/active/release-v067-preparation.contract.json [evidence: .ai/work-items/archive/2026/release-v067-preparation.contract.json]
-- Changed .ai/work-items/active/release-v067-preparation.summary.json [evidence: .ai/work-items/archive/2026/release-v067-preparation.summary.json]
-- Changed .ai/work-items/starts/release-v067-preparation.json [evidence: .ai/work-items/starts/release-v067-preparation.json]
+- Changed .ai/work-items/active/release-v067-projection-sync.contract.json [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.contract.json]
+- Changed .ai/work-items/active/release-v067-projection-sync.summary.json [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.summary.json]
+- Changed .ai/work-items/starts/release-v067-projection-sync.json [evidence: .ai/work-items/starts/release-v067-projection-sync.json]
 - Changed release.json [evidence: release.json]
 - Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
 - Changed release-state.json [evidence: release-state.json]
@@ -40,42 +40,46 @@ Design decisions
 - Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
 - Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
 - Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
 - Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
 - Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
 - Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/work-items/active/release-v067-preparation.outcome.json [evidence: .ai/work-items/archive/2026/release-v067-preparation.outcome.json]
-- Changed .ai/work-items/active/release-v067-preparation.outcome.md [evidence: .ai/work-items/archive/2026/release-v067-preparation.outcome.md]
+- Changed .ai/work-items/active/release-v067-projection-sync.outcome.json [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.outcome.json]
+- Changed .ai/work-items/active/release-v067-projection-sync.outcome.md [evidence: .ai/work-items/archive/2026/release-v067-projection-sync.outcome.md]
+- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
 
 Problems found
-- Total: 2
+- Total: 3
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- None recorded.
+- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
 
 Problems resolved
 - Problem: observed issue
-  Solution: Supplied the real GitHub Release evidence URL and stable_release_unverified classification; synchronization then completed atomically.
-  Evidence: [evidence: observedIssues[0] observed issue, observedIssues[0] observed issue]
-- Problem: observed issue
-  Solution: Ran refresh-candidate-release-evidence SOURCE_COMMIT=HEAD and verified provenance, release, and candidate digest checks.
-  Evidence: [evidence: observedIssues[1] observed issue, observedIssues[1] observed issue, observedIssues[1] observed issue]
+  Solution: Ran the canonical --write generators for Capability Truth, Japanese capability assessment, and pre-release documentation alignment before rerunning readiness.
+  Evidence: [evidence: regenerated current byte hashes, repository readiness source-bound checks]
+- Problem: aiGuidelines failed before the retry.
+  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Problem: aiGuidelines failed before the retry.
+  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] aiGuidelines failed, verification[aiGuidelines] retry passed]
 
 Risks avoided
-- None recorded.
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- This preparation WI intentionally stops at the evidence-bound v0.5.67 candidate; formal publication remains a separate exact-source release operation and is not claimed here. [evidence: residualRisks]
+- None recorded.
 
 Unknowns
 - None recorded.
 
 Human decisions
-- Complete the existing WI goals before publishing a new version; Outcome green is not itself the release goal. (inference)
-- Do not allow a stale or reused release candidate to enter a future publication workflow. (inference)
+- None recorded.
 
 Verification
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
@@ -97,9 +101,9 @@ Verification
 - aiSummary [evidence: aiSummary]
 
 Impact
-- Rework avoided: None recorded.
+- Rework avoided: If not detected, could have led to a stale completion claim. (inference)
 - Repeat correction prevented: unknown: no direct recurrence probability evidence was recorded. (inference)
-- Major risk prevented: None recorded.
+- Major risk prevented: If not detected, could have led to a stale completion claim. (inference)
 
 Next action
 - Bind conversation locale and preserve evidence details before the next Work Item starts. (inference)
