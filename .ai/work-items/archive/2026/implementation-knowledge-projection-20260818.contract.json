@@ -1,0 +1,317 @@
+{
+  "contractVersion": 2,
+  "workItemId": "implementation-knowledge-projection-20260818",
+  "mode": "code",
+  "title": "Add evidence-bound implementation knowledge projection",
+  "baseCommit": "50223b0b70055c27b92065874c144e25c1270721",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/implementation-knowledge-projection-20260818.contract.json",
+    ".ai/work-items/active/implementation-knowledge-projection-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/implementation-knowledge-projection-20260818.outcome.json",
+    ".ai/work-items/active/implementation-knowledge-projection-20260818.outcome.md",
+    ".ai/knowledge/**",
+    ".ai/guards/coverage_policy.yaml",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/ai_generate_knowledge_record.py",
+    "scripts/ai_check_knowledge_index.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_start.py",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_outcome_gate.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_generate_human_report.py",
+    "scripts/ai_check_pr.py",
+    ".ai/schemas/implementation-knowledge-record.schema.json",
+    ".ai/schemas/implementation-knowledge-index.schema.json",
+    "scripts/ai_installer_catalog.json",
+    ".ai/project/adopter-capability-manifest.json",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_implementation_knowledge.py",
+    "tests/test_knowledge_installer_parity.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/implementation-knowledge.md",
+    "docs/superpowers/plans/2026-08-18-implementation-knowledge-projection.md",
+    "docs/reference/documentation-context-registry.json"
+  ],
+  "outOfScope": [
+    "Knowledge Query Interface implementation; it is the serial WI-2 consumer of this projection.",
+    "Semantic search, embeddings, LLM relevance ranking, current-code semantic validation, or customer-answer generation.",
+    "Backfilling missing historical Implementation Approach or Design Reason facts by inference.",
+    "Changes to external adopter CI, GitHub settings, branch protection, hosted providers, or production systems.",
+    "Changing the authoritative Contract, Summary, Evidence, or Outcome model into a new fact source."
+  ],
+  "rawUserRequest": "Implementation Knowledge Projection: 在 Work Item Close 时，将已有 Summary/Outcome 中的实现知识压缩为可检索 projection，不成为新的事实源；生成 .ai/knowledge/work-items/<id>.json 和 .ai/knowledge/index.json，保留 unknown/partial，绑定 Summary/Outcome digest，stale 时 fail-closed，并纳入 adopter installer parity。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:implementation-knowledge-projection-20260818#Implementation Knowledge Projection",
+    "capturedAt": "2026-08-18T17:00:00+09:00",
+    "digest": "sha256:60ba50f006dca75efb0d46b806dc9518c0123c069238be8c40c30b4302c6827b"
+  },
+  "authorityEvidence": {
+    "type": "direct_user_request",
+    "source": "user explicitly requested the two-capability implementation and said to begin the corresponding work",
+    "reference": "user-request:implementation-knowledge-projection-20260818#WI-1",
+    "capturedAt": "2026-08-18T17:00:00+09:00"
+  },
+  "declaredIntent": {
+    "requestedCapabilities": ["ai_governance", "software_design", "documentation", "test_automation"],
+    "operation": "repository_governance.modify",
+    "summary": "Make implementation knowledge an evidence-bound, rebuildable projection with verified/partial/unknown states and fresh-adopter parity."
+  },
+  "requestedOperation": {
+    "kind": "repository_governance.modify",
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": true,
+    "reason": "This changes repository runtime, schemas, installer delivery, generated knowledge artifacts, tests, and documentation."
+  },
+  "sources": [
+    {
+      "path": "user-request:implementation-knowledge-projection-20260818",
+      "reason": "User-provided requirements for the two capabilities, record fields, status model, fail-closed rules, lifecycle, and adopter parity."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Existing Summary/Outcome Implementation Approach projection and applicability behavior."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Existing machine-readable Outcome contract that remains authoritative."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Existing installer delivery catalog and adopter-facing surface."
+    },
+    {
+      "path": ".ai/project/adopter-capability-manifest.json",
+      "reason": "Existing capability truth and installed parity manifest."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and authority boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "knowledge_integrity",
+      "installer_parity",
+      "generated_artifact_drift",
+      "interface_contract"
+    ],
+    "reason": "A projection that overclaims verified knowledge or is missing from adopter installation would damage trust; the authoritative evidence chain must remain unchanged and all generated artifacts must be rebuildable.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item changes evidence-bound knowledge output, schemas, installer catalog, and adopter parity."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized implementation of the two requested capabilities; high-risk evidence and installer boundaries remain enforced by the Contract and verification gates."
+  },
+  "preReviewWarnings": [
+    "Verified Knowledge Record claims must be derived from existing Summary/Outcome evidence and must fail closed on missing, stale, or mismatched evidence.",
+    "Legacy Work Items must remain partial/unknown; no inferred historical Implementation Approach may be written."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A code Work Item with evidence-bound implementationApproach produces .ai/knowledge/work-items/<work-item-id>.json with implementation, designDecisions, effects, evidence, mergedCommit, generatedFrom.summaryDigest, generatedFrom.outcomeDigest, and knowledgeState.",
+    "The projection reads existing Contract, Summary, Outcome, and evidence only; missing Implementation Approach or Design Reason remains unknown/partial and is never inferred.",
+    "Verified projection claims are emitted only when evidence paths exist, evidence digests are current when declared, Work Item identity matches, and Summary/Outcome projections agree; otherwise the record is partial/unknown and the checker fails closed.",
+    "The deterministic .ai/knowledge/index.json can be rebuilt from work-item records and contains only lightweight workItemId/title/topics/components/state fields plus record path, with stable ordering and no semantic-search data.",
+    "The projection records source digests and the checker detects stale Summary/Outcome sources or missing record files without rewriting authoritative archives.",
+    "The projection command and schemas are delivered through the installer catalog, adopter capability manifest, Make targets, and fresh-adopter parity tests; the installed runtime can generate/check the same record and index.",
+    "Unit, negative, schema, legacy-partial, rebuild, stale-digest, and installed-parity tests pass, and the projection documentation states the immutable-authority and fail-closed boundaries.",
+    "The Work Item produces a direct green Outcome only after all declared local governance checks and project tests pass; no Query Interface or natural-language answer generation is included."
+  ],
+  "guidelines": [
+    "Knowledge Record is a rebuildable projection; Contract, Summary, Evidence, and Outcome remain authoritative.",
+    "Do not infer missing historical Implementation Approach, Design Reason, current validity, or supersession relationships.",
+    "Do not add semantic search, embeddings, LLM ranking, or customer-answer generation to the Core.",
+    "Every verified projection claim must retain repository-relative evidence and fail closed when the evidence is missing, stale, or mismatched.",
+    "Any adopter-facing runtime/schema/Make capability must be present in the installer catalog and proven by a fresh-adopter parity test."
+  ],
+  "intent": {
+    "problem": "The repository records what changed and has evidence-bound Implementation Approach in Summary/Outcome, but it cannot yet produce a small rebuildable knowledge projection that an external Agent can retrieve without parsing the entire archive. Historical absence must remain visible, and adopter installations must receive the same capability.",
+    "constraints": [
+      "The projection is not a new fact source; it must be derived from existing Contract, Summary, Evidence, Outcome, and Git merge identity.",
+      "Unknown/partial legacy states must be preserved without AI backfill or current-code semantic validation.",
+      "The first version supports deterministic structured artifacts only; Query Interface and natural-language answers are a separate serial WI.",
+      "Installed adopter capability must be verified from a fresh adopter fixture, not inferred from template files or catalog declarations alone."
+    ],
+    "rationale": "A bounded projection gives external Agents a trustworthy retrieval surface while preserving the existing evidence chain and preventing self-declared or stale implementation knowledge from being presented as verified."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "verified-code-work-item",
+      "status": "unverified",
+      "reason": "Implementation and tests will establish the first verified projection path.",
+      "expected": "A verified record contains the matching implementation, evidence, and source digests.",
+      "verificationPlan": "Run the focused verified fixture and schema validation in tests/test_implementation_knowledge.py.",
+      "required": true,
+      "evidence": ["tests/test_implementation_knowledge.py"]
+    },
+    {
+      "scenario": "legacy-partial-work-item",
+      "status": "unverified",
+      "reason": "A fixture will prove missing facts remain partial/unknown.",
+      "expected": "A legacy record is partial/unknown and contains no inferred implementation or design reason.",
+      "verificationPlan": "Run the legacy fixture assertions in tests/test_implementation_knowledge.py.",
+      "required": true,
+      "evidence": ["tests/test_implementation_knowledge.py"]
+    },
+    {
+      "scenario": "stale-or-mismatched-evidence",
+      "status": "unverified",
+      "reason": "Negative tests will prove stale and contradictory sources fail closed.",
+      "expected": "Missing, stale, mismatched, or contradictory evidence cannot produce verified knowledge.",
+      "verificationPlan": "Run negative and stale-digest assertions in tests/test_implementation_knowledge.py.",
+      "required": true,
+      "evidence": ["tests/test_implementation_knowledge.py"]
+    },
+    {
+      "scenario": "deterministic-index-rebuild",
+      "status": "unverified",
+      "reason": "Rebuild tests will prove stable ordering and a lightweight index.",
+      "expected": "Two index rebuilds are byte-stable and contain only the documented lightweight fields.",
+      "verificationPlan": "Run index rebuild and field-boundary assertions in tests/test_implementation_knowledge.py.",
+      "required": true,
+      "evidence": ["tests/test_implementation_knowledge.py"]
+    },
+    {
+      "scenario": "fresh-adopter-parity",
+      "status": "unverified",
+      "reason": "The installed parity fixture will prove both runtime entrypoints are usable after installation.",
+      "expected": "Fresh adopter installation contains both scripts, both schemas, Make targets, and executable entrypoints.",
+      "verificationPlan": "Run the fresh-adopter installer parity test in tests/test_knowledge_installer_parity.py.",
+      "required": true,
+      "evidence": ["tests/test_knowledge_installer_parity.py"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "direct_user_request:implementation-knowledge-projection-20260818",
+    "reason": "The user explicitly requested implementation of the evidence-bound projection, installer parity, lifecycle integration, and release-facing governance surfaces."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 959
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/implementation-knowledge-projection-20260818.json",
+    "baseCommit": "50223b0b70055c27b92065874c144e25c1270721",
+    "initialScopeDigest": "44cc75a193326354a1c78a2b0f3ba724021c0600e005755fc4968553bbc9cc6d",
+    "contractSkeletonDigest": "32580c1235ede95ae69a6dc78f01ceb61cdbbacfa8188ed9d05e4a0f43a61e3c"
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "implementation-knowledge-projection-20260818",
+  "title": "Add evidence-bound implementation knowledge projection",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在 Work Item 归档完成后，从既有 Contract、Summary、Outcome 和仓库证据生成可重建的 Implementation Knowledge Record；关闭流程再校验记录与来源 digest，缺失或过期时 fail-closed。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.contract.json",
+    ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/project/adopter-capability-manifest.json",
+    ".ai/schemas/implementation-knowledge-index.schema.json",
+    ".ai/schemas/implementation-knowledge-record.schema.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/implementation-knowledge.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_knowledge_index.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_outcome_gate.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_generate_human_report.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_start.py",
+    "scripts/ai_generate_knowledge_record.py",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_implementation_knowledge.py",
+    "tests/test_knowledge_installer_parity.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/superpowers/plans/2026-08-18-implementation-knowledge-projection.md",
+    "docs/reference/documentation-context-registry.json",
+    ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.outcome.json",
+    ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.outcome.md",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.archive-manifest.json",
+    ".ai/knowledge/work-items/implementation-knowledge-projection-20260818.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Contract、Summary、Outcome 和 Evidence 保持唯一事实源",
+      "reason": "知识记录只能是 projection，不能通过 Agent 记忆或 diff 推断缺失事实。",
+      "status": "verified"
+    },
+    {
+      "decision": "第一版索引只支持确定性轻量字段，不加入语义检索",
+      "reason": "WI-2 查询层需要独立治理，避免 projection 隐式承担 LLM/RAG 行为。",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "digest": "a63b55c25b5572ffedc2276a93c1d74202b65c3514629d60df4ff70d9129e150"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_knowledge_installer_parity.py",
+      "digest": "844d617a7dc6e778b50300b489abde5228c2eebb1a7bb55b7d3c81cc4ebd5dc4"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_archive_work_item.py",
+      "digest": "b172c1bebd60a2bf8527df5b2b0558e99df54f79bb710757311cd689874cfdb9"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_close_work_item.py",
+      "digest": "2e85f308d930a5acafa0a8f41723002bf4debe8cd8d2fcf85f6d83a52ca25e66"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_check_knowledge_index.py",
+      "digest": "23807ce09447a6490f12d878f55537caf8f8aeb3350562f5daff144177a79f37"
+    },
+    {
+      "type": "code",
+      "path": ".ai/schemas/implementation-knowledge-record.schema.json",
+      "digest": "3684de7f2c022da8aee794324befddec9c4445f9ea419fac359611ef10fcfc78"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/implementation-knowledge.md",
+      "digest": "93216936f64d49d9209b5d288dc635d84929f3b9dc1b51b9dc03838d581ed28e"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_implementation_knowledge.py",
+      "digest": "a43a2e322541ef1c136da129631d13619037628946aa6f801006763abe16b1e0"
+    }
+  ],
+  "mergedCommit": null,
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.contract.json",
+    "contractDigest": "626f26da783b902a3b41c8ae11a880b7b5b53e753e7266f99fa9a3c2c118b6b0",
+    "summaryPath": ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.summary.json",
+    "summaryDigest": "edc5d021533b51eab73ac9ff7997f23910f157321bfa2239c8011119d439af5f",
+    "outcomePath": ".ai/work-items/archive/2026/implementation-knowledge-projection-20260818.outcome.json",
+    "outcomeDigest": "6c2c8fd781d17fbefb5716571b4ae8b4dfc7c8802dc2d922978066e77e2a6b70"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

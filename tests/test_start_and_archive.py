@@ -290,6 +290,12 @@ def test_ai_start_main_creates_unrelated_contract_despite_real_foreign_duplicate
     assert ai_start.main() == 0
     assert (active / "new-task.contract.json").exists()
     assert (active / "new-task.summary.json").exists()
+    contract = json.loads((active / "new-task.contract.json").read_text(encoding="utf-8"))
+    assert {
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
+        ".ai/knowledge/**",
+    }.issubset(contract["scope"])
     assert (
         foreign / ".ai/work-items/active/other-task.contract.json"
     ).read_bytes() == foreign_contract
@@ -2698,7 +2704,7 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     monkeypatch.setattr(
         ai_generate_human_report,
         "generate_human_report",
-        lambda value, *, phase, closure_facts=None: {
+        lambda value, *, phase, closure_facts=None, contract=None: {
             "workItemId": value["workItemId"],
             "source": value["sections"]["evidence"][0]["source"],
             "phase": phase,
@@ -2839,6 +2845,8 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
             ".ai/cockpit/current_status.md",
             ".ai/cockpit/task_report.json",
             ".ai/cockpit/task_report.md",
+            ".ai/knowledge/index.json",
+            ".ai/knowledge/work-items/task.json",
         }
         for item in data["changedFiles"]
     )

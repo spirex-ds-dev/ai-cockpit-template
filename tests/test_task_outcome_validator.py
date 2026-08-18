@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+import ai_finish
+
 from scripts.ai_check_task_outcome import validate_outcome
 from scripts.ai_generate_task_outcome import generate_outcome, render_markdown
 
@@ -47,6 +49,59 @@ def test_valid_empty_outcome_passes_and_all_statuses_are_allowed() -> None:
             candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
         )
         assert report.valid, report.errors
+
+
+def test_expected_pre_merge_merge_identity_stays_residual_not_yellow(
+    tmp_path: Path, monkeypatch
+) -> None:
+    task = "pre-merge-knowledge"
+    contract_path = tmp_path / f"{task}.contract.json"
+    summary_path = tmp_path / f"{task}.summary.json"
+    contract_path.write_text(
+        json.dumps(
+            {
+                "workItemId": task,
+                "rawUserRequest": "Project evidence-bound implementation knowledge.",
+                "baseCommit": "a" * 40,
+                "verification": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "verification": [],
+                "knownGaps": [
+                    "Merged commit identity is intentionally null until a post-merge binding exists; no inference is performed."
+                ],
+                "residualRisks": [
+                    {
+                        "area": "merge_identity",
+                        "level": "medium",
+                        "detail": "The post-merge identity is not available before merge.",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+
+    payload = ai_finish._pre_merge_outcome_input(task, contract_path, summary_path, "en")
+    candidate = generate_outcome(
+        task,
+        payload["bindings"],
+        evidence=payload["evidence"],
+        events=payload["evidence"].get("events", []),
+    )
+
+    assert candidate["status"] == "completed"
+    assert candidate["humanStatusColor"] == "green"
+    assert candidate["sections"]["warnings"] == []
+    assert candidate["sections"]["residualRisks"][0]["title"] == "merge_identity"
 
 
 def test_new_outcome_diagnostics_reject_missing_or_contradictory_fields() -> None:
@@ -112,6 +167,49 @@ def test_verified_implementation_claim_requires_an_existing_repository_path() ->
 
     assert not report.valid
     assert any(error.code == "implementation_approach_evidence" for error in report.errors)
+
+
+def test_active_contract_scope_allows_untracked_implementation_evidence(monkeypatch) -> None:
+    candidate = outcome()
+    candidate["sections"]["implementationApproach"] = {
+        "approachType": "implementation",
+        "status": "complete",
+        "summary": {
+            "text": "The projection is rebuilt from governed Work Item evidence.",
+            "status": "verified",
+            "evidence": [
+                {"source": "scripts/ai_generate_knowledge_record.py", "subject": "generator"}
+            ],
+        },
+        "mechanism": {
+            "text": "The checker validates source and evidence bindings.",
+            "status": "verified",
+            "evidence": [{"source": "scripts/ai_check_knowledge_index.py", "subject": "checker"}],
+        },
+        "affectedComponents": [],
+        "designDecisions": [],
+        "technicalDetails": [],
+        "evidence": [],
+    }
+    contract = {
+        "contractVersion": 2,
+        "scope": [
+            "scripts/ai_generate_knowledge_record.py",
+            "scripts/ai_check_knowledge_index.py",
+        ],
+    }
+    monkeypatch.setattr(
+        "scripts.ai_check_summary._is_git_tracked_repository_path", lambda _path: False
+    )
+
+    report = validate_outcome(
+        candidate,
+        render_markdown(candidate),
+        expected_task_id="task-outcome-validator",
+        contract=contract,
+    )
+
+    assert report.valid, report.errors
 
 
 def test_historical_generator_version_remains_readable_without_diagnostics() -> None:

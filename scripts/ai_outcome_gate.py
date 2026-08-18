@@ -50,7 +50,12 @@ def validate_terminal_outcome(
     outcome = loaded
 
     try:
-        validation = validate_outcome(outcome, markdown, expected_task_id=expected_task_id)
+        validation = validate_outcome(
+            outcome,
+            markdown,
+            expected_task_id=expected_task_id,
+            contract=load_json(contract_path),
+        )
     except (KeyError, TypeError, ValueError) as exc:
         issues.append(f"Outcome schema validation raised an error: {exc}")
     else:
