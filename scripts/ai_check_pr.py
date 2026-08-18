@@ -38,7 +38,7 @@ from ai_lifecycle_truth import (
     superseded_summary_validation_exception,
 )
 from ai_outcome_gate import validate_terminal_outcome
-from ai_post_archive_recovery import archive_files, RECEIPT_DIRECTORY, validate_recovery_receipt
+from ai_post_archive_recovery import RECEIPT_DIRECTORY, archive_files, validate_recovery_receipt
 from ai_start_receipt import validate_receipt, validate_resume_history_structure
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
