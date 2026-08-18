@@ -1,0 +1,294 @@
+{
+  "contractVersion": 2,
+  "workItemId": "implementation-approach-evidence",
+  "mode": "code",
+  "title": "Evidence-bound Implementation Approach across Summary, Task Outcome, and Human Report",
+  "rawUserRequest": "把 Implementation Approach / 实现方式作为 AI Cockpit 的正式、证据绑定的知识记录，贯穿 Summary -> Task Outcome -> Human Report；从指定 origin/main 建立专用分支/工作树；建立 contractVersion: 2 active Contract，读 glossary，执行 preflight，先写失败测试再实现；保持 Changes、Implementation Approach、Evidence 语义分离；code/config 缺失 Approach 为 incomplete/warning，不升级为安全红色；只修改 Summary/Outcome/Report 的 schema、validator、generator、相关测试与必要说明，不修改 installer catalog/parity、Makefile 或 verification runtime；更新 Summary，运行相关测试与 AI checks，返回证据且不 merge/release/close WI。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-implementation-approach-evidence",
+    "capturedAt": "2026-08-18",
+    "digest": "sha256:user-authorized-implementation-approach-evidence"
+  },
+  "declaredIntent": {
+    "summary": "Add an evidence-bound Implementation Approach knowledge record to the existing Summary, Task Outcome, and Human Benefit Report chain.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/implementation-approach-evidence.contract.json",
+    ".ai/work-items/active/implementation-approach-evidence.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/implementation-approach-evidence.outcome.json",
+    ".ai/work-items/active/implementation-approach-evidence.outcome.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/schemas/task_outcome.schema.json",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_generate_human_report.py",
+    "scripts/ai_finish.py",
+    ".ai/cockpit/README.md",
+    "tests/test_ai_check_summary.py",
+    "tests/test_task_outcome_schema.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_task_outcome_markdown_renderer.py",
+    "tests/test_human_benefit_report.py",
+    "tests/test_task_outcome_ai_finish_integration.py"
+  ],
+  "outOfScope": [
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_installer.py",
+    "templates/**",
+    "install.sh",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_check_status_consistency.py",
+    ".ai/verification/**",
+    "Halley/**",
+    "Goodall/**"
+  ],
+  "sources": [
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines Summary, Repository Truth, Evidence, and governance boundaries."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Existing Summary validator is the source validation boundary."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Existing Task Outcome projection consumes Summary truth."
+    },
+    {
+      "path": "scripts/ai_generate_human_report.py",
+      "reason": "Existing Human Benefit Report projection consumes Task Outcome truth."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Existing machine-readable Task Outcome schema."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Existing integration evidence for the unchanged Finish pipeline."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Repository capability mapping used by preflight evidence-dependency checks."
+    }
+  ],
+  "unknowns": [
+  ],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "schema_compatibility",
+      "evidence_integrity"
+    ],
+    "reason": "The change adds a bounded field across existing Summary, Outcome, and Human Report projections; historical records must remain readable and unsupported factual claims must remain visibly unverified.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Schema, validator, generator, and focused test changes are repository governance work with medium evidence-integrity risk."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, evidence sources, acceptance, scenarios, and verification are explicit; implementation remains confined to Summary/Outcome/Report surfaces and related tests."
+  },
+  "preReviewWarnings": [
+    "Review that verified approach claims retain evidence references and that missing code/config approach is yellow incomplete rather than a security red signal.",
+    "Review that historic Task Outcome and Human Benefit Report records remain readable without retroactive rewriting."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Summary validation accepts a structured implementationApproach with customer summary, mechanism, affectedComponents, designDecisions, technicalDetails, and evidence; code/config Work Items require the relevant approach while bug-investigation-only is optional and documentation-only is not_applicable.",
+    "Every verified factual approach statement has at least one evidence reference, and unsupported statements are accepted only with unverified or unknown status; forbidden internal-thinking and operation-log fields are rejected.",
+    "Task Outcome JSON and Markdown, then Human Benefit Report JSON and Markdown, project the approach from Summary without changing existing Outcome status, traffic-light, findings, risks, or evidence semantics; customer-facing summary appears before progressive technical detail.",
+    "Focused regression tests cover complete, incomplete/warning, not_applicable, evidence-bound, unsupported-claim, and no-benchmark cases without changing installer catalog/parity or verification runtime files.",
+    "The implementation remains evidence-conservative: it describes observable path/mechanism changes and never claims performance improvement without benchmark evidence."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "AI Cockpit currently records what changed and why a review should trust the result, but it does not retain a first-class, evidence-bound explanation of how the change works across Summary, Task Outcome, and Human Benefit Report.",
+    "constraints": [
+      "Summary is the canonical source; Outcome and Human Benefit Report are projections.",
+      "Only Summary/Outcome/Report schemas, validators, generators, related tests, and necessary explanation may change.",
+      "Do not modify installer catalog/parity files, Makefile, or verification runtime.",
+      "Do not record Agent internal reasoning or verbose operation logs; do not overclaim unbenchmarked performance improvements."
+    ],
+    "rationale": "A small typed approach record with claim status and evidence references gives customers an understandable explanation while preserving progressive technical disclosure and existing traffic-light/evidence semantics."
+  },
+  "problemStatement": "Make Implementation Approach a formal, evidence-bound knowledge record that travels from Summary to Task Outcome to Human Benefit Report without weakening existing status or evidence semantics.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Code Work Item with complete evidence-bound implementationApproach",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Must be executed after implementation.",
+      "expected": "Summary validator accepts the approach, Outcome and Human Report expose it, and focused tests pass.",
+      "verificationPlan": "Run focused Summary, Outcome schema/validator/generator, and Human Report tests after the implementation."
+    },
+    {
+      "scenario": "Code/config Work Item missing the required approach",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Must be executed after validator tests are added.",
+      "expected": "Validation reports incomplete/warning semantics and does not classify the gap as a security red signal.",
+      "verificationPlan": "Run focused validator tests asserting warning/incomplete classification and preserved traffic-light behavior."
+    },
+    {
+      "scenario": "Unsupported factual approach claim without evidence",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Must be executed after evidence-binding tests are added.",
+      "expected": "Verified claims without evidence are rejected; unknown/unverified claims remain explicitly non-confirmed.",
+      "verificationPlan": "Run focused evidence-binding tests for verified, unverified, unknown, and no-benchmark fixtures."
+    },
+    {
+      "scenario": "Documentation-only Work Item",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "The current Work Item changes governance code and tests, not a documentation-only Work Item."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized this Work Item's Summary/Outcome/Report schema, validator, generator, test, and necessary documentation changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 953
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/implementation-approach-evidence.json",
+    "baseCommit": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+    "initialScopeDigest": "7cd4361f618a3f5a09b9018ad6c939579ddc85e3810f41d10cc44c818175184f",
+    "contractSkeletonDigest": "bbc30d8112b5cfae406488bc7f35c7c0e6be58dc3e70c40dac56be9e28fb11c8"
+  }
+}

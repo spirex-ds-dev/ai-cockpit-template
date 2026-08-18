@@ -1,0 +1,950 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "implementation-approach-evidence",
+  "contractPath": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
+      "reason": "Defines the v2 scope, acceptance, scenarios, and verification boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/implementation-approach-evidence.summary.json",
+      "reason": "Records the canonical evidence-bound Implementation Approach and verification handoff."
+    },
+    {
+      "path": ".ai/work-items/starts/implementation-approach-evidence.json",
+      "reason": "Binds the Work Item start to the dedicated branch and base commit."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Documents the Changes, Implementation Approach, and Evidence separation."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status for the active Work Item."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated Human Report JSON projection for the active Work Item."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated Human Report Markdown projection for the active Work Item."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Adds the structured Outcome Implementation Approach projection without making it mandatory for historic records."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Generated capability evidence identities refreshed before sourceBoundEvidence."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "Declared capability truth Markdown projection registered with source-bound evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Generated documentation alignment evidence refreshed after the capability matrix changed."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Generated documentation alignment Markdown refreshed after the capability matrix changed."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Generated Japanese capability assessment JSON refreshed with source-bound evidence."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Generated Japanese capability assessment Markdown refreshed with source-bound evidence."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Owns the cataloged root-aware Implementation Approach validator and code/config completeness assessment."
+    },
+    {
+      "path": "scripts/ai_check_task_outcome.py",
+      "reason": "Validates Outcome approach claims and preserves historic section sets."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Projects the Summary approach through the ai_finish evidence source into Outcome JSON/Markdown."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome.py",
+      "reason": "Renders the structured approach with customer summary before technical detail."
+    },
+    {
+      "path": "scripts/ai_generate_human_report.py",
+      "reason": "Projects the Outcome approach into Human Report JSON/Markdown."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Refreshes capability truth evidence before sourceBoundEvidence and records the generation binding."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Covers scope applicability, yellow missing data, and real repository evidence paths."
+    },
+    {
+      "path": "tests/test_task_outcome_schema.py",
+      "reason": "Covers the machine-readable approach schema projection."
+    },
+    {
+      "path": "tests/test_task_outcome_validator.py",
+      "reason": "Covers verified evidence requirements and unknown claim handling."
+    },
+    {
+      "path": "tests/test_task_outcome_generator.py",
+      "reason": "Covers Summary projection, ai_finish input shape, incomplete warning, and no-benchmark language."
+    },
+    {
+      "path": "tests/test_task_outcome_markdown_renderer.py",
+      "reason": "Keeps the Outcome Markdown projection covered."
+    },
+    {
+      "path": "tests/test_human_benefit_report.py",
+      "reason": "Covers direct Human Report JSON/Markdown projection and progressive disclosure."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Covers source-bound evidence refresh ordering and fail-closed refresh failure."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.json",
+      "reason": "Generated Task Outcome projection."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.md",
+      "reason": "Generated Task Outcome Markdown projection."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/implementation-approach-evidence.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/implementation-approach-evidence.contract.json",
+    ".ai/glossary.md",
+    ".ai/cockpit/README.md",
+    ".ai/schemas/task_outcome.schema.json",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_generate_human_report.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_capability_truth.py",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_pre_release_documentation_alignment.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "tests/test_ai_check_summary.py",
+    "tests/test_task_outcome_schema.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_task_outcome_markdown_renderer.py",
+    "tests/test_human_benefit_report.py",
+    "tests/test_task_outcome_ai_finish_integration.py"
+  ],
+  "implementationApproach": {
+    "approachType": "implementation",
+    "status": "complete",
+    "summary": {
+      "text": "Customers can see what changed, how the governed result is produced, and which repository evidence supports it.",
+      "status": "verified",
+      "evidence": [
+        {
+          "source": "scripts/ai_generate_task_outcome.py",
+          "subject": "Outcome projection"
+        },
+        {
+          "source": "scripts/ai_generate_human_report.py",
+          "subject": "Human Report projection"
+        }
+      ]
+    },
+    "mechanism": {
+      "text": "Summary implementationApproach is read from the ai_finish Summary evidence source, validated against real repository paths, and projected into Outcome and Human Report JSON/Markdown views.",
+      "status": "verified",
+      "evidence": [
+        {
+          "source": "scripts/ai_check_summary.py",
+          "subject": "root-aware evidence validation"
+        },
+        {
+          "source": "scripts/ai_generate_task_outcome.py",
+          "subject": "Summary evidence source loading"
+        },
+        {
+          "source": "tests/test_task_outcome_generator.py",
+          "subject": "ai_finish Summary source projection"
+        }
+      ]
+    },
+    "affectedComponents": [
+      {
+        "component": "Summary",
+        "detail": "Stores the canonical structured approach and evidence references.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_summary.py",
+            "subject": "Summary approach validator"
+          }
+        ]
+      },
+      {
+        "component": "Task Outcome",
+        "detail": "Carries the same approach with customer-facing and progressive technical rendering.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_generate_task_outcome.py",
+            "subject": "implementationApproach section"
+          }
+        ]
+      },
+      {
+        "component": "Human Report",
+        "detail": "Carries the same approach in direct JSON and Markdown output.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_generate_human_report.py",
+            "subject": "implementationApproach report projection"
+          }
+        ]
+      }
+    ],
+    "designDecisions": [
+      {
+        "decision": "Keep Summary as the source of truth and make Outcome/Human Report projections deterministic.",
+        "reason": "The existing ai_finish evidence source carries the Summary path; ai_finish now refreshes the capability truth projection before its source-bound gate without changing verification runtime semantics.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_finish.py",
+            "subject": "sourceBoundEvidence lifecycle synchronization"
+          },
+          {
+            "source": "tests/test_task_outcome_ai_finish_integration.py",
+            "subject": "refresh ordering and fail-closed behavior"
+          }
+        ]
+      },
+      {
+        "decision": "Require real repository-relative evidence for verified approach claims.",
+        "reason": "A non-empty source/subject pair cannot prove a factual implementation claim by itself.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_summary.py",
+            "subject": "_valid_repository_evidence_path"
+          },
+          {
+            "source": "tests/test_ai_check_summary.py",
+            "subject": "missing repository evidence path"
+          }
+        ]
+      },
+      {
+        "decision": "Do not infer performance improvement without benchmark evidence.",
+        "reason": "The record describes observable path and mechanism changes and retains no benchmark claim.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "tests/test_task_outcome_generator.py",
+            "subject": "no benchmark performance guard"
+          }
+        ]
+      }
+    ],
+    "technicalDetails": [
+      {
+        "topic": "Completeness states",
+        "detail": "Code scope requires implementationApproach; configuration scope requires configurationApproach; missing Summary input becomes yellow incomplete/warning, while standalone legacy projection remains not_applicable.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "tests/test_ai_check_summary.py",
+            "subject": "code/config applicability"
+          },
+          {
+            "source": "tests/test_task_outcome_generator.py",
+            "subject": "missing approach warning"
+          }
+        ]
+      },
+      {
+        "topic": "Progressive disclosure",
+        "detail": "Customer summary and mechanism render before affected components, design decisions, technical details, and evidence.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "tests/test_human_benefit_report.py",
+            "subject": "summary before technical details"
+          }
+        ]
+      },
+      {
+        "topic": "Source-bound evidence refresh",
+        "detail": "When the capability truth matrix and generator are present, ai_finish runs the existing generator with --write before check-source-bound-evidence, records matrix before/after digests, and blocks without running the original gate if refresh fails.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_finish.py",
+            "subject": "refresh_source_bound_evidence"
+          },
+          {
+            "source": "tests/test_task_outcome_ai_finish_integration.py",
+            "subject": "matrix refresh and failed refresh tests"
+          }
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "claim": "Verified approach references are checked against real repository files.",
+        "status": "verified",
+        "source": "scripts/ai_check_summary.py",
+        "subject": "validate_implementation_approach"
+      },
+      {
+        "claim": "The ai_finish Summary source reaches Outcome without manual approach injection.",
+        "status": "verified",
+        "source": "tests/test_task_outcome_generator.py",
+        "subject": "ai_finish Summary source projection"
+      },
+      {
+        "claim": "Human Report JSON and Markdown expose the approach directly.",
+        "status": "verified",
+        "source": "tests/test_human_benefit_report.py",
+        "subject": "direct report projection"
+      },
+      {
+        "claim": "sourceBoundEvidence consumes refreshed capability evidence and records its generated file binding.",
+        "status": "verified",
+        "source": "tests/test_task_outcome_ai_finish_integration.py",
+        "subject": "refresh before source-bound check"
+      }
+    ]
+  },
+  "verification": [
+    {
+      "check": "sourceBoundEvidence",
+      "command": "make check-source-bound-evidence",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:01.237606+00:00",
+      "exitCode": 0,
+      "durationMs": 827,
+      "outputDigest": "e51c15d673da9344fb3b52494d1e1dadc5efc897ced397d5417b3a196feafdb1",
+      "commandHash": "d86740d1d67217b831acef07cf8c7dfdf9a5216b5917b64f95de6e72269f5dc3",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "6440ac90eeacec6173d1b72801a326f41fca491de88ca0d6bf3b8b636131a912",
+      "outputSummary": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=5bc7dd470805d0c6e8d71fc15307100d2ad40d7a117e16f3ecc0f7c64d5504d4, after=e227898f8997ff54773a48eef99595ea5a5bdbb4d2067477abb067b7d319ee4a; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
+      "outputTail": "\": \"cd903bb0db29dc389698ccd519947859085d093ea26ab55a04b96ef5268cd154\" }, { \"path\": \"tests/test_guards_and_status.py\", \"sha256\": \"e7b96c338468de33bf4b7f2cb87989fd79003e11e4a6934c1728bc7567a98d72\" }, { \"path\": \"tests/test_input_trust.py\", \"sha256\": \"6228386f8b4b9667791d27adb527b4837fd4b42ad160c5ac1b7be728beb47fb9\" }, { \"path\": \"tests/test_input_trust_corpus.py\", \"sha256\": \"a5196c1965c10dc84bb8641cef0128c928d67d506ec2be10a40c5df3f5265dde\" }, { \"path\": \"tests/test_install_wizard.py\", \"sha256\": \"2683e49865bc52083587eb282778c41d276c8263a4e8f5bc27b75199b56169e5\" }, { \"path\": \"tests/test_japanese_adopter_lifecycle.py\", \"sha256\": \"153c9a5a169605f5a42c4cd0dc2c7a6f6918c678bc1b9dc838141948229adeb7\" }, { \"path\": \"tests/test_japanese_capability.py\", \"sha256\": \"848a4820e76f007d29e005c684d874b19a904bb3690fcfca6295f6c6ba6b0ba7\" }, { \"path\": \"tests/test_makefile.py\", \"sha256\": \"bcdf7657f674bfe4e4a33b2c8545a72ec68c97c74ad9cd7832b9f883efc7c753\" }, { \"path\": \"tests/test_task_outcome_multilingual.py\", \"sha256\": \"3f04b876fd84ae3362c274766cf5aa5430ff2bd8686c469a3ed776d9973f4cca\" }, { \"path\": \"tests/test_task_outcome_pr_summary.py\", \"sha256\": \"407c8cb2717cb1fc1664d5f706d4a5187720329137f235277d3e7fed87ced239\" }, { \"path\": \"tests/test_trust_layer_docs.py\", \"sha256\": \"8230686f3332b7b670efe8e0cbdb60eac8653618fa80ddf244f79b21f5005ac7\" }, { \"path\": \"tests/test_wizard_localization.py\", \"sha256\": \"a7161e9d05d8bd5a2d7116aff553cf36880776a1b870f7aea241529f65f28d38\" } ] }, \"limitations\": [ \"This assessment does not claim general model fluency, translation quality, or provider behavior.\", \"Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking.\" ], \"scope\": \"bounded repository-governance Japanese handling\", \"workItemId\": \"final-japanese-reassessment-replacement-20260731\", \"workItemRole\": \"final_reassessment\" } PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/check_pre_release_documentation_alignment.py pre-release documentation alignment passed",
+      "outputBytes": 51188
+    },
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:01.520193+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "eb2f1f7f07c32a2ddab32d176c548fd465cc5ac2faf0cb568f068e025b1fbca0",
+      "commandHash": "717aa3a8852834396d6dd12496eea5807d79e99208d4d9946ba6bf6782518239",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "14b4eaaee6e35aec02d8762e90873a20e1b4d990166d9b1c6a40a61e4929a72d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/implementation-approach-evidence.contract.json work item contract check passed: .ai/work-items/active/implementation-approach-evidence.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/implementation-approach-evidence.contract.json work item contract check passed: .ai/work-items/active/implementation-approach-evidence.contract.json",
+      "outputBytes": 345
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:01.910324+00:00",
+      "exitCode": 0,
+      "durationMs": 223,
+      "outputDigest": "f3dc4d1bddad2e9d217874f9e11b51ad0f7c875fc374767bf23cba5962fe488e",
+      "commandHash": "0531af5f7038a1ed6d322d44a906ee37f721d14f70ef58887987f1ee35f32dce",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "784f38b735950d23eb3a2cefab2b705e65988de3afdbea5a6f695b0ed87a1938",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/implementation-approach-evidence.contract.json scope guard passed: 26 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/implementation-approach-evidence.contract.json scope guard passed: 26 changed path(s) covered",
+      "outputBytes": 286
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:02.660711+00:00",
+      "exitCode": 0,
+      "durationMs": 561,
+      "outputDigest": "2d486bbf6ac356f1abfd34729b8aabc2df63ce7f5dfeef4114f15b77c9309f4d",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "21698b51301172c573ac85b4c3dd3bff2424f5db4cc1e99503726bb88c60abe4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/schemas/task_outcome.schema.json (.ai/**) - AI governance configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/schemas/task_outcome.schema.json (.ai/**) - AI governance configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 518
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:05.255611+00:00",
+      "exitCode": 0,
+      "durationMs": 2349,
+      "outputDigest": "adb5cb17dfb6cf0bcef8537efb76ab87c86ab1c5ff709620954ac503907dd090",
+      "commandHash": "c9595284c0b84e763e98ecc8aa0bb35728db8b365acdee986807c3fc7d1d7d74",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "4a0a1a225357004fa122c855b89e7fb2cf97a2074a32e451ebc05fe8018d1050",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `implementation-approach-evidence` - Contract Hash: `51a4e8504358512b` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unkn",
+      "outputTail": "ope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/implementation-approach-evidence.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_summary.py` — covered by Contract scope - [active_owned] `scripts/ai_check_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_human_report.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome.py` — covered by Contract scope - [active_owned] `tests/test_ai_check_summary.py` — covered by Contract scope - [active_owned] `tests/test_human_benefit_report.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_generator.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_markdown_renderer.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_schema.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_validator.py` — covered by Contract scope ## Next Action - Ready for final status generation and human review.",
+      "outputBytes": 7701
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:05.747898+00:00",
+      "exitCode": 0,
+      "durationMs": 306,
+      "outputDigest": "bfe3c585f0c8605a5af0de9b365a40605e98df501df41cab93e063c2bdc99f63",
+      "commandHash": "ee8c55a4783ce04cbaf8ad8c9fe70eb191b913fe77baf59d54ca7d158090441f",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "22f075839de250a127cd6f25824ab201157ffe98fb600c42c23ef707830f619f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/implementation-approach-evidence.summary.json review policy matched 15 path(s) [review] .ai/work-items/active/implementation-approach-evidence.contract.json [review] .ai/work-items/active/implementation-approach-evidence.outcome.json [review] .ai/work-items/active/implementation-approach-evidence.outcome.md [review] .ai/work-items/starts/implementation-approach-evidence.jso",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/implementation-approach-evidence.summary.json review policy matched 15 path(s) [review] .ai/work-items/active/implementation-approach-evidence.contract.json [review] .ai/work-items/active/implementation-approach-evidence.outcome.json [review] .ai/work-items/active/implementation-approach-evidence.outcome.md [review] .ai/work-items/starts/implementation-approach-evidence.json [review] .ai/cockpit/README.md [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/schemas/task_outcome.schema.json [review] scripts/ai_check_summary.py [review] scripts/ai_check_task_outcome.py [review] scripts/ai_finish.py [review] scripts/ai_generate_human_report.py [review] scripts/ai_generate_task_outcome.py [review] scripts/ai_render_task_outcome.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 1097
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:06.200602+00:00",
+      "exitCode": 0,
+      "durationMs": 289,
+      "outputDigest": "47d2b454ba473f6cb464d3376d1b7514add034dff0397695bcfbcf461cd74c07",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "4dc498670a2250260a68fc6030ff09f216447a8fbbcc62a90b5d3fa7893598d1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 241
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:06.805273+00:00",
+      "exitCode": 0,
+      "durationMs": 415,
+      "outputDigest": "6c0a636e57f967a17b91d7d8fdf061a50bfabe9368f5138a14f55d49356893fe",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "b3bcdbb2616015f2ef8c2406deb3fb6fe83d9a3cf41602331880e09ad9225784",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 250
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:07.186884+00:00",
+      "exitCode": 0,
+      "durationMs": 172,
+      "outputDigest": "5e7f7fdbcc57c8d60e5ff7356b40a1fb26b9612615503cd8ca22f1ce0d932b4c",
+      "commandHash": "5d8a663f9f33450211ee7e08b1804df3e3fdd7457a023d44ae409e5e9e340cc2",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "eed55cdd5e763c9c0e9db619a6e8af6c6a2d9b998d22b0a0f5694e1aa9ec16ef",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 478
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:07.575657+00:00",
+      "exitCode": 0,
+      "durationMs": 154,
+      "outputDigest": "e63126fe8ad4fc071c7fb6e08b7d9ed5a6ff16063fc34200c6164536f9c8ed14",
+      "commandHash": "7f837985de3664f503b36c1efdeb12585831f141bc99c425727bece3e72a2003",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "d4dab137a992ada6128e313dc5aa2597a28d4c8a4029e6176e1daa7c91ae8418",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputBytes": 393
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:33:09.522669+00:00",
+      "exitCode": 0,
+      "durationMs": 1797,
+      "outputDigest": "7afa3251fc88b9cb027593e160e8923ceba8a75025de3dd52048167a6628b7d9",
+      "commandHash": "f252612a01dcd28ed1ebe61eb5ff8b3d41ff60afcde33492cb741c462af08db5",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "812e5df9cb984e24b6d481559c533d80559ae4e948964fce5cffcb4cdec5f556",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json ## Diff Ownership Preview - active_owned: `26`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_repor",
+      "outputTail": "wned] `.ai/schemas/task_outcome.schema.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.outcome.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.outcome.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/implementation-approach-evidence.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/implementation-approach-evidence.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_summary.py` — covered by Contract scope - [active_owned] `scripts/ai_check_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_human_report.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_task_outcome.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome.py` — covered by Contract scope - [active_owned] `tests/test_ai_check_summary.py` — covered by Contract scope - [active_owned] `tests/test_human_benefit_report.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_generator.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_markdown_renderer.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_schema.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_validator.py` — covered by Contract scope",
+      "outputBytes": 2869
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:51:15.347663+00:00",
+      "exitCode": 0,
+      "durationMs": 1085359,
+      "outputDigest": "9f248ac3a78f6ead62ca68e5593737790f8e428a516660f06e4d8d7d0d5d4275",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "3d1771e3fa9309b605e3a1c422b93a595558569e9b393d6fc92e32d87bd0f359",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/README.md, .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, .ai/schemas/task_outcome.schema.json, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json",
+      "outputTail": "check-ai-test-weakening.json\" --log \"target/quality/sessions/bce5d48422c7-local-20260818T033310Z-44881-0/logs/check-ai-test-weakening.log\" -- \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory check-ai-test-weakening PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_test_weakening.py --root . --mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"bce5d48422c77695d8fd86ddb2019de1e77f1194\", \"decision\": \"continue\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"No recovery action is required for the analyzed diff.\", \"requiredExplanation\": false, \"signals\": [], \"version\": 1} \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-aggregate PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory project-test-receipt PROJECT_TEST_RECEIPT=target/quality/project-test-aggregate/receipt.json PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt \"target/quality/project-test-aggregate/receipt.json\" quality gate summary written: target/quality/sessions/bce5d48422c7-local-20260818T033310Z-44881-0/summary.json",
+      "outputBytes": 78554
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:51:19.135674+00:00",
+      "exitCode": 0,
+      "durationMs": 1893,
+      "outputDigest": "94bfd6739a92e9681ff9c2b4ec7628273d9dbc386b1cf9c5ba7ac90702acd5c1",
+      "commandHash": "f3f1c510399006b09d68508ad36d4f8b49a4421379272c7902c67f672e179fef",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "3b7b9566c64c207691797b03429f545ec696b276fbd21688b2456a9e5d191fe6",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 479
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:51:22.724706+00:00",
+      "exitCode": 0,
+      "durationMs": 1729,
+      "outputDigest": "96813d5bbe1ec8082f9b3e4330bf1195d0a640c0585efd3397c5ba9ac44692b0",
+      "commandHash": "6fa2f35da3ba326536f36e94e14b1eac0ea28de0a43aec010ee4240209b4a451",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "fdaf436f53c82eb80238877252808571529f993084d08f890bc0c7e4f45cc006",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 418
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:51:24.771004+00:00",
+      "exitCode": 0,
+      "durationMs": 65,
+      "outputDigest": "f0cd92f86c60b3428a0c7c77e50b16de88bbd5789cb770e5c910657fb5306b8e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "4a5327c81dfb6d5a77510219372e163b97a15b718744fd3565dd4555a4ba4d9f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 218
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:51:24.948354+00:00",
+      "exitCode": 0,
+      "durationMs": 65,
+      "outputDigest": "e3b4db7c8a34eb580d54ea4e3af0767b25eb1194e4399ff2ff478737b9a8c6f4",
+      "commandHash": "cede7819213cef52c43b751a079e4d47a6ce2128d2c6da1d0aece1c333642b4d",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "656437a4c6a89e6a70ac04653d85b3f32893157ba10801970c371a63217a638a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/implementation-approach-evidence.contract.json --summary .ai/work-items/active/implementation-approach-evidence.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 398
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/implementation-approach-evidence.summary.json CONTRACT=.ai/work-items/active/implementation-approach-evidence.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T03:51:30.406872+00:00",
+      "exitCode": 0,
+      "durationMs": 779,
+      "outputDigest": "7e00231a7c9ebc428c7e797434a74357bf06faae3bc4f0c1f4aa321a1bc04d68",
+      "commandHash": "3fb6cd80b5c1c2959371f868a9417b470ef0313ce85346899eaa3c2cf7aa5d9c",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "f110c7277a8cbc10145b29c4ab391b881e854ba32a65940c591cdebb4688a694",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/implementation-approach-evidence.summary.json --contract .ai/work-items/active/implementation-approach-evidence.contract.json ai summary check passed: .ai/work-items/active/implementation-approach-evidence.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/implementation-approach-evidence.summary.json --contract .ai/work-items/active/implementation-approach-evidence.contract.json ai summary check passed: .ai/work-items/active/implementation-approach-evidence.summary.json",
+      "outputBytes": 414,
+      "outcomeInputDigest": "d68a27c3c0187ea5ada737b4a198c1c31b5912f7e7a0ef0383505d75b0878acc"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": ".ai/cockpit/README.md documents the new Summary/Outcome/Report contract."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "Outcome validation reuses the cataloged Summary validator; no new helper module or installer catalog entry was added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Schema compatibility and evidence integrity remain bounded risks; historic Outcome/Human Report records are accepted without requiring the new section."
+  },
+  "generatedFiles": [
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.json",
+    ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "benchmark and hosted evidence",
+      "detail": "No benchmark or hosted environment evidence was run; the implementation record makes no performance-improvement claim and remains bounded to repository code and tests.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm every verified approach claim remains bound to an existing repository path.",
+      "Confirm installer catalog/parity, Makefile, and verification runtime remain untouched."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "bcf1c29a1d768e4e",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "bcf1c29a1d768e4e",
+      "previousContractHash": "bcf1c29a1d768e4e",
+      "contractHash": "d94b634b9287af47",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Bind the actual ai-finish Human Report JSON and Markdown projection paths into this Work Item scope.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-18T01:55:51.252636+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "bcf1c29a1d768e4e",
+      "previousContractHash": "d94b634b9287af47",
+      "contractHash": "2b6c0635122ad076",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "Record the user authorization required by the repository restricted-write guard for the declared governance schema and documentation paths.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-18T01:56:31.689259+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "bcf1c29a1d768e4e",
+      "previousContractHash": "2b6c0635122ad076",
+      "contractHash": "ec65c1c12330b9fb",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "User-authorized lifecycle synchronization: refresh capability truth before sourceBoundEvidence, record generated evidence, and fail closed on refresh failure.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-18T02:02:07.548961+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "bcf1c29a1d768e4e",
+      "previousContractHash": "ec65c1c12330b9fb",
+      "contractHash": "1e8173c38b435a39",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "The existing sourceBoundEvidence gate also validates its generated pre-release documentation alignment projection after capability truth refresh; include those generated evidence paths so the original gate can pass without changing runtime logic.",
+      "verificationStarted": false,
+      "invalidatedRequiredChecks": [],
+      "requiredChecksPassedAtAmendment": 0,
+      "recordedAt": "2026-08-18T02:06:58.166809+00:00"
+    },
+    {
+      "stage": "contract_amendment_revalidation",
+      "recorded": true,
+      "originalBeforeEditContractHash": "bcf1c29a1d768e4e",
+      "previousContractHash": "1e8173c38b435a39",
+      "contractHash": "51a4e8504358512b",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "reason": "User-authorized lifecycle binding of every declared source-bound generated documentation output: capability matrix JSON/Markdown, pre-release alignment JSON/Markdown, and Japanese assessment JSON/Markdown.",
+      "verificationStarted": true,
+      "invalidatedRequiredChecks": [
+        "aiWorkItem",
+        "aiScope",
+        "aiGuards",
+        "aiCheckpoint",
+        "aiAgentRisk",
+        "aiReviewPolicy",
+        "aiBacktrack",
+        "aiCoverage",
+        "aiScenarioCoverage",
+        "aiGuidelines",
+        "aiSummary",
+        "aiStatus",
+        "aiStatusCheck",
+        "aiStatusConsistency",
+        "aiDiffOwnership",
+        "quality"
+      ],
+      "requiredChecksPassedAtAmendment": 6,
+      "recordedAt": "2026-08-18T02:11:58.418467+00:00"
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "51a4e8504358512b",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 16
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-18T23:00:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/README.md"
+        ],
+        "reason": "The Work Item Contract and implementation approach are reflected in the governance guide."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/README.md"
+        ],
+        "reason": "The guide documents Summary as source of truth and Outcome/Human Report as projections."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/README.md",
+          ".ai/work-items/archive/2026/implementation-approach-evidence.outcome.md",
+          ".ai/cockpit/task_report.md",
+          "docs/reference/pre-release-documentation-alignment.json",
+          "docs/reference/pre-release-documentation-alignment.md",
+          "docs/reference/capability-truth-matrix.json",
+          "docs/reference/capability-truth-matrix.md",
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "The guide documents the evidence-bound fields and their conservative status semantics."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/README.md"
+        ],
+        "reason": "The projection keeps customer summary and technical detail semantics locale-neutral."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/README.md"
+        ],
+        "reason": "The guide records unknown/unverified and no-benchmark limitations without rewriting historic records."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/implementation-approach-evidence.outcome.json",
+    "markdownPath": ".ai/work-items/active/implementation-approach-evidence.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 9,
+    "humanStatusColor": "green",
+    "completionFact": "All declared finish checks passed.",
+    "recoveryCondition": ""
+  },
+  "verificationHistory": [
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "failed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T02:16:32.271799+00:00",
+      "exitCode": 2,
+      "durationMs": 21605,
+      "outputDigest": "db52958031dc43faba71ffcd650e771fa8d5ba017bd3b668550333f0f34e06cf",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "14e9d7107768232c364acf2f09e2d0a249f81fea2cf69825bd3b71cc2147bc83",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/README.md, .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, .ai/schemas/task_outcome.schema.json, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json",
+      "outputTail": "----------------------------------------------------------------------- 1225 | \"_human_report_paths\", - lambda: (tmp_path / \".ai/cockpit/task_report.json\", tmp_path / \".ai/cockpit/task_report.md\"), 1226 + lambda: ( 1227 + tmp_path / \".ai/cockpit/task_report.json\", 1228 + tmp_path / \".ai/cockpit/task_report.md\", 1229 + ), 1230 | ) | unformatted: File would be reformatted --> tests/test_task_outcome_generator.py:1:1 | 96 | summary_path.write_text( - json.dumps({\"changedFiles\": [], \"verification\": [], \"implementationApproach\": implementation_approach()}), 97 + json.dumps( 98 + { 99 + \"changedFiles\": [], 100 + \"verification\": [], 101 + \"implementationApproach\": implementation_approach(), 102 + } 103 + ), 104 | encoding=\"utf-8\", | 8 files would be reformatted, 400 files already formatted make[7]: *** [project-lint] Error 1 make[7]: *** [project-format-check] Error 1 🔴 quality-full blocked Failed gate: project-format-check Recovery: /Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make -f Makefile --no-print-directory project-format-check Outcome: target/quality/sessions/bce5d48422c7-local-20260818T021629Z-81558-0/timing/project-format-check.json Log: target/quality/sessions/bce5d48422c7-local-20260818T021629Z-81558-0/logs/project-format-check.log 🔴 quality-full blocked Failed gate: project-lint Recovery: /Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make -f Makefile --no-print-directory project-lint Outcome: target/quality/sessions/bce5d48422c7-local-20260818T021629Z-81558-0/timing/project-lint.json Log: target/quality/sessions/bce5d48422c7-local-20260818T021629Z-81558-0/logs/project-lint.log make[6]: *** [qg-project-lint] Error 2 make[6]: *** Waiting for unfinished jobs.... make[6]: *** [qg-project-format-check] Error 2 make[5]: *** [quality-fast-static] Error 2 make[4]: *** [quality-fast-owned] Error 2 make[3]: *** [quality-fast] Error 2 make[2]: *** [quality-full-owned] Error 2 make[1]: *** [quality-full] Error 2 make: *** [ai-cockpit-quality] Error 2",
+      "outputBytes": 34405
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality GOVERNANCE_PROFILE=strict",
+      "result": "failed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-18T02:31:57.812375+00:00",
+      "exitCode": 2,
+      "durationMs": 780231,
+      "outputDigest": "1e0fee671bdf728073ffd7a80c49cdd586bee8be1d2a10c7a5eed85cbd8a37fd",
+      "commandHash": "e9589e6d07367af0027719354a354539e4f4ff284dd5a2d2bd35631b228fcf51",
+      "contractHash": "51a4e8504358512b9d18be7e6758c47c149f4072b6198dd162639c989ea5d66a",
+      "commitSha": "bce5d48422c77695d8fd86ddb2019de1e77f1194",
+      "executionContractPath": ".ai/work-items/active/implementation-approach-evidence.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/implementation-approach-evidence.summary.json",
+      "worktreeDigest": "13c7bb462f57bc837a336af9e81422611441997e362526e95f0c6956c50c0886",
+      "outputSummary": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\", \"unknown\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/README.md, .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, .ai/schemas/task_outcome.schema.json, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json",
+      "outputTail": "json PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/run_quality_gate.py --gate check-ai-test-weakening --category project-consistency --session-id \"bce5d48422c7-local-20260818T021856Z-93247-0\" --run-id \"local\" --output \"target/quality/sessions/bce5d48422c7-local-20260818T021856Z-93247-0/timing/check-ai-test-weakening.json\" --log \"target/quality/sessions/bce5d48422c7-local-20260818T021856Z-93247-0/logs/check-ai-test-weakening.log\" -- \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory check-ai-test-weakening PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_test_weakening.py --root . --mode full --policy .ai/guards/test_weakening_policy.yaml {\"baseRef\": \"bce5d48422c77695d8fd86ddb2019de1e77f1194\", \"decision\": \"continue\", \"limitations\": [\"Static signals do not prove semantic equivalence or complete test coverage.\"], \"mode\": \"full\", \"recoveryCondition\": \"No recovery action is required for the analyzed diff.\", \"requiredExplanation\": false, \"signals\": [], \"version\": 1} make[7]: *** [project-test-shard-core] Error 1 make[7]: *** Waiting for unfinished jobs.... make[7]: *** [project-test-shard-governance] Error 1 make[7]: *** [project-test-shard-lifecycle] Error 1 make[7]: *** [project-test-shard-installer] Error 1 make[7]: *** [project-test-shard-release] Error 1 make[6]: *** [project-test-owned] Error 2 make[5]: *** [project-test] Error 2 🔴 quality-full blocked Failed gate: project-test Recovery: /Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make -f Makefile --no-print-directory project-test Outcome: target/quality/sessions/bce5d48422c7-local-20260818T021856Z-93247-0/timing/project-test.json Log: target/quality/sessions/bce5d48422c7-local-20260818T021856Z-93247-0/logs/project-test.log make[4]: *** [qg-project-test] Error 2 make[3]: *** [quality-heavy] Error 2 make[2]: *** [quality-full-owned] Error 2 make[1]: *** [quality-full] Error 2 make: *** [ai-cockpit-quality] Error 2",
+      "outputBytes": 78071
+    }
+  ],
+  "archiveSequence": 950
+}

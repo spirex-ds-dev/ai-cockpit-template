@@ -796,6 +796,180 @@ def ensure_active_evidence_changed_files(task: str, summary_path: Path) -> None:
     save_json(summary_path, summary)
 
 
+SOURCE_BOUND_MATRIX_RELATIVE = "docs/reference/capability-truth-matrix.json"
+SOURCE_BOUND_MATRIX_MARKDOWN_RELATIVE = "docs/reference/capability-truth-matrix.md"
+SOURCE_BOUND_GENERATOR_RELATIVE = "scripts/ai_capability_truth.py"
+SOURCE_BOUND_JAPANESE_GENERATOR_RELATIVE = "scripts/ai_japanese_capability.py"
+SOURCE_BOUND_JAPANESE_RELATIVES = (
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+)
+SOURCE_BOUND_ALIGNMENT_GENERATOR_RELATIVE = "scripts/check_pre_release_documentation_alignment.py"
+SOURCE_BOUND_ALIGNMENT_RELATIVES = (
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+)
+SOURCE_BOUND_DECLARED_GENERATED_RELATIVES = (
+    SOURCE_BOUND_MATRIX_RELATIVE,
+    SOURCE_BOUND_MATRIX_MARKDOWN_RELATIVE,
+    *SOURCE_BOUND_ALIGNMENT_RELATIVES,
+    *SOURCE_BOUND_JAPANESE_RELATIVES,
+)
+
+
+def _file_sha256(path: Path) -> str:
+    if not path.is_file():
+        return "missing"
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _record_source_bound_generation(
+    summary_path: Path,
+    *,
+    path: str,
+    before_sha256: str,
+    after_sha256: str,
+) -> None:
+    """Bind a source-bound generated document to the active Summary evidence."""
+    summary = load_json(summary_path)
+    changed = summary.get("changedFiles")
+    if not isinstance(changed, list):
+        changed = []
+        summary["changedFiles"] = changed
+    if not any(isinstance(item, dict) and item.get("path") == path for item in changed):
+        changed.append(
+            {
+                "path": path,
+                "reason": (
+                    "Generated source-bound evidence during ai_finish; "
+                    f"sha256 before={before_sha256}, after={after_sha256}."
+                ),
+            }
+        )
+    generated = summary.get("generatedFiles")
+    if not isinstance(generated, list):
+        generated = []
+        summary["generatedFiles"] = generated
+    if path not in generated:
+        generated.append(path)
+
+    alignment = summary.get("documentationAlignment")
+    checks = alignment.get("checks") if isinstance(alignment, dict) else None
+    if isinstance(checks, list):
+        for check in checks:
+            if (
+                not isinstance(check, dict)
+                or check.get("area") != "documentationCommandsCapability"
+            ):
+                continue
+            evidence = check.get("evidence")
+            if isinstance(evidence, list) and path not in evidence:
+                evidence.append(path)
+            break
+    save_json(summary_path, summary)
+
+
+def _record_existing_source_bound_outputs(
+    summary_path: Path,
+    paths: tuple[str, ...],
+    before_sha256: dict[str, str],
+) -> None:
+    """Register every declared output, including unchanged projections."""
+    for relative in paths:
+        path = PROJECT_ROOT / relative
+        if path.is_file():
+            after = _file_sha256(path)
+            _record_source_bound_generation(
+                summary_path,
+                path=relative,
+                before_sha256=before_sha256.get(relative, after),
+                after_sha256=after,
+            )
+
+
+def refresh_source_bound_evidence(*, summary_path: Path) -> tuple[int, int, str]:
+    """Refresh capability evidence before the source-bound gate runs.
+
+    The refresh is intentionally fail-closed when configured.  Repositories
+    without the capability truth pair retain the historical no-op behavior.
+    """
+    matrix_path = PROJECT_ROOT / SOURCE_BOUND_MATRIX_RELATIVE
+    generator_path = PROJECT_ROOT / SOURCE_BOUND_GENERATOR_RELATIVE
+    if not matrix_path.is_file() or not generator_path.is_file():
+        return (
+            0,
+            0,
+            "sourceBoundEvidence refresh skipped: capability truth configuration is absent",
+        )
+
+    details: list[str] = []
+    total_duration = 0
+
+    def run_generator(
+        relative_generator: str,
+        outputs: tuple[str, ...],
+        label: str,
+        *,
+        required_outputs: tuple[str, ...] | None = None,
+    ) -> int:
+        nonlocal total_duration
+        before = {relative: _file_sha256(PROJECT_ROOT / relative) for relative in outputs}
+        code, duration, output = run([sys.executable, relative_generator, "--write"])
+        total_duration += duration
+        after = {relative: _file_sha256(PROJECT_ROOT / relative) for relative in outputs}
+        details.append(
+            f"{label} generated: "
+            + "; ".join(
+                f"{relative} sha256 before={before[relative]}, after={after[relative]}"
+                for relative in outputs
+            )
+        )
+        if output:
+            details.append(output)
+        _record_existing_source_bound_outputs(summary_path, outputs, before)
+        required = required_outputs if required_outputs is not None else outputs
+        missing = [relative for relative in required if after[relative] == "missing"]
+        if code == 0 and missing:
+            details.append(f"{label} refresh failed: missing output(s): {', '.join(missing)}")
+            return 1
+        return code
+
+    matrix_outputs = (
+        SOURCE_BOUND_MATRIX_RELATIVE,
+        SOURCE_BOUND_MATRIX_MARKDOWN_RELATIVE,
+    )
+    code = run_generator(
+        SOURCE_BOUND_GENERATOR_RELATIVE,
+        matrix_outputs,
+        "capability truth",
+        required_outputs=(SOURCE_BOUND_MATRIX_RELATIVE,),
+    )
+    if code != 0:
+        return code, total_duration, "\n".join(details)
+
+    japanese_generator = PROJECT_ROOT / SOURCE_BOUND_JAPANESE_GENERATOR_RELATIVE
+    if japanese_generator.is_file():
+        code = run_generator(
+            SOURCE_BOUND_JAPANESE_GENERATOR_RELATIVE,
+            SOURCE_BOUND_JAPANESE_RELATIVES,
+            "Japanese capability assessment",
+        )
+        if code != 0:
+            return code, total_duration, "\n".join(details)
+
+    alignment_generator = PROJECT_ROOT / SOURCE_BOUND_ALIGNMENT_GENERATOR_RELATIVE
+    if alignment_generator.is_file():
+        code = run_generator(
+            SOURCE_BOUND_ALIGNMENT_GENERATOR_RELATIVE,
+            SOURCE_BOUND_ALIGNMENT_RELATIVES,
+            "pre-release documentation alignment",
+        )
+        if code != 0:
+            return code, total_duration, "\n".join(details)
+
+    return 0, total_duration, "\n".join(details)
+
+
 def prepare_documentation_alignment_evidence(task: str, summary_path: Path) -> None:
     """Bind already-declared generated Markdown before Finish validates docs.
 
@@ -816,7 +990,11 @@ def prepare_documentation_alignment_evidence(task: str, summary_path: Path) -> N
         return
     report_markdown = _human_report_paths()[1].relative_to(PROJECT_ROOT).as_posix()
     outcome_markdown = _outcome_paths(task)[1].relative_to(PROJECT_ROOT).as_posix()
-    documented_generated_paths = {report_markdown, outcome_markdown}
+    documented_generated_paths = {
+        report_markdown,
+        outcome_markdown,
+        *SOURCE_BOUND_DECLARED_GENERATED_RELATIVES,
+    }
     changed = summary.get("changedFiles", [])
     declared_paths = {item.get("path") for item in changed if isinstance(item, dict)}
     for check in checks:
@@ -1505,6 +1683,22 @@ def _pre_merge_outcome_input(
             user_decisions.append(item.strip())
         elif isinstance(item, dict) and isinstance(item.get("instruction"), str):
             user_decisions.append(item["instruction"])
+    approach_projection: dict[str, Any] = {}
+    has_new_approach_contract_signal = isinstance(contract.get("rawUserRequest"), str) and bool(
+        contract["rawUserRequest"].strip()
+    )
+    if (
+        not has_new_approach_contract_signal
+        and not isinstance(summary.get("implementationApproach"), dict)
+        and not isinstance(summary.get("configurationApproach"), dict)
+    ):
+        # Historic Contracts predate the applicability signal. Preserve their
+        # terminal behavior while making the projection explicit; new v2
+        # Contracts carry rawUserRequest and therefore remain fail-visible when
+        # a code/config approach is missing.
+        from ai_generate_task_outcome import _not_applicable_approach
+
+        approach_projection["implementationApproach"] = _not_applicable_approach()
     problem_count = (
         len(summary.get("observedIssues", []))
         + len(warnings)
@@ -1565,6 +1759,7 @@ def _pre_merge_outcome_input(
             if warnings
             else [],
             "humanDecisions": [*human_decisions, *user_decisions],
+            **approach_projection,
             "sources": [
                 {
                     "source": contract_path.relative_to(PROJECT_ROOT).as_posix(),
@@ -2132,7 +2327,40 @@ def run_declared_checks(
                     worktree_digest=current_digest,
                 ),
             )
+        refresh_output = ""
+        refresh_duration = 0
+        if check_id == "sourceBoundEvidence":
+            refresh_code, refresh_duration, refresh_output = refresh_source_bound_evidence(
+                summary_path=summary_path
+            )
+            if refresh_code != 0:
+                current_digest = worktree_digest(changed_paths(contract_data))
+                record_result(
+                    summary_path,
+                    evidence(
+                        check_id,
+                        cmd_str,
+                        refresh_code,
+                        refresh_duration,
+                        refresh_output,
+                        contract_hash=contract_hash,
+                        commit_sha=commit_sha,
+                        execution_contract_path=contract,
+                        execution_summary_path=summary,
+                        worktree_digest=current_digest,
+                    ),
+                )
+                obs.check_failed(
+                    check_id=check_id,
+                    command=cmd_str,
+                    duration_ms=refresh_duration,
+                    detail="source-bound evidence refresh failed",
+                )
+                return refresh_code
         code, duration, output = run(command)
+        duration += refresh_duration
+        if refresh_output:
+            output = refresh_output + ("\n" + output if output else "")
         if route is not None:
             output = json.dumps({"finishQualityRoute": route}, sort_keys=True) + "\n" + output
         current_digest = worktree_digest(changed_paths(contract_data))

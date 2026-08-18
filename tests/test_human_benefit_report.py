@@ -262,6 +262,51 @@ def test_validation_fails_closed_for_malformed_outcome_and_stale_report():
     )
 
 
+def test_human_report_projects_customer_summary_and_progressive_technical_approach():
+    evidence = [{"source": "scripts/ai_generate_human_report.py", "subject": "projection"}]
+    approach = {
+        "approachType": "implementation",
+        "status": "complete",
+        "summary": {
+            "text": "Customers can understand how the result is produced.",
+            "status": "verified",
+            "evidence": evidence,
+        },
+        "mechanism": {
+            "text": "The Summary approach is carried into the Outcome.",
+            "status": "verified",
+            "evidence": evidence,
+        },
+        "affectedComponents": [],
+        "designDecisions": [],
+        "technicalDetails": [
+            {
+                "topic": "Evidence",
+                "detail": "Technical detail remains available after the customer summary.",
+                "status": "verified",
+                "evidence": evidence,
+            }
+        ],
+        "evidence": [
+            {
+                "claim": "Projection path",
+                "status": "verified",
+                "source": "scripts/ai_generate_human_report.py",
+                "subject": "projection",
+            }
+        ],
+    }
+    source = outcome(sections={"implementationApproach": approach})
+
+    report = human.generate_human_report(source)
+    markdown = human.render_human_report(report)
+
+    assert report["implementationApproach"] == approach
+    assert markdown.index("Implementation Approach") < markdown.index("Technical details")
+    assert "Customers can understand how the result is produced." in markdown
+    assert "Technical detail remains available after the customer summary." in markdown
+
+
 def test_cli_writes_and_checks_deterministic_json_and_markdown(tmp_path):
     source_path = tmp_path / "outcome.json"
     json_path = tmp_path / "task_report.json"

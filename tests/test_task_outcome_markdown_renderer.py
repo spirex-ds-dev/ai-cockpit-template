@@ -64,3 +64,49 @@ def test_rendering_is_deterministic_and_does_not_mutate_input() -> None:
     before = deepcopy(candidate)
     assert render_task_outcome(candidate) == render_task_outcome(candidate)
     assert candidate == before
+
+
+def test_implementation_approach_renders_customer_summary_before_evidence() -> None:
+    candidate = outcome()
+    candidate["sections"]["implementationApproach"] = {
+        "status": "complete",
+        "summary": {
+            "status": "verified",
+            "text": "Customers can understand the governed implementation path.",
+        },
+        "mechanism": {
+            "status": "verified",
+            "text": "The Outcome renderer projects the structured approach.",
+        },
+        "affectedComponents": [
+            {
+                "component": "Task Outcome",
+                "detail": "The Markdown view includes the approach section.",
+                "status": "verified",
+            }
+        ],
+        "designDecisions": [],
+        "technicalDetails": [
+            {
+                "topic": "Evidence binding",
+                "detail": "The output retains the repository evidence reference.",
+                "status": "verified",
+            }
+        ],
+        "evidence": [
+            {
+                "claim": "The renderer emits the approach section.",
+                "source": "scripts/ai_render_task_outcome.py",
+                "subject": "implementationApproach",
+                "status": "verified",
+            }
+        ],
+    }
+
+    rendered = render_task_outcome(candidate)
+
+    assert "## Implementation Approach" in rendered
+    assert "Customers can understand the governed implementation path." in rendered
+    assert "scripts/ai_render_task_outcome.py#implementationApproach" in rendered
+    assert rendered.index("Customers can understand") < rendered.index("### Technical details")
+    assert rendered.index("### Technical details") < rendered.index("### Evidence")

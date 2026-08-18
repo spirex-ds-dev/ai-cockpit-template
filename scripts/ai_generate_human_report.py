@@ -184,6 +184,54 @@ def _next_safe_action(
     return "Review the pull request and provider checks before merge."
 
 
+def _implementation_approach_lines(approach: Mapping[str, Any]) -> list[str]:
+    """Render the customer summary first and technical detail after it."""
+
+    def text(value: Any, fallback: str) -> str:
+        if not isinstance(value, Mapping):
+            return fallback
+        return str(value.get("text") or value.get("detail") or value.get("decision") or fallback)
+
+    def claim_status(value: Any) -> str:
+        return str(value.get("status", "unknown")) if isinstance(value, Mapping) else "unknown"
+
+    lines = [
+        f"Status: `{approach.get('status', 'incomplete')}`",
+        f"Customer summary ({claim_status(approach.get('summary'))}): {text(approach.get('summary'), 'None recorded.')}",
+        f"Mechanism ({claim_status(approach.get('mechanism'))}): {text(approach.get('mechanism'), 'None recorded.')}",
+        "",
+        "Affected components",
+    ]
+    components = approach.get("affectedComponents", [])
+    lines.extend(
+        f"- {item.get('component', 'Component')}: {item.get('detail', 'None recorded.')} ({claim_status(item)})"
+        for item in components
+        if isinstance(item, Mapping)
+    ) if isinstance(components, list) and components else lines.append("- None recorded.")
+    lines.extend(["", "Design decisions"])
+    decisions = approach.get("designDecisions", [])
+    lines.extend(
+        f"- {item.get('decision', 'Decision')}: {item.get('reason', 'None recorded.')} ({claim_status(item)})"
+        for item in decisions
+        if isinstance(item, Mapping)
+    ) if isinstance(decisions, list) and decisions else lines.append("- None recorded.")
+    lines.extend(["", "### Technical details"])
+    details = approach.get("technicalDetails", [])
+    lines.extend(
+        f"- {item.get('topic', 'Detail')}: {item.get('detail', 'None recorded.')} ({claim_status(item)})"
+        for item in details
+        if isinstance(item, Mapping)
+    ) if isinstance(details, list) and details else lines.append("- None recorded.")
+    lines.extend(["", "### Evidence"])
+    evidence = approach.get("evidence", [])
+    lines.extend(
+        f"- {item.get('claim', 'Claim')}: {item.get('source', 'source')}#{item.get('subject', 'subject')} ({claim_status(item)})"
+        for item in evidence
+        if isinstance(item, Mapping)
+    ) if isinstance(evidence, list) and evidence else lines.append("- None recorded.")
+    return lines
+
+
 def _validate_source(outcome: Mapping[str, Any]) -> None:
     report = validate_outcome(outcome, expected_task_id=str(outcome.get("workItemId", "")))
     if not report.valid:
@@ -263,6 +311,9 @@ def generate_human_report(
         "forbiddenClaims": _string_list(sections.get("forbiddenClaims")),
         "remainingRisks": remaining,
     }
+    approach = sections.get("implementationApproach")
+    if isinstance(approach, Mapping):
+        report["implementationApproach"] = dict(approach)
     if isinstance(handoff, Mapping):
         report["humanHandoff"] = dict(handoff)
     normalized_facts = _validate_closure_facts(closure_facts) if phase == "final" else None
@@ -296,6 +347,11 @@ def render_human_report(report: Mapping[str, Any]) -> str:
             "",
             "What was completed",
         ]
+        approach = report.get("implementationApproach")
+        if isinstance(approach, Mapping):
+            lines.extend(
+                ["", "Implementation Approach", *_implementation_approach_lines(approach), ""]
+            )
         completed = handoff.get("completed", [])
         lines.extend(
             f"- {_claim_text(item)}{_evidence_suffix(item)}" for item in completed
@@ -393,15 +449,22 @@ def render_human_report(report: Mapping[str, Any]) -> str:
         "## 实际完成内容 / Completed work",
         str(report["task"]["summary"]),
         "",
-        "## 发现的问题 / Findings",
-        f"- Detected issues: {issues['detected']}",
-        f"- Hard stops: {issues['hardStops']}",
-        f"- Warnings: {issues['warnings']}",
-        f"- Resolved: {issues['resolved']}",
-        f"- Unresolved: {issues['unresolved']}",
-        "",
-        "## AI Cockpit 的干预 / AI Cockpit interventions",
     ]
+    approach = report.get("implementationApproach")
+    if isinstance(approach, Mapping):
+        lines.extend(["## Implementation Approach", *_implementation_approach_lines(approach), ""])
+    lines.extend(
+        [
+            "## 发现的问题 / Findings",
+            f"- Detected issues: {issues['detected']}",
+            f"- Hard stops: {issues['hardStops']}",
+            f"- Warnings: {issues['warnings']}",
+            f"- Resolved: {issues['resolved']}",
+            f"- Unresolved: {issues['unresolved']}",
+            "",
+            "## AI Cockpit 的干预 / AI Cockpit interventions",
+        ]
+    )
     interventions = report.get("interventions", [])
     lines.extend(f"- {item}" for item in interventions) if interventions else lines.append(
         "None recorded."

@@ -171,6 +171,38 @@ def test_complete_report_covers_requested_categories() -> None:
     validate(document, document, report)
 
 
+def test_schema_accepts_evidence_bound_implementation_approach_section() -> None:
+    document = schema()
+    report = minimum_report()
+    report["sections"]["implementationApproach"] = {
+        "approachType": "implementation",
+        "status": "complete",
+        "summary": {
+            "text": "Customer-facing explanation.",
+            "status": "verified",
+            "evidence": [{"subject": "projection", "source": "scripts/example.py"}],
+        },
+        "mechanism": {
+            "text": "Evidence-backed mechanism.",
+            "status": "verified",
+            "evidence": [{"subject": "projection", "source": "scripts/example.py"}],
+        },
+        "affectedComponents": [],
+        "designDecisions": [],
+        "technicalDetails": [],
+        "evidence": [
+            {
+                "claim": "The path is present in code.",
+                "status": "verified",
+                "source": "scripts/example.py",
+                "subject": "projection",
+            }
+        ],
+    }
+
+    validate(document, document, report)
+
+
 @pytest.mark.parametrize(
     ("field", "value"),
     [("status", "green"), ("schemaVersion", 2)],
