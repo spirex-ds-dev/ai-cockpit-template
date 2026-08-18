@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "release-v0-5-66-publication",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "e450e12b163eb480586089285cb68de18df00cf008a3235ac062f95271cc4d95"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "release-v0-5-66-publication",
+    "contractDigest": "b95d81633597bf33bced690468710adf6ffac38c644abe0937b73bf67ca168d1",
+    "summaryDigest": "c34eeeafe9a2eb6184505b9017261e136b7b1263160621df06e6d72395fe7307",
+    "verificationDigest": "621435f6b6082ad1b13146bbd7cc1520d334458a793828cc0fe5bff6842d8c1b",
+    "baseCommit": "44b87df25fc20ce53254c177aa63ff959afb2ca2",
+    "headCommit": "44b87df25fc20ce53254c177aa63ff959afb2ca2",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "e0479acf47d4576ecedc05d6f6f2d9867f14c17764b598675db7e0d3dbe8acdf",
+      "binding": {
+        "baseCommit": "44b87df25fc20ce53254c177aa63ff959afb2ca2",
+        "candidateHead": "44b87df25fc20ce53254c177aa63ff959afb2ca2",
+        "candidateTreeDigest": "0dcd6e456f0704136bc99d4e00f4f91bdb90ee333ccbe8fe89ccd1cb94b3bf79",
+        "candidateDiffDigest": "480090da828b85c4eccb2dccf2f8bad57ee6761ab1f1a9820144833404b0aec3"
+      }
+    }
   },
-  "task": {
-    "summary": "Task release-v0-5-66-publication generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task release-v0-5-66-publication generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: release-v0-5-66-publication",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/release-v0-5-66-publication.contract.json",
       ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
@@ -22,66 +45,86 @@
       ".ai/work-items/archive/2026/release-v0-5-66-publication.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
+            "subject": "verificationHistory[0] aiSummary failed",
+            "digest": "abb8daa9b7c7ae8331d35db4b01b0a5971dcce9171f1553a0c628e752ad1ce5e"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "78c826981f83dfa4a4616a716d0b3d3cc33277437d870d23196b5f45981e0267"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
+            "subject": "verificationHistory[0] aiSummary failed",
+            "digest": "abb8daa9b7c7ae8331d35db4b01b0a5971dcce9171f1553a0c628e752ad1ce5e"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "78c826981f83dfa4a4616a716d0b3d3cc33277437d870d23196b5f45981e0267"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
+        "subject": "verificationHistory[0] aiSummary failed",
+        "digest": "abb8daa9b7c7ae8331d35db4b01b0a5971dcce9171f1553a0c628e752ad1ce5e"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
+        "subject": "verification[aiSummary] retry passed",
+        "digest": "78c826981f83dfa4a4616a716d0b3d3cc33277437d870d23196b5f45981e0267"
+      }
     ]
   },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
-          "subject": "verificationHistory[0] aiSummary failed",
-          "digest": "abb8daa9b7c7ae8331d35db4b01b0a5971dcce9171f1553a0c628e752ad1ce5e"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "78c826981f83dfa4a4616a716d0b3d3cc33277437d870d23196b5f45981e0267"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
-          "subject": "verificationHistory[0] aiSummary failed",
-          "digest": "abb8daa9b7c7ae8331d35db4b01b0a5971dcce9171f1553a0c628e752ad1ce5e"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/release-v0-5-66-publication.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "78c826981f83dfa4a4616a716d0b3d3cc33277437d870d23196b5f45981e0267"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [],
   "humanHandoff": {
     "locale": "zh-CN",
     "completed": [
@@ -694,6 +737,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the pull request and provider checks before merge."
+  }
 }
