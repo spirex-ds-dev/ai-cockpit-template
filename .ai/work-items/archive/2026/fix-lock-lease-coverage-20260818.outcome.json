@@ -1,0 +1,870 @@
+{
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
+  "workItemId": "fix-lock-lease-coverage-20260818",
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "fix-lock-lease-coverage-20260818",
+    "contractDigest": "df2c240f2c0b2f5a12d5370507c4181dafa24f31bbae07c014b74221341d04ba",
+    "summaryDigest": "7fce65147b4ccb22b56d5efb6eae4001d8f3b22d736afc6f308699f61c27a053",
+    "verificationDigest": "3a9b909ee85681d38a776823cb207dc7d59f9c9144c6adc38c22e619b9d8c459",
+    "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+    "headCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "2f2bd995f4de1888f2258e185f20ecda5b34bd341fb3731a707b5cbb14dd4d1b",
+      "binding": {
+        "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+        "candidateHead": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+        "candidateTreeDigest": "8e4ce4a685a0a60133022989e44e89e8d99adce2f0ec7b5e152afec201c0aa62",
+        "candidateDiffDigest": "8d4fad84bd2360803e056582bd8189af2cc1456b4621d8c20b3565b504d7a55a"
+      }
+    }
+  },
+  "sections": {
+    "outcomeSummary": "Task fix-lock-lease-coverage-20260818 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: fix-lock-lease-coverage-20260818",
+    "deliveredChanges": [
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+      "tests/test_work_item_intelligence.py",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md",
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json",
+      ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [
+      {
+        "problem": "observed issue",
+        "action": "Added a deterministic malformed-lock test that preserves the lock and asserts the fail-closed IntelligenceError path.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "tests/test_work_item_intelligence.py::test_malformed_writer_lease_is_preserved_and_fails_closed",
+            "subject": "observedIssues[0] observed issue"
+          },
+          {
+            "source": "tests/test_work_item_intelligence.py",
+            "subject": "observedIssues[0] observed issue"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "tests/test_work_item_intelligence.py::test_malformed_writer_lease_is_preserved_and_fails_closed",
+            "subject": "observedIssues[0] observed issue"
+          },
+          {
+            "source": "tests/test_work_item_intelligence.py",
+            "subject": "observedIssues[0] observed issue"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": "tests/test_work_item_intelligence.py",
+        "subject": "Direct malformed metadata regression"
+      },
+      {
+        "source": "docs/reference/capability-truth-matrix.json",
+        "subject": "Official generator output"
+      }
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "在不改变生产锁逻辑的前提下，直接增加 malformed writer-lease metadata 的确定性回归测试，使原本依赖并发时序才能触达的 fail-closed 分支在每次质量汇总中稳定被覆盖；随后用官方生成器刷新 Capability Truth 与 pre-release documentation alignment 投影。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "tests/test_work_item_intelligence.py",
+            "subject": "Deterministic malformed writer-lease regression"
+          },
+          {
+            "source": "scripts/ai_capability_truth.py",
+            "subject": "Generated capability evidence refresh"
+          },
+          {
+            "source": "scripts/check_pre_release_documentation_alignment.py",
+            "subject": "Generated documentation-alignment refresh"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "在临时运行目录中写入不可解析的 status.lock，调用现有 exclusive-lock 入口并断言立即以 IntelligenceError fail closed 且保留锁文件；该测试覆盖 JSONDecodeError 防御路径，不依赖并发调度。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "tests/test_work_item_intelligence.py",
+            "subject": "test_malformed_writer_lease_is_preserved_and_fails_closed"
+          },
+          {
+            "source": "scripts/ai_work_item_intelligence.py",
+            "subject": "Existing exclusive-lock malformed-metadata handling"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Work Item intelligence lock-lease test surface",
+          "detail": "Adds deterministic coverage for the existing malformed-metadata fail-closed branch; production implementation is unchanged.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_work_item_intelligence.py",
+              "subject": "Focused regression test"
+            }
+          ]
+        },
+        {
+          "component": "Capability Truth and pre-release alignment projections",
+          "detail": "Regenerates source-bound digests and documentation-alignment projections from the changed evidence.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "docs/reference/capability-truth-matrix.json",
+              "subject": "Generated capability matrix"
+            },
+            {
+              "source": "docs/reference/pre-release-documentation-alignment.md",
+              "subject": "Generated alignment projection"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Add a direct malformed-lock fixture instead of changing production code or relying on a concurrent race.",
+          "reason": "The observed failure was coverage nondeterminism, while the defensive production behavior was already correct.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_work_item_intelligence.py",
+              "subject": "Non-racy fixture and fail-closed assertion"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+              "subject": "Root-cause record"
+            }
+          ]
+        },
+        {
+          "decision": "Keep hosted exact-source aggregate verification in the Release WI.",
+          "reason": "This corrective WI proves the deterministic local evidence path; the authoritative hosted Python 3.12 result belongs to the release source after merge.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+              "subject": "Out-of-scope publication and acceptance boundary"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Coverage behavior",
+          "detail": "The targeted intelligence module passes 35 tests; hosted aggregate threshold verification remains a separate exact-source release check.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_work_item_intelligence.py",
+              "subject": "35 passing focused tests"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The fix removes the concurrent timing dependency from the malformed-lock coverage path.",
+          "status": "verified",
+          "source": "tests/test_work_item_intelligence.py",
+          "subject": "Direct malformed metadata regression"
+        },
+        {
+          "claim": "Generated capability and pre-release alignment evidence matches the changed test surface.",
+          "status": "verified",
+          "source": "docs/reference/capability-truth-matrix.json",
+          "subject": "Official generator output"
+        }
+      ]
+    }
+  },
+  "humanHandoff": {
+    "locale": "zh-CN",
+    "completed": [
+      {
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json",
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json",
+        "detail": "Created the Work Item Contract skeleton.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json",
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json",
+        "detail": "Created the AI Change Summary skeleton.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_work_item_intelligence.py",
+        "title": "Changed tests/test_work_item_intelligence.py",
+        "detail": "Added deterministic malformed writer-lease metadata regression coverage.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "tests/test_work_item_intelligence.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "tests/test_work_item_intelligence.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.json",
+        "title": "Changed docs/reference/capability-truth-matrix.json",
+        "detail": "Regenerated source-bound capability evidence after the test addition.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "detail": "Regenerated the official documentation-alignment projection.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "detail": "Regenerated the human-readable documentation-alignment projection.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json",
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md",
+        "title": "Changed .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.outcome.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.json",
+        "title": "Changed .ai/cockpit/task_report.json",
+        "detail": "Generated machine-readable Human Benefit Review Report.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.md",
+        "title": "Changed .ai/cockpit/task_report.md",
+        "detail": "Generated human-readable Human Benefit Review Report.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.md",
+        "title": "Changed docs/reference/capability-truth-matrix.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.json",
+        "title": "Changed docs/reference/japanese-capability-assessment.json",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55, after=20e2d1f3c55221f097211ecc29ad3d7f96bab24ea8b2bcbd1fdd7e9812269e55.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.md",
+        "title": "Changed docs/reference/japanese-capability-assessment.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94, after=86bd31a5bd108126fc8f00f98ae41e2614d1a6dc54bbdb57b18114e69c36eb94.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "passed": [
+      {
+        "claim": "sourceBoundEvidence",
+        "title": "sourceBoundEvidence",
+        "detail": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=deb83a9f6071af4cc0c6ae9f032eaa00711ffd59a18e3fdd9d5525da392ac915, after=7e222cddbba5781a162d2ad16612c487eefa5875c1217a5320c43b241ec57b20; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "a0a5127aabcafc286140a68c8e5485cd6a403b8af142efe1aa132507b0dd23a7"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "a0a5127aabcafc286140a68c8e5485cd6a403b8af142efe1aa132507b0dd23a7"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiWorkItem",
+        "title": "aiWorkItem",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json work item contract check passed: .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "52450d8e56a9eb81048e5d89407c82b9c5a611b0a1df0f19ebd81a8dcdfbe184"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "52450d8e56a9eb81048e5d89407c82b9c5a611b0a1df0f19ebd81a8dcdfbe184"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScope",
+        "title": "aiScope",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json scope guard passed: 12 changed path(s) covered",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScope",
+            "digest": "d76b475372409b2c9b7a228563016afa684efe036490f9f59fe845a469ba2e33"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScope",
+            "digest": "d76b475372409b2c9b7a228563016afa684efe036490f9f59fe845a469ba2e33"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuards",
+        "title": "aiGuards",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuards",
+            "digest": "e323d7ad082e2935f07905894103fc9b217310f64444404e4fdd8cfc8ee5557c"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuards",
+            "digest": "e323d7ad082e2935f07905894103fc9b217310f64444404e4fdd8cfc8ee5557c"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCheckpoint",
+        "title": "aiCheckpoint",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-lock-lease-coverage-20260818` - Contract Hash: `df2c240f2c0b2f5a` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Re",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "280214f2a45799d51542bbf2b5fa62ac52a003866fdb37fb134083dabdfbbe65"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "280214f2a45799d51542bbf2b5fa62ac52a003866fdb37fb134083dabdfbbe65"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiReviewPolicy",
+        "title": "aiReviewPolicy",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json review policy matched 7 path(s) [review] .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json [review] .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json [review] .ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md [review] .ai/work-items/starts/fix-lock-lease-coverage-20260818.json [review] .ai/cockp",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "fc3e3e181066fcec8c9e4723236b4f87c35e7a99dced75a2b2559c1207f052f2"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "fc3e3e181066fcec8c9e4723236b4f87c35e7a99dced75a2b2559c1207f052f2"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiBacktrack",
+        "title": "aiBacktrack",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "7949708c3577f42cfd2762cc25f3763957f791fdd38a1659498cfeab783fbc14"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "7949708c3577f42cfd2762cc25f3763957f791fdd38a1659498cfeab783fbc14"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCoverage",
+        "title": "aiCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCoverage",
+            "digest": "c82215fddfea8bda4d1cc28af722a2761572c960fb9dec419146c59fb08c2d5e"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiCoverage",
+            "digest": "c82215fddfea8bda4d1cc28af722a2761572c960fb9dec419146c59fb08c2d5e"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScenarioCoverage",
+        "title": "aiScenarioCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json report: target/ai_scenario_coverage_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "d7f285636815a6c15e37d4024015982314bed40b3dfa60c247846d5e33de112c"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "d7f285636815a6c15e37d4024015982314bed40b3dfa60c247846d5e33de112c"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuidelines",
+        "title": "aiGuidelines",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "3c5e1e40f0811a2369842cf3158162606db1ea149ba5eb5fb1ed9a97401e6d84"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "3c5e1e40f0811a2369842cf3158162606db1ea149ba5eb5fb1ed9a97401e6d84"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiDiffOwnership",
+        "title": "aiDiffOwnership",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json ## Diff Ownership Preview - active_owned: `12`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.md` — cove",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "61146802e1f753f5a61465f8b21c9daa49e2f87c6ea5f0fd93fbd8f366b67771"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "61146802e1f753f5a61465f8b21c9daa49e2f87c6ea5f0fd93fbd8f366b67771"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "quality",
+        "title": "quality",
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"tests\", \"trust\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json, docs/reference/pre-release-documentation-alignment.md, tests/test_work_item_intelligen",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "quality",
+            "digest": "0fb76826e10300f4b612eac25e3172d35739dc68718a6ebd67d3d1773e63f43e"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "quality",
+            "digest": "0fb76826e10300f4b612eac25e3172d35739dc68718a6ebd67d3d1773e63f43e"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatus",
+        "title": "aiStatus",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatus",
+            "digest": "4594b88f03a62564c0cf429dbc741b25ee95903c8d0675d16cae3967301cd10c"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatus",
+            "digest": "4594b88f03a62564c0cf429dbc741b25ee95903c8d0675d16cae3967301cd10c"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusCheck",
+        "title": "aiStatusCheck",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "8b348430d5582d135f603784ee6490cd82e8f03c4de874443f03228123b3ca82"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "8b348430d5582d135f603784ee6490cd82e8f03c4de874443f03228123b3ca82"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusConsistency",
+        "title": "aiStatusConsistency",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "378ec445c37bffbf3a6bcb0678ed1827d1e4aba343837383817651d09730c1ad"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "378ec445c37bffbf3a6bcb0678ed1827d1e4aba343837383817651d09730c1ad"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiAgentRisk",
+        "title": "aiAgentRisk",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json --summary .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "4a62232c5ece90378aa51c953be49a5072839b39e08d9bb2be8959b6c51ed457"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "4a62232c5ece90378aa51c953be49a5072839b39e08d9bb2be8959b6c51ed457"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiSummary",
+        "title": "aiSummary",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json --contract .ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json ai summary check passed: .ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiSummary",
+            "digest": "86232c15b98edf059507782579e6e5bbf7c27da0d5a05720748cf0bd6554f34e"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.contract.json",
+            "subject": "aiSummary",
+            "digest": "86232c15b98edf059507782579e6e5bbf7c27da0d5a05720748cf0bd6554f34e"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "retained": [],
+    "risks": [],
+    "redReasons": [],
+    "questions": {
+      "problemCount": 1,
+      "problemCountEvidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/fix-lock-lease-coverage-20260818.summary.json",
+          "subject": "observedIssues"
+        }
+      ],
+      "blockedProblems": [],
+      "resolvedProblems": [
+        {
+          "claim": "observed issue",
+          "evidenceRefs": [
+            {
+              "source": "tests/test_work_item_intelligence.py::test_malformed_writer_lease_is_preserved_and_fails_closed",
+              "subject": "observedIssues[0] observed issue"
+            },
+            {
+              "source": "tests/test_work_item_intelligence.py",
+              "subject": "observedIssues[0] observed issue"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolutionApproach": [
+        {
+          "claim": "Added a deterministic malformed-lock test that preserves the lock and asserts the fail-closed IntelligenceError path.",
+          "evidenceRefs": [
+            {
+              "source": "tests/test_work_item_intelligence.py::test_malformed_writer_lease_is_preserved_and_fails_closed",
+              "subject": "observedIssues[0] observed issue"
+            },
+            {
+              "source": "tests/test_work_item_intelligence.py",
+              "subject": "observedIssues[0] observed issue"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "avoidedRisks": [],
+      "remainingRisks": [],
+      "agentUnknowns": [],
+      "humanConfirmations": [],
+      "recurrenceLikelihood": {
+        "claim": "unknown: no direct recurrence probability evidence was recorded.",
+        "evidenceRefs": [],
+        "inference": true
+      },
+      "nextTime": {
+        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+        "evidenceRefs": [],
+        "inference": true
+      }
+    }
+  }
+}

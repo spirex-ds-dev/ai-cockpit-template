@@ -1,0 +1,245 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-lock-lease-coverage-20260818",
+  "mode": "code",
+  "title": "Make release coverage deterministic for malformed lock metadata",
+  "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-lock-lease-coverage-20260818.contract.json",
+    ".ai/work-items/active/fix-lock-lease-coverage-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.json",
+    ".ai/work-items/active/fix-lock-lease-coverage-20260818.outcome.md",
+    "tests/test_work_item_intelligence.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing production lock behavior, release workflow behavior, installer behavior, historical archive records, or release tags/assets.",
+    "Publishing v0.5.68; that remains owned by the Release Work Item after this fix is merged."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "The lock lease path whose malformed-metadata branch was covered only by a concurrent timing race."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Existing lease tests and the deterministic regression-test location."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32146066890",
+      "reason": "Release-blocking Smoke run that measured 85.09% against an 85.10% floor."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32144968411",
+      "reason": "Same-SHA Smoke run that measured 85.10%, proving the boundary was timing-sensitive."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Generated capability evidence that must remain bound to the added regression test."
+    }
+  ],
+  "unknowns": [],
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-release-coverage-variance",
+    "capturedAt": "2026-08-18T00:00:00+09:00",
+    "digest": "sha256:release-coverage-variance-deterministic-fix"
+  },
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "release_quality_gate"
+    ],
+    "reason": "The change is a bounded regression test and generated evidence refresh; it does not alter production behavior, release workflow behavior, or public state.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user-authorized corrective Work Item is bounded to test and generated evidence paths; hosted confirmation remains a verification item, not a coding blocker."
+  },
+  "declaredIntent": {
+    "summary": "Make the release coverage boundary deterministic by directly testing malformed lock metadata without changing production behavior.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "preReviewWarnings": [
+    "Confirm the test covers malformed writer metadata without depending on concurrent timing, and confirm no production lock behavior changed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A regression test deterministically exercises malformed writer-lease metadata and proves the lock remains fail-closed.",
+    "The targeted intelligence tests pass and directly cover the malformed-metadata defensive lines without depending on concurrent timing; exact hosted aggregate confirmation is owned by the separate Release Work Item.",
+    "Capability Truth and pre-release documentation alignment are regenerated from the changed evidence and pass their checks.",
+    "No production source, release workflow, tag, or public Release is changed by this Work Item; the fix is ready for a separate Release WI to consume after merge."
+  ],
+  "guidelines": [
+    "Do not change production behavior when a deterministic regression test is sufficient.",
+    "Generated evidence must be refreshed through the repository generator, not hand-edited."
+  ],
+  "intent": {
+    "problem": "The same source SHA and quality manifest produced both 85.09% and 85.10% hosted coverage because two lock-lease error-handling lines were covered only when a concurrent waiter read malformed metadata during a timing race.",
+    "constraints": [
+      "Keep the production lock implementation unchanged.",
+      "Make the coverage evidence deterministic and fail closed.",
+      "Do not publish the release from this fix Work Item."
+    ],
+    "rationale": "A direct malformed-lock test covers the intended defensive branch without relying on scheduling, eliminating the release gate's same-SHA coverage variance."
+  },
+  "rawUserRequest": "Resolve the known same-SHA release coverage variance at the 85.10% gate so the issue cannot recur in the release Work Item.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Malformed writer lease metadata",
+      "required": true,
+      "expected": "The lock remains present and the operation fails closed with IntelligenceError.",
+      "verificationPlan": "Run the focused regression test after implementation.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Existing intelligence regression suite",
+      "required": true,
+      "expected": "All existing intelligence behavior remains passing.",
+      "verificationPlan": "Run the full intelligence test module after implementation.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Generated capability evidence",
+      "required": true,
+      "expected": "Capability Truth and pre-release documentation alignment remain consistent with the new evidence path.",
+      "verificationPlan": "Run make check-source-bound-evidence after generated evidence refresh.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 962
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-lock-lease-coverage-20260818.json",
+    "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+    "initialScopeDigest": "10275f980e75e6f643e2f1ff1a4f10210078762d6e3ff0c0e91d96b6ac99affb",
+    "contractSkeletonDigest": "7d0b419787d65fea9d2f89981401e9218fe2728c3ca312c615b180da137d61b7"
+  }
+}
