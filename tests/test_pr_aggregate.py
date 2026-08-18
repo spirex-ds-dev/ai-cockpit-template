@@ -174,6 +174,25 @@ def test_recovery_only_pr_discovers_archived_owner_from_valid_receipt(tmp_path, 
     assert ai_check_pr.recovery_only_contract_paths("b" * 40) == [contract_path]
 
 
+def test_same_work_item_recovery_ignores_receipts_for_another_pr_base(tmp_path, monkeypatch):
+    task = "base-bound-recovery"
+    archive = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    archive.mkdir(parents=True)
+    receipt_dir = tmp_path / ".ai" / "work-items" / "recovery-receipts"
+    receipt_dir.mkdir(parents=True)
+    (receipt_dir / f"{task}.json").write_text(
+        json.dumps({"workItemId": task, "prBaseCommit": "a" * 40}), encoding="utf-8"
+    )
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    entries = [(archive / f"{task}.contract.json", {"workItemId": task}, {}, (74, task, task))]
+
+    permitted, receipts, blockers = ai_check_pr.same_work_item_recovery_paths("b" * 40, entries)
+
+    assert permitted == {}
+    assert receipts == set()
+    assert blockers == []
+
+
 def test_pr_bundle_accepts_restricted_path_only_when_same_item_recovery_receipt_binds_it(
     tmp_path, monkeypatch
 ):

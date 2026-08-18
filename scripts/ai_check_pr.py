@@ -499,6 +499,8 @@ def same_work_item_recovery_paths(
             continue
         if not isinstance(receipt, dict) or receipt.get("workItemId") not in known_tasks:
             continue
+        if receipt.get("prBaseCommit") != base:
+            continue
         receipt_issues = validate_recovery_receipt(PROJECT_ROOT, receipt, pr_base=base)
         if receipt_issues:
             blockers.append(
