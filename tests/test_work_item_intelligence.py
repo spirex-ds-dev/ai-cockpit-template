@@ -112,9 +112,11 @@ def test_malformed_writer_lease_is_preserved_and_fails_closed(tmp_path: Path) ->
     lock.parent.mkdir(parents=True)
     lock.write_text("not-json", encoding="utf-8")
 
-    with pytest.raises(IntelligenceError, match="lock is unavailable"):
-        with intelligence._exclusive_lock(lock, timeout_seconds=0):
-            pass
+    with (
+        pytest.raises(IntelligenceError, match="lock is unavailable"),
+        intelligence._exclusive_lock(lock, timeout_seconds=0),
+    ):
+        pass
 
     assert lock.exists()
 
