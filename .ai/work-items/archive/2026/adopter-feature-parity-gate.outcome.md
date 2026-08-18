@@ -95,6 +95,23 @@ None
 - verification[aiSummary] retry passed
 - verificationHistory[4] aiSummary failed
 
+## Implementation Approach
+Status: `incomplete`
+Customer summary (unknown): None recorded.
+Mechanism (unknown): None recorded.
+
+Affected components
+- None recorded.
+
+Design decisions
+- None recorded.
+
+### Technical details
+- None recorded.
+
+### Evidence
+- None recorded.
+
 ## Human Handoff
 Locale: `zh-CN`
 
