@@ -1,3 +1,4 @@
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -135,6 +136,42 @@ def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
 
     assert not any("scripts/ai_finish.py" in issue for issue in issues)
+
+
+def test_recovery_only_pr_discovers_archived_owner_from_valid_receipt(tmp_path, monkeypatch):
+    contract_path = write_pair(tmp_path, "recovered-only", [], [])
+    archive = contract_path.parent
+    outcome_path = archive / "recovered-only.outcome.json"
+    manifest_path = archive / "recovered-only.archive-manifest.json"
+    outcome_path.write_text(json.dumps({"workItemId": "recovered-only"}), encoding="utf-8")
+    manifest_path.write_text(json.dumps({"workItemId": "recovered-only"}), encoding="utf-8")
+    receipt_dir = tmp_path / ".ai" / "work-items" / "recovery-receipts"
+    receipt_dir.mkdir(parents=True)
+    receipt = {
+        "receiptVersion": 1,
+        "kind": "same_work_item_post_archive_recovery",
+        "workItemId": "recovered-only",
+        "prBaseCommit": "b" * 40,
+        "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/901",
+        "humanAuthorization": {"type": "human", "reference": "user-request"},
+        "failure": {"gate": "changedCriticalCoverage"},
+        "archive": {},
+        "recoveryPaths": [".ai/knowledge/index.json"],
+    }
+    for suffix, path in {
+        "contract": contract_path,
+        "summary": archive / "recovered-only.summary.json",
+        "outcome": outcome_path,
+        "archive-manifest": manifest_path,
+    }.items():
+        receipt["archive"][suffix] = {
+            "path": path.relative_to(tmp_path).as_posix(),
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        }
+    (receipt_dir / "recovered-only.json").write_text(json.dumps(receipt), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.recovery_only_contract_paths("b" * 40) == [contract_path]
 
 
 def test_pr_bundle_accepts_restricted_path_only_when_same_item_recovery_receipt_binds_it(
