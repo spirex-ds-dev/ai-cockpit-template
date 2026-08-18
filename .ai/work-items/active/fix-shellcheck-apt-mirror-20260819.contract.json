@@ -25,7 +25,9 @@
     "docs/reference/pre-release-documentation-alignment.md",
     ".ai/evidence/reference-impact/**",
     "scripts/installer/legacy.py",
-    "tests/test_installer.py"
+    "tests/test_installer.py",
+    "Makefile",
+    "tests/test_makefile.py"
   ],
   "outOfScope": [
     "Changing shellcheck rules or install.sh behavior.",
@@ -96,6 +98,7 @@
     "The lane uses the runner-provided shellcheck executable on a pinned Ubuntu 24.04 image and fails closed when the executable is absent or unusable.",
     "A repository workflow test prevents reintroducing the network-dependent apt bootstrap and preserves the shellcheck invocation.",
     "Local shellcheck and the declared AI/project checks pass; the hosted compatibility gate reaches and passes the actual shellcheck step.",
+    "A clean committed Work Item snapshot can execute project-test shards without failing on an empty git diff.",
     "No shellcheck rule, install.sh behavior, other compatibility lane, release workflow, tag, or public Release is changed by this Work Item."
   ],
   "guidelines": [
@@ -106,7 +109,7 @@
   "intent": {
     "problem": "The release-blocking compatibility workflow repeatedly times out before running shellcheck because apt update contacts an unavailable azure.archive.ubuntu.com mirror. The runner image already includes shellcheck, so the package bootstrap is an unnecessary network dependency.",
     "constraints": [
-      "Keep the Work Item scoped to the compatibility workflow, its executable workflow regression test, and the installer boundary required to prevent source-only reference-impact evidence from breaking fresh adopters.",
+      "Keep the Work Item scoped to the compatibility workflow, its executable workflow regression test, the installer boundary required to prevent source-only reference-impact evidence from breaking fresh adopters, and the project-test shard no-op needed for clean committed snapshots.",
       "Preserve shellcheck as a blocking compatibility lane and do not weaken its failure semantics.",
       "Do not modify production code, release behavior, tags, or public Releases."
     ],

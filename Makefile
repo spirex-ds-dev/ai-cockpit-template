@@ -187,7 +187,7 @@ project-test-shard-%:
 		git worktree add --detach "$$workspace" HEAD >/dev/null 2>&1; \
 		cleanup() { if git worktree list --porcelain | grep -Fqx "worktree $$workspace"; then git worktree remove --force "$$workspace" >/dev/null 2>&1; fi; }; \
 		trap cleanup EXIT INT TERM; \
-		git diff --binary | git -C "$$workspace" apply --whitespace=nowarn -; \
+		if git diff --quiet; then :; else git diff --binary | git -C "$$workspace" apply --whitespace=nowarn -; fi; \
 		git ls-files --others --exclude-standard | while IFS= read -r path; do \
 			case "$$path" in target/*|.venv/*) continue ;; esac; \
 			mkdir -p "$$workspace/$$(dirname "$$path")"; \
