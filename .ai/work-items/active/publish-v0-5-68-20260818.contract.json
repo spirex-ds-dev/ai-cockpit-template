@@ -1,0 +1,304 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-v0-5-68-20260818",
+  "mode": "code",
+  "title": "Publish v0.5.68 after Implementation Knowledge acceptance",
+  "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish-v0-5-68-20260818.contract.json",
+    ".ai/work-items/active/publish-v0-5-68-20260818.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/publish-v0-5-68-20260818.outcome.json",
+    ".ai/work-items/active/publish-v0-5-68-20260818.outcome.md",
+    "tests/test_work_item_intelligence.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing product source, installer behavior, release workflow behavior, candidate projections, or historical Release assets; the scoped deterministic regression test is the only allowed source-tree change.",
+    "Creating, moving, deleting, or publishing any tag or Release other than v0.5.68 through the authoritative release.yml workflow.",
+    "Bypassing readiness, a missing or mismatched rehearsal receipt, provider checks, public asset verification, or Work Item cleanup requirements."
+  ],
+  "sources": [
+    {
+      "path": "release-state.json",
+      "reason": "Canonical release state identifies v0.5.68 as the sole unpublished candidate after v0.5.67."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate projection records v0.5.68, its public contract, and pending provider evidence."
+    },
+    {
+      "path": "release.json",
+      "reason": "Published v0.5.67 projection anchors the next-patch relationship and historical public baseline."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Authoritative workflow for exact-source rehearsal, immutable tag, provider Release, assets, and strict Quick Install validation."
+    },
+    {
+      "path": "docs/getting-started/security-release-verification.md",
+      "reason": "Defines the release identity tuple, rehearsal boundary, public evidence, and fail-closed publication sequence."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Defines candidate/pre-publish state and the required exact-source release verification boundary."
+    },
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Canonical command implementation for post-archive release freeze evidence."
+    },
+    {
+      "path": "scripts/check_release_preflight.py",
+      "reason": "Fail-closed validator for source-bound release identity and frozen Work Item lifecycle."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/901",
+      "reason": "Release prerequisite: installer knowledge-history leakage is resolved and the Issue is closed with independent regression evidence."
+    },
+    {
+      "path": "d7b4b6f06",
+      "reason": "Installer fix commit that prunes repository-local knowledge history from the adopter installation tree."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "The release-blocking coverage variance was isolated to the lock-lease malformed-metadata recovery branch."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Scoped deterministic regression coverage for malformed lock metadata removes the concurrent timing dependency."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32146066890",
+      "reason": "Same-SHA publication attempt failed closed before tag creation because aggregate coverage was 85.09% against the 85.10% threshold."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/32144968411",
+      "reason": "Earlier same-SHA rehearsal passed with the two lock-lease recovery lines covered, proving the observed coverage variance."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "The official generator refreshes the documentation-alignment projections after capability evidence bytes change."
+    },
+    {
+      "path": "conversation:2026-08-18-user-release-request",
+      "reason": "User explicitly added publishing a new version after completing the existing objectives."
+    }
+  ],
+  "rawUserRequest": "目标加一个，发布新版本。不是 Outcome 达到 🟢，是完成现有既定目标以后发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-18-user-release-request",
+    "capturedAt": "2026-08-18",
+    "digest": "ad4b161366af37e691740b2a6ee2abd8f50fe12eea63efa2c6d060b3782579f0"
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "immutable_release",
+      "provider_workflow",
+      "release_identity",
+      "supply_chain_evidence"
+    ],
+    "reason": "This Work Item creates an immutable public tag and provider assets; only exact-source evidence and all fail-closed hosted gates permit publication.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Public immutable publication and provider evidence require strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized publishing a new version after the existing objectives are complete, bounded by the release workflow and all fail-closed gates."
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-18-user-release-request",
+    "scope": "Publish only v0.5.68 after the existing objectives are complete, readiness passes, a matching same-SHA rehearsal succeeds, the authoritative release workflow validates the exact source, public assets pass independent checks, and the Release Work Item is closed. No gate bypass or historical tag mutation is authorized."
+  },
+  "preReviewWarnings": [
+    "Resolve the latest default-branch SHA immediately before rehearsal and publication; any source, tag, receipt, asset, installer, or supply-chain mismatch blocks the release."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record publication readiness, rehearsal, provider evidence, and independent post-publication checks before the final Outcome and lifecycle closure."
+  },
+  "acceptance": [
+    "Issue #901 is closed as completed with root-cause, fix-commit, and fresh-adopter regression evidence; its fix is present on the selected release source.",
+    "The same-SHA 85.10% coverage boundary is deterministic: the lock-lease malformed-metadata path is covered by a non-racy regression test, and release-blocking quality aggregation passes without relying on concurrent timing.",
+    "make check-release-readiness passes on the synchronized latest origin/main and identifies v0.5.68 as the only eligible next candidate.",
+    "After Work Item archive and pre-merge freeze, a same-SHA release.yml rehearsal succeeds for v0.5.68; its private receipt binds the exact source SHA, tree, strict smoke evidence, required jobs, coverage, and artifact digests, and no v0.5.68 tag or Release exists before publication.",
+    "The actual release.yml run consumes that exact successful rehearsal receipt and publishes v0.5.68 only after exact-source preflight, dependency/CI evidence, source-bound SBOM/provenance/digest evidence, tagged Quick Install, and Draft Release validation pass.",
+    "Independent post-publication checks verify the immutable tag target, stable provider Release, public release.json/sbom.json/provenance.json/release-digests.json assets, archive checksum, installer identity, release-state consistency, and adopter Quick Install for v0.5.68.",
+    "The Release Work Item is archived, its PR is merged, ai-close-work-item verifies merged identity and cleanup, and no release work branch or active Work Item remains."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Readiness rejects stale, inconsistent, or already-used candidate metadata.",
+      "expected": "Only v0.5.68 on the freshly synchronized default branch is eligible; any mismatch stops before hosted release dispatch.",
+      "verificationPlan": "Run check-release-readiness and record the resolved source/candidate evidence in the Summary.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Same-SHA rehearsal verifies without publication.",
+      "expected": "The rehearsal succeeds for one source SHA and v0.5.68 while no v0.5.68 tag, Release, or public asset exists afterward.",
+      "verificationPlan": "Inspect the release workflow run, private rehearsal receipt, remote tag, and provider Release state.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Actual publication is receipt-bound and complete.",
+      "expected": "The provider workflow publishes v0.5.68 only from the matching source SHA and leaves complete public assets and strict smoke evidence.",
+      "verificationPlan": "Inspect hosted workflow evidence and independently query tag, Release, asset digests, release metadata, and Quick Install.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "guidelines": [
+    "Use only .github/workflows/release.yml for immutable tag and provider Release mutations; never create, move, delete, or republish a release manually.",
+    "Preserve readiness → archive/pre-merge freeze → PR merge → same-SHA rehearsal → receipt-bound publication → independent post-publication verification → Work Item closure.",
+    "Treat Outcome and chat claims as handoff summaries only; public release truth must come from provider, tag, asset, and command evidence.",
+    "Never reuse or mutate a failed immutable tag; quarantine failed provider evidence and use a new corrective patch release if the workflow fails after tag creation."
+  ],
+  "intent": {
+    "problem": "The accepted Implementation Knowledge feature is merged on main, while the repository still has v0.5.68 only as an unpublished candidate. Adopters need a new immutable version that exposes the completed functionality through the supported installer and public release contract.",
+    "constraints": [
+      "Publish only v0.5.68 from the latest freshly resolved origin/main commit.",
+      "Do not rerun or publish v0.5.68 until Issue #901 is resolved and its installer regression evidence is recorded.",
+      "Do not rerun or publish v0.5.68 until the observed same-SHA coverage variance is fixed and a fresh source-bound rehearsal passes.",
+      "Use the repository's release.yml workflow and its exact-source rehearsal; do not manually mutate tags, Releases, assets, or provider configuration.",
+      "Do not claim published or verified until public provider assets and independent post-publication checks agree.",
+      "Stop and preserve evidence on any missing, failed, stale, or mismatched gate."
+    ],
+    "rationale": "A new patch release is the requested next step after the existing objectives are complete, and an immutable source-bound release is required for adopters to consume the accepted feature safely. The open installer knowledge-history issue was resolved and verified before resuming release preparation."
+  },
+  "declaredIntent": {
+    "summary": "Publish only v0.5.68 from the latest verified default-branch source after the accepted Implementation Knowledge objectives are complete, using the repository's receipt-bound release workflow and independent public verification.",
+    "requestedCapabilities": [
+      "ai_governance"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": false,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly requested publishing a new version after completing the existing objectives; this approval is bounded by the exact v0.5.68 release workflow and never authorizes a gate bypass."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 962
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/publish-v0-5-68-20260818.json",
+    "baseCommit": "b56d514e0c78b0ec32b855da67effd5d2e9ca728",
+    "initialScopeDigest": "bedfaa5451bcdb53d3d8242053bd095cbff4514765f65f57fb886a576eec0e08",
+    "contractSkeletonDigest": "248b399d49c95307786253bf66e9189292fec2bb05e787689e673c9ce8bfe1ef"
+  }
+}
