@@ -35,6 +35,28 @@ def test_complexity_report_records_increment(monkeypatch):
     assert report["complexityDelta"]["pythonLines"] > 0
 
 
+def test_lifecycle_synchronization_history_is_not_protocol_complexity(tmp_path):
+    contracts = []
+    for name in ("first", "second"):
+        path = tmp_path / f"{name}.contract.json"
+        path.write_text(
+            json.dumps(
+                {
+                    "workItemId": name,
+                    "synchronizationHistory": [
+                        {"fromBaseCommit": "a" * 40, "toBaseCommit": "b" * 40}
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        contracts.append(path)
+
+    metrics = check_governance_complexity.repository_shape_metrics(tmp_path, contracts, {})
+
+    assert metrics["repeatedProtocolFields"] == 1
+
+
 def test_report_records_three_provenance_bound_baselines(monkeypatch):
     monkeypatch.setenv("AI_COMPLEXITY_ACTIVE_BASE_COMMIT", "HEAD")
     monkeypatch.setenv("AI_COMPLEXITY_WORK_ITEM_BASE_COMMIT", "HEAD")
