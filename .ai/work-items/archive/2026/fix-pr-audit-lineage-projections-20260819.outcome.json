@@ -1,0 +1,963 @@
+{
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
+  "workItemId": "fix-pr-audit-lineage-projections-20260819",
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "fix-pr-audit-lineage-projections-20260819",
+    "contractDigest": "65aee753c37b59f673f3ba344315132826c2ed08b6a40655595064aa6a0f1ecf",
+    "summaryDigest": "2872f8e476f59a77853ef73caf4248e3b349015d6662224082f05c74ba998923",
+    "verificationDigest": "ad41a3b68153fc5c4b9ec3d2727f7c5c028a4f4969379c87d4c493a68a46e0e0",
+    "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+    "headCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "82a1598cf0f8a65173d2c34d9f9cb4625facc4b47a128ac1a17a23ccb0d1f5df",
+      "binding": {
+        "baseCommit": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+        "candidateHead": "6d295d6da6d6ff62aa8fab50994a5304c8e20b20",
+        "candidateTreeDigest": "986f7bd0a2c46d39fb5568533a52e0aa1b8da5ffef4b5834504bc068678c84b0",
+        "candidateDiffDigest": "0b887220543de110bbf3d728f127798d22346922cc83908925761591a9eeddf3"
+      }
+    }
+  },
+  "sections": {
+    "outcomeSummary": "Task fix-pr-audit-lineage-projections-20260819 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: fix-pr-audit-lineage-projections-20260819",
+    "deliveredChanges": [
+      "scripts/ai_check_pr.py",
+      "tests/test_pr_aggregate.py",
+      ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+      ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+      ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.json",
+      ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "quality failed before the retry.",
+        "policyOrGuard": "required verification: quality",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry quality after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "quality failed before the retry.",
+        "action": "Re-ran quality after the correction; the latest attempt passed.",
+        "verification": "quality latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verificationHistory[0] quality failed",
+            "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "verification[quality] retry passed",
+            "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "The exact provider-side cause of the historical Hosted apt mirror stall remains unproven from one run; the release workflow fix removes that external apt dependency.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": "scripts/ai_check_pr.py",
+        "subject": "implementation"
+      },
+      {
+        "source": "tests/test_pr_aggregate.py",
+        "subject": "verification"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "subject": "verificationHistory[0] quality failed",
+        "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "subject": "verification[quality] retry passed",
+        "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+      }
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "PR evidence aggregation now follows the repository's canonical synchronization history and recognizes generated knowledge records only when their validated evidence dependency closure reaches a directly owned projection. Existing malformed-lineage and unowned-path rejection behavior remains fail closed.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_pr.py",
+            "subject": "PR archive compatibility and knowledge projection ownership"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "Validate synchronizationHistory with the lifecycle module before accepting a Contract base transition, then validate each generated knowledge record and traverse only its repository-relative evidence dependencies to find direct Summary ownership.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_check_pr.py",
+            "subject": "archive_base_is_compatible and archive_owns_knowledge_projection"
+          },
+          {
+            "source": "scripts/ai_check_knowledge_index.py",
+            "subject": "check_record"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "scripts/ai_check_pr.py",
+          "detail": "Archive base compatibility and generated knowledge ownership checks.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_check_pr.py",
+              "subject": "PR aggregate audit"
+            }
+          ]
+        },
+        {
+          "component": "tests/test_pr_aggregate.py",
+          "detail": "Regression coverage for canonical lineage and dependency ownership.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "PR aggregate regression suite"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Reuse existing lifecycle and knowledge validators.",
+          "reason": "The audit must enforce the same evidence schemas used by lifecycle commands and knowledge index checks.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_start_receipt.py",
+              "subject": "canonical synchronization history validator"
+            }
+          ]
+        },
+        {
+          "decision": "Do not grant broad ownership to all knowledge files.",
+          "reason": "Only a validated generated record whose dependency closure reaches a directly changed owned projection may pass.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "unowned knowledge projection rejection"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Compatibility",
+          "detail": "Existing resumeHistory handling and exact-base contracts remain supported; synchronizationHistory is selected when present.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_pr_aggregate.py",
+              "subject": "lineage compatibility regression coverage"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "source": "scripts/ai_check_pr.py",
+          "subject": "implementation",
+          "claim": "The audit logic implements the bounded lineage and projection rules.",
+          "status": "verified"
+        },
+        {
+          "source": "tests/test_pr_aggregate.py",
+          "subject": "verification",
+          "claim": "The focused and full PR aggregate test suites pass.",
+          "status": "verified"
+        }
+      ]
+    }
+  },
+  "humanHandoff": {
+    "locale": "en",
+    "completed": [
+      {
+        "claim": "Changed scripts/ai_check_pr.py",
+        "title": "Changed scripts/ai_check_pr.py",
+        "detail": "Use canonical synchronizationHistory validation and evidence-derived knowledge projection ownership during PR aggregation.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "scripts/ai_check_pr.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "scripts/ai_check_pr.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_pr_aggregate.py",
+        "title": "Changed tests/test_pr_aggregate.py",
+        "detail": "Cover valid and discontinuous synchronization lineage plus transitive and unowned knowledge projection cases.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "tests/test_pr_aggregate.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "tests/test_pr_aggregate.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json",
+        "title": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json",
+        "detail": "The active Contract records the bounded governance scope and acceptance criteria.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "title": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "detail": "This Summary records the implementation approach and verification evidence for the corrective WI.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.json",
+        "title": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.md",
+        "title": "Changed .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.md",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.outcome.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.json",
+        "title": "Changed .ai/cockpit/task_report.json",
+        "detail": "Generated machine-readable Human Benefit Review Report.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.md",
+        "title": "Changed .ai/cockpit/task_report.md",
+        "detail": "Generated human-readable Human Benefit Review Report.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.json",
+        "title": "Changed docs/reference/capability-truth-matrix.json",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=200470bf37fe469ac8680dc0f42f08f2242edd67e14ba5720a02615932a19a31, after=1fb8e02184733ec31cb551ef457315b96d19b46bb780586f436baba1a6e29b13.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.md",
+        "title": "Changed docs/reference/capability-truth-matrix.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.json",
+        "title": "Changed docs/reference/japanese-capability-assessment.json",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=be7a725f6284bf850dc957984ff4d2282f0d87f656bd647590662f6e16853bbb, after=be7a725f6284bf850dc957984ff4d2282f0d87f656bd647590662f6e16853bbb.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.md",
+        "title": "Changed docs/reference/japanese-capability-assessment.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=20c6bb08ae5932d3d85637bfb0dd278efc391519e4b3a2ceaa145b7b6d3c0804, after=20c6bb08ae5932d3d85637bfb0dd278efc391519e4b3a2ceaa145b7b6d3c0804.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=df2e9ae7208188b559c8dc85e20ee0a580a80c1643d952aa88742aff03855602, after=6d36eafa954f2f420f6c352086eb4a3d6108dda29c72015d6d6054dffc8acf80.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=2bd6081b9ed5b733b5992d405aa4345ee7380e7cc55fddc93094353630acf71a, after=1de8c07843ae2c0232daddcccf231eb7c0c44996ebaf305349af4aef0b7c2f29.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "passed": [
+      {
+        "claim": "sourceBoundEvidence",
+        "title": "sourceBoundEvidence",
+        "detail": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=1c5e5bd65ca11058e86eecbfebd363965dc91afbbcbf555599988b928d6aded2, after=614c085fcd9d7045a169a1348e4b01e3f175bece6b813dd23b1b3e8f6056a9ac; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "2f322c3cf1d320f392891b7c8c6c5af711d4854af2dbdd1d593ebb956feb1130"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "2f322c3cf1d320f392891b7c8c6c5af711d4854af2dbdd1d593ebb956feb1130"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiWorkItem",
+        "title": "aiWorkItem",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json work item contract check passed: .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "7bde8e8fdf3d33dd64e678fb0e9550120a4ff3b062fbd721323304e0e1062b82"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "7bde8e8fdf3d33dd64e678fb0e9550120a4ff3b062fbd721323304e0e1062b82"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScope",
+        "title": "aiScope",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json scope guard passed: 13 changed path(s) covered",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiScope",
+            "digest": "1b44a57b179eb3fabf88ee1b93852c4eea07c107bbd5eb468ad702a2f81d8be6"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiScope",
+            "digest": "1b44a57b179eb3fabf88ee1b93852c4eea07c107bbd5eb468ad702a2f81d8be6"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuards",
+        "title": "aiGuards",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiGuards",
+            "digest": "b7d5670e9793dc0bdbfaae3d6dd68c6635f48f1dfbd9e833ba96ee7bc56d6217"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiGuards",
+            "digest": "b7d5670e9793dc0bdbfaae3d6dd68c6635f48f1dfbd9e833ba96ee7bc56d6217"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCheckpoint",
+        "title": "aiCheckpoint",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json --summary .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-pr-audit-lineage-projections-20260819` - Contract Hash: `65aee753c37b59f6` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - A",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "fc0a43e78294d6e46e0a6fd628865c98f361bee67b995d146ecdc02237ca193b"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "fc0a43e78294d6e46e0a6fd628865c98f361bee67b995d146ecdc02237ca193b"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiReviewPolicy",
+        "title": "aiReviewPolicy",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json [review] .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.json [review] .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.outcome.md [review] .ai/work-items/starts/f",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "0406ccd0c5c103962f9ddbf3a7584b3cc1bbafadb0dd6b93866301e3a5cb97c4"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "0406ccd0c5c103962f9ddbf3a7584b3cc1bbafadb0dd6b93866301e3a5cb97c4"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiBacktrack",
+        "title": "aiBacktrack",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "f8aaae8524e986d2f952d36446a86a8234093de17958e67fb8a7b2413ca638e0"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "f8aaae8524e986d2f952d36446a86a8234093de17958e67fb8a7b2413ca638e0"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCoverage",
+        "title": "aiCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiCoverage",
+            "digest": "00ce5565c581c67cdbf6e326d938668d18e3a2a34ab1aba9606eea68e0f7110b"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiCoverage",
+            "digest": "00ce5565c581c67cdbf6e326d938668d18e3a2a34ab1aba9606eea68e0f7110b"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScenarioCoverage",
+        "title": "aiScenarioCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json --summary .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "fc5c25403ef9ccfb00d3b672aa5025ac8d99a5aad752d5ba3f737e96b700aeef"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "fc5c25403ef9ccfb00d3b672aa5025ac8d99a5aad752d5ba3f737e96b700aeef"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuidelines",
+        "title": "aiGuidelines",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json --summary .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "aeb5615c862a3621119d3d879eb8586aa61b8404847bd9b03529621f472b27d2"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "aeb5615c862a3621119d3d879eb8586aa61b8404847bd9b03529621f472b27d2"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiDiffOwnership",
+        "title": "aiDiffOwnership",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json ## Diff Ownership Preview - active_owned: `13`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validate",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "aeeac11d2d935256336ec0c55662cc0b296db63588ccf475dc7e7abc5f7d16ed"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "aeeac11d2d935256336ec0c55662cc0b296db63588ccf475dc7e7abc5f7d16ed"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "quality",
+        "title": "quality",
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, docs/reference/capability-truth-matrix.json, docs/reference/pre-release-documentation-alignment.json, docs/reference/pre-release-documentation-alignment.md, tests/test_pr_a",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "quality",
+            "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "quality",
+            "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatus",
+        "title": "aiStatus",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json --summary .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiStatus",
+            "digest": "d8090a1a82a991cbc8e68673458fc12ea6fdca86c4f005fb03487eb537f0dae6"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiStatus",
+            "digest": "d8090a1a82a991cbc8e68673458fc12ea6fdca86c4f005fb03487eb537f0dae6"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusCheck",
+        "title": "aiStatusCheck",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json --summary .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "bcb74d07b020ad2daa6865a1a94dc7b38366e11bb6725c274a439ac05133cdca"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "bcb74d07b020ad2daa6865a1a94dc7b38366e11bb6725c274a439ac05133cdca"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusConsistency",
+        "title": "aiStatusConsistency",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "f7dca25c981f8fafb6885feb873c1525a25472bda6a88f7cf380f0ce34e8aae5"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "f7dca25c981f8fafb6885feb873c1525a25472bda6a88f7cf380f0ce34e8aae5"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiAgentRisk",
+        "title": "aiAgentRisk",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json --summary .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "2c37a099930358a49f894f4ac46974d764765a3473efeb76d27a4d781130ed29"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "2c37a099930358a49f894f4ac46974d764765a3473efeb76d27a4d781130ed29"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiSummary",
+        "title": "aiSummary",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json --contract .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.contract.json ai summary check passed: .ai/work-items/active/fix-pr-audit-lineage-projections-20260819.summary.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiSummary",
+            "digest": "1cc295daf269cab988802184a50437f9ab38e8df1222980683fb03d6830a5d37"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.contract.json",
+            "subject": "aiSummary",
+            "digest": "1cc295daf269cab988802184a50437f9ab38e8df1222980683fb03d6830a5d37"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "retained": [],
+    "risks": [
+      {
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "The exact provider-side cause of the historical Hosted apt mirror stall remains unproven from one run; the release workflow fix removes that external apt dependency.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "redReasons": [],
+    "questions": {
+      "problemCount": 1,
+      "problemCountEvidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+          "subject": "verification and verificationHistory"
+        }
+      ],
+      "blockedProblems": [],
+      "resolvedProblems": [
+        {
+          "claim": "quality failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+              "subject": "verificationHistory[0] quality failed",
+              "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolutionApproach": [
+        {
+          "claim": "Re-ran quality after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+              "subject": "verificationHistory[0] quality failed",
+              "digest": "a693d4957220bb41389fb6f2f07de0eb1abaa81804f2bae8272d991f2eeb43c3"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+              "subject": "verification[quality] retry passed",
+              "digest": "4375e9e8c6dd911769f4853c6f78c3986025183994c5e055782c224700be65db"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "avoidedRisks": [
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        }
+      ],
+      "remainingRisks": [
+        {
+          "claim": "The exact provider-side cause of the historical Hosted apt mirror stall remains unproven from one run; the release workflow fix removes that external apt dependency.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/fix-pr-audit-lineage-projections-20260819.summary.json",
+              "subject": "residualRisks"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "agentUnknowns": [],
+      "humanConfirmations": [],
+      "recurrenceLikelihood": {
+        "claim": "unknown: no direct recurrence probability evidence was recorded.",
+        "evidenceRefs": [],
+        "inference": true
+      },
+      "nextTime": {
+        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+        "evidenceRefs": [],
+        "inference": true
+      }
+    }
+  }
+}

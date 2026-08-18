@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_capability_truth import validate_matrix
+from ai_check_knowledge_index import check_record as check_knowledge_record
 from ai_check_summary import changed_file_paths, validate_summary
 from ai_check_work_item import validate_contract
 from ai_common import (
@@ -39,7 +40,11 @@ from ai_lifecycle_truth import (
 )
 from ai_outcome_gate import validate_terminal_outcome
 from ai_post_archive_recovery import RECEIPT_DIRECTORY, archive_files, validate_recovery_receipt
-from ai_start_receipt import validate_receipt, validate_resume_history_structure
+from ai_start_receipt import (
+    validate_receipt,
+    validate_resume_history_structure,
+    validate_synchronization_history_structure,
+)
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
 OWNERSHIP_POLICY = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
@@ -258,13 +263,15 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
     receipt_base = receipt.get("baseCommit")
     if not isinstance(receipt_base, str) or not receipt_base:
         return False
-    if receipt_base != archived_base and validate_resume_history_structure(contract, receipt_base):
-        return False
-    if (
-        receipt_base == archived_base
-        and contract.get("resumeHistory") is not None
-        and validate_resume_history_structure(contract, receipt_base)
-    ):
+    if contract.get("synchronizationHistory") is not None:
+        lineage_issues = validate_synchronization_history_structure(contract, receipt_base)
+    elif contract.get("resumeHistory") is not None:
+        lineage_issues = validate_resume_history_structure(contract, receipt_base)
+    else:
+        lineage_issues = (
+            [] if receipt_base == archived_base else ["missing baseline transition history"]
+        )
+    if lineage_issues:
         return False
     if archived_base == pr_base:
         return True
@@ -678,6 +685,29 @@ def human_benefit_report_issues(contract_path: Path) -> list[str]:
     return validate_human_report(report, outcome, phase="review", markdown=markdown)
 
 
+def _knowledge_projection_dependencies(path: str) -> set[str]:
+    """Return validated knowledge-record dependencies for a generated projection."""
+    if not path.startswith(".ai/knowledge/work-items/") or not path.endswith(".json"):
+        return set()
+    record_path = PROJECT_ROOT / path
+    try:
+        if check_knowledge_record(record_path, repo_root=PROJECT_ROOT):
+            return set()
+        record = load_json(record_path)
+    except (OSError, json.JSONDecodeError, ValueError):
+        return set()
+    evidence = record.get("evidence")
+    if not isinstance(evidence, list):
+        return set()
+    return {
+        item["path"]
+        for item in evidence
+        if isinstance(item, dict)
+        and isinstance(item.get("path"), str)
+        and item["path"].startswith(".ai/knowledge/")
+    }
+
+
 def archive_owns_knowledge_projection(
     path: str,
     archive_entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
@@ -690,17 +720,33 @@ def archive_owns_knowledge_projection(
     archived Summary's exact generated paths are the durable ownership evidence
     for this derived surface.
     """
-    if path != ".ai/knowledge/index.json" and not path.startswith(".ai/knowledge/work-items/"):
+    if path not in all_paths:
         return False
+    direct_owned: set[str] = set()
     for _contract_path, _contract, summary, _rank in archive_entries:
         changed = set(changed_file_paths(summary))
-        if path not in changed or path not in all_paths:
+        direct_owned.update(
+            candidate
+            for candidate in changed & set(all_paths)
+            if candidate == ".ai/knowledge/index.json"
+            or candidate.startswith(".ai/knowledge/work-items/")
+        )
+    if path in direct_owned:
+        return True
+    if not path.startswith(".ai/knowledge/work-items/"):
+        return False
+    pending = [path]
+    visited: set[str] = set()
+    while pending:
+        current = pending.pop()
+        if current in visited:
             continue
-        required = {".ai/knowledge/index.json"}
-        if path.startswith(".ai/knowledge/work-items/"):
-            required.add(path)
-        if required.issubset(changed) and required.issubset(all_paths):
-            return True
+        visited.add(current)
+        for dependency in _knowledge_projection_dependencies(current):
+            if dependency in direct_owned:
+                return True
+            if dependency in all_paths and dependency.startswith(".ai/knowledge/work-items/"):
+                pending.append(dependency)
     return False
 
 
