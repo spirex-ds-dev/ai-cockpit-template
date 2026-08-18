@@ -38,7 +38,7 @@ from ai_lifecycle_truth import (
     superseded_summary_validation_exception,
 )
 from ai_outcome_gate import validate_terminal_outcome
-from ai_post_archive_recovery import RECEIPT_DIRECTORY, validate_recovery_receipt
+from ai_post_archive_recovery import RECEIPT_DIRECTORY, archive_files, validate_recovery_receipt
 from ai_start_receipt import validate_receipt, validate_resume_history_structure
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
@@ -499,6 +499,8 @@ def same_work_item_recovery_paths(
             continue
         if not isinstance(receipt, dict) or receipt.get("workItemId") not in known_tasks:
             continue
+        if receipt.get("prBaseCommit") != base:
+            continue
         receipt_issues = validate_recovery_receipt(PROJECT_ROOT, receipt, pr_base=base)
         if receipt_issues:
             blockers.append(
@@ -702,6 +704,38 @@ def archive_owns_knowledge_projection(
     return False
 
 
+def recovery_only_contract_paths(base: str) -> list[Path]:
+    """Discover archived owners for a receipt-bound PR with no archive diff.
+
+    A same-Work-Item recovery may be opened after the original PR has merged.
+    Its archived Contract/Summary are already on the base, so they cannot
+    appear as additions in the recovery PR.  The recovery receipt remains the
+    authority for the narrowly permitted paths.
+    """
+    directory = PROJECT_ROOT / RECEIPT_DIRECTORY
+    if not directory.is_dir():
+        return []
+    found: dict[str, Path] = {}
+    for receipt_path in sorted(directory.glob("*.json")):
+        try:
+            receipt = load_json(receipt_path)
+        except (OSError, json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(receipt, dict) or receipt.get("prBaseCommit") != base:
+            continue
+        task = receipt.get("workItemId")
+        if not isinstance(task, str) or not task:
+            continue
+        try:
+            artifacts = archive_files(PROJECT_ROOT, task)
+        except (OSError, ValueError):
+            continue
+        if validate_recovery_receipt(PROJECT_ROOT, receipt, pr_base=base):
+            continue
+        found[task] = artifacts["contract"]
+    return [found[task] for task in sorted(found)]
+
+
 def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     issues: list[str] = []
     evidence_changes = archive_evidence_changes(base)
@@ -742,6 +776,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
                 f"{contract_rel}, {summary_rel}"
             )
 
+    contract_paths = contract_paths or recovery_only_contract_paths(base)
     if not contract_paths:
         return ["PR diff must contain at least one archived Work Item Contract"]
 
