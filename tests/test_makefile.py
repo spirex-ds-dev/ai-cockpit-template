@@ -79,6 +79,15 @@ def test_source_and_installed_makefiles_expose_the_same_post_archive_recovery_ta
         assert "HOSTED_JOB_ID" in text
 
 
+def test_pr_audit_restores_tracked_aggregate_evidence_before_audit():
+    source = (ROOT / "Makefile").read_text(encoding="utf-8")
+
+    assert 'aggregate_receipt="target/quality/project-test-aggregate/receipt.json"' in source
+    assert 'git ls-files --error-unmatch "$$aggregate_receipt"' in source
+    assert 'git restore --source=HEAD --worktree -- "$$aggregate_receipt"' in source
+    assert source.index("aggregate_receipt=") < source.index("scripts/ai_check_pr.py")
+
+
 def test_project_test_shards_skip_empty_git_diff_before_applying_changes():
     text = (ROOT / "Makefile").read_text(encoding="utf-8")
 

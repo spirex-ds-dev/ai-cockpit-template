@@ -914,6 +914,10 @@ check-ai:
 	fi
 
 check-ai-pr-core:
+	@aggregate_receipt="target/quality/project-test-aggregate/receipt.json"; \
+	if git ls-files --error-unmatch "$$aggregate_receipt" >/dev/null 2>&1; then \
+		git restore --source=HEAD --worktree -- "$$aggregate_receipt"; \
+	fi
 	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 check-ai-pr:
