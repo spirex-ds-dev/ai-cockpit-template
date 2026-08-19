@@ -11,6 +11,7 @@ import json
 import os
 import re
 import shlex
+import signal
 import subprocess
 import sys
 import time
@@ -53,6 +54,10 @@ from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 FINISH_LOCK_MAX_AGE_SECONDS = 24 * 60 * 60
+FINISH_COMMAND_TIMEOUT_ENV = "AI_FINISH_COMMAND_TIMEOUT_SECONDS"
+FINISH_COMMAND_TIMEOUT_DEFAULT_SECONDS = 60 * 60
+FINISH_COMMAND_TIMEOUT_MAX_SECONDS = 24 * 60 * 60
+FINISH_COMMAND_TERMINATION_GRACE_SECONDS = 5
 REPORT_BOUNDARY_TEXT = {
     "en": (
         "## Task Outcome Report (active; relay to the human before archive)",
@@ -253,6 +258,85 @@ def task_paths(task: str) -> tuple[str, str]:
     ).as_posix()
 
 
+def finish_command_timeout_seconds() -> float:
+    """Return the finite command timeout, rejecting unsafe overrides."""
+    raw = os.environ.get(FINISH_COMMAND_TIMEOUT_ENV)
+    if raw is None or not raw.strip():
+        return float(FINISH_COMMAND_TIMEOUT_DEFAULT_SECONDS)
+    try:
+        value = float(raw)
+    except ValueError as exc:
+        raise ValueError(
+            f"{FINISH_COMMAND_TIMEOUT_ENV} must be a finite number of seconds"
+        ) from exc
+    if not value.is_integer() or not 1 <= value <= FINISH_COMMAND_TIMEOUT_MAX_SECONDS:
+        raise ValueError(
+            f"{FINISH_COMMAND_TIMEOUT_ENV} must be an integer from 1 through "
+            f"{FINISH_COMMAND_TIMEOUT_MAX_SECONDS}"
+        )
+    return value
+
+
+def _owned_process_groups(root_pid: int) -> set[int]:
+    """Return process groups belonging to one command's process tree."""
+    if os.name != "posix":
+        return {root_pid}
+    try:
+        snapshot = subprocess.run(  # nosec B603 B607 - fixed local ps inspection command
+            ["/bin/ps", "-eo", "pid=,ppid=,pgid="],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return {root_pid}
+    children: dict[int, list[tuple[int, int]]] = {}
+    for line in snapshot.stdout.splitlines():
+        try:
+            pid, parent_pid, process_group = (int(value) for value in line.split())
+        except ValueError:
+            continue
+        children.setdefault(parent_pid, []).append((pid, process_group))
+    groups = {root_pid}
+    pending = [root_pid]
+    while pending:
+        parent_pid = pending.pop()
+        for child_pid, process_group in children.get(parent_pid, []):
+            groups.add(process_group)
+            pending.append(child_pid)
+    return groups
+
+
+def _signal_owned_process_group(
+    process: subprocess.Popen[str], signum: int, groups: set[int] | None = None
+) -> None:
+    """Signal only process groups in one Finish command's process tree."""
+    if os.name == "posix":
+        for process_group in sorted(groups or _owned_process_groups(process.pid)):
+            try:
+                os.killpg(process_group, signum)
+            except (ProcessLookupError, OSError):
+                pass
+    else:
+        if signum == signal.SIGKILL:
+            process.kill()
+        else:
+            process.terminate()
+
+
+def _terminate_owned_process_group(process: subprocess.Popen[str]) -> None:
+    """Terminate, escalate, and reap one Finish command and its descendants."""
+    groups = _owned_process_groups(process.pid)
+    if process.poll() is not None and groups == {process.pid}:
+        return
+    _signal_owned_process_group(process, signal.SIGTERM, groups)
+    try:
+        process.wait(timeout=FINISH_COMMAND_TERMINATION_GRACE_SECONDS)
+    except subprocess.TimeoutExpired:
+        _signal_owned_process_group(process, signal.SIGKILL, groups)
+        process.wait()
+
+
 def run(command: list[str], *, extra_env: dict[str, str] | None = None) -> tuple[int, int, str]:
     command = list(command)
     if command and command[0] == "make":
@@ -265,24 +349,68 @@ def run(command: list[str], *, extra_env: dict[str, str] | None = None) -> tuple
         output = f"ERROR: {exc}\n"
         print(output, end="", file=sys.stderr)
         return 2, 0, output
+    try:
+        timeout_seconds = finish_command_timeout_seconds()
+    except ValueError as exc:
+        output = f"ERROR: {exc}\n"
+        print(output, end="", file=sys.stderr)
+        return 2, 0, output
     print("$ " + " ".join(command))
     start = time.time()
     environment = clean_git_environment()
     if extra_env:
         environment.update(extra_env)
-    result = subprocess.run(
+    process = subprocess.Popen(  # validated argv, no shell, owned session
         command,
         cwd=PROJECT_ROOT,
         env=environment,
-        check=False,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
+        start_new_session=os.name == "posix",
     )
-    if result.stdout:
-        displayed = console_output(result.stdout)
+    cancelled_signal: int | None = None
+    timed_out = False
+    previous_handlers: dict[int, Any] = {}
+
+    def cancel(signum: int, _frame: Any) -> None:
+        nonlocal cancelled_signal
+        cancelled_signal = signum
+        _terminate_owned_process_group(process)
+
+    if os.name == "posix":
+        for signum in (signal.SIGINT, signal.SIGTERM):
+            previous_handlers[signum] = signal.getsignal(signum)
+            signal.signal(signum, cancel)
+    try:
+        try:
+            captured, _ = process.communicate(timeout=timeout_seconds)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            _terminate_owned_process_group(process)
+            captured, _ = process.communicate()
+    finally:
+        for restored_signum, handler in previous_handlers.items():
+            signal.signal(restored_signum, handler)
+    output = captured or ""
+    if timed_out:
+        output += (
+            f"\n🔴 ai-finish command timed out after {int(timeout_seconds)} second(s); "
+            "owned process group terminated.\n"
+        )
+        code = 124
+    elif cancelled_signal is not None:
+        output += (
+            f"\n🔴 ai-finish command cancelled by signal {cancelled_signal}; "
+            "owned process group terminated.\n"
+        )
+        code = 128 + cancelled_signal
+    else:
+        code = process.returncode
+    if output:
+        displayed = console_output(output)
         print(displayed, end="" if displayed.endswith("\n") else "\n")
-    return result.returncode, elapsed_ms(start), result.stdout or ""
+    return code, elapsed_ms(start), output
 
 
 def evidence(

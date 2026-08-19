@@ -1,5 +1,7 @@
 import hashlib
 import json
+import signal
+import subprocess
 import sys
 from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
@@ -79,12 +81,26 @@ def test_nested_make_command_rejects_untrusted_or_conflicting_entrypoint(
 def test_finish_run_merges_stabilization_environment(monkeypatch):
     captured = {}
 
-    def fake_run(command, **kwargs):
+    class FakeProcess:
+        pid = 901
+        returncode = 0
+
+        def communicate(self, timeout=None):
+            return "passed\n", None
+
+        def poll(self):
+            return self.returncode
+
+        def wait(self, timeout=None):
+            return self.returncode
+
+    def fake_popen(command, **kwargs):
         captured["command"] = command
         captured["env"] = kwargs["env"]
-        return SimpleNamespace(returncode=0, stdout="passed\n")
+        captured["start_new_session"] = kwargs["start_new_session"]
+        return FakeProcess()
 
-    monkeypatch.setattr(ai_finish.subprocess, "run", fake_run)
+    monkeypatch.setattr(ai_finish.subprocess, "Popen", fake_popen)
     monkeypatch.delenv("AI_COCKPIT_MAKE_ENTRYPOINT", raising=False)
     code, _, output = ai_finish.run(
         ["make", "check-ai-agent-risk"], extra_env={"AI_FINISH_STABILIZING": "1"}
@@ -93,6 +109,7 @@ def test_finish_run_merges_stabilization_environment(monkeypatch):
     assert output == "passed\n"
     assert captured["command"] == ["make", "check-ai-agent-risk"]
     assert captured["env"]["AI_FINISH_STABILIZING"] == "1"
+    assert captured["start_new_session"] is True
 
 
 def test_finish_discards_verification_evidence_bound_to_a_prior_contract(tmp_path):
@@ -138,10 +155,24 @@ def test_finish_console_output_is_bounded_but_marks_truncation():
 
 def test_finish_run_bounds_large_console_output(monkeypatch, capsys):
     payload = "x" * (ai_finish.CONSOLE_OUTPUT_LIMIT + 10)
+
+    class FakeProcess:
+        pid = 902
+        returncode = 0
+
+        def communicate(self, timeout=None):
+            return payload, None
+
+        def poll(self):
+            return self.returncode
+
+        def wait(self, timeout=None):
+            return self.returncode
+
     monkeypatch.setattr(
         ai_finish.subprocess,
-        "run",
-        lambda *_args, **_kwargs: SimpleNamespace(returncode=0, stdout=payload),
+        "Popen",
+        lambda *_args, **_kwargs: FakeProcess(),
     )
 
     code, _, output = ai_finish.run(["make", "check-ai-agent-risk"])
@@ -149,6 +180,119 @@ def test_finish_run_bounds_large_console_output(monkeypatch, capsys):
     assert code == 0
     assert output == payload
     assert "output truncated: 10 character(s)" in capsys.readouterr().out
+
+
+class ProcessCleanupFakeProcess:
+    def __init__(self, *, timeout=False):
+        self.pid = 901
+        self.returncode = None
+        self.timeout = timeout
+        self.communicate_calls = 0
+        self.wait_calls = 0
+
+    def communicate(self, timeout=None):
+        self.communicate_calls += 1
+        if self.timeout and self.communicate_calls == 1:
+            raise subprocess.TimeoutExpired(["make", "quality"], timeout)
+        self.returncode = 0
+        return "captured\n", None
+
+    def poll(self):
+        return self.returncode
+
+    def wait(self, timeout=None):
+        self.wait_calls += 1
+        if self.timeout and self.wait_calls == 1:
+            raise subprocess.TimeoutExpired(["make", "quality"], timeout)
+        self.returncode = 0
+        return self.returncode
+
+
+def test_finish_timeout_terminates_and_escalates_owned_process_group(monkeypatch):
+    process = ProcessCleanupFakeProcess(timeout=True)
+    signals = []
+
+    monkeypatch.setattr(ai_finish.subprocess, "Popen", lambda *_args, **_kwargs: process)
+    monkeypatch.setattr(ai_finish, "_owned_process_groups", lambda _pid: {901})
+    monkeypatch.setattr(
+        ai_finish.os,
+        "killpg",
+        lambda pid, signum: signals.append((pid, signum)),
+    )
+    monkeypatch.setenv(ai_finish.FINISH_COMMAND_TIMEOUT_ENV, "1")
+
+    code, _duration, output = ai_finish.run(["make", "quality"])
+
+    assert code == 124
+    assert "timed out after 1 second(s)" in output
+    assert signals == [(901, signal.SIGTERM), (901, signal.SIGKILL)]
+    assert process.communicate_calls == 2
+    assert process.wait_calls == 2
+
+
+def test_finish_sigterm_cancellation_cleans_owned_process_group(monkeypatch):
+    process = ProcessCleanupFakeProcess()
+    signals = []
+
+    monkeypatch.setattr(ai_finish.subprocess, "Popen", lambda *_args, **_kwargs: process)
+    monkeypatch.setattr(ai_finish, "_owned_process_groups", lambda _pid: {901})
+    monkeypatch.setattr(
+        ai_finish.os,
+        "killpg",
+        lambda pid, signum: signals.append((pid, signum)),
+    )
+
+    def communicate(timeout=None):
+        handler = signal.getsignal(signal.SIGTERM)
+        assert callable(handler)
+        handler(signal.SIGTERM, None)
+        return "cancelled\n", None
+
+    process.communicate = communicate
+
+    code, _duration, output = ai_finish.run(["make", "quality"])
+
+    assert code == 128 + signal.SIGTERM
+    assert "cancelled by signal" in output
+    assert signals == [(901, signal.SIGTERM)]
+
+
+def test_finish_rejects_invalid_timeout_before_spawning(monkeypatch):
+    monkeypatch.setenv(ai_finish.FINISH_COMMAND_TIMEOUT_ENV, "0")
+    monkeypatch.setattr(
+        ai_finish.subprocess,
+        "Popen",
+        lambda *_args, **_kwargs: pytest.fail("invalid timeout must not spawn a command"),
+    )
+
+    code, duration, output = ai_finish.run(["make", "quality"])
+
+    assert code == 2
+    assert duration == 0
+    assert ai_finish.FINISH_COMMAND_TIMEOUT_ENV in output
+
+
+def test_finish_signal_targets_only_owned_process_group(monkeypatch):
+    process = ProcessCleanupFakeProcess()
+    signals = []
+    monkeypatch.setattr(
+        ai_finish.os,
+        "killpg",
+        lambda pid, signum: signals.append((pid, signum)),
+    )
+
+    ai_finish._signal_owned_process_group(process, signal.SIGTERM)
+
+    assert signals == [(901, signal.SIGTERM)]
+
+
+def test_finish_process_group_discovery_collects_descendants(monkeypatch):
+    class Snapshot:
+        stdout = "901 1 901\n902 901 902\n903 902 903\n904 1 904\n"
+
+    monkeypatch.setattr(ai_finish.subprocess, "run", lambda *_args, **_kwargs: Snapshot())
+
+    assert ai_finish._owned_process_groups(901) == {901, 902, 903}
 
 
 @pytest.fixture(autouse=True)
