@@ -543,7 +543,6 @@ quality-full-owned:
 		timing="$$session_root/timing"; logs="$$session_root/logs"; junit="$$session_root/junit"; \
 		mkdir -p "$$timing" "$$logs" "$$junit"; \
 		trap 'status=$$?; printf "%s\n" "$$session_id" > target/quality/current-session.txt; cleanup_project_test_receipt "$$status"' EXIT; \
-		restore_project_test_receipt 0; \
 		printf '%s\n' "$$session_id" > target/quality/current-session.txt; \
 		$(AI_PYTHON) scripts/run_quality_session.py --phase quality-fast --phase quality-heavy -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit" TEST_WEAKENING_FULL_OWNERSHIP=true; \
 		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md" --profile "$(QUALITY_PROFILE)" $(QUALITY_ESCALATIONS) $(QUALITY_ESCALATION_REASONS); \

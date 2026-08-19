@@ -98,10 +98,7 @@ def test_quality_full_restores_tracked_aggregate_evidence_before_exit():
     assert 'aggregate_receipt="target/quality/project-test-aggregate/receipt.json"' in quality_full
     assert 'git ls-files --error-unmatch "$$aggregate_receipt"' in quality_full
     assert 'git restore --source=HEAD --worktree -- "$$aggregate_receipt"' in quality_full
-    assert "restore_project_test_receipt 0" in quality_full
-    assert quality_full.index("restore_project_test_receipt 0") < quality_full.index(
-        "run_quality_session.py"
-    )
+    assert "restore_project_test_receipt 0" not in quality_full
     assert quality_full.index("trap") < quality_full.index("run_quality_session.py")
 
 
