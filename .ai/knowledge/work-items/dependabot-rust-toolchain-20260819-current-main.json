@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "dependabot-rust-toolchain-20260819-current-main",
+  "title": "Process Dependabot rust-toolchain update from current main",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在现有 compatibility workflow 中只替换 dtolnay/rust-toolchain 的 immutable action SHA，保持 Rust toolchain 版本、矩阵条件和其他 CI 门禁不变。",
+    "status": "incomplete"
+  },
+  "configuration": {
+    "approachType": "configuration",
+    "status": "complete",
+    "summary": {
+      "text": "在现有 compatibility workflow 中只替换 dtolnay/rust-toolchain 的 immutable action SHA，保持 Rust toolchain 版本、矩阵条件和其他 CI 门禁不变。",
+      "status": "verified",
+      "evidence": [
+        {
+          "source": ".github/workflows/compatibility.yml",
+          "subject": "Single rust-toolchain action pin in the Rust compatibility lane"
+        }
+      ]
+    },
+    "mechanism": {
+      "text": "Rust compatibility lane 在 matrix.stack == 'rust' 时使用新 SHA 加载同一 rust-toolchain action，toolchain 仍为 1.86.0；其余 lanes 和 required jobs 不变。",
+      "status": "verified",
+      "evidence": [
+        {
+          "source": ".github/workflows/compatibility.yml",
+          "subject": "Rust lane condition, action SHA, and toolchain input"
+        },
+        {
+          "source": "tests/test_workflows.py",
+          "subject": "Workflow contract regression coverage"
+        }
+      ]
+    },
+    "affectedComponents": [
+      {
+        "component": "Rust compatibility lane",
+        "detail": "Uses the Dependabot target action commit while retaining the existing Rust toolchain input and matrix condition.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": ".github/workflows/compatibility.yml",
+            "subject": "Rust compatibility job"
+          }
+        ]
+      }
+    ],
+    "designDecisions": [
+      {
+        "decision": "Keep the dependency update as a one-line immutable SHA replacement.",
+        "reason": "The successor must preserve the raw Dependabot change boundary and avoid unrelated CI behavior changes.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": ".github/workflows/compatibility.yml",
+            "subject": "Exact workflow diff"
+          }
+        ]
+      }
+    ],
+    "technicalDetails": [
+      {
+        "topic": "Action pinning",
+        "detail": "dtolnay/rust-toolchain is pinned to 6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 rather than a mutable tag or branch.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": ".github/workflows/compatibility.yml",
+            "subject": "Immutable action reference"
+          }
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "claim": "The current-main successor changes only the rust-toolchain action SHA in the compatibility workflow.",
+        "status": "verified",
+        "source": ".github/workflows/compatibility.yml",
+        "subject": "Bounded workflow change"
+      }
+    ]
+  },
+  "changes": [
+    ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.contract.json",
+    ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.summary.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "next-release.json",
+    "release-state.json",
+    ".github/workflows/compatibility.yml",
+    ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.json",
+    ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.archive-manifest.json",
+    ".ai/knowledge/work-items/dependabot-rust-toolchain-20260819-current-main.json",
+    ".ai/knowledge/index.json",
+    ".ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json",
+    ".ai/knowledge/work-items/fix-shellcheck-apt-mirror-20260819.json",
+    ".ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json",
+    ".ai/knowledge/work-items/release-projection-v0_5_68-20260819.json",
+    ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Keep the dependency update as a one-line immutable SHA replacement.",
+      "reason": "The successor must preserve the raw Dependabot change boundary and avoid unrelated CI behavior changes.",
+      "status": "unknown"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": ".github/workflows/compatibility.yml",
+      "digest": "a64c0224edeb02604d794c81b18e1f189cd1030787c25f619833e34a3293abf9"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_workflows.py",
+      "digest": "8d192e39952bda76b0fd9b960af59fc72ad6a01672630de1d812857a7a323074"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.contract.json",
+    "contractDigest": "72b884cbf5ed4ab87a2e4a3dac74d1b865bbaf6b580c3b0beab382986dcc9a75",
+    "summaryPath": ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.summary.json",
+    "summaryDigest": "855c2cecef2ff31be0681afb834f98d4588aaab13b0b78126da33ad8a55208c3",
+    "outcomePath": ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.json",
+    "outcomeDigest": "c705a1b11bf525a4069cd69af3074ebcbfb619f6e102eabb43e46804cd2ede1e"
+  },
+  "knowledgeState": "partial",
+  "unknowns": [
+    "Summary and Outcome Implementation Approach are incomplete"
+  ]
+}
