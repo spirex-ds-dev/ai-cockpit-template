@@ -10,15 +10,15 @@ Task dependabot-rust-toolchain-20260819-current-main generated an evidence-deriv
 Governed Work Item: dependabot-rust-toolchain-20260819-current-main
 
 ## Delivered Changes
-- .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json
-- .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json
+- .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.contract.json
+- .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.summary.json
 - .ai/cockpit/sbom.json
 - .ai/cockpit/provenance.json
 - next-release.json
 - release-state.json
 - .github/workflows/compatibility.yml
-- .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.json
-- .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.md
+- .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.json
+- .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.md
 - .ai/cockpit/task_report.json
 - .ai/cockpit/task_report.md
 
@@ -114,7 +114,7 @@ Locale: `zh-CN`
 - aiScope: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json scope guard passed: 13 changed path(s) covered
 - aiGuards: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workflow configuration. guard check comple
 - aiCheckpoint: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json --summary .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json --stage "before_finish" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `dependabot-rust-toolchain-20260819-current-main` - Contract Hash: `72b884cbf5ed4ab8` - Mode: `code` - notCodable: `False` - Execution Decisi
-- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json review policy matched 10 path(s) [review] .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json [review] .ai/work-items/starts/dependabot-rust-toolchain-20260819-current-main.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/sbom.jso
+- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json review policy matched 10 path(s) [review] .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json [review] .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.json [review] .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.md [review
 - aiBacktrack: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json
 - aiCoverage: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json
 - aiScenarioCoverage: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json --summary .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json report: target/ai_scenario_coverage_report.json

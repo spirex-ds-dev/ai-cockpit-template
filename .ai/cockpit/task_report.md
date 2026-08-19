@@ -22,15 +22,15 @@ Design decisions
 ### Evidence
 - The current-main successor changes only the rust-toolchain action SHA in the compatibility workflow.: .github/workflows/compatibility.yml#Bounded workflow change (verified)
 
-- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json [evidence: .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json]
-- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json [evidence: .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json]
+- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json [evidence: .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.contract.json]
+- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json [evidence: .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.summary.json]
 - Changed .ai/cockpit/sbom.json [evidence: .ai/cockpit/sbom.json]
 - Changed .ai/cockpit/provenance.json [evidence: .ai/cockpit/provenance.json]
 - Changed next-release.json [evidence: next-release.json]
 - Changed release-state.json [evidence: release-state.json]
 - Changed .github/workflows/compatibility.yml [evidence: .github/workflows/compatibility.yml]
-- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.json [evidence: .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.json]
-- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.md [evidence: .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.md]
+- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.json [evidence: .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.json]
+- Changed .ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.md [evidence: .ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 
