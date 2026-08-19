@@ -185,6 +185,16 @@ the exact provider and log-digest bindings. A generic command error, a
 coverage-only shortfall, or a log that has only one of those pytest elements is
 not functional-failure evidence and remains rejected.
 
+A completed Hosted quality-gate block can use the same append-only boundary with
+`HOSTED_FAILURE_KIND=governance`. The provider log must contain the explicit
+`quality-full blocked`, `Failed gate`, and `Recovery` signal. This route is
+intended for lifecycle or governance failures such as a valid post-archive
+recovery receipt being mistaken for an unowned no-active worktree change. The
+receipt records the exact failed provider facts and grants ownership only to
+its listed `recoveryPaths`; `check-ai-status-consistency` accepts those paths
+only when the PR base and, for provider-bound receipts, candidate Head also
+match. A generic Hosted command failure remains unowned and fail-closed.
+
 When the provider's raw job log is incomplete, `HOSTED_ARTIFACT_NAME` may name
 one non-expired artifact from that exact run. The recovery command downloads
 the named artifact, records its immutable bytes digest and ID, and accepts it
