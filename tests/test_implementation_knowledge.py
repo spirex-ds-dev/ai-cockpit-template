@@ -8,9 +8,14 @@ import shutil
 from pathlib import Path
 
 import ai_archive_work_item
+import ai_generate_knowledge_record
 import pytest
 from ai_check_knowledge_index import check_index, check_record
-from ai_generate_knowledge_record import build_record, rebuild_index
+from ai_generate_knowledge_record import (
+    build_record,
+    rebuild_existing_projections,
+    rebuild_index,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_SCHEMA = ROOT / ".ai/schemas/implementation-knowledge-record.schema.json"
@@ -307,3 +312,79 @@ def test_archive_projection_generates_record_from_final_archive_paths(
     assert check_record(record_path, repo_root=tmp_path) == []
     index = json.loads((tmp_path / ".ai/knowledge/index.json").read_text(encoding="utf-8"))
     assert index["workItems"][0]["workItemId"] == "archived-knowledge"
+
+
+def test_archive_projection_fails_closed_when_generated_record_has_stale_evidence(
+    tmp_path, monkeypatch
+):
+    contract, summary, outcome = write_fixture(tmp_path, work_item_id="stale-archive")
+    archive_dir = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    archive_dir.mkdir(parents=True)
+    archived_contract = archive_dir / contract.name
+    for source, target in (
+        (contract, archived_contract),
+        (summary, archive_dir / summary.name),
+        (outcome, archive_dir / outcome.name),
+    ):
+        shutil.copyfile(source, target)
+
+    original_build_record = ai_generate_knowledge_record.build_record
+
+    def build_stale_record(*args, **kwargs):
+        record = original_build_record(*args, **kwargs)
+        record["evidence"][0]["digest"] = "0" * 64
+        return record
+
+    monkeypatch.setattr(ai_generate_knowledge_record, "build_record", build_stale_record)
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+
+    with pytest.raises(ValueError, match="stale or invalid"):
+        ai_archive_work_item._generate_knowledge_projection(archived_contract)
+
+
+def test_rebuild_existing_projections_refreshes_records_after_bound_source_changes(tmp_path):
+    contract, summary, outcome = write_fixture(tmp_path, work_item_id="historical-knowledge")
+    archive_dir = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    archive_dir.mkdir(parents=True)
+    archived_contract = archive_dir / contract.name
+    for source, target in (
+        (contract, archived_contract),
+        (summary, archive_dir / summary.name),
+        (outcome, archive_dir / outcome.name),
+    ):
+        shutil.copyfile(source, target)
+
+    records_dir = tmp_path / ".ai" / "knowledge" / "work-items"
+    records_dir.mkdir(parents=True)
+    record_path = records_dir / "historical-knowledge.json"
+    record_path.write_text(
+        json.dumps(
+            build_record(
+                archived_contract,
+                archive_dir / summary.name,
+                archive_dir / outcome.name,
+                repo_root=tmp_path,
+            )
+        ),
+        encoding="utf-8",
+    )
+    rebuild_index(records_dir, tmp_path / ".ai" / "knowledge" / "index.json")
+
+    (tmp_path / "src/order_service.py").write_text(
+        "def validate(order):\n    return order.status\n\n# refreshed source\n",
+        encoding="utf-8",
+    )
+
+    changed = rebuild_existing_projections(repo_root=tmp_path)
+
+    assert ".ai/knowledge/work-items/historical-knowledge.json" in changed
+    assert (
+        check_index(
+            tmp_path / ".ai" / "knowledge" / "index.json",
+            records_dir=records_dir,
+            repo_root=tmp_path,
+        )
+        == []
+    )
+    refreshed = json.loads(record_path.read_text(encoding="utf-8"))
+    assert refreshed["evidence"][0]["digest"] != "0" * 64

@@ -266,6 +266,52 @@ def test_source_bound_refresh_registers_all_declared_generated_documents(tmp_pat
     assert set(summary["documentationAlignment"]["checks"][0]["evidence"]) == set(generated)
 
 
+def test_source_bound_refresh_rebuilds_existing_knowledge_projections(tmp_path, monkeypatch):
+    matrix_path = tmp_path / "docs" / "reference" / "capability-truth-matrix.json"
+    generator_path = tmp_path / "scripts" / "ai_capability_truth.py"
+    summary_path = tmp_path / "summary.json"
+    matrix_path.parent.mkdir(parents=True)
+    generator_path.parent.mkdir(parents=True)
+    matrix_path.write_text("{}\n", encoding="utf-8")
+    generator_path.write_text("# test generator\n", encoding="utf-8")
+    summary_path.write_text(
+        json.dumps({"changedFiles": [], "generatedFiles": [], "verification": []}),
+        encoding="utf-8",
+    )
+    knowledge_file = tmp_path / ".ai" / "knowledge" / "work-items" / "old.json"
+    knowledge_file.parent.mkdir(parents=True)
+    knowledge_file.write_text("old\n", encoding="utf-8")
+    index_file = knowledge_file.parent.parent / "index.json"
+    index_file.write_text("old-index\n", encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+
+    def fake_run(command, **_kwargs):
+        if "--write" in command:
+            matrix_path.write_text("fresh\n", encoding="utf-8")
+            return 0, 3, "capability truth matrix refreshed"
+        return 0, 3, "source-bound evidence passed"
+
+    monkeypatch.setattr(ai_finish, "run", fake_run)
+    monkeypatch.setattr(
+        "ai_generate_knowledge_record.rebuild_existing_projections",
+        lambda *, repo_root: [
+            ".ai/knowledge/work-items/old.json",
+            ".ai/knowledge/index.json",
+        ],
+    )
+
+    code, _duration, detail = ai_finish.refresh_source_bound_evidence(summary_path=summary_path)
+
+    assert code == 0
+    assert "Implementation Knowledge projections refreshed" in detail
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert {item["path"] for item in summary["changedFiles"]} == {
+        "docs/reference/capability-truth-matrix.json",
+        ".ai/knowledge/work-items/old.json",
+        ".ai/knowledge/index.json",
+    }
+
+
 def test_finish_digest_excludes_derived_lifecycle_projections(monkeypatch):
     monkeypatch.setattr(ai_finish, "path_fingerprint", lambda path: f"digest:{path}")
 

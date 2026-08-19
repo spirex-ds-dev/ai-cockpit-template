@@ -35,6 +35,51 @@ def test_pr_rejects_stale_capability_matrix(monkeypatch):
     ) == ["capabilities[3].evidenceSource does not match current evidence bytes"]
 
 
+def test_pr_rejects_stale_implementation_knowledge_projection(tmp_path, monkeypatch):
+    records_dir = tmp_path / ".ai" / "knowledge" / "work-items"
+    records_dir.mkdir(parents=True)
+    source = tmp_path / "src.py"
+    source.write_text("value = 1\n", encoding="utf-8")
+    record = {
+        "schemaVersion": 1,
+        "workItemId": "stale-projection",
+        "title": "Stale projection",
+        "knowledgeState": "partial",
+        "generatedFrom": {},
+        "evidence": [{"type": "code", "path": "src.py", "digest": "0" * 64}],
+    }
+    (records_dir / "stale-projection.json").write_text(json.dumps(record), encoding="utf-8")
+    (tmp_path / ".ai" / "knowledge" / "index.json").write_text(
+        json.dumps(
+            {
+                "schemaVersion": 1,
+                "workItems": [
+                    {
+                        "workItemId": "stale-projection",
+                        "title": "Stale projection",
+                        "topics": [],
+                        "components": [],
+                        "state": "partial",
+                        "knowledgePath": ".ai/knowledge/work-items/stale-projection.json",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    issues = ai_check_pr.knowledge_index_issues()
+
+    assert any("evidence src.py: digest is stale" in issue for issue in issues)
+
+
+def test_pr_allows_repository_without_implementation_knowledge_surface(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.knowledge_index_issues() == []
+
+
 def write_pair(root, name, scope, changed, *, approved=False):
     archive = root / ".ai" / "work-items" / "archive" / "2026"
     archive.mkdir(parents=True, exist_ok=True)

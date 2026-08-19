@@ -369,6 +369,61 @@ def rebuild_index(records_dir: Path, output_path: Path) -> dict[str, Any]:
     return result
 
 
+def rebuild_existing_projections(*, repo_root: Path) -> list[str]:
+    """Rebuild every archived projection after shared evidence changes.
+
+    Source-bound generated documents can be evidence in older Work Items. If
+    a lifecycle command refreshes those documents, rebuilding only the current
+    Work Item leaves historical projections stale. This canonical pass keeps
+    the whole existing knowledge surface aligned with the current evidence;
+    fresh adopters with no knowledge surface remain a no-op.
+    """
+    records_dir = repo_root / ".ai" / "knowledge" / "work-items"
+    index_path = repo_root / ".ai" / "knowledge" / "index.json"
+    record_paths = sorted(records_dir.glob("*.json")) if records_dir.is_dir() else []
+    if not record_paths and not index_path.is_file():
+        return []
+    if not records_dir.is_dir():
+        raise ValueError("Implementation Knowledge records directory is missing")
+
+    archive_dir = repo_root / ".ai" / "work-items" / "archive"
+    changed: list[str] = []
+    for record_path in record_paths:
+        record = _load(record_path)
+        work_item_id = record.get("workItemId")
+        if not isinstance(work_item_id, str) or not work_item_id:
+            raise ValueError(f"knowledge record has no Work Item identity: {record_path}")
+        matches = sorted(archive_dir.glob(f"*/{work_item_id}.contract.json"))
+        if len(matches) != 1:
+            raise ValueError(
+                f"knowledge record {record_path.name} does not have exactly one archived Contract"
+            )
+        contract_path = matches[0]
+        summary_path = contract_path.with_name(f"{work_item_id}.summary.json")
+        outcome_path = contract_path.with_name(f"{work_item_id}.outcome.json")
+        if not summary_path.is_file() or not outcome_path.is_file():
+            raise ValueError(
+                f"archived Work Item {work_item_id} is missing Summary or Outcome evidence"
+            )
+        record_payload = build_record(
+            contract_path,
+            summary_path,
+            outcome_path,
+            repo_root=repo_root,
+        )
+        serialized = json.dumps(record_payload, ensure_ascii=False, indent=2) + "\n"
+        if record_path.read_text(encoding="utf-8") != serialized:
+            _atomic_write(record_path, record_payload)
+            changed.append(_relative(record_path, repo_root))
+
+    index_payload = build_index(records_dir)
+    serialized_index = json.dumps(index_payload, ensure_ascii=False, indent=2) + "\n"
+    if not index_path.is_file() or index_path.read_text(encoding="utf-8") != serialized_index:
+        _atomic_write(index_path, index_payload)
+        changed.append(_relative(index_path, repo_root))
+    return changed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contract", type=Path, required=True)
