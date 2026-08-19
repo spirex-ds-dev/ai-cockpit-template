@@ -600,6 +600,79 @@ def _stub_changed_paths(monkeypatch, changed: list[str]) -> None:
     monkeypatch.setattr(ai_check_status_consistency.subprocess, "run", fake_run)
 
 
+def test_finish_quality_paths_excludes_all_generated_lifecycle_projections(monkeypatch):
+    monkeypatch.setattr(
+        ai_finish,
+        "changed_paths",
+        lambda _contract: [
+            "scripts/ai_finish.py",
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+            ".ai/work-items/starts/task.json",
+            ".ai/work-items/active/task.contract.json",
+            ".ai/work-items/active/task.summary.json",
+            ".ai/work-items/active/task.outcome.json",
+            ".ai/work-items/active/task.outcome.md",
+        ],
+    )
+
+    assert ai_finish.finish_quality_paths({"workItemId": "task"}) == ["scripts/ai_finish.py"]
+
+
+def test_finish_pin_route_binds_to_contract_base_and_current_file(tmp_path, monkeypatch):
+    workflow = tmp_path / ".github" / "workflows" / "compatibility.yml"
+    workflow.parent.mkdir(parents=True)
+    workflow.write_text(
+        "jobs:\n  quality:\n    steps:\n"
+        "      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_finish.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(
+            returncode=0,
+            stdout=(
+                "jobs:\n  quality:\n    steps:\n"
+                "      - uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9\n"
+            ),
+            stderr="",
+        ),
+    )
+
+    facts = ai_finish.immutable_pin_facts_for_finish(
+        {"baseCommit": "a" * 40}, [".github/workflows/compatibility.yml"]
+    )
+
+    assert facts is not None
+    assert facts["eligible"] is True
+
+
+@pytest.mark.parametrize("contract", [{}, {"baseCommit": "a" * 40}])
+def test_finish_pin_route_fails_closed_when_base_or_current_evidence_is_unavailable(
+    tmp_path, monkeypatch, contract
+):
+    workflow = tmp_path / ".github" / "workflows" / "compatibility.yml"
+    workflow.parent.mkdir(parents=True)
+    if contract:
+        workflow.write_text("name: compatibility\n", encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_finish.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(returncode=1, stdout="", stderr="missing base"),
+    )
+
+    facts = ai_finish.immutable_pin_facts_for_finish(
+        contract, [".github/workflows/compatibility.yml"]
+    )
+
+    assert facts is not None
+    assert facts["eligible"] is False
+
+
 def _write_archive_manifest(root, paths: dict[str, str], **overrides) -> None:
     contract_target = root / paths["contract"]
     contract_target.parent.mkdir(parents=True, exist_ok=True)

@@ -284,6 +284,55 @@ def test_repository_policy_uses_targeted_strict_route_for_automatic_governance_c
     assert "quality-project-consistency-group" in result["requiredGroups"]
 
 
+def test_repository_policy_does_not_escalate_generated_projections_in_strict_route():
+    policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
+
+    result = routing.determine(
+        [
+            "scripts/ai_finish.py",
+            ".ai/work-items/active/task.summary.json",
+            ".ai/cockpit/task_report.json",
+        ],
+        policy,
+    )
+
+    assert result["selectedProfile"] == "strict"
+    assert result["dispatchTarget"] == "quality-strict-targeted"
+    assert result["requiredGroups"] != ["quality-full"]
+
+
+def test_repository_policy_binds_immutable_pin_route_to_base_and_current_content(
+    tmp_path, monkeypatch
+):
+    workflow = tmp_path / ".github" / "workflows" / "compatibility.yml"
+    workflow.parent.mkdir(parents=True)
+    workflow.write_text(
+        "jobs:\n  quality:\n    steps:\n"
+        "      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        routing,
+        "_read_git_file",
+        lambda _repository, _revision, _path: (
+            "jobs:\n  quality:\n    steps:\n"
+            "      - uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9\n"
+        ),
+    )
+
+    result = routing.determine(
+        [".github/workflows/compatibility.yml"],
+        routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml"),
+        repository=tmp_path,
+        base="base",
+        head="HEAD",
+    )
+
+    assert result["immutablePinChange"]["eligible"] is True
+    assert result["dispatchTarget"] == "quality-strict-targeted"
+    assert result["requiredGroups"] == ["quality-fast"]
+
+
 def test_repository_policy_keeps_explicit_strict_route_full():
     policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
 

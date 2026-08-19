@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-dependency-pin-quality-routing-20260819",
+  "title": "Route immutable dependency pin updates through targeted strict quality",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "将严格质量路由绑定到 Work Item Contract 的 base/current 文件证据：只有非发布工作流中恰好一行从一个 40 位 action SHA 替换为另一个 40 位 SHA 时，才投影为 targeted strict；生成的生命周期记录不再作为风险路径重复升级。所有其他形状继续走完整 strict 质量检查。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.contract.json",
+    ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/fix-dependency-pin-quality-routing-20260819.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/ai_verification_policy.py",
+    "scripts/determine_governance_profile.py",
+    "scripts/ai_finish.py",
+    "tests/test_verification_policy.py",
+    "tests/test_governance_profile.py",
+    "tests/test_core_gates.py",
+    ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.outcome.json",
+    ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-dependency-pin-quality-routing-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Fail closed for every shape other than one exact immutable SHA replacement.",
+      "reason": "A routing optimization must not lower proof requirements for action identity, mutable references, extra changes, or release/signing workflows.",
+      "status": "verified"
+    },
+    {
+      "decision": "Use repository evidence rather than path names or self-declared intent.",
+      "reason": "The same rule must be trustworthy in both automatic profile selection and final Finish routing.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_governance_profile.py",
+      "digest": "09da2ad5cb0ddd14bac79b15bc173f939bf30cf25186d1f33c2868da065aa106"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_verification_policy.py",
+      "digest": "e32b0466f008f79a29c46fa85f5f1d6a18594667f67c56cad0d471ab384c9105"
+    },
+    {
+      "type": "code",
+      "path": "scripts/determine_governance_profile.py",
+      "digest": "2791a8c76e0d7bf60cb468a1781fac9e6bab005bf89ee3c5fb5facc84b1ce848"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_finish.py",
+      "digest": "6814cb6ca188dffb33f8a30e03c5cbf4e84c6ed08e751081dfed4bd0882992e4"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_verification_policy.py",
+      "digest": "610c26c9c5c97b08f1c5eb4f57bec525c333ece37f05484705f3575624e312a8"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_core_gates.py",
+      "digest": "d3f3300bd1837cb18455a440eea1c421fd0b164f8a330207ab692e10f29505ec"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.contract.json",
+    "contractDigest": "58d695c06077c82f3c6f8461743fcde07abb8bdf33b927ec2fa74f2ae9fa61b7",
+    "summaryPath": ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.summary.json",
+    "summaryDigest": "6558654925061a41342cb8d2156fff48dca01bafd2174846c10d5c5d71770cea",
+    "outcomePath": ".ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.outcome.json",
+    "outcomeDigest": "4f050c76f7faaf1bd201957f4881c6dfb497921e0ffa4cd37e00bfc7bd5f5283"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}
