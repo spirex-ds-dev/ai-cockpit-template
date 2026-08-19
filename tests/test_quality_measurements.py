@@ -10,7 +10,12 @@ def _sample(run_id: str, seconds: float, **overrides: object) -> dict[str, objec
         "sampleKind": "candidate",
         "commitSha": "a" * 40,
         "treeDigest": "sha256:" + "b" * 64,
-        "runner": {"image": "ubuntu-24.04", "os": "Linux", "python": "3.12.3"},
+        "runner": {
+            "image": "ubuntu-24.04",
+            "os": "Linux",
+            "python": "3.12.3",
+            "cpuCount": 4,
+        },
         "workflow": {"name": "smoke.yml", "runId": run_id, "attempt": 1},
         "result": "passed",
         "wallTimeSeconds": seconds,
@@ -29,6 +34,51 @@ def test_validate_samples_returns_identity_and_nearest_rank_percentiles():
     assert report["identity"]["commitSha"] == "a" * 40
     assert report["p50Seconds"] == 420
     assert report["p95Seconds"] == 440
+
+
+def test_validate_samples_accepts_dynamic_images_when_runner_class_is_stable():
+    samples = [
+        _sample(
+            str(index),
+            value,
+            runner={
+                "image": "ubuntu24@20260810.271.1" if index < 5 else "ubuntu24@20260816.277.1",
+                "os": "Linux",
+                "python": "3.12.3",
+                "cpuCount": 4,
+            },
+        )
+        for index, value in enumerate((400, 410, 420, 430, 440), 1)
+    ]
+
+    report = quality_measurements.validate_samples(samples, expected_kind="candidate")
+
+    assert report["identity"]["runner"] == {
+        "os": "Linux",
+        "python": "3.12.3",
+        "cpuCount": 4,
+    }
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("os", "Windows"), ("python", "3.12.4"), ("cpuCount", 8)],
+)
+def test_validate_samples_rejects_stable_runner_class_drift(field, value):
+    samples = []
+    for index in range(1, 6):
+        runner = {
+            "image": "ubuntu24@20260810.271.1",
+            "os": "Linux",
+            "python": "3.12.3",
+            "cpuCount": 4,
+        }
+        if index == 5:
+            runner[field] = value
+        samples.append(_sample(str(index), 400 + index, runner=runner))
+
+    with pytest.raises(quality_measurements.MeasurementError, match="runner class"):
+        quality_measurements.validate_samples(samples, expected_kind="candidate")
 
 
 def test_validate_samples_rejects_wrong_sha_and_non_successful_result():
@@ -135,6 +185,10 @@ def test_build_hosted_receipt_binds_complete_project_test_evidence(tmp_path):
     (aggregate / "gate.log").write_text("passed\n", encoding="utf-8")
     (aggregate / "timing.json").write_text("{}\n", encoding="utf-8")
     (aggregate / ".coverage").write_bytes(b"coverage-data")
+    shard_images = {
+        "core": "ubuntu24@20260801.1",
+        "installer": "ubuntu24@20260816.277.1",
+    }
     for shard, seconds in (("core", 10.0), ("installer", 20.0)):
         folder = shards / shard
         folder.mkdir(parents=True)
@@ -146,7 +200,7 @@ def test_build_hosted_receipt_binds_complete_project_test_evidence(tmp_path):
                     "treeDigest": "sha256:" + "b" * 64,
                     "result": "passed",
                     "runner": {
-                        "image": "ubuntu24@20260801.1",
+                        "image": shard_images[shard],
                         "os": "Linux",
                         "python": "3.12.3",
                         "cpuCount": 4,
@@ -231,6 +285,8 @@ def test_build_hosted_receipt_binds_complete_project_test_evidence(tmp_path):
     assert receipt["commitSha"] == "a" * 40
     assert receipt["treeDigest"].startswith("sha256:")
     assert receipt["runner"]["cpuCount"] == 4
+    assert receipt["runnerClass"] == {"os": "Linux", "python": "3.12.3", "cpuCount": 4}
+    assert receipt["shardRunners"]["installer"]["image"] == "ubuntu24@20260816.277.1"
     assert receipt["workflow"]["runId"] == "123"
     assert receipt["workflow"]["providerStatusAtReceipt"] == "in_progress"
     assert receipt["gates"]["project-test"]["wallTimeSeconds"] == 27.0

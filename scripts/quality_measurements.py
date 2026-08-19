@@ -18,6 +18,7 @@ class MeasurementError(ValueError):
 
 IDENTITY_FIELDS = ("commitSha", "treeDigest")
 RUNNER_FIELDS = ("image", "os", "python")
+STABLE_RUNNER_FIELDS = ("os", "python", "cpuCount")
 
 
 def sha256_json(value: Any) -> str:
@@ -121,7 +122,8 @@ def build_hosted_receipt(
         raise MeasurementError("at least one shard artifact directory is required")
 
     receipts: list[tuple[Path, dict[str, Any]]] = []
-    runner: dict[str, Any] | None = None
+    runner_class: dict[str, Any] | None = None
+    shard_runners: dict[str, dict[str, Any]] = {}
     cache: dict[str, Any] = {}
     for folder in shard_folders:
         receipt = _load_json(folder / "receipt.json", f"{folder.name} receipt")
@@ -134,10 +136,12 @@ def build_hosted_receipt(
         for field in (*RUNNER_FIELDS, "cpuCount"):
             if field not in current_runner:
                 raise MeasurementError(f"shard {folder.name} runner.{field} is missing")
-        if runner is None:
-            runner = current_runner
-        elif runner != current_runner:
-            raise MeasurementError(f"shard {folder.name} runner differs from other shards")
+        current_runner_class = {field: current_runner[field] for field in STABLE_RUNNER_FIELDS}
+        if runner_class is None:
+            runner_class = current_runner_class
+        elif runner_class != current_runner_class:
+            raise MeasurementError(f"shard {folder.name} stable runner class differs")
+        shard_runners[folder.name] = current_runner
         cache[folder.name] = _mapping(receipt.get("cache"), f"shard {folder.name} cache")
         receipts.append((folder, receipt))
 
@@ -212,7 +216,7 @@ def build_hosted_receipt(
     attempt = provider_run.get("run_attempt")
     if not isinstance(run_id, int) or not isinstance(attempt, int) or attempt < 1:
         raise MeasurementError("provider run id/attempt must be positive integers")
-    if runner is None:
+    if runner_class is None:
         raise MeasurementError("runner facts are missing")
     return {
         "format": "ai-cockpit-hosted-measurement-receipt",
@@ -231,7 +235,9 @@ def build_hosted_receipt(
         "ref": ref,
         "commitSha": commit_sha,
         "treeDigest": tree_digest,
-        "runner": runner,
+        "runner": runner_class,
+        "runnerClass": runner_class,
+        "shardRunners": shard_runners,
         "cache": cache,
         "workflow": {
             "name": "smoke.yml",
@@ -286,15 +292,29 @@ def _text(value: Any, name: str) -> str:
     return value
 
 
-def _identity(sample: dict[str, Any]) -> dict[str, str]:
+def _runner_class(sample: dict[str, Any]) -> dict[str, Any]:
     runner = _mapping(sample.get("runner"), "runner")
+    declared_class = sample.get("runnerClass", runner)
+    runner_class = _mapping(declared_class, "runnerClass")
+    return {field: runner_class.get(field) for field in STABLE_RUNNER_FIELDS}
+
+
+def _identity(sample: dict[str, Any]) -> dict[str, Any]:
     return {
         **{field: _text(sample.get(field), field) for field in IDENTITY_FIELDS},
         **{
-            f"runner.{field}": _text(runner.get(field), f"runner.{field}")
-            for field in RUNNER_FIELDS
+            f"runner.{field}": _text(value, f"runner.{field}")
+            if field != "cpuCount"
+            else _positive_int(value, f"runner.{field}")
+            for field, value in _runner_class(sample).items()
         },
     }
+
+
+def _positive_int(value: Any, name: str) -> int:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 1:
+        raise MeasurementError(f"{name} must be a positive integer")
+    return value
 
 
 def _nearest_rank(values: list[float], percentile: int) -> float:
@@ -311,7 +331,7 @@ def validate_samples(samples: list[dict[str, Any]], *, expected_kind: str) -> di
     """
     if len(samples) < 5:
         raise MeasurementError("at least 5 comparable samples are required")
-    expected_identity: dict[str, str] | None = None
+    expected_identity: dict[str, Any] | None = None
     seen_runs: set[tuple[str, int]] = set()
     values: list[float] = []
     for index, raw_sample in enumerate(samples, 1):
@@ -326,6 +346,8 @@ def validate_samples(samples: list[dict[str, Any]], *, expected_kind: str) -> di
         else:
             for key, value in identity.items():
                 if expected_identity[key] != value:
+                    if key.startswith("runner."):
+                        raise MeasurementError("runner class differs between comparable samples")
                     raise MeasurementError(f"{key} differs between comparable samples")
         workflow = _mapping(sample.get("workflow"), "workflow")
         run_id = _text(workflow.get("runId"), "workflow.runId")
@@ -350,7 +372,9 @@ def validate_samples(samples: list[dict[str, Any]], *, expected_kind: str) -> di
         "identity": {
             "commitSha": expected_identity["commitSha"],
             "treeDigest": expected_identity["treeDigest"],
-            "runner": {field: expected_identity[f"runner.{field}"] for field in RUNNER_FIELDS},
+            "runner": {
+                field: expected_identity[f"runner.{field}"] for field in STABLE_RUNNER_FIELDS
+            },
         },
         "p50Seconds": _nearest_rank(ordered, 50),
         "p95Seconds": _nearest_rank(ordered, 95),
