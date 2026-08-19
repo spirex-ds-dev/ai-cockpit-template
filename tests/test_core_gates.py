@@ -1048,6 +1048,93 @@ def test_status_consistency_accepts_summary_owned_post_archive_implementation_ch
     assert ai_check_status_consistency.validate_status_consistency(status) == []
 
 
+def test_status_consistency_accepts_receipt_owned_post_archive_recovery_change(
+    tmp_path, monkeypatch
+):
+    paths = _archive_bundle_paths()
+    outcome_path = ".ai/work-items/archive/2026/task.outcome.json"
+    recovery_path = "target/quality/project-test-aggregate/receipt.json"
+    changed = [*paths.values(), outcome_path, recovery_path]
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    outcome_target = tmp_path / outcome_path
+    outcome_target.parent.mkdir(parents=True, exist_ok=True)
+    outcome_target.write_text(json.dumps(_completed_outcome("task")), encoding="utf-8")
+    _write_archive_summary(tmp_path, paths, changed)
+    _write_archive_manifest(tmp_path, paths)
+    recovery_target = tmp_path / ".ai/work-items/recovery-receipts/task.json"
+    recovery_target.parent.mkdir(parents=True, exist_ok=True)
+    recovery_target.write_text(
+        json.dumps(
+            {
+                "receiptVersion": 1,
+                "kind": "same_work_item_post_archive_recovery",
+                "workItemId": "task",
+                "prBaseCommit": "a" * 40,
+                "issue": "https://github.com/example/repo/issues/1",
+                "humanAuthorization": {
+                    "type": "human",
+                    "reference": "same Work Item recovery",
+                },
+                "failure": {"gate": "changedCriticalCoverage"},
+                "archive": {
+                    "contract": {
+                        "path": paths["contract"],
+                        "sha256": hashlib.sha256(
+                            (tmp_path / paths["contract"]).read_bytes()
+                        ).hexdigest(),
+                    },
+                    "summary": {
+                        "path": paths["summary"],
+                        "sha256": hashlib.sha256(
+                            (tmp_path / paths["summary"]).read_bytes()
+                        ).hexdigest(),
+                    },
+                    "outcome": {
+                        "path": outcome_path,
+                        "sha256": hashlib.sha256(outcome_target.read_bytes()).hexdigest(),
+                    },
+                    "archive-manifest": {
+                        "path": paths["manifest"],
+                        "sha256": hashlib.sha256(
+                            (tmp_path / paths["manifest"]).read_bytes()
+                        ).hexdigest(),
+                    },
+                },
+                "recoveryPaths": [recovery_path],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / recovery_path).parent.mkdir(parents=True, exist_ok=True)
+    (tmp_path / recovery_path).write_text("generated\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    monkeypatch.setenv("AI_BASE_COMMIT", "a" * 40)
+
+    def fake_run(command, **kwargs):
+        if command[:3] == ["git", "rev-parse", "--verify"]:
+            return SimpleNamespace(returncode=0, stdout="head\n")
+        if command[:3] == ["git", "diff", "--name-only"]:
+            return SimpleNamespace(returncode=0, stdout=f"{recovery_path}\n")
+        if command[:3] == ["git", "ls-files", "--others"]:
+            return SimpleNamespace(returncode=0, stdout="")
+        return SimpleNamespace(returncode=0, stdout="")
+
+    monkeypatch.setattr(ai_check_status_consistency.subprocess, "run", fake_run)
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == []
+    assert ai_check_status_consistency.validate_status_consistency(status) == []
+
+
 def test_status_consistency_rejects_summary_omitted_path_without_false_repair(
     tmp_path, monkeypatch
 ):
