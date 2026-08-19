@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "fix-closure-knowledge-base-20260819",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "3c347f96761af967de5fd6f42d91a3ae4ad0ded58b1582fd9897c3e545138513"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "fix-closure-knowledge-base-20260819",
+    "contractDigest": "64558b917259105caf91e303703dfa9f2607ab175e6d410ae610d8ab64a392b9",
+    "summaryDigest": "0e678e5e586added2a0d1ec2f9ad69c8c3b793c78d3d58acb0b434ec98182502",
+    "verificationDigest": "ef0aa21ac6c653379dd8153a09cadb38f913bda5a2244dec1658a7b248ec1fe8",
+    "baseCommit": "35fbfa28db32d4c355b425305573800483cad4bc",
+    "headCommit": "35fbfa28db32d4c355b425305573800483cad4bc",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "8f683fb1d09af372b864862bb15272d58fd97bbaca90c873ab084d739d032916",
+      "binding": {
+        "baseCommit": "35fbfa28db32d4c355b425305573800483cad4bc",
+        "candidateHead": "35fbfa28db32d4c355b425305573800483cad4bc",
+        "candidateTreeDigest": "dcd5881ded17d8ccb989549b52f6bbfb9db771bf9573f6c3e19d85b9b146bec8",
+        "candidateDiffDigest": "1abf5bc2b763310884e4c49803ccb1c0a7e21ed5d88038dfa3bf84a1d8b300bf"
+      }
+    }
   },
-  "task": {
-    "summary": "Task fix-closure-knowledge-base-20260819 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task fix-closure-knowledge-base-20260819 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: fix-closure-knowledge-base-20260819",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.contract.json",
       ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json",
@@ -28,133 +51,156 @@
       ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
       ".ai/knowledge/work-items/implementation-knowledge-projection-20260818.json",
       ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json"
-    ]
-  },
-  "issues": {
-    "detected": 0,
-    "hardStops": 0,
-    "warnings": 0,
-    "resolved": 0,
-    "unresolved": 0
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "The closure boundary is covered by focused regression tests; Hosted provider latency remains outside this Work Item.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "在确认当前 Work Item 分支、PR 状态和精确 Head SHA 后，先同步合并目标 base，再以该 base worktree 作为归档证据和 source-bound knowledge projection 的校验根；不改写旧分支或绕过 fail-closed 清理。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_close_work_item.py",
-          "subject": "closure ordering and base-root evidence validation"
-        },
-        {
-          "source": "tests/test_work_item_lifecycle_closure.py",
-          "subject": "base-root and ordering regression tests"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "关闭流程先验证 Work Item branch 的干净状态、PR 合并状态、branch identity 和 Head SHA；完成 base fast-forward synchronization 后，使用 base worktree 读取 archive、Outcome、Status 和 knowledge projection，再生成 Receipt 并执行远端/本地分支清理。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_close_work_item.py",
-          "subject": "close_work_item ordering"
-        },
-        {
-          "source": "tests/test_work_item_lifecycle_closure.py",
-          "subject": "test_close_validates_archived_evidence_after_base_synchronization"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [
       {
-        "component": "Work Item closure",
-        "detail": "Archived evidence validation uses the synchronized base snapshot when linked worktrees are involved.",
-        "status": "verified",
+        "claim": "scope",
+        "severity": "medium",
+        "title": "scope",
+        "detail": "The closure boundary is covered by focused regression tests; Hosted provider latency remains outside this Work Item.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
         "evidence": [
           {
-            "source": "scripts/ai_close_work_item.py",
-            "subject": "_verify_archived_evidence project_root"
+            "source": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json",
+            "subject": "residualRisks"
           }
-        ]
-      },
-      {
-        "component": "Branch cleanup",
-        "detail": "PR Head SHA ownership and fail-closed cleanup ordering remain unchanged.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_work_item_lifecycle_closure.py",
-            "subject": "existing cleanup failure tests"
-          }
-        ]
+        ],
+        "inference": false
       }
     ],
-    "designDecisions": [
-      {
-        "decision": "Use an explicit project_root override only for archived evidence validation.",
-        "reason": "The old Work Item snapshot cannot be updated without changing the merged PR Head SHA; the synchronized base is the repository state that survives cleanup.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_close_work_item.py",
-            "subject": "evidence_root"
-          }
-        ]
-      },
-      {
-        "decision": "Keep branch identity and PR Head SHA verification before base synchronization.",
-        "reason": "Evidence-root correction must not become a branch deletion escape hatch.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/ai_close_work_item.py",
-            "subject": "_verify_pr before synchronization"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [
-      {
-        "topic": "Failure handling",
-        "detail": "Invalid archived evidence, stale base projections, dirty worktrees, synchronization failure, receipt failure, and remote deletion failure remain blocking and prevent cleanup.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_work_item_lifecycle_closure.py",
-            "subject": "fail-closed closure regressions"
-          }
-        ]
-      }
-    ],
+    "humanDecisions": [],
     "evidence": [
       {
-        "claim": "The new ordering is covered by a focused regression suite.",
-        "status": "verified",
+        "source": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": "tests/test_work_item_lifecycle_closure.py",
         "subject": "51 passed"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "在确认当前 Work Item 分支、PR 状态和精确 Head SHA 后，先同步合并目标 base，再以该 base worktree 作为归档证据和 source-bound knowledge projection 的校验根；不改写旧分支或绕过 fail-closed 清理。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_close_work_item.py",
+            "subject": "closure ordering and base-root evidence validation"
+          },
+          {
+            "source": "tests/test_work_item_lifecycle_closure.py",
+            "subject": "base-root and ordering regression tests"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "关闭流程先验证 Work Item branch 的干净状态、PR 合并状态、branch identity 和 Head SHA；完成 base fast-forward synchronization 后，使用 base worktree 读取 archive、Outcome、Status 和 knowledge projection，再生成 Receipt 并执行远端/本地分支清理。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_close_work_item.py",
+            "subject": "close_work_item ordering"
+          },
+          {
+            "source": "tests/test_work_item_lifecycle_closure.py",
+            "subject": "test_close_validates_archived_evidence_after_base_synchronization"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Work Item closure",
+          "detail": "Archived evidence validation uses the synchronized base snapshot when linked worktrees are involved.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_close_work_item.py",
+              "subject": "_verify_archived_evidence project_root"
+            }
+          ]
+        },
+        {
+          "component": "Branch cleanup",
+          "detail": "PR Head SHA ownership and fail-closed cleanup ordering remain unchanged.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_work_item_lifecycle_closure.py",
+              "subject": "existing cleanup failure tests"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Use an explicit project_root override only for archived evidence validation.",
+          "reason": "The old Work Item snapshot cannot be updated without changing the merged PR Head SHA; the synchronized base is the repository state that survives cleanup.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_close_work_item.py",
+              "subject": "evidence_root"
+            }
+          ]
+        },
+        {
+          "decision": "Keep branch identity and PR Head SHA verification before base synchronization.",
+          "reason": "Evidence-root correction must not become a branch deletion escape hatch.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_close_work_item.py",
+              "subject": "_verify_pr before synchronization"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Failure handling",
+          "detail": "Invalid archived evidence, stale base projections, dirty worktrees, synchronization failure, receipt failure, and remote deletion failure remain blocking and prevent cleanup.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_work_item_lifecycle_closure.py",
+              "subject": "fail-closed closure regressions"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The new ordering is covered by a focused regression suite.",
+          "status": "verified",
+          "source": "tests/test_work_item_lifecycle_closure.py",
+          "subject": "51 passed"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "en",
@@ -864,6 +910,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

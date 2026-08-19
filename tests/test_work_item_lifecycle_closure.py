@@ -81,6 +81,65 @@ def test_archived_evidence_uses_strict_summary_validation() -> None:
     assert "legacy_archive=False" in source
 
 
+def test_archived_evidence_can_be_validated_from_synchronized_base_root(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    old_root = tmp_path / "old-worktree"
+    base_root = tmp_path / "base-worktree"
+    task = "base-root-evidence"
+    archive = base_root / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    contract = archive / f"{task}.contract.json"
+    summary = archive / f"{task}.summary.json"
+    contract.write_text(json.dumps({"contractVersion": 1, "workItemId": task}), encoding="utf-8")
+    summary.write_text(json.dumps({"workItemId": task}), encoding="utf-8")
+    active = base_root / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    status = base_root / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text("- State: `no_active_work_item`\n", encoding="utf-8")
+
+    monkeypatch.setattr(closure, "PROJECT_ROOT", old_root)
+    monkeypatch.setattr(closure, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(closure, "validate_summary", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(closure, "ACTIVE_DIR", old_root / ".ai/work-items/active")
+    monkeypatch.setattr(closure, "ARCHIVE_DIR", old_root / ".ai/work-items/archive")
+    monkeypatch.setattr(
+        closure,
+        "_archived_outcome_path",
+        lambda _contract: (_ for _ in ()).throw(AssertionError("v1 has no outcome gate")),
+    )
+
+    assert closure._verify_archived_evidence(task, project_root=base_root) == contract
+
+
+def test_close_validates_archived_evidence_after_base_synchronization(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeGit()
+    fake.base_worktree_path = "/tmp/base-worktree"
+    events: list[str] = []
+    prepare(monkeypatch, fake)
+
+    def verify(_task: str, *, project_root: Path | None = None) -> Path:
+        events.append(f"verify:{project_root}")
+        return closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json"
+
+    monkeypatch.setattr(closure, "_verify_archived_evidence", verify)
+    original_merge = fake.__call__
+
+    def recording_runner(args: list[str] | tuple[str, ...], check: bool) -> closure.CommandResult:
+        normalized = tuple(args[2:]) if tuple(args[:1]) == ("-C",) else tuple(args)
+        if normalized[:2] == ("merge", "--ff-only"):
+            events.append("merge")
+        return original_merge(args, check)
+
+    result = closure.close_work_item("example", recording_runner)
+
+    assert result["state"] == "closed"
+    assert events == ["merge", "verify:/tmp/base-worktree"]
+
+
 def test_archived_evidence_rejects_non_green_current_outcome(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -482,7 +541,9 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
     monkeypatch.setattr(
         closure,
         "_verify_archived_evidence",
-        lambda _task: closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json",
+        lambda _task, **_kwargs: (
+            closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json"
+        ),
     )
     monkeypatch.setattr(closure, "_discover_base", lambda _runner: ("origin", "main"))
     monkeypatch.setattr(
@@ -511,7 +572,9 @@ def test_task_branch_mismatch_stops_before_provider_or_cleanup(
     monkeypatch.setattr(
         closure,
         "_verify_archived_evidence",
-        lambda _task: closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json",
+        lambda _task, **_kwargs: (
+            closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json"
+        ),
     )
     monkeypatch.setattr(closure, "_discover_base", lambda _runner: ("origin", "main"))
     monkeypatch.setattr(
@@ -657,20 +720,37 @@ def test_base_branch_worktree_occupancy_is_supported(
     assert ("-C", "/tmp/base-worktree", "merge", "--ff-only", "origin/main") in fake.commands
 
 
-def test_incomplete_archived_evidence_blocks_before_branch_inspection(
+def test_incomplete_archived_evidence_blocks_before_base_synchronization(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fake = FakeGit()
+    prepare(monkeypatch, fake)
     monkeypatch.setattr(
         closure,
         "_verify_archived_evidence",
-        lambda _task: (_ for _ in ()).throw(RuntimeError("archived Work Item evidence is invalid")),
+        lambda _task, **_kwargs: (_ for _ in ()).throw(
+            RuntimeError("archived Work Item evidence is invalid")
+        ),
     )
 
     with pytest.raises(RuntimeError, match="evidence is invalid"):
         closure.close_work_item("example", fake)
 
-    assert fake.commands == []
+    assert fake.commands == [
+        ("branch", "--show-current"),
+        ("status", "--porcelain", "--untracked-files=all"),
+        ("rev-parse", "codex/example"),
+        ("worktree", "list", "--porcelain"),
+        ("switch", "main"),
+        ("fetch", "origin", "--prune"),
+        ("merge", "--ff-only", "origin/main"),
+        ("rev-parse", "main"),
+        ("rev-parse", "origin/main"),
+        ("branch", "--show-current"),
+        ("status", "--porcelain", "--untracked-files=all"),
+        ("rev-parse", "main"),
+        ("rev-parse", "origin/main"),
+    ]
 
 
 def test_branch_mapping_mismatch_blocks_before_switch(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -1148,7 +1228,9 @@ def test_real_linked_worktree_closure_is_closed_but_not_ready(
     monkeypatch.setattr(
         closure,
         "_verify_archived_evidence",
-        lambda _task: closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json",
+        lambda _task, **_kwargs: (
+            closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json"
+        ),
     )
     monkeypatch.setattr(
         closure,
