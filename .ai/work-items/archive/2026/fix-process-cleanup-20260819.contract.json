@@ -1,0 +1,85 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-process-cleanup-20260819",
+  "mode": "code",
+  "title": "Make Work Item command cancellation and timeout process-safe",
+  "rawUserRequest": "发布版本前必须确认 Issue、PR、分支、worktree 和进程都清理干净；已查明长任务取消/超时可能留下子进程和 scratch worktree，必须从根因修复，不能让以后 WI 再出现残留。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:release-cleanliness-process-residue", "capturedAt": "2026-08-19T00:00:00+09:00", "digest": "sha256:release-cleanliness-process-cleanup-root-cause"},
+  "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-process-cleanup-20260819.contract.json",
+    ".ai/work-items/active/fix-process-cleanup-20260819.summary.json",
+    ".ai/work-items/active/fix-process-cleanup-20260819.outcome.json",
+    ".ai/work-items/active/fix-process-cleanup-20260819.outcome.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    "scripts/ai_finish.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_process_cleanup.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "scripts/run_quality_gate.py",
+    "scripts/run_quality_session.py",
+    "Makefile",
+    "templates/**",
+    "Hosted CI runner timeout configuration",
+    "Changing required quality gates or their governance routing"
+  ],
+  "sources": [
+    {"path": ".ai/glossary.md", "reason": "Defines evidence governance, human status, and lifecycle terminology."},
+    {"path": "scripts/run_quality_session.py", "reason": "Existing process-group cleanup behavior provides the repository precedent."},
+    {"path": "scripts/run_quality_gate.py", "reason": "Existing bounded gate behavior defines timeout and signal handling expectations."},
+    {"path": "tests/test_quality_session.py", "reason": "Existing tests define process-group and interruption cleanup evidence."}
+  ],
+  "problemStatement": "ai_finish currently uses an unbounded subprocess.run for each declared command. A cancelled or hung child can outlive the parent and leave residual processes, locks, or worktrees. Implement process-group ownership, bounded timeout, termination escalation, and regression tests.",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["verification", "reliability", "process-lifecycle"], "reason": "The change affects the lifecycle verification command runner and must preserve output, exit codes, signal handling, and cleanup boundaries.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["The lifecycle verification command runner can leave residual processes and must be proven fail closed."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "Scope, evidence sources, acceptance, and required verification are explicit."},
+  "preReviewWarnings": ["Review signal and timeout cleanup for process-group ownership and cross-platform behavior."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Long-running lifecycle behavior requires explicit scope and verification checkpoints."},
+  "acceptance": [
+    "ai_finish launches each command in an owned process session and preserves captured output and exit-code semantics on success and failure.",
+    "Timeout and SIGINT/SIGTERM cancellation terminate the owned process group, escalate after the bounded grace period, and reap the root process without affecting unrelated groups.",
+    "The timeout is configurable through a validated environment value with a finite default; invalid values fail closed before command execution.",
+    "Focused regression tests cover success, command failure, timeout, cancellation, escalation, descendant cleanup, and unrelated process-group isolation.",
+    "Required AI Cockpit checks and full quality verification pass, with a standalone green Outcome visible in the conversation."
+  ],
+  "guidelines": [
+    "Keep command execution argv-based and keep process cleanup bounded to the owned session.",
+    "Do not weaken or bypass required verification or quality gates.",
+    "Record timeout and cancellation behavior as evidence rather than self-declaration."
+  ],
+  "intent": {"problem": "ai_finish currently uses an unbounded subprocess.run for each declared command. A cancelled or hung child can outlive the parent and leave residual processes, locks, or worktrees.", "constraints": ["Preserve existing command argv, output capture, and evidence semantics.", "Do not kill processes outside the command process group.", "Keep timeout behavior deterministic and fail closed.", "Do not change quality policy or reduce required verification."], "rationale": "Release cleanup must prove that interrupted Work Item execution cannot leave owned processes behind."},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Make lifecycle command cancellation and timeout process-safe.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "implementationSurface": {"production": ["scripts/ai_finish.py"], "tests": ["tests/test_core_gates.py", "tests/test_finish_process_cleanup.py"], "documentation": [], "generated": [".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"]},
+  "requiredEvidenceContext": {"destructiveLevel": "none", "externalSystem": "", "availableEvidence": ["process-group cleanup tests", "timeout and signal receipts", "full quality evidence"]},
+  "scenarioCoverage": [
+    {"scenario": "Successful command keeps existing output and exit behavior", "expected": "The command returns its original exit code, captured output is unchanged, and no cleanup signal is sent on success.", "required": true, "status": "verified", "evidence": ["tests/test_core_gates.py", "tests/test_finish_process_cleanup.py"], "reason": "Focused regression suite passed.", "verificationPlan": "Retain focused tests and rerun full quality."},
+    {"scenario": "Command timeout terminates and reaps the owned process group", "expected": "A command exceeding the configured finite timeout returns a deterministic timeout failure and all owned descendants are terminated and reaped.", "required": true, "status": "verified", "evidence": ["tests/test_finish_process_cleanup.py"], "reason": "Timeout and SIGKILL escalation assertions passed.", "verificationPlan": "Rerun the process cleanup regression suite and full quality."},
+    {"scenario": "SIGINT/SIGTERM cancellation terminates and reaps the owned process group", "expected": "Cancellation sends termination to the owned process group, waits only for the bounded grace period, escalates if needed, and preserves a signal-derived failure result.", "required": true, "status": "verified", "evidence": ["tests/test_finish_process_cleanup.py"], "reason": "SIGTERM cancellation and signal-derived exit assertions passed.", "verificationPlan": "Rerun signal-handler regression tests and full quality."},
+    {"scenario": "Unrelated process groups remain untouched", "expected": "Cleanup targets only the command session/process group and never sends a signal to an unrelated process group.", "required": true, "status": "verified", "evidence": ["tests/test_finish_process_cleanup.py"], "reason": "Owned group isolation and descendant-group discovery assertions passed.", "verificationPlan": "Rerun isolation tests and full quality."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted write is needed for this change."},
+  "rollbackNote": "Revert the ai_finish runner and its focused tests; no data migration is introduced.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 968}},
+  "startReceipt": {"path": ".ai/work-items/starts/fix-process-cleanup-20260819.json", "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1", "initialScopeDigest": "349c118270996e2b99db19347066cbfbadb378c0d8721e392320f413e7d36426", "contractSkeletonDigest": "47a249f55710335d5122e6ffb49d9bd7634b8140d00566aa0bd1dc8d1d432bfe"}
+}

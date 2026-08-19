@@ -1,874 +1,38 @@
 {
-  "forbiddenClaims": [],
-  "forcedStops": [
-    {
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "evidence": [
-        {
-          "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35",
-          "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed"
-        },
-        {
-          "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2",
-          "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed"
-        }
-      ],
-      "handoff": "",
-      "humanDecision": "",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "reason": "aiGuidelines failed before the retry.",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "stage": "verification"
-    }
-  ],
-  "humanDecisions": [
-    "Release cannot proceed while interrupted Work Item commands can leave owned processes, locks, or scratch worktrees."
-  ],
-  "humanHandoff": {
-    "completed": [
-      {
-        "claim": "Changed scripts/ai_finish.py",
-        "detail": "Runs each lifecycle command in an owned process tree with bounded timeout and termination escalation.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "scripts/ai_finish.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "scripts/ai_finish.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed scripts/ai_finish.py"
-      },
-      {
-        "claim": "Changed tests/test_core_gates.py",
-        "detail": "Adapts Finish runner tests to the process-group execution surface.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "tests/test_core_gates.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "tests/test_core_gates.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_core_gates.py"
-      },
-      {
-        "claim": "Changed tests/test_finish_process_cleanup.py",
-        "detail": "Verifies timeout, signal cancellation, escalation, process-tree grouping, and unrelated-group isolation.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "tests/test_finish_process_cleanup.py"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "tests/test_finish_process_cleanup.py"
-          }
-        ],
-        "inference": false,
-        "title": "Changed tests/test_finish_process_cleanup.py"
-      },
-      {
-        "claim": "Changed docs/reference/capability-truth-matrix.json",
-        "detail": "Regenerated source-bound capability evidence after the Finish runner change.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/capability-truth-matrix.json"
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.json",
-        "detail": "Regenerated Japanese capability evidence after the Finish runner change.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/japanese-capability-assessment.json"
-      },
-      {
-        "claim": "Changed docs/reference/japanese-capability-assessment.md",
-        "detail": "Regenerated Japanese capability report after the Finish runner change.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/japanese-capability-assessment.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/japanese-capability-assessment.md"
-      },
-      {
-        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
-        "detail": "Regenerated pre-release documentation alignment evidence after the Finish runner change.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/pre-release-documentation-alignment.json"
-      },
-      {
-        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
-        "detail": "Regenerated pre-release documentation alignment report after the Finish runner change.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/pre-release-documentation-alignment.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/pre-release-documentation-alignment.md"
-      },
-      {
-        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.contract.json",
-        "detail": "Active Work Item Contract is committed snapshot evidence.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.contract.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.summary.json",
-        "detail": "Active AI Change Summary is committed snapshot evidence.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.summary.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.json",
-        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.json"
-      },
-      {
-        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.md",
-        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.md"
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.json",
-        "detail": "Generated machine-readable Human Benefit Review Report.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.json"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/cockpit/task_report.json"
-      },
-      {
-        "claim": "Changed .ai/cockpit/task_report.md",
-        "detail": "Generated human-readable Human Benefit Review Report.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": ".ai/cockpit/task_report.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed .ai/cockpit/task_report.md"
-      },
-      {
-        "claim": "Changed docs/reference/capability-truth-matrix.md",
-        "detail": "Generated source-bound evidence during ai_finish; sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f.",
-        "evidence": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.md"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-            "subject": "docs/reference/capability-truth-matrix.md"
-          }
-        ],
-        "inference": false,
-        "title": "Changed docs/reference/capability-truth-matrix.md"
-      }
-    ],
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
+  "workItemId": "fix-process-cleanup-20260819",
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "fix-process-cleanup-20260819",
+    "contractDigest": "f79c2ec6ff57d2fdf931ca3ebc62c15a35019d6fe5e0bcaa88d8faa9a36cb6da",
+    "summaryDigest": "90a544c2d608e9017dda5f1f775a653dee99ca2d5364b778d9c0e6f086d797f9",
+    "verificationDigest": "c42feb8be140661a83a3a0f3d56c0d0f109f602c2c15aad132ba7a926b4d9953",
+    "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+    "headCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
     "locale": "en",
-    "passed": [
-      {
-        "claim": "sourceBoundEvidence",
-        "detail": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=ffe980a09e4eb57388fd378b091e99a154b5d74b42e81cefd2053a82045b5a43, after=b766b7880eb41beeeaaf490439d381d0919b2ea83d48f1ab22d542cada90b005; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
-        "evidence": [
-          {
-            "digest": "3d62fab80b79f651f5913df96ba907532d890843f8103ae1a935541c8fc740de",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "sourceBoundEvidence"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "3d62fab80b79f651f5913df96ba907532d890843f8103ae1a935541c8fc740de",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "sourceBoundEvidence"
-          }
-        ],
-        "inference": false,
-        "title": "sourceBoundEvidence"
-      },
-      {
-        "claim": "aiWorkItem",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/fix-process-cleanup-20260819.contract.json work item contract check passed: .ai/work-items/active/fix-process-cleanup-20260819.contract.json",
-        "evidence": [
-          {
-            "digest": "88a4653ae5b11161aacdd55d3310eacda35e537abb30dc06ad0752bd51bea0e2",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiWorkItem"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "88a4653ae5b11161aacdd55d3310eacda35e537abb30dc06ad0752bd51bea0e2",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiWorkItem"
-          }
-        ],
-        "inference": false,
-        "title": "aiWorkItem"
-      },
-      {
-        "claim": "aiScope",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/fix-process-cleanup-20260819.contract.json scope guard passed: 16 changed path(s) covered",
-        "evidence": [
-          {
-            "digest": "1211f9e0c4ba66ef6e2b1cee1c52faa6cc4e1d56263bd6fdadd0270906785698",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiScope"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "1211f9e0c4ba66ef6e2b1cee1c52faa6cc4e1d56263bd6fdadd0270906785698",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiScope"
-          }
-        ],
-        "inference": false,
-        "title": "aiScope"
-      },
-      {
-        "claim": "aiGuards",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
-        "evidence": [
-          {
-            "digest": "8585be096880a72e633cc8c4e616ecb11600df07408d5d7e9679ed6787b73ffb",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiGuards"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "8585be096880a72e633cc8c4e616ecb11600df07408d5d7e9679ed6787b73ffb",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiGuards"
-          }
-        ],
-        "inference": false,
-        "title": "aiGuards"
-      },
-      {
-        "claim": "aiCheckpoint",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-process-cleanup-20260819` - Contract Hash: `f79c2ec6ff57d2fd` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `",
-        "evidence": [
-          {
-            "digest": "1432fd7cb97b110798668b5a1345583d3650e822236088fc01249d7f6539b8b0",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiCheckpoint"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "1432fd7cb97b110798668b5a1345583d3650e822236088fc01249d7f6539b8b0",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiCheckpoint"
-          }
-        ],
-        "inference": false,
-        "title": "aiCheckpoint"
-      },
-      {
-        "claim": "aiReviewPolicy",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/fix-process-cleanup-20260819.contract.json [review] .ai/work-items/active/fix-process-cleanup-20260819.outcome.json [review] .ai/work-items/active/fix-process-cleanup-20260819.outcome.md [review] .ai/work-items/starts/fix-process-cleanup-20260819.json [review] .ai/cockpi",
-        "evidence": [
-          {
-            "digest": "5b38719688f54e180de8c270753bcee2f27b0773fd105263e588c1cfce02374e",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiReviewPolicy"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "5b38719688f54e180de8c270753bcee2f27b0773fd105263e588c1cfce02374e",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiReviewPolicy"
-          }
-        ],
-        "inference": false,
-        "title": "aiReviewPolicy"
-      },
-      {
-        "claim": "aiBacktrack",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
-        "evidence": [
-          {
-            "digest": "f850ce9d5380a81505fa94c1cb4eea0de716038e70a6ea7896b46c97b60865bb",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiBacktrack"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "f850ce9d5380a81505fa94c1cb4eea0de716038e70a6ea7896b46c97b60865bb",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiBacktrack"
-          }
-        ],
-        "inference": false,
-        "title": "aiBacktrack"
-      },
-      {
-        "claim": "aiCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
-        "evidence": [
-          {
-            "digest": "34366be9da1728212472724329c3d38dbf714f26792698b238b342e93bf9de8c",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiCoverage"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "34366be9da1728212472724329c3d38dbf714f26792698b238b342e93bf9de8c",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiCoverage"
-          }
-        ],
-        "inference": false,
-        "title": "aiCoverage"
-      },
-      {
-        "claim": "aiScenarioCoverage",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json report: target/ai_scenario_coverage_report.json",
-        "evidence": [
-          {
-            "digest": "27ef14fd5446d7e3b17756b286ace4de6fab7fc4be6405445ecc450ed763980c",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiScenarioCoverage"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "27ef14fd5446d7e3b17756b286ace4de6fab7fc4be6405445ecc450ed763980c",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiScenarioCoverage"
-          }
-        ],
-        "inference": false,
-        "title": "aiScenarioCoverage"
-      },
-      {
-        "claim": "aiGuidelines",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json guidelines compliance check passed: 3 guideline(s) verified",
-        "evidence": [
-          {
-            "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiGuidelines"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiGuidelines"
-          }
-        ],
-        "inference": false,
-        "title": "aiGuidelines"
-      },
-      {
-        "claim": "aiDiffOwnership",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json ## Diff Ownership Preview - active_owned: `16`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — covered by Contract scope - [active_owned] `.ai/cockpit/task_re",
-        "evidence": [
-          {
-            "digest": "d4ef60a05c9337abf530ac1984462f2749dc0d641f9177c6c6adb794de6d4524",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiDiffOwnership"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "d4ef60a05c9337abf530ac1984462f2749dc0d641f9177c6c6adb794de6d4524",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiDiffOwnership"
-          }
-        ],
-        "inference": false,
-        "title": "aiDiffOwnership"
-      },
-      {
-        "claim": "quality",
-        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, docs/reference/capability-truth-matrix.json, docs/reference/japanese-capability-assessment.json, docs/reference/japanese-capability-assessment.md, docs/reference/pre-releas",
-        "evidence": [
-          {
-            "digest": "e4c38627442cfb3bceec2627debe5b6957dc4614fc3eb2d38445c48d00b01621",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "quality"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "e4c38627442cfb3bceec2627debe5b6957dc4614fc3eb2d38445c48d00b01621",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "quality"
-          }
-        ],
-        "inference": false,
-        "title": "quality"
-      },
-      {
-        "claim": "aiStatus",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
-        "evidence": [
-          {
-            "digest": "138047f7db331efcf6ff8a5075abe049949cc0043ec3d1126c72c050bb8459c9",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiStatus"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "138047f7db331efcf6ff8a5075abe049949cc0043ec3d1126c72c050bb8459c9",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiStatus"
-          }
-        ],
-        "inference": false,
-        "title": "aiStatus"
-      },
-      {
-        "claim": "aiStatusCheck",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
-        "evidence": [
-          {
-            "digest": "fdae5ac5fb3502fa4df48521e8888af652491a2ead7d95ed5ac8a02d2fd0a483",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiStatusCheck"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "fdae5ac5fb3502fa4df48521e8888af652491a2ead7d95ed5ac8a02d2fd0a483",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiStatusCheck"
-          }
-        ],
-        "inference": false,
-        "title": "aiStatusCheck"
-      },
-      {
-        "claim": "aiStatusConsistency",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
-        "evidence": [
-          {
-            "digest": "1dc6bbfdee292f01e908eb9b917d6466e2a7029c21621e6b5138e5e540528366",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiStatusConsistency"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "1dc6bbfdee292f01e908eb9b917d6466e2a7029c21621e6b5138e5e540528366",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiStatusConsistency"
-          }
-        ],
-        "inference": false,
-        "title": "aiStatusConsistency"
-      },
-      {
-        "claim": "aiAgentRisk",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
-        "evidence": [
-          {
-            "digest": "5361b0318e22e24f72bf5f5ca450797886b45f750c67c10281dc13376aaf58d1",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiAgentRisk"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "5361b0318e22e24f72bf5f5ca450797886b45f750c67c10281dc13376aaf58d1",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiAgentRisk"
-          }
-        ],
-        "inference": false,
-        "title": "aiAgentRisk"
-      },
-      {
-        "claim": "aiSummary",
-        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/fix-process-cleanup-20260819.summary.json --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json ai summary check passed: .ai/work-items/active/fix-process-cleanup-20260819.summary.json",
-        "evidence": [
-          {
-            "digest": "3039a528628deaf870b822c60b2a9a389e52c1b2a2800609ca264bfbf5c5ef99",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiSummary"
-          }
-        ],
-        "evidenceRefs": [
-          {
-            "digest": "3039a528628deaf870b822c60b2a9a389e52c1b2a2800609ca264bfbf5c5ef99",
-            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
-            "subject": "aiSummary"
-          }
-        ],
-        "inference": false,
-        "title": "aiSummary"
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "1d87c6bb659be41af3cea9b95dd3dfe35c4ddf550cce17c8509f1a714d2e6ed4",
+      "binding": {
+        "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+        "candidateHead": "dc07070d85c8849afc72f473e89b151842da5bb1",
+        "candidateTreeDigest": "32f6dda7fb47e0809287b24ecad128df98c1f606203399c3fa33eb2401630902",
+        "candidateDiffDigest": "a95e77bd86fbe3e8ad169ea949c9edf6979a0b871821da66d2edd82bc55641ef"
       }
-    ],
-    "questions": {
-      "agentUnknowns": [],
-      "avoidedRisks": [
-        {
-          "claim": "If not detected, could have led to a stale completion claim.",
-          "evidenceRefs": [],
-          "inference": true
-        }
-      ],
-      "blockedProblems": [],
-      "humanConfirmations": [
-        {
-          "claim": "Release cannot proceed while interrupted Work Item commands can leave owned processes, locks, or scratch worktrees.",
-          "evidenceRefs": [],
-          "inference": true
-        }
-      ],
-      "nextTime": {
-        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
-        "evidenceRefs": [],
-        "inference": true
-      },
-      "problemCount": 1,
-      "problemCountEvidenceRefs": [
-        {
-          "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-          "subject": "verification and verificationHistory"
-        }
-      ],
-      "recurrenceLikelihood": {
-        "claim": "unknown: no direct recurrence probability evidence was recorded.",
-        "evidenceRefs": [],
-        "inference": true
-      },
-      "remainingRisks": [],
-      "resolutionApproach": [
-        {
-          "claim": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
-          "evidenceRefs": [
-            {
-              "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35",
-              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-              "subject": "verificationHistory[0] aiGuidelines failed"
-            },
-            {
-              "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2",
-              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-              "subject": "verification[aiGuidelines] retry passed"
-            }
-          ],
-          "inference": false
-        }
-      ],
-      "resolvedProblems": [
-        {
-          "claim": "aiGuidelines failed before the retry.",
-          "evidenceRefs": [
-            {
-              "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35",
-              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-              "subject": "verificationHistory[0] aiGuidelines failed"
-            },
-            {
-              "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2",
-              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-              "subject": "verification[aiGuidelines] retry passed"
-            }
-          ],
-          "inference": false
-        }
-      ]
-    },
-    "redReasons": [],
-    "retained": [],
-    "risks": []
-  },
-  "implementationApproach": {
-    "affectedComponents": [
-      {
-        "component": "ai_finish command runner",
-        "detail": "Each declared lifecycle command owns an isolated process session and bounded cleanup path.",
-        "evidence": [
-          {
-            "source": "scripts/ai_finish.py",
-            "subject": "run"
-          }
-        ],
-        "status": "verified"
-      },
-      {
-        "component": "Finish runner regression tests",
-        "detail": "Covers success, timeout, cancellation, escalation, descendant process-group discovery, and isolation.",
-        "evidence": [
-          {
-            "source": "tests/test_finish_process_cleanup.py",
-            "subject": "Process cleanup regression suite"
-          }
-        ],
-        "status": "verified"
-      }
-    ],
-    "approachType": "implementation",
-    "designDecisions": [
-      {
-        "decision": "Use an isolated process session for each command.",
-        "evidence": [
-          {
-            "source": "scripts/ai_finish.py",
-            "subject": "start_new_session"
-          }
-        ],
-        "reason": "Cleanup must not signal unrelated Work Item or user processes.",
-        "status": "verified"
-      },
-      {
-        "decision": "Use a finite default timeout with a validated environment override.",
-        "evidence": [
-          {
-            "source": "scripts/ai_finish.py",
-            "subject": "FINISH_COMMAND_TIMEOUT_ENV"
-          }
-        ],
-        "reason": "A hung command must have a deterministic recovery boundary without changing required quality gates.",
-        "status": "verified"
-      }
-    ],
-    "evidence": [
-      {
-        "claim": "The command runner cleans only its owned process tree.",
-        "source": "tests/test_finish_process_cleanup.py",
-        "status": "verified",
-        "subject": "Process-group isolation and descendant discovery"
-      }
-    ],
-    "mechanism": {
-      "evidence": [
-        {
-          "source": "scripts/ai_finish.py",
-          "subject": "finish_command_timeout_seconds and _terminate_owned_process_group"
-        },
-        {
-          "source": "tests/test_finish_process_cleanup.py",
-          "subject": "timeout, cancellation, escalation, and process-tree tests"
-        }
-      ],
-      "status": "verified",
-      "text": "ai_finish 通过 Popen 的独立 session 执行命令，超时或 SIGINT/SIGTERM 时只向该命令进程树的进程组发送 SIGTERM，等待固定宽限期后升级为 SIGKILL，并通过 communicate/wait 回收；无法解析的超时配置在启动前 fail closed。"
-    },
-    "status": "complete",
-    "summary": {
-      "evidence": [
-        {
-          "source": "scripts/ai_finish.py",
-          "subject": "Owned command session, timeout, signal cleanup, and reaping"
-        }
-      ],
-      "status": "verified",
-      "text": "在 ai_finish 的每个生命周期命令外建立受控进程会话，使用有限超时和有界终止升级收口命令及其后代进程；正常命令的 argv、输出和退出码保持不变。"
-    },
-    "technicalDetails": [
-      {
-        "detail": "Timeout returns exit code 124; signal cancellation returns 128 plus the received signal; both append a visible red cleanup fact to command evidence.",
-        "evidence": [
-          {
-            "source": "scripts/ai_finish.py",
-            "subject": "run timeout and cancellation result mapping"
-          }
-        ],
-        "status": "verified",
-        "topic": "Error handling"
-      },
-      {
-        "detail": "Normal argv execution, output capture, and successful exit behavior remain unchanged; only cancellation and timeout ownership is strengthened.",
-        "evidence": [
-          {
-            "source": "tests/test_core_gates.py",
-            "subject": "existing Finish runner behavior tests"
-          }
-        ],
-        "status": "verified",
-        "topic": "Compatibility"
-      }
-    ]
-  },
-  "interventions": [],
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "resolved": 1,
-    "unresolved": 0,
-    "warnings": 0
-  },
-  "limitations": [],
-  "nextSafeAction": "Review the pull request and provider checks before merge.",
-  "phase": "review",
-  "preventedRisks": [
-    {
-      "action": "blocked",
-      "detectedBy": "required verification: aiGuidelines",
-      "evidence": [
-        {
-          "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35",
-          "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed"
-        },
-        {
-          "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2",
-          "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed"
-        }
-      ],
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium"
     }
-  ],
-  "remainingRisks": [],
-  "reportVersion": 1,
-  "result": "completed",
-  "sourceOutcome": {
-    "digest": "69a66f935f6942b26a25e311e29d354a8f86bda8fd58c2f0695b916e4c89135c",
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1
   },
-  "task": {
+  "sections": {
+    "outcomeSummary": "Task fix-process-cleanup-20260819 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: fix-process-cleanup-20260819",
     "deliveredChanges": [
       "scripts/ai_finish.py",
       "tests/test_core_gates.py",
@@ -886,7 +50,904 @@
       ".ai/cockpit/task_report.md",
       "docs/reference/capability-truth-matrix.md"
     ],
-    "summary": "Task fix-process-cleanup-20260819 generated an evidence-derived outcome with status completed."
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [
+      {
+        "sourceWarning": "A temporary restricted changed-critical policy amendment was attempted, rejected by the approval boundary, and reverted before final verification; no policy file change remains.",
+        "reason": "The final coverage fix is implemented in the existing Contract-scoped test_core_gates mapping, so the restricted policy file is unchanged and the temporary amendment record is not part of the final Contract chain.",
+        "evidence": [
+          {
+            "source": "tests/test_core_gates.py",
+            "subject": "critical coverage regression tests for the process cleanup runner"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "final Contract scope and immutable amendment chain"
+          }
+        ]
+      }
+    ],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [],
+    "humanDecisions": [
+      "Release cannot proceed while interrupted Work Item commands can leave owned processes, locks, or scratch worktrees."
+    ],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": "tests/test_finish_process_cleanup.py",
+        "subject": "Process-group isolation and descendant discovery"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2"
+      }
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "在 ai_finish 的每个生命周期命令外建立受控进程会话，使用有限超时和有界终止升级收口命令及其后代进程；正常命令的 argv、输出和退出码保持不变。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_finish.py",
+            "subject": "Owned command session, timeout, signal cleanup, and reaping"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "ai_finish 通过 Popen 的独立 session 执行命令，超时或 SIGINT/SIGTERM 时只向该命令进程树的进程组发送 SIGTERM，等待固定宽限期后升级为 SIGKILL，并通过 communicate/wait 回收；无法解析的超时配置在启动前 fail closed。",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_finish.py",
+            "subject": "finish_command_timeout_seconds and _terminate_owned_process_group"
+          },
+          {
+            "source": "tests/test_finish_process_cleanup.py",
+            "subject": "timeout, cancellation, escalation, and process-tree tests"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "ai_finish command runner",
+          "detail": "Each declared lifecycle command owns an isolated process session and bounded cleanup path.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_finish.py",
+              "subject": "run"
+            }
+          ]
+        },
+        {
+          "component": "Finish runner regression tests",
+          "detail": "Covers success, timeout, cancellation, escalation, descendant process-group discovery, and isolation.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_finish_process_cleanup.py",
+              "subject": "Process cleanup regression suite"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Use an isolated process session for each command.",
+          "reason": "Cleanup must not signal unrelated Work Item or user processes.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_finish.py",
+              "subject": "start_new_session"
+            }
+          ]
+        },
+        {
+          "decision": "Use a finite default timeout with a validated environment override.",
+          "reason": "A hung command must have a deterministic recovery boundary without changing required quality gates.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_finish.py",
+              "subject": "FINISH_COMMAND_TIMEOUT_ENV"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Error handling",
+          "detail": "Timeout returns exit code 124; signal cancellation returns 128 plus the received signal; both append a visible red cleanup fact to command evidence.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/ai_finish.py",
+              "subject": "run timeout and cancellation result mapping"
+            }
+          ]
+        },
+        {
+          "topic": "Compatibility",
+          "detail": "Normal argv execution, output capture, and successful exit behavior remain unchanged; only cancellation and timeout ownership is strengthened.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_core_gates.py",
+              "subject": "existing Finish runner behavior tests"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The command runner cleans only its owned process tree.",
+          "status": "verified",
+          "source": "tests/test_finish_process_cleanup.py",
+          "subject": "Process-group isolation and descendant discovery"
+        }
+      ]
+    }
   },
-  "workItemId": "fix-process-cleanup-20260819"
+  "humanHandoff": {
+    "locale": "en",
+    "completed": [
+      {
+        "claim": "Changed scripts/ai_finish.py",
+        "title": "Changed scripts/ai_finish.py",
+        "detail": "Runs each lifecycle command in an owned process tree with bounded timeout and termination escalation.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "scripts/ai_finish.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "scripts/ai_finish.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_core_gates.py",
+        "title": "Changed tests/test_core_gates.py",
+        "detail": "Adapts Finish runner tests to the process-group execution surface.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "tests/test_core_gates.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "tests/test_core_gates.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed tests/test_finish_process_cleanup.py",
+        "title": "Changed tests/test_finish_process_cleanup.py",
+        "detail": "Verifies timeout, signal cancellation, escalation, process-tree grouping, and unrelated-group isolation.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "tests/test_finish_process_cleanup.py"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "tests/test_finish_process_cleanup.py"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.json",
+        "title": "Changed docs/reference/capability-truth-matrix.json",
+        "detail": "Regenerated source-bound capability evidence after the Finish runner change.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.json",
+        "title": "Changed docs/reference/japanese-capability-assessment.json",
+        "detail": "Regenerated Japanese capability evidence after the Finish runner change.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/japanese-capability-assessment.md",
+        "title": "Changed docs/reference/japanese-capability-assessment.md",
+        "detail": "Regenerated Japanese capability report after the Finish runner change.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/japanese-capability-assessment.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.json",
+        "detail": "Regenerated pre-release documentation alignment evidence after the Finish runner change.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "title": "Changed docs/reference/pre-release-documentation-alignment.md",
+        "detail": "Regenerated pre-release documentation alignment report after the Finish runner change.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/pre-release-documentation-alignment.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.contract.json",
+        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.contract.json",
+        "detail": "Active Work Item Contract is committed snapshot evidence.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.summary.json",
+        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.summary.json",
+        "detail": "Active AI Change Summary is committed snapshot evidence.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.json",
+        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.json",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.md",
+        "title": "Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.md",
+        "detail": "Mandatory Task Outcome evidence generated by ai-finish.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.json",
+        "title": "Changed .ai/cockpit/task_report.json",
+        "detail": "Generated machine-readable Human Benefit Review Report.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.json"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed .ai/cockpit/task_report.md",
+        "title": "Changed .ai/cockpit/task_report.md",
+        "detail": "Generated human-readable Human Benefit Review Report.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": ".ai/cockpit/task_report.md"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "Changed docs/reference/capability-truth-matrix.md",
+        "title": "Changed docs/reference/capability-truth-matrix.md",
+        "detail": "Generated source-bound evidence during ai_finish; sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f.",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+            "subject": "docs/reference/capability-truth-matrix.md"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "passed": [
+      {
+        "claim": "sourceBoundEvidence",
+        "title": "sourceBoundEvidence",
+        "detail": "capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=ffe980a09e4eb57388fd378b091e99a154b5d74b42e81cefd2053a82045b5a43, after=b766b7880eb41beeeaaf490439d381d0919b2ea83d48f1ab22d542cada90b005; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "3d62fab80b79f651f5913df96ba907532d890843f8103ae1a935541c8fc740de"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "sourceBoundEvidence",
+            "digest": "3d62fab80b79f651f5913df96ba907532d890843f8103ae1a935541c8fc740de"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiWorkItem",
+        "title": "aiWorkItem",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/fix-process-cleanup-20260819.contract.json work item contract check passed: .ai/work-items/active/fix-process-cleanup-20260819.contract.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "88a4653ae5b11161aacdd55d3310eacda35e537abb30dc06ad0752bd51bea0e2"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiWorkItem",
+            "digest": "88a4653ae5b11161aacdd55d3310eacda35e537abb30dc06ad0752bd51bea0e2"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScope",
+        "title": "aiScope",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/fix-process-cleanup-20260819.contract.json scope guard passed: 16 changed path(s) covered",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiScope",
+            "digest": "1211f9e0c4ba66ef6e2b1cee1c52faa6cc4e1d56263bd6fdadd0270906785698"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiScope",
+            "digest": "1211f9e0c4ba66ef6e2b1cee1c52faa6cc4e1d56263bd6fdadd0270906785698"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuards",
+        "title": "aiGuards",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiGuards",
+            "digest": "8585be096880a72e633cc8c4e616ecb11600df07408d5d7e9679ed6787b73ffb"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiGuards",
+            "digest": "8585be096880a72e633cc8c4e616ecb11600df07408d5d7e9679ed6787b73ffb"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCheckpoint",
+        "title": "aiCheckpoint",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-process-cleanup-20260819` - Contract Hash: `f79c2ec6ff57d2fd` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "1432fd7cb97b110798668b5a1345583d3650e822236088fc01249d7f6539b8b0"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiCheckpoint",
+            "digest": "1432fd7cb97b110798668b5a1345583d3650e822236088fc01249d7f6539b8b0"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiReviewPolicy",
+        "title": "aiReviewPolicy",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json review policy matched 8 path(s) [review] .ai/work-items/active/fix-process-cleanup-20260819.contract.json [review] .ai/work-items/active/fix-process-cleanup-20260819.outcome.json [review] .ai/work-items/active/fix-process-cleanup-20260819.outcome.md [review] .ai/work-items/starts/fix-process-cleanup-20260819.json [review] .ai/cockpi",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "5b38719688f54e180de8c270753bcee2f27b0773fd105263e588c1cfce02374e"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiReviewPolicy",
+            "digest": "5b38719688f54e180de8c270753bcee2f27b0773fd105263e588c1cfce02374e"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiBacktrack",
+        "title": "aiBacktrack",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "f850ce9d5380a81505fa94c1cb4eea0de716038e70a6ea7896b46c97b60865bb"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiBacktrack",
+            "digest": "f850ce9d5380a81505fa94c1cb4eea0de716038e70a6ea7896b46c97b60865bb"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiCoverage",
+        "title": "aiCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiCoverage",
+            "digest": "34366be9da1728212472724329c3d38dbf714f26792698b238b342e93bf9de8c"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiCoverage",
+            "digest": "34366be9da1728212472724329c3d38dbf714f26792698b238b342e93bf9de8c"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiScenarioCoverage",
+        "title": "aiScenarioCoverage",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json report: target/ai_scenario_coverage_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "27ef14fd5446d7e3b17756b286ace4de6fab7fc4be6405445ecc450ed763980c"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiScenarioCoverage",
+            "digest": "27ef14fd5446d7e3b17756b286ace4de6fab7fc4be6405445ecc450ed763980c"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiGuidelines",
+        "title": "aiGuidelines",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiGuidelines",
+            "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiDiffOwnership",
+        "title": "aiDiffOwnership",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json ## Diff Ownership Preview - active_owned: `16`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — covered by Contract scope - [active_owned] `.ai/cockpit/task_re",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "d4ef60a05c9337abf530ac1984462f2749dc0d641f9177c6c6adb794de6d4524"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiDiffOwnership",
+            "digest": "d4ef60a05c9337abf530ac1984462f2749dc0d641f9177c6c6adb794de6d4524"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "quality",
+        "title": "quality",
+        "detail": "{\"finishQualityRoute\": {\"command\": \"make ai-cockpit-quality GOVERNANCE_PROFILE=strict\", \"policy\": {\"domains\": [\"docs\", \"project_code\", \"tests\", \"trust\"], \"level\": \"strict\", \"qualityRouting\": {\"reason\": \"strict paths without a targeted routing rule require full quality: .ai/cockpit/task_report.json, .ai/cockpit/task_report.md, docs/reference/capability-truth-matrix.json, docs/reference/japanese-capability-assessment.json, docs/reference/japanese-capability-assessment.md, docs/reference/pre-releas",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "quality",
+            "digest": "e4c38627442cfb3bceec2627debe5b6957dc4614fc3eb2d38445c48d00b01621"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "quality",
+            "digest": "e4c38627442cfb3bceec2627debe5b6957dc4614fc3eb2d38445c48d00b01621"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatus",
+        "title": "aiStatus",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiStatus",
+            "digest": "138047f7db331efcf6ff8a5075abe049949cc0043ec3d1126c72c050bb8459c9"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiStatus",
+            "digest": "138047f7db331efcf6ff8a5075abe049949cc0043ec3d1126c72c050bb8459c9"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusCheck",
+        "title": "aiStatusCheck",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "fdae5ac5fb3502fa4df48521e8888af652491a2ead7d95ed5ac8a02d2fd0a483"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiStatusCheck",
+            "digest": "fdae5ac5fb3502fa4df48521e8888af652491a2ead7d95ed5ac8a02d2fd0a483"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiStatusConsistency",
+        "title": "aiStatusConsistency",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "1dc6bbfdee292f01e908eb9b917d6466e2a7029c21621e6b5138e5e540528366"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiStatusConsistency",
+            "digest": "1dc6bbfdee292f01e908eb9b917d6466e2a7029c21621e6b5138e5e540528366"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiAgentRisk",
+        "title": "aiAgentRisk",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json --summary .ai/work-items/active/fix-process-cleanup-20260819.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "5361b0318e22e24f72bf5f5ca450797886b45f750c67c10281dc13376aaf58d1"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiAgentRisk",
+            "digest": "5361b0318e22e24f72bf5f5ca450797886b45f750c67c10281dc13376aaf58d1"
+          }
+        ],
+        "inference": false
+      },
+      {
+        "claim": "aiSummary",
+        "title": "aiSummary",
+        "detail": "PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/fix-process-cleanup-20260819.summary.json --contract .ai/work-items/active/fix-process-cleanup-20260819.contract.json ai summary check passed: .ai/work-items/active/fix-process-cleanup-20260819.summary.json",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiSummary",
+            "digest": "3039a528628deaf870b822c60b2a9a389e52c1b2a2800609ca264bfbf5c5ef99"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+            "subject": "aiSummary",
+            "digest": "3039a528628deaf870b822c60b2a9a389e52c1b2a2800609ca264bfbf5c5ef99"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "retained": [],
+    "risks": [],
+    "redReasons": [],
+    "questions": {
+      "problemCount": 1,
+      "problemCountEvidenceRefs": [
+        {
+          "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+          "subject": "verification and verificationHistory"
+        }
+      ],
+      "blockedProblems": [],
+      "resolvedProblems": [
+        {
+          "claim": "aiGuidelines failed before the retry.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+              "subject": "verificationHistory[0] aiGuidelines failed",
+              "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+              "subject": "verification[aiGuidelines] retry passed",
+              "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "resolutionApproach": [
+        {
+          "claim": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+          "evidenceRefs": [
+            {
+              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+              "subject": "verificationHistory[0] aiGuidelines failed",
+              "digest": "22c48e0af9b2a1c8ff344f2a9fc818ef2c559b3d0f7e3affe5bb38650106ff35"
+            },
+            {
+              "source": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+              "subject": "verification[aiGuidelines] retry passed",
+              "digest": "9a29a69dd08ae5b126c35a905236cd5b8b73f1706f8c029ab9e4d051f40e08d2"
+            }
+          ],
+          "inference": false
+        }
+      ],
+      "avoidedRisks": [
+        {
+          "claim": "If not detected, could have led to a stale completion claim.",
+          "evidenceRefs": [],
+          "inference": true
+        }
+      ],
+      "remainingRisks": [],
+      "agentUnknowns": [],
+      "humanConfirmations": [
+        {
+          "claim": "Release cannot proceed while interrupted Work Item commands can leave owned processes, locks, or scratch worktrees.",
+          "evidenceRefs": [],
+          "inference": true
+        }
+      ],
+      "recurrenceLikelihood": {
+        "claim": "unknown: no direct recurrence probability evidence was recorded.",
+        "evidenceRefs": [],
+        "inference": true
+      },
+      "nextTime": {
+        "claim": "Bind conversation locale and preserve evidence details before the next Work Item starts.",
+        "evidenceRefs": [],
+        "inference": true
+      }
+    }
+  }
 }

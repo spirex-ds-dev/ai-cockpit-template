@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-process-cleanup-20260819",
+  "title": "Make Work Item command cancellation and timeout process-safe",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在 ai_finish 的每个生命周期命令外建立受控进程会话，使用有限超时和有界终止升级收口命令及其后代进程；正常命令的 argv、输出和退出码保持不变。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    "scripts/ai_finish.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_process_cleanup.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+    ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+    ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.json",
+    ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-process-cleanup-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-process-cleanup-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Use an isolated process session for each command.",
+      "reason": "Cleanup must not signal unrelated Work Item or user processes.",
+      "status": "verified"
+    },
+    {
+      "decision": "Use a finite default timeout with a validated environment override.",
+      "reason": "A hung command must have a deterministic recovery boundary without changing required quality gates.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_finish_process_cleanup.py",
+      "digest": "13370170c25c5b668688f035a9f6448f45ffeb4ed9ef381692585a452445c595"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_finish.py",
+      "digest": "40a1a4d0c5cb5ca51419d9311caf9c49ea7fbacb3ce2568d7491e93b520f5024"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_core_gates.py",
+      "digest": "6d66d47d26b6ca423f1347f751193e5e0ec3d2d98af86190fc61490aa2360f7c"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+    "contractDigest": "f79c2ec6ff57d2fdf931ca3ebc62c15a35019d6fe5e0bcaa88d8faa9a36cb6da",
+    "summaryPath": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json",
+    "summaryDigest": "90a544c2d608e9017dda5f1f775a653dee99ca2d5364b778d9c0e6f086d797f9",
+    "outcomePath": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.json",
+    "outcomeDigest": "04586e6d2bfaef7c7baed57d511b50213f309e48ba327e49bbcd1c72dfdd70f2"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

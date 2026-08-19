@@ -7,86 +7,64 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): 将严格质量路由绑定到 Work Item Contract 的 base/current 文件证据：只有非发布工作流中恰好一行从一个 40 位 action SHA 替换为另一个 40 位 SHA 时，才投影为 targeted strict；生成的生命周期记录不再作为风险路径重复升级。所有其他形状继续走完整 strict 质量检查。
-Mechanism (verified): 路由器先读取 Contract baseCommit 对应的工作流文件和当前文件，使用精确的一行替换判定；Finish 与 governance profile 两条入口共享同一判定器。任务状态、报告和 Outcome 等生成投影只参与证据记录，不参与严格风险路径选择。
+Customer summary (verified): 在 ai_finish 的每个生命周期命令外建立受控进程会话，使用有限超时和有界终止升级收口命令及其后代进程；正常命令的 argv、输出和退出码保持不变。
+Mechanism (verified): ai_finish 通过 Popen 的独立 session 执行命令，超时或 SIGINT/SIGTERM 时只向该命令进程树的进程组发送 SIGTERM，等待固定宽限期后升级为 SIGKILL，并通过 communicate/wait 回收；无法解析的超时配置在启动前 fail closed。
 
 Affected components
-- Strict quality routing: Exact immutable workflow pin updates use quality-strict-targeted with quality-fast only; unsafe or high-risk shapes remain quality-full. (verified)
-- Governance profile receipt: Routing facts include the evidence-bound immutablePinChange classification without exposing file contents. (verified)
-- Finish lifecycle: Generated lifecycle projections are excluded from quality risk paths and Finish binds the classifier to the Contract base. (verified)
+- ai_finish command runner: Each declared lifecycle command owns an isolated process session and bounded cleanup path. (verified)
+- Finish runner regression tests: Covers success, timeout, cancellation, escalation, descendant process-group discovery, and isolation. (verified)
 
 Design decisions
-- Fail closed for every shape other than one exact immutable SHA replacement.: A routing optimization must not lower proof requirements for action identity, mutable references, extra changes, or release/signing workflows. (verified)
-- Use repository evidence rather than path names or self-declared intent.: The same rule must be trustworthy in both automatic profile selection and final Finish routing. (verified)
+- Use an isolated process session for each command.: Cleanup must not signal unrelated Work Item or user processes. (verified)
+- Use a finite default timeout with a validated environment override.: A hung command must have a deterministic recovery boundary without changing required quality gates. (verified)
 
 ### Technical details
-- Evidence binding: Both routing callers read the Contract baseCommit and current workflow bytes before accepting the targeted route; unavailable evidence produces an ineligible classification. (verified)
-- Generated projection boundary: Lifecycle status, Outcome, start, and Human Benefit Report files remain auditable outputs but are excluded from strict quality risk-path selection. (verified)
+- Error handling: Timeout returns exit code 124; signal cancellation returns 128 plus the received signal; both append a visible red cleanup fact to command evidence. (verified)
+- Compatibility: Normal argv execution, output capture, and successful exit behavior remain unchanged; only cancellation and timeout ownership is strengthened. (verified)
 
 ### Evidence
-- The routing implementation and its real-sample behavior are covered by the evidence-bound classifier, governance integration test, and Finish integration test.: tests/test_governance_profile.py#Evidence-bound base/current routing receipt integration (verified)
+- The command runner cleans only its owned process tree.: tests/test_finish_process_cleanup.py#Process-group isolation and descendant discovery (verified)
 
-- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.contract.json [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.contract.json]
-- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.summary.json [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.summary.json]
-- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/starts/fix-dependency-pin-quality-routing-20260819.json [evidence: .ai/work-items/starts/fix-dependency-pin-quality-routing-20260819.json]
+- Changed scripts/ai_finish.py [evidence: scripts/ai_finish.py]
+- Changed tests/test_core_gates.py [evidence: tests/test_core_gates.py]
+- Changed tests/test_finish_process_cleanup.py [evidence: tests/test_finish_process_cleanup.py]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
 - Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
 - Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
 - Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
 - Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed scripts/ai_verification_policy.py [evidence: scripts/ai_verification_policy.py]
-- Changed scripts/determine_governance_profile.py [evidence: scripts/determine_governance_profile.py]
-- Changed scripts/ai_finish.py [evidence: scripts/ai_finish.py]
-- Changed tests/test_verification_policy.py [evidence: tests/test_verification_policy.py]
-- Changed tests/test_governance_profile.py [evidence: tests/test_governance_profile.py]
-- Changed tests/test_core_gates.py [evidence: tests/test_core_gates.py]
-- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.outcome.json [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.outcome.json]
-- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.outcome.md [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.outcome.md]
+- Changed .ai/work-items/active/fix-process-cleanup-20260819.contract.json [evidence: .ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json]
+- Changed .ai/work-items/active/fix-process-cleanup-20260819.summary.json [evidence: .ai/work-items/archive/2026/fix-process-cleanup-20260819.summary.json]
+- Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.json [evidence: .ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.json]
+- Changed .ai/work-items/active/fix-process-cleanup-20260819.outcome.md [evidence: .ai/work-items/archive/2026/fix-process-cleanup-20260819.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 - Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
 
 Problems found
-- Total: 5
+- Total: 1
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
-- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[3] quality failed, verification[quality] retry passed]
+- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
 
 Problems resolved
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
-- Problem: quality failed before the retry.
-  Solution: Re-ran quality after the correction; the latest attempt passed.
-  Evidence: [evidence: verificationHistory[3] quality failed, verification[quality] retry passed]
+- Problem: aiGuidelines failed before the retry.
+  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
-- If not detected, could have led to a stale completion claim. (inference)
-- If not detected, could have led to a stale completion claim. (inference)
-- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- The #907 one-line immutable action SHA diff was escalated to quality-full because generated governance paths were mixed into strict routing inputs. [evidence: observedIssues[0] quality_routing, observedIssues[0] quality_routing]
-- The targeted route reduces local work only for the exact classifier shape; hosted checks and all other strict changes remain full proof. [evidence: residualRisks]
+- None recorded.
 
 Unknowns
 - None recorded.
 
 Human decisions
-- None recorded.
+- Release cannot proceed while interrupted Work Item commands can leave owned processes, locks, or scratch worktrees. (inference)
 
 Verification
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
