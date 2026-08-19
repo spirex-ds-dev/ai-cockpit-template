@@ -1,0 +1,268 @@
+{
+  "contractVersion": 2,
+  "workItemId": "dependabot-rust-toolchain-20260819-current-main",
+  "mode": "code",
+  "title": "Process Dependabot rust-toolchain update from current main",
+  "rawUserRequest": "继续处理当前仓库未完成的开放 Dependabot PR；对 PR #907 建立以当前 main 为基线的 successor Work Item，并完成验证、交付和生命周期关闭。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-thread: continue-open-dependabot-work",
+    "capturedAt": "2026-08-19",
+    "digest": "user-instructed-continue-current-main-dependabot-successor"
+  },
+  "declaredIntent": {
+    "summary": "将 Dependabot PR #907 的 rust-toolchain action pin 以当前 main 为真实基线重新交付，并保留原始 PR 作为来源事实。",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json",
+    ".ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.json",
+    ".ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.outcome.md",
+    ".github/workflows/compatibility.yml",
+    "tests/test_workflows.py",
+    "docs/reference/capability-truth-matrix.json"
+  ],
+  "outOfScope": [
+    "requirements-dev.in, requirements-dev.txt, and requirements-dev.lock; those paths belong to separate mypy/ruff successor Work Items.",
+    "Changing compatibility matrix jobs, required checks, timeouts, or failure policy beyond the single Dependabot action pin.",
+    "Modifying the archived evidence of PR #907 or automatically merging the raw Dependabot PR.",
+    "Release publication, unrelated dependency updates, and unrelated Issue remediation."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/907",
+      "reason": "Source Dependabot PR and requested rust-toolchain SHA transition."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Only implementation surface; the current action pin and compatibility matrix are defined here."
+    },
+    {
+      "path": "docs/reference/dependabot-intake.md",
+      "reason": "Repository policy requiring a current-main successor instead of direct raw Dependabot merge."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical terms and lifecycle boundaries for governed Work Item delivery."
+    },
+    {
+      "path": ".ai/work-items/starts/dependabot-rust-toolchain-20260819-current-main.json",
+      "reason": "Start Receipt binding this successor to the exact current-main base."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "dependency_update",
+      "ci_configuration",
+      "hosted_verification"
+    ],
+    "reason": "The change is a single immutable action pin, but it affects the compatibility verification toolchain and must be proven on the current main baseline.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "PR #907, the target workflow, and the repository Dependabot successor policy define the bounded change and its verification boundary."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item changes a pinned CI action and requires hosted compatibility verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user instructed continuation after the open Dependabot PR was identified; this successor is bounded to PR #907 and current-main verification."
+  },
+  "preReviewWarnings": [
+    "Confirm the diff changes only the rust-toolchain action SHA and does not alter compatibility jobs or required gates.",
+    "Confirm hosted evidence is bound to the successor head and current-main base, not the stale raw Dependabot merge ref."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The current-main successor records PR #907 as its source and changes only the rust-toolchain action pin in .github/workflows/compatibility.yml.",
+    "The compatibility workflow remains pinned to the exact Dependabot target SHA and preserves all existing matrix jobs and required gates.",
+    "Local AI governance and quality checks pass without weakening tests, coverage, or hosted gates.",
+    "Fresh Hosted compatibility, smoke, installer, lifecycle, release-evidence, and CI-evidence checks pass for the successor PR.",
+    "Before closing this Work Item, ai-close-work-item passes and its closure receipt records the merged successor PR and absent local and remote successor branches."
+  ],
+  "guidelines": [
+    "Keep the action pinned to an immutable commit SHA.",
+    "Do not weaken, skip, or retime existing compatibility and required CI gates.",
+    "Preserve the raw Dependabot PR as source evidence and deliver from current main."
+  ],
+  "intent": {
+    "problem": "PR #907 is a raw Dependabot candidate based on an obsolete main commit. Its Hosted checks ran against a stale merge ref and the repository's intake policy intentionally blocks raw Dependabot candidates until a current-main successor Work Item exists.",
+    "constraints": [
+      "Use the recorded current main commit dc07070d85c8849afc72f473e89b151842da5bb1 as the base.",
+      "Change only .github/workflows/compatibility.yml for this dependency update.",
+      "Do not modify archived predecessor evidence or bypass the Dependabot intake policy.",
+      "Require fresh hosted evidence before merge and lifecycle closure."
+    ],
+    "rationale": "A fresh bounded successor separates immutable Dependabot source facts from the current repository baseline and prevents stale generated evidence from being mistaken for current verification."
+  },
+  "implementationSurface": {
+    "production": [".github/workflows/compatibility.yml"],
+    "tests": ["tests/test_workflows.py"],
+    "documentation": [],
+    "generated": [
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md",
+      ".ai/work-items/archive/index.json",
+      ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.contract.json",
+      ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.summary.json",
+      ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.json",
+      ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.outcome.md",
+      ".ai/work-items/archive/2026/dependabot-rust-toolchain-20260819-current-main.archive-manifest.json",
+      ".ai/knowledge/index.json",
+      ".ai/knowledge/work-items/dependabot-rust-toolchain-20260819-current-main.json"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "SC-RUST-1",
+      "scenario": "The successor changes the compatibility workflow action pin from the old rust-toolchain SHA to PR #907's target SHA.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The diff contains exactly the intended immutable SHA update and no unrelated workflow change.",
+      "verificationPlan": "Inspect the branch diff and run the workflow/configuration checks."
+    },
+    {
+      "id": "SC-RUST-2",
+      "scenario": "The current-main successor runs the complete compatibility and repository smoke gates.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "All required Hosted checks pass and evidence is bound to the successor head SHA.",
+      "verificationPlan": "Run local ai-finish and require fresh Hosted PR checks before merge."
+    },
+    {
+      "id": "SC-RUST-3",
+      "scenario": "The raw Dependabot PR remains an obsolete source candidate while the successor is delivered.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "No raw Dependabot PR is merged automatically; its source facts are referenced by the successor evidence.",
+      "verificationPlan": "Review PR state, source binding, and post-merge reconciliation."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user instructed continuation after the outstanding Dependabot PR was identified; this approval is limited to the declared single workflow pin change."
+  },
+  "rollbackNote": "Revert the successor PR or restore the previous rust-toolchain immutable SHA in .github/workflows/compatibility.yml; do not alter the raw Dependabot PR archive facts.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 968
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/dependabot-rust-toolchain-20260819-current-main.json",
+    "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+    "initialScopeDigest": "dc91c3b632a00bf44637bab1f0b1c5c8e96fc197295b75664030934127a8f4d2",
+    "contractSkeletonDigest": "a7ece1ea1668310cd4d195cf703544109f95ce03ab1ff1131c65686353eec7d4"
+  }
+}
