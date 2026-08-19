@@ -12,7 +12,10 @@
   },
   "declaredIntent": {
     "summary": "将 Dependabot PR #907 的 rust-toolchain action pin 以当前 main 为真实基线重新交付，并保留原始 PR 作为来源事实。",
-    "requestedCapabilities": ["ai_governance", "test_automation"]
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
   },
   "requestedOperation": {
     "target": "repository_governance",
@@ -21,7 +24,7 @@
     "effect": "enforce",
     "authorityRequired": false
   },
-  "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+  "baseCommit": "790ae5389552466f4a6813bb5cb8b089d0bcb1b2",
   "baselineDirtyPaths": [],
   "scope": [
     ".ai/work-items/active/dependabot-rust-toolchain-20260819-current-main.contract.json",
@@ -91,7 +94,12 @@
     ],
     "override": null
   },
-  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
   "executionDecision": {
     "status": "continue",
     "reason": "The user instructed continuation after the open Dependabot PR was identified; this successor is bounded to PR #907 and current-main verification."
@@ -131,8 +139,12 @@
     "rationale": "A fresh bounded successor separates immutable Dependabot source facts from the current repository baseline and prevents stale generated evidence from being mistaken for current verification."
   },
   "implementationSurface": {
-    "production": [".github/workflows/compatibility.yml"],
-    "tests": ["tests/test_workflows.py"],
+    "production": [
+      ".github/workflows/compatibility.yml"
+    ],
+    "tests": [
+      "tests/test_workflows.py"
+    ],
     "documentation": [],
     "generated": [
       ".ai/cockpit/current_status.md",
@@ -264,5 +276,20 @@
     "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
     "initialScopeDigest": "dc91c3b632a00bf44637bab1f0b1c5c8e96fc197295b75664030934127a8f4d2",
     "contractSkeletonDigest": "a7ece1ea1668310cd4d195cf703544109f95ce03ab1ff1131c65686353eec7d4"
-  }
+  },
+  "synchronizationHistory": [
+    {
+      "synchronizationVersion": 1,
+      "fromBaseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+      "toBaseCommit": "790ae5389552466f4a6813bb5cb8b089d0bcb1b2",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/dependabot-rust-toolchain-20260819-current-main",
+      "recordedAt": "2026-08-19T21:07:42.960134+00:00",
+      "priorContractDigest": "b32b4cf5a51a54be5e6c81facd181a5eaa730b32ac939d253b916e55ddd023bf",
+      "priorSummaryDigest": "1b0a7ceb699408026447702d0a826afb2599f701b420cc648598e9942730f06d",
+      "rebaseHeadBefore": "181b88dee58e29cbdc3e75b872689b9bf6de4a25",
+      "rebaseHeadAfter": "181b88dee58e29cbdc3e75b872689b9bf6de4a25"
+    }
+  ]
 }
