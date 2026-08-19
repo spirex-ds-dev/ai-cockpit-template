@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-closure-knowledge-base-20260819",
+  "title": "fix-closure-knowledge-base-20260819",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在确认当前 Work Item 分支、PR 状态和精确 Head SHA 后，先同步合并目标 base，再以该 base worktree 作为归档证据和 source-bound knowledge projection 的校验根；不改写旧分支或绕过 fail-closed 清理。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.contract.json",
+    ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json",
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.outcome.json",
+    ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/work-items/implementation-knowledge-projection-20260818.json",
+    ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-closure-knowledge-base-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Use an explicit project_root override only for archived evidence validation.",
+      "reason": "The old Work Item snapshot cannot be updated without changing the merged PR Head SHA; the synchronized base is the repository state that survives cleanup.",
+      "status": "verified"
+    },
+    {
+      "decision": "Keep branch identity and PR Head SHA verification before base synchronization.",
+      "reason": "Evidence-root correction must not become a branch deletion escape hatch.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "digest": "7fcace963a7720f5f103328b21ba198e7f87623a1198c03c6d327fcf26045849"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_close_work_item.py",
+      "digest": "7daa8f22bd6082dac9ea38d601a065b640a4e9b479f92b29c9f0840c78eb70bd"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.contract.json",
+    "contractDigest": "64558b917259105caf91e303703dfa9f2607ab175e6d410ae610d8ab64a392b9",
+    "summaryPath": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json",
+    "summaryDigest": "0e678e5e586added2a0d1ec2f9ad69c8c3b793c78d3d58acb0b434ec98182502",
+    "outcomePath": ".ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.outcome.json",
+    "outcomeDigest": "021ff780759b36cf3cf11441876f2039a23a90931d168f40cbebc83650c018f1"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

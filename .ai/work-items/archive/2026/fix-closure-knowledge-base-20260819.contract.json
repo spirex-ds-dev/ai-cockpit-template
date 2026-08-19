@@ -1,0 +1,241 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-closure-knowledge-base-20260819",
+  "mode": "code",
+  "title": "fix-closure-knowledge-base-20260819",
+  "rawUserRequest": "发布版本前必须确认 Issue、PR、分支、worktree 和进程都清理干净；调查旧 #915 关闭失败的根因，修复后再继续收敛和发布。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:release-cleanliness-closure-boundary", "capturedAt": "2026-08-19T00:00:00+09:00", "digest": "sha256:closure-knowledge-base-ordering-root-cause"},
+  "baseCommit": "35fbfa28db32d4c355b425305573800483cad4bc",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    ".ai/work-items/active/fix-closure-knowledge-base-20260819.contract.json",
+    ".ai/work-items/active/fix-closure-knowledge-base-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/fix-closure-knowledge-base-20260819.outcome.json",
+    ".ai/work-items/active/fix-closure-knowledge-base-20260819.outcome.md"
+  ],
+  "outOfScope": [
+    "historical archived Contract, Summary, Outcome, and knowledge records",
+    "force deletion or rewriting of the #915 Work Item branch",
+    "release publication and unrelated Issue/PR changes"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Current closure ordering validates archived evidence before base synchronization."
+    },
+    {
+      "path": "scripts/ai_check_knowledge_index.py",
+      "reason": "Knowledge projection validity is source-bound to the repository snapshot being checked."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Existing closure boundary and cleanup regression coverage."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-process-cleanup-20260819.contract.json",
+      "reason": "Merged Work Item whose safe closure is currently blocked by the ordering defect."
+    },
+    {
+      "path": ".ai/knowledge/work-items/fix-process-cleanup-20260819.json",
+      "reason": "Current repaired projection used to reproduce the old-branch versus synchronized-base mismatch."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_ordering",
+      "branch_cleanup"
+    ],
+    "reason": "Closure must use synchronized base evidence without weakening branch/PR identity or fail-closed cleanup.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The change affects lifecycle validation and branch cleanup boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The closure ordering defect, constraints, acceptance, and verification are explicit."
+  },
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Validate archived closure evidence against the synchronized base snapshot after proving Work Item branch identity.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "implementationSurface": {"production": ["scripts/ai_close_work_item.py"], "tests": ["tests/test_work_item_lifecycle_closure.py"], "documentation": [], "generated": [".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"]},
+  "requiredEvidenceContext": {"destructiveLevel": "none", "externalSystem": "GitHub PR metadata and Git repository state", "availableEvidence": ["closure ordering regression tests", "archived evidence checks", "#915 closure receipt"]},
+  "preReviewWarnings": [
+    "Review that archived evidence is checked against the synchronized base snapshot only after PR Head SHA ownership is verified, and that every cleanup failure remains fail closed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-close-work-item validates archived Contract, Summary, Outcome, Status, and Implementation Knowledge against the synchronized base worktree when the invoking Work Item branch predates a later merged projection repair.",
+    "The closure path still verifies the current Work Item branch, PR state, PR head branch, and exact PR Head SHA before synchronizing the base or deleting either branch.",
+    "A regression test reproduces the #915 boundary: the old branch snapshot is stale for the repaired projection, while the synchronized base snapshot is valid and permits safe closure.",
+    "Invalid archived evidence, branch mismatch, PR Head SHA mismatch, dirty worktrees, failed base synchronization, and failed remote deletion remain fail closed.",
+    "The current #915 Work Item closes through the governed lifecycle after this fix, leaving no #915 local or remote branch/worktree residue."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Merged Work Item branch has an older source snapshot while the synchronized base contains the repaired knowledge projection.",
+      "riskDomain": "lifecycle_ordering",
+      "expected": "PR identity is verified against the old branch commit, then archived evidence is validated against the synchronized base and closure completes safely.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "The current #915 failure reproduces this boundary.",
+      "verificationPlan": "Regression test with separate old and base repository snapshots, followed by governed closure of #915."
+    },
+    {
+      "scenario": "Archived evidence or Implementation Knowledge remains invalid on the synchronized base.",
+      "riskDomain": "evidence_integrity",
+      "expected": "Closure stops before any local or remote branch deletion.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Fail-closed evidence is a safety boundary.",
+      "verificationPlan": "Existing fail-closed unit tests plus focused regression coverage."
+    },
+    {
+      "scenario": "The requested task, PR head branch, or PR Head SHA does not match the selected Work Item branch.",
+      "riskDomain": "branch_cleanup",
+      "expected": "Closure stops before base synchronization and cleanup.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Branch identity prevents deleting an unrelated branch.",
+      "verificationPlan": "Existing branch and PR identity tests."
+    }
+  ],
+  "guidelines": [
+    "Use the existing closure receipt and cleanup ordering; do not create a force-delete escape hatch.",
+    "Keep the source-of-truth override explicit and scoped to archived evidence validation."
+  ],
+  "intent": {
+    "problem": "After PR #916 repaired source-bound Implementation Knowledge projections on the synchronized main branch, the already-merged #915 Work Item could not be closed because ai-close-work-item checked the archived projection against the pre-repair #915 branch snapshot before synchronizing main. The closure command therefore blocked a safe cleanup even though current base truth was valid.",
+    "constraints": [
+      "Preserve the merged PR's exact Head SHA and branch identity checks.",
+      "Do not rewrite historical archived evidence or bypass fail-closed cleanup.",
+      "Delete local and remote Work Item branches only after evidence, synchronization, receipt, and postconditions pass."
+    ],
+    "rationale": "Closure is a repository-state operation. Once the PR identity is proven, current archived evidence and generated projections must be checked against the synchronized base snapshot that will remain after branch cleanup, not against an obsolete source snapshot that cannot be updated without changing the PR Head SHA."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization",
+    "reason": "用户明确要求先处理已知残留根因，禁止把 stale projection 问题带入后续 WI；Finish 的 canonical generator 需要刷新既有 source-bound knowledge projections。"
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 0
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-closure-knowledge-base-20260819.json",
+    "baseCommit": "35fbfa28db32d4c355b425305573800483cad4bc",
+    "initialScopeDigest": "f1cd174fce1f17a5167e140ac87646ce95d6bdf480d1cf98d2462e3d36a7d4fd",
+    "contractSkeletonDigest": "b30c599a622c4436d4781de6c0f9870be4cea22b2cc6b183946132403f79092a"
+  }
+}
