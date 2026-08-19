@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-knowledge-projection-freshness-20260819",
+  "title": "Prevent stale Implementation Knowledge projections after branch synchronization",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在 Finish、归档生成和 PR 边界统一增加 Implementation Knowledge freshness 校验，并在共享 source-bound 证据刷新后用 canonical generator 重建既有投影；不改写历史归档证据。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.contract.json",
+    ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.summary.json",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_generate_knowledge_record.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_implementation_knowledge.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    ".ai/knowledge/index.json",
+    ".ai/knowledge/work-items/fix-dependency-pin-quality-routing-20260819.json",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/work-items/fix-post-archive-generated-ownership-20260819.json",
+    ".ai/knowledge/work-items/fix-pr-audit-lineage-projections-20260819.json",
+    ".ai/knowledge/work-items/fix-process-cleanup-20260819.json",
+    ".ai/knowledge/work-items/implementation-knowledge-projection-20260818.json",
+    ".ai/knowledge/work-items/knowledge-query-design-alignment-20260818.json",
+    ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json",
+    ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.outcome.json",
+    ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/work-items/publish-v0-5-68-20260818.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Use the existing canonical knowledge checker instead of duplicating digest logic.",
+      "reason": "One freshness definition must govern archive, PR, and closure paths.",
+      "status": "verified"
+    },
+    {
+      "decision": "Skip the PR knowledge check only when the repository has no knowledge surface at all.",
+      "reason": "Fresh adopter projects must not be blocked before they create their first projection.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": ".ai/knowledge/index.json",
+      "digest": "26511bbe23278243a8add9bf2ce24eab13977619a3941d6694e5e0e02bf4e940"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_archive_work_item.py",
+      "digest": "8ef71ab0ceead383e48d189ffa1fb32fa2438786d697f2b36f3a3989886c5529"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_check_pr.py",
+      "digest": "9ad40b20fabc0a5bbacd89d395851dcfcf14e7aad56d9b6d44f63f6c5d988df1"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_finish.py",
+      "digest": "851e1e7abbd093665b5a9bff994d4bfb41c83946234416d467dbce90ff7e0f10"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_pr_aggregate.py",
+      "digest": "74c66ec6e8d1a0b5079a01a0214bf65ab6f3e1526283cea8b6a03a02285decd4"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "digest": "f6f5dfbfd9b78a56c948372176effcdb1b6e2ccaae17191beb298ee2317dc7c9"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_check_knowledge_index.py",
+      "digest": "947e1fc99c177e239f4d4d326340671bb46ae3b779e826b96eb451ef0df7f4de"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_implementation_knowledge.py",
+      "digest": "d5a61e0b2c5069b099845584da613f4f1676ae5f157c4263ae3e3a3e2cf682cc"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.contract.json",
+    "contractDigest": "2bb26054c64cba6a55099b0c40a416170805cd79c6ae7b977b8079101a25c7e1",
+    "summaryPath": ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.summary.json",
+    "summaryDigest": "3dd82c52e63f0eab49c7a48a09402099a92012ef7bd82debf44acb450532e412",
+    "outcomePath": ".ai/work-items/archive/2026/fix-knowledge-projection-freshness-20260819.outcome.json",
+    "outcomeDigest": "40ac8bd57334bd5889197b633be37834fd58cd9ba3dbff68aab5a25f1748dfa1"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

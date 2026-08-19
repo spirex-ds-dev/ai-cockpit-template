@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_capability_truth import validate_matrix
+from ai_check_knowledge_index import check_index as check_knowledge_index
 from ai_check_knowledge_index import check_record as check_knowledge_record
 from ai_check_summary import changed_file_paths, validate_summary
 from ai_check_work_item import validate_contract
@@ -91,6 +92,26 @@ def capability_truth_dependency_issues(paths: list[str]) -> list[str]:
     if issues:
         return issues
     return validate_matrix(PROJECT_ROOT / dependencies.matrix_path, root=PROJECT_ROOT)
+
+
+def knowledge_index_issues() -> list[str]:
+    """Reject a stale generated knowledge surface before a PR can merge.
+
+    Fresh adopter repositories do not have a knowledge surface yet. Once an
+    index or record exists, however, the whole projection is a repository
+    invariant: a rebase that changes bound evidence without regenerating the
+    record must fail closed before merge.
+    """
+    index_path = PROJECT_ROOT / ".ai" / "knowledge" / "index.json"
+    records_dir = PROJECT_ROOT / ".ai" / "knowledge" / "work-items"
+    has_records = records_dir.is_dir() and any(records_dir.glob("*.json"))
+    if not index_path.is_file() and not has_records:
+        return []
+    if not index_path.is_file():
+        return ["Implementation Knowledge index is missing while knowledge records exist"]
+    if not records_dir.is_dir():
+        return ["Implementation Knowledge records directory is missing"]
+    return check_knowledge_index(index_path, records_dir=records_dir, repo_root=PROJECT_ROOT)
 
 
 def _git_blob_hash(revision: str, path: str) -> str:
@@ -988,6 +1009,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     all_paths = changed_paths(
         {"baseCommit": base, "baselineDirtyPaths": []}, ignore_baseline_dirty=True
     )
+    issues.extend(knowledge_index_issues())
     issues.extend(capability_truth_dependency_issues(all_paths))
     report_required = (
         HUMAN_REPORT_JSON in all_paths

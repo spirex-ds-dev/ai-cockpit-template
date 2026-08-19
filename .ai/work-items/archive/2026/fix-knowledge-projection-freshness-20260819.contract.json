@@ -1,0 +1,269 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-knowledge-projection-freshness-20260819",
+  "mode": "code",
+  "title": "Prevent stale Implementation Knowledge projections after branch synchronization",
+  "baseCommit": "2b4b549fab7b8debe94d2bd234c2c97de1944d2e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-knowledge-projection-freshness-20260819.contract.json",
+    ".ai/work-items/active/fix-knowledge-projection-freshness-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_generate_knowledge_record.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_implementation_knowledge.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/fix-knowledge-projection-freshness-20260819.outcome.json",
+    ".ai/work-items/active/fix-knowledge-projection-freshness-20260819.outcome.md"
+  ],
+  "outOfScope": [
+    "Rewriting archived Contract, Summary, Outcome, archive manifest, or archive index evidence.",
+    "Changing release tags, GitHub Releases, installer catalog contents, or knowledge records unrelated to the canonical freshness pass.",
+    "Changing the Work Item process-cleanup implementation delivered by PR #915."
+  ],
+  "sources": [
+    {
+      "path": ".ai/knowledge/work-items/fix-process-cleanup-20260819.json",
+      "reason": "Current merged projection whose evidence digests are stale after the #915 rebase."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Canonical archive transaction that generates the Implementation Knowledge Record."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR boundary validator that must reject stale generated knowledge before merge."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Finish lifecycle that refreshes source-bound generated evidence before Outcome completion."
+    },
+    {
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "reason": "Canonical generator used to rebuild every existing projection after shared evidence changes."
+    },
+    {
+      "path": "scripts/ai_check_knowledge_index.py",
+      "reason": "Evidence-bound checker that defines current record and index validity."
+    },
+    {
+      "path": "tests/test_implementation_knowledge.py",
+      "reason": "Existing generator and checker regression coverage."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Existing PR aggregate boundary regression coverage."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Finish integration coverage for source-bound refresh and projection synchronization."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Existing archive transaction regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "evidence_integrity"
+    ],
+    "reason": "The change only strengthens generated knowledge freshness checks and repairs generated projections; archived evidence remains immutable."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["Evidence-integrity gate and generated projection repair with bounded repository scope."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The stale projection, repair boundary, and preventive validation are deterministic and bounded."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The finish and canonical archive transactions refresh existing projections and validate the generated Work Item knowledge record and index against the current repository tree before reporting completion; stale or invalid output fails closed.",
+    "The PR aggregate boundary validates the repository knowledge index whenever the knowledge surface exists, so a rebase or merge that changes bound evidence without regenerating its projection is rejected before merge; an adopter with no knowledge surface is not falsely blocked.",
+    "Every stale Implementation Knowledge Record reported by the canonical checker, including the #915 projection and the six historical records currently identified on main, is regenerated by the canonical generator; archived Contract, Summary, Outcome, archive manifest, and archive index bytes remain unchanged.",
+    "Regression tests cover fresh archive generation, stale evidence detection, PR-boundary rejection, and the no-knowledge-surface compatibility path.",
+    "The repair Work Item receives a separate visible Outcome, its PR is merged, and its lifecycle closes with no active Work Item or branch residue."
+  ],
+  "guidelines": [
+    "Generated knowledge projections must be produced by repository commands, not hand-edited.",
+    "Archived Contract, Summary, Outcome, archive manifest, and archive index files are immutable evidence and must not be rewritten.",
+    "PR validation must fail closed on stale generated knowledge without requiring a knowledge record in a fresh adopter repository."
+  ],
+  "intent": {
+    "problem": "PR #915 merged a stale Implementation Knowledge Record because the record was generated before the branch was rebased onto the #914-updated main. The final source digests changed, but Hosted CI did not validate the knowledge index; the defect surfaced only when ai-close-work-item checked the archived record.",
+    "constraints": [
+      "Repair only generated knowledge projections reported stale by the canonical checker and the preventive archive/PR validation paths.",
+      "Do not rewrite historical archived evidence or publish a release in this Work Item.",
+      "Keep fresh adopter repositories without .ai/knowledge records compatible.",
+      "Use the canonical generator and checker, and expose the full Outcome in the conversation before lifecycle closure."
+    ],
+    "rationale": "The root cause is a missing post-synchronization freshness gate, not a one-off bad digest. Refreshing existing projections after shared source-bound generation, then validating finish, archive, and PR boundaries, prevents the same drift from reaching a merged branch while restoring the current closure invariant."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization",
+    "reason": "用户明确要求先处理发现的残留与根因，再进行发布前 Issue/PR/分支清理。"
+  },
+  "rollbackNote": "Revert this Work Item diff and regenerate only the affected generated knowledge projections from immutable archived inputs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 970
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-knowledge-projection-freshness-20260819.json",
+    "baseCommit": "2b4b549fab7b8debe94d2bd234c2c97de1944d2e",
+    "initialScopeDigest": "32b0919d254e71dc746afcb6d7cade88ac098075d3d7f98d2b6a62a5fbd2597c",
+    "contractSkeletonDigest": "60ac022febff2b78fd08b16b38382925736c4cdd1e678829f8ca968bcdfde767"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Archive generation completes with a fresh knowledge projection.",
+      "expected": "The generated record and index pass the canonical checker against the same repository tree before archive success is reported.",
+      "verificationPlan": "Run archive projection unit tests and the repository knowledge checker on a temporary fixture with immutable source files.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A rebase changes an evidence-bound source after an old projection was generated.",
+      "expected": "The PR aggregate check fails closed and identifies the stale digest before merge.",
+      "verificationPlan": "Create a temporary repository fixture with a stale record and invoke the PR aggregate validator; assert the stale evidence path is reported.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Fresh adopter has no knowledge records yet.",
+      "expected": "PR validation does not fail merely because the optional knowledge surface has not been installed or populated.",
+      "verificationPlan": "Run the PR aggregate validator against a fixture without .ai/knowledge/index.json and assert no knowledge freshness error is emitted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "rawUserRequest": "发布版本前确认 Issue、PR、分支和 worktree 都清理干净；发现 #915 关闭时 Implementation Knowledge Record 的 evidence digest 残留后，查清根因并处理掉，不要把已知问题带入后续 WI。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:release-cleanliness-and-stale-knowledge-projection",
+    "capturedAt": "2026-08-19",
+    "digest": "sha256:release-cleanliness-stale-knowledge-projection"
+  },
+  "declaredIntent": {
+    "summary": "在发布前修复并根治 rebase/merge 后知识投影 digest 残留，随后完成全量清理复核。",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  }
+}

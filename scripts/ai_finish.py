@@ -967,6 +967,37 @@ def _record_source_bound_generation(
     after_sha256: str,
 ) -> None:
     """Bind a source-bound generated document to the active Summary evidence."""
+    _record_generated_output(
+        summary_path,
+        path=path,
+        before_sha256=before_sha256,
+        after_sha256=after_sha256,
+    )
+    summary = load_json(summary_path)
+    alignment = summary.get("documentationAlignment")
+    checks = alignment.get("checks") if isinstance(alignment, dict) else None
+    if isinstance(checks, list):
+        for check in checks:
+            if (
+                not isinstance(check, dict)
+                or check.get("area") != "documentationCommandsCapability"
+            ):
+                continue
+            evidence = check.get("evidence")
+            if isinstance(evidence, list) and path not in evidence:
+                evidence.append(path)
+            break
+    save_json(summary_path, summary)
+
+
+def _record_generated_output(
+    summary_path: Path,
+    *,
+    path: str,
+    before_sha256: str,
+    after_sha256: str,
+) -> None:
+    """Register a generated output without misclassifying its evidence type."""
     summary = load_json(summary_path)
     changed = summary.get("changedFiles")
     if not isinstance(changed, list):
@@ -988,20 +1019,6 @@ def _record_source_bound_generation(
         summary["generatedFiles"] = generated
     if path not in generated:
         generated.append(path)
-
-    alignment = summary.get("documentationAlignment")
-    checks = alignment.get("checks") if isinstance(alignment, dict) else None
-    if isinstance(checks, list):
-        for check in checks:
-            if (
-                not isinstance(check, dict)
-                or check.get("area") != "documentationCommandsCapability"
-            ):
-                continue
-            evidence = check.get("evidence")
-            if isinstance(evidence, list) and path not in evidence:
-                evidence.append(path)
-            break
     save_json(summary_path, summary)
 
 
@@ -1102,6 +1119,33 @@ def refresh_source_bound_evidence(*, summary_path: Path) -> tuple[int, int, str]
         )
         if code != 0:
             return code, total_duration, "\n".join(details)
+
+    knowledge_root = PROJECT_ROOT / ".ai" / "knowledge"
+    knowledge_paths = []
+    if knowledge_root.is_dir():
+        index_path = knowledge_root / "index.json"
+        if index_path.is_file():
+            knowledge_paths.append(index_path)
+        knowledge_paths.extend(sorted((knowledge_root / "work-items").glob("*.json")))
+    before = {
+        path.relative_to(PROJECT_ROOT).as_posix(): _file_sha256(path) for path in knowledge_paths
+    }
+    try:
+        from ai_generate_knowledge_record import rebuild_existing_projections
+
+        refreshed = rebuild_existing_projections(repo_root=PROJECT_ROOT)
+    except (OSError, TypeError, ValueError) as exc:
+        details.append(f"Implementation Knowledge refresh failed: {exc}")
+        return 1, total_duration, "\n".join(details)
+    for relative in refreshed:
+        _record_generated_output(
+            summary_path,
+            path=relative,
+            before_sha256=before.get(relative, "missing"),
+            after_sha256=_file_sha256(PROJECT_ROOT / relative),
+        )
+    if refreshed:
+        details.append("Implementation Knowledge projections refreshed: " + ", ".join(refreshed))
 
     return 0, total_duration, "\n".join(details)
 

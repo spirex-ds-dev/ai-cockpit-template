@@ -59,7 +59,13 @@ def _generate_knowledge_projection(contract_path: Path) -> Path | None:
         # discoverable through the authoritative archive index; no projection
         # is fabricated for them.
         return None
-    from ai_generate_knowledge_record import _atomic_write, build_record, rebuild_index
+    from ai_check_knowledge_index import check_index, check_record
+    from ai_generate_knowledge_record import (
+        _atomic_write,
+        build_record,
+        rebuild_existing_projections,
+        rebuild_index,
+    )
 
     record = build_record(
         contract_path,
@@ -71,6 +77,14 @@ def _generate_knowledge_projection(contract_path: Path) -> Path | None:
     index_path = PROJECT_ROOT / ".ai" / "knowledge" / "index.json"
     _atomic_write(record_path, record)
     rebuild_index(record_path.parent, index_path)
+    rebuild_existing_projections(repo_root=PROJECT_ROOT)
+    issues = check_record(record_path, repo_root=PROJECT_ROOT)
+    issues.extend(check_index(index_path, records_dir=record_path.parent, repo_root=PROJECT_ROOT))
+    if issues:
+        raise ValueError(
+            "generated Implementation Knowledge projection is stale or invalid: "
+            + "; ".join(issues)
+        )
     return record_path
 
 
