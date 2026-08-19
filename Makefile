@@ -521,6 +521,14 @@ quality-strict-targeted-owned:
 
 quality-full-owned:
 	@set -eu; \
+		aggregate_receipt="target/quality/project-test-aggregate/receipt.json"; \
+		cleanup_project_test_receipt() { \
+			status=$${1:-$$?}; \
+			if git ls-files --error-unmatch "$$aggregate_receipt" >/dev/null 2>&1; then \
+				git restore --source=HEAD --worktree -- "$$aggregate_receipt" || status=$$?; \
+			fi; \
+			exit $$status; \
+		}; \
 		commit=$$(git rev-parse --short=12 HEAD 2>/dev/null || printf unknown); \
 		run_id="$${GITHUB_RUN_ID:-local}"; \
 		attempt="$${GITHUB_RUN_ATTEMPT:-0}"; \
@@ -529,7 +537,7 @@ quality-full-owned:
 		session_root="target/quality/sessions/$$session_id"; \
 		timing="$$session_root/timing"; logs="$$session_root/logs"; junit="$$session_root/junit"; \
 		mkdir -p "$$timing" "$$logs" "$$junit"; \
-		trap 'printf "%s\n" "$$session_id" > target/quality/current-session.txt' EXIT; \
+		trap 'status=$$?; printf "%s\n" "$$session_id" > target/quality/current-session.txt; cleanup_project_test_receipt "$$status"' EXIT; \
 		printf '%s\n' "$$session_id" > target/quality/current-session.txt; \
 		$(AI_PYTHON) scripts/run_quality_session.py --phase quality-fast --phase quality-heavy -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit" TEST_WEAKENING_FULL_OWNERSHIP=true; \
 		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md" --profile "$(QUALITY_PROFILE)" $(QUALITY_ESCALATIONS) $(QUALITY_ESCALATION_REASONS); \
