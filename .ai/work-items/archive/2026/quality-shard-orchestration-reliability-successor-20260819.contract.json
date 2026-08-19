@@ -1,0 +1,321 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-shard-orchestration-reliability-successor-20260819",
+  "rawUserRequest": "继续完成质量分片可靠性修复，并在当前 main 基线上重新验证；不得通过重编号或改写既有归档证据来绕过 archive recovery gate。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "Codex conversation 2026-08-19: current-main successor continuation",
+    "capturedAt": "2026-08-19T11:28:00+00:00",
+    "digest": "sha256:606fb04b797d2c1aa5bb904a16eb1c8f70c0ce7d4a797dae90a6c48eeb694047"
+  },
+  "declaredIntent": {
+    "summary": "Deliver the bounded quality shard lifecycle fix on the current main base without rewriting immutable predecessor archive evidence.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "mode": "code",
+  "title": "Deliver quality shard workspace reliability on current main",
+  "baseCommit": "e0220b988dd0d52f1e73b13a71dd60ab27a06c42",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/quality-shard-orchestration-reliability-successor-20260819.contract.json",
+    ".ai/work-items/active/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    "target/quality/**",
+    ".ai/work-items/active/quality-shard-orchestration-reliability-successor-20260819.outcome.json",
+    ".ai/work-items/active/quality-shard-orchestration-reliability-successor-20260819.outcome.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/quality_shard_workspace.py",
+    "tests/test_quality_shard_workspace.py",
+    "tests/test_makefile.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_outcome_lifecycle_rules.py",
+    "AGENTS.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    ".ai/project/adopter-capability-manifest.json",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing the project-test shard count, test ownership plan, coverage floor, or quality profile selection.",
+    "Changing Hosted workflow matrices, runner labels, timeouts, or required-check policy.",
+    "Changing Hosted runner comparability receipt semantics; that belongs to the merged Hosted runner compatibility Work Item.",
+    "Resuming, merging, or publishing the Dependabot rust-toolchain Work Item or a release from this Work Item."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.contract.json",
+      "reason": "The predecessor Contract records the bounded implementation and original acceptance boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.summary.json",
+      "reason": "The predecessor Summary records implementation and local verification evidence without importing its immutable archive sequence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.outcome.json",
+      "reason": "The predecessor Outcome is retained as audit context; this successor must generate a new current-main-bound Outcome."
+    },
+    {
+      "path": "Makefile",
+      "reason": "The project-test shard recipe creates and removes Git worktrees concurrently and must expose lifecycle failures."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Existing tests define the source-bound worktree isolation contract for project-test shards."
+    },
+    {
+      "path": "target/quality/shards/*/receipt.json",
+      "reason": "The failed quality session produced passed shard receipts, isolating the defect to orchestration after shard execution."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "The template repository must state the current-Work-Item repair boundary for agents operating here."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "The installer source must deliver the same boundary into adopter agent instructions."
+    },
+    {
+      "path": ".ai/project/adopter-capability-manifest.json",
+      "reason": "The adopter-facing capability surface must declare the boundary and its installed verification surface."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_configuration",
+      "evidence_integrity",
+      "test_reliability"
+    ],
+    "reason": "The change affects local quality orchestration and evidence handoff, but must preserve test selection, coverage, and Hosted policy.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The predecessor evidence and current-main source tree identify the bounded helper, tests, and documentation surface."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The successor is bounded to the predecessor implementation and the current-main archive recovery decision."
+  },
+  "preReviewWarnings": [
+    "Review that no predecessor archive sequence, Outcome, or Hosted evidence is modified."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The project-test shard orchestration serializes only shared Git worktree metadata mutations while preserving configured parallel shard test execution.",
+    "When every shard runner writes a passed receipt, the parent project-test-shards target returns success and leaves no registered shard worktree.",
+    "When worktree preparation, evidence copy, or cleanup fails, the target fails closed with the shard name, failing phase, and actionable stderr; cleanup does not silently overwrite a preceding shard-runner failure.",
+    "Focused automated tests prove serialized worktree mutation, passed-result preservation, and visible cleanup failure behavior.",
+    "The template repository Makefile delivers the corrected behavior without changing test selection or quality policy; lifecycle documentation distinguishes template-internal pytest sharding from adopter-defined PROJECT_TEST execution.",
+    "The current-Work-Item problem-resolution boundary is explicit in template and installed agent rules, declared as adopter_installed capability surface, and verified by a fresh-adopter parity test."
+  ],
+  "guidelines": [
+    "Keep the shard test plan, coverage floor, and quality profile unchanged.",
+    "Serialize only Git common-directory mutations; do not serialize the test runner itself.",
+    "Do not suppress an orchestration failure that is required to make evidence trustworthy.",
+    "Keep the boundary between template-internal pytest sharding and installed adopter PROJECT_TEST execution explicit.",
+    "When a problem remains within the current Contract, resolve it in the current Work Item; amend and revalidate before expanding scope, and reserve a new Work Item for a genuinely different or independently governed delivery.",
+    "Keep the current-Work-Item resolution boundary identical in the template rules and the installer-delivered adopter rules.",
+    "Do not modify or renumber predecessor or merged Hosted archive evidence."
+  ],
+  "intent": {
+    "problem": "The predecessor implementation was archived on an older base and cannot be rebased because its archive sequence collides with the merged Hosted runner Work Item. The actual quality shard reliability fix still needs to be delivered on current main without rewriting either archived evidence record.",
+    "constraints": [
+      "Do not change shard count, test assignments, coverage floor, or required quality gates.",
+      "Keep shard tests parallel; only shared Git worktree metadata operations may be serialized.",
+      "Preserve source-bound shard receipts and fail closed on preparation, copy, runner, or cleanup errors.",
+      "Keep template-internal pytest sharding distinct from installed adopter PROJECT_TEST execution.",
+      "Do not modify or renumber predecessor or merged Hosted archive evidence."
+    ],
+    "rationale": "A clean current-main successor preserves archive immutability while delivering the reliability fix. Deterministic, visible worktree lifecycle handling makes quality evidence trustworthy and removes false parent failures."
+  },
+  "scenarioCoverage": [
+    {
+      "id": "SC-SHARD-SUCCESSOR-1",
+      "scenario": "Five configured project-test shards execute concurrently after isolated worktrees are prepared.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Actual shard runners remain parallel while common Git worktree metadata mutations are serialized.",
+      "verificationPlan": "Unit-test the workspace lifecycle coordinator and inspect the Makefile invocation contract."
+    },
+    {
+      "id": "SC-SHARD-SUCCESSOR-2",
+      "scenario": "Every shard runner completes successfully and writes its receipt.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The parent target succeeds, publishes shard evidence, and removes every temporary worktree.",
+      "verificationPlan": "Use the controlled workspace-runner fixture and project-test aggregate receipt validation."
+    },
+    {
+      "id": "SC-SHARD-SUCCESSOR-3",
+      "scenario": "A worktree lifecycle phase fails after a runner result is available.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The command fails closed with the shard and phase visible while preserving the primary runner result for diagnosis.",
+      "verificationPlan": "Inject a lifecycle command failure in a focused test and assert diagnostic output and exit semantics."
+    },
+    {
+      "id": "SC-WI-BOUNDARY-1",
+      "scenario": "A problem is discovered while a Work Item is still within its Contract scope.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The agent repairs it in the current Work Item after any Contract amendment and revalidation; a new Work Item is created only for a genuinely different or independently governed delivery.",
+      "verificationPlan": "Inspect the template and installer rules, manifest capability declaration, and fresh-adopter installed AGENTS.md parity test."
+    }
+  ],
+  "implementationSurface": {
+    "production": [
+      "scripts/quality_shard_workspace.py",
+      "Makefile",
+      "templates/make/Makefile.ai"
+    ],
+    "tests": [
+      "tests/test_quality_shard_workspace.py",
+      "tests/test_makefile.py",
+      "tests/test_installed_runtime_parity.py",
+      "tests/test_outcome_lifecycle_rules.py"
+    ],
+    "generated": [],
+      "documentation": [
+      "AGENTS.md",
+      "templates/agents/AI_COCKPIT_RULES.md",
+      ".ai/project/adopter-capability-manifest.json",
+      "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "docs/reference/capability-truth-matrix.json"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository user",
+    "reason": "The user explicitly directed continuation of the convergence remediation, including the quality orchestration Makefile surface."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 973
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-shard-orchestration-reliability-successor-20260819.json",
+    "baseCommit": "e0220b988dd0d52f1e73b13a71dd60ab27a06c42",
+    "initialScopeDigest": "65a03dbf6627259bad95958d43535aea94bc1caa58bd80b075cee39257fbeb88",
+    "contractSkeletonDigest": "fc44b192a3c9d9b1ca2858e8f0fc1230b325bfd4dca3b0075edea256c56d52c8"
+  }
+}

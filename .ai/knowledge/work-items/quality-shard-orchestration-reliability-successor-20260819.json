@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "quality-shard-orchestration-reliability-successor-20260819",
+  "title": "Deliver quality shard workspace reliability on current main",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在当前 main 上重新交付质量分片工作树生命周期修复；仅串行化共享 Git 元数据操作，保留分片测试并行执行，并让失败阶段和原始 runner 结果可见。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.contract.json",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.outcome.json",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "AGENTS.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    ".ai/project/adopter-capability-manifest.json",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_outcome_lifecycle_rules.py",
+    "scripts/quality_shard_workspace.py",
+    "tests/test_quality_shard_workspace.py",
+    "Makefile",
+    "tests/test_makefile.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    ".ai/work-items/starts/quality-shard-orchestration-reliability-successor-20260819.json",
+    "target/quality/project-test-aggregate/receipt.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/work-items/fix-shellcheck-apt-mirror-20260819.json",
+    ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json",
+    ".ai/knowledge/work-items/fix-post-archive-generated-ownership-20260819.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/quality-shard-orchestration-reliability-successor-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Only shared Git worktree metadata operations are serialized.",
+      "reason": "This preserves parallel shard execution while protecting the shared Git common directory.",
+      "status": "verified"
+    },
+    {
+      "decision": "Deliver the current-Work-Item repair boundary through the same agent rules used by fresh adopters.",
+      "reason": "The template and installed adopter must not diverge on when a new Work Item is justified.",
+      "status": "verified"
+    },
+    {
+      "decision": "Reserve a new Work Item for a genuinely different or independently governed delivery.",
+      "reason": "Routine corrections stay bounded and converge in the current Work Item; successor routes remain explicit and auditable.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_makefile.py",
+      "digest": "90eca5acc70c7439489e9f47b457b3b237930ef8120646d3342c2aca473f7be3"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_installed_runtime_parity.py",
+      "digest": "43c646db7c120073bf8d10cf95bd8156f39589ad3b6a79e41c10706b28a25320"
+    },
+    {
+      "type": "code",
+      "path": "Makefile",
+      "digest": "9c70ce50ccba49a2bb3667bef1c839f721db0b8a4899c344153a94faec2a02d5"
+    },
+    {
+      "type": "code",
+      "path": "target/quality/project-test-aggregate/receipt.json",
+      "digest": "0659c464a85bf8f1cde3b6fa6307d6e9b6fcedc7437503bc7098023c3bd56b69"
+    },
+    {
+      "type": "code",
+      "path": "scripts/quality_shard_workspace.py",
+      "digest": "820ef6c6fb25e7bdca27fd94c3de61665bab5758cf6255a83839b2c7b0610c49"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_quality_shard_workspace.py",
+      "digest": "d5089bb96090ec7c3d4abc48bea96bb09b1e03a3f632b22d745d3c1e7e19d8d2"
+    },
+    {
+      "type": "code",
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "digest": "163f5fb6201baceaf4faf2641ef8eed9930da422c1b3bc34e820381779363ac6"
+    },
+    {
+      "type": "code",
+      "path": ".ai/project/adopter-capability-manifest.json",
+      "digest": "4515c48c3c7f637df9eb6e1952c5d1665531750079062c70c76fd756c0a328e3"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "digest": "f838a7b389d13327374291ea326748816402826e274c26fd0c641bd010cbf8a9"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.contract.json",
+    "contractDigest": "4d6257b30b587d2a503e8f687d201422826b1c7f95a0f73848b3d5387e308326",
+    "summaryPath": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+    "summaryDigest": "8a4bde4f60ce197cb3d204279bc25a086074271c996560c5ba58be8d14f508bc",
+    "outcomePath": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.outcome.json",
+    "outcomeDigest": "80d83c4bba854322e02709d6f8cf799afec3d79fc73dba9cd3de297f1f2fcc76"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

@@ -34,6 +34,25 @@ schedule those tasks and a Work Item never becomes a shared global runtime
 lock. It validates the local record shape and fails closed for malformed,
 unpaired, mismatched, or non-dedicated active branches.
 
+### Template quality-shard worktrees
+
+The template repository's own `project-test-shard-%` targets use isolated,
+temporary Git worktrees because its pytest shards write generated governance
+evidence. `scripts/quality_shard_workspace.py` serializes only the short
+Git-common-directory operations (`worktree list`, `add`, and `remove`) with a
+cross-process lock. Each `make` invocation also uses a unique parent-process
+run directory, so an interrupted invocation cannot share a worktree path with
+a later retry. Evidence copying, regeneration, shard execution, and artifact publication remain parallel. A lifecycle failure names the shard and
+phase on stderr; if both the runner and cleanup fail, the runner exit status is
+preserved and the cleanup failure is also reported.
+
+This is a template-repository quality implementation, not an automatic claim
+that every installed adopter uses pytest sharding. The installed `Makefile.ai`
+executes the adopter-defined `PROJECT_TEST` command. Adding an adopter-facing,
+stack-neutral parallel-test runtime requires its own Contract, installer
+catalog delivery, and fresh-adopter parity evidence; it must not be inferred
+from this template-internal helper.
+
 ### Branch-integrated generated projections
 
 Active Contract, Summary, Outcome, and Start Receipt files are task-namespaced
@@ -151,16 +170,10 @@ For the hosted execution, dispatch `smoke.yml` with `purpose=hosted_measurement`
 and the snapshot branch. A successful `ci-evidence` job uploads exactly one
 `hosted-measurement-receipt-<run-id>-<attempt>` artifact. Its JSON schema records
 the repository, workflow/run URL and identity, ref, exact `commitSha`, required
-job names and conclusions, and artifact name. The `runnerClass` records the
-stable execution class used for comparability (`os`, Python runtime, and CPU
-count); `shardRunners` retains each shard's actual provider facts, including
-the Ubuntu image identifier. GitHub-hosted `ubuntu-24.04` may assign different
-patch-image identifiers to parallel shards, so that image drift is recorded and
-does not by itself invalidate an otherwise identical runner class. A difference
-in the stable class remains fail closed. Copy its facts into the active Summary
-only after independently confirming that its `commitSha` equals the snapshot
-receipt. The hosted receipt is evidence, not authority: it cannot authorize a
-PR, merge, release, archive mutation, closure, or branch deletion.
+job names and conclusions, and artifact name. Copy its facts into the active
+Summary only after independently confirming that its `commitSha` equals the
+snapshot receipt. The hosted receipt is evidence, not authority: it cannot
+authorize a PR, merge, release, archive mutation, closure, or branch deletion.
 intent, an archived Work Item, complete hosted evidence, a dirty/detached/base
 state, baseline mismatch, or failed quality stops the stage. Once hosted
 results are recorded in the active Summary, the Work Item must return to the
@@ -190,6 +203,23 @@ lifecycle writes; this narrow bootstrap exception does
 not enable general concurrent startup.
 
 ## Retry-versus-successor boundary
+
+### Resolve current-Work-Item problems in place
+
+When implementation, verification, finish, or handoff discovers a problem,
+the default is to repair it in the current Work Item. This is allowed when
+the current Contract still covers the scope, authority, and base: amend the
+Contract before adding paths or authority, revalidate it, preserve the retry
+evidence, and keep the blocked Outcome visible. Do not create another Work
+Item or Issue merely to avoid the repair or to expand the work.
+
+Create a successor or independent Work Item only when the scope, authority, or
+base genuinely differs, the change is genuinely independent, safe in-scope
+resolution is impossible, immutable failed-delivery evidence requires a new
+delivery, or a human explicitly directs it. The reason and predecessor/linkage
+must be recorded in the new Contract and Start Receipt. This boundary applies
+to the template repository and to every adopter repository receiving the
+installed AI Cockpit rules.
 
 A blocked active Work Item retries in place when it retains the same active
 Contract and scope and needs only an active schema/evidence correction. Preserve

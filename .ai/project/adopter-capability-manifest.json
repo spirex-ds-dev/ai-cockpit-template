@@ -399,6 +399,51 @@
       "verifyInstalledSurface": true
     },
     {
+      "id": "current_work_item_problem_resolution_boundary",
+      "title": "Current Work Item problem-resolution boundary",
+      "adopterFacing": true,
+      "status": "adopter_installed",
+      "truth": "adopter_installed",
+      "ownership": "template_and_installer",
+      "summary": "Installs and verifies the rule that problems discovered during a Work Item are repaired in that Work Item when its Contract still covers the scope, authority, and base; new Work Items are reserved for genuinely different or independently governed work.",
+      "templateFiles": [
+        "AGENTS.md",
+        "templates/agents/AI_COCKPIT_RULES.md",
+        ".ai/project/adopter-capability-manifest.json",
+        ".ai/schemas/adopter-capability-manifest.schema.json",
+        "templates/make/Makefile.ai",
+        "docs/reference/ai-cockpit-work-item-lifecycle.md"
+      ],
+      "installedFiles": [
+        "AGENTS.md",
+        ".ai/project/adopter-capability-manifest.json",
+        ".ai/schemas/adopter-capability-manifest.schema.json",
+        "Makefile.ai"
+      ],
+      "catalogScripts": [
+        "ai_installer_adopter_capability_manifest.py"
+      ],
+      "makeTargets": [
+        "check-adopter-capability-manifest"
+      ],
+      "schemas": [
+        ".ai/schemas/adopter-capability-manifest.schema.json"
+      ],
+      "entrypoints": [
+        {
+          "path": "scripts/ai_installer_adopter_capability_manifest.py",
+          "args": [
+            "--help"
+          ],
+          "sideEffect": "none"
+        }
+      ],
+      "docs": [
+        "docs/reference/ai-cockpit-work-item-lifecycle.md"
+      ],
+      "verifyInstalledSurface": true
+    },
+    {
       "id": "template_capability_truth_material",
       "title": "Template Capability Truth material",
       "adopterFacing": true,
