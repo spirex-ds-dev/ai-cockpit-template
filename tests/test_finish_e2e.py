@@ -92,6 +92,25 @@ def test_finish_git_environment_helper_filters_nested_work_item_overrides(monkey
     assert environment["PYTHONDONTWRITEBYTECODE"] == "1"
 
 
+def test_ai_finish_restores_tracked_project_test_receipt_after_quality(tmp_path: Path):
+    receipt = tmp_path / "target/quality/project-test-aggregate/receipt.json"
+    receipt.parent.mkdir(parents=True)
+    receipt.write_text('{"status":"base"}\n', encoding="utf-8")
+    assert run(tmp_path, "git", "init", "-q", "-b", "main").returncode == 0
+    run(tmp_path, "git", "config", "user.email", "test@example.invalid")
+    run(tmp_path, "git", "config", "user.name", "Test")
+    assert run(tmp_path, "git", "add", "target").returncode == 0
+    assert run(tmp_path, "git", "commit", "-qm", "base").returncode == 0
+
+    receipt.write_text('{"status":"quality-run"}\n', encoding="utf-8")
+    restore = getattr(ai_finish, "restore_tracked_project_test_receipt", None)
+    assert callable(restore), "ai-finish must expose the tracked receipt cleanup behavior"
+
+    assert restore(root=tmp_path) is True
+    assert receipt.read_text(encoding="utf-8") == '{"status":"base"}\n'
+    assert run(tmp_path, "git", "status", "--short").stdout == ""
+
+
 def run(root: Path, *args: str, env=None):
     child_env = dict(os.environ if env is None else env)
     child_env = {

@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "requestedText": "Advance the unpublished next-release.json candidate to v0.5.69 based on the verified published v0.5.68 projection.",
+  "target": {
+    "type": "file",
+    "name": "unpublished_release_candidate_projection_next_release_json",
+    "path": "next-release.json",
+    "operation": "change_signature"
+  },
+  "referenceAnalysis": {
+    "staticReferences": [],
+    "testReferences": [],
+    "configurationReferences": [],
+    "documentationReferences": [],
+    "workflowReferences": [],
+    "buildReferences": [],
+    "dynamicReferences": {
+      "status": "proven_absent",
+      "evidence": [
+        "scripts/sync_published_release_projection.py",
+        "scripts/check_release_distribution.py",
+        "tests/test_release_distribution.py"
+      ],
+      "stale": false
+    },
+    "externalConsumers": {
+      "status": "proven_absent",
+      "evidence": [
+        "docs/reference/distribution.md",
+        "scripts/check_release_state_consistency.py"
+      ],
+      "stale": false
+    },
+    "monitoringReferences": {
+      "status": "proven_absent",
+      "evidence": [
+        "tests/test_release_distribution.py"
+      ],
+      "stale": false
+    }
+  },
+  "governanceEvidence": {
+    "contractDeclared": true,
+    "acceptanceDeclared": true,
+    "destructiveChangeAllowed": true,
+    "evidence": [
+      ".ai/work-items/active/release-projection-v0_5_68-20260819.contract.json",
+      "scripts/sync_published_release_projection.py",
+      "scripts/check_release_state_consistency.py",
+      "tests/test_release_distribution.py"
+    ]
+  }
+}
