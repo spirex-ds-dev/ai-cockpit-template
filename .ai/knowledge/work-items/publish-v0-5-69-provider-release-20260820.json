@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "publish-v0-5-69-provider-release-20260820",
+  "title": "Authorize v0.5.69 provider publication from clean main",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "本次采用证据绑定的发布与投影同步方式：先用同一源提交完成 Hosted rehearsal，再由 Provider 工作流创建并发布不可变 v0.5.69，随后下载公共资产独立核对摘要，并通过 fail-closed synchronizer 将已验证发布投影为稳定版本、将下一候选推进到 v0.5.70。发布后的证据真值由既有 canonical generators 重新生成，避免能力摘要继续引用旧字节。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.contract.json",
+    ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.summary.json",
+    ".ai/work-items/starts/publish-v0-5-69-provider-release-20260820.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/task-event-log.events.jsonl",
+    ".ai/work-items/external-handoffs/**",
+    ".ai/work-items/external-handoffs/publish-v0-5-69-provider-release-20260820.json",
+    ".ai/work-items/external-handoffs/run-release-rehearsal-v0-5-69-20260820.json",
+    ".ai/work-items/external-handoffs/publish-v0-5-69-provider-release-20260820-v2.json",
+    ".ai/work-items/external-handoffs/publish-v0-5-69-provider-release-20260820-v3.json",
+    ".ai/work-items/external-handoffs/publish-v0-5-69-provider-release-20260820-v4.json",
+    "target/release-v0-5-69-provider-release/**",
+    "target/release-v0-5-69-provider-release/provider-release.receipt.json",
+    "target/release-v0-5-69-provider-release/public-assets-32286215124/**",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/version.json",
+    "install.sh",
+    "next-release.json",
+    "release-state.json",
+    "release.json",
+    "scripts/sync_published_release_projection.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/work-items/release-projection-v0_5_68-20260819.json",
+    ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json",
+    ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.outcome.json",
+    ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.archive-manifest.json",
+    ".ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Keep v0.5.69 immutable and move only the local candidate projection to v0.5.70.",
+      "reason": "A published tag and its public assets are historical release facts; the next candidate must remain separately unpublished until a future release WI.",
+      "status": "verified"
+    },
+    {
+      "decision": "Regenerate evidence-bound projections after release projection writes instead of editing capability summaries manually.",
+      "reason": "The validator binds claims to actual repository bytes; regeneration is the only acceptable way to recover stale evidenceSource values.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "target/release-v0-5-69-provider-release/provider-release.receipt.json",
+      "digest": "fb21a4a63a2d9434cd666667b6e37a0ff6b1a1331c81ed71e988e29a6c15acd2"
+    },
+    {
+      "type": "code",
+      "path": "scripts/sync_published_release_projection.py",
+      "digest": "0ca265825f218b5d7a16b16f815149d25dfdf6dba6de07f2f12b86b28d39187e"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/capability-truth-matrix.json",
+      "digest": "d1729e6d1a47fe1ca9672731ff3334a1c01647bafe7e91d74acf5e18f885320f"
+    },
+    {
+      "type": "code",
+      "path": ".github/workflows/release.yml",
+      "digest": "fbff216bb3fb49bfd48b55a36738b9958b460c45190a78f377cfa9fd771301ca"
+    },
+    {
+      "type": "code",
+      "path": "target/release-v0-5-69-provider-release/rehearsal-artifact-32284965833/release-rehearsal.json",
+      "digest": "444632a1c70fc0d64387972bb19c27adb8e6b3ed560ee9ccf80a2a1c2aac213d"
+    },
+    {
+      "type": "code",
+      "path": "target/release-v0-5-69-provider-release/public-assets-32286215124/release-digests.json",
+      "digest": "caab4068be2238e7a1e37074dd9637026999fb08b395a469eec2743834785e51"
+    },
+    {
+      "type": "code",
+      "path": "release-state.json",
+      "digest": "8595b4670641e84c4564e1c88f25d763153dae7349424d92c607542d72d921fd"
+    },
+    {
+      "type": "code",
+      "path": "next-release.json",
+      "digest": "8a27053a4399332d1a785484bebd73174d6bac23fb22d7d973b3f4759a3f61b9"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_capability_truth.py",
+      "digest": "5cda977775e5b4fa6531886f963f1c8a4a976344ed974e34bcf39b58b1a3500e"
+    },
+    {
+      "type": "code",
+      "path": "scripts/ai_japanese_capability.py",
+      "digest": "bcfcbba322c358e5cd7e9d65aff825bb204ebd5de9b726513c6afd678d851327"
+    },
+    {
+      "type": "code",
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "digest": "46440f36622c8597298ca5f8b84a99db408cd39bc74639bd301c77977680bd71"
+    },
+    {
+      "type": "code",
+      "path": "release.json",
+      "digest": "048d04dbb1c0130891a94c4b2f74f2d738962f32a617ad323b265235e38baa55"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.contract.json",
+    "contractDigest": "083762e850e1edcdae9617209bc12e9cd4f37e380c528d3abdc1a58f7f8bb8fd",
+    "summaryPath": ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.summary.json",
+    "summaryDigest": "fd578b9162b2cc76c25bdb73801698d6e3d9215b0b665e090bc876f03615f723",
+    "outcomePath": ".ai/work-items/archive/2026/publish-v0-5-69-provider-release-20260820.outcome.json",
+    "outcomeDigest": "96c9f66df65c079e5564dd4375ff64213dc7ee412ffae4814d37f45e85022a81"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}
