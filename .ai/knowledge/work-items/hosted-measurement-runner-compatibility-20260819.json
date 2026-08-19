@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "hosted-measurement-runner-compatibility-20260819",
+  "title": "Fix Hosted measurement runner comparability",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "The receipt builder now compares the stable runner class and preserves each shard's exact provider image, so dynamic Ubuntu patch-image drift is visible evidence rather than a false mismatch.",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.contract.json",
+    ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.summary.json",
+    "scripts/quality_measurements.py",
+    "tests/test_quality_measurements.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.outcome.json",
+    ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/hosted-measurement-runner-compatibility-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Do not weaken source identity or success checks.",
+      "reason": "Only stable runner-class comparison changes; commit, tree, result, artifact, and coverage checks remain unchanged.",
+      "status": "verified"
+    },
+    {
+      "decision": "Do not claim all shards used the same patch image when they did not.",
+      "reason": "Actual provider image values are retained under shardRunners.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "scripts/quality_measurements.py",
+      "digest": "bc98307dd97f33d970152470125360bbb48f3c1b65239ffefe4bae9b639d9170"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_quality_measurements.py",
+      "digest": "a8345224b780e65200911284dcf71ca66b022642ed7904c60a4b707ce840c597"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.contract.json",
+    "contractDigest": "cf84643ae070b9d5a0eb9225cdc5dc3affe789575c4f3cf456f4913ed90a7009",
+    "summaryPath": ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.summary.json",
+    "summaryDigest": "f0dad8f88f59ab6c5e7692687233fef683052f9835e7fa4d18e1d171b789bb2b",
+    "outcomePath": ".ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.outcome.json",
+    "outcomeDigest": "57c2b9c2f3f5090f9667a20cf253760b63bd1b9a8001677636e0586f7f42b084"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}
