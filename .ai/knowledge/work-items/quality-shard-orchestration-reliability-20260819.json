@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "quality-shard-orchestration-reliability-20260819",
+  "title": "Fix quality shard orchestration reliability",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "在每次 project-test 分片执行时建立按本次 Make 进程隔离的临时工作树，并只串行化 Git worktree 元数据操作；测试运行和证据发布继续并行。生命周期失败会带出分片、阶段和动作，并保留已有 runner 结果。",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.contract.json",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    "Makefile",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "scripts/quality_shard_workspace.py",
+    "tests/test_quality_shard_workspace.py",
+    "tests/test_makefile.py",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.outcome.json",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/work-items/fix-shellcheck-apt-mirror-20260819.json",
+    ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.archive-manifest.json",
+    ".ai/knowledge/work-items/quality-shard-orchestration-reliability-20260819.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Serialize only shared Git worktree metadata, not pytest execution.",
+      "reason": "The five shard runners must remain parallel while Git common-directory mutations are protected from collisions.",
+      "status": "verified"
+    },
+    {
+      "decision": "Use a unique run directory for every Make invocation.",
+      "reason": "An interrupted or retried parent process must not collide with stale generated workspace paths.",
+      "status": "verified"
+    },
+    {
+      "decision": "Keep installed adopter PROJECT_TEST execution outside this pytest-specific helper.",
+      "reason": "The installed template surface is stack-neutral; automatically claiming pytest orchestration for adopters would overstate inherited capability.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "scripts/quality_shard_workspace.py",
+      "digest": "820ef6c6fb25e7bdca27fd94c3de61665bab5758cf6255a83839b2c7b0610c49"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_quality_shard_workspace.py",
+      "digest": "d5089bb96090ec7c3d4abc48bea96bb09b1e03a3f632b22d745d3c1e7e19d8d2"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "digest": "8ff28363d99f4a6ec2d2426df4a86822d9b690433d2923056f3564ef1ca70945"
+    },
+    {
+      "type": "code",
+      "path": "Makefile",
+      "digest": "9c70ce50ccba49a2bb3667bef1c839f721db0b8a4899c344153a94faec2a02d5"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_makefile.py",
+      "digest": "90eca5acc70c7439489e9f47b457b3b237930ef8120646d3342c2aca473f7be3"
+    },
+    {
+      "type": "code",
+      "path": "templates/make/Makefile.ai",
+      "digest": "aa3c1bfe1e9a481392eb8e26f734949d8b8a6df9882c476b2ea001fa647659b0"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.contract.json",
+    "contractDigest": "f6298859815e4c2f4eb9706d5b03b23236c208aef0b0c6de3664cc76016fb51d",
+    "summaryPath": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.summary.json",
+    "summaryDigest": "7ff34ac2babf477813fff0768b800087b494db328d72b4343cc10f33c72fe491",
+    "outcomePath": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-20260819.outcome.json",
+    "outcomeDigest": "22b1c4f9e362b4e8d84410b9a75cf2ee586cafb9d73c310e0ef5315b74123a28"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

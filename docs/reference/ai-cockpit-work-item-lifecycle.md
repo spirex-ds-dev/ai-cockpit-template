@@ -34,6 +34,25 @@ schedule those tasks and a Work Item never becomes a shared global runtime
 lock. It validates the local record shape and fails closed for malformed,
 unpaired, mismatched, or non-dedicated active branches.
 
+### Template quality-shard worktrees
+
+The template repository's own `project-test-shard-%` targets use isolated,
+temporary Git worktrees because its pytest shards write generated governance
+evidence. `scripts/quality_shard_workspace.py` serializes only the short
+Git-common-directory operations (`worktree list`, `add`, and `remove`) with a
+cross-process lock. Each `make` invocation also uses a unique parent-process
+run directory, so an interrupted invocation cannot share a worktree path with
+a later retry. Evidence copying, regeneration, shard execution, and artifact publication remain parallel. A lifecycle failure names the shard and
+phase on stderr; if both the runner and cleanup fail, the runner exit status is
+preserved and the cleanup failure is also reported.
+
+This is a template-repository quality implementation, not an automatic claim
+that every installed adopter uses pytest sharding. The installed `Makefile.ai`
+executes the adopter-defined `PROJECT_TEST` command. Adding an adopter-facing,
+stack-neutral parallel-test runtime requires its own Contract, installer
+catalog delivery, and fresh-adopter parity evidence; it must not be inferred
+from this template-internal helper.
+
 ### Branch-integrated generated projections
 
 Active Contract, Summary, Outcome, and Start Receipt files are task-namespaced
