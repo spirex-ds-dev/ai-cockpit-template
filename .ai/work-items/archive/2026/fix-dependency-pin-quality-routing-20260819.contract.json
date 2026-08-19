@@ -1,0 +1,287 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-dependency-pin-quality-routing-20260819",
+  "mode": "code",
+  "title": "Route immutable dependency pin updates through targeted strict quality",
+  "rawUserRequest": "Continue: correct the root cause that makes a narrowly scoped immutable dependency pin update invoke unnecessary full-repository quality, then resume dependency PR reconciliation and the release-cleanliness audit.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:ten-hour-non-convergence-release-cleanliness",
+    "capturedAt": "2026-08-19",
+    "digest": "sha256:immutable-pin-quality-routing-convergence"
+  },
+  "declaredIntent": {
+    "summary": "Make narrowly proven immutable dependency pin updates converge through targeted strict local quality while preserving strict governance and hosted proof.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-dependency-pin-quality-routing-20260819.contract.json",
+    ".ai/work-items/active/fix-dependency-pin-quality-routing-20260819.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    "scripts/ai_verification_policy.py",
+    "scripts/determine_governance_profile.py",
+    "scripts/ai_finish.py",
+    "tests/test_verification_policy.py",
+    "tests/test_governance_profile.py",
+    "tests/test_core_gates.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/fix-dependency-pin-quality-routing-20260819.outcome.json",
+    ".ai/work-items/active/fix-dependency-pin-quality-routing-20260819.outcome.md"
+  ],
+  "outOfScope": [
+    "Process-tree cancellation, hard timeouts, and scratch worktree cleanup; handled by the follow-up cancellation/timeout Work Item.",
+    "Changing the dependency pin or any .github/workflows/** file; the successor dependency Work Item owns that change.",
+    "Release/signing workflow routing, mutable tags, action identity changes, or any non-pin workflow behavior change.",
+    "Hosted CI policy or hosted verification requirements.",
+    "requirements-dev.in, lockfiles, installer catalog redesign, and new capability implementations."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_verification_policy.py",
+      "reason": "Current strict/full and strict-targeted routing policy."
+    },
+    {
+      "path": "scripts/determine_governance_profile.py",
+      "reason": "Current governance profile classifier and dispatch receipt."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Finish-time quality path selection and Make invocation."
+    },
+    {
+      "path": "tests/test_verification_policy.py",
+      "reason": "Existing routing policy behavior tests."
+    },
+    {
+      "path": "tests/test_governance_profile.py",
+      "reason": "Existing governance receipt and profile behavior tests."
+    },
+    {
+      "path": ".ai/quality/governance-routing.yaml",
+      "reason": "Declared path risk levels; strict workflow risk must remain strict."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Adopter-installed runtime surface for the existing routing scripts."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_routing",
+      "verification_coverage",
+      "evidence_integrity"
+    ],
+    "reason": "The change must reduce unnecessary local work without weakening strict classification or hosted proof.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The change modifies governance routing and verification dispatch."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The scope, evidence sources, and fail-closed scenarios are deterministic and bounded."
+  },
+  "preReviewWarnings": [
+    "Verify that strict risk classification remains strict while only the local test graph is narrowed for an evidence-bound immutable pin diff."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An exact one-line immutable action SHA replacement in one non-release/non-signing workflow retains governanceProfile strict and routes local quality to strict-targeted with only quality-fast.",
+    "A mutable tag, action identity change, extra workflow line, multiple pin change, release/signing workflow, or missing base/current evidence remains quality-full.",
+    "determine_governance_profile.py and ai_finish.py use the same evidence-bound classification and do not let generated status, outcome, task-report, or start projections escalate an otherwise eligible pin-only change.",
+    "The routing receipt records the changed paths, eligibility facts, rejection reason when applicable, dispatch target, and required groups without recording file contents or relying on a self-declared Contract flag.",
+    "The existing installer surface still contains the routing scripts and adopter parity verification remains green.",
+    "Focused routing tests, required AI checks, and project quality checks pass; hosted PR checks remain required for the successor dependency update."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "One workflow line changes only from one 40-hex action SHA to another and routes strict-targeted with quality-fast only.",
+      "required": true,
+      "status": "unverified",
+      "expected": "strict-targeted with quality-fast only",
+      "verificationPlan": "Add and run a focused policy test with base/current workflow contents and assert the routing receipt.",
+      "evidence": ["tests/test_verification_policy.py", "tests/test_governance_profile.py"]
+    },
+    {
+      "scenario": "The workflow also changes a second line or action behavior and remains quality-full.",
+      "required": true,
+      "status": "unverified",
+      "expected": "quality-full",
+      "verificationPlan": "Add focused negative cases for an extra workflow line and assert full routing.",
+      "evidence": ["tests/test_verification_policy.py", "tests/test_governance_profile.py"]
+    },
+    {
+      "scenario": "A tag, branch, action identity, or non-SHA reference changes and remains quality-full.",
+      "required": true,
+      "status": "unverified",
+      "expected": "quality-full",
+      "verificationPlan": "Add focused negative cases for mutable refs and action identity changes and assert full routing.",
+      "evidence": ["tests/test_verification_policy.py", "tests/test_governance_profile.py"]
+    },
+    {
+      "scenario": "An otherwise SHA-only change occurs in a release or signing workflow and remains quality-full.",
+      "required": true,
+      "status": "unverified",
+      "expected": "quality-full",
+      "verificationPlan": "Add a release/signing workflow case and assert it remains full routing.",
+      "evidence": ["tests/test_verification_policy.py", "tests/test_governance_profile.py"]
+    },
+    {
+      "scenario": "Generated lifecycle projections change alongside an eligible workflow line without escalating risk routing.",
+      "required": true,
+      "status": "unverified",
+      "expected": "generated paths do not escalate an eligible workflow pin change",
+      "verificationPlan": "Add governance and finish-path tests with generated projections present and assert consistent targeted routing.",
+      "evidence": ["tests/test_governance_profile.py", "tests/test_core_gates.py"]
+    }
+  ],
+  "guidelines": [
+    "Keep the governance profile strict; narrow only the evidence-proven local verification graph.",
+    "Fail closed when the base/current diff cannot prove the exact immutable SHA-only shape.",
+    "Keep routing logic centralized so determine_governance_profile.py and ai_finish.py cannot disagree.",
+    "Preserve the existing installer catalog and installed runtime parity surface."
+  ],
+  "intent": {
+    "problem": "A one-line immutable dependency action pin update is currently escalated to quality-full because strict workflow paths and generated governance projections are mixed into routing inputs. This invokes a 2718-entry local quality graph and full-repository checks for a narrowly bounded change, making Work Item completion non-convergent.",
+    "constraints": [
+      "Strict governance classification stays strict.",
+      "Release and signing workflows plus non-pin workflow changes retain full quality.",
+      "Eligibility is proven from repository base and current file contents.",
+      "Hosted CI remains final proof and is not bypassed.",
+      "Adopter projects receive the behavior through the existing installed scripts."
+    ],
+    "rationale": "Separate risk level from local verification scope: strict risk remains visible, while an exact immutable-pin evidence receipt permits only the smallest safe local strict group."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization",
+    "reason": "The user instructed continuation and requires the governance routing root cause to be corrected through a governed Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 20
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-dependency-pin-quality-routing-20260819.json",
+    "baseCommit": "dc07070d85c8849afc72f473e89b151842da5bb1",
+    "initialScopeDigest": "a36570639cd260cc835b23439575b679704fa34f763da9f51779bacd847d73cd",
+    "contractSkeletonDigest": "c17082b026bca375b2a9dc07c22518ce6d82cb2b74ef6fdf3d0e6a2d0b9f6689"
+  }
+}

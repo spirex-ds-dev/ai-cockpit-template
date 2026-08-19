@@ -1,5 +1,6 @@
 import pytest
 from ai_verification_policy import (
+    classify_immutable_workflow_pin_change,
     escalation_reasons,
     finish_quality_route,
     finish_quality_route_for_contract,
@@ -8,6 +9,77 @@ from ai_verification_policy import (
     verification_cache_key,
     verification_signal,
 )
+
+_PIN_BEFORE = """jobs:\n  quality:\n    steps:\n      - uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9\n"""
+_PIN_AFTER = """jobs:\n  quality:\n    steps:\n      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772\n"""
+
+
+def test_immutable_sha_only_workflow_change_uses_minimal_strict_groups():
+    facts = classify_immutable_workflow_pin_change(
+        ".github/workflows/compatibility.yml", _PIN_BEFORE, _PIN_AFTER
+    )
+
+    assert facts["eligible"] is True
+    route = finish_quality_route([".github/workflows/compatibility.yml"], immutable_pin_facts=facts)
+    assert route["policy"]["level"] == "strict"
+    assert route["policy"]["qualityTarget"] == "quality-strict-targeted"
+    assert route["policy"]["requiredGroups"] == ["quality-fast"]
+
+
+@pytest.mark.parametrize(
+    ("path", "before", "after"),
+    [
+        (
+            ".github/workflows/compatibility.yml",
+            _PIN_BEFORE,
+            _PIN_AFTER.replace("      - uses:", "      - name: extra\n        uses:"),
+        ),
+        (
+            ".github/workflows/compatibility.yml",
+            _PIN_BEFORE,
+            _PIN_AFTER.replace("6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772", "v1"),
+        ),
+        (
+            ".github/workflows/release.yml",
+            _PIN_BEFORE,
+            _PIN_AFTER,
+        ),
+    ],
+)
+def test_immutable_pin_classifier_fails_closed_for_unsafe_shapes(path, before, after):
+    facts = classify_immutable_workflow_pin_change(path, before, after)
+
+    assert facts["eligible"] is False
+    route = finish_quality_route([path], immutable_pin_facts=facts)
+    assert route["policy"]["qualityTarget"] == "quality-full"
+
+
+@pytest.mark.parametrize(
+    ("path", "before", "after"),
+    [
+        ("README.md", _PIN_BEFORE, _PIN_AFTER),
+        (".github/workflows/nested/compatibility.yml", _PIN_BEFORE, _PIN_AFTER),
+        (".github/workflows/compatibility.yml", _PIN_BEFORE + "extra\n", _PIN_AFTER),
+        (
+            ".github/workflows/compatibility.yml",
+            _PIN_BEFORE,
+            _PIN_AFTER.replace("dtolnay/rust-toolchain", "actions/checkout"),
+        ),
+        (".github/workflows/compatibility.yml", _PIN_BEFORE, _PIN_BEFORE),
+        (
+            ".github/workflows/compatibility.yml",
+            _PIN_BEFORE,
+            _PIN_AFTER.replace(
+                "@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772",
+                "@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # changed",
+            ),
+        ),
+    ],
+)
+def test_immutable_pin_classifier_rejects_non_exact_evidence(path, before, after):
+    facts = classify_immutable_workflow_pin_change(path, before, after)
+
+    assert facts["eligible"] is False
 
 
 def test_finish_quality_route_keeps_docs_only_task_focused_but_escalates_governance_paths():

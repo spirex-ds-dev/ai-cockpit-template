@@ -7,63 +7,80 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): 本次保留 Work Item 的同步/恢复历史作为生命周期证据，同时将其从 repeatedProtocolFields 复杂度指标中排除；普通 Contract 字段仍按原规则计数。这样不会通过提高上限掩盖真实协议复杂度，也不会因合法的生命周期 lineage 记录阻断发布。
-Mechanism (verified): 复杂度检查器在聚合 Contract 顶层字段前过滤 resumeHistory 和 synchronizationHistory；ai_check_work_item 及生命周期检查仍保留并验证这些字段。回归测试构造包含同步历史的两个 Contract，确认 lineage 不增加指标，同时普通 workItemId 重复字段仍被计数。
+Customer summary (verified): 将严格质量路由绑定到 Work Item Contract 的 base/current 文件证据：只有非发布工作流中恰好一行从一个 40 位 action SHA 替换为另一个 40 位 SHA 时，才投影为 targeted strict；生成的生命周期记录不再作为风险路径重复升级。所有其他形状继续走完整 strict 质量检查。
+Mechanism (verified): 路由器先读取 Contract baseCommit 对应的工作流文件和当前文件，使用精确的一行替换判定；Finish 与 governance profile 两条入口共享同一判定器。任务状态、报告和 Outcome 等生成投影只参与证据记录，不参与严格风险路径选择。
 
 Affected components
-- Governance complexity report: Only repeatedProtocolFields aggregation changes; policy limit, archive integrity, and all other metrics remain unchanged. (verified)
-- Work Item lifecycle lineage: Synchronization and resume history remain in Contracts and continue to be validated as lifecycle evidence. (verified)
-- Complexity regression coverage: A focused test prevents a future lifecycle-history record from reintroducing this false blocker. (verified)
+- Strict quality routing: Exact immutable workflow pin updates use quality-strict-targeted with quality-fast only; unsafe or high-risk shapes remain quality-full. (verified)
+- Governance profile receipt: Routing facts include the evidence-bound immutablePinChange classification without exposing file contents. (verified)
+- Finish lifecycle: Generated lifecycle projections are excluded from quality risk paths and Finish binds the classifier to the Contract base. (verified)
 
 Design decisions
-- Exclude lifecycle lineage fields instead of raising the repeatedProtocolFields limit.: The failure was caused by evidence-preserving synchronization history, not by a new protocol concept; raising the limit would hide the classification error. (verified)
-- Keep the existing policy limit unchanged.: The corrected metric remains below the existing limit without a budget-only relaxation. (verified)
+- Fail closed for every shape other than one exact immutable SHA replacement.: A routing optimization must not lower proof requirements for action identity, mutable references, extra changes, or release/signing workflows. (verified)
+- Use repository evidence rather than path names or self-declared intent.: The same rule must be trustworthy in both automatic profile selection and final Finish routing. (verified)
 
 ### Technical details
-- Failure handling: A malformed or structurally invalid Contract is still handled by the existing Contract and lifecycle validators; this change only affects the separate complexity aggregation metric. (verified)
+- Evidence binding: Both routing callers read the Contract baseCommit and current workflow bytes before accepting the targeted route; unavailable evidence produces an ineligible classification. (verified)
+- Generated projection boundary: Lifecycle status, Outcome, start, and Human Benefit Report files remain auditable outputs but are excluded from strict quality risk-path selection. (verified)
 
 ### Evidence
-- The release finish no longer counts synchronization history as repeated protocol complexity.: scripts/check_governance_complexity.py#LIFECYCLE_LINEAGE_FIELDS (verified)
-- The boundary is regression-tested while ordinary repeated fields remain counted.: tests/test_governance_complexity.py#lifecycle synchronization history test (verified)
-- The corrected repository metric passes without increasing the policy limit.: tests/test_governance_complexity.py#repeatedProtocolFields boundary regression and ordinary-field preservation (verified)
+- The routing implementation and its real-sample behavior are covered by the evidence-bound classifier, governance integration test, and Finish integration test.: tests/test_governance_profile.py#Evidence-bound base/current routing receipt integration (verified)
 
-- Changed .ai/work-items/active/publish-v0-5-68-20260818.contract.json [evidence: .ai/work-items/archive/2026/publish-v0-5-68-20260818.contract.json]
-- Changed .ai/work-items/active/publish-v0-5-68-20260818.summary.json [evidence: .ai/work-items/archive/2026/publish-v0-5-68-20260818.summary.json]
-- Changed tests/test_work_item_intelligence.py [evidence: tests/test_work_item_intelligence.py]
-- Changed scripts/check_governance_complexity.py [evidence: scripts/check_governance_complexity.py]
-- Changed tests/test_governance_complexity.py [evidence: tests/test_governance_complexity.py]
+- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.contract.json [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.contract.json]
+- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.summary.json [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.summary.json]
+- Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
+- Changed .ai/work-items/starts/fix-dependency-pin-quality-routing-20260819.json [evidence: .ai/work-items/starts/fix-dependency-pin-quality-routing-20260819.json]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json [evidence: .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json]
-- Changed .ai/knowledge/index.json [evidence: .ai/knowledge/index.json]
-- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
 - Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
 - Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
-- Changed .ai/work-items/active/publish-v0-5-68-20260818.outcome.json [evidence: .ai/work-items/archive/2026/publish-v0-5-68-20260818.outcome.json]
-- Changed .ai/work-items/active/publish-v0-5-68-20260818.outcome.md [evidence: .ai/work-items/archive/2026/publish-v0-5-68-20260818.outcome.md]
+- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
+- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
+- Changed scripts/ai_verification_policy.py [evidence: scripts/ai_verification_policy.py]
+- Changed scripts/determine_governance_profile.py [evidence: scripts/determine_governance_profile.py]
+- Changed scripts/ai_finish.py [evidence: scripts/ai_finish.py]
+- Changed tests/test_verification_policy.py [evidence: tests/test_verification_policy.py]
+- Changed tests/test_governance_profile.py [evidence: tests/test_governance_profile.py]
+- Changed tests/test_core_gates.py [evidence: tests/test_core_gates.py]
+- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.outcome.json [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.outcome.json]
+- Changed .ai/work-items/active/fix-dependency-pin-quality-routing-20260819.outcome.md [evidence: .ai/work-items/archive/2026/fix-dependency-pin-quality-routing-20260819.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
+- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
 
 Problems found
-- Total: 2
+- Total: 5
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
 - Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[3] quality failed, verification[quality] retry passed]
 
 Problems resolved
 - Problem: quality failed before the retry.
   Solution: Re-ran quality after the correction; the latest attempt passed.
   Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] quality failed, verification[quality] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[2] quality failed, verification[quality] retry passed]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[3] quality failed, verification[quality] retry passed]
 
 Risks avoided
 - If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- Two exact-SHA Smoke runs used identical manifest, plan, source tree, and 85.10% floor; the passing run covered two lock-lease JSONDecodeError lines through a concurrent race, while the failing run did not and aggregated at 85.09%. [evidence: observedIssues[0] observed issue, observedIssues[0] observed issue, observedIssues[0] observed issue, observedIssues[0] observed issue]
-- The source SHA, rehearsal receipt, provider run, and public assets are external facts and must be independently verified at their respective boundaries. [evidence: residualRisks]
+- The #907 one-line immutable action SHA diff was escalated to quality-full because generated governance paths were mixed into strict routing inputs. [evidence: observedIssues[0] quality_routing, observedIssues[0] quality_routing]
+- The targeted route reduces local work only for the exact classifier shape; hosted checks and all other strict changes remain full proof. [evidence: residualRisks]
 
 Unknowns
 - None recorded.

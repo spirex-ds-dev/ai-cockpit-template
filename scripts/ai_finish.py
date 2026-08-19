@@ -45,7 +45,10 @@ from ai_evidence_dependencies import (
 from ai_observability import create_observability, elapsed_ms
 from ai_projection_lease import ProjectionLeaseError, requires_lease
 from ai_projection_lease import acquire as acquire_projection_lease
-from ai_verification_policy import finish_quality_route_for_contract
+from ai_verification_policy import (
+    classify_immutable_workflow_pin_change,
+    finish_quality_route_for_contract,
+)
 from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -2262,6 +2265,8 @@ def finish_quality_paths(contract_data: dict[str, Any]) -> list[str]:
     task = str(contract_data.get("workItemId", ""))
     generated = {
         ".ai/cockpit/current_status.md",
+        ".ai/cockpit/task_report.json",
+        ".ai/cockpit/task_report.md",
         f".ai/work-items/starts/{task}.json",
         f".ai/work-items/active/{task}.contract.json",
         f".ai/work-items/active/{task}.summary.json",
@@ -2269,6 +2274,51 @@ def finish_quality_paths(contract_data: dict[str, Any]) -> list[str]:
         f".ai/work-items/active/{task}.outcome.md",
     }
     return [path for path in changed_paths(contract_data) if path not in generated]
+
+
+def immutable_pin_facts_for_finish(
+    contract_data: dict[str, Any], paths: list[str]
+) -> dict[str, Any] | None:
+    """Bind immutable-pin routing to the active Contract base and current file."""
+    if len(paths) != 1:
+        return None
+    base = str(contract_data.get("baseCommit", ""))
+    path = paths[0]
+    if not base:
+        return {
+            "path": path,
+            "kind": "immutable_workflow_pin",
+            "eligible": False,
+            "reason": "Contract baseCommit is unavailable",
+            "replacementCount": 0,
+        }
+    try:
+        base_result = subprocess.run(  # nosec B603 B607 - fixed list-form Git evidence lookup
+            ["git", "show", f"{base}:{path}"],
+            cwd=PROJECT_ROOT,
+            env=clean_git_environment(),
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if base_result.returncode != 0:
+            raise ValueError(base_result.stderr.strip() or "base file is unavailable")
+        current_path = PROJECT_ROOT / path
+        if not current_path.is_file():
+            raise ValueError("current file is unavailable")
+        return classify_immutable_workflow_pin_change(
+            path,
+            base_result.stdout,
+            current_path.read_text(encoding="utf-8"),
+        )
+    except (OSError, ValueError) as exc:
+        return {
+            "path": path,
+            "kind": "immutable_workflow_pin",
+            "eligible": False,
+            "reason": f"base/current evidence unavailable: {exc}",
+            "replacementCount": 0,
+        }
 
 
 def run_declared_checks(
@@ -2313,9 +2363,13 @@ def run_declared_checks(
         try:
             if check_id == "quality":
                 governance_profile = contract_data.get("governanceProfile", {})
+                quality_paths = finish_quality_paths(contract_data)
                 route = finish_quality_route_for_contract(
-                    finish_quality_paths(contract_data),
+                    quality_paths,
                     governance_profile if isinstance(governance_profile, dict) else None,
+                    immutable_pin_facts=immutable_pin_facts_for_finish(
+                        contract_data, quality_paths
+                    ),
                 )
                 cmd_str = str(route["command"])
                 command = shlex.split(cmd_str)
