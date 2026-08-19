@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -14,6 +15,7 @@ from typing import Any
 
 from ai_common import PROJECT_ROOT, clean_git_environment
 from ai_generate_human_report import validate_human_report
+from ai_post_archive_recovery import RECEIPT_DIRECTORY, validate_recovery_receipt
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 DEFAULT_STATUS = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
@@ -191,6 +193,40 @@ def transaction_owned_paths(changed: set[str]) -> set[str]:
     return owned
 
 
+def recovery_owned_paths(changed: set[str], head: str) -> set[str]:
+    """Return exact paths authorized by a valid same-Work-Item recovery receipt.
+
+    A post-archive recovery can intentionally re-run a generated evidence
+    command after the active Contract has been archived.  The receipt is the
+    only ownership source for that narrow case; a missing base binding,
+    malformed receipt, or provider receipt for another candidate remains
+    unowned.
+    """
+    base = os.environ.get("AI_BASE_COMMIT", "").strip()
+    if not re.fullmatch(r"[0-9a-f]{40}", base):
+        return set()
+    directory = PROJECT_ROOT / RECEIPT_DIRECTORY
+    if not directory.is_dir():
+        return set()
+    owned: set[str] = set()
+    for receipt_path in sorted(directory.glob("*.json")):
+        try:
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if validate_recovery_receipt(PROJECT_ROOT, receipt, pr_base=base):
+            continue
+        provider = receipt.get("provider") if isinstance(receipt, dict) else None
+        if isinstance(provider, dict):
+            candidate = provider.get("failedCandidateHead")
+            if isinstance(candidate, str) and candidate != head:
+                continue
+        paths = receipt.get("recoveryPaths") if isinstance(receipt, dict) else None
+        if isinstance(paths, list) and all(isinstance(path, str) for path in paths):
+            owned.update(set(paths) & changed)
+    return owned
+
+
 def live_no_active_changed_files(status_path: Path) -> list[str]:
     try:
         relative_status = relative(status_path)
@@ -233,6 +269,7 @@ def live_no_active_changed_files(status_path: Path) -> list[str]:
         )
     changed.discard(relative_status)
     changed.difference_update(transaction_owned_paths(changed))
+    changed.difference_update(recovery_owned_paths(changed, head.stdout.strip()))
     return sorted(changed)
 
 

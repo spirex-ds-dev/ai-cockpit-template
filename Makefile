@@ -179,27 +179,7 @@ project-test-shard:
 project-test-shards: $(PROJECT_TEST_SHARD_TARGETS)
 
 project-test-shard-%:
-	@set -eu; \
-		shard="$*"; \
-		workspace="$(abspath $(PROJECT_TEST_WORKSPACE_ROOT))/$$shard"; \
-		if git worktree list --porcelain | grep -Fqx "worktree $$workspace"; then git worktree remove --force "$$workspace" >/dev/null 2>&1; fi; \
-		rm -rf "$$workspace"; \
-		git worktree add --detach "$$workspace" HEAD >/dev/null 2>&1; \
-		cleanup() { if git worktree list --porcelain | grep -Fqx "worktree $$workspace"; then git worktree remove --force "$$workspace" >/dev/null 2>&1; fi; }; \
-		trap cleanup EXIT INT TERM; \
-		if git diff --quiet; then :; else git diff --binary | git -C "$$workspace" apply --whitespace=nowarn -; fi; \
-		git ls-files --others --exclude-standard | while IFS= read -r path; do \
-			case "$$path" in target/*|.venv/*) continue ;; esac; \
-			mkdir -p "$$workspace/$$(dirname "$$path")"; \
-			cp "$$path" "$$workspace/$$path"; \
-		done; \
-		(cd "$$workspace" && $(AI_PYTHON) scripts/ai_capability_truth.py --write >/dev/null && $(AI_PYTHON) scripts/ai_japanese_capability.py --write >/dev/null && $(AI_PYTHON) scripts/check_pre_release_documentation_alignment.py --write >/dev/null); \
-		mkdir -p "$$workspace/target/quality"; \
-		cp target/quality/project-test-manifest.json target/quality/project-test-shard-plan.json "$$workspace/target/quality/"; \
-		$(AI_PYTHON) scripts/quality_test_manifest.py run-shard --root "$$workspace" --manifest "$$workspace/target/quality/project-test-manifest.json" --plan "$$workspace/target/quality/project-test-shard-plan.json" --shard "$$shard" --output "$$workspace/target/quality/shards/$$shard"; \
-		rm -rf "target/quality/shards/$$shard"; \
-		mkdir -p "target/quality/shards/$$shard"; \
-		cp -R "$$workspace/target/quality/shards/$$shard/." "target/quality/shards/$$shard/"
+	$(AI_PYTHON) scripts/quality_shard_workspace.py run --root "$(abspath .)" --workspace-root "$(abspath $(PROJECT_TEST_WORKSPACE_ROOT))/run-$$PPID" --manifest "$(abspath target/quality/project-test-manifest.json)" --plan "$(abspath target/quality/project-test-shard-plan.json)" --shard "$*"
 
 project-test-aggregate:
 	$(AI_PYTHON) scripts/quality_test_manifest.py aggregate --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt target/quality/shards/core/receipt.json --receipt target/quality/shards/governance/receipt.json --receipt target/quality/shards/installer/receipt.json --receipt target/quality/shards/lifecycle/receipt.json --receipt target/quality/shards/release/receipt.json --output target/quality/project-test-aggregate
@@ -934,6 +914,10 @@ check-ai:
 	fi
 
 check-ai-pr-core:
+	@aggregate_receipt="target/quality/project-test-aggregate/receipt.json"; \
+	if git ls-files --error-unmatch "$$aggregate_receipt" >/dev/null 2>&1; then \
+		git restore --source=HEAD --worktree -- "$$aggregate_receipt"; \
+	fi
 	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 check-ai-pr:

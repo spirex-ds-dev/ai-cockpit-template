@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "quality-shard-orchestration-reliability-successor-20260819",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "78283990a01023efe0dbb1404be489a1fc941c0616269944d13724c42a96f747"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "quality-shard-orchestration-reliability-successor-20260819",
+    "contractDigest": "4d6257b30b587d2a503e8f687d201422826b1c7f95a0f73848b3d5387e308326",
+    "summaryDigest": "8a4bde4f60ce197cb3d204279bc25a086074271c996560c5ba58be8d14f508bc",
+    "verificationDigest": "37162c9bba18e16a675630fa66934ebbfa7d12686d93384b401cbd7fb7eb339d",
+    "baseCommit": "e0220b988dd0d52f1e73b13a71dd60ab27a06c42",
+    "headCommit": "e0220b988dd0d52f1e73b13a71dd60ab27a06c42",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "a003ed7f09101a463b82c4a4afec72134745d2e0966c6655b26678c516c89fdc",
+      "binding": {
+        "baseCommit": "e0220b988dd0d52f1e73b13a71dd60ab27a06c42",
+        "candidateHead": "e0220b988dd0d52f1e73b13a71dd60ab27a06c42",
+        "candidateTreeDigest": "779f15245c7f1fcc8266e234c1b741802b4cb724e828afc7f8d52eac0f8339f5",
+        "candidateDiffDigest": "25d65012f7f5a6b777e5bb623e072b83d9215b6c5810dbc48a743309ffb665d9"
+      }
+    }
   },
-  "task": {
-    "summary": "Task quality-shard-orchestration-reliability-successor-20260819 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task quality-shard-orchestration-reliability-successor-20260819 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: quality-shard-orchestration-reliability-successor-20260819",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.contract.json",
       ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
@@ -39,154 +62,170 @@
       ".ai/knowledge/work-items/fix-shellcheck-apt-mirror-20260819.json",
       ".ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json",
       ".ai/knowledge/work-items/fix-post-archive-generated-ownership-20260819.json"
-    ]
-  },
-  "issues": {
-    "detected": 2,
-    "hardStops": 2,
-    "warnings": 0,
-    "resolved": 2,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "2f299dd684ba46875d0a5610ca8d1bb42909a574d2ab5d29d385c4b3b05655ab"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "6d4eb509ff18662123cb7b2de9c39c6ee0b2682f5fb3db22dcd1c23d74b8091c"
-        }
-      ]
-    },
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiSummary",
-      "action": "blocked",
-      "resolution": "Retry aiSummary after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verificationHistory[1] aiSummary failed",
-          "digest": "8ff7249acbdfbaaceef362da41a801c9ca7c9f2078f14441a3bf3c1b1434b8bf"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "d1ccc3a28b1d501f46fec098cb69d6bd7928d1f811c3e34122e731948aa1bc7d"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "2f299dd684ba46875d0a5610ca8d1bb42909a574d2ab5d29d385c4b3b05655ab"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "6d4eb509ff18662123cb7b2de9c39c6ee0b2682f5fb3db22dcd1c23d74b8091c"
-        }
-      ]
-    },
-    {
-      "stage": "verification",
-      "reason": "aiSummary failed before the retry.",
-      "policyOrGuard": "required verification: aiSummary",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiSummary after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verificationHistory[1] aiSummary failed",
-          "digest": "8ff7249acbdfbaaceef362da41a801c9ca7c9f2078f14441a3bf3c1b1434b8bf"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "verification[aiSummary] retry passed",
-          "digest": "d1ccc3a28b1d501f46fec098cb69d6bd7928d1f811c3e34122e731948aa1bc7d"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "Fresh current-main Hosted/CI evidence is still required after implementation.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "在当前 main 上重新交付质量分片工作树生命周期修复；仅串行化共享 Git 元数据操作，保留分片测试并行执行，并让失败阶段和原始 runner 结果可见。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "Makefile",
-          "subject": "project-test shard orchestration"
-        },
-        {
-          "source": "target/quality/project-test-aggregate/receipt.json",
-          "subject": "current-main aggregate result"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "协调器为每次父进程运行生成隔离 workspace root，在受控锁内管理 worktree 创建、删除和残留恢复；分片 runner 与证据发布仍在隔离工作树中并行，清理失败不覆盖 runner 原始结果。",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/quality_shard_workspace.py",
-          "subject": "lifecycle coordinator"
-        },
-        {
-          "source": "tests/test_quality_shard_workspace.py",
-          "subject": "failure-preservation tests"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
       {
-        "component": "Makefile project-test shard orchestration",
-        "detail": "The parent target prepares isolated shard workspaces and aggregates their receipts without changing the configured shard plan.",
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "2f299dd684ba46875d0a5610ca8d1bb42909a574d2ab5d29d385c4b3b05655ab"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "6d4eb509ff18662123cb7b2de9c39c6ee0b2682f5fb3db22dcd1c23d74b8091c"
+          }
+        ]
+      },
+      {
+        "stage": "verification",
+        "reason": "aiSummary failed before the retry.",
+        "policyOrGuard": "required verification: aiSummary",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiSummary after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verificationHistory[1] aiSummary failed",
+            "digest": "8ff7249acbdfbaaceef362da41a801c9ca7c9f2078f14441a3bf3c1b1434b8bf"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "d1ccc3a28b1d501f46fec098cb69d6bd7928d1f811c3e34122e731948aa1bc7d"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "2f299dd684ba46875d0a5610ca8d1bb42909a574d2ab5d29d385c4b3b05655ab"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "6d4eb509ff18662123cb7b2de9c39c6ee0b2682f5fb3db22dcd1c23d74b8091c"
+          }
+        ]
+      },
+      {
+        "problem": "aiSummary failed before the retry.",
+        "action": "Re-ran aiSummary after the correction; the latest attempt passed.",
+        "verification": "aiSummary latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verificationHistory[1] aiSummary failed",
+            "digest": "8ff7249acbdfbaaceef362da41a801c9ca7c9f2078f14441a3bf3c1b1434b8bf"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "verification[aiSummary] retry passed",
+            "digest": "d1ccc3a28b1d501f46fec098cb69d6bd7928d1f811c3e34122e731948aa1bc7d"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "verification",
+        "severity": "medium",
+        "title": "verification",
+        "detail": "Fresh current-main Hosted/CI evidence is still required after implementation.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": "tests/test_makefile.py",
+        "subject": "Make target delegation contract"
+      },
+      {
+        "source": "tests/test_installed_runtime_parity.py",
+        "subject": "fresh-adopter AGENTS.md parity"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "2f299dd684ba46875d0a5610ca8d1bb42909a574d2ab5d29d385c4b3b05655ab"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "6d4eb509ff18662123cb7b2de9c39c6ee0b2682f5fb3db22dcd1c23d74b8091c"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+        "subject": "verificationHistory[1] aiSummary failed",
+        "digest": "8ff7249acbdfbaaceef362da41a801c9ca7c9f2078f14441a3bf3c1b1434b8bf"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/quality-shard-orchestration-reliability-successor-20260819.summary.json",
+        "subject": "verification[aiSummary] retry passed",
+        "digest": "d1ccc3a28b1d501f46fec098cb69d6bd7928d1f811c3e34122e731948aa1bc7d"
+      }
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "在当前 main 上重新交付质量分片工作树生命周期修复；仅串行化共享 Git 元数据操作，保留分片测试并行执行，并让失败阶段和原始 runner 结果可见。",
         "status": "verified",
         "evidence": [
           {
@@ -195,13 +234,12 @@
           },
           {
             "source": "target/quality/project-test-aggregate/receipt.json",
-            "subject": "passed aggregate receipt"
+            "subject": "current-main aggregate result"
           }
         ]
       },
-      {
-        "component": "Quality shard lifecycle coordinator",
-        "detail": "The coordinator serializes only shared Git worktree metadata and preserves runner failures when cleanup also fails.",
+      "mechanism": {
+        "text": "协调器为每次父进程运行生成隔离 workspace root，在受控锁内管理 worktree 创建、删除和残留恢复；分片 runner 与证据发布仍在隔离工作树中并行，清理失败不覆盖 runner 原始结果。",
         "status": "verified",
         "evidence": [
           {
@@ -214,76 +252,108 @@
           }
         ]
       },
-      {
-        "component": "Installer-delivered Work Item rules",
-        "detail": "Fresh adopters receive the same current-Work-Item repair boundary through generated AGENTS.md content.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "templates/agents/AI_COCKPIT_RULES.md",
-            "subject": "installer source rule"
-          },
-          {
-            "source": "tests/test_installed_runtime_parity.py",
-            "subject": "fresh-adopter AGENTS.md parity"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Only shared Git worktree metadata operations are serialized.",
-        "reason": "This preserves parallel shard execution while protecting the shared Git common directory.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "scripts/quality_shard_workspace.py",
-            "subject": "serialized Git operation boundary"
-          }
-        ]
-      },
-      {
-        "decision": "Deliver the current-Work-Item repair boundary through the same agent rules used by fresh adopters.",
-        "reason": "The template and installed adopter must not diverge on when a new Work Item is justified.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "tests/test_installed_runtime_parity.py",
-            "subject": "installed rule parity"
-          },
-          {
-            "source": ".ai/project/adopter-capability-manifest.json",
-            "subject": "adopter_installed capability declaration"
-          }
-        ]
-      },
-      {
-        "decision": "Reserve a new Work Item for a genuinely different or independently governed delivery.",
-        "reason": "Routine corrections stay bounded and converge in the current Work Item; successor routes remain explicit and auditable.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "docs/reference/ai-cockpit-work-item-lifecycle.md",
-            "subject": "retry-versus-successor boundary"
-          }
-        ]
-      }
-    ],
-    "technicalDetails": [],
-    "evidence": [
-      {
-        "claim": "The current-main successor keeps Git worktree lifecycle mutations bounded to the quality shard coordinator.",
-        "status": "verified",
-        "source": "tests/test_makefile.py",
-        "subject": "Make target delegation contract"
-      },
-      {
-        "claim": "The current-Work-Item problem-resolution boundary is present in the template and installer-delivered agent rules.",
-        "status": "verified",
-        "source": "tests/test_installed_runtime_parity.py",
-        "subject": "fresh-adopter AGENTS.md parity"
-      }
-    ]
+      "affectedComponents": [
+        {
+          "component": "Makefile project-test shard orchestration",
+          "detail": "The parent target prepares isolated shard workspaces and aggregates their receipts without changing the configured shard plan.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "Makefile",
+              "subject": "project-test shard orchestration"
+            },
+            {
+              "source": "target/quality/project-test-aggregate/receipt.json",
+              "subject": "passed aggregate receipt"
+            }
+          ]
+        },
+        {
+          "component": "Quality shard lifecycle coordinator",
+          "detail": "The coordinator serializes only shared Git worktree metadata and preserves runner failures when cleanup also fails.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/quality_shard_workspace.py",
+              "subject": "lifecycle coordinator"
+            },
+            {
+              "source": "tests/test_quality_shard_workspace.py",
+              "subject": "failure-preservation tests"
+            }
+          ]
+        },
+        {
+          "component": "Installer-delivered Work Item rules",
+          "detail": "Fresh adopters receive the same current-Work-Item repair boundary through generated AGENTS.md content.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "templates/agents/AI_COCKPIT_RULES.md",
+              "subject": "installer source rule"
+            },
+            {
+              "source": "tests/test_installed_runtime_parity.py",
+              "subject": "fresh-adopter AGENTS.md parity"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Only shared Git worktree metadata operations are serialized.",
+          "reason": "This preserves parallel shard execution while protecting the shared Git common directory.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/quality_shard_workspace.py",
+              "subject": "serialized Git operation boundary"
+            }
+          ]
+        },
+        {
+          "decision": "Deliver the current-Work-Item repair boundary through the same agent rules used by fresh adopters.",
+          "reason": "The template and installed adopter must not diverge on when a new Work Item is justified.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "tests/test_installed_runtime_parity.py",
+              "subject": "installed rule parity"
+            },
+            {
+              "source": ".ai/project/adopter-capability-manifest.json",
+              "subject": "adopter_installed capability declaration"
+            }
+          ]
+        },
+        {
+          "decision": "Reserve a new Work Item for a genuinely different or independently governed delivery.",
+          "reason": "Routine corrections stay bounded and converge in the current Work Item; successor routes remain explicit and auditable.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+              "subject": "retry-versus-successor boundary"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [],
+      "evidence": [
+        {
+          "claim": "The current-main successor keeps Git worktree lifecycle mutations bounded to the quality shard coordinator.",
+          "status": "verified",
+          "source": "tests/test_makefile.py",
+          "subject": "Make target delegation contract"
+        },
+        {
+          "claim": "The current-Work-Item problem-resolution boundary is present in the template and installer-delivered agent rules.",
+          "status": "verified",
+          "source": "tests/test_installed_runtime_parity.py",
+          "subject": "fresh-adopter AGENTS.md parity"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "zh-CN",
@@ -1273,6 +1343,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }

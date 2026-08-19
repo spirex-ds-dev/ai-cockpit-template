@@ -92,6 +92,36 @@ def test_installed_adopter_contains_runtime_scripts_and_targets(tmp_path):
     assert result.returncode == 0, result.stdout + result.stderr
 
 
+def test_installed_adopter_receives_current_work_item_problem_boundary(tmp_path):
+    target = tmp_path / "adopter"
+    installer = Installer(
+        source=ROOT,
+        target=target,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+    assert installer.install() == 0
+
+    rules = (target / "AGENTS.md").read_text(encoding="utf-8")
+    assert "In-Work-Item problem resolution boundary" in rules
+    assert "Do not open another Work Item or Issue" in rules
+    assert "immutable failed-delivery evidence requires re-delivery" in rules
+
+    manifest = json.loads(
+        (target / ".ai/project/adopter-capability-manifest.json").read_text(encoding="utf-8")
+    )
+    capability = next(
+        item
+        for item in manifest["capabilities"]
+        if item["id"] == "current_work_item_problem_resolution_boundary"
+    )
+    assert capability["status"] == "adopter_installed"
+    assert "AGENTS.md" in capability["installedFiles"]
+
+
 def test_installed_capability_truth_target_reports_when_matrix_is_not_configured(tmp_path):
     target = tmp_path / "adopter"
     installer = Installer(

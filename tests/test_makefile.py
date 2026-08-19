@@ -79,12 +79,19 @@ def test_source_and_installed_makefiles_expose_the_same_post_archive_recovery_ta
         assert "HOSTED_JOB_ID" in text
 
 
+def test_pr_audit_restores_tracked_aggregate_evidence_before_audit():
+    source = (ROOT / "Makefile").read_text(encoding="utf-8")
+
+    assert 'aggregate_receipt="target/quality/project-test-aggregate/receipt.json"' in source
+    assert 'git ls-files --error-unmatch "$$aggregate_receipt"' in source
+    assert 'git restore --source=HEAD --worktree -- "$$aggregate_receipt"' in source
+    assert source.index("aggregate_receipt=") < source.index("scripts/ai_check_pr.py")
+
+
 def test_project_test_shards_skip_empty_git_diff_before_applying_changes():
     text = (ROOT / "Makefile").read_text(encoding="utf-8")
 
-    assert (
-        'if git diff --quiet; then :; else git diff --binary | git -C "$$workspace" apply' in text
-    )
+    assert "scripts/quality_shard_workspace.py run" in text
 
 
 def test_source_and_installed_makefiles_expose_the_same_conflict_successor_target():
@@ -344,21 +351,22 @@ def test_project_test_exposes_each_bounded_shard_alias():
     )
 
     assert result.returncode == 0, result.stdout + result.stderr
-    assert 'shard="core"' in result.stdout
-    assert '--shard "$shard"' in result.stdout
+    assert "scripts/quality_shard_workspace.py run" in result.stdout
+    assert '--shard "core"' in result.stdout
 
 
 def test_project_test_shards_isolate_mutating_tests_in_source_bound_worktrees():
     makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    coordinator = (ROOT / "scripts" / "quality_shard_workspace.py").read_text(encoding="utf-8")
 
-    assert "git worktree add --detach" in makefile
-    assert "git worktree remove --force" in makefile
-    assert 'workspace="$(abspath' in makefile
-    assert '--root "$$workspace"' in makefile
-    assert "ai_capability_truth.py --write" in makefile
-    assert "ai_japanese_capability.py --write" in makefile
-    assert "check_pre_release_documentation_alignment.py --write" in makefile
-    assert "target/quality/shards/$$shard" in makefile
+    assert "scripts/quality_shard_workspace.py run" in makefile
+    assert "--workspace-root" in makefile
+    assert '["worktree", "add", "--detach"' in coordinator
+    assert '["worktree", "remove", "--force"' in coordinator
+    assert "copy_current_evidence" in coordinator
+    assert "regenerate_workspace" in coordinator
+    assert "publish_artifacts" in coordinator
+    assert "quality_test_manifest.py" in coordinator
 
 
 def test_project_test_manifest_is_a_public_make_target_with_live_collection():

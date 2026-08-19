@@ -520,6 +520,45 @@ def test_open_hosted_recovery_binds_exact_functional_failure_evidence(tmp_path):
     )
 
 
+def test_open_hosted_recovery_binds_quality_gate_blocked_evidence(tmp_path):
+    write_archive(tmp_path, outcome_status="needs_human_confirmation")
+
+    def governance_failure_provider(endpoint):
+        if endpoint.endswith("/logs"):
+            return (
+                b"quality-full blocked\n"
+                b"Failed gate: check-ai-status-consistency\n"
+                b"Recovery: make check-ai-status-consistency\n"
+            )
+        return functional_failure_provider(endpoint)
+
+    receipt = recovery.open_hosted_governance_failure_recovery(
+        root=tmp_path,
+        task="example-task",
+        base_commit="a" * 40,
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/620",
+        authority="user-authorized same Work Item recovery",
+        recovery_paths=["scripts/ai_check_status_consistency.py"],
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=765,
+        failed_candidate_head="c" * 40,
+        run_id=43,
+        job_id=85,
+        fetch_provider=governance_failure_provider,
+        worktree_clean=lambda: True,
+    )
+
+    assert receipt["receiptVersion"] == recovery.HOSTED_GOVERNANCE_RECEIPT_VERSION
+    assert receipt["failure"]["gate"] == "hostedGovernanceFailure"
+    assert receipt["provider"]["failureMarker"] == "quality_gate_blocked"
+    assert (
+        recovery.validate_recovery_receipt(
+            tmp_path, receipt, pr_base="a" * 40, fetch_provider=governance_failure_provider
+        )
+        == []
+    )
+
+
 def test_hosted_functional_recovery_appends_a_distinct_receipt_for_the_same_work_item(tmp_path):
     write_archive(tmp_path)
     common = {
