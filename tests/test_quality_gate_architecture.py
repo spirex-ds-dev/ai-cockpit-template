@@ -205,8 +205,10 @@ def test_quality_full_uses_commit_and_run_bound_session_directories():
     assert "GITHUB_RUN_ID" in text
     assert "--session-id" in text
     assert "--run-id" in text
-    assert "trap 'printf" in text
-    assert "target/quality/current-session.txt' EXIT" in text
+    assert "trap 'status=$$?; printf" in text
+    assert 'cleanup_project_test_receipt "$$status"' in text
+    assert "target/quality/current-session.txt; cleanup_project_test_receipt" in text
+    assert 'cleanup_project_test_receipt "$$status"\' EXIT' in text
 
 
 def test_quality_full_uses_owned_phase_cleanup_helper():
