@@ -7,57 +7,60 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): 在确认当前 Work Item 分支、PR 状态和精确 Head SHA 后，先同步合并目标 base，再以该 base worktree 作为归档证据和 source-bound knowledge projection 的校验根；不改写旧分支或绕过 fail-closed 清理。
-Mechanism (verified): 关闭流程先验证 Work Item branch 的干净状态、PR 合并状态、branch identity 和 Head SHA；完成 base fast-forward synchronization 后，使用 base worktree 读取 archive、Outcome、Status 和 knowledge projection，再生成 Receipt 并执行远端/本地分支清理。
+Customer summary (verified): The receipt builder now compares the stable runner class and preserves each shard's exact provider image, so dynamic Ubuntu patch-image drift is visible evidence rather than a false mismatch.
+Mechanism (verified): The receipt builder separates stable execution-class identity from provider image patch identifiers, accepts parallel shards when OS, Python, and CPU class agree, and retains each exact image under shardRunners. Source identity and stable-class mismatches remain fail closed.
 
 Affected components
-- Work Item closure: Archived evidence validation uses the synchronized base snapshot when linked worktrees are involved. (verified)
-- Branch cleanup: PR Head SHA ownership and fail-closed cleanup ordering remain unchanged. (verified)
+- scripts/quality_measurements.py: Hosted receipt and cross-run identity validation. (verified)
+- tests/test_quality_measurements.py: Regression coverage for image drift and stable-class drift. (verified)
 
 Design decisions
-- Use an explicit project_root override only for archived evidence validation.: The old Work Item snapshot cannot be updated without changing the merged PR Head SHA; the synchronized base is the repository state that survives cleanup. (verified)
-- Keep branch identity and PR Head SHA verification before base synchronization.: Evidence-root correction must not become a branch deletion escape hatch. (verified)
+- Do not weaken source identity or success checks.: Only stable runner-class comparison changes; commit, tree, result, artifact, and coverage checks remain unchanged. (verified)
+- Do not claim all shards used the same patch image when they did not.: Actual provider image values are retained under shardRunners. (verified)
 
 ### Technical details
-- Failure handling: Invalid archived evidence, stale base projections, dirty worktrees, synchronization failure, receipt failure, and remote deletion failure remain blocking and prevent cleanup. (verified)
+- None recorded.
 
 ### Evidence
-- The new ordering is covered by a focused regression suite.: tests/test_work_item_lifecycle_closure.py#51 passed (verified)
+- The implementation distinguishes stable runner class from dynamic image patch identifiers.: scripts/quality_measurements.py#runnerClass and shardRunners (verified)
+- Regression coverage includes accepted image drift and rejected stable-class drift.: tests/test_quality_measurements.py#runner comparability regression tests (verified)
 
-- Changed .ai/work-items/active/fix-closure-knowledge-base-20260819.contract.json [evidence: .ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.contract.json]
-- Changed .ai/work-items/active/fix-closure-knowledge-base-20260819.summary.json [evidence: .ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.summary.json]
-- Changed scripts/ai_close_work_item.py [evidence: scripts/ai_close_work_item.py]
-- Changed tests/test_work_item_lifecycle_closure.py [evidence: tests/test_work_item_lifecycle_closure.py]
-- Changed .ai/work-items/active/fix-closure-knowledge-base-20260819.outcome.json [evidence: .ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.outcome.json]
-- Changed .ai/work-items/active/fix-closure-knowledge-base-20260819.outcome.md [evidence: .ai/work-items/archive/2026/fix-closure-knowledge-base-20260819.outcome.md]
+- Changed .ai/work-items/active/hosted-measurement-runner-compatibility-20260819.contract.json [evidence: .ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.contract.json]
+- Changed .ai/work-items/active/hosted-measurement-runner-compatibility-20260819.summary.json [evidence: .ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.summary.json]
+- Changed scripts/quality_measurements.py [evidence: scripts/quality_measurements.py]
+- Changed tests/test_quality_measurements.py [evidence: tests/test_quality_measurements.py]
+- Changed docs/reference/ai-cockpit-work-item-lifecycle.md [evidence: docs/reference/ai-cockpit-work-item-lifecycle.md]
+- Changed .ai/work-items/active/hosted-measurement-runner-compatibility-20260819.outcome.json [evidence: .ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.outcome.json]
+- Changed .ai/work-items/active/hosted-measurement-runner-compatibility-20260819.outcome.md [evidence: .ai/work-items/archive/2026/hosted-measurement-runner-compatibility-20260819.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
-- Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
-- Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
-- Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
-- Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
-- Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json [evidence: .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json]
-- Changed .ai/knowledge/work-items/implementation-knowledge-projection-20260818.json [evidence: .ai/knowledge/work-items/implementation-knowledge-projection-20260818.json]
-- Changed .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json [evidence: .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json]
 
 Problems found
-- Total: 0
+- Total: 3
 - Blocking: 0
 - Warning: 0
 
 Stops triggered
-- None recorded.
+- Reason: aiGuidelines failed before the retry. | Stage: verification | Resolution: Retry aiGuidelines after correcting the recorded failure. [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Reason: aiSummary failed before the retry. | Stage: verification | Resolution: Retry aiSummary after correcting the recorded failure. [evidence: verificationHistory[1] aiSummary failed, verification[aiSummary] retry passed]
 
 Problems resolved
-- None recorded.
+- Problem: observed issue
+  Solution: Resolution status: resolved
+  Evidence: [evidence: observedIssues[0] observed issue, observedIssues[0] observed issue, observedIssues[0] observed issue, observedIssues[0] observed issue]
+- Problem: aiGuidelines failed before the retry.
+  Solution: Re-ran aiGuidelines after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] aiGuidelines failed, verification[aiGuidelines] retry passed]
+- Problem: aiSummary failed before the retry.
+  Solution: Re-ran aiSummary after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[1] aiSummary failed, verification[aiSummary] retry passed]
 
 Risks avoided
-- None recorded.
+- If not detected, could have led to a stale completion claim. (inference)
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- The closure boundary is covered by focused regression tests; Hosted provider latency remains outside this Work Item. [evidence: residualRisks]
+- Hosted evidence remains dependent on the supported Ubuntu/Python/CPU runner class; patch-image facts are recorded per shard and are not treated as identical. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
@@ -66,7 +69,6 @@ Human decisions
 - None recorded.
 
 Verification
-- sourceBoundEvidence [evidence: sourceBoundEvidence]
 - aiWorkItem [evidence: aiWorkItem]
 - aiScope [evidence: aiScope]
 - aiGuards [evidence: aiGuards]
@@ -85,9 +87,9 @@ Verification
 - aiSummary [evidence: aiSummary]
 
 Impact
-- Rework avoided: None recorded.
+- Rework avoided: If not detected, could have led to a stale completion claim. (inference)
 - Repeat correction prevented: unknown: no direct recurrence probability evidence was recorded. (inference)
-- Major risk prevented: None recorded.
+- Major risk prevented: If not detected, could have led to a stale completion claim. (inference)
 
 Next action
 - Bind conversation locale and preserve evidence details before the next Work Item starts. (inference)
