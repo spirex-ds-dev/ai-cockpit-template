@@ -656,6 +656,23 @@ def test_status_consistency_covers_empty_paired_and_unpaired_states(tmp_path, mo
     assert ai_check_status_consistency.validate_status_consistency(status) == []
 
 
+def test_quality_session_filters_only_transient_project_test_receipt(monkeypatch):
+    changed = [
+        "Makefile",
+        "target/quality/project-test-aggregate/receipt.json",
+        "tests/test_core_gates.py",
+    ]
+
+    monkeypatch.setenv("QUALITY_SESSION_ID", "quality-session-1")
+    assert ai_check_status_consistency.filter_quality_session_transient_paths(changed) == [
+        "Makefile",
+        "tests/test_core_gates.py",
+    ]
+
+    monkeypatch.setenv("QUALITY_SESSION_ID", "legacy")
+    assert ai_check_status_consistency.filter_quality_session_transient_paths(changed) == changed
+
+
 def test_status_consistency_rejects_live_no_active_changes(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)

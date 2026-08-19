@@ -88,6 +88,20 @@ def test_pr_audit_restores_tracked_aggregate_evidence_before_audit():
     assert source.index("aggregate_receipt=") < source.index("scripts/ai_check_pr.py")
 
 
+def test_quality_full_restores_tracked_aggregate_evidence_before_exit():
+    source = (ROOT / "Makefile").read_text(encoding="utf-8")
+    quality_full = source.split("quality-full-owned:", 1)[1].split(
+        "# Backward-compatible aliases", 1
+    )[0]
+
+    assert "trap" in quality_full
+    assert 'aggregate_receipt="target/quality/project-test-aggregate/receipt.json"' in quality_full
+    assert 'git ls-files --error-unmatch "$$aggregate_receipt"' in quality_full
+    assert 'git restore --source=HEAD --worktree -- "$$aggregate_receipt"' in quality_full
+    assert "restore_project_test_receipt 0" not in quality_full
+    assert quality_full.index("trap") < quality_full.index("run_quality_session.py")
+
+
 def test_project_test_shards_skip_empty_git_diff_before_applying_changes():
     text = (ROOT / "Makefile").read_text(encoding="utf-8")
 

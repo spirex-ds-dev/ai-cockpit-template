@@ -1,0 +1,138 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-projection-v0_5_68-20260819",
+  "mode": "code",
+  "title": "Synchronize published v0.5.68 projection and advance the next release candidate",
+  "rawUserRequest": "继续推进既定目标：先完成当前发布事实链收敛，再发布新版本。当前已发现仓库发布投影落后于 Provider v0.5.68，因此先同步公开事实并准备 v0.5.69 候选。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-thread: continue-release-after-wi-closeout",
+    "capturedAt": "2026-08-19",
+    "digest": "user-authorized-release-projection-reconciliation"
+  },
+  "declaredIntent": {
+    "summary": "将已公开且不可变的 Provider v0.5.68 资产安全投影回仓库，并把未发布候选推进到 v0.5.69，为后续新版本发布建立一致、可验证的基线。",
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e4aa5abe1db426983de542395113471b3e771a1b",
+  "baseRemote": "origin",
+  "baseBranch": "main",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-projection-v0_5_68-20260819.contract.json",
+    ".ai/work-items/active/release-projection-v0_5_68-20260819.summary.json",
+    ".ai/work-items/active/release-projection-v0_5_68-20260819.outcome.json",
+    ".ai/work-items/active/release-projection-v0_5_68-20260819.outcome.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/evidence/reference-impact/**",
+    "tests/test_release_distribution.py",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "install.sh",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/ai_finish.py",
+    "tests/test_finish_e2e.py"
+  ],
+  "outOfScope": [
+    "Creating, moving, deleting, or republishing the immutable v0.5.68 tag or Provider Release.",
+    "Publishing v0.5.69 or creating its tag; this Work Item prepares the candidate only.",
+    "Changing release workflow behavior, runtime behavior, installer logic beyond the candidate reference, or unrelated dependency updates.",
+    "Rewriting historical Work Item archives or changing the unrelated Dependabot Work Item."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.68", "reason": "Stable Provider Release and immutable public assets that are the authoritative source for post-publication projection."},
+    {"path": "make check-release-distribution", "reason": "Current main fails closed because release.json is v0.5.67 while stable Provider and reserved tag facts are v0.5.68."},
+    {"path": "scripts/sync_published_release_projection.py", "reason": "Canonical atomic synchronizer that validates provider asset identity before writing projections."},
+    {"path": "docs/reference/distribution.md", "reason": "Authoritative separation of published projection, Provider Release, immutable tag, and next candidate."},
+    {"path": "release-state.json", "reason": "Canonical release lifecycle state and reserved-version history."},
+    {"path": ".ai/glossary.md", "reason": "Canonical governance terminology and evidence boundaries."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "provider_evidence", "adopter_installation"],
+    "reason": "Projection errors can make the repository advertise the wrong installer release or advance over an immutable reserved version; every promoted fact must be bound to the exact Provider assets.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The Provider release, public assets, canonical synchronizer, and current failing distribution check define the bounded repair."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["Release identity and public distribution projections require strict evidence validation."],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user instructed continuation toward release; this Work Item is limited to reconciling already-published evidence and preparing the next candidate without provider mutation."},
+  "preReviewWarnings": [
+    "Verify both public v0.5.68 assets and their source/tag/metadata identity before any projection write.",
+    "Do not treat a successful local projection check as proof that v0.5.69 has been published.",
+    "Keep the human-facing Outcome independent from folded tool output and report the exact remaining publication boundary."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Bind the projection edit and final checks to the current Work Item and exact release evidence."},
+  "acceptance": [
+    "Provider v0.5.68 release.json and release-digests.json assets are downloaded, hash-verified, and each binds releaseTag, sourceCommit, tagTarget, and metadataCommit consistently.",
+    "The canonical synchronizer promotes v0.5.68 into release.json and release-digests.json without changing the immutable Provider tag or Release.",
+    "release-state.json, next-release.json, .ai/cockpit/version.json, and install.sh advance exactly to an unpublished v0.5.69 candidate based on v0.5.68.",
+    "make check-release-state-consistency, make check-release-distribution, make check-release-distribution-post-publish, and the relevant release distribution tests pass after synchronization.",
+    "All required AI Cockpit checks and ai-finish pass, the PR is merged, ai-close-work-item succeeds, and the Work Item branch is absent locally and remotely.",
+    "The final dialogue contains a standalone, complete, human-facing Outcome with the result, implementation approach, evidence, residual publication boundary, and traffic-light status."
+  ],
+  "guidelines": [
+    "Use only the canonical projection synchronizer after validating the exact Provider assets.",
+    "Never move, delete, overwrite, or republish an immutable release tag or Provider Release.",
+    "Keep repository published projection, Provider Release, immutable tag, and unpublished candidate as separate facts.",
+    "Do not claim v0.5.69 is published until the release workflow and independent post-publication validation prove it.",
+    "Report the complete human-facing Outcome directly in the dialogue, not as a raw file substitution."
+  ],
+  "intent": {
+    "problem": "Current main advertises v0.5.67 even though stable Provider v0.5.68 and its immutable tag already exist; the distribution checker therefore fails closed before the next release can safely proceed.",
+    "constraints": ["Promote only the exact public v0.5.68 assets and preserve their source identity.", "Advance the candidate exactly one patch to v0.5.69.", "Do not publish or mutate v0.5.68 or v0.5.69 in this projection Work Item.", "Preserve evidence-bound, conversation-visible Outcome requirements."],
+    "rationale": "Release publication cannot safely continue while repository projections contradict the already-published Provider facts; reconciling this boundary first prevents a wrong-version installer contract and preserves calibrated trust."
+  },
+  "implementationSurface": {
+    "production": ["release.json", "next-release.json", "release-state.json", "install.sh", ".ai/cockpit/version.json", ".ai/cockpit/release-digests.json", "scripts/ai_finish.py"],
+    "tests": ["tests/test_release_distribution.py", "tests/test_finish_e2e.py"],
+    "documentation": [],
+    "generated": [".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md", ".ai/work-items/archive/index.json", ".ai/knowledge/index.json"]
+  },
+  "scenarioCoverage": [
+    {"id": "SC-RELEASE-PROJECTION-1", "scenario": "The stable Provider v0.5.68 assets are mutually bound to the same release tag and exact source identity.", "required": true, "status": "unverified", "evidence": [], "expected": "Downloaded release.json and release-digests.json agree on v0.5.68, sourceCommit, tagTarget, metadataCommit, and their declared digests.", "verificationPlan": "Download both named assets and run the canonical asset and distribution checks."},
+    {"id": "SC-RELEASE-PROJECTION-2", "scenario": "The repository published projection and next candidate advance exactly one patch after v0.5.68.", "required": true, "status": "unverified", "evidence": [], "expected": "release.json is v0.5.68; next-release.json, release-state.json, version.json, and installer defaults identify unpublished v0.5.69.", "verificationPlan": "Run state consistency, distribution, post-publish distribution, and projection-focused tests."},
+    {"id": "SC-RELEASE-PROJECTION-3", "scenario": "The projection repair does not imply publication of the next candidate.", "required": true, "status": "unverified", "evidence": [], "expected": "No v0.5.69 tag or Provider Release is created by this Work Item, and the Outcome states publication remains a separate next boundary.", "verificationPlan": "Inspect the diff and remote tags/releases before closure."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized continuation toward release; this WI performs only evidence-bound source projection synchronization and does not mutate provider release state."},
+  "rollbackNote": "Revert this Work Item's projection diff; do not alter immutable v0.5.68 tags or Provider assets.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-projection-v0_5_68-20260819.json",
+    "baseCommit": "e4aa5abe1db426983de542395113471b3e771a1b",
+    "initialScopeDigest": "fd03c018bc73398bbe0b87a1129fae508712242bf9beb3f0f72996343e3cce5d",
+    "contractSkeletonDigest": "9807c03d002d02d69999f889a75b42e2eecf6e73dc6562908047281a7178f75c"
+  }
+}

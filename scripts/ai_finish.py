@@ -80,6 +80,46 @@ CURRENT_REPORT_LANGUAGE = "en"
 PRE_MERGE_MERGE_IDENTITY_GAP_PREFIX = (
     "Merged commit identity is intentionally null until a post-merge binding exists;"
 )
+PROJECT_TEST_AGGREGATE_RECEIPT = Path("target/quality/project-test-aggregate/receipt.json")
+
+
+def restore_tracked_project_test_receipt(*, root: Path = PROJECT_ROOT) -> bool:
+    """Restore the tracked aggregate receipt after quality mutates its worktree copy."""
+    receipt = PROJECT_TEST_AGGREGATE_RECEIPT.as_posix()
+    tracked = subprocess.run(  # nosec B603 B607 - fixed Git argv and bounded repository path
+        ["git", "ls-files", "--error-unmatch", "--", receipt],
+        cwd=root,
+        env=clean_git_environment(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if tracked.returncode != 0:
+        repository = subprocess.run(  # nosec B603 B607 - fixed Git argv and bounded repository path
+            ["git", "rev-parse", "--is-inside-work-tree"],
+            cwd=root,
+            env=clean_git_environment(),
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if repository.returncode != 0:
+            detail = repository.stderr.strip() or tracked.stderr.strip() or "unknown Git error"
+            raise RuntimeError(f"cannot inspect tracked quality receipt: {detail}")
+        return False
+
+    restored = subprocess.run(  # nosec B603 B607 - fixed Git argv and bounded repository path
+        ["git", "restore", "--source=HEAD", "--worktree", "--", receipt],
+        cwd=root,
+        env=clean_git_environment(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if restored.returncode != 0:
+        detail = restored.stderr.strip() or "git restore failed"
+        raise RuntimeError(f"cannot restore tracked quality receipt: {detail}")
+    return True
 
 
 def checkpoint_recovery_guidance(issues: list[str], *, contract: str, summary: str) -> str:
@@ -2633,6 +2673,16 @@ def run_declared_checks(
         duration += refresh_duration
         if refresh_output:
             output = refresh_output + ("\n" + output if output else "")
+        if check_id == "quality":
+            try:
+                if restore_tracked_project_test_receipt():
+                    output = (
+                        output.rstrip()
+                        + "\nRestored tracked project-test aggregate receipt before Summary stabilization.\n"
+                    )
+            except RuntimeError as exc:
+                output = output.rstrip() + f"\nERROR: {exc}\n"
+                code = code or 1
         if route is not None:
             output = json.dumps({"finishQualityRoute": route}, sort_keys=True) + "\n" + output
         current_digest = worktree_digest(changed_paths(contract_data))
