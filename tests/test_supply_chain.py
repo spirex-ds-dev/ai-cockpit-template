@@ -641,6 +641,52 @@ def test_supply_chain_baselines_match_repository_state():
     )
 
 
+def test_candidate_provenance_baseline_uses_unpublished_candidate_identity(tmp_path, monkeypatch):
+    provenance = tmp_path / "provenance.json"
+    candidate = tmp_path / "next-release.json"
+    provenance.write_text(
+        json.dumps(
+            {
+                "builder": "ai-cockpit-template",
+                "commitSha": "candidate-source",
+                "sbomDigest": "candidate-sbom",
+                "requirementsLockDigest": "lock",
+                "releaseTag": "v0.5.71",
+                "installerDigest": "installer",
+            }
+        ),
+        encoding="utf-8",
+    )
+    candidate.write_text(
+        json.dumps(
+            {
+                "releaseState": "candidate",
+                "published": False,
+                "releaseTag": "v0.5.71",
+                "basedOnReleaseTag": "v0.5.70",
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(check_supply_chain, "PROVENANCE_BASELINE", provenance)
+    monkeypatch.setattr(check_supply_chain, "NEXT_RELEASE_JSON", candidate)
+
+    issues = check_supply_chain.compare_or_write(
+        provenance,
+        {
+            "builder": "ai-cockpit-template",
+            "commitSha": "stable-source",
+            "sbomDigest": "stable-sbom",
+            "requirementsLockDigest": "lock",
+            "releaseTag": "v0.5.70",
+            "installerDigest": "installer",
+        },
+        write=False,
+    )
+
+    assert issues == []
+
+
 def test_repository_uses_in_and_lock_without_redundant_txt():
     assert (ROOT / "requirements-dev.in").is_file()
     assert (ROOT / "requirements-dev.lock").is_file()
