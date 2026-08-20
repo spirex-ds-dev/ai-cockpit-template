@@ -1,7 +1,7 @@
 # AI Cockpit Task Report
 
 Task Result
-Status: Blocked
+Status: Success
 
 What was completed
 
@@ -27,15 +27,15 @@ Design decisions
 - The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.: .ai/cockpit/release-digests.json#Formal Provider publication and public asset digest projection (verified)
 
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json]
 - Changed .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json]
 - Changed .ai/work-items/active/task-event-log.events.jsonl [evidence: .ai/work-items/active/task-event-log.events.jsonl]
 - Changed .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json [evidence: .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json]
 - Changed target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json [evidence: target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json]
 - Changed target/release-v0-5-70-provider-release/rehearsal.receipt.json [evidence: target/release-v0-5-70-provider-release/rehearsal.receipt.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.json]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 - Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
@@ -73,8 +73,8 @@ Design decisions
 
 Problems found
 - Total: 3
-- Blocking: 1
-- Warning: 1
+- Blocking: 0
+- Warning: 0
 
 Stops triggered
 - None recorded.

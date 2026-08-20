@@ -1,27 +1,25 @@
 # Task Outcome: publish-v0-5-70-provider-release-20260820
 
-Status: `blocked`
-Human Status: `red`
-Failed Gate: `aiDiffOwnership`
-Recovery Condition: Run a passing aiDiffOwnership retry.
+Status: `completed`
+Human Status: `green`
 
 ## Outcome Summary
-Task publish-v0-5-70-provider-release-20260820 generated an evidence-derived outcome with status blocked.
+Task publish-v0-5-70-provider-release-20260820 generated an evidence-derived outcome with status completed.
 
 ## Task Overview
 Governed Work Item: publish-v0-5-70-provider-release-20260820
 
 ## Delivered Changes
 - .ai/cockpit/current_status.md
-- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json
-- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json
+- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json
+- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json
 - .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json
 - .ai/work-items/active/task-event-log.events.jsonl
 - .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json
 - target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json
 - target/release-v0-5-70-provider-release/rehearsal.receipt.json
-- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json
-- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md
+- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.json
+- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.md
 - .ai/cockpit/task_report.json
 - .ai/cockpit/task_report.md
 - .ai/cockpit/release-digests.json
@@ -64,16 +62,16 @@ None
 None
 
 ## Warnings
-- Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
+None
 
 ## Limitations
-- Finish verification is blocked
+None
 
 ## Non-Risk Explanations
-- {"evidence": [], "reason": "The failed Finish gate is recorded as a recovery condition, not a completed result.", "sourceWarning": "Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope"}
+None
 
 ## Forbidden Claims
-- Do not claim a blocked Work Item has completed verification or may be archived.
+None
 
 ## Interventions
 None
@@ -177,17 +175,17 @@ Locale: `zh-CN`
 - Changed .ai/work-items/recovery-receipts/publish-v0-5-70-provider-release-20260820.json: Bound post-archive ownership recovery receipt for generated knowledge projections.
 
 ### What passed
-- sourceBoundEvidence: capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=1b8d5aefd37a853b8e79e53bae16441427a9e3c457f3218a25fd16d8fd2c0474, after=6bcfc929ba09a1a204cc07a066c82d6a64f0be348e84cff2cd1d4a983c29cba6; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut
+- sourceBoundEvidence: capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=8deeaa16dd97c32f542219a5a3a947b79de5c682879920cadcce3dece40d3364, after=a48e2fbe432a4beffc640292233f1a7ca46f9801b1cfac37a3a574ff9438f232; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut
 - aiWorkItem: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json work item contract check passed: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json
-- aiScope: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json scope guard passed: 22 changed path(s) covered
-- aiGuards: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/version.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json (.ai/**) - AI governance configuration. [
+- aiScope: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json scope guard passed: 29 changed path(s) covered
+- aiGuards: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [warning] restricted_write: .ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/version.json (.ai/**) - AI governance configu
 - aiCheckpoint: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json --summary .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json --stage "before_finish" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `publish-v0-5-70-provider-release-20260820` - Contract Hash: `0d6d5eb053a0eca4` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - A
-- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json review policy matched 14 path(s) [review] .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [review] .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json [review] .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md [review] .ai/work-items/externa
+- aiReviewPolicy: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json review policy matched 21 path(s) [review] .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [review] .ai/work-items/external-handoffs/publish-v0-5-70-provider-release-20260820.json [review] .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json [review] .ai/work-items/re
 - aiBacktrack: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json
 - aiCoverage: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json
 - aiScenarioCoverage: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json --summary .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json [warning] required_scenario_unverified: The final human Outcome or lifecycle cleanup is incomplete. - required scenario remains unverified [warning] required_scenario_unverified: Cleanup reaches v0.5.69 or unrelated user-owned s
 - aiGuidelines: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json --summary .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json guidelines compliance check passed: 5 guideline(s) verified
-- aiDiffOwnership: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json ## Diff Ownership Preview - active_owned: `22`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.a
+- aiDiffOwnership: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json ## Diff Ownership Preview - active_owned: `29`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.a
 - aiStatus: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json --summary .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md
 - aiStatusCheck: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json --summary .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json cockpit status check passed: .ai/cockpit/current_status.md
 - aiStatusConsistency: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed
@@ -195,18 +193,18 @@ Locale: `zh-CN`
 - aiSummary: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json ai summary check passed: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json
 
 ### What was retained
-- Warning retained: Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
+None
 
 ### Risks
 - next-candidate: v0.5.71 is intentionally unpublished and remains a candidate until a future exact-source release WI authorizes and verifies its publication.
 - lifecycle: The release WI still requires finish, archive, PR merge, ai-close-work-item, and final local/remote cleanup after publication.
 
 ### Red reasons
-- Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
+None
 
 ### Human questions
 - problemCount: 3
-- blockedProblems: Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
+- blockedProblems: None
 - resolvedProblems: observed issue; observed issue; observed issue
 - resolutionApproach: Switched the active github.com account to RayIori, verified gh api user=RayIori and repository permissions admin=true/push=true, then reran the exact formal dispatch successfully. No Provider mutation occurred during the rejected attempt.; Reran the canonical synchronizer with the explicit stable_release_unverified unavailable entry and the public v0.5.70 Release URL as evidence; synchronization then passed.; Used the post-publication distribution, release-state consistency, and source-bound evidence gates for the already-published v0.5.70; no v0.5.71 freeze was created and no historical release metadata was changed.
 - avoidedRisks: None
