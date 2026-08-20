@@ -27,6 +27,10 @@ You know when to continue, when to pause, and when a Work Item is truly closed.
 ## Scenario
 Use this route for one change from a trusted base to merged cleanup.
 
+If your question is specifically “can two independent Work Items move forward
+at the same time?”, start with [Work Item parallel processing](../features/work-item-parallelism.md)
+and return here for the canonical merge and closure sequence.
+
 ## Decision
 `latest remote base → Contract → preflight → implementation → verification → Summary/Outcome → archive → commit/push → PR → merge → closure → cleanup`.
 

@@ -1,19 +1,96 @@
 ---
 author: Ray
 title: Human Benefit Report
-description: 1 つの governed task の価値と残る判断を、証拠から簡潔に示すレポート。
+description: 1 つの governed task の価値、残る risk、次に人が判断することを evidence から短く示します。
+audience:
+  - adopter
+  - reviewer
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - human_benefit_report
+  - implementation_approach_report
 ---
 
 # Human Benefit Report
 
-新しい人間向け要約は、Task Result、What was completed、Problems found、Stops triggered、Problems resolved、Risks avoided、Remaining risks、Unknowns、Human decisions、Verification、Impact、Next action の順で出力します。要約は検証済み Outcome から決定的に生成し、すべての事実に `evidenceRefs` を結び付けます。根拠のない便益は `inference` と明示し、事実として表現しません。アーカイブ前にすべての agent がローカライズされた Outcome と要約を会話へ直接渡し、ファイルパスだけを提示してはなりません。
+## この機能でできること
 
-Human Benefit Report は、変更内容、検出された証拠付き問題、停止、解決、回避したリスク、人間の判断、残存リスク、次の安全な操作を短く示します。
+人へ短く、しかし根拠のある答えを渡したい時に使います。**何を完了し、何を見つけ、何を
+解決し、どの risk が残り、次に何をするか**を示します。これは検証済み Task Outcome の
+human-facing projection です。
 
-Task Outcome が唯一の machine truth です。`ai-finish` は `.ai/cockpit/task_report.json` と `.ai/cockpit/task_report.md` に Review Report を生成し、`check-ai-pr` は archive 済み Outcome との一致を fail closed で検証します。
+## 自然言語で依頼する
 
-archive がその Outcome の active path を書き換える場合、archive transaction は正確な report pair を再生成し、両方の path を同じ archive 済み Summary に記録します。その pair を所有できるのは完全な現在の archive transaction だけです。欠落、stale、不正形式、または別 task の report は unowned のままです。
+> 「この Work Item の human handoff をください。完了、blocking problem、evidence 付きの
+> resolution、残る risk、Unknown、人の判断、次の安全な action を含めてください。」
 
-Provider の merge を確認した後、`ai-close-work-item` は branch 削除前に `target/task-closure-receipts/` へ Final Report を生成します。PR URL、merge commit、同期済み base、cleanup intent、継続先だけを provider-bound facts として追加し、`main` を dirty にしません。
+Agent は保存された `humanHandoff` を表示できますが、evidence のない benefit を fact に
+書き換えてはいけません。
 
-問題数は findings、risks、warnings、forced stops の証拠レコード数です。生産性、時間、金額、安全性、信頼度の score ではありません。Review Report は Hosted CI、merge、cleanup、人間の受領、provider identity を証明しません。Final Report も platform isolation、enterprise compliance、production safety を証明しません。
+## 結果の形式
+
+人の判断に使いやすいよう、次の順に表示します。
+
+```text
+Task Result
+Status: Success / Partial / Blocked / Failed
+
+What was completed
+Problems found
+Stops triggered
+Problems resolved
+Risks avoided
+Remaining risks
+Unknowns
+Human decisions
+Verification
+Impact
+Next action
+```
+
+finding、risk、warning、forced stop の数は evidence record の数です。生産性、時間、金額、
+security、信頼度 score ではありません。
+
+## 使用例
+
+不足していた documentation link を追加した場合、handoff は次のように示します。
+
+```text
+Completed: 不足していた capability overview link を追加した。
+Resolved problem: docs entry から capability overview に到達できる。
+Evidence: Contract、変更 file、passed した documentation-link check。
+Remaining risk: Hosted provider review は未確認。
+Next action: PR を review し、provider result を待ってから merge する。
+```
+
+根拠がない場合は「reported」または「inference」とし、Yellow/Red を維持します。短い要約
+だからといって review を省略できるわけではありません。
+
+## 欠落または stale の場合
+
+まず Task Outcome を停止して検証します。欠落、形式不正、stale、別 task、archive 済み
+Outcome との不一致は無効です。source record を直して projection を生成し直し、projection
+を手編集して完了に見せてはいけません。
+
+## Advanced route と lifecycle
+
+`humanHandoff` は `.ai/work-items/active/<task>.outcome.json` から生成されます。`ai-finish`
+は Review Report を `.ai/cockpit/task_report.json` と `.ai/cockpit/task_report.md` に出します。
+provider が merge を確認した後、`ai-close-work-item` は branch cleanup 前に Closure Receipt の
+隣へ Final Report を作ります。
+
+```sh
+make generate-human-benefit-report \
+  OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
+make check-human-benefit-report \
+  OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
+```
+
+Review Report は PR 作成、Hosted CI、merge、cleanup、人が読んだこと、provider identity を
+証明しません。Final Report も closure adapter が検証した事実だけを繰り返します。どちらも
+platform isolation、enterprise compliance、production safety を証明しません。
+
+[Task Outcome Report](task-outcome-report.ja.md)、[Decision States](../concepts/decision-states.ja.md)、
+[Work Item ライフサイクル](../operations/work-item-lifecycle.ja.md)も参照してください。

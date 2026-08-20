@@ -25,6 +25,9 @@ Contributor、Maintainer、Reviewer。
 ## シナリオ
 信頼できる base から merge 後の cleanup まで、一つの変更に使います。
 
+「独立した 2 つの Work Item を同時に進められるか」を知りたい場合は、まず[Work Item の並行処理](../features/work-item-parallelism.ja.md)
+を読み、その後このページで標準の merge と close の順序を確認してください。
+
 ## 判断
 `latest remote base → Contract → preflight → implementation → verification → Summary/Outcome → archive → commit/push → PR → merge → closure → cleanup` の順です。
 

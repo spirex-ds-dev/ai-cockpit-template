@@ -42,6 +42,25 @@ capabilityClaims:
 | stop から回復する | [回復](operations/recovery.ja.md) | 不足証拠を直すまで Work Item を保持し、安全に再試行する。 |
 | 保守・監査する | [ドキュメント・アーキテクチャ](reference/documentation-architecture.ja.md) | canonical owner、言語方針、reference の深さを見つける。 |
 
+## まず能力一覧を見る
+
+どのページを開けばよいか分からない場合は、まず[能力と境界](capabilities.ja.md)
+を見てください。ここが能力の index です。各能力について、目的、現在の status、
+責任の境界、詳細ページへのリンクを短く示します。詳細ページでは、前提条件、自然言語の
+依頼、使用例、期待する結果、停止・復旧方法、必要な場合だけ advanced command を確認します。
+
+| 目的 | 能力一覧から進む先 |
+| --- | --- |
+| 完了・warning・blocked の結果を理解する | [Outcome、Summary、Human Benefit Report](features/task-outcome-report.ja.md) |
+| 過去に検証された実装を探す | [Implementation Knowledge](reference/implementation-knowledge.ja.md) |
+| 独立した Work Item を同時に進める | [Work Item の並行処理](features/work-item-parallelism.ja.md) |
+| status、復旧、close を理解する | [Work Item ライフサイクル](operations/work-item-lifecycle.ja.md) |
+| 導入、calibration、既存導入の更新を行う | [アップグレード](upgrade.ja.md) |
+
+自然言語の例は、人が Agent に依頼できる目的を示したものです。AI Cockpit 自体は、
+範囲付きの repository governance layer です。一文だけで無制限の workflow、scheduler、
+外部の proof を作るものではありません。
+
 この入口では、技術詳細より先にプロジェクトを理解する道筋を示します。重要なテーマは
 英語・中国語・日本語の入口を優先して整備します。翻訳が未完了、または移行中のページは
 その状態を明示し、多言語対応がすべて完了したとは案内しません。現在の境界は、P1 の

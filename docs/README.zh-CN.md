@@ -41,6 +41,24 @@ capabilityClaims:
 | 从停止中恢复 | [恢复](operations/recovery.zh-CN.md) | 保留 Work Item，修复缺失证据后再重试。 |
 | 维护或审计 | [文档架构（英文参考）](reference/documentation-architecture.md) | 找到 canonical owner、语言政策和参考资料深度。 |
 
+## 先看能力一览
+
+如果你还不知道应该打开哪一页，请先看[能力与边界](capabilities.zh-CN.md)。
+它是能力索引：每项能力只用一句话说明用途、当前状态、责任边界，并提供“详细说明”
+链接。点击进入详细页面后，再查看前置条件、自然语言请求、使用事例、预期结果、
+停止/恢复方式以及可选的高级命令。
+
+| 你想做什么 | 从能力一览进入 |
+| --- | --- |
+| 了解一个已完成、有警告或被阻止的结果 | [Outcome、Summary 和 Human Benefit Report](features/task-outcome-report.zh-CN.md) |
+| 查找以前已经验证过的实现 | [Implementation Knowledge](reference/implementation-knowledge.zh-CN.md) |
+| 同时推进多个相互独立的 Work Item | [Work Item 并行处理](features/work-item-parallelism.zh-CN.md) |
+| 理解状态、恢复和关闭 | [Work Item 生命周期](operations/work-item-lifecycle.zh-CN.md) |
+| 安装、校准或更新已有安装 | [升级](upgrade.zh-CN.md) |
+
+自然语言事例描述的是人可以让自己的 Agent 执行的目标。AI Cockpit 仍然只是有边界的
+仓库治理层；它不会把一句话变成无限制的工作流、调度器或外部证明。
+
 这个入口先帮助你理解项目，再引导到安装、使用和技术参考。重要主题会优先提供中文、
 日文和英文入口；尚未完成翻译或仍在迁移的页面会明确标注，不能据此认为全部文档已经
 完成多语言覆盖。当前边界是：P1 的 commands 和 schemas 技术参考目前只有英文

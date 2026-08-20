@@ -1,68 +1,132 @@
 ---
 author: Ray
 title: Task Outcome Report
-description: Evidence-backed reporting of what AI Cockpit changed, found, prevented, and left for human review.
+description: Evidence-backed reporting of what a governed Work Item changed, found, prevented, and left for human review.
+audience:
+  - adopter
+  - reviewer
+  - maintainer
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - human_benefit_report
+  - implementation_approach_report
 ---
 
 # Task Outcome Report
 
-Task Outcome answers “what value and evidence did AI Cockpit provide for this Work Item?” It is separate from Cockpit Status, which answers “can execution continue?”, and from the PR Summary, which is an optional sanitized reviewer presentation.
+## What this helps you do
 
-## Sources and structure
+When a Work Item finishes, ask: **what happened, what was fixed, what remains,
+and what is the safest next decision?** Task Outcome is the evidence-backed
+answer. It is separate from Cockpit Status, which answers whether execution may
+continue, and from an optional PR Summary, which is a presentation for review.
 
-Machine truth is `.ai/work-items/active/<task>.outcome.json`. Its Markdown view is derived at `.ai/work-items/active/<task>.outcome.md`; archived Work Items retain the corresponding `outcome.json` and `outcome.md`. The pre-merge Outcome is rebuilt from Contract, Summary, verification, guards, risks, checkpoints, human confirmations, stops/resumes, changed files, tests, and archive evidence. It binds the exact base and Work Item head, and explicitly records that provider PR facts do not yet exist.
+## Before you start
 
-The report contains these sections: Outcome Summary, Task Overview, Delivered Changes, Findings, Risks, Warnings, Interventions, Forced Stops, Resolutions, Recurrence Prevention, Avoided Impact, Residual Risks, Human Decisions, and Evidence. Empty sections say `None`. Findings are evidence-backed and categorized; risks distinguish observed problems, potential risks, and prevented events. A Resolution links Problem → Action → Verification → Result.
+The Work Item needs a Contract, a Summary, verification evidence, and a known
+current state. If the Work Item stopped or contains Unknowns, read those facts
+before treating the result as complete. A report cannot repair missing evidence.
 
-New generator versions also include `humanHandoff`. This is the mandatory conversational projection for every agent (Codex, Gemini, subagents, or another client), and it is emitted before archive. It contains `completed`, `passed`, `retained`, `risks`, `redReasons`, and the fixed human-question set: problem count, blocking problems, resolved problems, resolution approach, avoided risks, remaining risks, agent unknowns, human confirmations, recurrence likelihood, and next-time prevention. Every claim carries `evidenceRefs`; a claim with no references is explicitly marked `inference` and is not a fact. Red reasons include gate, cause, exact location, evidence, and recovery.
+## Tell your Agent what you want
 
-When a Summary records `observedIssues`, `ai-finish` projects an issue marked with a resolved/fixed/mitigated/accepted status into `resolvedProblems` and `resolutionApproach`, preserving that issue's evidence references. An issue without evidence is never presented as verified resolution; it remains visible as an inference/remaining risk. This projection is prospective and does not rewrite immutable historical archives.
+You can say:
 
-The same structured records are also projected into the top-level sections: evidence-bound `resolutions` populate `Resolutions` with Problem, Action, Verification, Result, and evidence references; `handoffRisks` populate `Residual Risks` when their state is unresolved or accepted. Markdown renders the problem/risk detail instead of replacing it with a file path. Duplicate human-decision strings are reduced in first-seen order. Evidence-free records remain explicit `inference` and cannot become verified facts.
+> “Explain what this Work Item delivered, which problem it resolved, what
+> evidence proves that result, what risks remain, and what I need to decide
+> next.”
 
-Observed issue handoff records use Summary `evidenceRefs` as the canonical evidence field. The pre-merge adapter preserves those references into `resolvedProblems`, `resolutionApproach`, and structured `resolutions`; legacy `evidence` remains a compatibility fallback, while missing or malformed references stay inference.
+Your Agent may use the repository's bounded report commands to answer. The
+sentence is a human-facing request pattern; it does not create a fact source,
+grant scope, or authenticate a human decision.
 
-## Warning color semantics
+## Four views, one evidence chain
 
-`knownGaps` means an intentionally unaddressed requirement. Each genuine known gap becomes a Warning with a limitation binding and makes an otherwise completed Outcome `completed_with_warnings` (yellow). It must not be used as free-form completion commentary.
+| View | It answers | It is not |
+| --- | --- | --- |
+| Contract | What was this Work Item allowed and expected to do? | A record that the work succeeded. |
+| Summary | What did the Agent record while changing and verifying the repository? | A replacement for raw checks or human decisions. |
+| Task Outcome | What value, findings, stops, resolutions, residual risks, and evidence belong to the Work Item? | A claim that a PR merged or a provider approved it. |
+| Human Benefit Report | What is the concise human-facing result and next safe action? | A second event log or free-form success statement. |
 
-For an evidence-backed fact that is not an unresolved requirement—for example, that hosted verification is not required by the active Contract—use the optional Summary `nonRiskExplanations` field. Finish carries that structured explanation into the Non-Risk Explanations section without adding a Warning, limitation, or yellow status. The field requires a statement, reason, and source/subject evidence reference; malformed entries fail Summary validation. Failed verification, blocked states, residual risks, and genuine gaps retain their existing warning or red behavior.
+Task Outcome is the machine fact source for the report projections. A Human
+Benefit Report is derived from the validated Outcome and keeps every factual
+claim tied to `evidenceRefs`.
 
-## Safety and privacy
+## Example: problem to verified resolution
 
-Task Outcome does not manufacture scores, productivity, time, money, percentages, or trust claims. Avoided Impact is conditional and requires Finding/Risk/Intervention/Stop/Resolution/Test evidence. Residual and accepted risks remain visible. Secrets, credentials, private keys, and unnecessary evidence details do not belong in the PR presentation. Self-congratulatory claims such as “dramatically improved project quality” or “saved a lot of time” are rejected unless backed by permitted quantitative evidence; the generator does not produce them.
+Suppose a Work Item was allowed to correct documentation for the order service.
+You ask:
 
-The full report is not copied into Cockpit Status or a pull request. The PR fragment is opt-in through Project Profile reporting policy and uses an allowlist. Provider PR state and release evidence remain platform or release evidence; Markdown presentation is not proof of merge, publication, or security assurance.
+> “Did the order-service documentation problem get fixed, and can I merge?”
 
-## Language
+A useful report should show a chain like this:
 
-Project Profile `reporting.defaultLanguage` selects the default locale. `reporting.taskOutcome.languages` may explicitly select `ja`, `en`, and/or `zh-CN` (supported aliases are normalized and unsupported values fail closed). The renderer writes only the configured `outcome.<locale>.md` files. JSON keys and the fact source remain English and are not duplicated per language; user-provided evidence prose is not silently translated or replaced by a fallback language.
+```text
+Problem: the documented entry route did not reach the verified capability page.
+Action: add the missing route within the Contract scope.
+Verification: documentation metadata and internal-link checks passed.
+Result: the evidence-backed issue is resolved; review/merge is still a human
+        decision based on the remaining PR and provider evidence.
+```
 
-## Lifecycle
+The report should point to the Contract, changed files, check receipts, and
+Summary fields that support each line. “Looks fixed” without those references
+is an inference, not a verified resolution.
 
-`ai-finish` first validates deterministic active-evidence readiness, including Summary documentation alignment and ownership, before it starts an expensive required quality route. If that readiness check fails, it immediately persists the canonical blocked/red Outcome with the failed gate and recovery condition; it does not run quality merely to rediscover an archive-blocking evidence defect. After quality and Outcome/report generation, Finish validates the same documentation alignment again so later self-referential mutations cannot make a completed state stale. Archive moves Outcome artifacts transactionally with the Work Item. Event corrections are append-only.
+## Example: warning or stop
 
-After a validated active Outcome exists, `ai-finish` emits a clearly delimited
-conversation/CLI handoff in the requested `REPORT_LANGUAGE`. This happens for
-both a successful finish and a fail-closed finish that persists a blocked
-Outcome, so a failed gate does not hide the decision facts behind only a file
-path or terse diagnostic. The handoff is rendered from the persisted Outcome;
-it does not create a second fact source. CLI output cannot authenticate that a
-human read or approved the report. The handoff also keeps archive explicit:
-`--archive` is a separate lifecycle request and must follow the direct report.
+If local checks pass but Hosted CI has not run, the result must say so. A yellow
+Outcome can identify the missing provider evidence and tell you to wait for or
+obtain that evidence. A red Outcome must name the failed gate, cause, location,
+evidence, and recovery action. It must not call the Work Item merged, published,
+secure, or production-ready.
 
-Verification retries are represented as two bounded views. `verification` keeps
-the latest result for each check, while failed attempts replaced by a later
-attempt are retained in the optional Summary `verificationHistory`. Before
-archive, `ai-finish` rebuilds the Outcome and Human Benefit Report after final
-stabilization. A failed attempt followed by a passing attempt therefore appears
-as an evidence-bound resolved stop and resolution, not as a current blocker;
-the latest failed attempt remains a red stop with its recovery condition. This
-projection is deterministic, and the history is evidence rather than a claim
-that a person read a UI receipt.
+## What the report contains
 
-After the PR has merged, `make ai-close-work-item TASK=<task>` verifies provider ownership, base synchronization, and cleanup facts, then generates and validates a separate Closure Receipt before either Work Item branch is deleted. The receipt names the archived Outcome, merged PR, merge commit, final base commit, cleanup intent, and the worktree from which the next Work Item may continue. It also checks local branches, local worktrees, and remote branch absence; any residue is a blocking red condition with its exact location and recovery action. A missing or invalid Outcome/Receipt fails closed. The assistant must surface that receipt in its Work Item completion report; it is not a replacement for provider evidence.
+The full report can include Outcome Summary, Task Overview, Delivered Changes,
+Findings, Risks, Warnings, Interventions, Forced Stops, Resolutions, Recurrence
+Prevention, Avoided Impact, Residual Risks, Human Decisions, and Evidence.
+Empty sections remain explicit as `None`.
 
-This rule applies prospectively. Historical archive bundles are not rewritten merely to add a newer report format.
+The conversational `humanHandoff` projection is delivered before archive. It
+summarizes completion, passed checks, retained work, risks, red reasons, human
+questions, and the next action. A claim without evidence references is marked
+as an inference and cannot become a fact through Markdown rendering.
 
-See [Task Outcome Report Self-Check](task-outcome-report-self-check.md) for the current implementation boundary and known gaps.
+## If the report is incomplete
+
+Stop and repair the source evidence when the report is missing, stale,
+malformed, cross-task, or contradictory. If the repair needs a new path,
+authority, or behavior outside the Contract, amend and revalidate the Contract
+or create a genuinely separate Work Item. Do not edit the report to hide the
+problem.
+
+## Advanced route
+
+The machine source is `.ai/work-items/active/<task>.outcome.json`; the derived
+Markdown view is `.ai/work-items/active/<task>.outcome.md`. The review report is
+`.ai/cockpit/task_report.json` and `.ai/cockpit/task_report.md`.
+
+```sh
+make ai-finish TASK=<work-item-id> REPORT_LANGUAGE=en
+make check-ai-task-outcome OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
+make check-human-benefit-report OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
+```
+
+`ai-finish` archives only when archive is explicitly requested and the direct
+human report has been delivered. After the provider reports a merged PR,
+`make ai-close-work-item TASK=<work-item-id>` verifies the closure facts before
+branch cleanup.
+
+## Boundaries and related entry points
+
+The report does not prove platform isolation, enterprise compliance, provider
+identity, human receipt, production readiness, or universal security. It also
+does not replace Cockpit Status or the raw evidence that produced it.
+
+- [Human Benefit Report](human-benefit-report.md)
+- [Work Item Lifecycle](../operations/work-item-lifecycle.md)
+- [Decision States](../concepts/decision-states.md)
+- [Capabilities and boundaries](../capabilities.md)

@@ -1,79 +1,103 @@
 ---
 author: Ray
 title: Human Benefit Report
-description: A concise evidence-derived explanation of the value and remaining decisions for one governed task.
+description: A concise evidence-derived explanation of the value, remaining risks, and next human decision for one governed task.
+audience:
+  - adopter
+  - reviewer
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - human_benefit_report
+  - implementation_approach_report
 ---
 
 # Human Benefit Report
 
-Human Benefit Report answers what changed, how many evidence-backed issues were detected, which stops occurred, what was resolved, what risk was prevented, which decisions came from a person, what remains unresolved, and the next safe action.
+## What this helps you do
 
-## Default human summary format
+Use this report when you need a short answer for a person: **what was done,
+what problems were found, what was resolved, what remains risky, and what
+should happen next?** It is the human-facing projection of a validated Task
+Outcome.
 
-The default Markdown projection uses this exact decision order:
+## Tell your Agent what you want
+
+> “Give me the human handoff for this Work Item. Include completed work,
+> blocking problems, resolved problems with evidence, remaining risks,
+> unknowns, human decisions, and the next safe action.”
+
+The Agent can present the persisted `humanHandoff`. It must not rewrite an
+evidence-free benefit into a fact.
+
+## What the result looks like
+
+The default order is intentionally decision-oriented:
 
 ```text
 Task Result
 Status: Success / Partial / Blocked / Failed
 
 What was completed
-- ...
-
 Problems found
-- Total:
-- Blocking:
-- Warning:
-
 Stops triggered
-- Reason:
-- Stage:
-- Resolution:
-
 Problems resolved
-- Problem:
-- Solution:
-- Evidence:
-
 Risks avoided
-- ...
-
 Remaining risks
-- ...
-
 Unknowns
-- ...
-
 Human decisions
-- ...
-
 Verification
-- ...
-
 Impact
-- Rework avoided:
-- Repeat correction prevented:
-- Major risk prevented:
-
 Next action
-- ...
 ```
 
-The JSON projection behind this format is `humanHandoff`. It is derived from the validated Outcome, not authored freehand. Each claim has `evidenceRefs`; evidence-free benefit language is represented as `inference` and cannot be phrased as a fact. This prevents a path-only receipt from being mistaken for a human explanation.
+Counts are evidence-record counts for findings, risks, warnings, and forced
+stops. They are not productivity, time, money, security, or trust scores.
 
-## One fact source, two lifecycle views
+## Example
 
-The report is a deterministic projection of the validated Task Outcome. It does not introduce another event log or allow free-form agent claims to become evidence.
+If a documentation link was missing and the Work Item added it, the handoff
+should say:
 
-`ai-finish` writes the Review Report to `.ai/cockpit/task_report.json` and `.ai/cockpit/task_report.md`. `check-ai-pr` compares those files with the archived Task Outcome and fails closed when they are missing, malformed, stale, or inconsistent.
+```text
+Completed: the missing capability-overview link was added.
+Resolved problem: the docs entry now reaches the capability overview.
+Evidence: Contract, changed file, and passing documentation-link check.
+Remaining risk: Hosted provider review has not yet been confirmed.
+Next action: review the PR and wait for the provider result before merge.
+```
 
-When archive rewrites that Outcome's active paths, the archive transaction regenerates the exact report pair and records both paths in the same archived Summary. Only a complete current archive transaction can own that pair; a missing, stale, malformed, or cross-task report remains unowned.
+If the evidence is missing, the wording must remain “reported” or “inference,”
+or the result must remain yellow/red. A concise report is not permission to
+skip review.
 
-After provider verification, `ai-close-work-item` writes the Final Report beside the Closure Receipt under `target/task-closure-receipts/` before branch deletion. The Final Report adds the PR URL, merge commit, synchronized base, cleanup intent, and continuation worktree. Writing it outside source history keeps synchronized `main` clean.
+## If the report is missing or stale
 
-## Count semantics
+Stop and validate the Task Outcome first. The report is invalid when it is
+missing, malformed, stale, cross-task, or inconsistent with the archived
+Outcome. Repair the source record and regenerate the projection; do not hand
+edit the projection to make it look complete.
 
-Detected issues count findings, risks, warnings, and forced stops as distinct evidence records. Hard stops and warnings are explicit subsets. Resolved counts use the structured state/result fields; unresolved is the remaining detected count. These are record counts, not unique-root-cause, productivity, security, time, money, or trust scores.
+## Advanced route and lifecycle
 
-## Evidence boundary
+`humanHandoff` is derived from `.ai/work-items/active/<task>.outcome.json`.
+`ai-finish` writes the Review Report to `.ai/cockpit/task_report.json` and
+`.ai/cockpit/task_report.md`. After a provider-confirmed merge,
+`ai-close-work-item` writes the Final Report beside the Closure Receipt before
+branch cleanup.
 
-A Review Report cannot prove PR creation, Hosted CI, merge, cleanup, human receipt, or provider identity. A Final Report can repeat only facts already verified by the closure adapter. Neither report proves platform isolation, security, enterprise compliance, or production safety. Missing or contradictory source evidence remains visible and blocks validation rather than being inferred as passed.
+```sh
+make generate-human-benefit-report \
+  OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
+make check-human-benefit-report \
+  OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
+```
+
+The Review Report cannot prove PR creation, Hosted CI, merge, cleanup, human
+receipt, or provider identity. The Final Report can repeat only facts verified
+by the closure adapter. Neither report proves platform isolation, enterprise
+compliance, or production safety.
+
+See [Task Outcome Report](task-outcome-report.md), [Decision States](../concepts/decision-states.md),
+and [Work Item Lifecycle](../operations/work-item-lifecycle.md).
