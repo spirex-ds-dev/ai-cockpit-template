@@ -650,6 +650,28 @@ def compare_or_write(path: Path, data: dict[str, Any], *, write: bool) -> list[s
         expected.pop("commitSha", None)
         current.pop("sbomDigest", None)
         expected.pop("sbomDigest", None)
+        # After a Provider publication, release.json is the stable historical
+        # projection while the local provenance baseline advances with the
+        # unpublished next candidate.  Validate that candidate baseline
+        # against its own declared identity; release-assets still uses the
+        # immutable release tag through build_provenance().
+        try:
+            candidate = load_json(NEXT_RELEASE_JSON)
+        except (OSError, json.JSONDecodeError, InvalidDataShapeError):
+            candidate = None
+        if isinstance(candidate, dict):
+            candidate_tag = candidate.get("releaseTag")
+            stable_tag = expected.get("releaseTag")
+            candidate_is_pending = (
+                candidate.get("releaseState") == "candidate"
+                and candidate.get("published") is False
+                and isinstance(candidate_tag, str)
+                and bool(candidate_tag)
+                and candidate.get("basedOnReleaseTag") == stable_tag
+                and current.get("releaseTag") == candidate_tag
+            )
+            if candidate_is_pending:
+                expected["releaseTag"] = candidate_tag
     elif path == RELEASE_DIGESTS_BASELINE:
         # The committed manifest is a candidate baseline. Its source identity
         # is intentionally symbolic (for example origin/main) until the

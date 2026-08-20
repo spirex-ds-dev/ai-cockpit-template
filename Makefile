@@ -70,7 +70,7 @@ QUALITY_SESSION_LOCK_HELD ?= false
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	ai-assess-provider-merge-state-recovery \
 	quality-fast quality-standard quality-full quality-strict-targeted quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
-	quality-fast-owned quality-standard-owned quality-full-owned quality-strict-targeted-owned quality-release-owned project-test-owned \
+	quality-fast-owned quality-standard-owned quality-full-owned quality-strict-targeted-owned quality-release-owned project-test-owned restore-project-test-receipt \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report ai-record-external-handoff ai-ingest-external-receipt \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
@@ -186,6 +186,13 @@ project-test-aggregate:
 
 project-test-receipt:
 	$(AI_PYTHON) scripts/quality_test_manifest.py validate-aggregate-receipt --root . --manifest target/quality/project-test-manifest.json --plan target/quality/project-test-shard-plan.json --receipt "$(PROJECT_TEST_RECEIPT)"
+
+restore-project-test-receipt:
+	@set -eu; \
+		aggregate_receipt="target/quality/project-test-aggregate/receipt.json"; \
+		if git ls-files --error-unmatch "$$aggregate_receipt" >/dev/null 2>&1; then \
+			git restore --source=HEAD --worktree -- "$$aggregate_receipt"; \
+		fi
 
 project-test-owned:
 	mkdir -p "$(QUALITY_JUNIT_DIR)"
@@ -457,6 +464,7 @@ quality-standard: ensure-locked-dev-environment
 quality-standard-owned:
 	$(QUALITY_MAKE) --no-print-directory quality-fast TEST_WEAKENING_FULL_OWNERSHIP=true
 	$(QUALITY_MAKE) --no-print-directory project-test
+	$(QUALITY_MAKE) --no-print-directory restore-project-test-receipt
 	$(QUALITY_MAKE) --no-print-directory check-ai-reference-impact
 	$(QUALITY_MAKE) --no-print-directory check-ai-test-weakening
 

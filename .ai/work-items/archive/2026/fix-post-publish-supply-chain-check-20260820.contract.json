@@ -1,0 +1,308 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-post-publish-supply-chain-check-20260820",
+  "mode": "code",
+  "title": "Fix post-publish supply-chain candidate baseline validation",
+  "baseCommit": "746329ced7a1d315a468d4e2c6a7a39d50bcc343",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/check_supply_chain.py",
+    "tests/test_supply_chain.py",
+    "tests/test_quality_gate_architecture.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/fix-post-publish-supply-chain-check-20260820.contract.json",
+    ".ai/work-items/active/fix-post-publish-supply-chain-check-20260820.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/fix-post-publish-supply-chain-check-20260820.outcome.json",
+    ".ai/work-items/active/fix-post-publish-supply-chain-check-20260820.outcome.md"
+  ],
+  "outOfScope": [
+    "Changing release workflow security controls, Provider publication behavior, signing infrastructure, or branch protection.",
+    "Modifying, deleting, moving, reusing, or republishing v0.5.69 or v0.5.70 Provider tags and releases.",
+    "Changing SBOM or provenance generation semantics for immutable release assets.",
+    "Bypassing or downgrading any Hosted CI, supply-chain, or release verification gate."
+  ],
+  "sources": [
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Validator that currently compares the provenance baseline against stable release.json identity."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Existing regression coverage for candidate release manifests, provenance, and supply-chain checks."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Unpublished v0.5.71 candidate projection that must own candidate baseline identity."
+    },
+    {
+      "path": "release.json",
+      "reason": "Stable v0.5.70 projection that must remain the immutable release identity boundary."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Hosted project-test-release shard that exposed the regression."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Project test and supply-chain check entrypoints."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Distributed quality entrypoint that must preserve the same generated-receipt boundary for adopters."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Quality graph regression coverage for ordering project-test cleanup before reference-impact analysis."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Capability Truth dependency consulted by preflight for the Makefile and distributed Makefile.ai quality surfaces; no content change is intended."
+    }
+  ],
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-20 Hosted project-test-release failure follow-up",
+    "capturedAt": "2026-08-20T13:20:00+09:00",
+    "digest": "sha256:post-publish-supply-chain-candidate-check-follow-up"
+  },
+  "declaredIntent": {
+    "summary": "Make post-publication candidate supply-chain baseline validation respect the unpublished next-release projection while preserving immutable release identity checks.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "action": "modify",
+    "authorityRequired": false,
+    "effect": "enforce",
+    "environment": "repository",
+    "target": "repository_governance"
+  },
+  "rawUserRequest": "修正 v0.5.70 发布后 Hosted project-test-release 的唯一失败项：稳定 release.json 已是 v0.5.70，而 next-release.json 与本地 SBOM/Provenance 已是未发布 v0.5.71 候选；保持稳定发布证据不变，让候选基线校验正确收敛，然后继续合并发布 WI。",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_projection",
+      "supply_chain_evidence",
+      "quality_orchestration"
+    ],
+    "reason": "The fix changes a release-adjacent validator and quality orchestration, so candidate and immutable stable identities must remain separate, missing candidate evidence must still fail closed, and generated test receipts must be cleaned before downstream impact analysis.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The Hosted failure is reproducible, the candidate/stable boundary is explicit, and the implementation and regression verification paths are bounded."
+  },
+  "preReviewWarnings": [
+    "Review that candidate identity normalization applies only to local candidate baseline validation and not to immutable release assets."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "When release.json is a stable published tag and next-release.json is an unpublished candidate, the provenance baseline check validates the candidate identity and local candidate installer evidence instead of comparing against the stable projection.",
+    "The provenance check continues to fail closed when the candidate projection is missing, published, malformed, or inconsistent, and stable release-asset generation keeps using the immutable release identity.",
+    "Regression tests cover the post-publication stable-versus-candidate projection state and the quality graph restores a tracked aggregate receipt before reference-impact analysis; the existing supply-chain and quality architecture tests remain passing.",
+    "The Hosted project-test-release shard passes on the corrected source and the Work Item records both the original failure diagnosis and the local quality-gate stabilization evidence."
+  ],
+  "guidelines": [
+    "Preserve the distinction between stable Provider release evidence and the next unpublished candidate projection.",
+    "Keep immutable release-asset generation bound to the requested stable tag; only candidate baseline validation may use next-release.json.",
+    "Fail closed for missing or malformed candidate projection evidence.",
+    "Keep the fix limited to candidate supply-chain validation, the generated project-test receipt cleanup required for the governed quality path, and their regression coverage."
+  ],
+  "implementationSurface": {
+    "production": [
+      "scripts/check_supply_chain.py",
+      "Makefile",
+      "templates/make/Makefile.ai"
+    ],
+    "tests": [
+      "tests/test_supply_chain.py",
+      "tests/test_quality_gate_architecture.py"
+    ],
+    "documentation": [],
+    "generated": [
+      "docs/reference/capability-truth-matrix.md",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md"
+    ]
+  },
+  "intent": {
+    "problem": "After v0.5.70 was publicly published, the repository projection correctly advanced next-release.json and local SBOM/Provenance baselines to the unpublished v0.5.71 candidate. Hosted project-test-release then failed because check_supply_chain.py provenance still compared the candidate baseline to stable release.json v0.5.70.",
+    "constraints": [
+      "Do not mutate the v0.5.70 Provider tag, public assets, or historical v0.5.69 evidence.",
+      "Do not weaken stable release-asset identity checks or accept missing candidate evidence.",
+      "Keep candidate validation and the local quality-gate stabilization explicit, source-controlled, and covered by regression tests."
+    ],
+    "rationale": "Candidate validation must compare candidate baselines with the unpublished candidate identity while Provider publication and generated release assets must continue to use the immutable stable release identity. Encoding that boundary in one shared validator removes the false release-shard failure without weakening fail-closed checks."
+  },
+  "scenarioCoverage": [
+    {
+      "evidence": [],
+      "expected": "The post-publication candidate provenance baseline passes when it matches next-release.json and current local installer evidence.",
+      "id": "post-publication-candidate-baseline",
+      "required": true,
+      "riskDomain": "release_projection",
+      "scenario": "Stable release.json points to v0.5.70 while next-release.json is an unpublished v0.5.71 candidate.",
+      "status": "unverified",
+      "verificationPlan": "Add a regression test and run the release project-test shard."
+    },
+    {
+      "evidence": [],
+      "expected": "Stable release-asset provenance generation remains bound to the immutable requested tag and does not inherit candidate identity.",
+      "id": "immutable-release-identity",
+      "required": true,
+      "riskDomain": "supply_chain_evidence",
+      "scenario": "The validator is used during exact-source release-asset generation for a stable tag.",
+      "status": "unverified",
+      "verificationPlan": "Run the focused supply-chain tests and release evidence checks."
+    },
+    {
+      "evidence": [],
+      "expected": "Missing, malformed, or published candidate projection remains a validation failure.",
+      "id": "fail-closed-candidate-boundary",
+      "required": true,
+      "riskDomain": "supply_chain_evidence",
+      "scenario": "Candidate metadata is unavailable or no longer represents an unpublished candidate.",
+      "status": "unverified",
+      "verificationPlan": "Retain existing fail-closed behavior and cover the boundary in unit tests where practical."
+    },
+    {
+      "evidence": [],
+      "expected": "The governed standard quality path restores the tracked aggregate project-test receipt before reference-impact analysis evaluates the worktree.",
+      "id": "tracked-project-test-receipt-cleanup",
+      "required": true,
+      "riskDomain": "quality_orchestration",
+      "scenario": "A successful project-test run regenerates target/quality/project-test-aggregate/receipt.json before the standard quality path reaches check-ai-reference-impact.",
+      "status": "unverified",
+      "verificationPlan": "Add a Makefile architecture regression and run the standard quality route with the tracked receipt boundary."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human user",
+    "reason": "User explicitly authorized including the confirmed local quality-orchestration defect in this corrective Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 978
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-post-publish-supply-chain-check-20260820.json",
+    "baseCommit": "746329ced7a1d315a468d4e2c6a7a39d50bcc343",
+    "initialScopeDigest": "4c1191711d88f90a313f23d7c69ac2d55059be7bc52e1528a5a0c7616ffed554",
+    "contractSkeletonDigest": "05e3c2596b686cfa64b854faebe74dc3b9d4f62ad8c84ffe1c43356e506f25b8"
+  }
+}
