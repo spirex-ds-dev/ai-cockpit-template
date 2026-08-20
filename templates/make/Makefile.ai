@@ -40,7 +40,7 @@ QUALITY_REQUIRED_GROUPS ?= quality-fast check-ai-reference-impact project-test
 	ai-start ai-synchronize-work-item ai-transition-conflict-successor ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy check-changed-critical-coverage \
 	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency check-adopter-capability-manifest ai-generate-work-item-status ai-governance-cost ai-performance-diagnosis ai-generate-knowledge-record ai-generate-knowledge ai-check-knowledge-index ai-knowledge-query check-ai-knowledge check-ai-task-outcome repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact generate-human-benefit-report check-human-benefit-report ai-lifecycle-facts ai-work-item-status ai-work-item-intelligence-rebuild ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
-	check-ai-lifecycle-truth
+	check-ai-lifecycle-truth restore-project-test-receipt
 
 ai-help:
 	@printf '%s\n' 'AI Cockpit commands:'
@@ -185,6 +185,7 @@ quality-fast: ai-cockpit-validate-project-quality-configuration
 quality-standard:
 	$(AI_NESTED_MAKE) --no-print-directory quality-fast
 	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-test
+	$(AI_NESTED_MAKE) --no-print-directory restore-project-test-receipt
 	$(AI_NESTED_MAKE) --no-print-directory check-ai-reference-impact
 	$(AI_NESTED_MAKE) --no-print-directory check-ai-test-weakening
 
@@ -199,6 +200,13 @@ quality-strict-targeted:
 quality-release:
 	$(AI_NESTED_MAKE) --no-print-directory quality-full
 	@$(AI_COCKPIT_RELEASE_CHECK)
+
+restore-project-test-receipt:
+	@set -eu; \
+		aggregate_receipt="target/quality/project-test-aggregate/receipt.json"; \
+		if git ls-files --error-unmatch "$$aggregate_receipt" >/dev/null 2>&1; then \
+			git restore --source=HEAD --worktree -- "$$aggregate_receipt"; \
+		fi
 
 ai-cockpit-quality:
 	+@set -eu; \

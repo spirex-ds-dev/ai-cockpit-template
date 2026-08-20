@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "fix-post-publish-supply-chain-check-20260820",
+  "title": "Fix post-publish supply-chain candidate baseline validation",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "Normalize only the local provenance baseline to a valid unpublished next-release candidate after stable publication; keep immutable release-asset generation bound to release.json.",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.contract.json",
+    ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.summary.json",
+    "scripts/check_supply_chain.py",
+    "tests/test_supply_chain.py",
+    "tests/test_quality_gate_architecture.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "docs/reference/capability-truth-matrix.json",
+    ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.outcome.json",
+    ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json",
+    ".ai/knowledge/work-items/fix-shellcheck-apt-mirror-20260819.json",
+    ".ai/knowledge/work-items/quality-shard-orchestration-reliability-successor-20260819.json",
+    ".ai/knowledge/work-items/release-projection-v0_5_68-20260819.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.archive-manifest.json",
+    ".ai/knowledge/work-items/fix-post-publish-supply-chain-check-20260820.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Use next-release.json only for local candidate baseline validation.",
+      "reason": "Stable release.json and Provider assets remain immutable historical evidence.",
+      "status": "verified"
+    },
+    {
+      "decision": "Restore generated project-test aggregate evidence before downstream reference-impact analysis.",
+      "reason": "The quality path must not classify its own tracked generated receipt as an unrelated configuration change.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "test",
+      "path": "tests/test_supply_chain.py",
+      "digest": "509f27fd6d9005767ce240cc015472a3c4db70f5af5575623ecaac4d27ef15b8"
+    },
+    {
+      "type": "test",
+      "path": "tests/test_quality_gate_architecture.py",
+      "digest": "508a733dc66305346bef996454a9ec47ef80c0a0b24f22a36564d205bcd2f188"
+    },
+    {
+      "type": "code",
+      "path": "scripts/check_supply_chain.py",
+      "digest": "06477d0529c76596de734ed9b9ebca114d65bd31e6adaf2d1a04c54d6b053a06"
+    },
+    {
+      "type": "code",
+      "path": "Makefile",
+      "digest": "144f68efc3cf1956fe17807bbae1592db7187301ee37942038bc861e3344fefa"
+    },
+    {
+      "type": "code",
+      "path": "templates/make/Makefile.ai",
+      "digest": "579f52e73e67e14d80eff781e9b29aae29b85460e013c4d8be7eb491aaad34ba"
+    },
+    {
+      "type": "code",
+      "path": "next-release.json",
+      "digest": "12915a140e66e6d5b13aaa65efc39ce13dbd2129a436b89d338b58a7816d03a0"
+    },
+    {
+      "type": "code",
+      "path": "release.json",
+      "digest": "ac62c2347e991a04384da4d6695fd6c73c2038234bd7b0538e3d72f7fb75b239"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.contract.json",
+    "contractDigest": "512f1753155f003ba9454b7210ddcff9cd7aa7a4b50bce7315f07f1ce351183a",
+    "summaryPath": ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.summary.json",
+    "summaryDigest": "21a8fd1f57851ba2f487eb91f85f984982e3e28e188dd7079a2b74bb9d220312",
+    "outcomePath": ".ai/work-items/archive/2026/fix-post-publish-supply-chain-check-20260820.outcome.json",
+    "outcomeDigest": "17315cde235e1d9ab782a33a15c75db1817b2b8436a088bfb3e0e27075144355"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

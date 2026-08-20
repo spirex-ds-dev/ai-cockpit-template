@@ -80,6 +80,29 @@ def test_default_quality_entrypoint_routes_without_duplicating_gate_commands():
     assert "quality-release" not in standard
 
 
+def test_standard_quality_restores_tracked_project_test_receipt_before_reference_impact():
+    cases = (
+        (MAKEFILE, "quality-standard-owned:", "project-test"),
+        (
+            ROOT / "templates" / "make" / "Makefile.ai",
+            "quality-standard:",
+            "ai-cockpit-project-test",
+        ),
+    )
+    for path, target, project_test_target in cases:
+        text = path.read_text(encoding="utf-8")
+        assert "restore-project-test-receipt:" in text
+        restore_target = text.index("restore-project-test-receipt:")
+        restore_body = text[restore_target:].split("\n\n", 1)[0]
+        assert "git restore --source=HEAD --worktree" in restore_body
+
+        section = text.split(target, 1)[1].split("\n\n", 1)[0]
+        project_test = section.index(project_test_target)
+        receipt_cleanup = section.index("restore-project-test-receipt", project_test)
+        reference_impact = section.index("check-ai-reference-impact", receipt_cleanup)
+        assert project_test < receipt_cleanup < reference_impact
+
+
 def test_targeted_strict_quality_owns_only_receipt_selected_groups():
     targeted = _target_block("quality-strict-targeted-owned")
 
