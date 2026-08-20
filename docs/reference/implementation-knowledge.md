@@ -35,6 +35,26 @@ Summary, repository evidence, and final Outcome remain authoritative. If a
 Work Item has not reached a usable Outcome, or its record is missing or stale,
 there may be no verified result to return.
 
+## How records are refreshed
+
+When a Work Item is finalized, AI Cockpit maintains three generated views:
+the Knowledge records, the query index, and a dependency map. The dependency
+map records which Contract, Summary, Outcome, and Evidence paths determine each
+record, then maps a changed path to the affected Work Items.
+
+On the normal Finish or Archive path, that map lets AI Cockpit refresh the
+current record and the affected historical records only. An unrelated record
+is not normally rebuilt or rewritten, and a generated file is replaced only
+when its serialized content changes.
+
+This is a maintenance boundary, not a promise that every recovery is cheap. If
+the dependency map is missing, malformed, stale, or incomplete, AI Cockpit
+performs an explicit full rebuild/revalidation or stops fail closed. A full
+recovery may inspect more historical records, so maintenance time and
+governance cost can grow as the Knowledge history grows. The query itself stays
+read-only; if a refresh stops, inspect the checker result and repair the
+evidence before reusing a record.
+
 ## Ask in ordinary language first
 
 You can ask your Agent:

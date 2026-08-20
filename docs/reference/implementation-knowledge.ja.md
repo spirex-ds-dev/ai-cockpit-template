@@ -34,6 +34,23 @@ Knowledge record は完了した Work Item の evidence から作られます。
 repository evidence、final Outcome が権威です。Work Item が利用可能な Outcome に到達
 していない、または record が欠落・stale の場合、verified な結果はありません。
 
+## record はどのように更新されるか
+
+Work Item が完了すると、AI Cockpit は Knowledge record、query index、dependency map の
+3 つの生成 view を維持します。dependency map は各 record を決める Contract、Summary、
+Outcome、Evidence の path を記録し、変更された path を影響を受ける Work Item に対応付けます。
+
+通常の Finish または Archive では、この map を使って現在の record と影響を受ける過去の
+record だけを更新します。無関係な record は通常 rebuild / rewrite されず、serialized content
+が変わった時だけ生成 file が置き換えられます。
+
+これは maintenance の境界であり、すべての recovery が軽いという保証ではありません。
+dependency map が欠落、形式不正、stale、または不完全な場合、AI Cockpit は明示的な full
+rebuild / revalidation を行うか、fail closed で停止します。full recovery ではより多くの
+過去 record を確認することがあるため、Knowledge の履歴が大きくなるほど maintenance の
+時間と governance cost も増える可能性があります。query 自体は read-only のままです。更新が
+停止したら checker の結果を確認し、record を再利用する前に evidence を修復してください。
+
 ## まず自然言語で依頼する
 
 Agent には次のように依頼できます。

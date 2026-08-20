@@ -33,6 +33,20 @@ Knowledge 记录来源于已经完成的 Work Item 证据。Contract、Summary�
 Outcome 仍然是权威来源。如果 Work Item 尚未得到可用 Outcome，或记录缺失、过期，就不
 一定有可验证结果。
 
+## 记录如何被刷新
+
+Work Item 完成时，AI Cockpit 会维护三种生成视图：Knowledge 记录、查询索引和依赖映射。
+依赖映射记录每条记录由哪些 Contract、Summary、Outcome 和 Evidence 路径决定，并把发生
+变化的路径映射到受影响的 Work Item。
+
+在正常的 Finish 或 Archive 流程中，AI Cockpit 会根据这张映射只刷新当前记录和受影响的
+历史记录。无关记录通常不会被重建或重写；只有序列化内容发生变化时，生成文件才会被替换。
+
+这只是维护边界，不代表每次恢复都很轻。如果依赖映射缺失、格式错误、过期或不完整，AI
+Cockpit 会明确执行全量重建/重新验证，或者 fail closed 停止。全量恢复可能需要检查更多历史
+记录，因此 Knowledge 历史越大，维护时间和治理成本可能越高。查询本身仍然是只读的；如果
+刷新停止，请先检查校验结果并修复证据，再复用记录。
+
 ## 先用自然语言提出请求
 
 你可以对 Agent 说：

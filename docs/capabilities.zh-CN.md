@@ -59,7 +59,7 @@ AI Cockpit 的产品边界是 **Repository Governance Layer（仓库治理层）
 | 性能诊断 | `adopter_installed` | 查看有证据支持的耗时和可能瓶颈。 | 它只诊断已有的计时证据，不承诺优化或更快运行。 | [高级诊断参考](reference/performance-diagnosis.md) |
 | Task Outcome 与 Human Benefit Report | `adopter_installed` | 了解发生了什么、解决了什么、剩下什么以及下一安全动作。 | Outcome 由证据派生；Human Benefit Report 是投影，不是第二个事实源。 | [Outcome 与报告](features/task-outcome-report.zh-CN.md) |
 | Implementation Knowledge 查询 | `adopter_installed` | 按精确的主题、组件、日期、commit 或状态筛选历史 Work Item。 | 查询只读、确定性、来源于归档；不是语义搜索或 RAG。 | [Knowledge 使用指南](reference/implementation-knowledge.zh-CN.md) |
-| Implementation Knowledge 投影 | `adopter_installed` | 从完成的证据派生并维护经过验证的实现记录和索引。 | Finish 和 archive 证据才是来源；过期或冲突记录会 fail closed 或保持 partial/unknown。 | [Knowledge 使用指南](reference/implementation-knowledge.zh-CN.md) |
+| Implementation Knowledge 投影 | `adopter_installed` | 从完成的证据派生并维护经过验证的实现记录和索引。 | 正常流程通过依赖映射只刷新受影响的记录；映射缺失或不可信时会明确全量重建/重新验证或 fail closed，历史越大时这类恢复可能成本更高。 | [Knowledge 使用指南](reference/implementation-knowledge.zh-CN.md) |
 | Work Item 问题解决边界 | `adopter_installed` | 判断发现的问题是否应留在当前 Work Item。 | Contract、权限和 base 仍覆盖时在当前任务内修复；否则建立独立 Work Item。 | [生命周期与恢复](operations/work-item-lifecycle.zh-CN.md) |
 | 模板 Capability Truth 材料 | `template_only` | 阅读模板使用的证据模型和能力声明限制。 | 模板材料本身不证明 adopter 已安装、已校准或拥有外部保证。 | [Capability Truth Matrix](reference/capability-truth-matrix.md) |
 | Implementation Approach 报告 | `adopter_installed` | 阅读有证据边界的实现方式说明。 | 它由 Summary、Outcome 和 Human Benefit Report 承载，不是 Agent 自述。 | [Outcome 与报告](features/task-outcome-report.zh-CN.md) |
