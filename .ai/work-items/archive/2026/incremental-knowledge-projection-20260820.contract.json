@@ -1,0 +1,321 @@
+{
+  "contractVersion": 2,
+  "workItemId": "incremental-knowledge-projection-20260820",
+  "mode": "code",
+  "title": "Incremental Knowledge Projection",
+  "baseCommit": "8030234f63ede13d5b6aa9233388c71ba037e665",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/incremental-knowledge-projection-20260820.contract.json",
+    ".ai/work-items/active/incremental-knowledge-projection-20260820.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/schemas/implementation-knowledge-dependency-index.schema.json",
+    ".ai/work-items/active/incremental-knowledge-projection-20260820.outcome.json",
+    ".ai/work-items/active/incremental-knowledge-projection-20260820.outcome.md",
+    "scripts/ai_generate_knowledge_record.py",
+    "scripts/ai_check_knowledge_index.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_knowledge_projection_benchmark.py",
+    ".ai/project/adopter-capability-manifest.json",
+    "tests/test_implementation_knowledge.py",
+    "tests/test_knowledge_query.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_knowledge_installer_parity.py",
+    "tests/test_adopter_feature_parity.py",
+    "tests/test_knowledge_projection_benchmark.py",
+    "docs/reference/implementation-knowledge.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/specs/2026-08-20-incremental-knowledge-projection-design.md",
+    "docs/superpowers/plans/2026-08-20-incremental-knowledge-projection.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing the deterministic Knowledge Query filter contract or adding semantic, vector, RAG, or LLM ranking behavior.",
+    "Adding a database, cache server, vector store, background daemon, or external service.",
+    "Rewriting archived Contract, Summary, Outcome, archive manifest, or archive index evidence.",
+    "Changing release tags, provider Releases, installer catalog contents, or publishing a version inside this corrective Work Item.",
+    "Changing unrelated Work Item projections except when the dependency index proves they are affected by a declared source change."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "reason": "Current canonical generator containing the all-existing-projections O(N) refresh path and generatedFrom digests."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Finish lifecycle that invokes projection refresh after source-bound evidence generation."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Canonical archive transaction that generates and validates Knowledge projections."
+    },
+    {
+      "path": "scripts/ai_check_knowledge_index.py",
+      "reason": "Authoritative fail-closed checker for Knowledge records and index consistency."
+    },
+    {
+      "path": "docs/reference/implementation-knowledge.md",
+      "reason": "Current public documentation for projection authority, lifecycle, query boundary, and limitations."
+    },
+    {
+      "path": "tests/test_implementation_knowledge.py",
+      "reason": "Existing projection, evidence binding, stale detection, and rebuild regression coverage."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Finish integration coverage for source-bound evidence and Knowledge refresh ordering."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Archive transaction regression coverage."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "PR-boundary validation coverage for stale Knowledge projections."
+    },
+    {
+      "path": "tests/test_knowledge_installer_parity.py",
+      "reason": "Fresh-adopter delivery and parity coverage for the Knowledge surface."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-20-incremental-knowledge-projection-design.md",
+      "reason": "Design record for the dependency-index and fail-closed fallback boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "performance",
+      "evidence_integrity",
+      "process"
+    ],
+    "reason": "The change alters lifecycle projection refresh behavior and generated evidence ownership; correctness must remain fail-closed while ordinary unrelated Work Items stop paying an O(N) refresh cost. Benchmark wall-clock values are environment-bound, so the acceptance invariant is affected-set and operation-count behavior, with local timings recorded as supporting evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Evidence-bound lifecycle behavior and generated projection performance change with bounded repository scope."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The affected lifecycle, dependency mapping, fail-closed fallback, and verification surfaces are concrete and repository-local."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record the before-edit and before-finish checkpoints for this governance-sensitive lifecycle change."
+  },
+  "acceptance": [
+    "A new Work Item generates only its own Knowledge Record plus the changed index/dependency-index entries; an unrelated existing Record is not rebuilt or rewritten.",
+    "When declared source-bound Evidence paths change, the dependency index identifies only affected Records and the lifecycle regenerates only those Records; unchanged dependencies are not rehashed in the normal incremental path.",
+    "A missing, malformed, stale, or incomplete dependency index never causes silent reuse: the checker or lifecycle performs an explicit full revalidation/rebuild or fails closed with an actionable error.",
+    "Knowledge Record, index, and dependency-index files are written only when their serialized content changes; archived Contract, Summary, Outcome, manifest, and archive-index evidence remains immutable.",
+    "Regression tests cover new-record generation, affected/unaffected dependency routing, changed Evidence, missing dependency index, archive/Finish integration, PR validation, and fresh-adopter parity.",
+    "A repository-local benchmark or complexity test exercises 1,000 and 10,000 synthetic Records and demonstrates that an ordinary unrelated refresh does not perform work proportional to all Record contents; results are recorded in the Summary.",
+    "Implementation Knowledge documentation explains the dependency index, incremental path, explicit full-validation fallback, and the unchanged deterministic/no-RAG/query boundary.",
+    "The corrective Work Item passes the required AI Cockpit and project verification, receives a separate visible Outcome, and closes with no active Work Item or branch residue."
+  ],
+  "guidelines": [
+    "Production behavior must be introduced through a failing regression test first.",
+    "Generated Knowledge projections and dependency indexes must be produced by repository commands, not hand-edited.",
+    "Archived Contract, Summary, Outcome, archive manifest, and archive index files are immutable evidence and must not be rewritten.",
+    "The normal incremental path must not add a database, cache server, vector database, embedding, semantic ranking, or LLM dependency.",
+    "Unknown or unverifiable dependency state must fail closed or trigger an explicit full revalidation; it must never silently reuse a projection."
+  ],
+  "intent": {
+    "problem": "Knowledge Projection currently refreshes every existing Record after shared evidence changes. This preserves freshness but makes ordinary lifecycle work grow with historical Knowledge volume, conflicting with the repository boundary that governance cost must not become a fixed tax on all history.",
+    "constraints": [
+      "Keep Contract, Summary, Outcome, repository Evidence, and explicit lifecycle facts as authoritative sources; Knowledge remains a projection.",
+      "Preserve deterministic exact-AND query behavior, explicit supersession, unknown preservation, read-only query semantics, and fresh-adopter parity.",
+      "Use repository-local generated JSON only; do not introduce a database, cache server, vector store, or background service.",
+      "Keep fail-closed evidence integrity: missing or uncertain dependency metadata may cause explicit full verification or failure, but never silent reuse.",
+      "Do not publish or mutate release state in this corrective Work Item; release is a separate subsequent lifecycle."
+    ],
+    "rationale": "A reverse dependency projection makes the existing evidence-bound model incremental without weakening its truth boundary: known changed paths route to affected Records, while missing dependency proof retains a safe full-validation fallback."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    },
+    {
+      "check": "projectTest",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization",
+    "reason": "用户明确要求开 WI 修正增量 Knowledge Projection，完成后清理远程、本地并发布新版本。"
+  },
+  "rollbackNote": "Revert this Work Item diff and regenerate the dependency index and affected projections from immutable archived inputs; do not rewrite archived evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 977
+    }
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A normal new Work Item is finalized while unrelated historical Knowledge Records exist.",
+      "expected": "Only the new Record and changed index entries are generated; unrelated Records are not rebuilt, rehashed, or rewritten.",
+      "verificationPlan": "Use a fixture with unrelated Records and instrument the canonical generator around new-record generation; assert unaffected paths and digest calls remain untouched.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A shared Evidence path changes and the dependency index is valid.",
+      "expected": "Only Records bound to that path are regenerated and the dependency index is updated deterministically.",
+      "verificationPlan": "Build a fixture with shared and unrelated Evidence dependencies, mutate one path, run the incremental refresh, and assert the affected set and serialized outputs.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Dependency metadata is absent, malformed, or cannot prove impact.",
+      "expected": "The lifecycle performs explicit full validation/rebuild or fails closed; it never silently reuses Records.",
+      "verificationPlan": "Remove or corrupt the dependency index in a temporary fixture and assert the documented fallback/error path and checker message.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The dependency routing surface contains 1,000 or 10,000 synthetic Records.",
+      "expected": "The benchmark records the affected-set routing cost and demonstrates that an unrelated refresh does not scale with Record content size.",
+      "verificationPlan": "Run the repository-local benchmark for both sizes and record the generated JSON artifact in the Summary evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A fresh adopter has no Knowledge Records yet.",
+      "expected": "The installer delivers the scripts/schema/docs and remains compatible without a populated Knowledge surface.",
+      "verificationPlan": "Run the existing installer parity fixture and Knowledge checker against an empty adopter surface.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "rawUserRequest": "开 WI 修正 Incremental Knowledge Projection；修正完成后清理远程和本地状态，确认没有问题，最后发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:incremental-knowledge-projection-fix-and-release",
+    "capturedAt": "2026-08-20",
+    "digest": "sha256:incremental-knowledge-projection-fix-and-release"
+  },
+  "declaredIntent": {
+    "summary": "在不削弱 Evidence-bound 与 fail-closed 边界的前提下，切断 Knowledge Projection 对历史全部 Record 的普通生命周期 O(N) 刷新成本；修复闭环后再单独完成清理和版本发布。",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/incremental-knowledge-projection-20260820.json",
+    "baseCommit": "8030234f63ede13d5b6aa9233388c71ba037e665",
+    "initialScopeDigest": "c34c5326778a645d8c7b2993ff9c2baa22cf995dcb599c5141298f457d5b5268",
+    "contractSkeletonDigest": "3cc9451d980e31d2bb8cb9b904caf1e46ff5628a41f184f8ae9352e39a2760b2"
+  }
+}

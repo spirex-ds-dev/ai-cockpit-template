@@ -750,10 +750,17 @@ def archive_owns_knowledge_projection(
             candidate
             for candidate in changed & set(all_paths)
             if candidate == ".ai/knowledge/index.json"
+            or candidate == ".ai/knowledge/dependencies.json"
             or candidate.startswith(".ai/knowledge/work-items/")
         )
     if path in direct_owned:
         return True
+    if path == ".ai/knowledge/dependencies.json":
+        return any(
+            candidate == ".ai/knowledge/index.json"
+            or candidate.startswith(".ai/knowledge/work-items/")
+            for candidate in direct_owned
+        )
     if not path.startswith(".ai/knowledge/work-items/"):
         return False
     pending = [path]
@@ -1087,7 +1094,10 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         """Accept generated archive metadata only when archived evidence names it."""
         if path in report_paths:
             return current_archive_owns_report_pair()
-        if path == ".ai/knowledge/index.json" or path.startswith(".ai/knowledge/work-items/"):
+        if path in {
+            ".ai/knowledge/index.json",
+            ".ai/knowledge/dependencies.json",
+        } or path.startswith(".ai/knowledge/work-items/"):
             return archive_owns_knowledge_projection(path, archive_entries, all_paths)
         if path in current_archive_generated_paths():
             return True

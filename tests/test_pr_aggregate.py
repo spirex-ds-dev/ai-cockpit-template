@@ -80,6 +80,42 @@ def test_pr_allows_repository_without_implementation_knowledge_surface(tmp_path,
     assert ai_check_pr.knowledge_index_issues() == []
 
 
+def test_pr_owns_dependency_index_through_archived_knowledge_projection(tmp_path, monkeypatch):
+    task = "dependency-index-owner"
+    contract_path = write_pair(
+        tmp_path,
+        task,
+        [".ai/knowledge/**"],
+        [".ai/knowledge/index.json", f".ai/knowledge/work-items/{task}.json"],
+    )
+    summary_path = contract_path.with_name(contract_path.name.replace(".contract", ".summary"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["changedFiles"].append(
+        {"path": ".ai/knowledge/dependencies.json", "reason": "derived dependency index"}
+    )
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    entries = [
+        (
+            contract_path,
+            json.loads(contract_path.read_text(encoding="utf-8")),
+            summary,
+            (74, task, task),
+        )
+    ]
+
+    assert ai_check_pr.archive_owns_knowledge_projection(
+        ".ai/knowledge/dependencies.json",
+        entries,
+        [
+            ".ai/knowledge/dependencies.json",
+            ".ai/knowledge/index.json",
+            f".ai/knowledge/work-items/{task}.json",
+        ],
+    )
+
+
 def write_pair(root, name, scope, changed, *, approved=False):
     archive = root / ".ai" / "work-items" / "archive" / "2026"
     archive.mkdir(parents=True, exist_ok=True)

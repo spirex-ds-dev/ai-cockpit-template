@@ -31,11 +31,26 @@ After a Work Item reaches its final Outcome, generate:
 
 - `.ai/knowledge/work-items/<work-item-id>.json`
 - `.ai/knowledge/index.json`
+- `.ai/knowledge/dependencies.json`
 
 The record keeps the customer-facing implementation summary, mechanism,
 affected components, design decisions, changes, effects, evidence paths, and
 source digests. The index contains only deterministic lookup fields and does
 not perform semantic search or assign relevance scores.
+
+`dependencies.json` is a generated reverse dependency projection. Each Record
+lists the repository-relative Contract, Summary, Outcome, and Evidence paths
+that determine its bytes; `byPath` maps a changed path to affected Work Item
+IDs. Finish passes changed source-bound output paths through this map, so the
+normal refresh rebuilds only affected archived Records. Archive explicitly
+includes the newly archived Work Item when it creates a Record.
+
+The dependency projection is an optimization boundary, not an authority
+boundary. If it is missing, malformed, stale, or incomplete, the lifecycle
+performs an explicit full rebuild or fails closed when archived evidence cannot
+be resolved. The checker always validates every Record, the query index, and
+the dependency projection. No Record, index, or dependency file is replaced
+when its serialized content is unchanged.
 
 ## Evidence rules
 
@@ -69,7 +84,7 @@ make ai-generate-knowledge \
 short `ai-generate-knowledge` target is the adopter-facing name used by the
 design and both targets execute the same evidence-bound projection.
 
-Validate all records and the deterministic index:
+Validate all records and the deterministic indexes:
 
 ```sh
 make ai-check-knowledge-index

@@ -61,7 +61,7 @@ def _generate_knowledge_projection(contract_path: Path) -> Path | None:
         return None
     from ai_check_knowledge_index import check_index, check_record
     from ai_generate_knowledge_record import (
-        _atomic_write,
+        _write_if_changed,
         build_record,
         rebuild_existing_projections,
         rebuild_index,
@@ -75,9 +75,16 @@ def _generate_knowledge_projection(contract_path: Path) -> Path | None:
     )
     record_path = PROJECT_ROOT / ".ai" / "knowledge" / "work-items" / f"{work_item_id}.json"
     index_path = PROJECT_ROOT / ".ai" / "knowledge" / "index.json"
-    _atomic_write(record_path, record)
-    rebuild_index(record_path.parent, index_path)
-    rebuild_existing_projections(repo_root=PROJECT_ROOT)
+    _write_if_changed(record_path, record)
+    rebuild_index(
+        record_path.parent,
+        index_path,
+        record_updates={work_item_id: record},
+    )
+    rebuild_existing_projections(
+        repo_root=PROJECT_ROOT,
+        include_work_item_ids=[work_item_id],
+    )
     issues = check_record(record_path, repo_root=PROJECT_ROOT)
     issues.extend(check_index(index_path, records_dir=record_path.parent, repo_root=PROJECT_ROOT))
     if issues:

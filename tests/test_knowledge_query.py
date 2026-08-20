@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 import pytest
+from ai_generate_knowledge_record import build_dependency_index
 from ai_knowledge_query import KnowledgeQueryError, QueryFilters, query_knowledge
 
 
@@ -79,6 +80,7 @@ def write_fixture(
 
 def write_index(root: Path, tasks: list[tuple[str, str, str, str]]) -> Path:
     index = root / ".ai" / "knowledge" / "index.json"
+    records = root / ".ai" / "knowledge" / "work-items"
     index.parent.mkdir(parents=True, exist_ok=True)
     index.write_text(
         json.dumps(
@@ -100,6 +102,12 @@ def write_index(root: Path, tasks: list[tuple[str, str, str, str]]) -> Path:
             sort_keys=True,
             indent=2,
         )
+        + "\n",
+        encoding="utf-8",
+    )
+    dependency_path = index.with_name("dependencies.json")
+    dependency_path.write_text(
+        json.dumps(build_dependency_index(records), ensure_ascii=False, sort_keys=True, indent=2)
         + "\n",
         encoding="utf-8",
     )
