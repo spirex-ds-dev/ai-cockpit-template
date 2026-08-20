@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "publish-v0-5-70-provider-release-20260820",
+  "title": "Authorize v0.5.70 provider publication from clean main",
+  "topics": [],
+  "components": [],
+  "implementation": {
+    "summary": "Use the existing fail-closed release workflow and projection synchronizer to publish exactly v0.5.70 from the latest merged default-branch source, without changing historical release identity.",
+    "status": "verified"
+  },
+  "configuration": null,
+  "changes": [
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json",
+    ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
+    ".ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json",
+    ".ai/work-items/active/task-event-log.events.jsonl",
+    ".ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json",
+    "target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json",
+    "target/release-v0-5-70-provider-release/rehearsal.receipt.json",
+    ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.json",
+    ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/version.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "install.sh",
+    "next-release.json",
+    "release-state.json",
+    "release.json",
+    ".ai/work-items/external-handoffs/publish-v0-5-70-provider-release-20260820.json",
+    "target/release-v0-5-70-provider-release/provider-release.receipt.json",
+    "target/release-v0-5-70-provider-release/public-assets-32327621485/release.json",
+    "target/release-v0-5-70-provider-release/public-assets-32327621485/release-digests.json",
+    "target/release-v0-5-70-provider-release/public-assets-32327621485/release-source.json",
+    "target/release-v0-5-70-provider-release/public-assets-32327621485/ci-release-evidence.json",
+    "target/release-v0-5-70-provider-release/public-assets-32327621485/sbom.json",
+    "target/release-v0-5-70-provider-release/public-assets-32327621485/provenance.json",
+    "target/release-v0-5-70-provider-release/public-assets-32327621485/v0.5.70.tar.gz",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
+    ".ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.archive-manifest.json",
+    ".ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json",
+    ".ai/knowledge/index.json"
+  ],
+  "designDecisions": [
+    {
+      "decision": "Keep v0.5.69 immutable and publish only v0.5.70.",
+      "reason": "Published tags and assets are historical facts; no historical mutation is authorized.",
+      "status": "verified"
+    },
+    {
+      "decision": "Use the exact merged default-branch SHA as the sole source identity.",
+      "reason": "The release workflow resolves origin/main and rejects a stale or mismatched source_commit.",
+      "status": "verified"
+    }
+  ],
+  "effects": [],
+  "evidence": [
+    {
+      "type": "code",
+      "path": "release.json",
+      "digest": "ac62c2347e991a04384da4d6695fd6c73c2038234bd7b0538e3d72f7fb75b239"
+    },
+    {
+      "type": "code",
+      "path": ".ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json",
+      "digest": "b32955e21c8fe768b9e72c23ab956c43e928d6b12edd5174fdb24c3e0b372591"
+    },
+    {
+      "type": "code",
+      "path": "target/release-v0-5-70-provider-release/provider-release.receipt.json",
+      "digest": "9e5657173824a3ce097c9d88194b56563dd8dea5398fa7a3149db17fd7175065"
+    },
+    {
+      "type": "code",
+      "path": ".github/workflows/release.yml",
+      "digest": "fbff216bb3fb49bfd48b55a36738b9958b460c45190a78f377cfa9fd771301ca"
+    },
+    {
+      "type": "code",
+      "path": "scripts/sync_published_release_projection.py",
+      "digest": "0ca265825f218b5d7a16b16f815149d25dfdf6dba6de07f2f12b86b28d39187e"
+    },
+    {
+      "type": "code",
+      "path": "docs/reference/distribution.md",
+      "digest": "c1e6a012fbb8d0787b7eaa7141b25656bdf47830972be19061890cb4f6067b3b"
+    }
+  ],
+  "mergedCommit": null,
+  "effectiveState": "historical_or_current_unknown",
+  "currentValidity": "unknown",
+  "supersedes": [],
+  "generatedFrom": {
+    "contractPath": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json",
+    "contractDigest": "0d6d5eb053a0eca466fb86a69cde15a621aca02cdedcbce2d505c8ae4c086583",
+    "summaryPath": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
+    "summaryDigest": "8ec5c9e8f87e85da39efb6696516f73bcffb8159fc967de46cad9b12a232aed7",
+    "outcomePath": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.json",
+    "outcomeDigest": "2366891d41827a8e972a6792d167bfc248cd450b2afd0abc2071c5a187b48363"
+  },
+  "knowledgeState": "verified",
+  "unknowns": []
+}

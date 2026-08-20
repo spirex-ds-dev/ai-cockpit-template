@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "publish-v0-5-70-provider-release-20260820",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "a4e9b0f895f012cb23d1195a452021766ba22ff4d86522e51e1897d8ce78a190"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "publish-v0-5-70-provider-release-20260820",
+    "contractDigest": "0d6d5eb053a0eca466fb86a69cde15a621aca02cdedcbce2d505c8ae4c086583",
+    "summaryDigest": "8ec5c9e8f87e85da39efb6696516f73bcffb8159fc967de46cad9b12a232aed7",
+    "verificationDigest": "cabcd990494ea50bac8d7b3c25717969ae47a8db32148cc2ec9fd0ef877da428",
+    "baseCommit": "746329ced7a1d315a468d4e2c6a7a39d50bcc343",
+    "headCommit": "746329ced7a1d315a468d4e2c6a7a39d50bcc343",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "zh-CN",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "f626bd4e1d1ee147e30f1b2e13ff505657a1721c8c1a095816d87e775e591778",
+      "binding": {
+        "baseCommit": "746329ced7a1d315a468d4e2c6a7a39d50bcc343",
+        "candidateHead": "746329ced7a1d315a468d4e2c6a7a39d50bcc343",
+        "candidateTreeDigest": "123b921ea0cdeaa17f769426816c42ccd6e48925d33117784a281da39ac6c04a",
+        "candidateDiffDigest": "f3f0c9c4ff7706c518c7c2865b471fe6354f5ac82e67d5f6d86bcf61ac08289c"
+      }
+    }
   },
-  "task": {
-    "summary": "Task publish-v0-5-70-provider-release-20260820 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task publish-v0-5-70-provider-release-20260820 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: publish-v0-5-70-provider-release-20260820",
     "deliveredChanges": [
       ".ai/cockpit/current_status.md",
       ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json",
@@ -46,147 +69,316 @@
       "docs/reference/japanese-capability-assessment.md",
       ".ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json",
       ".ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json"
-    ]
-  },
-  "issues": {
-    "detected": 0,
-    "hardStops": 0,
-    "warnings": 0,
-    "resolved": 0,
-    "unresolved": 0
-  },
-  "preventedRisks": [],
-  "interventions": [],
-  "forcedStops": [],
-  "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "medium",
-      "detail": "v0.5.71 is intentionally unpublished and remains a candidate until a future exact-source release WI authorizes and verifies its publication.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    },
-    {
-      "severity": "medium",
-      "detail": "The release WI still requires finish, archive, PR merge, ai-close-work-item, and final local/remote cleanup after publication.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "complete",
-    "summary": {
-      "text": "Use the existing fail-closed release workflow and projection synchronizer to publish exactly v0.5.70 from the latest merged default-branch source, without changing historical release identity.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": ".github/workflows/release.yml",
-          "subject": "Exact-source rehearsal, release identity, Draft asset, tagged Quick Install, and publication gate ordering"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "Run repository readiness, dispatch release.yml in rehearsal mode for the exact source SHA, ingest its bound receipt, dispatch the same workflow for Provider publication, verify the public assets and tagged Quick Install, then synchronize the downloaded public release metadata into the stable projection and advance only the next candidate.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/sync_published_release_projection.py",
-          "subject": "Fail-closed stable-release projection and next-candidate synchronization"
-        }
-      ]
-    },
-    "affectedComponents": [
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [
       {
-        "component": "Provider release workflow",
-        "detail": "The controlled workflow is the only authorized external mutation path for v0.5.70; its formal run and public assets are independently recorded.",
-        "status": "verified",
+        "problem": "observed issue",
+        "action": "Switched the active github.com account to RayIori, verified gh api user=RayIori and repository permissions admin=true/push=true, then reran the exact formal dispatch successfully. No Provider mutation occurred during the rejected attempt.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "target/release-v0-5-70-provider-release/provider-release.receipt.json",
+            "subject": "observedIssues[0] observed issue"
+          },
+          {
+            "source": "target/release-v0-5-70-provider-release/public-assets-32327621485/release-source.json",
+            "subject": "observedIssues[0] observed issue"
+          }
+        ],
         "evidence": [
           {
-            "source": ".github/workflows/release.yml",
-            "subject": "Workflow dispatch inputs and publication gates"
+            "source": "target/release-v0-5-70-provider-release/provider-release.receipt.json",
+            "subject": "observedIssues[0] observed issue"
+          },
+          {
+            "source": "target/release-v0-5-70-provider-release/public-assets-32327621485/release-source.json",
+            "subject": "observedIssues[0] observed issue"
           }
-        ]
+        ],
+        "inference": false
       },
       {
-        "component": "Repository release projection",
-        "detail": "The post-publication synchronizer promoted verified v0.5.70 and prepared v0.5.71 as the next unpublished candidate.",
-        "status": "verified",
+        "problem": "observed issue",
+        "action": "Reran the canonical synchronizer with the explicit stable_release_unverified unavailable entry and the public v0.5.70 Release URL as evidence; synchronization then passed.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "scripts/sync_published_release_projection.py",
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": "release-state.json",
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": "release.json",
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": "next-release.json",
+            "subject": "observedIssues[1] observed issue"
+          }
+        ],
         "evidence": [
           {
             "source": "scripts/sync_published_release_projection.py",
-            "subject": "Projection synchronization contract"
-          }
-        ]
-      }
-    ],
-    "designDecisions": [
-      {
-        "decision": "Keep v0.5.69 immutable and publish only v0.5.70.",
-        "reason": "Published tags and assets are historical facts; no historical mutation is authorized.",
-        "status": "verified",
-        "evidence": [
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": "release-state.json",
+            "subject": "observedIssues[1] observed issue"
+          },
           {
             "source": "release.json",
-            "subject": "Stable public v0.5.70 projection with source-bound asset digests"
+            "subject": "observedIssues[1] observed issue"
+          },
+          {
+            "source": "next-release.json",
+            "subject": "observedIssues[1] observed issue"
           }
+        ],
+        "inference": false
+      },
+      {
+        "problem": "observed issue",
+        "action": "Used the post-publication distribution, release-state consistency, and source-bound evidence gates for the already-published v0.5.70; no v0.5.71 freeze was created and no historical release metadata was changed.",
+        "verification": "Evidence review",
+        "result": "resolved",
+        "evidenceRefs": [
+          {
+            "source": "release-state.json",
+            "subject": "observedIssues[2] observed issue"
+          },
+          {
+            "source": "scripts/check_release_distribution.py",
+            "subject": "observedIssues[2] observed issue"
+          },
+          {
+            "source": "Makefile",
+            "subject": "observedIssues[2] observed issue"
+          }
+        ],
+        "evidence": [
+          {
+            "source": "release-state.json",
+            "subject": "observedIssues[2] observed issue"
+          },
+          {
+            "source": "scripts/check_release_distribution.py",
+            "subject": "observedIssues[2] observed issue"
+          },
+          {
+            "source": "Makefile",
+            "subject": "observedIssues[2] observed issue"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [
+      {
+        "claim": "next-candidate",
+        "severity": "medium",
+        "title": "next-candidate",
+        "detail": "v0.5.71 is intentionally unpublished and remains a candidate until a future exact-source release WI authorizes and verifies its publication.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false,
+        "requiredEvidence": [
+          "a new dedicated v0.5.71 release WI",
+          "same-SHA rehearsal and Hosted evidence",
+          "successful formal Provider workflow receipt"
+        ],
+        "decisionOwner": "user-authorized release maintainer",
+        "mitigation": "Keep v0.5.71 marked candidate/unpublished and require the canonical release workflow and post-publication gates for any future publication.",
+        "acceptanceStatus": "accepted_non_blocking",
+        "blockingFor": [
+          "v0.5.71 publication claim"
         ]
       },
       {
-        "decision": "Use the exact merged default-branch SHA as the sole source identity.",
-        "reason": "The release workflow resolves origin/main and rejects a stale or mismatched source_commit.",
-        "status": "verified",
+        "claim": "lifecycle",
+        "severity": "medium",
+        "title": "lifecycle",
+        "detail": "The release WI still requires finish, archive, PR merge, ai-close-work-item, and final local/remote cleanup after publication.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
         "evidence": [
           {
-            "source": ".github/workflows/release.yml",
-            "subject": "Default-branch source binding"
+            "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
+            "subject": "residualRisks"
           }
+        ],
+        "inference": false,
+        "requiredEvidence": [
+          "merged release-preparation PR",
+          "close-work-item receipt",
+          "clean branch and worktree audit"
+        ],
+        "decisionOwner": "user-authorized release maintainer",
+        "mitigation": "Retain the active WI and its external evidence until the canonical lifecycle closes successfully.",
+        "acceptanceStatus": "pending",
+        "blockingFor": [
+          "Work Item closure"
         ]
       }
     ],
-    "technicalDetails": [
-      {
-        "topic": "Fail-closed publication",
-        "detail": "No tag or public asset may be created before rehearsal, source-bound preflight, dependency evidence, SBOM, provenance, Draft validation, and tagged Quick Install pass.",
-        "status": "verified",
-        "evidence": [
-          {
-            "source": "docs/reference/distribution.md",
-            "subject": "Release lifecycle and evidence boundary"
-          }
-        ]
-      }
-    ],
+    "humanDecisions": [],
     "evidence": [
       {
-        "claim": "The repository currently has stable published v0.5.70 based on the exact merged main source, with unpublished v0.5.71 as the next candidate.",
-        "status": "verified",
+        "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json",
+        "subject": "Summary"
+      },
+      {
         "source": "release.json",
         "subject": "Stable release projection"
       },
       {
-        "claim": "The latest merged main source is 746329ced7a1d315a468d4e2c6a7a39d50bcc343.",
-        "status": "verified",
         "source": ".ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json",
         "subject": "Work Item start source binding"
       },
       {
-        "claim": "The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.",
-        "status": "verified",
         "source": "target/release-v0-5-70-provider-release/provider-release.receipt.json",
         "subject": "Formal Provider publication receipt"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "complete",
+      "summary": {
+        "text": "Use the existing fail-closed release workflow and projection synchronizer to publish exactly v0.5.70 from the latest merged default-branch source, without changing historical release identity.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": ".github/workflows/release.yml",
+            "subject": "Exact-source rehearsal, release identity, Draft asset, tagged Quick Install, and publication gate ordering"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "Run repository readiness, dispatch release.yml in rehearsal mode for the exact source SHA, ingest its bound receipt, dispatch the same workflow for Provider publication, verify the public assets and tagged Quick Install, then synchronize the downloaded public release metadata into the stable projection and advance only the next candidate.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/sync_published_release_projection.py",
+            "subject": "Fail-closed stable-release projection and next-candidate synchronization"
+          }
+        ]
+      },
+      "affectedComponents": [
+        {
+          "component": "Provider release workflow",
+          "detail": "The controlled workflow is the only authorized external mutation path for v0.5.70; its formal run and public assets are independently recorded.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".github/workflows/release.yml",
+              "subject": "Workflow dispatch inputs and publication gates"
+            }
+          ]
+        },
+        {
+          "component": "Repository release projection",
+          "detail": "The post-publication synchronizer promoted verified v0.5.70 and prepared v0.5.71 as the next unpublished candidate.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "scripts/sync_published_release_projection.py",
+              "subject": "Projection synchronization contract"
+            }
+          ]
+        }
+      ],
+      "designDecisions": [
+        {
+          "decision": "Keep v0.5.69 immutable and publish only v0.5.70.",
+          "reason": "Published tags and assets are historical facts; no historical mutation is authorized.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "release.json",
+              "subject": "Stable public v0.5.70 projection with source-bound asset digests"
+            }
+          ]
+        },
+        {
+          "decision": "Use the exact merged default-branch SHA as the sole source identity.",
+          "reason": "The release workflow resolves origin/main and rejects a stale or mismatched source_commit.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": ".github/workflows/release.yml",
+              "subject": "Default-branch source binding"
+            }
+          ]
+        }
+      ],
+      "technicalDetails": [
+        {
+          "topic": "Fail-closed publication",
+          "detail": "No tag or public asset may be created before rehearsal, source-bound preflight, dependency evidence, SBOM, provenance, Draft validation, and tagged Quick Install pass.",
+          "status": "verified",
+          "evidence": [
+            {
+              "source": "docs/reference/distribution.md",
+              "subject": "Release lifecycle and evidence boundary"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "claim": "The repository currently has stable published v0.5.70 based on the exact merged main source, with unpublished v0.5.71 as the next candidate.",
+          "status": "verified",
+          "source": "release.json",
+          "subject": "Stable release projection"
+        },
+        {
+          "claim": "The latest merged main source is 746329ced7a1d315a468d4e2c6a7a39d50bcc343.",
+          "status": "verified",
+          "source": ".ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json",
+          "subject": "Work Item start source binding"
+        },
+        {
+          "claim": "The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.",
+          "status": "verified",
+          "source": "target/release-v0-5-70-provider-release/provider-release.receipt.json",
+          "subject": "Formal Provider publication receipt"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "zh-CN",
@@ -1367,6 +1559,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
