@@ -25,6 +25,9 @@ lastVerifiedBy: capability-truth-matrix
 ## 场景
 从可信 base 开始，直到合并后的清理，都使用这条路线。
 
+如果你具体想知道“两个独立的 Work Item 能否同时推进”，先阅读[Work Item 并行处理](../features/work-item-parallelism.zh-CN.md)，
+再回到本页查看标准的合并和关闭顺序。
+
 ## 决定
 顺序是 `latest remote base → Contract → preflight → implementation → verification → Summary/Outcome → archive → commit/push → PR → merge → closure → cleanup`。
 

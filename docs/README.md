@@ -50,6 +50,26 @@ Follow the same order as the project’s North Star:
 | Recover from a stop | [Recovery](operations/recovery.md) | Preserve the Work Item and retry only after the missing evidence is repaired. |
 | Maintain or audit the system | [Documentation Architecture](reference/documentation-architecture.md) | Find canonical owners, language policy, and reference depth. |
 
+## Start with the capability overview
+
+If you are not sure which page to open, use [Capabilities and boundaries](capabilities.md)
+as the index. It gives a one-line description, current status, responsibility
+boundary, and a Details link for each capability. The detailed page then gives
+the prerequisites, a natural-language request, an example, expected results,
+stop/recovery guidance, and optional commands.
+
+| What you want to do | Open the overview row, then follow |
+| --- | --- |
+| Understand a completed, warning, or blocked result | [Outcome, Summary, and Human Benefit Report](features/task-outcome-report.md) |
+| Find an earlier verified implementation | [Implementation Knowledge](reference/implementation-knowledge.md) |
+| Move independent Work Items forward at the same time | [Work Item parallel processing](features/work-item-parallelism.md) |
+| Understand status, recovery, and closure | [Work Item Lifecycle](operations/work-item-lifecycle.md) |
+| Install, calibrate, or update an existing installation | [Upgrade](upgrade.md) |
+
+The natural-language examples describe what a person can ask their Agent to
+do. AI Cockpit itself remains a bounded repository governance layer; it does
+not turn a sentence into an unbounded workflow, scheduler, or external proof.
+
 The home keeps the guided path short: understand the project first, then move to
 technical reference. Important topics are intended to have Chinese and Japanese
 routes as well as English. A route that is missing or still being migrated is

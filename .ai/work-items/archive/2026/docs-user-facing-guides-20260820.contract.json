@@ -1,0 +1,171 @@
+{
+  "contractVersion": 2,
+  "workItemId": "docs-user-facing-guides-20260820",
+  "mode": "code",
+  "title": "Add multilingual user-facing capability and usage guides",
+  "baseCommit": "7b1ea9760d4d0403b826d4c634832d87e6c6d3a1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/docs-user-facing-guides-20260820.contract.json",
+    ".ai/work-items/active/docs-user-facing-guides-20260820.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/docs-user-facing-guides-20260820.outcome.json",
+    ".ai/work-items/active/docs-user-facing-guides-20260820.outcome.md",
+    "docs/README.md",
+    "docs/README.zh-CN.md",
+    "docs/README.ja.md",
+    "docs/capabilities.md",
+    "docs/capabilities.zh-CN.md",
+    "docs/capabilities.ja.md",
+    "docs/features/task-outcome-report.md",
+    "docs/features/task-outcome-report.zh-CN.md",
+    "docs/features/task-outcome-report.ja.md",
+    "docs/features/human-benefit-report.md",
+    "docs/features/human-benefit-report.zh-CN.md",
+    "docs/features/human-benefit-report.ja.md",
+    "docs/features/work-item-parallelism.md",
+    "docs/features/work-item-parallelism.zh-CN.md",
+    "docs/features/work-item-parallelism.ja.md",
+    "docs/reference/implementation-knowledge.md",
+    "docs/reference/implementation-knowledge.zh-CN.md",
+    "docs/reference/implementation-knowledge.ja.md",
+    "docs/operations/work-item-lifecycle.md",
+    "docs/operations/work-item-lifecycle.zh-CN.md",
+    "docs/operations/work-item-lifecycle.ja.md",
+    "docs/upgrade.md",
+    "docs/upgrade.zh-CN.md",
+    "docs/upgrade.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/specs/2026-08-20-user-facing-guides-design.md",
+    "docs/superpowers/plans/2026-08-20-user-facing-guides.md",
+    "docs/reference/capability-truth-matrix.json"
+  ],
+  "outOfScope": [
+    "All production scripts, Makefile behavior, installer behavior, schemas, and tests.",
+    "Changing the Work Item, WIII, Knowledge, Outcome, or release runtime behavior.",
+    "Creating a scheduler, agent manager, retry controller, or cross-worktree service.",
+    "Changing semantic versions, release metadata, tags, provider Releases, or publishing a new version.",
+    "Translating every maintainer-only schema, command catalog, audit, benchmark, or historical document."
+  ],
+  "sources": [
+    {"path": "docs/README.md", "reason": "Canonical reader-first documentation home and current navigation gap."},
+    {"path": "docs/capabilities.md", "reason": "Canonical user-facing capability and responsibility boundary."},
+    {"path": "docs/features/task-outcome-report.md", "reason": "Current authoritative Task Outcome semantics and lifecycle evidence boundary."},
+    {"path": "docs/features/human-benefit-report.md", "reason": "Current human-facing report projection and next-action semantics."},
+    {"path": "docs/reference/implementation-knowledge.md", "reason": "Current Knowledge generation, validation, query, and evidence-boundary contract."},
+    {"path": "docs/operations/work-item-lifecycle.md", "reason": "Current Work Item lifecycle, parallel ownership, serialization, and closure rules."},
+    {"path": "docs/reference/work-item-intelligence-interface.md", "reason": "WIII read-only and non-scheduler boundary."},
+    {"path": "docs/reference/agent-parallel-work-items.md", "reason": "Existing parallel Work Item ownership and conflict rules."},
+    {"path": "docs/reference/safe-parallel-verification.md", "reason": "Existing bounded parallel verification behavior and limits."},
+    {"path": ".ai/project/adopter-capability-manifest.json", "reason": "Adopter-facing capability inventory and current status claims."},
+    {"path": "docs/reference/capability-truth-matrix.json", "reason": "Evidence-bound capability status and limitations."},
+    {"path": ".ai/glossary.md", "reason": "Canonical terminology and boundary definitions."},
+    {"path": "README.md", "reason": "Repository-level entry path into the documentation home and capabilities page."}
+  ],
+  "rawUserRequest": "按 HCI 和 AI 时代的自然语言方针，补齐普通用户可理解的三语功能文档。每项功能需要有说明、自然语言为主的使用方法、使用事例、失败/边界和相关入口；不要遗漏 Outcome、Summary、Human Benefit Report、Knowledge、Work Item 并行处理等能力。本轮只有文档修改，不需要发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:multilingual-user-facing-guides-natural-language-hci",
+    "capturedAt": "2026-08-20T00:00:00+09:00",
+    "digest": "sha256:docs-user-facing-guides-20260820-request"
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["documentation_truth_drift", "multilingual_semantic_drift", "capability_overclaim"],
+    "reason": "The change is documentation-only, but inaccurate user guidance or language drift could cause unsafe lifecycle, evidence, or parallel Work Item decisions.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["The Work Item changes user-facing documentation and generated capability evidence without changing runtime behavior."],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user approved the natural-language HCI documentation direction and authorized the complete Work Item lifecycle for this scoped documentation change, including commit, push, one PR, merge, close, branch cleanup, and base synchronization; release and version publication remain excluded."
+  },
+  "declaredIntent": {
+    "summary": "Make current user-facing AI Cockpit capabilities discoverable and actionable in English, Simplified Chinese, and Japanese without overstating runtime or external guarantees.",
+    "requestedCapabilities": ["documentation", "ai_governance"]
+  },
+  "requestedOperation": {"target": "documentation", "action": "modify", "environment": "repository", "effect": "document", "authorityRequired": false},
+  "implementationSurface": {
+    "production": [],
+    "tests": [],
+    "documentation": [
+      "docs/README.md", "docs/README.zh-CN.md", "docs/README.ja.md",
+      "docs/capabilities.md", "docs/capabilities.zh-CN.md", "docs/capabilities.ja.md",
+      "docs/features/task-outcome-report.md", "docs/features/task-outcome-report.zh-CN.md", "docs/features/task-outcome-report.ja.md",
+      "docs/features/human-benefit-report.md", "docs/features/human-benefit-report.zh-CN.md", "docs/features/human-benefit-report.ja.md",
+      "docs/features/work-item-parallelism.md", "docs/features/work-item-parallelism.zh-CN.md", "docs/features/work-item-parallelism.ja.md",
+      "docs/reference/implementation-knowledge.md", "docs/reference/implementation-knowledge.zh-CN.md", "docs/reference/implementation-knowledge.ja.md",
+      "docs/operations/work-item-lifecycle.md", "docs/operations/work-item-lifecycle.zh-CN.md", "docs/operations/work-item-lifecycle.ja.md",
+      "docs/upgrade.md", "docs/upgrade.zh-CN.md", "docs/upgrade.ja.md",
+      "docs/reference/documentation-context-registry.json",
+      "docs/superpowers/specs/2026-08-20-user-facing-guides-design.md",
+      "docs/superpowers/plans/2026-08-20-user-facing-guides.md"
+    ],
+    "generated": ["docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", ".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"]
+  },
+  "scenarioCoverage": [
+    {"id": "user-finds-capability-route", "riskDomain": "discoverability", "scenario": "A reader starts at a root or docs entry page and wants to understand available capabilities.", "expected": "The reader reaches the capability map and a localized user-facing guide without relying on a direct file path.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run documentation journey and internal-link checks, then manually follow all three entry routes."},
+    {"id": "outcome-guides-next-action", "riskDomain": "operator_visibility", "scenario": "A user receives a completed, warning, or blocked Work Item Outcome.", "expected": "The user can distinguish Summary, Outcome, and Human Benefit Report and identify evidence, remaining risks, and the next safe action.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Review the three localized Outcome examples against the current report generator and validator semantics."},
+    {"id": "knowledge-natural-language-query", "riskDomain": "evidence_interpretation", "scenario": "A user asks what prior verified Work Item addressed a topic or component.", "expected": "The guide presents a natural-language request first, explains the deterministic result, and provides the command only as an advanced path.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Check every example against the current Knowledge query filters and limitation wording."},
+    {"id": "parallel-work-item-conflict", "riskDomain": "concurrency_boundary", "scenario": "Two Work Items appear independent but share a path or serialized projection.", "expected": "The guide tells the user to isolate independent Work Items and serialize conflicting work; it does not imply that AI Cockpit schedules or retries tasks.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Cross-check examples against Work Item lifecycle, concurrency-boundary, WIII, and parallel verification references."},
+    {"id": "language-parity", "riskDomain": "multilingual_semantic_drift", "scenario": "A reader switches between English, Simplified Chinese, and Japanese entry routes.", "expected": "The same user goals, actions, results, stop conditions, and limits are preserved; technical fallback is labeled explicitly.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run documentation metadata/language checks and perform a semantic checklist over each localized sibling set."}
+  ],
+  "preReviewWarnings": [
+    "Keep natural-language guidance as the primary path; commands and file paths are progressive-disclosure material.",
+    "Do not describe WIII, AI Cockpit, or the Agent as a scheduler, retry controller, security sandbox, or external assurance provider.",
+    "Keep examples evidence-bound and mark English-only advanced references instead of implying translation parity.",
+    "Do not publish, tag, modify release metadata, or change runtime behavior in this Work Item.",
+    "User authorization covers only this Work Item's scoped commit, push, one PR, PR checks/review, merge, ai-close-work-item, branch cleanup, and base synchronization; it does not authorize a release or version change."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "A checkpoint is required to prevent scope drift across the multilingual documentation set."},
+  "acceptance": [
+    "The three root/docs entry routes link to a capability map and expose user-facing routes for Outcome, Knowledge, Work Item parallel processing, and upgrade guidance.",
+    "Every in-scope user-facing guide presents purpose, natural-language usage, a concrete example, expected result, stop/recovery guidance, limitations, and advanced references in English, Simplified Chinese, and Japanese.",
+    "The Outcome guide explains Contract, Summary, Task Outcome, and Human Benefit Report as distinct lifecycle views and uses an evidence-backed problem-to-resolution example.",
+    "The Knowledge guide explains archive-derived records, validation, exact read-only querying, natural-language-first interaction, and the non-semantic/non-RAG boundary without inventing behavior.",
+    "The Work Item parallel-processing guide explains independent branch/worktree ownership, conflict serialization, bounded verification parallelism, WIII scope, and external Agent/Orchestrator scheduling boundaries with a safe and unsafe example.",
+    "For every adopter-facing capability id in the manifest, the capability map has a corresponding row with a current status, a user-facing explanation, and either a localized guide link or an explicit advanced/English-fallback label; planned/template-only/external behavior remains visibly qualified.",
+    "The documentation architecture/specification and implementation plan record the exact file map, language-parity rules, natural-language HCI writing rules, and verification commands.",
+    "The final diff changes documentation and generated documentation evidence only; it contains no production code, test, installer, version, release, or tag mutation, and the complete authorized Work Item lifecycle ends with a merged PR, successful ai-close-work-item, branch cleanup, and synchronized default base."
+  ],
+  "guidelines": [
+    "Lead with the user's goal and natural-language action; reveal commands, paths, and schemas only as advanced detail.",
+    "Use the same semantic sections and examples across English, Simplified Chinese, and Japanese; translations may be idiomatic but must preserve boundaries and next actions.",
+    "Use the glossary's canonical terms and distinguish repository evidence, adopter responsibility, and external/provider responsibility.",
+    "Only describe capabilities supported by the current Capability Truth Matrix or explicitly label them as advanced, template-only, planned, or external.",
+    "Do not change production code, tests, CI, installer behavior, release metadata, version files, tags, or provider state."
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "docsMetadata", "required": true}, {"check": "systemInvariants", "required": true}, {"check": "unsupportedClaims", "required": true}, {"check": "sourceBoundEvidence", "required": true}, {"check": "diffCheck", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user authorized automatic completion of this Work Item through commit, push, one PR, PR checks/review, merge, ai-close-work-item, branch cleanup, and default-base synchronization; no release or version publication is authorized."},
+  "rollbackNote": "Revert only this Work Item's documentation and generated evidence paths; preserve all unrelated user changes and immutable historical archives.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 1600}},
+  "intent": {
+    "problem": "The repository has accurate technical references for several capabilities, but ordinary readers cannot reach them consistently from the entry pages, and the main usage path begins with commands and internal terminology instead of user goals. Outcome, Knowledge, and Work Item parallel-processing guidance are not yet presented as complete three-language user journeys.",
+    "constraints": ["The eligible change surface is documentation and generated documentation evidence; runtime, test, installer, release, and provider paths are excluded.", "Natural-language, goal-oriented guidance is the primary HCI surface; commands and file paths are optional progressive-disclosure references.", "Localized siblings preserve the same user goals, examples, boundaries, stop conditions, and next actions.", "Capability wording follows the current Capability Truth Matrix and existing source documentation, with planned, template-only, and external responsibilities labeled.", "Maintainer-only technical references remain outside translation unless a direct user journey needs a clearly labeled fallback link."],
+    "rationale": "A user-facing capability map with natural-language examples reduces the cognitive load of an AI-era HCI while preserving human control: readers can ask for a goal, understand the result, and see exactly when evidence is insufficient or a human decision is required."
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/docs-user-facing-guides-20260820.json",
+    "baseCommit": "7b1ea9760d4d0403b826d4c634832d87e6c6d3a1",
+    "initialScopeDigest": "b74e03823fe87e0a678ef3db3d22189116a40e8a2758fe5110c04201cbc73b51",
+    "contractSkeletonDigest": "aaf8f5515e832dc2ee7dda99c1180c16e12bb3ac191f6116bb998e8cde2e4098"
+  }
+}

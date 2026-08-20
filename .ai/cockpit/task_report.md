@@ -7,69 +7,70 @@ What was completed
 
 Implementation Approach
 Status: `complete`
-Customer summary (verified): Use the existing fail-closed release workflow and projection synchronizer to publish exactly v0.5.70 from the latest merged default-branch source, without changing historical release identity.
-Mechanism (verified): Run repository readiness, dispatch release.yml in rehearsal mode for the exact source SHA, ingest its bound receipt, dispatch the same workflow for Provider publication, verify the public assets and tagged Quick Install, then synchronize the downloaded public release metadata into the stable projection and advance only the next candidate.
+Customer summary (verified): 以 HCI-first 的能力一览作为统一入口，再为每项能力提供三语言的自然语言说明、使用方法、事例、预期结果、停止与恢复边界；本轮只更新文档及其源绑定生成证据。
+Mechanism (verified): README 页面引导读者进入能力一览；能力一览展示状态、价值、边界和详情链接；专题页按前置条件、自然语言步骤、事例、预期结果、停止/恢复和高级命令逐层展开，并用三语言 sibling 检查与源绑定生成器保持一致。
 
 Affected components
-- Provider release workflow: The controlled workflow is the only authorized external mutation path for v0.5.70; its formal run and public assets are independently recorded. (verified)
-- Repository release projection: The post-publication synchronizer promoted verified v0.5.70 and prepared v0.5.71 as the next unpublished candidate. (verified)
+- Documentation entry and capability overview: 三语言 README 与 capability index 提供按读者目标扫描、按详情链接深入的入口。 (verified)
+- User-facing capability journeys: Outcome、Human Benefit、Knowledge、Work Item 并行处理、生命周期和升级均提供自然语言优先的使用与恢复路径。 (verified)
 
 Design decisions
-- Keep v0.5.69 immutable and publish only v0.5.70.: Published tags and assets are historical facts; no historical mutation is authorized. (verified)
-- Use the exact merged default-branch SHA as the sole source identity.: The release workflow resolves origin/main and rejects a stale or mismatched source_commit. (verified)
+- Use one Work Item for the shared capability index and multilingual user documentation.: The entrypoint, capability manifest, sibling links, and generated evidence form one consistency boundary. (verified)
+- Lead with natural language and progressive disclosure; keep commands as advanced detail.: General users should understand the goal, result, and recovery boundary before seeing repository mechanics. (verified)
+- Do not publish a new version in this documentation-only round.: Release, version, tag, and provider publication remain explicitly out of scope. (verified)
 
 ### Technical details
-- Fail-closed publication: No tag or public asset may be created before rehearsal, source-bound preflight, dependency evidence, SBOM, provenance, Draft validation, and tagged Quick Install pass. (verified)
+- Three-language parity: English, Simplified Chinese, and Japanese pages preserve the same journey sections, examples, boundaries, and related-link destinations while allowing idiomatic wording. (verified)
+- Generated evidence: Capability Truth and pre-release documentation alignment projections are regenerated from repository sources after the documentation changes. (verified)
 
 ### Evidence
-- The repository currently has stable published v0.5.70 based on the exact merged main source, with unpublished v0.5.71 as the next candidate.: release.json#Stable release projection (verified)
-- The latest merged main source is 746329ced7a1d315a468d4e2c6a7a39d50bcc343.: .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json#Work Item start source binding (verified)
-- The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.: .ai/cockpit/release-digests.json#Formal Provider publication and public asset digest projection (verified)
+- The implementation is documentation-only and preserves the release boundary.: .ai/work-items/archive/2026/docs-user-facing-guides-20260820.contract.json#scope and outOfScope (verified)
+- The user-facing capability index and focused journeys are available in three languages.: docs/capabilities.md#capability index and sibling documentation (verified)
+- Generated capability and documentation-alignment evidence was refreshed.: docs/reference/pre-release-documentation-alignment.json#source-bound generator output (verified)
 
+- Changed .ai/work-items/active/docs-user-facing-guides-20260820.contract.json [evidence: .ai/work-items/archive/2026/docs-user-facing-guides-20260820.contract.json]
+- Changed .ai/work-items/active/docs-user-facing-guides-20260820.summary.json [evidence: .ai/work-items/archive/2026/docs-user-facing-guides-20260820.summary.json]
+- Changed .ai/work-items/starts/docs-user-facing-guides-20260820.json [evidence: .ai/work-items/starts/docs-user-facing-guides-20260820.json]
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json]
-- Changed .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json]
-- Changed .ai/work-items/active/task-event-log.events.jsonl [evidence: .ai/work-items/active/task-event-log.events.jsonl]
-- Changed .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json [evidence: .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json]
-- Changed target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json [evidence: target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json]
-- Changed target/release-v0-5-70-provider-release/rehearsal.receipt.json [evidence: target/release-v0-5-70-provider-release/rehearsal.receipt.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.md]
-- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
-- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
-- Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
-- Changed .ai/cockpit/version.json [evidence: .ai/cockpit/version.json]
+- Changed docs/README.md [evidence: docs/README.md]
+- Changed docs/README.zh-CN.md [evidence: docs/README.zh-CN.md]
+- Changed docs/README.ja.md [evidence: docs/README.ja.md]
+- Changed docs/capabilities.md [evidence: docs/capabilities.md]
+- Changed docs/capabilities.zh-CN.md [evidence: docs/capabilities.zh-CN.md]
+- Changed docs/capabilities.ja.md [evidence: docs/capabilities.ja.md]
+- Changed docs/features/task-outcome-report.md [evidence: docs/features/task-outcome-report.md]
+- Changed docs/features/task-outcome-report.zh-CN.md [evidence: docs/features/task-outcome-report.zh-CN.md]
+- Changed docs/features/task-outcome-report.ja.md [evidence: docs/features/task-outcome-report.ja.md]
+- Changed docs/features/human-benefit-report.md [evidence: docs/features/human-benefit-report.md]
+- Changed docs/features/human-benefit-report.zh-CN.md [evidence: docs/features/human-benefit-report.zh-CN.md]
+- Changed docs/features/human-benefit-report.ja.md [evidence: docs/features/human-benefit-report.ja.md]
+- Changed docs/features/work-item-parallelism.md [evidence: docs/features/work-item-parallelism.md]
+- Changed docs/features/work-item-parallelism.zh-CN.md [evidence: docs/features/work-item-parallelism.zh-CN.md]
+- Changed docs/features/work-item-parallelism.ja.md [evidence: docs/features/work-item-parallelism.ja.md]
+- Changed docs/reference/implementation-knowledge.md [evidence: docs/reference/implementation-knowledge.md]
+- Changed docs/reference/implementation-knowledge.zh-CN.md [evidence: docs/reference/implementation-knowledge.zh-CN.md]
+- Changed docs/reference/implementation-knowledge.ja.md [evidence: docs/reference/implementation-knowledge.ja.md]
+- Changed docs/operations/work-item-lifecycle.md [evidence: docs/operations/work-item-lifecycle.md]
+- Changed docs/operations/work-item-lifecycle.zh-CN.md [evidence: docs/operations/work-item-lifecycle.zh-CN.md]
+- Changed docs/operations/work-item-lifecycle.ja.md [evidence: docs/operations/work-item-lifecycle.ja.md]
+- Changed docs/upgrade.md [evidence: docs/upgrade.md]
+- Changed docs/upgrade.zh-CN.md [evidence: docs/upgrade.zh-CN.md]
+- Changed docs/upgrade.ja.md [evidence: docs/upgrade.ja.md]
+- Changed docs/reference/documentation-context-registry.json [evidence: docs/reference/documentation-context-registry.json]
+- Changed docs/superpowers/specs/2026-08-20-user-facing-guides-design.md [evidence: docs/superpowers/specs/2026-08-20-user-facing-guides-design.md]
+- Changed docs/superpowers/plans/2026-08-20-user-facing-guides.md [evidence: docs/superpowers/plans/2026-08-20-user-facing-guides.md]
 - Changed docs/reference/capability-truth-matrix.json [evidence: docs/reference/capability-truth-matrix.json]
 - Changed docs/reference/pre-release-documentation-alignment.json [evidence: docs/reference/pre-release-documentation-alignment.json]
 - Changed docs/reference/pre-release-documentation-alignment.md [evidence: docs/reference/pre-release-documentation-alignment.md]
-- Changed install.sh [evidence: install.sh]
-- Changed next-release.json [evidence: next-release.json]
-- Changed release-state.json [evidence: release-state.json]
-- Changed release.json [evidence: release.json]
-- Changed .ai/work-items/external-handoffs/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/work-items/external-handoffs/publish-v0-5-70-provider-release-20260820.json]
-- Changed target/release-v0-5-70-provider-release/provider-release.receipt.json [evidence: target/release-v0-5-70-provider-release/provider-release.receipt.json]
-- Changed target/release-v0-5-70-provider-release/public-assets-32327621485/release.json [evidence: target/release-v0-5-70-provider-release/public-assets-32327621485/release.json]
-- Changed target/release-v0-5-70-provider-release/public-assets-32327621485/release-digests.json [evidence: target/release-v0-5-70-provider-release/public-assets-32327621485/release-digests.json]
-- Changed target/release-v0-5-70-provider-release/public-assets-32327621485/release-source.json [evidence: target/release-v0-5-70-provider-release/public-assets-32327621485/release-source.json]
-- Changed target/release-v0-5-70-provider-release/public-assets-32327621485/ci-release-evidence.json [evidence: target/release-v0-5-70-provider-release/public-assets-32327621485/ci-release-evidence.json]
-- Changed target/release-v0-5-70-provider-release/public-assets-32327621485/sbom.json [evidence: target/release-v0-5-70-provider-release/public-assets-32327621485/sbom.json]
-- Changed target/release-v0-5-70-provider-release/public-assets-32327621485/provenance.json [evidence: target/release-v0-5-70-provider-release/public-assets-32327621485/provenance.json]
-- Changed target/release-v0-5-70-provider-release/public-assets-32327621485/v0.5.70.tar.gz [evidence: target/release-v0-5-70-provider-release/public-assets-32327621485/v0.5.70.tar.gz]
+- Changed .ai/work-items/active/docs-user-facing-guides-20260820.outcome.json [evidence: .ai/work-items/archive/2026/docs-user-facing-guides-20260820.outcome.json]
+- Changed .ai/work-items/active/docs-user-facing-guides-20260820.outcome.md [evidence: .ai/work-items/archive/2026/docs-user-facing-guides-20260820.outcome.md]
+- Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
+- Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 - Changed docs/reference/capability-truth-matrix.md [evidence: docs/reference/capability-truth-matrix.md]
 - Changed docs/reference/japanese-capability-assessment.json [evidence: docs/reference/japanese-capability-assessment.json]
 - Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
 - Changed .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json [evidence: .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json]
 - Changed .ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json [evidence: .ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json]
-- Changed .ai/work-items/archive/index.json [evidence: .ai/work-items/archive/index.json]
-- Changed .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.archive-manifest.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.archive-manifest.json]
-- Changed .ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json]
-- Changed .ai/knowledge/index.json [evidence: .ai/knowledge/index.json]
-- Changed .ai/knowledge/dependencies.json [evidence: .ai/knowledge/dependencies.json]
-- Changed .ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json [evidence: .ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json]
-- Changed .ai/knowledge/work-items/release-projection-v0_5_68-20260819.json [evidence: .ai/knowledge/work-items/release-projection-v0_5_68-20260819.json]
-- Changed .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json [evidence: .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json]
-- Changed .ai/work-items/recovery-receipts/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/work-items/recovery-receipts/publish-v0-5-70-provider-release-20260820.json]
 
 Problems found
 - Total: 3
@@ -77,31 +78,31 @@ Problems found
 - Warning: 0
 
 Stops triggered
-- None recorded.
+- Reason: quality failed before the retry. | Stage: verification | Resolution: Retry quality after correcting the recorded failure. [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
 
 Problems resolved
-- Problem: observed issue
-  Solution: Switched the active github.com account to RayIori, verified gh api user=RayIori and repository permissions admin=true/push=true, then reran the exact formal dispatch successfully. No Provider mutation occurred during the rejected attempt.
-  Evidence: [evidence: observedIssues[0] observed issue, observedIssues[0] observed issue]
-- Problem: observed issue
-  Solution: Reran the canonical synchronizer with the explicit stable_release_unverified unavailable entry and the public v0.5.70 Release URL as evidence; synchronization then passed.
-  Evidence: [evidence: observedIssues[1] observed issue, observedIssues[1] observed issue, observedIssues[1] observed issue, observedIssues[1] observed issue]
-- Problem: observed issue
-  Solution: Used the post-publication distribution, release-state consistency, and source-bound evidence gates for the already-published v0.5.70; no v0.5.71 freeze was created and no historical release metadata was changed.
-  Evidence: [evidence: observedIssues[2] observed issue, observedIssues[2] observed issue, observedIssues[2] observed issue]
+- Problem: quality failed before the retry.
+  Solution: Re-ran quality after the correction; the latest attempt passed.
+  Evidence: [evidence: verificationHistory[0] quality failed, verification[quality] retry passed]
 
 Risks avoided
-- None recorded.
+- If not detected, could have led to a stale completion claim. (inference)
 
 Remaining risks
-- v0.5.71 is intentionally unpublished and remains a candidate until a future exact-source release WI authorizes and verifies its publication. [evidence: residualRisks]
-- The release WI still requires finish, archive, PR merge, ai-close-work-item, and final local/remote cleanup after publication. [evidence: residualRisks]
+- Five independent review strategies produced no consensus Critical, High, or Medium finding. (inference)
+- Repository language checks verify structure and semantic coverage; they do not claim general native fluency. (inference)
+- Technical references that are canonical English remain advanced fallbacks; localized user journeys label that depth boundary explicitly. [evidence: residualRisks]
 
 Unknowns
 - None recorded.
 
 Human decisions
-- None recorded.
+- Use one Work Item for the shared capability-index and multilingual documentation change; do not split it into parallel implementation Work Items. (inference)
+- Document Work Item parallel processing, not parallel evaluation. (inference)
+- Describe each capability with purpose, usage method, example, expected result, stop/recovery guidance, and boundaries. (inference)
+- Lead with natural language and HCI; place commands and paths in progressive-disclosure advanced sections. (inference)
+- Include a capability overview/index with detail links from the entry documentation. (inference)
+- This round is documentation-only and must not publish a new version. (inference)
 
 Verification
 - sourceBoundEvidence [evidence: sourceBoundEvidence]
@@ -115,6 +116,11 @@ Verification
 - aiScenarioCoverage [evidence: aiScenarioCoverage]
 - aiGuidelines [evidence: aiGuidelines]
 - aiDiffOwnership [evidence: aiDiffOwnership]
+- docsMetadata [evidence: docsMetadata]
+- systemInvariants [evidence: systemInvariants]
+- unsupportedClaims [evidence: unsupportedClaims]
+- diffCheck [evidence: diffCheck]
+- quality [evidence: quality]
 - aiStatus [evidence: aiStatus]
 - aiStatusCheck [evidence: aiStatusCheck]
 - aiStatusConsistency [evidence: aiStatusConsistency]
@@ -122,9 +128,9 @@ Verification
 - aiSummary [evidence: aiSummary]
 
 Impact
-- Rework avoided: None recorded.
+- Rework avoided: If not detected, could have led to a stale completion claim. (inference)
 - Repeat correction prevented: unknown: no direct recurrence probability evidence was recorded. (inference)
-- Major risk prevented: None recorded.
+- Major risk prevented: If not detected, could have led to a stale completion claim. (inference)
 
 Next action
 - Bind conversation locale and preserve evidence details before the next Work Item starts. (inference)

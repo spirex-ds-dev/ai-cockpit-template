@@ -1,12 +1,17 @@
 ---
 author: Ray
-title: "Implementation Knowledge Projection"
-description: "Evidence-bound projection of Work Item implementation knowledge for customer-facing explanation and deterministic lifecycle validation."
+title: "Implementation Knowledge"
+description: "A natural-language-first guide to finding validated, archive-derived Work Item implementation knowledge."
 audience:
   - adopter
   - reviewer
   - maintainer
-authority: implementation_record
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - implementation_knowledge_query
+  - implementation_knowledge_projection
 keywords:
   - ai-cockpit
   - implementation-knowledge
@@ -14,63 +19,92 @@ keywords:
   - work-item
 ---
 
-# Implementation Knowledge Projection
+# Implementation Knowledge
 
-AI Cockpit records what changed in the Work Item Summary and explains the
-result through Task Outcome and Human Report. The implementation knowledge
-projection adds a deterministic, evidence-bound view of how the change works.
+## What this helps you do
 
-## Authority and lifecycle
+Use Knowledge when you want to learn from a previous governed change. For
+example: “Which verified Work Item addressed the order service, and what files
+and evidence did it leave?” The result is a deterministic lookup over validated
+implementation records, not a confident-sounding answer from Agent memory.
 
-The projection is derived from existing evidence. The Contract, Summary,
-repository evidence, and final Outcome remain authoritative; a knowledge
-record is not a second fact source and must not be completed from agent memory
-or inferred from a diff.
+## Before you start
 
-After a Work Item reaches its final Outcome, generate:
+Knowledge records are created from completed Work Item evidence. The Contract,
+Summary, repository evidence, and final Outcome remain authoritative. If a
+Work Item has not reached a usable Outcome, or its record is missing or stale,
+there may be no verified result to return.
 
-- `.ai/knowledge/work-items/<work-item-id>.json`
-- `.ai/knowledge/index.json`
-- `.ai/knowledge/dependencies.json`
+## Ask in ordinary language first
 
-The record keeps the customer-facing implementation summary, mechanism,
-affected components, design decisions, changes, effects, evidence paths, and
-source digests. The index contains only deterministic lookup fields and does
-not perform semantic search or assign relevance scores.
+You can ask your Agent:
 
-`dependencies.json` is a generated reverse dependency projection. Each Record
-lists the repository-relative Contract, Summary, Outcome, and Evidence paths
-that determine its bytes; `byPath` maps a changed path to affected Work Item
-IDs. Finish passes changed source-bound output paths through this map, so the
-normal refresh rebuilds only affected archived Records. Archive explicitly
-includes the newly archived Work Item when it creates a Record.
+> “Find verified Work Items about orders that affected the OrderService
+> component. Show the Work Item ID, state, evidence paths, and what I should
+> inspect next.”
 
-The dependency projection is an optimization boundary, not an authority
-boundary. If it is missing, malformed, stale, or incomplete, the lifecycle
-performs an explicit full rebuild or fails closed when archived evidence cannot
-be resolved. The checker always validates every Record, the query index, and
-the dependency projection. No Record, index, or dependency file is replaced
-when its serialized content is unchanged.
+The Agent may translate that request into exact filters. AI Cockpit does not
+pretend that it understands arbitrary natural-language meaning inside the
+query engine: the underlying interface is structured, read-only, and
+conjunctive. The human-facing sentence is the HCI entry; the exact filter and
+the returned record are the evidence boundary.
 
-## Evidence rules
+## What happens
 
-Every verified implementation claim must be supported by a repository-relative
-evidence path. The generator freezes a SHA-256 digest for each evidence path
-and for the Contract, Summary, and Outcome sources. The checker reports stale
-or missing paths and source drift. A record with missing or conflicting facts
-cannot remain `verified`.
+1. The Agent identifies the topic, component, date, commit, Work Item, or state
+   filters that the request actually names.
+2. The query reads the validated index and matching Knowledge records.
+3. Every record is checked against its source paths and frozen SHA-256 digests.
+4. Results are returned in stable Work Item ID and knowledge-path order.
+5. You inspect the record's evidence and limitations before reusing the design.
 
-Legacy Work Items remain readable as `partial` records. Missing Implementation
-Approach fields become `unknown`; the projection never backfills them.
+Filters combine with **AND** semantics. Supported filters are Work Item ID,
+topic, component, merged commit, exact date, inclusive date range, and
+Knowledge state (`verified`, `partial`, `unknown`, `superseded`).
 
-Knowledge states are `verified`, `partial`, `unknown`, and `superseded`.
-`superseded` is reserved for an explicit later Work Item relationship, not an
-inference based on similarity.
+## Example: a useful result
 
-## Commands
+Request:
 
-Generate or rebuild a record and index after the source Summary and Outcome are
-complete:
+> “Show me verified order-service changes from January 2026.”
+
+Expected result:
+
+```text
+Query: topic=orders, component=OrderService, date-from=2026-01-01,
+       date-to=2026-01-31, status=verified
+Matches: 1
+Next: open the returned knowledgePath and its evidenceRefs before applying
+      the design to a new Work Item.
+```
+
+If the result is empty, that means no record matched all named filters. It does
+not mean the repository has never addressed the topic. Broaden one exact
+filter intentionally, or ask a person to identify a different evidence source.
+
+If a record is stale, malformed, conflicting, or has an invalid supersession
+relationship, validation fails closed or keeps the record visibly partial or
+unknown. Do not silently select the newest-looking file.
+
+## What Knowledge does not do
+
+Knowledge is not:
+
+- semantic, vector, fuzzy, or RAG search;
+- a relevance scorer, recommendation engine, or design authority;
+- a second fact source that can overrule Contract, Summary, Outcome, or source
+  evidence;
+- a writer: queries do not modify records, indexes, reports, or Work Items;
+- a guarantee that an archived implementation still fits a new repository.
+
+Dates are used only when explicitly present in Contract, Summary, or Outcome.
+The system does not guess dates from file timestamps or commit history.
+Supersession is taken from an explicit relationship; it is never inferred from
+similarity. Legacy records may remain `partial`.
+
+## Advanced route
+
+After the source Summary and Outcome are complete, generate or rebuild records:
 
 ```sh
 make ai-generate-knowledge \
@@ -80,55 +114,32 @@ make ai-generate-knowledge \
   OUTCOME=.ai/work-items/active/<work-item-id>.outcome.json
 ```
 
-`ai-generate-knowledge-record` remains a compatible explicit target. The
-short `ai-generate-knowledge` target is the adopter-facing name used by the
-design and both targets execute the same evidence-bound projection.
-
-Validate all records and the deterministic indexes:
+Validate the records and indexes:
 
 ```sh
 make ai-check-knowledge-index
+make check-ai-knowledge
 ```
 
-Query the validated records with exact, conjunctive filters:
+Query with exact filters:
 
 ```sh
 make ai-knowledge-query TOPIC=orders COMPONENT=OrderService STATUS=verified
 make ai-knowledge-query DATE_FROM=2026-01-01 DATE_TO=2026-01-31
 ```
 
-The equivalent script interface is `--work-item` (also accepted as
-`--work-item-id`), `--topic`, `--component`, `--commit`, `--date`,
-`--date-from`, `--date-to`, and `--status`. Existing `ARGS='...'` invocations
-remain supported.
+The JSON result includes a normalized query, match count, stable `results`,
+and the compatibility alias `matches`. Each result exposes `workItemId`,
+`knowledgePath`, `state`, `latestKnownRecord`, `supersessionStatus`, and the
+complete record.
 
-The query result is JSON with a schema version, the normalized query, a match
-count, and `results`. Each result exposes `workItemId`, `knowledgePath`,
-`state`, `latestKnownRecord`, `supersessionStatus`, and the complete `record`.
-`matches` is retained as an identical compatibility alias. Results are sorted
-by Work Item ID and knowledge path, so the same validated inputs produce the
-same output.
-Supported filters are Work Item ID, topic, component, merged commit, exact
-date, inclusive date range, and knowledge state. The filters are exact and
-combine with AND semantics. All four knowledge states remain queryable;
-supersession is returned from the explicit `supersedes` relationship and is
-never inferred. A single explicit descendant produces `latestKnownRecord`; a
-conflicting set of explicit descendants produces `null` with
-`supersessionStatus: conflict`.
+## Stop and related entry points
 
-Dates are filterable only when a record contains an explicit `date` field. The
-generator preserves a valid date only when Contract, Summary, or Outcome
-explicitly supplies it; it never guesses a date from file timestamps, commit
-history, or other metadata. `effectiveState` is likewise explicit and
-defaults to `historical_or_current_unknown`; `currentValidity` remains
-`unknown` unless a separate evidence-backed lifecycle rule establishes it.
-Invalid or missing index/record evidence, missing supersession targets, and
-supersession cycles fail closed. The interface is read-only: it does not write
-records, indexes, or reports. It is intentionally a deterministic structured
-lookup, not a natural-language, semantic, vector, or RAG query layer.
+Stop when evidence is missing, stale, contradictory, or outside the record's
+declared sources. Ask for a new evidence-bound Work Item rather than filling
+the gap from memory.
 
-Validate the installed query surface as well as the knowledge index:
-
-```sh
-make check-ai-knowledge
-```
+- [Task Outcome Report](../features/task-outcome-report.md)
+- [Human Benefit Report](../features/human-benefit-report.md)
+- [Capabilities and boundaries](../capabilities.md)
+- [Work Item Lifecycle](../operations/work-item-lifecycle.md)
