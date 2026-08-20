@@ -12,6 +12,7 @@ import ai_generate_knowledge_record
 import pytest
 from ai_check_knowledge_index import check_index, check_record
 from ai_generate_knowledge_record import (
+    build_dependency_index,
     build_record,
     rebuild_existing_projections,
     rebuild_index,
@@ -20,6 +21,7 @@ from ai_generate_knowledge_record import (
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_SCHEMA = ROOT / ".ai/schemas/implementation-knowledge-record.schema.json"
 INDEX_SCHEMA = ROOT / ".ai/schemas/implementation-knowledge-index.schema.json"
+DEPENDENCY_INDEX_SCHEMA = ROOT / ".ai/schemas/implementation-knowledge-dependency-index.schema.json"
 
 
 def approach() -> dict:
@@ -232,6 +234,7 @@ def test_index_rebuild_is_sorted_lightweight_and_deterministic(tmp_path) -> None
 def test_schema_documents_are_present_and_versioned() -> None:
     record_schema = json.loads(RECORD_SCHEMA.read_text(encoding="utf-8"))
     index_schema = json.loads(INDEX_SCHEMA.read_text(encoding="utf-8"))
+    dependency_schema = json.loads(DEPENDENCY_INDEX_SCHEMA.read_text(encoding="utf-8"))
     assert record_schema["$schema"].endswith("draft/2020-12/schema")
     assert index_schema["$schema"].endswith("draft/2020-12/schema")
     assert set(record_schema["properties"]["knowledgeState"]["enum"]) == {
@@ -241,6 +244,8 @@ def test_schema_documents_are_present_and_versioned() -> None:
         "superseded",
     }
     assert "semanticScore" not in index_schema["properties"]
+    assert dependency_schema["properties"]["schemaVersion"]["const"] == 1
+    assert set(dependency_schema["required"]) == {"schemaVersion", "records", "byPath"}
 
 
 def test_checker_detects_stale_source_and_evidence_digests(tmp_path) -> None:
@@ -286,6 +291,25 @@ def test_checker_detects_index_drift_and_missing_record(tmp_path) -> None:
     record_path.unlink()
     issues = check_index(index_path, records_dir=records_dir, repo_root=tmp_path)
     assert any("missing" in issue for issue in issues)
+
+
+def test_checker_detects_dependency_index_drift(tmp_path) -> None:
+    contract, summary, outcome = write_fixture(tmp_path, work_item_id="dependency-drift")
+    records_dir = tmp_path / ".ai" / "knowledge" / "work-items"
+    records_dir.mkdir(parents=True)
+    record = build_record(contract, summary, outcome, repo_root=tmp_path)
+    (records_dir / "dependency-drift.json").write_text(json.dumps(record), encoding="utf-8")
+    index_path = tmp_path / ".ai" / "knowledge" / "index.json"
+    rebuild_index(records_dir, index_path)
+
+    dependency_path = index_path.with_name("dependencies.json")
+    payload = json.loads(dependency_path.read_text(encoding="utf-8"))
+    payload["byPath"] = {}
+    dependency_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    issues = check_index(index_path, records_dir=records_dir, repo_root=tmp_path)
+
+    assert any("dependency index" in issue for issue in issues)
 
 
 def test_archive_projection_generates_record_from_final_archive_paths(
@@ -388,3 +412,139 @@ def test_rebuild_existing_projections_refreshes_records_after_bound_source_chang
     )
     refreshed = json.loads(record_path.read_text(encoding="utf-8"))
     assert refreshed["evidence"][0]["digest"] != "0" * 64
+
+
+def test_missing_dependency_projection_falls_back_to_explicit_full_rebuild(tmp_path):
+    contract, summary, outcome = write_fixture(tmp_path, work_item_id="fallback-knowledge")
+    archive_dir = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    archive_dir.mkdir(parents=True)
+    archived_contract = archive_dir / contract.name
+    archived_summary = archive_dir / summary.name
+    archived_outcome = archive_dir / outcome.name
+    for source, target in (
+        (contract, archived_contract),
+        (summary, archived_summary),
+        (outcome, archived_outcome),
+    ):
+        shutil.copyfile(source, target)
+
+    records_dir = tmp_path / ".ai" / "knowledge" / "work-items"
+    records_dir.mkdir(parents=True)
+    record_path = records_dir / "fallback-knowledge.json"
+    record_path.write_text(
+        json.dumps(
+            build_record(archived_contract, archived_summary, archived_outcome, repo_root=tmp_path)
+        ),
+        encoding="utf-8",
+    )
+    index_path = tmp_path / ".ai" / "knowledge" / "index.json"
+    rebuild_index(records_dir, index_path)
+    dependency_path = index_path.with_name("dependencies.json")
+    dependency_path.unlink()
+    (tmp_path / "src/order_service.py").write_text(
+        "def changed():\n    return False\n", encoding="utf-8"
+    )
+
+    changed = rebuild_existing_projections(
+        repo_root=tmp_path,
+        changed_paths=["src/not-routed-yet.py"],
+    )
+
+    assert ".ai/knowledge/work-items/fallback-knowledge.json" in changed
+    assert dependency_path.is_file()
+    assert build_dependency_index(records_dir) == json.loads(
+        dependency_path.read_text(encoding="utf-8")
+    )
+    assert check_index(index_path, records_dir=records_dir, repo_root=tmp_path) == []
+
+
+def test_selective_refresh_rebuilds_only_records_bound_to_changed_path(tmp_path, monkeypatch):
+    contract, summary, outcome = write_fixture(tmp_path, work_item_id="affected-knowledge")
+    (tmp_path / "src/unrelated.py").write_text(
+        "def unrelated():\n    return True\n", encoding="utf-8"
+    )
+    archive_dir = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    archive_dir.mkdir(parents=True)
+
+    def archive(
+        contract_source: Path,
+        summary_source: Path,
+        outcome_source: Path,
+        work_item_id: str,
+    ) -> tuple[Path, Path, Path]:
+        archived_contract = archive_dir / f"{work_item_id}.contract.json"
+        archived_summary = archive_dir / f"{work_item_id}.summary.json"
+        archived_outcome = archive_dir / f"{work_item_id}.outcome.json"
+        for source_path, target in (
+            (contract_source, archived_contract),
+            (summary_source, archived_summary),
+            (outcome_source, archived_outcome),
+        ):
+            shutil.copyfile(source_path, target)
+        return archived_contract, archived_summary, archived_outcome
+
+    first_paths = archive(contract, summary, outcome, "affected-knowledge")
+    second_contract = tmp_path / "unrelated-knowledge.contract.json"
+    second_summary = tmp_path / "unrelated-knowledge.summary.json"
+    second_outcome = tmp_path / "unrelated-knowledge.outcome.json"
+    second_contract.write_text(
+        json.dumps(
+            {
+                **json.loads(contract.read_text(encoding="utf-8")),
+                "workItemId": "unrelated-knowledge",
+                "title": "Unrelated knowledge",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def replace_path(value):
+        if isinstance(value, dict):
+            return {key: replace_path(child) for key, child in value.items()}
+        if isinstance(value, list):
+            return [replace_path(child) for child in value]
+        if value == "src/order_service.py":
+            return "src/unrelated.py"
+        if value == "affected-knowledge":
+            return "unrelated-knowledge"
+        return value
+
+    second_summary.write_text(
+        json.dumps(replace_path(json.loads(summary.read_text(encoding="utf-8")))),
+        encoding="utf-8",
+    )
+    second_outcome.write_text(
+        json.dumps(replace_path(json.loads(outcome.read_text(encoding="utf-8")))),
+        encoding="utf-8",
+    )
+    second_paths = archive(second_contract, second_summary, second_outcome, "unrelated-knowledge")
+
+    records_dir = tmp_path / ".ai" / "knowledge" / "work-items"
+    records_dir.mkdir(parents=True)
+    for paths in (first_paths, second_paths):
+        record = build_record(*paths, repo_root=tmp_path)
+        (records_dir / f"{record['workItemId']}.json").write_text(
+            json.dumps(record), encoding="utf-8"
+        )
+    rebuild_index(records_dir, tmp_path / ".ai" / "knowledge" / "index.json")
+    (tmp_path / "src/order_service.py").write_text(
+        "def validate(order):\n    return order.status\n\n# refreshed source\n",
+        encoding="utf-8",
+    )
+
+    calls: list[str] = []
+    original_build_record = ai_generate_knowledge_record.build_record
+
+    def counted_build_record(*args, **kwargs):
+        calls.append(Path(args[0]).name)
+        return original_build_record(*args, **kwargs)
+
+    monkeypatch.setattr(ai_generate_knowledge_record, "build_record", counted_build_record)
+    changed = rebuild_existing_projections(
+        repo_root=tmp_path,
+        changed_paths=["src/order_service.py"],
+    )
+
+    assert calls == ["affected-knowledge.contract.json"]
+    assert ".ai/knowledge/work-items/affected-knowledge.json" in changed
+    assert ".ai/knowledge/work-items/unrelated-knowledge.json" not in changed

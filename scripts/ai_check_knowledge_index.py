@@ -7,7 +7,14 @@ import json
 from pathlib import Path
 from typing import Any
 
-from ai_generate_knowledge_record import _digest, _load, _safe_evidence, build_index
+from ai_generate_knowledge_record import (
+    _digest,
+    _load,
+    _safe_evidence,
+    build_dependency_index,
+    build_index,
+    validate_dependency_index,
+)
 
 EFFECTIVE_STATES = {"current", "superseded", "unknown", "historical_or_current_unknown"}
 
@@ -25,7 +32,7 @@ def check_record(record_path: Path, *, repo_root: Path) -> list[str]:
     issues: list[str] = []
     try:
         record = _load(record_path)
-    except (OSError, json.JSONDecodeError, ValueError) as exc:
+    except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
         return [f"record {record_path}: cannot load ({exc})"]
 
     work_item_id = record.get("workItemId")
@@ -102,12 +109,23 @@ def check_index(index_path: Path, *, records_dir: Path, repo_root: Path) -> list
     issues: list[str] = []
     try:
         actual = _load(index_path)
-    except (OSError, json.JSONDecodeError, ValueError) as exc:
+    except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
         return [f"index {index_path}: cannot load ({exc})"]
 
     expected = build_index(records_dir)
     if actual != expected:
         issues.append("index does not match deterministic rebuild")
+
+    dependency_path = index_path.with_name("dependencies.json")
+    try:
+        dependency_actual = _load(dependency_path)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+        issues.append(f"dependency index cannot load ({exc})")
+        dependency_actual = None
+    if validate_dependency_index(dependency_actual, records_dir=records_dir):
+        issues.append("dependency index is malformed or incomplete")
+    elif dependency_actual != build_dependency_index(records_dir):
+        issues.append("dependency index does not match deterministic rebuild")
 
     seen: set[str] = set()
     records_by_id: dict[str, dict[str, Any]] = {}

@@ -28,6 +28,7 @@ def test_fresh_adopter_receives_and_can_call_knowledge_projection_surface(tmp_pa
         "scripts/ai_knowledge_query.py",
         ".ai/schemas/implementation-knowledge-record.schema.json",
         ".ai/schemas/implementation-knowledge-index.schema.json",
+        ".ai/schemas/implementation-knowledge-dependency-index.schema.json",
         ".ai/schemas/implementation-knowledge-query.schema.json",
     ):
         assert (target / relative).is_file(), relative

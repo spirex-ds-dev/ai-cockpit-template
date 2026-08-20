@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import tempfile
+from collections.abc import Iterable
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -342,6 +343,14 @@ def _atomic_write(path: Path, payload: dict[str, Any]) -> None:
             os.unlink(temp_name)
 
 
+def _write_if_changed(path: Path, payload: dict[str, Any]) -> bool:
+    serialized = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+    if path.is_file() and path.read_text(encoding="utf-8") == serialized:
+        return False
+    _atomic_write(path, payload)
+    return True
+
+
 def build_index(records_dir: Path) -> dict[str, Any]:
     items: list[dict[str, Any]] = []
     for record_path in sorted(records_dir.glob("*.json")):
@@ -363,20 +372,268 @@ def build_index(records_dir: Path) -> dict[str, Any]:
     return {"schemaVersion": 1, "workItems": items}
 
 
-def rebuild_index(records_dir: Path, output_path: Path) -> dict[str, Any]:
-    result = build_index(records_dir)
-    _atomic_write(output_path, result)
+def _normalize_dependency_path(path_text: str) -> str:
+    path = Path(path_text)
+    if not path_text or path.is_absolute() or ".." in path.parts or "" in path.parts:
+        raise ValueError(f"knowledge dependency path must be repository-relative: {path_text}")
+    return path.as_posix()
+
+
+def dependency_paths(record: dict[str, Any]) -> list[str]:
+    """Return the generated source paths that determine one record's content."""
+    paths: set[str] = set()
+    generated = record.get("generatedFrom")
+    if isinstance(generated, dict):
+        for key in ("contractPath", "summaryPath", "outcomePath"):
+            value = generated.get(key)
+            if isinstance(value, str) and value:
+                paths.add(_normalize_dependency_path(value))
+    evidence = record.get("evidence")
+    if isinstance(evidence, list):
+        for item in evidence:
+            if isinstance(item, dict) and isinstance(item.get("path"), str):
+                paths.add(_normalize_dependency_path(item["path"]))
+    return sorted(paths)
+
+
+def build_dependency_index(records_dir: Path) -> dict[str, Any]:
+    records: dict[str, dict[str, Any]] = {}
+    by_path: dict[str, list[str]] = {}
+    for record_path in sorted(records_dir.glob("*.json")):
+        record = _load(record_path)
+        work_item_id = record.get("workItemId")
+        if not isinstance(work_item_id, str) or not work_item_id:
+            raise TypeError(f"record workItemId is required: {record_path}")
+        dependencies = dependency_paths(record)
+        records[work_item_id] = {
+            "recordPath": f".ai/knowledge/work-items/{record_path.name}",
+            "dependencies": dependencies,
+        }
+        for path in dependencies:
+            by_path.setdefault(path, []).append(work_item_id)
+    for work_item_ids in by_path.values():
+        work_item_ids.sort()
+    return {
+        "schemaVersion": 1,
+        "records": {work_item_id: records[work_item_id] for work_item_id in sorted(records)},
+        "byPath": {path: by_path[path] for path in sorted(by_path)},
+    }
+
+
+def validate_dependency_index(
+    payload: Any,
+    *,
+    records_dir: Path | None = None,
+) -> list[str]:
+    """Validate dependency routing without hashing any source evidence."""
+    issues: list[str] = []
+    if not isinstance(payload, dict):
+        return ["dependency index is not an object"]
+    if payload.get("schemaVersion") != 1:
+        issues.append("dependency index schemaVersion is unsupported")
+    records = payload.get("records")
+    by_path = payload.get("byPath")
+    if not isinstance(records, dict):
+        issues.append("dependency index records is not an object")
+        records = {}
+    if not isinstance(by_path, dict):
+        issues.append("dependency index byPath is not an object")
+        by_path = {}
+
+    if records_dir is not None and records_dir.is_dir():
+        expected_ids = {path.stem for path in records_dir.glob("*.json")}
+        actual_ids = set(records)
+        for work_item_id in sorted(expected_ids - actual_ids):
+            issues.append(f"dependency index missing record: {work_item_id}")
+        for work_item_id in sorted(actual_ids - expected_ids):
+            issues.append(f"dependency index references missing record: {work_item_id}")
+
+    for work_item_id, entry in records.items():
+        if not isinstance(work_item_id, str) or not work_item_id:
+            issues.append("dependency index record identity is invalid")
+            continue
+        if not isinstance(entry, dict):
+            issues.append(f"dependency index record is not an object: {work_item_id}")
+            continue
+        expected_record_path = f".ai/knowledge/work-items/{work_item_id}.json"
+        if entry.get("recordPath") != expected_record_path:
+            issues.append(f"dependency index recordPath is stale: {work_item_id}")
+        dependencies = entry.get("dependencies")
+        if not isinstance(dependencies, list) or any(
+            not isinstance(path, str) for path in dependencies
+        ):
+            issues.append(f"dependency index dependencies are invalid: {work_item_id}")
+            continue
+        if dependencies != sorted(set(dependencies)):
+            issues.append(f"dependency index dependencies are not normalized: {work_item_id}")
+        for path in dependencies:
+            try:
+                normalized = _normalize_dependency_path(path)
+            except ValueError:
+                issues.append(f"dependency index path is invalid: {path}")
+                continue
+            if normalized != path:
+                issues.append(f"dependency index path is not normalized: {path}")
+            if work_item_id not in by_path.get(path, []):
+                issues.append(f"dependency index reverse mapping is incomplete: {path}")
+
+    for path, work_item_ids in by_path.items():
+        if not isinstance(path, str):
+            issues.append("dependency index reverse path is invalid")
+            continue
+        try:
+            normalized = _normalize_dependency_path(path)
+        except ValueError:
+            issues.append(f"dependency index reverse path is invalid: {path}")
+            normalized = path
+        if normalized != path:
+            issues.append(f"dependency index reverse path is not normalized: {path}")
+        if not isinstance(work_item_ids, list) or work_item_ids != sorted(set(work_item_ids)):
+            issues.append(f"dependency index reverse mapping is not normalized: {path}")
+            continue
+        for work_item_id in work_item_ids:
+            entry = records.get(work_item_id)
+            if not isinstance(entry, dict) or path not in entry.get("dependencies", []):
+                issues.append(f"dependency index reverse mapping is stale: {path}")
+    return issues
+
+
+def _index_entry(record: dict[str, Any]) -> dict[str, Any]:
+    work_item_id = record.get("workItemId")
+    if not isinstance(work_item_id, str) or not work_item_id:
+        raise TypeError("record workItemId is required")
+    return {
+        "workItemId": work_item_id,
+        "title": record.get("title", work_item_id),
+        "topics": record.get("topics", []),
+        "components": record.get("components", []),
+        "state": record.get("knowledgeState", "unknown"),
+        "knowledgePath": f".ai/knowledge/work-items/{work_item_id}.json",
+    }
+
+
+def _index_is_well_formed(payload: Any) -> bool:
+    if not isinstance(payload, dict) or payload.get("schemaVersion") != 1:
+        return False
+    items = payload.get("workItems")
+    if not isinstance(items, list):
+        return False
+    ids = [item.get("workItemId") for item in items if isinstance(item, dict)]
+    if len(ids) != len(items) or not all(
+        isinstance(work_item_id, str) and work_item_id for work_item_id in ids
+    ):
+        return False
+    typed_ids = [work_item_id for work_item_id in ids if isinstance(work_item_id, str)]
+    return typed_ids == sorted(set(typed_ids))
+
+
+def rebuild_dependency_index(
+    records_dir: Path,
+    output_path: Path,
+    *,
+    record_updates: dict[str, dict[str, Any]] | None = None,
+    full: bool = False,
+) -> dict[str, Any]:
+    """Persist the dependency projection, routing only updated records normally."""
+    if full or record_updates is None or not output_path.is_file():
+        result = build_dependency_index(records_dir)
+        _write_if_changed(output_path, result)
+        return result
+
+    try:
+        result = _load(output_path)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        result = {}
+    if validate_dependency_index(result, records_dir=records_dir):
+        result = build_dependency_index(records_dir)
+        _write_if_changed(output_path, result)
+        return result
+
+    records = dict(result["records"])
+    by_path = {path: list(work_item_ids) for path, work_item_ids in result["byPath"].items()}
+    for work_item_id, record in record_updates.items():
+        old_entry = records.get(work_item_id, {})
+        old_dependencies = old_entry.get("dependencies", [])
+        if isinstance(old_dependencies, list):
+            for path in old_dependencies:
+                work_item_ids = [item for item in by_path.get(path, []) if item != work_item_id]
+                if work_item_ids:
+                    by_path[path] = work_item_ids
+                else:
+                    by_path.pop(path, None)
+        dependencies = dependency_paths(record)
+        records[work_item_id] = {
+            "recordPath": f".ai/knowledge/work-items/{work_item_id}.json",
+            "dependencies": dependencies,
+        }
+        for path in dependencies:
+            by_path.setdefault(path, [])
+            if work_item_id not in by_path[path]:
+                by_path[path].append(work_item_id)
+            by_path[path].sort()
+    result = {
+        "schemaVersion": 1,
+        "records": {work_item_id: records[work_item_id] for work_item_id in sorted(records)},
+        "byPath": {path: sorted(by_path[path]) for path in sorted(by_path) if by_path[path]},
+    }
+    _write_if_changed(output_path, result)
     return result
 
 
-def rebuild_existing_projections(*, repo_root: Path) -> list[str]:
-    """Rebuild every archived projection after shared evidence changes.
+def rebuild_index(
+    records_dir: Path,
+    output_path: Path,
+    *,
+    record_updates: dict[str, dict[str, Any]] | None = None,
+    full: bool = False,
+) -> dict[str, Any]:
+    """Persist the query index and its dependency routing projection."""
+    dependency_path = output_path.with_name("dependencies.json")
+    if full or record_updates is None or not output_path.is_file():
+        result = build_index(records_dir)
+        _write_if_changed(output_path, result)
+        rebuild_dependency_index(records_dir, dependency_path, full=True)
+        return result
 
-    Source-bound generated documents can be evidence in older Work Items. If
-    a lifecycle command refreshes those documents, rebuilding only the current
-    Work Item leaves historical projections stale. This canonical pass keeps
-    the whole existing knowledge surface aligned with the current evidence;
-    fresh adopters with no knowledge surface remain a no-op.
+    try:
+        result = _load(output_path)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        result = {}
+    if not _index_is_well_formed(result):
+        result = build_index(records_dir)
+        _write_if_changed(output_path, result)
+        rebuild_dependency_index(records_dir, dependency_path, full=True)
+        return result
+
+    entries = {item["workItemId"]: item for item in result["workItems"] if isinstance(item, dict)}
+    for record in record_updates.values():
+        entry = _index_entry(record)
+        entries[entry["workItemId"]] = entry
+    result = {
+        "schemaVersion": 1,
+        "workItems": [entries[work_item_id] for work_item_id in sorted(entries)],
+    }
+    _write_if_changed(output_path, result)
+    rebuild_dependency_index(
+        records_dir,
+        dependency_path,
+        record_updates=record_updates,
+    )
+    return result
+
+
+def rebuild_existing_projections(
+    *,
+    repo_root: Path,
+    changed_paths: Iterable[str] | None = None,
+    include_work_item_ids: Iterable[str] = (),
+) -> list[str]:
+    """Refresh only archived records routed by changed evidence paths.
+
+    A missing, malformed, or internally inconsistent dependency projection is
+    an explicit full-rebuild condition.  The normal path reads the routing
+    projection and the selected archived sources only; the authoritative
+    checker still validates every record separately.
     """
     records_dir = repo_root / ".ai" / "knowledge" / "work-items"
     index_path = repo_root / ".ai" / "knowledge" / "index.json"
@@ -386,12 +643,44 @@ def rebuild_existing_projections(*, repo_root: Path) -> list[str]:
     if not records_dir.is_dir():
         raise ValueError("Implementation Knowledge records directory is missing")
 
+    dependency_path = index_path.with_name("dependencies.json")
+    include_ids = set(include_work_item_ids)
+    explicit_full = changed_paths is None and not include_ids
+    dependency_payload: dict[str, Any] | None = None
+    if not explicit_full and dependency_path.is_file():
+        try:
+            candidate = _load(dependency_path)
+        except (OSError, json.JSONDecodeError, TypeError, ValueError):
+            candidate = None
+        if not validate_dependency_index(candidate, records_dir=records_dir):
+            dependency_payload = candidate
+
+    record_path_by_id = {path.stem: path for path in record_paths}
+    full_rebuild = explicit_full or dependency_payload is None
+    if full_rebuild:
+        selected_ids = set(record_path_by_id)
+    else:
+        if dependency_payload is None:
+            raise ValueError("Implementation Knowledge dependency index is unavailable")
+        selected_ids = set(include_ids)
+        for path_text in changed_paths or ():
+            normalized = _normalize_dependency_path(path_text)
+            selected_ids.update(dependency_payload["byPath"].get(normalized, []))
+    unknown_ids = sorted(selected_ids - set(record_path_by_id))
+    if unknown_ids:
+        raise ValueError(
+            "Implementation Knowledge dependency routing references missing records: "
+            + ", ".join(unknown_ids)
+        )
+
     archive_dir = repo_root / ".ai" / "work-items" / "archive"
     changed: list[str] = []
-    for record_path in record_paths:
+    record_updates: dict[str, dict[str, Any]] = {}
+    for work_item_id in sorted(selected_ids):
+        record_path = record_path_by_id[work_item_id]
         record = _load(record_path)
-        work_item_id = record.get("workItemId")
-        if not isinstance(work_item_id, str) or not work_item_id:
+        loaded_work_item_id = record.get("workItemId")
+        if loaded_work_item_id != work_item_id:
             raise ValueError(f"knowledge record has no Work Item identity: {record_path}")
         matches = sorted(archive_dir.glob(f"*/{work_item_id}.contract.json"))
         if len(matches) != 1:
@@ -415,12 +704,22 @@ def rebuild_existing_projections(*, repo_root: Path) -> list[str]:
         if record_path.read_text(encoding="utf-8") != serialized:
             _atomic_write(record_path, record_payload)
             changed.append(_relative(record_path, repo_root))
+        record_updates[work_item_id] = record_payload
 
-    index_payload = build_index(records_dir)
-    serialized_index = json.dumps(index_payload, ensure_ascii=False, indent=2) + "\n"
-    if not index_path.is_file() or index_path.read_text(encoding="utf-8") != serialized_index:
-        _atomic_write(index_path, index_payload)
+    before_index = index_path.read_text(encoding="utf-8") if index_path.is_file() else None
+    before_dependencies = (
+        dependency_path.read_text(encoding="utf-8") if dependency_path.is_file() else None
+    )
+    rebuild_index(
+        records_dir,
+        index_path,
+        record_updates=record_updates if not full_rebuild else None,
+        full=full_rebuild,
+    )
+    if index_path.read_text(encoding="utf-8") != before_index:
         changed.append(_relative(index_path, repo_root))
+    if dependency_path.read_text(encoding="utf-8") != before_dependencies:
+        changed.append(_relative(dependency_path, repo_root))
     return changed
 
 
@@ -434,8 +733,12 @@ def main() -> int:
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     args = parser.parse_args()
     record = build_record(args.contract, args.summary, args.outcome, repo_root=args.repo_root)
-    _atomic_write(args.output, record)
-    rebuild_index(args.output.parent, args.index)
+    _write_if_changed(args.output, record)
+    rebuild_index(
+        args.output.parent,
+        args.index,
+        record_updates={record["workItemId"]: record},
+    )
     print(json.dumps(record, ensure_ascii=False, indent=2))
     return 0
 

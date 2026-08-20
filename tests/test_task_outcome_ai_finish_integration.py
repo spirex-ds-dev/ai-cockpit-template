@@ -284,6 +284,7 @@ def test_source_bound_refresh_rebuilds_existing_knowledge_projections(tmp_path, 
     index_file = knowledge_file.parent.parent / "index.json"
     index_file.write_text("old-index\n", encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    captured = {}
 
     def fake_run(command, **_kwargs):
         if "--write" in command:
@@ -294,16 +295,23 @@ def test_source_bound_refresh_rebuilds_existing_knowledge_projections(tmp_path, 
     monkeypatch.setattr(ai_finish, "run", fake_run)
     monkeypatch.setattr(
         "ai_generate_knowledge_record.rebuild_existing_projections",
-        lambda *, repo_root: [
-            ".ai/knowledge/work-items/old.json",
-            ".ai/knowledge/index.json",
-        ],
+        lambda *, repo_root, changed_paths: (
+            captured.update({"repo_root": repo_root, "changed_paths": tuple(changed_paths)})
+            or [
+                ".ai/knowledge/work-items/old.json",
+                ".ai/knowledge/index.json",
+            ]
+        ),
     )
 
     code, _duration, detail = ai_finish.refresh_source_bound_evidence(summary_path=summary_path)
 
     assert code == 0
     assert "Implementation Knowledge projections refreshed" in detail
+    assert captured == {
+        "repo_root": tmp_path,
+        "changed_paths": ("docs/reference/capability-truth-matrix.json",),
+    }
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     assert {item["path"] for item in summary["changedFiles"]} == {
         "docs/reference/capability-truth-matrix.json",

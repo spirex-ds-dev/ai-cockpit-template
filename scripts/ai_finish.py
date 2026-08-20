@@ -1096,6 +1096,7 @@ def refresh_source_bound_evidence(*, summary_path: Path) -> tuple[int, int, str]
         )
 
     details: list[str] = []
+    changed_source_bound_paths: set[str] = set()
     total_duration = 0
 
     def run_generator(
@@ -1110,6 +1111,9 @@ def refresh_source_bound_evidence(*, summary_path: Path) -> tuple[int, int, str]
         code, duration, output = run([sys.executable, relative_generator, "--write"])
         total_duration += duration
         after = {relative: _file_sha256(PROJECT_ROOT / relative) for relative in outputs}
+        changed_source_bound_paths.update(
+            relative for relative in outputs if before[relative] != after[relative]
+        )
         details.append(
             f"{label} generated: "
             + "; ".join(
@@ -1173,7 +1177,10 @@ def refresh_source_bound_evidence(*, summary_path: Path) -> tuple[int, int, str]
     try:
         from ai_generate_knowledge_record import rebuild_existing_projections
 
-        refreshed = rebuild_existing_projections(repo_root=PROJECT_ROOT)
+        refreshed = rebuild_existing_projections(
+            repo_root=PROJECT_ROOT,
+            changed_paths=sorted(changed_source_bound_paths),
+        )
     except (OSError, TypeError, ValueError) as exc:
         details.append(f"Implementation Knowledge refresh failed: {exc}")
         return 1, total_duration, "\n".join(details)
@@ -2673,7 +2680,7 @@ def run_declared_checks(
         duration += refresh_duration
         if refresh_output:
             output = refresh_output + ("\n" + output if output else "")
-        if check_id == "quality":
+        if check_id in {"quality", "projectTest"}:
             try:
                 if restore_tracked_project_test_receipt():
                     output = (
