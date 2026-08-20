@@ -1,25 +1,27 @@
 # Task Outcome: publish-v0-5-70-provider-release-20260820
 
-Status: `completed`
-Human Status: `green`
+Status: `blocked`
+Human Status: `red`
+Failed Gate: `aiDiffOwnership`
+Recovery Condition: Run a passing aiDiffOwnership retry.
 
 ## Outcome Summary
-Task publish-v0-5-70-provider-release-20260820 generated an evidence-derived outcome with status completed.
+Task publish-v0-5-70-provider-release-20260820 generated an evidence-derived outcome with status blocked.
 
 ## Task Overview
 Governed Work Item: publish-v0-5-70-provider-release-20260820
 
 ## Delivered Changes
 - .ai/cockpit/current_status.md
-- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json
-- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json
+- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json
+- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json
 - .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json
 - .ai/work-items/active/task-event-log.events.jsonl
 - .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json
 - target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json
 - target/release-v0-5-70-provider-release/rehearsal.receipt.json
-- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.json
-- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.md
+- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json
+- .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md
 - .ai/cockpit/task_report.json
 - .ai/cockpit/task_report.md
 - .ai/cockpit/release-digests.json
@@ -45,6 +47,15 @@ Governed Work Item: publish-v0-5-70-provider-release-20260820
 - docs/reference/japanese-capability-assessment.md
 - .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json
 - .ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json
+- .ai/work-items/archive/index.json
+- .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.archive-manifest.json
+- .ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json
+- .ai/knowledge/index.json
+- .ai/knowledge/dependencies.json
+- .ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json
+- .ai/knowledge/work-items/release-projection-v0_5_68-20260819.json
+- .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json
+- .ai/work-items/recovery-receipts/publish-v0-5-70-provider-release-20260820.json
 
 ## Findings
 None
@@ -53,16 +64,16 @@ None
 None
 
 ## Warnings
-None
+- Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
 
 ## Limitations
-None
+- Finish verification is blocked
 
 ## Non-Risk Explanations
-None
+- {"evidence": [], "reason": "The failed Finish gate is recorded as a recovery condition, not a completed result.", "sourceWarning": "Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope"}
 
 ## Forbidden Claims
-None
+- Do not claim a blocked Work Item has completed verification or may be archived.
 
 ## Interventions
 None
@@ -93,7 +104,7 @@ None
 - Summary
 - Stable release projection
 - Work Item start source binding
-- Formal Provider publication receipt
+- Formal Provider publication and public asset digest projection
 
 ## Implementation Approach
 Status: `complete`
@@ -114,7 +125,7 @@ Design decisions
 ### Evidence
 - The repository currently has stable published v0.5.70 based on the exact merged main source, with unpublished v0.5.71 as the next candidate.: release.json#Stable release projection (verified)
 - The latest merged main source is 746329ced7a1d315a468d4e2c6a7a39d50bcc343.: .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json#Work Item start source binding (verified)
-- The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.: target/release-v0-5-70-provider-release/provider-release.receipt.json#Formal Provider publication receipt (verified)
+- The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.: .ai/cockpit/release-digests.json#Formal Provider publication and public asset digest projection (verified)
 
 ## Human Handoff
 Locale: `zh-CN`
@@ -155,6 +166,15 @@ Locale: `zh-CN`
 - Changed docs/reference/japanese-capability-assessment.md: Generated source-bound evidence during ai_finish; sha256 before=3368e719005cbed0535585232e744f355929faeb2c49b271a149dd2887571fbd, after=3368e719005cbed0535585232e744f355929faeb2c49b271a149dd2887571fbd.
 - Changed .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json: Generated source-bound evidence during ai_finish; sha256 before=d7339e8940aa5ca50eab59bff43c3ce9b4077fdc1c35398ce73afd1b8cb47f4b, after=24afada55f785cbeb00add97fc587988f71fd333c50c0c8e57b5b3cdbb1fa51c.
 - Changed .ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json: Generated source-bound evidence during ai_finish; sha256 before=f5fc027bbf554e67f1d37e4cfe14325b7f5cc0d93f731b3131f6982e95b72cee, after=8b3fd47877fa56149c7906e392329fe20ebf39b1347a3dd5f9b089193b742a85.
+- Changed .ai/work-items/archive/index.json: Generated archive discovery index.
+- Changed .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.archive-manifest.json: Immutable archive evidence root.
+- Changed .ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json: Generated evidence-bound Implementation Knowledge Record.
+- Changed .ai/knowledge/index.json: Rebuilt deterministic Implementation Knowledge index.
+- Changed .ai/knowledge/dependencies.json: Rebuilt deterministic Implementation Knowledge dependency routing index.
+- Changed .ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json: Refreshed stale historical knowledge projection during archive validation.
+- Changed .ai/knowledge/work-items/release-projection-v0_5_68-20260819.json: Refreshed stale historical release projection knowledge during archive validation.
+- Changed .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json: Refreshed stale historical lock-lease knowledge projection during archive validation.
+- Changed .ai/work-items/recovery-receipts/publish-v0-5-70-provider-release-20260820.json: Bound post-archive ownership recovery receipt for generated knowledge projections.
 
 ### What passed
 - sourceBoundEvidence: capability truth generated: docs/reference/capability-truth-matrix.json sha256 before=1b8d5aefd37a853b8e79e53bae16441427a9e3c457f3218a25fd16d8fd2c0474, after=6bcfc929ba09a1a204cc07a066c82d6a64f0be348e84cff2cd1d4a983c29cba6; docs/reference/capability-truth-matrix.md sha256 before=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f, after=560be79ad6925d5087d7e2a3860c41aa3bf48afe7019b3c663165f9d95cd485f capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-trut
@@ -175,18 +195,18 @@ Locale: `zh-CN`
 - aiSummary: PYTHONDONTWRITEBYTECODE=1 <PROJECT_ROOT>/.venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json --contract .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json ai summary check passed: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json
 
 ### What was retained
-None
+- Warning retained: Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
 
 ### Risks
 - next-candidate: v0.5.71 is intentionally unpublished and remains a candidate until a future exact-source release WI authorizes and verifies its publication.
 - lifecycle: The release WI still requires finish, archive, PR merge, ai-close-work-item, and final local/remote cleanup after publication.
 
 ### Red reasons
-None
+- Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
 
 ### Human questions
 - problemCount: 3
-- blockedProblems: None
+- blockedProblems: Finish blocked at aiDiffOwnership: one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope
 - resolvedProblems: observed issue; observed issue; observed issue
 - resolutionApproach: Switched the active github.com account to RayIori, verified gh api user=RayIori and repository permissions admin=true/push=true, then reran the exact formal dispatch successfully. No Provider mutation occurred during the rejected attempt.; Reran the canonical synchronizer with the explicit stable_release_unverified unavailable entry and the public v0.5.70 Release URL as evidence; synchronization then passed.; Used the post-publication distribution, release-state consistency, and source-bound evidence gates for the already-published v0.5.70; no v0.5.71 freeze was created and no historical release metadata was changed.
 - avoidedRisks: None

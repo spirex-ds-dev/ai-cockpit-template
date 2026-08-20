@@ -1,7 +1,7 @@
 # AI Cockpit Task Report
 
 Task Result
-Status: Success
+Status: Blocked
 
 What was completed
 
@@ -24,18 +24,18 @@ Design decisions
 ### Evidence
 - The repository currently has stable published v0.5.70 based on the exact merged main source, with unpublished v0.5.71 as the next candidate.: release.json#Stable release projection (verified)
 - The latest merged main source is 746329ced7a1d315a468d4e2c6a7a39d50bcc343.: .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json#Work Item start source binding (verified)
-- The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.: target/release-v0-5-70-provider-release/provider-release.receipt.json#Formal Provider publication receipt (verified)
+- The formal Provider release, public assets, and post-publication projection checks passed for v0.5.70.: .ai/cockpit/release-digests.json#Formal Provider publication and public asset digest projection (verified)
 
 - Changed .ai/cockpit/current_status.md [evidence: .ai/cockpit/current_status.md]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.contract.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.summary.json]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.contract.json]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.summary.json]
 - Changed .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/work-items/starts/publish-v0-5-70-provider-release-20260820.json]
 - Changed .ai/work-items/active/task-event-log.events.jsonl [evidence: .ai/work-items/active/task-event-log.events.jsonl]
 - Changed .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json [evidence: .ai/work-items/external-handoffs/run-release-rehearsal-v0-5-70-20260820.json]
 - Changed target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json [evidence: target/release-v0-5-70-provider-release/rehearsal-artifact-32326745197/release-rehearsal.json]
 - Changed target/release-v0-5-70-provider-release/rehearsal.receipt.json [evidence: target/release-v0-5-70-provider-release/rehearsal.receipt.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.json]
-- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.outcome.md]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.json]
+- Changed .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md [evidence: .ai/work-items/active/publish-v0-5-70-provider-release-20260820.outcome.md]
 - Changed .ai/cockpit/task_report.json [evidence: .ai/cockpit/task_report.json]
 - Changed .ai/cockpit/task_report.md [evidence: .ai/cockpit/task_report.md]
 - Changed .ai/cockpit/release-digests.json [evidence: .ai/cockpit/release-digests.json]
@@ -61,11 +61,20 @@ Design decisions
 - Changed docs/reference/japanese-capability-assessment.md [evidence: docs/reference/japanese-capability-assessment.md]
 - Changed .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json [evidence: .ai/knowledge/work-items/fix-lock-lease-coverage-20260818.json]
 - Changed .ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json [evidence: .ai/knowledge/work-items/publish-v0-5-69-provider-release-20260820.json]
+- Changed .ai/work-items/archive/index.json [evidence: .ai/work-items/archive/index.json]
+- Changed .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.archive-manifest.json [evidence: .ai/work-items/archive/2026/publish-v0-5-70-provider-release-20260820.archive-manifest.json]
+- Changed .ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/knowledge/work-items/publish-v0-5-70-provider-release-20260820.json]
+- Changed .ai/knowledge/index.json [evidence: .ai/knowledge/index.json]
+- Changed .ai/knowledge/dependencies.json [evidence: .ai/knowledge/dependencies.json]
+- Changed .ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json [evidence: .ai/knowledge/work-items/fix-knowledge-projection-freshness-20260819.json]
+- Changed .ai/knowledge/work-items/release-projection-v0_5_68-20260819.json [evidence: .ai/knowledge/work-items/release-projection-v0_5_68-20260819.json]
+- Changed .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json [evidence: .ai/knowledge/work-items/repair-lock-lease-knowledge-projection-20260819.json]
+- Changed .ai/work-items/recovery-receipts/publish-v0-5-70-provider-release-20260820.json [evidence: .ai/work-items/recovery-receipts/publish-v0-5-70-provider-release-20260820.json]
 
 Problems found
 - Total: 3
-- Blocking: 0
-- Warning: 0
+- Blocking: 1
+- Warning: 1
 
 Stops triggered
 - None recorded.
