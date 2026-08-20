@@ -1,0 +1,291 @@
+{
+  "contractVersion": 2,
+  "workItemId": "knowledge-docs-scalability-boundary-20260820",
+  "mode": "code",
+  "title": "Document Knowledge projection scale and freshness boundaries",
+  "baseCommit": "b9a3c0640154bff128776f854c892a60e84c29bc",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/knowledge-docs-scalability-boundary-20260820.contract.json",
+    ".ai/work-items/active/knowledge-docs-scalability-boundary-20260820.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/knowledge/**",
+    ".ai/work-items/active/knowledge-docs-scalability-boundary-20260820.outcome.json",
+    ".ai/work-items/active/knowledge-docs-scalability-boundary-20260820.outcome.md",
+    "docs/capabilities.md",
+    "docs/capabilities.zh-CN.md",
+    "docs/capabilities.ja.md",
+    "docs/reference/implementation-knowledge.md",
+    "docs/reference/implementation-knowledge.zh-CN.md",
+    "docs/reference/implementation-knowledge.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "Changing projection, query, lifecycle, installer, Makefile, schema, or test behavior.",
+    "Changing the deterministic exact-AND Knowledge query contract or adding semantic, vector, RAG, or LLM ranking behavior.",
+    "Rewriting any previously archived Contract, Summary, Outcome, archive manifest, archive index, or Knowledge record.",
+    "Publishing a release, changing semantic versions or tags, or mutating provider release state.",
+    "Translating maintainer-only reference pages outside the three scoped user-facing siblings."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_generate_knowledge_record.py",
+      "reason": "Current generator proves dependency-aware affected-record routing and the explicit full-rebuild fallback."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current Finish lifecycle passes changed source-bound paths into Knowledge refresh."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Current Archive lifecycle includes the newly archived Work Item in its Knowledge projection."
+    },
+    {
+      "path": "scripts/ai_check_knowledge_index.py",
+      "reason": "Authoritative checker for records, query index, dependency index, and fail-closed consistency."
+    },
+    {
+      "path": "docs/reference/implementation-knowledge.md",
+      "reason": "Canonical user-facing Knowledge guide whose current rewrite dropped the dependency and scale boundary."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-20-incremental-knowledge-projection-design.md",
+      "reason": "Supporting design record describing affected-set routing, explicit recovery fallback, and historical scale risk."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/incremental-knowledge-projection-20260820.contract.json",
+      "reason": "Archived implementation contract records the completed incremental projection behavior and documentation acceptance."
+    },
+    {
+      "path": "docs/capabilities.md",
+      "reason": "Canonical capability overview that must expose the same Knowledge boundary as the detail guide."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Generated capability status and limitation evidence used by the capability claim checks."
+    }
+  ],
+  "rawUserRequest": "在已合并的三语用户文档中补齐 Knowledge Projection 的规模、刷新和恢复边界；保持本轮只改文档，不改变运行时，不发布新版本。用户已授权本 WI 按完整流程执行，包括提交、推送、PR、合并、关闭、分支清理和默认分支同步。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:documentation-completeness-knowledge-projection-boundary",
+    "capturedAt": "2026-08-20T19:30:00+09:00",
+    "digest": "sha256:knowledge-docs-scalability-boundary-20260820-request"
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["documentation_truth_drift", "multilingual_semantic_drift", "capability_overclaim"],
+    "reason": "The change is documentation-only, but omitting the incremental path or overstating constant cost could mislead users about Knowledge freshness and lifecycle behavior across three languages.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["The Work Item changes user-facing documentation and generated documentation evidence without changing runtime behavior."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the complete lifecycle for this scoped documentation correction; runtime changes and release publication remain excluded."
+  },
+  "declaredIntent": {
+    "summary": "Make the existing incremental Knowledge projection and its explicit recovery cost understandable to ordinary users in English, Simplified Chinese, and Japanese without claiming a runtime change.",
+    "requestedCapabilities": ["documentation", "ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "documentation",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "implementationSurface": {
+    "production": [],
+    "tests": [],
+    "documentation": [
+      "docs/capabilities.md",
+      "docs/capabilities.zh-CN.md",
+      "docs/capabilities.ja.md",
+      "docs/reference/implementation-knowledge.md",
+      "docs/reference/implementation-knowledge.zh-CN.md",
+      "docs/reference/implementation-knowledge.ja.md"
+    ],
+    "generated": [
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/pre-release-documentation-alignment.json",
+      "docs/reference/pre-release-documentation-alignment.md",
+      ".ai/cockpit/current_status.md",
+      ".ai/cockpit/task_report.json",
+      ".ai/cockpit/task_report.md"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "id": "knowledge-normal-refresh",
+      "riskDomain": "documentation_truth",
+      "scenario": "A user asks what happens when a new Work Item creates or refreshes Knowledge.",
+      "expected": "The guide explains that the current Work Item and affected records are refreshed through the dependency projection, while unrelated records are not normally rebuilt or rewritten.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Cross-check the wording against the current generator, Finish, Archive, and incremental projection design record."
+    },
+    {
+      "id": "knowledge-recovery-fallback",
+      "riskDomain": "evidence_integrity",
+      "scenario": "The dependency projection is missing, malformed, stale, or incomplete.",
+      "expected": "The user is told that AI Cockpit explicitly rebuilds/revalidates or fails closed; it never silently trusts an old record, and full recovery cost may grow with history.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Cross-check the guide against the generator fallback, authoritative Knowledge checker, and archived design acceptance."
+    },
+    {
+      "id": "knowledge-language-parity",
+      "riskDomain": "multilingual_semantic_drift",
+      "scenario": "A reader switches among the English, Simplified Chinese, and Japanese Knowledge and capability pages.",
+      "expected": "All three languages preserve the same incremental behavior, fallback, scale-cost limitation, stop condition, and non-RAG boundary.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run documentation metadata, capability, journey, Japanese, and semantic-parity checks, then review the three sibling sections together."
+    }
+  ],
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The English, Simplified Chinese, and Japanese Implementation Knowledge guides explain the dependency projection, normal affected-record refresh, explicit full-rebuild/fail-closed fallback, and why recovery cost can grow with historical Knowledge volume.",
+    "The three capability overview rows expose the same Knowledge projection boundary and link to the detailed localized guide without changing capability status or implying a runtime performance guarantee.",
+    "The wording remains natural-language-first for ordinary users, with commands and technical details progressive-disclosed; it clearly says this Work Item documents current behavior and does not implement a new optimization.",
+    "The final diff contains only the declared documentation and generated documentation evidence, with no production code, tests, installer, version, release, or tag mutation.",
+    "All required AI Cockpit, documentation, and traceability checks pass; the full project quality suite is retained as an optional diagnostic for this documentation-only, non-release Work Item, and the Work Item receives a merged PR and successful ai-close-work-item."
+  ],
+  "guidelines": [
+    "Use natural-language, goal-oriented explanations before commands or file paths.",
+    "Keep English, Simplified Chinese, and Japanese siblings semantically aligned for purpose, steps, result, stop conditions, and limitations.",
+    "Do not claim a runtime optimization, constant cost, semantic search, or RAG behavior that the current evidence does not support.",
+    "Keep Contract, Summary, Outcome, and repository Evidence as the authoritative sources; Knowledge remains a projection."
+  ],
+  "intent": {
+    "problem": "The user-facing Knowledge rewrite explains evidence and exact querying but no longer exposes the implemented dependency-aware refresh path or the cost boundary of explicit full recovery. A reader could therefore mistake a read-only query surface for a guarantee that all lifecycle maintenance has constant cost as historical Knowledge grows.",
+    "constraints": [
+      "Document current behavior only: incremental affected-record routing is implemented; this Work Item must not change runtime behavior.",
+      "Preserve the evidence boundary: Contract, Summary, Outcome, and repository Evidence remain authoritative, while Knowledge remains a generated projection.",
+      "Preserve exact deterministic query, non-semantic/non-RAG, fail-closed, and fresh-adopter boundaries.",
+      "Keep all three localized siblings aligned and keep release/version paths untouched."
+    ],
+    "rationale": "A concise user-facing cost and recovery boundary is necessary HCI: it lets a reader understand what normally happens, why a recovery may be heavier, and when to stop or investigate without inventing an optimization or hiding a known trade-off."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized automatic completion of this documentation-only Work Item through commit, push, PR, merge, ai-close-work-item, branch cleanup, and default-base synchronization; no release or version publication is authorized."
+  },
+  "rollbackNote": "Revert the declared documentation and generated documentation evidence; do not alter previously archived evidence or runtime behavior.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 981
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/knowledge-docs-scalability-boundary-20260820.json",
+    "baseCommit": "b9a3c0640154bff128776f854c892a60e84c29bc",
+    "initialScopeDigest": "a4881f93953c9908553eb48d3529ac22c06b387a2ccc7c6d3b859136a964cd42",
+    "contractSkeletonDigest": "496b276727f695899003f841f0a2ed1a8d9bc6c7a28aa64a12af2f9adeeb812c"
+  }
+}

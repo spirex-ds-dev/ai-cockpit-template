@@ -1,15 +1,38 @@
 {
-  "reportVersion": 1,
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
   "workItemId": "knowledge-docs-scalability-boundary-20260820",
-  "phase": "review",
-  "result": "completed",
-  "sourceOutcome": {
-    "format": "ai-cockpit-task-outcome",
-    "schemaVersion": 1,
-    "digest": "142fcb778d157f41a9f41bf46b29e52c6396c683e406432aab987f63a668176d"
+  "status": "completed",
+  "humanStatusColor": "green",
+  "failedGate": "",
+  "recoveryCondition": "",
+  "bindings": {
+    "taskId": "knowledge-docs-scalability-boundary-20260820",
+    "contractDigest": "d88c9d05f475b343eca7a16ab68d0751e0db30256f545fd1b74fc24ecc0e2fce",
+    "summaryDigest": "d328ecb08a4d40858fb4ef1259ade16b6bcb2641cb36e27229a95a08bff0442e",
+    "verificationDigest": "29b71987cd7bf9ecf85275efe59da0a31b08e9b07971cb81c9e70d1a5187288d",
+    "baseCommit": "b9a3c0640154bff128776f854c892a60e84c29bc",
+    "headCommit": "b9a3c0640154bff128776f854c892a60e84c29bc",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.2",
+    "locale": "en",
+    "preArchiveCandidateCoverage": {
+      "reportSha256": "88986aafeae6d488b9791c669114c0c1238179497059d8ac9c78789a815e5eee",
+      "binding": {
+        "baseCommit": "b9a3c0640154bff128776f854c892a60e84c29bc",
+        "candidateHead": "b9a3c0640154bff128776f854c892a60e84c29bc",
+        "candidateTreeDigest": "95adadcf587bd4907f85da3870b161325b272ee24e73b67b3ee5d569fc6fb247",
+        "candidateDiffDigest": "1490a9caa46226d5b79f2e3f45b6fff5e1f92b3379dba552498fb2ada9067788"
+      }
+    }
   },
-  "task": {
-    "summary": "Task knowledge-docs-scalability-boundary-20260820 generated an evidence-derived outcome with status completed.",
+  "sections": {
+    "outcomeSummary": "Task knowledge-docs-scalability-boundary-20260820 generated an evidence-derived outcome with status completed.",
+    "taskOverview": "Governed Work Item: knowledge-docs-scalability-boundary-20260820",
     "deliveredChanges": [
       ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.contract.json",
       ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
@@ -34,131 +57,169 @@
       ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.outcome.md",
       ".ai/cockpit/task_report.json",
       ".ai/cockpit/task_report.md"
-    ]
-  },
-  "issues": {
-    "detected": 1,
-    "hardStops": 1,
-    "warnings": 0,
-    "resolved": 1,
-    "unresolved": 0
-  },
-  "preventedRisks": [
-    {
-      "risk": "If not detected, could have led to a stale completion claim.",
-      "severity": "medium",
-      "detectedBy": "required verification: aiGuidelines",
-      "action": "blocked",
-      "resolution": "Retry aiGuidelines after correcting the recorded failure.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "3a04a694f1309509c948cac7f1b59757684e315bbcc9b406bf2157d7f1e47a88"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "d60439d216a220cd152051470cfc0ce96306b0a738f51ff9e28b61e1165f60c1"
-        }
-      ]
-    }
-  ],
-  "interventions": [],
-  "forcedStops": [
-    {
-      "stage": "verification",
-      "reason": "aiGuidelines failed before the retry.",
-      "policyOrGuard": "required verification: aiGuidelines",
-      "attemptedAction": "complete the Work Item",
-      "conditionalImpact": "If not detected, could have led to a stale completion claim.",
-      "handoff": "",
-      "humanDecision": "",
-      "recovery": "Retry aiGuidelines after correcting the recorded failure.",
-      "result": "resolved",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
-          "subject": "verificationHistory[0] aiGuidelines failed",
-          "digest": "3a04a694f1309509c948cac7f1b59757684e315bbcc9b406bf2157d7f1e47a88"
-        },
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
-          "subject": "verification[aiGuidelines] retry passed",
-          "digest": "d60439d216a220cd152051470cfc0ce96306b0a738f51ff9e28b61e1165f60c1"
-        }
-      ]
-    }
-  ],
-  "humanDecisions": [
-    "For this documentation-only, non-release Work Item, use proportional documentation verification; retain full project quality only as an optional diagnostic unless runtime, tests, installer, or release paths are in scope."
-  ],
-  "limitations": [],
-  "forbiddenClaims": [],
-  "remainingRisks": [
-    {
-      "severity": "low",
-      "detail": "The guide describes current incremental routing and explicit full-recovery behavior; future runtime changes must refresh this boundary before the wording is reused.",
-      "evidence": [
-        {
-          "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
-          "subject": "residualRisks"
-        }
-      ]
-    }
-  ],
-  "implementationApproach": {
-    "approachType": "implementation",
-    "status": "not_applicable",
-    "summary": {
-      "text": "No runtime implementation is in scope; this Work Item updates user-facing documentation and generated documentation evidence only.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "docs/reference/implementation-knowledge.md",
-          "subject": "documentation-only scope"
-        },
-        {
-          "source": "docs/capabilities.md",
-          "subject": "capability overview documentation"
-        }
-      ]
-    },
-    "mechanism": {
-      "text": "The documented behavior is bound to the existing dependency-aware generator and lifecycle sources; no executable behavior is changed.",
-      "status": "verified",
-      "evidence": [
-        {
-          "source": "scripts/ai_generate_knowledge_record.py",
-          "subject": "dependency-aware Knowledge refresh"
-        },
-        {
-          "source": "scripts/ai_finish.py",
-          "subject": "governed finish refresh path"
-        },
-        {
-          "source": "scripts/ai_archive_work_item.py",
-          "subject": "governed archive projection path"
-        }
-      ]
-    },
-    "affectedComponents": [],
-    "designDecisions": [],
-    "technicalDetails": [],
+    ],
+    "findings": [],
+    "risks": [],
+    "warnings": [],
+    "limitations": [],
+    "nonRiskExplanations": [],
+    "forbiddenClaims": [],
+    "interventions": [],
+    "forcedStops": [
+      {
+        "stage": "verification",
+        "reason": "aiGuidelines failed before the retry.",
+        "policyOrGuard": "required verification: aiGuidelines",
+        "attemptedAction": "complete the Work Item",
+        "conditionalImpact": "If not detected, could have led to a stale completion claim.",
+        "handoff": "",
+        "humanDecision": "",
+        "recovery": "Retry aiGuidelines after correcting the recorded failure.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "3a04a694f1309509c948cac7f1b59757684e315bbcc9b406bf2157d7f1e47a88"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "d60439d216a220cd152051470cfc0ce96306b0a738f51ff9e28b61e1165f60c1"
+          }
+        ]
+      }
+    ],
+    "resolutions": [
+      {
+        "problem": "aiGuidelines failed before the retry.",
+        "action": "Re-ran aiGuidelines after the correction; the latest attempt passed.",
+        "verification": "aiGuidelines latest verification result is passed.",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+            "subject": "verificationHistory[0] aiGuidelines failed",
+            "digest": "3a04a694f1309509c948cac7f1b59757684e315bbcc9b406bf2157d7f1e47a88"
+          },
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+            "subject": "verification[aiGuidelines] retry passed",
+            "digest": "d60439d216a220cd152051470cfc0ce96306b0a738f51ff9e28b61e1165f60c1"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [
+      "If not detected, could have led to a stale completion claim."
+    ],
+    "residualRisks": [
+      {
+        "claim": "documentation_truth",
+        "severity": "low",
+        "title": "documentation_truth",
+        "detail": "The guide describes current incremental routing and explicit full-recovery behavior; future runtime changes must refresh this boundary before the wording is reused.",
+        "state": "unresolved",
+        "evidenceRefs": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+            "subject": "residualRisks"
+          }
+        ],
+        "inference": false
+      }
+    ],
+    "humanDecisions": [
+      "For this documentation-only, non-release Work Item, use proportional documentation verification; retain full project quality only as an optional diagnostic unless runtime, tests, installer, or release paths are in scope."
+    ],
     "evidence": [
       {
-        "claim": "The Work Item is documentation-only and does not change runtime behavior.",
-        "status": "verified",
-        "subject": "documentation-only scope",
-        "source": "docs/reference/implementation-knowledge.md"
+        "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.contract.json",
+        "subject": "Contract"
       },
       {
-        "claim": "The current Knowledge refresh path uses dependency-aware incremental routing.",
-        "status": "verified",
-        "subject": "current incremental refresh behavior",
-        "source": "scripts/ai_generate_knowledge_record.py"
+        "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": "docs/reference/implementation-knowledge.md",
+        "subject": "documentation-only scope"
+      },
+      {
+        "source": "scripts/ai_generate_knowledge_record.py",
+        "subject": "current incremental refresh behavior"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+        "subject": "verificationHistory[0] aiGuidelines failed",
+        "digest": "3a04a694f1309509c948cac7f1b59757684e315bbcc9b406bf2157d7f1e47a88"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/knowledge-docs-scalability-boundary-20260820.summary.json",
+        "subject": "verification[aiGuidelines] retry passed",
+        "digest": "d60439d216a220cd152051470cfc0ce96306b0a738f51ff9e28b61e1165f60c1"
       }
-    ]
+    ],
+    "implementationApproach": {
+      "approachType": "implementation",
+      "status": "not_applicable",
+      "summary": {
+        "text": "No runtime implementation is in scope; this Work Item updates user-facing documentation and generated documentation evidence only.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "docs/reference/implementation-knowledge.md",
+            "subject": "documentation-only scope"
+          },
+          {
+            "source": "docs/capabilities.md",
+            "subject": "capability overview documentation"
+          }
+        ]
+      },
+      "mechanism": {
+        "text": "The documented behavior is bound to the existing dependency-aware generator and lifecycle sources; no executable behavior is changed.",
+        "status": "verified",
+        "evidence": [
+          {
+            "source": "scripts/ai_generate_knowledge_record.py",
+            "subject": "dependency-aware Knowledge refresh"
+          },
+          {
+            "source": "scripts/ai_finish.py",
+            "subject": "governed finish refresh path"
+          },
+          {
+            "source": "scripts/ai_archive_work_item.py",
+            "subject": "governed archive projection path"
+          }
+        ]
+      },
+      "affectedComponents": [],
+      "designDecisions": [],
+      "technicalDetails": [],
+      "evidence": [
+        {
+          "claim": "The Work Item is documentation-only and does not change runtime behavior.",
+          "status": "verified",
+          "subject": "documentation-only scope",
+          "source": "docs/reference/implementation-knowledge.md"
+        },
+        {
+          "claim": "The current Knowledge refresh path uses dependency-aware incremental routing.",
+          "status": "verified",
+          "subject": "current incremental refresh behavior",
+          "source": "scripts/ai_generate_knowledge_record.py"
+        }
+      ]
+    }
   },
   "humanHandoff": {
     "locale": "en",
@@ -1007,6 +1068,5 @@
         "inference": true
       }
     }
-  },
-  "nextSafeAction": "Review the remaining risks and obtain the named evidence before proceeding."
+  }
 }
